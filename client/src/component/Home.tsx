@@ -34,7 +34,7 @@ export default function Home({}: Props) {
               attr: "",
             }}
             onSubmit={async ({ attr }) => {
-              updateGlobalState(attr, dispatch);
+              return updateGlobalState(attr, dispatch);
             }}
           >
             <Form>

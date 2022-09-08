@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { GlobalContext } from "../context/GlobalContext";
-import { GlobalActionType } from "../context/GlobalContextTypes";
+import { GlobalContext } from "../context/global/GlobalContext";
+import { GlobalActionType } from "../context/global/GlobalContextTypes";
 import { UPDATE_GLOBAL_STATE } from "../utils/constant";
 
 export default function useGlobalContext() {
