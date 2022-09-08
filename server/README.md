@@ -1,4 +1,4 @@
-A basic structure presenting both synchronous connection and asynchronous messaging between services:
+### A basic structure presenting both synchronous connection and asynchronous messaging between services:
 
 +------------------+                                                                                                               
 |                  |                                                                                                               
@@ -29,4 +29,9 @@ A basic structure presenting both synchronous connection and asynchronous messag
                      |  +----------+         |               |        +---------+ (Async)   +--------------+  |                    
                      |    Producer           +---------------+                                  Consumer      |                    
                      |                                                                                        |                    
-                     +----------------------------------------------------------------------------------------+                   
+                     +----------------------------------------------------------------------------------------+        
+
+### Run in Docker:
+
+    Maven clean/install
+    docker compose up -d
