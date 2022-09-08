@@ -1,11 +1,9 @@
-# https://stackoverflow.com/a/73508528/16648127
-
 services:
   mysql:
     container_name: multi-module-microservices-db
     image: mysql:5.7
     volumes:
-      # creating multiple databases in one mysql container: https://stackoverflow.com/a/52899915/16648127
+      # Creating multiple databases in one mysql container: https://stackoverflow.com/a/52899915/16648127
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -106,7 +104,6 @@ services:
     environment:
       MYSQL_HOST: mysql
       SPRING_PROFILES_ACTIVE: docker
-      # Different syntax
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_notification",
         "spring.datasource.username": "root",
