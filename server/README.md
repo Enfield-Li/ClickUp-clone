@@ -1,5 +1,6 @@
 ### A basic structure presenting both synchronous connection and asynchronous messaging between services:
 
+```
 +------------------+                                                                                                               
 |                  |                                                                                                               
 |                  |                                                                                                               
@@ -30,7 +31,7 @@
                      |    Producer           +---------------+                                  Consumer      |                    
                      |                                                                                        |                    
                      +----------------------------------------------------------------------------------------+        
-
+```
 ### Run in Docker:
 
     Maven clean/install
