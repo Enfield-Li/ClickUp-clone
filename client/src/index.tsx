@@ -3,7 +3,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import GlobalStateProvider from "./context/GlobalContext";
+import AuthStateProvider from "./context/auth/AuthContext";
+import GlobalStateProvider from "./context/global/GlobalContext";
 // import reportWebVitals from "./reportWebVitals"
 // import * as serviceWorker from "./serviceWorker"
 
@@ -14,10 +15,12 @@ const root = ReactDOM.createRoot(container);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <GlobalStateProvider>
-        <ColorModeScript />
-        <App />
-      </GlobalStateProvider>
+      <AuthStateProvider>
+        <GlobalStateProvider>
+          <ColorModeScript />
+          <App />
+        </GlobalStateProvider>
+      </AuthStateProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

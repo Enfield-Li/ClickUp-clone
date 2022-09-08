@@ -1,4 +1,4 @@
-import { UPDATE_GLOBAL_STATE } from "../utils/constant";
+import { UPDATE_GLOBAL_STATE } from "../../utils/constant";
 
 export type GlobalContextType = {
   state: GlobalStateType;
