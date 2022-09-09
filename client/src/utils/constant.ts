@@ -1,3 +1,8 @@
-export const UPDATE_GLOBAL_STATE = "UPDATE_GLOBAL_STATE";
-export const LOGIN_USER = "LOGIN_USER";
-export const LOGOUT_USER = "LOGOUT_USER";
+export const GLOBAL = {
+  UPDATE_GLOBAL_STATE: "UPDATE_GLOBAL_STATE",
+};
+
+export const AUTH = {
+  LOGIN_USER: "LOGIN_USER",
+  LOGOUT_USER: "LOGOUT_USER",
+} as const;

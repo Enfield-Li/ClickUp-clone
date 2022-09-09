@@ -1,4 +1,4 @@
-import { UPDATE_GLOBAL_STATE } from "../../utils/constant";
+import { GLOBAL } from "../../utils/constant";
 import { GlobalStateType, GlobalActionType } from "./GlobalContextTypes";
 
 export default function globalReducer(
@@ -6,7 +6,7 @@ export default function globalReducer(
   action: GlobalActionType
 ) {
   switch (action.type) {
-    case UPDATE_GLOBAL_STATE: {
+    case GLOBAL.UPDATE_GLOBAL_STATE: {
       return { ...state, attr: "updated to " + action.payload };
     }
 

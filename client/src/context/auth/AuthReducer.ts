@@ -1,8 +1,4 @@
-import {
-  LOGIN_USER,
-  LOGOUT_USER,
-  UPDATE_GLOBAL_STATE,
-} from "../../utils/constant";
+import { AUTH } from "../../utils/constant";
 import { AuthStateType, AuthActionType } from "./AuthContextTypes";
 
 export default function authReducer(
@@ -10,7 +6,7 @@ export default function authReducer(
   action: AuthActionType
 ) {
   switch (action.type) {
-    case LOGIN_USER: {
+    case AUTH.LOGIN_USER: {
       return {
         ...state,
         user: {
@@ -20,7 +16,7 @@ export default function authReducer(
       };
     }
 
-    case LOGOUT_USER: {
+    case AUTH.LOGOUT_USER: {
       return {
         ...state,
         user: null,
