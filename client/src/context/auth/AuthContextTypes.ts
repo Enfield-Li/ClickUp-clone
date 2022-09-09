@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOGOUT_USER } from "../../utils/constant";
+import { AUTH } from "../../utils/constant";
 
 export const authInitialState: AuthStateType = { user: null };
 
@@ -18,5 +18,5 @@ export type User = {
 
 export type AuthActionType = LogInUser | LogOutUser;
 
-type LogInUser = { type: typeof LOGIN_USER; payload: User };
-type LogOutUser = { type: typeof LOGOUT_USER };
+type LogInUser = { type: typeof AUTH.LOGIN_USER; payload: User };
+type LogOutUser = { type: typeof AUTH.LOGOUT_USER };

@@ -1,4 +1,4 @@
-import { UPDATE_GLOBAL_STATE } from "../../utils/constant";
+import { GLOBAL } from "../../utils/constant";
 
 export type GlobalContextType = {
   state: GlobalStateType;
@@ -13,4 +13,7 @@ export type GlobalStateType = {
 
 export type GlobalActionType = UpdateGlobalState;
 
-type UpdateGlobalState = { type: typeof UPDATE_GLOBAL_STATE; payload: string };
+type UpdateGlobalState = {
+  type: typeof GLOBAL.UPDATE_GLOBAL_STATE;
+  payload: string;
+};
