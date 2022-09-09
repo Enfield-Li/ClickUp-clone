@@ -24,7 +24,7 @@ export default function NavBar({}: Props) {
       {userState?.user ? (
         <>
           <Text>Hello! {userState.user?.username}</Text>
-          <Link to="/home" onClick={() => logOutUser(userDispatch)}>
+          <Link to="/" onClick={() => logOutUser(userDispatch)}>
             Log out
           </Link>
         </>
