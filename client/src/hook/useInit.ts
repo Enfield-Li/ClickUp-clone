@@ -10,6 +10,7 @@ export default function useInit() {
     console.log("Initialize some network connection...");
   }, []);
 
+  // toast for indicating network error
   useEffect(() => {
     if (globalState.error)
       toast({

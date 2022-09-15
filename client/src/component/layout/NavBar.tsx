@@ -6,13 +6,14 @@ type Props = {};
 
 export default function NavBar({}: Props) {
   return (
-    <div>
+    <>
       <Center h="40px">
         <Link to="/undefined">Functionality 1</Link>
       </Center>
+
       <Center h="40px">
         <Link to="/undefined">Functionality 2</Link>
       </Center>
-    </div>
+    </>
   );
 }

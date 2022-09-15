@@ -24,7 +24,7 @@ export default function Header({}: Props) {
         <Spacer />
         <Link to="/about">About</Link>
 
-        {/* Authentication stuff */}
+        {/* Login */}
         {authState?.user ? (
           <>
             <Text>Hello! {authState.user?.username}</Text>
@@ -39,6 +39,8 @@ export default function Header({}: Props) {
             )}
           </>
         )}
+        
+        {/* Dark/light mode switcher */}
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
       {/* Loading progress bar */}

@@ -7,6 +7,7 @@ export default function useGlobalContext() {
   return useContext(GlobalContext);
 }
 
+// Update global network error 
 export function popUpError(
   error: string,
   dispatch: React.Dispatch<GlobalActionType>
@@ -14,6 +15,7 @@ export function popUpError(
   return dispatch({ type: GLOBAL.NEW_ERROR, payload: error });
 }
 
+// Update global loading state
 export function indicateLoading(
   isLoading: boolean,
   dispatch: React.Dispatch<GlobalActionType>
