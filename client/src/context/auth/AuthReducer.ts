@@ -19,7 +19,7 @@ export default function authReducer(
     case AUTH.LOGOUT_USER: {
       return {
         ...state,
-        user: null,
+        user: undefined,
       };
     }
 

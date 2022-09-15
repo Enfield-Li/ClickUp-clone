@@ -1,6 +1,6 @@
 import { AUTH } from "../../utils/constant";
 
-export const authInitialState: AuthStateType = { user: null };
+export const authInitialState: AuthStateType = {};
 
 export type AuthContextType = {
   authState: AuthStateType;
@@ -8,7 +8,7 @@ export type AuthContextType = {
 };
 
 export type AuthStateType = {
-  user: User | null;
+  user?: User;
 };
 
 export type User = {
