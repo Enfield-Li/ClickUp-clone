@@ -14,6 +14,7 @@ export default function Header({}: Props) {
   return (
     <>
       <Flex minWidth="max-content" alignItems="center" gap="2" m={2}>
+        {/* Title */}
         <Box p="2">
           <Link to="/">
             <Heading size="md">PB platform</Heading>
@@ -23,6 +24,7 @@ export default function Header({}: Props) {
         <Spacer />
         <Link to="/about">About</Link>
 
+        {/* Authentication stuff */}
         {authState?.user ? (
           <>
             <Text>Hello! {authState.user?.username}</Text>
@@ -39,6 +41,7 @@ export default function Header({}: Props) {
         )}
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
+      {/* Loading progress bar */}
       {globalState.loading ? <Progress size="xs" isIndeterminate /> : null}
     </>
   );

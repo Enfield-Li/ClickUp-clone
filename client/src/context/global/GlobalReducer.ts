@@ -10,6 +10,10 @@ export default function globalReducer(
       return { ...state, error: action.payload };
     }
 
+    case GLOBAL.LOADING_STATE: {
+      return { ...state, loading: action.payload };
+    }
+
     default: {
       return state;
     }

@@ -1,6 +1,9 @@
 import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import useGlobalContext, { popUpError } from "../hook/useGlobalContext";
+import useGlobalContext, {
+  indicateLoading,
+  popUpError,
+} from "../hook/useGlobalContext";
 import ToastButton from "./ToastButton";
 
 type Props = {};
@@ -13,26 +16,32 @@ export default function Home({}: Props) {
       <Box textAlign="center" fontSize="xl" p={3}>
         <VStack spacing={3}>
           <Text>Home page</Text>
+
+          {/* Link to Chakra docs */}
           <Link color="teal.500" href="https://chakra-ui.com">
             Chakra docs
           </Link>
 
-          <ToastButton
-            text="Show error"
-            description="Some custom error here"
-            duration={3000}
-            isClosable={true}
-            status="error"
-            title="Custom title"
-          />
-
+          {/* Button to manually trigger network error response */}
           <Button onClick={() => popUpError("Error example", globalDispatch)}>
-            popUpError
+            Trigger network error
+          </Button>
+
+          {/* Button to manually trigger network loading state */}
+          <Button
+            onClick={() =>
+              indicateLoading(!globalState.loading, globalDispatch)
+            }
+          >
+            Trigger network loading
           </Button>
 
           <Text>State: {globalState.error}</Text>
 
-          {/* Formik docs example: https://formik.org/docs/examples/basic */}
+          {/* 
+            Form to test formik
+            Formik docs example: https://formik.org/docs/examples/basic 
+          */}
           <Formik
             initialValues={{
               attr: "",
