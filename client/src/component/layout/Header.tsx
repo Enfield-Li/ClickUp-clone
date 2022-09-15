@@ -1,12 +1,12 @@
 import { Box, Flex, Heading, Progress, Spacer, Text } from "@chakra-ui/react";
-import { ColorModeSwitcher } from "../ColorModeSwitcher";
+import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { Link, useLocation } from "react-router-dom";
-import useAuthContext, { logOutUser } from "../hook/useAuthContext";
-import useGlobalContext from "../hook/useGlobalContext";
+import useAuthContext, { logOutUser } from "../../hook/useAuthContext";
+import useGlobalContext from "../../hook/useGlobalContext";
 
 type Props = {};
 
-export default function NavBar({}: Props) {
+export default function Header({}: Props) {
   const location = useLocation();
   const { authState, authDispatch } = useAuthContext();
   const { globalState } = useGlobalContext();
@@ -21,9 +21,8 @@ export default function NavBar({}: Props) {
         </Box>
 
         <Spacer />
-
-        <Link to="/">Home</Link>
         <Link to="/about">About</Link>
+
         {authState?.user ? (
           <>
             <Text>Hello! {authState.user?.username}</Text>
