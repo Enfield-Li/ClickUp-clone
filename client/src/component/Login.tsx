@@ -8,7 +8,7 @@ import useAuthContext, { logInUser } from "../hook/useAuthContext";
 type Props = {};
 
 export default function Login({}: Props) {
-  const { state, dispatch } = useAuthContext();
+  const { authState, authDispatch } = useAuthContext();
   const navigate = useNavigate();
 
   return (
@@ -18,7 +18,7 @@ export default function Login({}: Props) {
         password: "",
       }}
       onSubmit={(credential: User, { setSubmitting }: FormikHelpers<User>) => {
-        logInUser(credential, dispatch);
+        logInUser(credential, authDispatch);
         navigate("/");
       }}
     >

@@ -1,19 +1,25 @@
 import { GLOBAL } from "../../utils/constant";
 
 export type GlobalContextType = {
-  state: GlobalStateType;
-  dispatch: React.Dispatch<GlobalActionType>;
+  globalState: GlobalStateType;
+  globalDispatch: React.Dispatch<GlobalActionType>;
 };
 
-export const globalInitialState: GlobalStateType = { attr: "initial state" };
+export const globalInitialState: GlobalStateType = {};
 
 export type GlobalStateType = {
-  attr?: string;
+  error?: string;
+  loading?: boolean;
 };
 
-export type GlobalActionType = UpdateGlobalState;
+export type GlobalActionType = NewErrorState | IndicateLoadingState;
 
-type UpdateGlobalState = {
-  type: typeof GLOBAL.UPDATE_GLOBAL_STATE;
+type NewErrorState = {
+  type: typeof GLOBAL.NEW_ERROR;
   payload: string;
+};
+
+type IndicateLoadingState = {
+  type: typeof GLOBAL.LOADING_STATE;
+  payload: boolean;
 };

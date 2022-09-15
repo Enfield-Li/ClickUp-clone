@@ -1,5 +1,6 @@
 export const GLOBAL = {
-  UPDATE_GLOBAL_STATE: "UPDATE_GLOBAL_STATE",
+  NEW_ERROR: "NEW_ERROR",
+  LOADING_STATE: "LOADING_STATE",
 } as const;
 
 export const AUTH = {

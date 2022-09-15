@@ -1,21 +1,12 @@
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react";
-import { Formik, Form, Field } from "formik";
-import React from "react";
-import useGlobalContext, { updateGlobalState } from "../hook/useGlobalContext";
+import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
+import useGlobalContext, { popUpError } from "../hook/useGlobalContext";
+import ToastButton from "./ToastButton";
 
 type Props = {};
 
 export default function Home({}: Props) {
-  const { state, dispatch } = useGlobalContext();
+  const { globalState, globalDispatch } = useGlobalContext();
 
   return (
     <>
@@ -26,7 +17,20 @@ export default function Home({}: Props) {
             Chakra docs
           </Link>
 
-          <Text>State: {state.attr}</Text>
+          <ToastButton
+            text="Show error"
+            description="Some custom error here"
+            duration={3000}
+            isClosable={true}
+            status="error"
+            title="Custom title"
+          />
+
+          <Button onClick={() => popUpError("Error example", globalDispatch)}>
+            popUpError
+          </Button>
+
+          <Text>State: {globalState.error}</Text>
 
           {/* Formik docs example: https://formik.org/docs/examples/basic */}
           <Formik
@@ -34,7 +38,7 @@ export default function Home({}: Props) {
               attr: "",
             }}
             onSubmit={async ({ attr }) => {
-              return updateGlobalState(attr, dispatch);
+              return popUpError(attr, globalDispatch);
             }}
           >
             <Form>

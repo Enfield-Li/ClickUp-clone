@@ -6,8 +6,8 @@ export default function globalReducer(
   action: GlobalActionType
 ) {
   switch (action.type) {
-    case GLOBAL.UPDATE_GLOBAL_STATE: {
-      return { ...state, attr: "updated to " + action.payload };
+    case GLOBAL.NEW_ERROR: {
+      return { ...state, error: action.payload };
     }
 
     default: {

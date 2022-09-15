@@ -9,10 +9,10 @@ type ProviderType = {
 };
 
 export default function AuthStateProvider({ children }: ProviderType) {
-  const [state, dispatch] = useReducer(authReducer, authInitialState);
+  const [authState, authDispatch] = useReducer(authReducer, authInitialState);
 
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
+    <AuthContext.Provider value={{ authState, authDispatch }}>
       {children}
     </AuthContext.Provider>
   );

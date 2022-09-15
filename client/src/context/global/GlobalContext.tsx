@@ -9,10 +9,13 @@ type ProviderType = {
 };
 
 export default function GlobalStateProvider({ children }: ProviderType) {
-  const [state, dispatch] = useReducer(globalReducer, globalInitialState);
+  const [globalState, globalDispatch] = useReducer(
+    globalReducer,
+    globalInitialState
+  );
 
   return (
-    <GlobalContext.Provider value={{ state, dispatch }}>
+    <GlobalContext.Provider value={{ globalState, globalDispatch }}>
       {children}
     </GlobalContext.Provider>
   );

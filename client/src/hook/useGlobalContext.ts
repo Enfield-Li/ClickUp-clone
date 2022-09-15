@@ -7,9 +7,16 @@ export default function useGlobalContext() {
   return useContext(GlobalContext);
 }
 
-export function updateGlobalState(
-  newAttr: string,
+export function popUpError(
+  error: string,
   dispatch: React.Dispatch<GlobalActionType>
 ) {
-  return dispatch({ type: GLOBAL.UPDATE_GLOBAL_STATE, payload: newAttr });
+  return dispatch({ type: GLOBAL.NEW_ERROR, payload: error });
+}
+
+export function indicateLoading(
+  isLoading: boolean,
+  dispatch: React.Dispatch<GlobalActionType>
+) {
+  return dispatch({ type: GLOBAL.LOADING_STATE, payload: isLoading });
 }

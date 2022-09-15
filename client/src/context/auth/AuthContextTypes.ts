@@ -3,8 +3,8 @@ import { AUTH } from "../../utils/constant";
 export const authInitialState: AuthStateType = { user: null };
 
 export type AuthContextType = {
-  state: AuthStateType;
-  dispatch: React.Dispatch<AuthActionType>;
+  authState: AuthStateType;
+  authDispatch: React.Dispatch<AuthActionType>;
 };
 
 export type AuthStateType = {
