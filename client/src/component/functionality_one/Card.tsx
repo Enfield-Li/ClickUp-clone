@@ -1,17 +1,15 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import React from "react";
+import { Task } from "./FunctionalityOne";
 
 type Props = {
-  task: {
-    id: string;
-    content: string;
-  };
+  task: Task;
   index: number;
 };
 
 export default function Card({ task, index }: Props) {
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={String(task.id)} index={index}>
       {(provided) => (
         <div
           {...provided.draggableProps}

@@ -4,73 +4,79 @@ import Column from "./Column";
 
 type Props = {};
 
-export const tasks = {
-  "task-1": { id: "task-1", content: "Take out the garbage" },
-  "task-2": { id: "task-2", content: "Watch my favorite show" },
-  "task-3": { id: "task-3", content: "Charge my phone" },
-  "task-4": { id: "task-4", content: "Cook dinner" },
-} as const;
+export type Task = { id: number; content: string; stage: number };
+export type Stage = { id: number; title: string };
+export type State = { tasks: Task[]; columns: Stage[] };
+export type SetState = React.Dispatch<React.SetStateAction<State>>;
 
-export const column = {
-  id: "column-1",
-  title: "To do",
-  taskIds: ["task-1", "task-2", "task-3", "task-4"],
-} as const;
+const tasks = [
+  { id: 1, content: "Take out the garbage", stage: 1 },
+  { id: 2, content: "Watch my favorite show", stage: 1 },
+  { id: 3, content: "Charge my phone", stage: 2 },
+  { id: 4, content: "Cook dinner", stage: 1 },
+];
 
-export const initialData = {
-  tasks,
-  columns: {
-    "column-1": column,
-  },
-  // Facilitate reordering of the columns
-  columnOrder: ["column-1"],
-} as const;
+const stage1 = {
+  id: 1,
+  title: "Stage 1",
+};
+
+export const initialData: State = {
+  tasks: [
+    { id: 1, content: "Take out the garbage", stage: 1 },
+    { id: 2, content: "Watch my favorite show", stage: 1 },
+    { id: 3, content: "Charge my phone", stage: 1 },
+    { id: 4, content: "Cook dinner", stage: 1 },
+  ],
+  columns: [stage1],
+};
 
 export default function FunctionalityOne({}: Props) {
   const [state, setState] = useState(initialData);
-  function handleDragEnd(result: DropResult) {
-    const { destination, source, draggableId } = result;
-
-    if (!destination) return;
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-
-    // https://stackoverflow.com/questions/56568423/typescript-no-index-signature-with-a-parameter-of-type-string-was-found-on-ty
-    const column = (state.columns as any)[source.droppableId];
-    const newTaskIds = Array.from(column.taskIds);
-    newTaskIds.splice(source.index, 1);
-    newTaskIds.splice(destination.index, 0, draggableId);
-
-    const newColumn = {
-      ...column,
-      taskIds: newTaskIds,
-    };
-
-    const newState = {
-      ...state,
-      columns: {
-        ...state.columns,
-        [newColumn.id]: newColumn,
-      },
-    };
-
-    setState(newState);
-  }
 
   return (
     <>
-      <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
-        {state.columnOrder.map((columnId) => {
-          const column = state.columns[columnId];
-          const tasks = column.taskIds.map((taskId) => state.tasks[taskId]);
-          return <Column key={column.id} column={column} tasks={tasks} />;
+      <DragDropContext
+        onDragEnd={(result) => handleDragEnd(result, state, setState)}
+      >
+        {state.columns.map((column, index) => {
+          return (
+            <Column
+              key={column.id}
+              column={column}
+              tasks={state.tasks.filter((task) =>
+                task.stage === column.id ? task : null
+              )}
+            />
+          );
         })}
       </DragDropContext>
     </>
   );
+}
+
+function handleDragEnd(result: DropResult, state: State, setState: SetState) {
+  const { destination, source, draggableId } = result;
+
+  if (!destination) return;
+
+  if (
+    destination.droppableId === source.droppableId &&
+    destination.index === source.index
+  ) {
+    return;
+  }
+  console.log(draggableId);
+
+  const oldPosition = source.index;
+  const newPosition = destination.index;
+
+  const newTasks = [...state.tasks];
+  const item = newTasks[oldPosition];
+
+  // swap location inside array
+  newTasks.splice(oldPosition, 1);
+  newTasks.splice(newPosition, 0, item);
+
+  setState({ ...state, tasks: newTasks });
 }
