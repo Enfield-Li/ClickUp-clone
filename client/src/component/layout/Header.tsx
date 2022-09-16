@@ -15,15 +15,16 @@ export default function Header({}: Props) {
   return (
     <>
       <Flex minWidth="max-content" alignItems="center" gap="2" m={2}>
-        {/* Title */}
-        <Box p="2">
-          <Link to={ROUTE.HOME}>
-            <Heading size="md">PB platform</Heading>
-          </Link>
-        </Box>
-
         <Spacer />
-        <Link to={ROUTE.ABOUT}>About</Link>
+        <Box
+          p={2}
+          borderRadius={3}
+          _hover={{
+            background: "rgb(51, 88, 119)",
+          }}
+        >
+          <Link to={ROUTE.ABOUT}>About</Link>
+        </Box>
 
         {/* Login */}
         {authState?.user ? (
@@ -36,7 +37,15 @@ export default function Header({}: Props) {
         ) : (
           <>
             {location.pathname === ROUTE.LOGIN ? null : (
-              <Link to={ROUTE.LOGIN}>Log in</Link>
+              <Box
+                p={2}
+                borderRadius={3}
+                _hover={{
+                  background: "rgb(51, 88, 119)",
+                }}
+              >
+                <Link to={ROUTE.LOGIN}>Log in</Link>
+              </Box>
             )}
           </>
         )}
