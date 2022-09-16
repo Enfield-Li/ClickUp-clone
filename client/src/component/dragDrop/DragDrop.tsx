@@ -27,7 +27,7 @@ export const initialData: State = {
   ],
 };
 
-export default function FunctionalityOne({}: Props) {
+export default function DragDrop({}: Props) {
   const [state, setState] = useState(initialData);
 
   return (

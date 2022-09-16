@@ -4,6 +4,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../context/auth/AuthContextTypes";
 import useAuthContext, { logInUser } from "../../hook/useAuthContext";
+import { ROUTE } from "../../utils/constant";
 
 type Props = {};
 
@@ -19,7 +20,7 @@ export default function Login({}: Props) {
       }}
       onSubmit={(credential: User, { setSubmitting }: FormikHelpers<User>) => {
         logInUser(credential, authDispatch);
-        navigate("/");
+        navigate(ROUTE.HOME);
       }}
     >
       <Form>

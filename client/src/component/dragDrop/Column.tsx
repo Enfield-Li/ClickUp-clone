@@ -1,7 +1,7 @@
 import { Droppable } from "@hello-pangea/dnd";
 import React from "react";
 import Card from "./Card";
-import { Stage, Task } from "./FunctionalityOne";
+import { Stage, Task } from "./DragDrop";
 
 type Props = {
   column: Stage;

@@ -1,6 +1,6 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import React from "react";
-import { Task } from "./FunctionalityOne";
+import { Task } from "./DragDrop";
 
 type Props = {
   task: Task;

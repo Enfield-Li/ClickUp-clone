@@ -8,6 +8,7 @@ import useGlobalContext, {
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
   const [loading, setLoading] = useState<boolean>();
+  const [error, setError] = useState<boolean>();
   const { globalDispatch } = useGlobalContext();
 
   async function fetchData() {
@@ -18,6 +19,7 @@ export function useFetch<T>(url: string) {
       const response = await axios.get<T>(url);
       setData(response.data);
     } catch (error) {
+      setError(true);
       const err = error as AxiosError;
       popUpError(err.message, globalDispatch);
       console.log(err);
@@ -29,5 +31,5 @@ export function useFetch<T>(url: string) {
   setLoading(false);
   indicateLoading(false, globalDispatch);
 
-  return { data, loading };
+  return { data, loading, error };
 }
