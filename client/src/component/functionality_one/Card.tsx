@@ -16,7 +16,7 @@ export default function Card({ task, index }: Props) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          {task.content}
+          {task.content} in stage {task.stage}
         </div>
       )}
     </Draggable>

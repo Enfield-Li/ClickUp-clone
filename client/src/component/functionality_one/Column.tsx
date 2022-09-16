@@ -10,15 +10,18 @@ type Props = {
 
 export default function Column({ column, tasks }: Props) {
   return (
-    <Droppable droppableId={String(column.id)}>
-      {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
-          {tasks.map((task, index) => (
-            <Card key={task.id} task={task} index={index} />
-          ))}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+    <>
+      {column.title}
+      <Droppable droppableId={String(column.id)}>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {tasks.map((task, index) => (
+              <Card key={task.id} task={task} index={index} />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </>
   );
 }
