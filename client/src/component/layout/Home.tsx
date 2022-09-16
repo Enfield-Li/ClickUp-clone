@@ -3,8 +3,8 @@ import { Field, Form, Formik } from "formik";
 import useGlobalContext, {
   indicateLoading,
   popUpError,
-} from "../hook/useGlobalContext";
-import ToastButton from "./ToastButton";
+} from "../../hook/useGlobalContext";
+import ToastButton from "../custom/ToastButton";
 
 type Props = {};
 

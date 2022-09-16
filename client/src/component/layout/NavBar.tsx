@@ -8,11 +8,11 @@ export default function NavBar({}: Props) {
   return (
     <>
       <Center h="40px">
-        <Link to="/undefined">Functionality 1</Link>
+        <Link to="/functionality_one">Functionality 1</Link>
       </Center>
 
       <Center h="40px">
-        <Link to="/undefined">Functionality 2</Link>
+        <Link to="/functionality_two">Functionality 2</Link>
       </Center>
     </>
   );

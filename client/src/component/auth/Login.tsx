@@ -2,8 +2,8 @@ import { VStack } from "@chakra-ui/react";
 import { Formik, FormikHelpers, Form, Field } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User } from "../context/auth/AuthContextTypes";
-import useAuthContext, { logInUser } from "../hook/useAuthContext";
+import { User } from "../../context/auth/AuthContextTypes";
+import useAuthContext, { logInUser } from "../../hook/useAuthContext";
 
 type Props = {};
 
