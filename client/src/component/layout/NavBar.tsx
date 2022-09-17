@@ -9,8 +9,13 @@ export default function NavBar({}: Props) {
   const navigate = useNavigate();
 
   return (
-    <Box borderRight={"1px"} borderColor={"teal.400"} height={"full"}>
-      <Heading size="md" alignItems="center" my={4} ml={3}>
+    <Box
+      height={"full"}
+      width={"220px"}
+      borderRight={"1px"}
+      borderColor={"teal.400"}
+    >
+      <Heading size="md" alignItems="center" my={4} px={5}>
         <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
           <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
           Ideas
@@ -20,7 +25,7 @@ export default function NavBar({}: Props) {
       {/* Home */}
       <Box
         my={2}
-        pl={3}
+        px={5}
         borderRadius={3}
         cursor={"pointer"}
         _hover={{
@@ -36,7 +41,7 @@ export default function NavBar({}: Props) {
       {/* Functionality ONE */}
       <Box
         my={2}
-        pl={3}
+        px={5}
         borderRadius={3}
         cursor={"pointer"}
         _hover={{
@@ -52,7 +57,7 @@ export default function NavBar({}: Props) {
       {/* Functionality TWO */}
       <Box
         my={2}
-        pl={3}
+        px={5}
         borderRadius={3}
         cursor={"pointer"}
         _hover={{

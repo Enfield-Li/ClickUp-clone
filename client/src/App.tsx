@@ -4,6 +4,7 @@ import {
   Center,
   ChakraProvider,
   Collapse,
+  Flex,
   Grid,
   GridItem,
   Slide,
@@ -19,26 +20,33 @@ export default function App() {
   useInit();
 
   return (
-    <Grid
-      height="100vh"
-      borderColor={"teal.300"}
-      templateAreas={`"nav header"
-                  "nav main"
-                  "nav main"`}
-      gridTemplateRows={"50px 1fr 30px"}
-      gridTemplateColumns={"150px 1fr"}
-    >
-      <GridItem area={"header"}>
+    <Flex height="100vh">
+      <NavBar />
+      <Box width={"100%"}>
         <Header />
-      </GridItem>
-
-      <GridItem area={"nav"}>
-        <NavBar />
-      </GridItem>
-
-      <GridItem area={"main"}>
         <PageRoute />
-      </GridItem>
-    </Grid>
+      </Box>
+    </Flex>
+    // <Grid
+    //   height="100vh"
+    //   borderColor={"teal.300"}
+    //   templateAreas={`"nav header"
+    //               "nav main"
+    //               "nav main"`}
+    //   gridTemplateRows={"50px 1fr 30px"}
+    //   gridTemplateColumns={"150px 1fr"}
+    // >
+    //   <GridItem area={"header"}>
+    //     <Header />
+    //   </GridItem>
+
+    //   <GridItem area={"nav"}>
+    //     <NavBar />
+    //   </GridItem>
+
+    //   <GridItem area={"main"}>
+    //     <PageRoute />
+    //   </GridItem>
+    // </Grid>
   );
 }
