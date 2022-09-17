@@ -1,61 +1,68 @@
 import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ROUTE } from "../../utils/constant";
 
 type Props = {};
 
 export default function NavBar({}: Props) {
+  const navigate = useNavigate();
+
   return (
     <>
       <Heading size="md" alignItems="center" my={4} ml={3}>
-        <Flex justifyContent={"space-between"}>
-          <Link to={ROUTE.HOME}>
-            <i className="bi bi-lightbulb"></i> Ideas
-          </Link>
-          <Box
-            borderRadius={3}
-            _hover={{
-              background: "rgb(51, 88, 119)",
-            }}
-          ></Box>
-        </Flex>
+        <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
+          <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
+          Ideas
+        </Box>
       </Heading>
 
+      {/* Home */}
       <Box
         my={2}
         pl={3}
         borderRadius={3}
+        cursor={"pointer"}
         _hover={{
-          background: "rgb(51, 88, 119)",
+          color: "black",
+          bg: "gray.400",
         }}
+        onClick={() => navigate(ROUTE.HOME)}
       >
         <i className="bi bi-house" style={{ marginRight: 6 }}></i>
-        <Link to={ROUTE.HOME}>Home</Link>
+        Home
       </Box>
 
+      {/* Functionality ONE */}
       <Box
         my={2}
         pl={3}
         borderRadius={3}
+        cursor={"pointer"}
         _hover={{
-          background: "rgb(51, 88, 119)",
+          color: "black",
+          bg: "gray.400",
         }}
+        onClick={() => navigate(ROUTE.FUNC_ONE)}
       >
         <i className="bi bi-hand-index-thumb" style={{ marginRight: 6 }}></i>
-        <Link to={ROUTE.FUNC_ONE}>Drag and Drop</Link>
+        Drag and Drop
       </Box>
 
+      {/* Functionality TWO */}
       <Box
         my={2}
         pl={3}
         borderRadius={3}
+        cursor={"pointer"}
         _hover={{
-          background: "rgb(51, 88, 119)",
+          color: "black",
+          bg: "gray.400",
         }}
+        onClick={() => navigate(ROUTE.FUNC_TWO)}
       >
         <i className="bi bi-question-circle" style={{ marginRight: 6 }}></i>
-        <Link to={ROUTE.FUNC_TWO}>Functionality 2</Link>
+        Functionality 2
       </Box>
     </>
   );
