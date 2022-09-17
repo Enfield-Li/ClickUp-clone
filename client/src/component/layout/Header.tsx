@@ -14,18 +14,20 @@ export default function Header({}: Props) {
   const { globalState } = useGlobalContext();
 
   return (
-    <>
+    <Box borderBottom={"1px"} borderColor={"teal.400"}>
       <Flex minWidth="max-content" alignItems="center" gap="2" m={2}>
         <Spacer />
         <Box
           p={2}
           borderRadius={3}
+          cursor={"pointer"}
           _hover={{
             color: "black",
             bg: "gray.400",
           }}
+          onClick={() => navigate(ROUTE.ABOUT)}
         >
-          <Link to={ROUTE.ABOUT}>About</Link>
+          About
         </Box>
 
         {/* Login */}
@@ -54,12 +56,14 @@ export default function Header({}: Props) {
               <Box
                 p={2}
                 borderRadius={3}
+                cursor={"pointer"}
                 _hover={{
                   color: "black",
                   bg: "gray.400",
                 }}
+                onClick={() => navigate(ROUTE.LOGIN)}
               >
-                <Link to={ROUTE.LOGIN}>Log in</Link>
+                Log in
               </Box>
             )}
           </>
@@ -70,6 +74,6 @@ export default function Header({}: Props) {
       </Flex>
       {/* Loading progress bar */}
       {globalState.loading ? <Progress size="xs" isIndeterminate /> : null}
-    </>
+    </Box>
   );
 }

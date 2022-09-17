@@ -9,7 +9,7 @@ export default function NavBar({}: Props) {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Box borderRight={"1px"} borderColor={"teal.400"} height={"full"}>
       <Heading size="md" alignItems="center" my={4} ml={3}>
         <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
           <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
@@ -64,6 +64,6 @@ export default function NavBar({}: Props) {
         <i className="bi bi-question-circle" style={{ marginRight: 6 }}></i>
         Functionality 2
       </Box>
-    </>
+    </Box>
   );
 }

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import AuthStateProvider from "./context/auth/AuthContext";
 import GlobalStateProvider from "./context/global/GlobalContext";
+import { ChakraProvider, theme } from "@chakra-ui/react";
 // import reportWebVitals from "./reportWebVitals"
 // import * as serviceWorker from "./serviceWorker"
 
@@ -18,7 +19,9 @@ root.render(
       <AuthStateProvider>
         <GlobalStateProvider>
           <ColorModeScript />
-          <App />
+          <ChakraProvider theme={theme}>
+            <App />
+          </ChakraProvider>
         </GlobalStateProvider>
       </AuthStateProvider>
     </BrowserRouter>
