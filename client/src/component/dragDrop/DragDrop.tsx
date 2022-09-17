@@ -29,6 +29,12 @@ export const initialData: State = {
 
 export default function DragDrop({}: Props) {
   const [state, setState] = useState(initialData);
+  const [columnIdWhenDragging, setColumnIdWhenDragging] = useState<number>();
+  console.log(columnIdWhenDragging);
+
+  function isDraggingToOtherColumn(currentColumnId: number) {
+    return columnIdWhenDragging && currentColumnId !== columnIdWhenDragging;
+  }
 
   return (
     <>
@@ -38,12 +44,17 @@ export default function DragDrop({}: Props) {
         <SimpleGrid columns={3} spacing={10}>
           {state.columns.map((column, index) => {
             return (
-              <Box key={column.id}>
+              <Box
+                key={column.id}
+                border={isDraggingToOtherColumn(column.id) ? "dotted" : ""}
+              >
                 <Column
                   column={column}
                   tasks={state.tasks.filter((task) =>
                     task.stage === column.id ? task : null
                   )}
+                  columnIdWhenDragging={columnIdWhenDragging}
+                  setColumnIdWhenDragging={setColumnIdWhenDragging}
                 />
               </Box>
             );
