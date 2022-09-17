@@ -1,20 +1,8 @@
-import * as React from "react";
-import {
-  Box,
-  Center,
-  ChakraProvider,
-  Collapse,
-  Flex,
-  Grid,
-  GridItem,
-  Slide,
-  theme,
-} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import Header from "./component/layout/Header";
+import NavBar from "./component/layout/NavBar";
 import useInit from "./hook/useInit";
 import PageRoute from "./routes/PageRoute";
-import NavBar from "./component/layout/NavBar";
-import { useState } from "react";
 
 export default function App() {
   useInit();
@@ -27,26 +15,5 @@ export default function App() {
         <PageRoute />
       </Box>
     </Flex>
-    // <Grid
-    //   height="100vh"
-    //   borderColor={"teal.300"}
-    //   templateAreas={`"nav header"
-    //               "nav main"
-    //               "nav main"`}
-    //   gridTemplateRows={"50px 1fr 30px"}
-    //   gridTemplateColumns={"150px 1fr"}
-    // >
-    //   <GridItem area={"header"}>
-    //     <Header />
-    //   </GridItem>
-
-    //   <GridItem area={"nav"}>
-    //     <NavBar />
-    //   </GridItem>
-
-    //   <GridItem area={"main"}>
-    //     <PageRoute />
-    //   </GridItem>
-    // </Grid>
   );
 }
