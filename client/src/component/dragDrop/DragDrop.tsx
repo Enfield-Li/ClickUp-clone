@@ -12,12 +12,12 @@ export type SetState = React.Dispatch<React.SetStateAction<State>>;
 
 export const initialData: State = {
   tasks: [
-    { id: 11, content: "Take out the garbage", stage: 1 },
-    { id: 25, content: "Watch my favorite show", stage: 3 },
-    { id: 32, content: "Charge my phone", stage: 1 },
-    { id: 43, content: "Cook dinner", stage: 2 },
+    { id: 11, content: "11111111111", stage: 1 },
+    { id: 25, content: "22222222222", stage: 3 },
+    { id: 32, content: "33333333333", stage: 1 },
+    { id: 43, content: "44444444444", stage: 2 },
     { id: 45, content: "55555555555", stage: 3 },
-    { id: 65, content: "56666666666", stage: 2 },
+    { id: 65, content: "66666666666", stage: 2 },
     { id: 57, content: "77777777777", stage: 1 },
   ],
   columns: [
@@ -38,7 +38,7 @@ export default function DragDrop({}: Props) {
         <SimpleGrid columns={3} spacing={10}>
           {state.columns.map((column, index) => {
             return (
-              <Box key={column.id} height="1.5">
+              <Box key={column.id}>
                 <Column
                   column={column}
                   tasks={state.tasks.filter((task) =>

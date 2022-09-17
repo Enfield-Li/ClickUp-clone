@@ -1,4 +1,15 @@
-import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Center,
+  Heading,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import useGlobalContext, {
   indicateLoading,
