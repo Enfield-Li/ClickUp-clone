@@ -14,17 +14,20 @@ export default function NavBar({ onToggle }: Props) {
     <Box height={"full"} borderRight={"1px"} borderColor={"teal.400"}>
       <Flex>
         {/* App icon */}
-        <Heading size="md" alignItems="center" my={4} px={5}>
-          <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
-            <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
-            Ideas
-          </Box>
-        </Heading>
+        <Center py={3}>
+          <Heading size="md" px={5}>
+            <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
+              <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
+              Ideas
+            </Box>
+          </Heading>
+        </Center>
 
         {/* Close menu icon */}
-        <Center cursor={"pointer"} onClick={() => onToggle()}>
+        <Center cursor={"pointer"} onClick={() => onToggle()} pl={5}>
           <Box
-            p={2}
+            p={1}
+            px={2}
             _hover={{
               color: "black",
               bg: "gray.300",

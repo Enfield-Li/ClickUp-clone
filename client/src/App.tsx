@@ -24,9 +24,6 @@ export default function App() {
         onAnimationComplete={() => setHidden(!isOpen)}
         animate={{ width: isOpen ? 220 : 0 }}
         style={{
-          top: "0",
-          right: "0",
-          height: "100vh",
           overflow: "hidden",
           whiteSpace: "nowrap",
         }}

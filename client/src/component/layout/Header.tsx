@@ -19,7 +19,8 @@ export default function Header({ onToggle, isOpen }: Props) {
         {/* Toggle menu icon */}
         {!isOpen ? (
           <Box
-            p={2}
+            p={1}
+            px={2}
             ml={2}
             _hover={{
               color: "black",
