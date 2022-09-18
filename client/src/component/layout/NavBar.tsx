@@ -1,26 +1,40 @@
-import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Spacer } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE } from "../../utils/constant";
 
-type Props = {};
+type Props = {
+  onToggle: (props?: any) => any;
+};
 
-export default function NavBar({}: Props) {
+export default function NavBar({ onToggle }: Props) {
   const navigate = useNavigate();
 
   return (
-    <Box
-      height={"full"}
-      width={"220px"}
-      borderRight={"1px"}
-      borderColor={"teal.400"}
-    >
-      <Heading size="md" alignItems="center" my={4} px={5}>
-        <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
-          <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
-          Ideas
-        </Box>
-      </Heading>
+    <Box height={"full"} borderRight={"1px"} borderColor={"teal.400"}>
+      <Flex>
+        {/* App icon */}
+        <Heading size="md" alignItems="center" my={4} px={5}>
+          <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
+            <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
+            Ideas
+          </Box>
+        </Heading>
+
+        {/* Close menu icon */}
+        <Center cursor={"pointer"} onClick={() => onToggle()}>
+          <Box
+            p={2}
+            _hover={{
+              color: "black",
+              bg: "gray.300",
+            }}
+            borderRadius={"md"}
+          >
+            <i className="bi bi-chevron-bar-left"></i>
+          </Box>
+        </Center>
+      </Flex>
 
       {/* Home */}
       <Box
@@ -30,7 +44,7 @@ export default function NavBar({}: Props) {
         cursor={"pointer"}
         _hover={{
           color: "black",
-          bg: "gray.400",
+          bg: "gray.300",
         }}
         onClick={() => navigate(ROUTE.HOME)}
       >
@@ -46,7 +60,7 @@ export default function NavBar({}: Props) {
         cursor={"pointer"}
         _hover={{
           color: "black",
-          bg: "gray.400",
+          bg: "gray.300",
         }}
         onClick={() => navigate(ROUTE.FUNC_ONE)}
       >
@@ -62,7 +76,7 @@ export default function NavBar({}: Props) {
         cursor={"pointer"}
         _hover={{
           color: "black",
-          bg: "gray.400",
+          bg: "gray.300",
         }}
         onClick={() => navigate(ROUTE.FUNC_TWO)}
       >
