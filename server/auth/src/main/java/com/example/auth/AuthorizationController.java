@@ -105,7 +105,7 @@ class AuthorizationController {
   }
 
   @PostMapping(REFRESH_TOKEN)
-  ResponseEntity<AuthorizationResponse> verify(HttpServletRequest request) {
+  ResponseEntity<AuthorizationResponse> refreshToken(HttpServletRequest request) {
     // 1. get both tokens
     var accessToken = request.getHeader(AUTHENTICATION);
     var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
