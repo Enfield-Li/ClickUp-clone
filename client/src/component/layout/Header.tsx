@@ -51,9 +51,9 @@ export default function Header({ onToggle, isOpen }: Props) {
         </Box>
 
         {/* User info & logout */}
-        {authState?.user ? (
+        {authState.user?.username ? (
           <>
-            <Text>Hello! {authState.user?.username}</Text>
+            <Text>Hello! {authState.user.username}</Text>
             <Box
               p={2}
               borderRadius={3}

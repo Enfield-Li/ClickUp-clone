@@ -10,8 +10,8 @@ export default function authReducer(
       return {
         ...state,
         user: {
+          id: action.payload.id,
           username: action.payload.username,
-          password: action.payload.password,
         },
       };
     }

@@ -1,13 +1,16 @@
 import { useToast } from "@chakra-ui/react";
 import React, { useEffect } from "react";
+import { Credentials } from "../context/auth/AuthContextTypes";
+import useAuthContext, { refreshUserToken } from "./useAuthContext";
 import useGlobalContext from "./useGlobalContext";
 
 export default function useInit() {
   const { globalState } = useGlobalContext();
+  const { authDispatch } = useAuthContext();
   const toast = useToast();
 
   useEffect(() => {
-    console.log("Initialize some network connection...");
+    refreshUserToken(authDispatch);
   }, []);
 
   // toast for indicating network error

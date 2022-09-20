@@ -46,10 +46,12 @@ export default function DragDrop({}: Props) {
             return (
               <Box
                 key={column.id}
+                borderRadius={4}
                 border={isDraggingToOtherColumn(column.id) ? "dotted" : ""}
               >
                 <Column
                   column={column}
+                  // every column contains the data from it
                   tasks={state.tasks.filter((task) =>
                     task.stage === column.id ? task : null
                   )}
@@ -145,7 +147,6 @@ function handleDragEnd(result: DropResult, state: State, setState: SetState) {
       return;
     }
 
-    // Normal situation
     const targetTask = taskListInDestinationStage[newPositionInStage];
     const indexOfTargetTaskInOriginalState = state.tasks.findIndex(
       (task) => task.id === targetTask.id

@@ -1,4 +1,4 @@
-import { Center, Text } from "@chakra-ui/react";
+import { Box, Center, Text } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import React, { useState } from "react";
 import Card from "./Card";
@@ -20,7 +20,7 @@ export default function Column({
   setColumnIdWhenDragging,
 }: Props) {
   return (
-    <>
+    <Box>
       <Center>
         <Text
           color={"green.500"}
@@ -32,9 +32,9 @@ export default function Column({
           {column.title}
         </Text>
       </Center>
-      <Droppable droppableId={String(column.id)} >
+      <Droppable droppableId={String(column.id)}>
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
+          <Box ref={provided.innerRef} {...provided.droppableProps}>
             {tasks.map((task, index) => (
               <Card
                 task={task}
@@ -46,9 +46,9 @@ export default function Column({
               />
             ))}
             {provided.placeholder}
-          </div>
+          </Box>
         )}
       </Droppable>
-    </>
+    </Box>
   );
 }

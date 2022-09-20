@@ -11,9 +11,20 @@ export type AuthStateType = {
   user?: User;
 };
 
-export type User = {
+export type Credentials = {
   username: string;
   password: string;
+};
+
+export type User = {
+  id: number;
+  username: string;
+};
+
+export type UserResponse = {
+  id: number;
+  username: string;
+  accessToken: string;
 };
 
 export type AuthActionType = LogInUser | LogOutUser;

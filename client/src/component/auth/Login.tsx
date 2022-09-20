@@ -2,8 +2,8 @@ import { VStack } from "@chakra-ui/react";
 import { Formik, FormikHelpers, Form, Field } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { User } from "../../context/auth/AuthContextTypes";
-import useAuthContext, { logInUser } from "../../hook/useAuthContext";
+import { Credentials } from "../../context/auth/AuthContextTypes";
+import useAuthContext, { loginUser } from "../../hook/useAuthContext";
 import { ROUTE } from "../../utils/constant";
 
 type Props = {};
@@ -13,13 +13,13 @@ export default function Login({}: Props) {
   const navigate = useNavigate();
 
   return (
-    <Formik
+    <Formik<Credentials>
       initialValues={{
         username: "",
         password: "",
       }}
-      onSubmit={(credential: User, { setSubmitting }: FormikHelpers<User>) => {
-        logInUser(credential, authDispatch);
+      onSubmit={(credential: Credentials) => {
+        loginUser(credential, authDispatch);
         navigate(ROUTE.HOME);
       }}
     >
