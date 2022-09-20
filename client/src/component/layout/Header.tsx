@@ -1,4 +1,12 @@
-import { Box, Flex, Heading, Progress, Spacer, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Progress,
+  Spacer,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthContext, { logOutUser } from "../../hook/useAuthContext";
@@ -8,10 +16,15 @@ import { ROUTE } from "../../utils/constant";
 type Props = { onToggle: (props?: any) => any; isOpen: boolean };
 
 export default function Header({ onToggle, isOpen }: Props) {
+  const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
   const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
   const { globalState } = useGlobalContext();
+
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <Box borderBottom={"1px"} borderColor={"teal.400"}>
@@ -34,6 +47,14 @@ export default function Header({ onToggle, isOpen }: Props) {
           </Box>
         ) : null}
 
+        <Box pl={isOpen ? 3 : 0}>
+          {location.pathname === "/" ? (
+            <Text>Home</Text>
+          ) : (
+            <Text>{capitalizeFirstLetter(location.pathname.substring(1))}</Text>
+          )}
+        </Box>
+
         <Spacer />
 
         {/* About page */}
@@ -49,7 +70,6 @@ export default function Header({ onToggle, isOpen }: Props) {
         >
           About
         </Box>
-
         {/* User info & logout */}
         {authState.user?.username ? (
           <>
@@ -63,7 +83,7 @@ export default function Header({ onToggle, isOpen }: Props) {
                 bg: "gray.300",
               }}
               onClick={() => {
-                logOutUser(authDispatch);
+                logOutUser(authDispatch, toast);
                 navigate(ROUTE.HOME);
               }}
             >
@@ -89,7 +109,6 @@ export default function Header({ onToggle, isOpen }: Props) {
             )}
           </>
         )}
-
         {/* Dark/light mode switcher */}
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>

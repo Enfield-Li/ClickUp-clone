@@ -1,16 +1,23 @@
 import { useToast } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { Credentials } from "../context/auth/AuthContextTypes";
+import { ACCESS_TOKEN } from "../utils/constant";
 import useAuthContext, { refreshUserToken } from "./useAuthContext";
 import useGlobalContext from "./useGlobalContext";
 
 export default function useInit() {
   const { globalState } = useGlobalContext();
   const { authDispatch } = useAuthContext();
-  const toast = useToast();
+  const toast = useToast({ duration: 3000, isClosable: true });
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    refreshUserToken(authDispatch);
+    refreshUserToken(authDispatch, toast);
+
+    if (accessToken) {
+      setInterval(() => {
+        refreshUserToken(authDispatch, toast);
+      }, 1790000); // 29 min and 50 sec
+    }
   }, []);
 
   // toast for indicating network error
@@ -20,8 +27,6 @@ export default function useInit() {
         title: "Something's gone wrong...",
         description: globalState.error,
         status: "error",
-        duration: 4000,
-        isClosable: true,
       });
   }, [globalState.error]);
 }

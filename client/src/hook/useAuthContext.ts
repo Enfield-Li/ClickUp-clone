@@ -4,7 +4,7 @@ import {
   AUTH_ENDPOINT_REFRESH_TOKEN,
   BEARER,
 } from "./../utils/constant";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/auth/AuthContext";
 import {
@@ -14,6 +14,7 @@ import {
   UserResponse,
 } from "../context/auth/AuthContextTypes";
 import { ACCESS_TOKEN, AUTH } from "../utils/constant";
+import { ToastId, UseToastOptions } from "@chakra-ui/react";
 
 export default function useAuthContext() {
   return useContext(AuthContext);
@@ -21,7 +22,8 @@ export default function useAuthContext() {
 
 export async function loginUser(
   credentials: Credentials,
-  dispatch: React.Dispatch<AuthActionType>
+  dispatch: React.Dispatch<AuthActionType>,
+  toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
     const response = await axios.post<UserResponse>(
@@ -39,16 +41,35 @@ export async function loginUser(
       type: AUTH.LOGIN_USER,
       payload: user,
     });
+
+    toast({
+      title: "Successful!",
+      description: "You've logged in.",
+      status: "success",
+    });
+
+    return true;
   } catch (error) {
+    const err = error as AxiosError;
+    console.log(err);
+
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH.LOGOUT_USER });
-    console.log(error);
+
+    toast({
+      title: "Error!",
+      description: err.response?.data as string,
+      status: "error",
+    });
+    
+    return false;
   }
 }
 
 export async function refreshUserToken(
-  dispatch: React.Dispatch<AuthActionType>
+  dispatch: React.Dispatch<AuthActionType>,
+  toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -75,14 +96,25 @@ export async function refreshUserToken(
       payload: user,
     });
   } catch (error) {
+    const err = error as AxiosError;
+    console.log(err);
+
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH.LOGOUT_USER });
-    console.log(error);
+
+    toast({
+      title: "Error!",
+      description: err.response?.data as string,
+      status: "error",
+    });
   }
 }
 
-export function logOutUser(dispatch: React.Dispatch<AuthActionType>) {
+export function logOutUser(
+  dispatch: React.Dispatch<AuthActionType>,
+  toast: (options?: UseToastOptions | undefined) => ToastId
+) {
   // invalidate session
   axios.post(AUTH_ENDPOINT_LOGOUT, null, {
     withCredentials: true,
@@ -91,4 +123,10 @@ export function logOutUser(dispatch: React.Dispatch<AuthActionType>) {
   // clear local auth state and accessToken
   localStorage.removeItem(ACCESS_TOKEN);
   dispatch({ type: AUTH.LOGOUT_USER });
+
+  toast({
+    title: "Successful!",
+    description: "You've logged out.",
+    status: "success",
+  });
 }

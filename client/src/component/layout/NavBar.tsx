@@ -42,6 +42,7 @@ export default function NavBar({ onToggle }: Props) {
       {/* Home */}
       <Box
         my={2}
+        py={1}
         px={5}
         borderRadius={3}
         cursor={"pointer"}
@@ -58,6 +59,7 @@ export default function NavBar({ onToggle }: Props) {
       {/* Functionality ONE */}
       <Box
         my={2}
+        py={1}
         px={5}
         borderRadius={3}
         cursor={"pointer"}
@@ -74,6 +76,7 @@ export default function NavBar({ onToggle }: Props) {
       {/* Functionality TWO */}
       <Box
         my={2}
+        py={1}
         px={5}
         borderRadius={3}
         cursor={"pointer"}
