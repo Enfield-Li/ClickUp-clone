@@ -15,16 +15,17 @@
 		<module>apigateway</module>
 		<module>notification</module>
 		<module>amqp</module>
+		<module>auth</module>
 	</modules>
 
 	<name>muti-module</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version>
 		<!-- https://www.baeldung.com/maven-java-version -->
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
 		<spring.boot.dependencies.version>2.5.7</spring.boot.dependencies.version>
 		<spring.cloud-version>2020.0.3</spring.cloud-version>
 	</properties>
@@ -66,6 +67,14 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency>
 	</dependencies>
 

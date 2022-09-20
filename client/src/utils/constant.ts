@@ -6,7 +6,7 @@ const LOGOUT = "/logout";
 const REGISTER = "/register";
 const REFRESH_TOKEN = "/refresh_token";
 
-const AUTH_ENDPOINT = "http://localhost:8082";
+const AUTH_ENDPOINT = "http://localhost:8083";
 const AUTH_VERSION = "/authorization/v1/user";
 
 export const AUTH_ENDPOINT_LOGIN = AUTH_ENDPOINT + AUTH_VERSION + LOGIN;

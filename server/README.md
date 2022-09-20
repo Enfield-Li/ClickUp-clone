@@ -32,6 +32,16 @@
                      |                                                                                        |                    
                      +----------------------------------------------------------------------------------------+        
 ```
+
+### Ports:
+    Customer: 8080
+    Fraud: 8081
+    Notification: 8082
+    Gateway: 8083
+    Auth: 8085
+
+    Eureka server: 8761
+
 ### Run in Docker:
 
     Maven clean/install
