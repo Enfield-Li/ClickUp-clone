@@ -1,6 +1,7 @@
 package com.example.clients.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -48,6 +49,18 @@ public class JwtUtils {
       .setIssuedAt(new Date())
       .signWith(key)
       .compact();
+  }
+
+  public Jws<Claims> validateAccessToken(String jwsToken) {
+    try {
+      return Jwts
+        .parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(resolveAccessToken(jwsToken));
+    } catch (Exception e) {
+      throw new InvalidateCredentialsException();
+    }
   }
 
   public Claims validateTokenAndGetClaims(String jwsToken) {

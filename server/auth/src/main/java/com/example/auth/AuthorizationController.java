@@ -1,6 +1,7 @@
 package com.example.auth;
 
 import static com.example.auth.Constants.*;
+import static com.example.clients.UrlConstants.*;
 
 import com.example.auth.dto.AuthorizationResponse;
 import com.example.auth.dto.Credentials;
@@ -31,7 +32,6 @@ class AuthorizationController {
 
   private final Integer INITIAL_TOKEN_VERSION = 0;
   private final String REFRESH_TOKEN = "refresh_token";
-  private final String AUTHENTICATION = "Authorization";
 
   @PostMapping(REGISTER)
   ResponseEntity<AuthorizationResponse> register(
@@ -105,9 +105,11 @@ class AuthorizationController {
   }
 
   @PostMapping(REFRESH_TOKEN)
-  ResponseEntity<AuthorizationResponse> refreshToken(HttpServletRequest request) {
+  ResponseEntity<AuthorizationResponse> refreshToken(
+    HttpServletRequest request
+  ) {
     // 1. get both tokens
-    var accessToken = request.getHeader(AUTHENTICATION);
+    var accessToken = request.getHeader(AUTHORIZATION);
     var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
     // 2. validate tokens and retrieve payload
