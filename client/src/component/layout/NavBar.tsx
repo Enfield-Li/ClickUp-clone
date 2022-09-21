@@ -1,4 +1,11 @@
-import { Box, Center, Flex, Heading, Spacer } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Spacer,
+  useMediaQuery,
+} from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTE } from "../../utils/constant";
@@ -12,7 +19,7 @@ export default function NavBar({ onToggle }: Props) {
 
   return (
     <Box height={"full"} borderRight={"1px"} borderColor={"teal.400"}>
-      <Flex>
+      <Flex my={1}>
         {/* App icon */}
         <Center py={3}>
           <Heading size="md" px={5}>
@@ -24,9 +31,9 @@ export default function NavBar({ onToggle }: Props) {
         </Center>
 
         {/* Close menu icon */}
-        <Center cursor={"pointer"} onClick={() => onToggle()} pl={5}>
+        <Center cursor={"pointer"} onClick={() => onToggle()} ml={6}>
           <Box
-            p={1}
+            py={1}
             px={2}
             _hover={{
               color: "black",
@@ -41,7 +48,6 @@ export default function NavBar({ onToggle }: Props) {
 
       {/* Home */}
       <Box
-        my={2}
         py={1}
         px={5}
         borderRadius={3}
@@ -58,7 +64,6 @@ export default function NavBar({ onToggle }: Props) {
 
       {/* Functionality ONE */}
       <Box
-        my={2}
         py={1}
         px={5}
         borderRadius={3}
@@ -75,7 +80,6 @@ export default function NavBar({ onToggle }: Props) {
 
       {/* Functionality TWO */}
       <Box
-        my={2}
         py={1}
         px={5}
         borderRadius={3}

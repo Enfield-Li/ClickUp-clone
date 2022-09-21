@@ -1,9 +1,4 @@
-import {
-  AUTH_ENDPOINT_LOGIN,
-  AUTH_ENDPOINT_LOGOUT,
-  AUTH_ENDPOINT_REFRESH_TOKEN,
-  BEARER,
-} from "./../utils/constant";
+import { API_ENDPOINT, BEARER } from "./../utils/constant";
 import axios, { AxiosError } from "axios";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/auth/AuthContext";
@@ -13,7 +8,7 @@ import {
   User,
   UserResponse,
 } from "../context/auth/AuthContextTypes";
-import { ACCESS_TOKEN, AUTH } from "../utils/constant";
+import { ACCESS_TOKEN, AUTH_ACTION } from "../utils/constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 
 export default function useAuthContext() {
@@ -27,7 +22,7 @@ export async function loginUser(
 ) {
   try {
     const response = await axios.post<UserResponse>(
-      AUTH_ENDPOINT_LOGIN,
+      API_ENDPOINT.AUTH_ENDPOINT_LOGIN,
       credentials,
       { withCredentials: true }
     );
@@ -38,7 +33,7 @@ export async function loginUser(
 
     // update auth state
     dispatch({
-      type: AUTH.LOGIN_USER,
+      type: AUTH_ACTION.LOGIN_USER,
       payload: user,
     });
 
@@ -55,15 +50,54 @@ export async function loginUser(
 
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
-    dispatch({ type: AUTH.LOGOUT_USER });
+    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     toast({
       title: "Error!",
       description: err.response?.data as string,
       status: "error",
     });
-    
+
     return false;
+  }
+}
+
+export async function registerUser(
+  credentials: Credentials,
+  dispatch: React.Dispatch<AuthActionType>,
+  toast: (options?: UseToastOptions | undefined) => ToastId
+) {
+  try {
+    const response = await axios.post<UserResponse>(
+      API_ENDPOINT.AUTH_ENDPOINT_REGISTER,
+      credentials,
+      { withCredentials: true }
+    );
+    // store accessToken to localStorage
+    localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
+
+    const user = { id: response.data.id, username: response.data.username };
+
+    // update auth state
+    dispatch({
+      type: AUTH_ACTION.LOGIN_USER,
+      payload: user,
+    });
+
+    toast({
+      title: "Successful!",
+      description: "You've logged in.",
+      status: "success",
+    });
+  } catch (error) {
+    const err = error as AxiosError;
+    console.log(err);
+
+    // clear local auth state and accessToken
+    localStorage.removeItem(ACCESS_TOKEN);
+    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
+
+    return err.response?.data as string;
   }
 }
 
@@ -77,7 +111,7 @@ export async function refreshUserToken(
     if (!accessToken) return;
 
     const response = await axios.post<UserResponse>(
-      AUTH_ENDPOINT_REFRESH_TOKEN,
+      API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN,
       null,
       {
         withCredentials: true,
@@ -92,7 +126,7 @@ export async function refreshUserToken(
 
     // update auth state
     dispatch({
-      type: AUTH.LOGIN_USER,
+      type: AUTH_ACTION.LOGIN_USER,
       payload: user,
     });
   } catch (error) {
@@ -101,7 +135,7 @@ export async function refreshUserToken(
 
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
-    dispatch({ type: AUTH.LOGOUT_USER });
+    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     toast({
       title: "Error!",
@@ -116,13 +150,13 @@ export function logOutUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   // invalidate session
-  axios.post(AUTH_ENDPOINT_LOGOUT, null, {
+  axios.post(API_ENDPOINT.AUTH_ENDPOINT_LOGOUT, null, {
     withCredentials: true,
   });
 
   // clear local auth state and accessToken
   localStorage.removeItem(ACCESS_TOKEN);
-  dispatch({ type: AUTH.LOGOUT_USER });
+  dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
   toast({
     title: "Successful!",

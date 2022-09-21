@@ -1,4 +1,4 @@
-import { GLOBAL } from "../../utils/constant";
+import { GLOBAL_ACTION } from "../../utils/constant";
 import { GlobalStateType, GlobalActionType } from "./GlobalContextTypes";
 
 export default function globalReducer(
@@ -6,11 +6,11 @@ export default function globalReducer(
   action: GlobalActionType
 ) {
   switch (action.type) {
-    case GLOBAL.NEW_ERROR: {
+    case GLOBAL_ACTION.NEW_ERROR: {
       return { ...state, error: action.payload };
     }
 
-    case GLOBAL.LOADING_STATE: {
+    case GLOBAL_ACTION.LOADING_STATE: {
       return { ...state, loading: action.payload };
     }
 

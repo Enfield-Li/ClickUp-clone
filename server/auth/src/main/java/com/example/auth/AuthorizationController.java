@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(USER_API)
@@ -45,7 +47,10 @@ class AuthorizationController {
     var exist = repository.existsByUsername(username);
 
     // 1.5 user exists
-    if (exist) throw new UserAlreadyExistsException();
+    if (exist) {
+      log.error("User already exists.");
+      throw new UserAlreadyExistsException();
+    }
 
     // 2. save user
     credentials.setPassword(passwordEncoder.encode(password));
@@ -65,6 +70,10 @@ class AuthorizationController {
       username,
       INITIAL_TOKEN_VERSION
     );
+
+    var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
+    System.out.println("session id: " + session.getId());
+    System.out.println("refreshToken: " + refreshToken);
 
     // 4. send access token
     return ResponseEntity.ok(userResponse);
@@ -86,7 +95,10 @@ class AuthorizationController {
     );
 
     // 1.5 wrong password
-    if (!matches) throw new InvalidateCredentialsException();
+    if (!matches) {
+      log.error("Invalid password");
+      throw new InvalidateCredentialsException();
+    }
 
     var userId = applicationUser.getId();
     var username = applicationUser.getUsername();
@@ -129,6 +141,7 @@ class AuthorizationController {
       tokenVersion != applicationUser.getRefreshTokenVersion() ||
       userIdInAccessToken != userIdInRefreshToken
     ) {
+      log.error("Token version mismatch");
       session.invalidate();
       throw new InvalidateCredentialsException();
     }
@@ -174,6 +187,7 @@ class AuthorizationController {
 
   @ExceptionHandler(InvalidateCredentialsException.class)
   ResponseEntity<String> handleInvalidateCredentialsException() {
+    log.error("InvalidateCredentialsException");
     return ResponseEntity
       .status(HttpStatus.UNAUTHORIZED)
       .body("Failed to login, please try again.");
@@ -181,6 +195,7 @@ class AuthorizationController {
 
   @ExceptionHandler(UserAlreadyExistsException.class)
   ResponseEntity<String> handleUserAlreadyExistsException() {
+    log.error("UserAlreadyExistsException");
     return ResponseEntity
       .status(HttpStatus.BAD_REQUEST)
       .body("User already exists.");

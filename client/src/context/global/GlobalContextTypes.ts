@@ -1,4 +1,4 @@
-import { GLOBAL } from "../../utils/constant";
+import { GLOBAL_ACTION } from "../../utils/constant";
 
 export type GlobalContextType = {
   globalState: GlobalStateType;
@@ -15,11 +15,11 @@ export type GlobalStateType = {
 export type GlobalActionType = NewErrorState | IndicateLoadingState;
 
 type NewErrorState = {
-  type: typeof GLOBAL.NEW_ERROR;
+  type: typeof GLOBAL_ACTION.NEW_ERROR;
   payload: string;
 };
 
 type IndicateLoadingState = {
-  type: typeof GLOBAL.LOADING_STATE;
+  type: typeof GLOBAL_ACTION.LOADING_STATE;
   payload: boolean;
 };

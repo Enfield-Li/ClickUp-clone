@@ -7,10 +7,12 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Log4j2
 @Component
 public class JwtUtils {
 
@@ -59,6 +61,7 @@ public class JwtUtils {
         .build()
         .parseClaimsJws(resolveAccessToken(jwsToken));
     } catch (Exception e) {
+      log.error("AccessToken validation error: " + e);
       throw new InvalidateCredentialsException();
     }
   }
@@ -72,6 +75,7 @@ public class JwtUtils {
         .parseClaimsJws(jwsToken)
         .getBody();
     } catch (Exception e) {
+      log.error("Token validation error: " + e);
       throw new InvalidateCredentialsException();
     }
   }
