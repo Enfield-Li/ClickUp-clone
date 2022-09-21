@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 @Log4j2
 @Component
-public class JwtUtils {
+public class JwtUtilitiesImpl implements JwtUtilities {
 
   private Key key;
 
@@ -32,6 +32,7 @@ public class JwtUtils {
     this.key = Keys.hmacShaKeyFor(secret.getBytes());
   }
 
+  @Override
   public String createAccessToken(Integer userId) {
     return Jwts
       .builder()
@@ -42,6 +43,7 @@ public class JwtUtils {
       .compact();
   }
 
+  @Override
   public String createRefreshToken(Integer userId, Integer tokenVersion) {
     return Jwts
       .builder()
@@ -53,6 +55,7 @@ public class JwtUtils {
       .compact();
   }
 
+  @Override
   public Jws<Claims> validateAccessToken(String jwsToken) {
     try {
       return Jwts
@@ -62,26 +65,13 @@ public class JwtUtils {
         .parseClaimsJws(resolveAccessToken(jwsToken));
     } catch (Exception e) {
       log.error("AccessToken validation error: " + e);
-      throw new InvalidateCredentialsException();
-    }
-  }
-
-  public Claims validateTokenAndGetClaims(String jwsToken) {
-    try {
-      return Jwts
-        .parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(jwsToken)
-        .getBody();
-    } catch (Exception e) {
-      log.error("Token validation error: " + e);
-      throw new InvalidateCredentialsException();
+      throw new InvalidCredentialsException();
     }
   }
 
   // Includes parsing and validate token
-  public RefreshTokenPayload getRefreshTokenPayload(String bearerToken) {
+  @Override
+  public RefreshTokenPayload getPayloadFromRefreshToken(String bearerToken) {
     var claims = validateTokenAndGetClaims(bearerToken);
 
     var userId = Integer.parseInt(claims.getSubject());
@@ -91,13 +81,28 @@ public class JwtUtils {
   }
 
   // Includes parsing and validate token
-  public Integer getAccessTokenUserId(String bearerToken) {
+  @Override
+  public Integer getUserIdFromAccessToken(String bearerToken) {
     return Integer.parseInt(
       validateTokenAndGetClaims(resolveAccessToken(bearerToken)).getSubject()
     );
   }
 
-  public String resolveAccessToken(String bearerToken) {
+  private Claims validateTokenAndGetClaims(String jwsToken) {
+    try {
+      return Jwts
+        .parserBuilder()
+        .setSigningKey(key)
+        .build()
+        .parseClaimsJws(jwsToken)
+        .getBody();
+    } catch (Exception e) {
+      log.error("Token validation error: " + e);
+      throw new InvalidCredentialsException();
+    }
+  }
+
+  private String resolveAccessToken(String bearerToken) {
     if (
       StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)
     ) {

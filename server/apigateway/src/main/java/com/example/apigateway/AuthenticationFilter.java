@@ -2,12 +2,11 @@ package com.example.apigateway;
 
 import static com.example.clients.UrlConstants.*;
 
-import com.example.clients.jwt.JwtUtils;
+import com.example.clients.jwt.JwtUtilities;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -21,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class AuthenticationFilter implements GatewayFilter {
 
   @Autowired
-  JwtUtils jwtUtils;
+  JwtUtilities jwtUtils;
 
   @Override
   public Mono<Void> filter(

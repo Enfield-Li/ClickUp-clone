@@ -5,17 +5,17 @@ import static com.example.clients.UrlConstants.*;
 
 import com.example.auth.dto.AuthorizationResponse;
 import com.example.auth.dto.Credentials;
-import com.example.clients.jwt.InvalidateCredentialsException;
-import com.example.clients.jwt.JwtUtils;
+import com.example.auth.exception.UserAlreadyExistsException;
+import com.example.clients.jwt.InvalidCredentialsException;
+import com.example.clients.jwt.JwtUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(USER_API)
 class AuthorizationController {
 
-  private final JwtUtils jwtUtils;
+  private final JwtUtilities jwtUtils;
   private final HttpSession session;
   private final PasswordEncoder passwordEncoder;
   private final ApplicationUserRepository repository;
@@ -37,7 +37,7 @@ class AuthorizationController {
 
   @PostMapping(REGISTER)
   ResponseEntity<AuthorizationResponse> register(
-    @RequestBody Credentials credentials
+    @Valid @RequestBody Credentials credentials
   )
     throws JsonProcessingException {
     var username = credentials.getUsername();
@@ -71,23 +71,19 @@ class AuthorizationController {
       INITIAL_TOKEN_VERSION
     );
 
-    var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
-    System.out.println("session id: " + session.getId());
-    System.out.println("refreshToken: " + refreshToken);
-
     // 4. send access token
     return ResponseEntity.ok(userResponse);
   }
 
   @PostMapping(LOGIN)
   ResponseEntity<AuthorizationResponse> login(
-    @RequestBody Credentials credentials
+    @Valid @RequestBody Credentials credentials
   )
     throws JsonProcessingException {
     // 1. check user password
     var applicationUser = repository
       .findByUsername(credentials.getUsername())
-      .orElseThrow(() -> new InvalidateCredentialsException());
+      .orElseThrow(() -> new InvalidCredentialsException());
 
     boolean matches = passwordEncoder.matches(
       credentials.getPassword(),
@@ -97,7 +93,7 @@ class AuthorizationController {
     // 1.5 wrong password
     if (!matches) {
       log.error("Invalid password");
-      throw new InvalidateCredentialsException();
+      throw new InvalidCredentialsException();
     }
 
     var userId = applicationUser.getId();
@@ -125,25 +121,25 @@ class AuthorizationController {
     var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
     // 2. validate tokens and retrieve payload
-    var userIdInAccessToken = jwtUtils.getAccessTokenUserId(accessToken);
+    var userIdInAccessToken = jwtUtils.getUserIdFromAccessToken(accessToken);
 
-    var refreshTokenPayload = jwtUtils.getRefreshTokenPayload(refreshToken);
+    var refreshTokenPayload = jwtUtils.getPayloadFromRefreshToken(refreshToken);
     var userIdInRefreshToken = refreshTokenPayload.getUserId();
     var tokenVersion = refreshTokenPayload.getTokenVersion();
 
     // 3. check if token version is valid
     var applicationUser = repository
       .findById(userIdInAccessToken)
-      .orElseThrow(() -> new InvalidateCredentialsException());
+      .orElseThrow(() -> new InvalidCredentialsException());
     var username = applicationUser.getUsername();
 
     if (
       tokenVersion != applicationUser.getRefreshTokenVersion() ||
       userIdInAccessToken != userIdInRefreshToken
     ) {
-      log.error("Token version mismatch");
+      log.error("Token version mismatch.");
       session.invalidate();
-      throw new InvalidateCredentialsException();
+      throw new InvalidCredentialsException();
     }
 
     // 4. generate refresh token and save to session
@@ -183,21 +179,5 @@ class AuthorizationController {
 
   private void changePassword() {
     // TODO: increment tokenVersion by 1
-  }
-
-  @ExceptionHandler(InvalidateCredentialsException.class)
-  ResponseEntity<String> handleInvalidateCredentialsException() {
-    log.error("InvalidateCredentialsException");
-    return ResponseEntity
-      .status(HttpStatus.UNAUTHORIZED)
-      .body("Failed to login, please try again.");
-  }
-
-  @ExceptionHandler(UserAlreadyExistsException.class)
-  ResponseEntity<String> handleUserAlreadyExistsException() {
-    log.error("UserAlreadyExistsException");
-    return ResponseEntity
-      .status(HttpStatus.BAD_REQUEST)
-      .body("User already exists.");
   }
 }
