@@ -1,6 +1,6 @@
 package com.example.auth.exception;
 
-import com.example.clients.jwt.InvalidCredentialsException;
+import com.example.clients.jwt.InvalidTokenException;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     );
   }
 
-  @ExceptionHandler(InvalidCredentialsException.class)
+  @ExceptionHandler(InvalidTokenException.class)
   ResponseEntity<String> catchInvalidateCredentialsException() {
     log.error("InvalidateCredentialsException");
     return ResponseEntity

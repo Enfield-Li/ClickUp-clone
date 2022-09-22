@@ -8,12 +8,11 @@ public interface JwtUtilities {
 
   String createRefreshToken(Integer userId, Integer tokenVersion);
 
-  Jws<Claims> validateAccessToken(String jwsToken)
-    throws InvalidCredentialsException;
+  Jws<Claims> validateAccessToken(String jwsToken) throws InvalidTokenException;
 
   RefreshTokenPayload getPayloadFromRefreshToken(String bearerToken)
-    throws InvalidCredentialsException;
+    throws InvalidTokenException;
 
   Integer getUserIdFromAccessToken(String bearerToken)
-    throws InvalidCredentialsException;
+    throws InvalidTokenException;
 }

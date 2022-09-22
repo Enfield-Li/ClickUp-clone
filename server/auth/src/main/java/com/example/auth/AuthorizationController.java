@@ -6,7 +6,7 @@ import static com.example.clients.UrlConstants.*;
 import com.example.auth.dto.AuthorizationResponse;
 import com.example.auth.dto.Credentials;
 import com.example.auth.exception.UserAlreadyExistsException;
-import com.example.clients.jwt.InvalidCredentialsException;
+import com.example.clients.jwt.InvalidTokenException;
 import com.example.clients.jwt.JwtUtilities;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.servlet.http.HttpServletRequest;
@@ -83,7 +83,7 @@ class AuthorizationController {
     // 1. check user password
     var applicationUser = repository
       .findByUsername(credentials.getUsername())
-      .orElseThrow(() -> new InvalidCredentialsException());
+      .orElseThrow(() -> new InvalidTokenException());
 
     boolean matches = passwordEncoder.matches(
       credentials.getPassword(),
@@ -93,7 +93,7 @@ class AuthorizationController {
     // 1.5 wrong password
     if (!matches) {
       log.error("Invalid password");
-      throw new InvalidCredentialsException();
+      throw new InvalidTokenException();
     }
 
     var userId = applicationUser.getId();
@@ -130,7 +130,7 @@ class AuthorizationController {
     // 3. check if token version is valid
     var applicationUser = repository
       .findById(userIdInAccessToken)
-      .orElseThrow(() -> new InvalidCredentialsException());
+      .orElseThrow(() -> new InvalidTokenException());
     var username = applicationUser.getUsername();
 
     if (
@@ -139,7 +139,7 @@ class AuthorizationController {
     ) {
       log.error("Token version mismatch.");
       session.invalidate();
-      throw new InvalidCredentialsException();
+      throw new InvalidTokenException();
     }
 
     // 4. generate refresh token and save to session

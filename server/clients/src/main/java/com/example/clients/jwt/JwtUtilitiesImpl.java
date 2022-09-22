@@ -65,7 +65,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
         .parseClaimsJws(resolveAccessToken(jwsToken));
     } catch (Exception e) {
       log.error("AccessToken validation error: " + e);
-      throw new InvalidCredentialsException();
+      throw new InvalidTokenException();
     }
   }
 
@@ -98,7 +98,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
         .getBody();
     } catch (Exception e) {
       log.error("Token validation error: " + e);
-      throw new InvalidCredentialsException();
+      throw new InvalidTokenException();
     }
   }
 
