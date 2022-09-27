@@ -2,11 +2,11 @@ import { Box, Center, Text } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import React, { useState } from "react";
 import Card from "./Card";
-import { Stage, Task } from "./DragDrop";
+import { Stage, TaskList } from "./DragDrop";
 
 type Props = {
   column: Stage;
-  tasks: Task[];
+  tasks: TaskList;
   columnIdWhenDragging: number | undefined;
   setColumnIdWhenDragging: React.Dispatch<
     React.SetStateAction<number | undefined>
