@@ -1,5 +1,7 @@
 package com.example.apigateway;
 
+import static com.example.clients.UrlConstants.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -26,13 +28,15 @@ public class RouteConfiguration {
       .route(
         "authorization",
         route ->
-          route.path("/authorization/v1/user/**").uri(authorizationServiceUrl)
+          route
+            .path(AUTHORIZATION_API_VERSION + "/**")
+            .uri(authorizationServiceUrl)
       )
       .route(
         "customer",
         route ->
           route
-            .path("/api/v1/customers/**")
+            .path(CUSTOMER_API_VERSION + "/**")
             .filters(filter -> filter.filter(authenticationFilter))
             .uri(customerServiceUrl)
       )

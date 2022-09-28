@@ -1,5 +1,7 @@
 package com.example.customer;
 
+import static com.example.clients.UrlConstants.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/customers")
+@RequestMapping(CUSTOMER_API_VERSION)
 class CustomerController {
 
   private final CustomerService customerService;
