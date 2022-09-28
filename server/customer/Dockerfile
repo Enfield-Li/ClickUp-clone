@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-alpine
 
 COPY /target/customer-0.0.1-SNAPSHOT.jar customer.jar
 
