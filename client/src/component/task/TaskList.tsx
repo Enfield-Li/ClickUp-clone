@@ -11,7 +11,7 @@ import {
   SortBy,
   OrderedTasks,
 } from "./Data";
-import { lookUp, processTaskBasedOnStage } from "./TaskDataProcessing";
+import { lookUpId, processTaskBasedOnStage } from "./TaskDataProcessing";
 
 type Props = {
   columns: Columns;
@@ -137,25 +137,25 @@ function handleDragEnd(
 
     // move up one row
     if (movingUpOneRow) {
-      sourceTask.previousItem[lookUp[sortBy]] = destinationTaskBefore
+      sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
         ? destinationTaskBefore.id
         : undefined;
-      destinationTask.previousItem[lookUp[sortBy]] = sourceTask.id;
+      destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
 
       if (sourceTaskAfter) {
-        sourceTaskAfter.previousItem[lookUp[sortBy]] = destinationTask.id;
+        sourceTaskAfter.previousItem[lookUpId[sortBy]] = destinationTask.id;
       }
     }
 
     // move down one row
     else if (moveDownOneRow) {
-      destinationTask.previousItem[lookUp[sortBy]] = sourceTaskBefore
+      destinationTask.previousItem[lookUpId[sortBy]] = sourceTaskBefore
         ? sourceTaskBefore.id
         : undefined;
-      sourceTask.previousItem[lookUp[sortBy]] = destinationTask.id;
+      sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
 
       if (destinationTaskAfter) {
-        destinationTaskAfter.previousItem[lookUp[sortBy]] = sourceTask.id;
+        destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
       }
     }
 
@@ -168,24 +168,24 @@ function handleDragEnd(
       // move down
       const isMoveDown = sourceTaskIndex < destinationTaskIndex;
       if (isMoveDown) {
-        sourceTaskAfter.previousItem[lookUp[sortBy]] = sourceTaskBefore
+        sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
           ? sourceTaskBefore.id
           : undefined;
 
         if (destinationTaskAfter)
-          destinationTaskAfter.previousItem[lookUp[sortBy]] = sourceTask.id;
-        sourceTask.previousItem[lookUp[sortBy]] = destinationTask.id;
+          destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
+        sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
       }
 
       // move up
       else {
-        sourceTask.previousItem[lookUp[sortBy]] = destinationTaskBefore
+        sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
           ? destinationTaskBefore.id
           : undefined;
-        destinationTask.previousItem[lookUp[sortBy]] = sourceTask.id;
+        destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
 
         if (sourceTaskAfter) {
-          sourceTaskAfter.previousItem[lookUp[sortBy]] = sourceTaskBefore
+          sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
             ? sourceTaskBefore.id
             : undefined;
         }
@@ -202,25 +202,25 @@ function handleDragEnd(
      */
   } else {
     // change task stage
-    sourceTask.status = columns[destinationTaskColumnIndex].id;
+    sourceTask[sortBy] = columns[destinationTaskColumnIndex].id;
 
     if (sourceTaskAfter)
-      sourceTaskAfter.previousItem[lookUp[sortBy]] = sourceTaskBefore
+      sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
         ? sourceTaskBefore.id
         : undefined;
 
     // move to an empty column or to the last position
     if (!destinationTask) {
       const lastElement = destinationTasksArr[destinationTasksArr.length - 1];
-      sourceTask.previousItem[lookUp[sortBy]] = lastElement
+      sourceTask.previousItem[lookUpId[sortBy]] = lastElement
         ? lastElement.id
         : undefined;
     }
 
     // move to the middle or top of the column
     else {
-      destinationTask.previousItem[lookUp[sortBy]] = sourceTask.id;
-      sourceTask.previousItem[lookUp[sortBy]] = destinationTaskBefore
+      destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
+      sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
         ? destinationTaskBefore.id
         : undefined;
     }

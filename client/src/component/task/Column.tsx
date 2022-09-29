@@ -18,7 +18,7 @@ export default function Column({
   setIsDragging,
 }: Props) {
   // console.log("tasks: ", tasks);
-  // if (!tasks) tasks = [];
+  if (!tasks) tasks = [];
   return (
     <Box>
       <Center>

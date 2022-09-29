@@ -1,6 +1,6 @@
 import { Columns, ColumnType, InitialData, OrderedTasks, SortBy } from "./Data";
 
-export const lookUp = {
+export const lookUpId = {
   status: "statusId",
   priority: "priorityId",
   dueDate: "dueDateId",
@@ -38,7 +38,7 @@ export function processTaskBasedOnStage(
     for (let j = 0; j < tasks.length; j++) {
       const task = tasks[j];
 
-      if (task.status === stageId && !task.previousItem?.[lookUp[sortBy]]) {
+      if (task.status === stageId && !task.previousItem?.[lookUpId[sortBy]]) {
         nestedTasks[i][0] = task;
       }
     }
@@ -49,13 +49,13 @@ export function processTaskBasedOnStage(
 
       const entailingTask = tasks.find((task) => {
         // console.log(task.previousItem?.[lookUp[sortBy]]);
-        return task.previousItem?.[lookUp[sortBy]] === currentTask.id;
+        return task.previousItem?.[lookUpId[sortBy]] === currentTask.id;
       });
 
       if (entailingTask) nestedTasks[i].push(entailingTask);
     }
   }
-  console.log("nestedTasks: ", nestedTasks)
+  console.log("nestedTasks: ", nestedTasks);
 
   return nestedTasks;
 }
