@@ -1,4 +1,4 @@
-import { Columns, ColumnType, InitialData, OrderedTasks, SortBy } from "./Data";
+import { Columns, OrderedTasks, SortBy, TaskList } from "./Data";
 
 export const lookUpId = {
   status: "statusId",
@@ -13,13 +13,11 @@ export const lookUpId = {
     [task3, task4] // <- task with stage 2 and ordered by previousId
   ]
 */
-export function processTaskBasedOnStage(
-  data: InitialData,
+export function processTaskBasedOnSortBy(
+  tasks: TaskList,
   columns: Columns,
   sortBy: SortBy
 ) {
-  const tasks = data.tasks;
-
   const idArr: number[] = [];
   const nestedTasks: OrderedTasks = [];
 
@@ -38,7 +36,7 @@ export function processTaskBasedOnStage(
     for (let j = 0; j < tasks.length; j++) {
       const task = tasks[j];
 
-      if (task.status === stageId && !task.previousItem?.[lookUpId[sortBy]]) {
+      if (task[sortBy] === stageId && !task.previousItem[lookUpId[sortBy]]) {
         nestedTasks[i][0] = task;
       }
     }
@@ -48,14 +46,12 @@ export function processTaskBasedOnStage(
       const currentTask = nestedTasks[i][j];
 
       const entailingTask = tasks.find((task) => {
-        // console.log(task.previousItem?.[lookUp[sortBy]]);
-        return task.previousItem?.[lookUpId[sortBy]] === currentTask.id;
+        return task.previousItem[lookUpId[sortBy]] === currentTask.id;
       });
 
       if (entailingTask) nestedTasks[i].push(entailingTask);
     }
   }
-  console.log("nestedTasks: ", nestedTasks);
 
   return nestedTasks;
 }

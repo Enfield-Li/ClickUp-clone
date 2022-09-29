@@ -51,21 +51,21 @@ export type SortingOptions = {
 
 export const sortingOptions: SortingOptions = {
   status: [
-    { id: 0, title: "TO DO" },
-    { id: 1, title: "IN PROGRESS" },
-    { id: 2, title: "DONE" },
+    { id: 1, title: "TO DO" },
+    { id: 2, title: "IN PROGRESS" },
+    { id: 3, title: "DONE" },
   ],
   priority: [
-    { id: 0, title: "NO PRIORITY" },
-    { id: 1, title: "LOW" },
-    { id: 2, title: "NORMAL" },
-    { id: 3, title: "HIGH" },
-    { id: 4, title: "URGENT" },
-    { id: 5, title: "DONE" },
+    { id: 1, title: "NO PRIORITY" },
+    { id: 2, title: "LOW" },
+    { id: 3, title: "NORMAL" },
+    { id: 4, title: "HIGH" },
+    { id: 5, title: "URGENT" },
+    { id: 6, title: "DONE" },
   ],
   dueDate: [
-    { id: 0, title: "NO DUE DATE" },
-    { id: 1, title: "OVER DUE" },
+    { id: 1, title: "NO DUE DATE" },
+    { id: 2, title: "OVER DUE" },
     { id: 3, title: "MONDAY" },
     { id: 4, title: "TUESDAY" },
     { id: 5, title: "WEDNESDAY" },
@@ -83,59 +83,64 @@ export type ColumnType = { id: number; title: string };
 export type Columns = ColumnType[];
 export type InitialData = { tasks: TaskList };
 
-export const initialData: InitialData = {
-  tasks: [
-    {
-      id: 666,
-      title: "66666",
-      status: 1,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { statusId: 555, priorityId: 555, dueDateId: 555 },
-    },
-    {
-      id: 555,
-      title: "55555",
-      status: 1,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { statusId: 111, priorityId: 444, dueDateId: 444 },
-    },
-    {
-      id: 444,
-      title: "44444",
-      status: 2,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
-    },
-    {
-      id: 222,
-      title: "22222",
-      status: 2,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { statusId: 777, priorityId: 111, dueDateId: 111 },
-    },
-    {
-      id: 111,
-      title: "11111",
-      status: 1,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { priorityId: 777, dueDateId: 777 },
-    },
-    {
-      id: 777,
-      title: "77777",
-      status: 2,
-      priority: 0,
-      dueDate: 0,
-      previousItem: { priorityId: 333, dueDateId: 333 },
-    },
-    { id: 333, title: "33333", status: 0, priority: 0, previousItem: {} },
-  ],
-};
+export const initialData: TaskList = [
+  {
+    id: 111,
+    title: "11111",
+    status: 1,
+    priority: 2,
+    dueDate: 1,
+    previousItem: {},
+  },
+  {
+    id: 222,
+    title: "22222",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 111, dueDateId: 111 },
+  },
+  {
+    id: 333,
+    title: "33333",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
+  },
+  {
+    id: 444,
+    title: "44444",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 333, priorityId: 333, dueDateId: 333 },
+  },
+  {
+    id: 555,
+    title: "55555",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
+  },
+  {
+    id: 666,
+    title: "66666",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 555, priorityId: 555, dueDateId: 555 },
+  },
+  {
+    id: 777,
+    title: "77777",
+    status: 1,
+    priority: 1,
+    dueDate: 1,
+    previousItem: { statusId: 666, priorityId: 666, dueDateId: 666 },
+  },
+];
 
 export type OrderedTasks = TaskList[];
 export type State = OrderedTasks;

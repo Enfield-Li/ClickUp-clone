@@ -11,7 +11,7 @@ import {
   SortBy,
   OrderedTasks,
 } from "./Data";
-import { lookUpId, processTaskBasedOnStage } from "./TaskDataProcessing";
+import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
 
 type Props = {
   columns: Columns;
@@ -20,15 +20,25 @@ type Props = {
 
 export default function TaskList({ columns, sortBy }: Props) {
   const [state, setState] = useState<OrderedTasks>();
-  // console.log("state: ", state);
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
 
   // Simulating getting data from api
   useEffect(() => {
     const dataFromAPI = initialData;
-    const processedData = processTaskBasedOnStage(dataFromAPI, columns, sortBy);
+    const processedData = processTaskBasedOnSortBy(
+      dataFromAPI,
+      columns,
+      sortBy
+    );
     setState(processedData);
+  }, []);
+
+  // Restructure task based on sortBy
+  useEffect(() => {
+    if (state) {
+      setState(processTaskBasedOnSortBy(state.flat(), columns, sortBy));
+    }
   }, [sortBy]);
 
   function isDraggingToOtherColumn(
@@ -53,27 +63,25 @@ export default function TaskList({ columns, sortBy }: Props) {
         }}
       >
         <SimpleGrid columns={columns.length} spacing={10}>
-          {columns.map((column, index) => {
-            return (
-              <Box
-                key={column.id}
-                borderRadius={4}
-                border={
-                  isDraggingToOtherColumn(isDragging, column.id, draggingId)
-                    ? "dotted"
-                    : "solid transparent"
-                }
-              >
-                <Column
-                  column={column}
-                  // pass down the tasklist data with stage that matches column/stage
-                  tasks={state[index]}
-                  isDragging={isDragging}
-                  setIsDragging={setIsDragging}
-                />
-              </Box>
-            );
-          })}
+          {columns.map((column, index) => (
+            <Box
+              key={column.id}
+              borderRadius={4}
+              border={
+                isDraggingToOtherColumn(isDragging, column.id, draggingId)
+                  ? "dotted"
+                  : "solid transparent"
+              }
+            >
+              <Column
+                column={column}
+                // pass down the tasklist data with stage that matches column/stage
+                tasks={state[index]}
+                isDragging={isDragging}
+                setIsDragging={setIsDragging}
+              />
+            </Box>
+          ))}
         </SimpleGrid>
       </DragDropContext>
     </Box>
