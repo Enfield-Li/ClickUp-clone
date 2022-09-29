@@ -72,7 +72,7 @@ export default function NavBar({ onToggle }: Props) {
           color: "black",
           bg: "gray.300",
         }}
-        onClick={() => navigate(ROUTE.FUNC_ONE)}
+        onClick={() => navigate(ROUTE.TASK)}
       >
         <i className="bi bi-hand-index-thumb" style={{ marginRight: 6 }}></i>
         Drag and Drop

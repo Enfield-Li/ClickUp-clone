@@ -12,24 +12,22 @@ import {
   DraggableStateSnapshot,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Task } from "./DragDrop";
+import { Task } from "./Data";
 
 type Props = {
   task: Task;
   index: number;
   columnId: number;
-  columnIdWhenDragging: number | undefined;
-  setColumnIdWhenDragging: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >;
+  isDragging: boolean;
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Card({
   task,
   index,
   columnId,
-  columnIdWhenDragging,
-  setColumnIdWhenDragging,
+  isDragging,
+  setIsDragging,
 }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
@@ -48,14 +46,11 @@ export default function Card({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           border={snapshot.isDragging ? "1px" : ""}
-          onMouseOver={() => setColumnIdWhenDragging(undefined)}
-          onMouseMoveCapture={() =>
-            setColumnIdWhenDragging(snapshot.isDragging ? columnId : undefined)
-          }
+          onMouseOver={() => setIsDragging(false)}
         >
           <Stack>
             <Heading color={headerColor} fontSize={"2xl"} fontFamily={"body"}>
-              {task.content}
+              {task.title}
             </Heading>
             <Text color={"gray.500"}>Lorem ipsum dolor</Text>
           </Stack>

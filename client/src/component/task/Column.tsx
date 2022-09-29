@@ -2,23 +2,23 @@ import { Box, Center, Text } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import React, { useState } from "react";
 import Card from "./Card";
-import { Stage, TaskList } from "./DragDrop";
+import { ColumnType, TaskList } from "./Data";
 
 type Props = {
-  column: Stage;
+  column: ColumnType;
   tasks: TaskList;
-  columnIdWhenDragging: number | undefined;
-  setColumnIdWhenDragging: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >;
+  isDragging: boolean;
+  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Column({
   column,
   tasks,
-  columnIdWhenDragging,
-  setColumnIdWhenDragging,
+  isDragging,
+  setIsDragging,
 }: Props) {
+  // console.log("tasks: ", tasks);
+  // if (!tasks) tasks = [];
   return (
     <Box>
       <Center>
@@ -41,8 +41,8 @@ export default function Column({
                 key={task.id}
                 index={index}
                 columnId={column.id}
-                columnIdWhenDragging={columnIdWhenDragging}
-                setColumnIdWhenDragging={setColumnIdWhenDragging}
+                isDragging={isDragging}
+                setIsDragging={setIsDragging}
               />
             ))}
             {provided.placeholder}

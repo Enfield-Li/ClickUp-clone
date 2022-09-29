@@ -21,7 +21,7 @@ export const ROUTE = {
   ABOUT: "/about",
   LOGIN: "/login",
   REGISTER: "/register",
-  FUNC_ONE: "/functionality_one",
+  TASK: "/task",
   FUNC_TWO: "/functionality_two",
 };
 
