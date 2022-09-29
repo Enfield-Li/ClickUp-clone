@@ -10,16 +10,25 @@ import {
   Columns,
   SortBy,
   OrderedTasks,
+  sortingOptions,
 } from "./Data";
 import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
 
 type Props = {
-  columns: Columns;
   sortBy: SortBy;
 };
 
-export default function TaskList({ columns, sortBy }: Props) {
-  const [state, setState] = useState<OrderedTasks>();
+export default function TaskList({ sortBy }: Props) {
+  // let columns: Columns = [];
+
+  // if (sortBy === "dueDate") {
+  //   const { currentWeekDay, nextWeekDay } = getWeekDays();
+  //   const previousColumns = sortingOptions[sortBy];
+  //   previousColumns.find(item => item.title === currentWeekDay)
+  // }
+  const columns = sortingOptions[sortBy];
+
+  const [orderedTasks, setOrderedTasks] = useState<OrderedTasks>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
 
@@ -31,13 +40,15 @@ export default function TaskList({ columns, sortBy }: Props) {
       columns,
       sortBy
     );
-    setState(processedData);
+    setOrderedTasks(processedData);
   }, []);
 
   // Restructure task based on sortBy
   useEffect(() => {
-    if (state) {
-      setState(processTaskBasedOnSortBy(state.flat(), columns, sortBy));
+    if (orderedTasks) {
+      setOrderedTasks(
+        processTaskBasedOnSortBy(orderedTasks.flat(), columns, sortBy)
+      );
     }
   }, [sortBy]);
 
@@ -49,13 +60,20 @@ export default function TaskList({ columns, sortBy }: Props) {
     return isDragging && columnId !== draggingId;
   }
 
-  if (!state) return <div>Loading</div>;
+  if (!orderedTasks) return <div>Loading</div>;
 
   return (
     <Box px={6} py={1}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, setState, columns, sortBy, setIsDragging)
+          handleDragEnd(
+            result,
+            orderedTasks,
+            setOrderedTasks,
+            columns,
+            sortBy,
+            setIsDragging
+          )
         }
         onDragStart={(start, provided) => {
           setDraggingId(Number(start.source.droppableId));
@@ -75,8 +93,8 @@ export default function TaskList({ columns, sortBy }: Props) {
             >
               <Column
                 column={column}
-                // pass down the tasklist data with stage that matches column/stage
-                tasks={state[index]}
+                // pass down the tasklist data with stage that matches the order of the respective column
+                tasks={orderedTasks[index]}
                 isDragging={isDragging}
                 setIsDragging={setIsDragging}
               />

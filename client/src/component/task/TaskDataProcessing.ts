@@ -7,32 +7,71 @@ export const lookUpId = {
 } as const;
 
 /* 
-  Convert unordered Task[] to ordered nested Task[][] array group by task.stage:
-  [
-    [task1, task2], // <- task with stage 1 and ordered by previousId
-    [task3, task4] // <- task with stage 2 and ordered by previousId
-  ]
+  Convert unordered Task[] list to ordered nested Task[][] list group by for example task.priorityId:
+  Find all sorting occurrences,
+    and, based on the id, generate respective nested list for that id, 
+    for example:
+      from:
+        status column data: 
+          [
+            { id: 1, title: "TO DO" },
+            { id: 2, title: "IN PROGRESS" },
+            { id: 3, title: "DONE" },
+          ],
+        with task data:
+          {
+            id: 111,
+            title: "11111",
+            status: 1,
+            priority: 2,
+            dueDate: 1,
+            previousItem: {},
+          },
+          {
+            id: 222,
+            title: "22222",
+            status: 1,
+            priority: 1,
+            dueDate: 1,
+            previousItem: { statusId: 111, dueDateId: 111 },
+          },
+      to:
+        [
+          [{
+            id: 111,
+            title: "11111",
+            status: 1,
+            priority: 2,
+            dueDate: 1,
+            previousItem: {},
+          }],
+          [{
+            "id": 222,
+            "title": "22222",
+            "status": 1,
+            "priority": 1,
+            "dueDate": 1,
+            "previousItem": {
+              "statusId": 111,
+              "dueDateId": 111
+            }
+          }]
+        ]
 */
 export function processTaskBasedOnSortBy(
   tasks: TaskList,
   columns: Columns,
   sortBy: SortBy
 ) {
-  const idArr: number[] = [];
   const nestedTasks: OrderedTasks = [];
 
-  // find all stages and collect it into "taskStageArr"
   for (let i = 0; i < columns.length; i++) {
-    const element = columns[i];
-    idArr.push(element.id);
     nestedTasks[i] = [];
-  }
 
-  // forming a nested structure from type Task[] to Task[][]
-  for (let i = 0; i < idArr.length; i++) {
-    const stageId = idArr[i];
+    const element = columns[i];
+    const stageId = element.id;
 
-    // add the first item by initializing the first task in the array with previousId === undefined
+    // add the first item by initializing the first task in the list with, for example, previousItem.statusId === undefined
     for (let j = 0; j < tasks.length; j++) {
       const task = tasks[j];
 
@@ -41,9 +80,9 @@ export function processTaskBasedOnSortBy(
       }
     }
 
-    // pushing the entailing task based on previousId
-    for (let j = 0; j < nestedTasks[i].length; j++) {
-      const currentTask = nestedTasks[i][j];
+    // pushing the entailing task based on, for example, previousItem.statusId
+    for (let k = 0; k < nestedTasks[i].length; k++) {
+      const currentTask = nestedTasks[i][k];
 
       const entailingTask = tasks.find((task) => {
         return task.previousItem[lookUpId[sortBy]] === currentTask.id;
