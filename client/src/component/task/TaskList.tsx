@@ -1,16 +1,16 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
+import { reorderAndRenameDateColumns } from "../../utils/reorderDateColumns";
 import Column from "./Column";
 import {
-  State,
-  initialData,
-  SetState,
-  ColumnType,
   Columns,
-  SortBy,
+  initialData,
   OrderedTasks,
+  SetState,
+  SortBy,
   sortingOptions,
+  State,
 } from "./Data";
 import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
 
@@ -19,15 +19,6 @@ type Props = {
 };
 
 export default function TaskList({ sortBy }: Props) {
-  // let columns: Columns = [];
-
-  // if (sortBy === "dueDate") {
-  //   const { currentWeekDay, nextWeekDay } = getWeekDays();
-  //   const previousColumns = sortingOptions[sortBy];
-  //   previousColumns.find(item => item.title === currentWeekDay)
-  // }
-  const columns = sortingOptions[sortBy];
-
   const [orderedTasks, setOrderedTasks] = useState<OrderedTasks>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
@@ -52,6 +43,14 @@ export default function TaskList({ sortBy }: Props) {
     }
   }, [sortBy]);
 
+  // Define columns
+  let columns: Columns;
+  if (sortBy === "dueDate") {
+    columns = reorderAndRenameDateColumns(sortingOptions, sortBy);
+  } else {
+    columns = sortingOptions[sortBy];
+  }
+
   function isDraggingToOtherColumn(
     isDragging: boolean,
     columnId: number,
@@ -63,7 +62,7 @@ export default function TaskList({ sortBy }: Props) {
   if (!orderedTasks) return <div>Loading</div>;
 
   return (
-    <Box px={6} py={1}>
+    <Box px={6} py={1} height={"580px"} overflow={"hidden"}>
       <DragDropContext
         onDragEnd={(result) =>
           handleDragEnd(
@@ -83,6 +82,8 @@ export default function TaskList({ sortBy }: Props) {
         <SimpleGrid columns={columns.length} spacing={10}>
           {columns.map((column, index) => (
             <Box
+              height={"580px"}
+              overflow={"auto"}
               key={column.id}
               borderRadius={4}
               border={

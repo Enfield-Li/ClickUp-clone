@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthContext, { logOutUser } from "../../hook/useAuthContext";
 import useGlobalContext from "../../hook/useGlobalContext";
 import { ROUTE } from "../../utils/constant";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 type Props = { onToggle: (props?: any) => any; isOpen: boolean };
 
@@ -21,10 +22,6 @@ export default function Header({ onToggle, isOpen }: Props) {
   const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
   const { globalState } = useGlobalContext();
-
-  function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
   return (
     <Box borderBottom={"1px"} borderColor={"teal.400"}>
