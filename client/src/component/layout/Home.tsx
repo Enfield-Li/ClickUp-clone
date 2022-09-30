@@ -14,7 +14,7 @@ import { Field, Form, Formik } from "formik";
 import useGlobalContext, {
   indicateLoading,
   popUpError,
-} from "../../hook/useGlobalContext";
+} from "../../context/global/useGlobalContext";
 import ToastButton from "../custom/ToastButton";
 
 type Props = {};

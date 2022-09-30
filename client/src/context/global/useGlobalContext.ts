@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { GlobalContext } from "../context/global/GlobalContext";
-import { GlobalActionType } from "../context/global/GlobalContextTypes";
-import { GLOBAL_ACTION } from "../utils/constant";
+import { GlobalContext } from "./GlobalContext";
+import { GlobalActionType } from "./GlobalContextTypes";
+import { GLOBAL_ACTION } from "../../utils/constant";
 
 export default function useGlobalContext() {
   return useContext(GlobalContext);

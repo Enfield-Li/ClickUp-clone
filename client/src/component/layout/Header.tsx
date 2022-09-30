@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useAuthContext, { logOutUser } from "../../hook/useAuthContext";
-import useGlobalContext from "../../hook/useGlobalContext";
+import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
+import useGlobalContext from "../../context/global/useGlobalContext";
 import { ROUTE } from "../../utils/constant";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 

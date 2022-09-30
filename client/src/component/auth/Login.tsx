@@ -17,7 +17,7 @@ import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Credentials } from "../../context/auth/AuthContextTypes";
-import useAuthContext, { loginUser } from "../../hook/useAuthContext";
+import useAuthContext, { loginUser } from "../../context/auth/useAuthContext";
 import { register } from "../../serviceWorker";
 import { ROUTE } from "../../utils/constant";
 

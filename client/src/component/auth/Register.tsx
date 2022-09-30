@@ -21,7 +21,7 @@ import { Credentials } from "../../context/auth/AuthContextTypes";
 import useAuthContext, {
   loginUser,
   registerUser,
-} from "../../hook/useAuthContext";
+} from "../../context/auth/useAuthContext";
 import { register } from "../../serviceWorker";
 import { ROUTE } from "../../utils/constant";
 type Props = {};

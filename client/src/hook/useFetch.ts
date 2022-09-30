@@ -3,7 +3,7 @@ import { useState } from "react";
 import useGlobalContext, {
   indicateLoading,
   popUpError,
-} from "./useGlobalContext";
+} from "../context/global/useGlobalContext";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
