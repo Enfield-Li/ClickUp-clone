@@ -1,7 +1,8 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { reorderAndRenameDateColumns } from "../../utils/reorderDateColumns";
+import { reorderColumnsOnId } from "../../utils/reorderColumnsOnId";
+import { renameDateColumns } from "../../utils/reorderDateColumns";
 import Column from "./Column";
 import {
   Columns,
@@ -43,13 +44,14 @@ export default function TaskList({ sortBy }: Props) {
     }
   }, [sortBy]);
 
-  // Define columns
+  // Define and reorder columns
   let columns: Columns;
   if (sortBy === "dueDate") {
-    columns = reorderAndRenameDateColumns(sortingOptions, sortBy);
+    columns = renameDateColumns(sortingOptions, sortBy);
   } else {
     columns = sortingOptions[sortBy];
   }
+  reorderColumnsOnId(columns);
 
   function isDraggingToOtherColumn(
     isDragging: boolean,

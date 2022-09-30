@@ -84,9 +84,9 @@ export function processTaskBasedOnSortBy(
     for (let k = 0; k < nestedTasks[i].length; k++) {
       const currentTask = nestedTasks[i][k];
 
-      const entailingTask = tasks.find((task) => {
-        return task.previousItem[lookUpId[sortBy]] === currentTask.id;
-      });
+      const entailingTask = tasks.find(
+        (task) => task.previousItem[lookUpId[sortBy]] === currentTask.id
+      );
 
       if (entailingTask) nestedTasks[i].push(entailingTask);
     }

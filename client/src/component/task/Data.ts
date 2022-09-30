@@ -51,30 +51,28 @@ export type SortingOptions = {
 
 export const sortingOptions: SortingOptions = {
   status: [
+    { id: 3, title: "DONE" },
     { id: 1, title: "TO DO" },
     { id: 2, title: "IN PROGRESS" },
-    { id: 3, title: "DONE" },
   ],
   priority: [
+    { id: 2, title: "URGENT" },
     { id: 1, title: "NO PRIORITY" },
-    { id: 2, title: "LOW" },
-    { id: 3, title: "NORMAL" },
-    { id: 4, title: "HIGH" },
-    { id: 5, title: "URGENT" },
-    { id: 6, title: "DONE" },
+    { id: 3, title: "HIGH" },
+    { id: 4, title: "NORMAL" },
+    { id: 5, title: "LOW" },
   ],
   dueDate: [
-    { id: 1, title: "NO DUE DATE" },
     { id: 2, title: "OVER DUE" },
-    { id: 3, title: "MONDAY" },
+    { id: 1, title: "NO DUE DATE" },
     { id: 4, title: "TUESDAY" },
+    { id: 3, title: "MONDAY" },
     { id: 5, title: "WEDNESDAY" },
     { id: 6, title: "THURSDAY" },
     { id: 7, title: "FRIDAY" },
     { id: 8, title: "SATURDAY" },
     { id: 9, title: "SUNDAY" },
     { id: 10, title: "FUTURE" },
-    { id: 11, title: "DONE" },
   ],
 };
 

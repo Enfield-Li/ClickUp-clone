@@ -1,7 +1,7 @@
 import { SortingOptions, SortBy, Columns } from "../component/task/Data";
 import { getWeekDays } from "./getWeekDays";
 
-export function reorderAndRenameDateColumns(
+export function renameDateColumns(
   sortingOptions: SortingOptions,
   sortBy: SortBy
 ) {
@@ -19,7 +19,7 @@ export function reorderAndRenameDateColumns(
     }
   });
 
-  // reorder columns
+  // put today to the front
   const columnsLength = updatedColumns.length;
   const front = updatedColumns.slice(0, 2);
   const end = updatedColumns.slice(columnsLength - 2, columnsLength + 1);
