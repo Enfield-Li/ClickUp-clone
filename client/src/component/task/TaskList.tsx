@@ -62,7 +62,7 @@ export default function TaskList({ sortBy }: Props) {
   if (!orderedTasks) return <div>Loading</div>;
 
   return (
-    <Box px={6} py={1}>
+    <Box mx={6} my={1} height={"580px"} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
           handleDragEnd(
@@ -79,9 +79,11 @@ export default function TaskList({ sortBy }: Props) {
           setIsDragging(true);
         }}
       >
-        <SimpleGrid columns={columns.length} spacing={10}>
+        <SimpleGrid columns={3} spacing={10}>
           {columns.map((column, index) => (
             <Box
+              display={"inline"}
+              width={"300px"}
               key={column.id}
               borderRadius={4}
               border={

@@ -40,8 +40,8 @@ export default function Column({
             ref={provided.innerRef}
             {...provided.droppableProps}
             minHeight={"100px"}
-            height={"530px"}
-            overflow={isHovering ? "auto" : "hidden"}
+            height={"440px"}
+            overflow={"auto"}
             onMouseOver={() => setIsHovering(true)}
             onMouseOutCapture={() => setIsHovering(false)}
           >
