@@ -7,7 +7,7 @@ import TaskNavigation from "./TaskNavigation";
 type Props = {};
 
 export default function TaskView({}: Props) {
-  const [sortBy, setSortBy] = useState<SortBy>("priority");
+  const [sortBy, setSortBy] = useState<SortBy>("status");
 
   return (
     <>

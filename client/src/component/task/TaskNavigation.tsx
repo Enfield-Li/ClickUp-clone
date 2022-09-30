@@ -9,13 +9,12 @@ type Props = {
 
 export default function TaskNavigation({ sortBy, setSortBy }: Props) {
   return (
-    <Flex p={2}>
+    <Flex p={2} mx={3}>
       <Box>Task navigation</Box>
 
       <Spacer />
       <Select
-        placeholder="Group by"
-        width={"100px"}
+        width={"125px"}
         onChange={(e) => {
           setSortBy(e.target.value as SortBy);
         }}

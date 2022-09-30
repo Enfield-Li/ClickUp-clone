@@ -17,6 +17,8 @@ export default function Column({
   isDragging,
   setIsDragging,
 }: Props) {
+  const [isHovering, setIsHovering] = useState(false);
+
   // ⬇⬇⬇⬇ Potential bug ⬇⬇⬇⬇
   if (!tasks) tasks = [];
   return (
@@ -34,7 +36,15 @@ export default function Column({
       </Center>
       <Droppable droppableId={String(column.id)}>
         {(provided, snapshot) => (
-          <Box ref={provided.innerRef} {...provided.droppableProps}>
+          <Box
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            minHeight={"100px"}
+            height={"530px"}
+            overflow={isHovering ? "auto" : "hidden"}
+            onMouseOver={() => setIsHovering(true)}
+            onMouseOutCapture={() => setIsHovering(false)}
+          >
             {tasks.map((task, index) => (
               <Card
                 task={task}
