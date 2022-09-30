@@ -2,7 +2,7 @@ import { Box, SimpleGrid } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
 import { reorderColumnsOnId } from "../../utils/reorderColumnsOnId";
-import { renameDateColumns } from "../../utils/reorderDateColumns";
+import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import Column from "./Column";
 import {
   Columns,
@@ -10,7 +10,7 @@ import {
   OrderedTasks,
   SetState,
   SortBy,
-  sortingOptions,
+  columnOptions,
   State,
 } from "./Data";
 import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
@@ -20,71 +20,65 @@ type Props = {
 };
 
 export default function TaskList({ sortBy }: Props) {
-  const [orderedTasks, setOrderedTasks] = useState<OrderedTasks>();
+  const [state, setState] = useState<State>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
 
   // Simulating getting data from api
   useEffect(() => {
+    const columnDataFromApi = columnOptions;
+
     const dataFromAPI = initialData;
     const processedData = processTaskBasedOnSortBy(
       dataFromAPI,
-      columns,
+      columnDataFromApi[sortBy],
       sortBy
     );
-    setOrderedTasks(processedData);
+
+    setState({
+      orderedTasks: processedData,
+      unorderedColumns: columnDataFromApi,
+    });
   }, []);
 
   // Restructure task based on sortBy
   useEffect(() => {
-    if (orderedTasks) {
-      setOrderedTasks(
-        processTaskBasedOnSortBy(orderedTasks.flat(), columns, sortBy)
-      );
+    if (state) {
+      setState({
+        ...state,
+        orderedTasks: processTaskBasedOnSortBy(
+          state.orderedTasks.flat(),
+          state.unorderedColumns[sortBy],
+          sortBy
+        ),
+      });
     }
   }, [sortBy]);
+
+  if (!state) return <div>Loading</div>;
 
   // Define and reorder columns
   let columns: Columns;
   if (sortBy === "dueDate") {
-    columns = renameDateColumns(sortingOptions, sortBy);
+    columns = reorderAndRenameColumns(state.unorderedColumns, sortBy);
   } else {
-    columns = sortingOptions[sortBy];
+    columns = state.unorderedColumns[sortBy];
   }
-  reorderColumnsOnId(columns);
-
-  function isDraggingToOtherColumn(
-    isDragging: boolean,
-    columnId: number,
-    draggingId: number | undefined
-  ) {
-    return isDragging && columnId !== draggingId;
-  }
-
-  if (!orderedTasks) return <div>Loading</div>;
 
   return (
     <Box mx={6} my={1} height={"580px"} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(
-            result,
-            orderedTasks,
-            setOrderedTasks,
-            columns,
-            sortBy,
-            setIsDragging
-          )
+          handleDragEnd(result, state, setState, columns, sortBy, setIsDragging)
         }
         onDragStart={(start, provided) => {
           setDraggingId(Number(start.source.droppableId));
           setIsDragging(true);
         }}
       >
-        <SimpleGrid columns={3} spacing={10}>
+        <SimpleGrid columns={columns.length} spacing={10} overflow={"auto"}>
           {columns.map((column, index) => (
             <Box
-              display={"inline"}
               width={"300px"}
               key={column.id}
               borderRadius={4}
@@ -97,7 +91,7 @@ export default function TaskList({ sortBy }: Props) {
               <Column
                 column={column}
                 // pass down the tasklist data with stage that matches the order of the respective column
-                tasks={orderedTasks[index]}
+                tasks={state.orderedTasks[index]}
                 isDragging={isDragging}
                 setIsDragging={setIsDragging}
               />
@@ -107,6 +101,14 @@ export default function TaskList({ sortBy }: Props) {
       </DragDropContext>
     </Box>
   );
+}
+
+function isDraggingToOtherColumn(
+  isDragging: boolean,
+  columnId: number,
+  draggingId: number | undefined
+) {
+  return isDragging && columnId !== draggingId;
 }
 
 function handleDragEnd(
@@ -136,7 +138,7 @@ function handleDragEnd(
     (column) => column.id === Number(destination.droppableId)
   );
 
-  const tasks = [...state];
+  const tasks = [...state.orderedTasks];
   const sourceTasksArr = tasks[sourceTaskColumnIndex];
   const destinationTasksArr = tasks[destinationTaskColumnIndex];
 
@@ -224,7 +226,7 @@ function handleDragEnd(
     sourceTasksArr.splice(source.index, 1); // delete original
     sourceTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
 
-    return setState(tasks);
+    return setState({ ...state, orderedTasks: tasks });
 
     /*
      * Drop in a different column
@@ -257,6 +259,6 @@ function handleDragEnd(
     sourceTasksArr.splice(source.index, 1); // delete original
     destinationTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
 
-    return setState(tasks);
+    return setState({ ...state, orderedTasks: tasks });
   }
 }

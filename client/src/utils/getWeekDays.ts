@@ -12,7 +12,7 @@ export function getWeekDays() {
 // https://stackoverflow.com/a/1579109/16648127
 function getNextWeekDay() {
   var now = new Date();
-  now.setDate(now.getDate() + ((7 - now.getDay() - 1) % 7));
+  now.setDate(now.getDate() + 1);
   return now;
 }
 

@@ -43,30 +43,30 @@ export const DUE_DATE = "dueDate";
 
 export type SortBy = typeof STATUS | typeof PRIORITY | typeof DUE_DATE;
 
-export type SortingOptions = {
+export type ColumnOptions = {
   status: { id: number; title: string }[];
   priority: { id: number; title: Priority }[];
   dueDate: { id: number; title: DueDate }[];
 };
 
-export const sortingOptions: SortingOptions = {
+export const columnOptions: ColumnOptions = {
   status: [
-    { id: 3, title: "DONE" },
     { id: 1, title: "TO DO" },
     { id: 2, title: "IN PROGRESS" },
+    { id: 3, title: "DONE" },
   ],
   priority: [
-    { id: 2, title: "URGENT" },
     { id: 1, title: "NO PRIORITY" },
+    { id: 2, title: "URGENT" },
     { id: 3, title: "HIGH" },
     { id: 4, title: "NORMAL" },
     { id: 5, title: "LOW" },
   ],
   dueDate: [
-    { id: 2, title: "OVER DUE" },
     { id: 1, title: "NO DUE DATE" },
-    { id: 4, title: "TUESDAY" },
+    { id: 2, title: "OVER DUE" },
     { id: 3, title: "MONDAY" },
+    { id: 4, title: "TUESDAY" },
     { id: 5, title: "WEDNESDAY" },
     { id: 6, title: "THURSDAY" },
     { id: 7, title: "FRIDAY" },
@@ -141,5 +141,8 @@ export const initialData: TaskList = [
 ];
 
 export type OrderedTasks = TaskList[];
-export type State = OrderedTasks;
+export type State = {
+  orderedTasks: OrderedTasks;
+  unorderedColumns: ColumnOptions;
+};
 export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;

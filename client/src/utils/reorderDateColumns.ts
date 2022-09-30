@@ -1,11 +1,13 @@
-import { SortingOptions, SortBy, Columns } from "../component/task/Data";
+import { ColumnOptions, SortBy, Columns } from "../component/task/Data";
 import { getWeekDays } from "./getWeekDays";
+import { reorderColumnsOnId } from "./reorderColumnsOnId";
 
-export function renameDateColumns(
-  sortingOptions: SortingOptions,
+export function reorderAndRenameColumns(
+  sortingOptions: ColumnOptions,
   sortBy: SortBy
 ) {
   const originalColumns = sortingOptions[sortBy];
+  // reorderColumnsOnId(originalColumns);
   const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
 
   // rename columns to Today and Tomorrow
@@ -22,9 +24,9 @@ export function renameDateColumns(
   // put today to the front
   const columnsLength = updatedColumns.length;
   const front = updatedColumns.slice(0, 2);
-  const end = updatedColumns.slice(columnsLength - 2, columnsLength + 1);
+  const end = updatedColumns.slice(columnsLength - 1, columnsLength + 1);
 
-  const weekDayColumns = updatedColumns.slice(2, columnsLength - 2);
+  const weekDayColumns = updatedColumns.slice(2, columnsLength - 1);
 
   const todayIndex = weekDayColumns.findIndex(
     (column) => column.title === "TODAY"

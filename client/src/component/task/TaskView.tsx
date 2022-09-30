@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { getWeekDays } from "../../utils/getWeekDays";
-import { Columns, SortBy, sortingOptions } from "./Data";
+import { SortBy } from "./Data";
 import TaskList from "./TaskList";
 import TaskNavigation from "./TaskNavigation";
 
