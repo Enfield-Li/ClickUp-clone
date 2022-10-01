@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
 import { reorderColumnsOnId } from "../../utils/reorderColumnsOnId";
@@ -66,7 +66,7 @@ export default function TaskList({ sortBy }: Props) {
   }
 
   return (
-    <Box mx={6} my={1} height={"580px"} overflowY={"auto"}>
+    <Box mx={6} my={1} height={"580px"}>
       <DragDropContext
         onDragEnd={(result) =>
           handleDragEnd(result, state, setState, columns, sortBy, setIsDragging)
@@ -76,10 +76,13 @@ export default function TaskList({ sortBy }: Props) {
           setIsDragging(true);
         }}
       >
-        <SimpleGrid columns={columns.length} spacing={10} overflow={"auto"}>
+        <Flex
+          overflowY={"auto"}
+          // whiteSpace="nowrap"
+        >
           {columns.map((column, index) => (
             <Box
-              width={"300px"}
+              mx={2}
               key={column.id}
               borderRadius={4}
               border={
@@ -97,7 +100,7 @@ export default function TaskList({ sortBy }: Props) {
               />
             </Box>
           ))}
-        </SimpleGrid>
+        </Flex>
       </DragDropContext>
     </Box>
   );

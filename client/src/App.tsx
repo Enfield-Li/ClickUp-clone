@@ -34,7 +34,11 @@ export default function App() {
       </motion.div>
 
       {/* Header & Main */}
-      <Box width={"100%"}>
+      <Box
+        width={"100%"}
+        // https://stackoverflow.com/a/1767270/16648127https://stackoverflow.com/a/1767270/16648127
+        overflow="hidden"
+      >
         <Header isOpen={isOpen} onToggle={onToggle} />
         <PageRoute />
       </Box>

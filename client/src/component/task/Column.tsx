@@ -22,7 +22,7 @@ export default function Column({
   // ⬇⬇⬇⬇ Potential bug ⬇⬇⬇⬇
   if (!tasks) tasks = [];
   return (
-    <Box>
+    <Box width={"280px"}>
       <Center>
         <Text
           color={"green.500"}
