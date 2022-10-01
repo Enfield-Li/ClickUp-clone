@@ -1,18 +1,10 @@
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { reorderColumnsOnId } from "../../utils/reorderColumnsOnId";
 import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
+import AddColumn from "./AddColumn";
 import Column from "./Column";
-import {
-  Columns,
-  initialData,
-  OrderedTasks,
-  SetState,
-  SortBy,
-  columnOptions,
-  State,
-} from "./Data";
+import { Columns, initialData, SortBy, columnOptions, State } from "./Data";
 import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
 
 type Props = {
@@ -41,7 +33,8 @@ export default function TaskList({ sortBy }: Props) {
     });
   }, []);
 
-  // Restructure task based on sortBy
+  // Sync up state with sortBy
+  // column keeps the original data and restructure tasks
   useEffect(() => {
     if (state) {
       setState({
@@ -66,10 +59,10 @@ export default function TaskList({ sortBy }: Props) {
   }
 
   return (
-    <Box mx={6} my={1} height={"580px"}>
+    <Box mx={6}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, setState, columns, sortBy, setIsDragging)
+          handleDragEnd(result, state, columns, sortBy, setIsDragging)
         }
         onDragStart={(start, provided) => {
           setDraggingId(Number(start.source.droppableId));
@@ -92,6 +85,7 @@ export default function TaskList({ sortBy }: Props) {
               }
             >
               <Column
+                sortBy={sortBy}
                 column={column}
                 // pass down the tasklist data with stage that matches the order of the respective column
                 tasks={state.orderedTasks[index]}
@@ -100,6 +94,7 @@ export default function TaskList({ sortBy }: Props) {
               />
             </Box>
           ))}
+          {sortBy === "status" && <AddColumn />}
         </Flex>
       </DragDropContext>
     </Box>
@@ -117,7 +112,6 @@ function isDraggingToOtherColumn(
 function handleDragEnd(
   result: DropResult,
   state: State,
-  setState: SetState,
   columns: Columns,
   sortBy: SortBy,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
@@ -229,8 +223,6 @@ function handleDragEnd(
     sourceTasksArr.splice(source.index, 1); // delete original
     sourceTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
 
-    return setState({ ...state, orderedTasks: tasks });
-
     /*
      * Drop in a different column
      */
@@ -261,7 +253,5 @@ function handleDragEnd(
 
     sourceTasksArr.splice(source.index, 1); // delete original
     destinationTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
-
-    return setState({ ...state, orderedTasks: tasks });
   }
 }

@@ -1,10 +1,11 @@
-import { Box, Center, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Spacer, Text } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import React, { useState } from "react";
 import Card from "./Card";
-import { ColumnType, TaskList } from "./Data";
+import { ColumnType, SortBy, TaskList } from "./Data";
 
 type Props = {
+  sortBy: SortBy;
   column: ColumnType;
   tasks: TaskList;
   isDragging: boolean;
@@ -12,18 +13,20 @@ type Props = {
 };
 
 export default function Column({
+  sortBy,
   column,
   tasks,
   isDragging,
   setIsDragging,
 }: Props) {
-  const [isHovering, setIsHovering] = useState(false);
+  const isSortByStatus = sortBy === "status";
 
-  // ⬇⬇⬇⬇ Potential bug ⬇⬇⬇⬇
+  // ⬇⬇⬇ Potential bug ⬇⬇⬇
   if (!tasks) tasks = [];
+
   return (
     <Box width={"280px"}>
-      <Center>
+      <Flex m={2}>
         <Text
           color={"green.500"}
           textTransform={"uppercase"}
@@ -33,17 +36,19 @@ export default function Column({
         >
           {column.title}
         </Text>
-      </Center>
+        <Spacer />
+        {/* {isSortByStatus && <i className="bi bi-gear"></i>} */}
+        <i className="bi bi-gear"></i>
+      </Flex>
       <Droppable droppableId={String(column.id)}>
         {(provided, snapshot) => (
           <Box
+            my={2}
             ref={provided.innerRef}
             {...provided.droppableProps}
             minHeight={"100px"}
-            height={"440px"}
+            height={"500px"}
             overflow={"auto"}
-            onMouseOver={() => setIsHovering(true)}
-            onMouseOutCapture={() => setIsHovering(false)}
           >
             {tasks.map((task, index) => (
               <Card
