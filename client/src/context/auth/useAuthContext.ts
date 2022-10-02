@@ -5,6 +5,7 @@ import { AuthContext } from "./AuthContext";
 import {
   AuthActionType,
   Credentials,
+  LogInError,
   User,
   UserResponse,
 } from "./AuthContextTypes";
@@ -42,23 +43,32 @@ export async function loginUser(
       description: "You've logged in.",
       status: "success",
     });
-
-    return true;
   } catch (error) {
-    const err = error as AxiosError;
-    console.log(err);
-
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
+    const err = error as AxiosError;
+
+    if (err.response?.status == 401) {
+      toast({
+        title: "Login failed...",
+        description: err.response.data as string,
+        status: "error",
+      });
+      return [];
+    }
+
+    console.log(err);
+    const response = err.response?.data as LogInError;
+
     toast({
-      title: "Error!",
-      description: err.response?.data as string,
+      title: "Login failed...",
+      description: "Please check the field.",
       status: "error",
     });
 
-    return false;
+    return response.errors;
   }
 }
 
@@ -90,14 +100,31 @@ export async function registerUser(
       status: "success",
     });
   } catch (error) {
-    const err = error as AxiosError;
-    console.log(err);
-
     // clear local auth state and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
-    return err.response?.data as string;
+    const err = error as AxiosError;
+
+    if (err.response?.status == 401) {
+      toast({
+        title: "Login failed...",
+        description: err.response.data as string,
+        status: "error",
+      });
+      return [];
+    }
+    
+    const response = err.response?.data as LogInError;
+    console.log(response);
+
+    toast({
+      title: "Register failed...",
+      description: "Please check the field.",
+      status: "error",
+    });
+
+    return response.errors;
   }
 }
 

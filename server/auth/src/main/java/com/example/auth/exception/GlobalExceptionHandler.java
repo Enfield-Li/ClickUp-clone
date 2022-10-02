@@ -43,8 +43,10 @@ public class GlobalExceptionHandler {
     );
   }
 
-  @ExceptionHandler(InvalidTokenException.class)
-  ResponseEntity<String> catchInvalidateCredentialsException() {
+  @ExceptionHandler(
+    value = { InvalidTokenException.class, LoginFailedException.class }
+  )
+  ResponseEntity<String> catchLoginFailure() {
     log.error("InvalidateCredentialsException");
     return ResponseEntity
       .status(HttpStatus.UNAUTHORIZED)
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler {
   ResponseEntity<String> catchUserAlreadyExistsException() {
     log.error("UserAlreadyExistsException");
     return ResponseEntity
-      .status(HttpStatus.BAD_REQUEST)
+      .status(HttpStatus.UNAUTHORIZED)
       .body("User already exists.");
   }
 

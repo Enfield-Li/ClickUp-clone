@@ -17,7 +17,11 @@ import {
 import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Credentials } from "../../context/auth/AuthContextTypes";
+import {
+  Credentials,
+  FieldError,
+  FieldErrors,
+} from "../../context/auth/AuthContextTypes";
 import useAuthContext, {
   loginUser,
   registerUser,
@@ -29,13 +33,13 @@ type Props = {};
 export default function Register({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
-  const [error, setError] = useState<string>();
+  const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
-  if (error) {
+  if (errors) {
     setTimeout(() => {
-      setError("");
-    }, 4000);
+      setErrors([]);
+    }, 5000);
   }
 
   return (
@@ -49,7 +53,7 @@ export default function Register({}: Props) {
           onSubmit={async (credentials) => {
             const error = await registerUser(credentials, authDispatch, toast);
             if (error === undefined) navigate(ROUTE.HOME);
-            if (error) setError(error);
+            if (error) setErrors(error);
           }}
         >
           {(props) => (
@@ -61,7 +65,13 @@ export default function Register({}: Props) {
                     <>
                       <FormLabel>Username:</FormLabel>
                       <Input {...field} placeholder="John Doe" />
-                      {error && <Text textColor={"red.400"}>{error}</Text>}
+
+                      <Text textColor={"red.400"}>
+                        {
+                          errors?.find((err) => err.field === "username")
+                            ?.message
+                        }
+                      </Text>
                     </>
                   )}
                 </Field>
@@ -71,6 +81,13 @@ export default function Register({}: Props) {
                     <>
                       <FormLabel mt={3}>Password:</FormLabel>
                       <Input {...field} type="password" />
+
+                      <Text textColor={"red.400"}>
+                        {
+                          errors?.find((err) => err.field === "password")
+                            ?.message
+                        }
+                      </Text>
                     </>
                   )}
                 </Field>

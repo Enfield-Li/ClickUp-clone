@@ -14,9 +14,9 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Credentials } from "../../context/auth/AuthContextTypes";
+import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
 import useAuthContext, { loginUser } from "../../context/auth/useAuthContext";
 import { register } from "../../serviceWorker";
 import { ROUTE } from "../../utils/constant";
@@ -26,6 +26,7 @@ type Props = {};
 export default function Login({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
+  const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
   return (
@@ -37,13 +38,14 @@ export default function Login({}: Props) {
             password: "",
           }}
           onSubmit={async (credentials) => {
-            const isLoginSuccessful = await loginUser(
+            const error = await loginUser(
               credentials,
               authDispatch,
               toast
             );
 
-            isLoginSuccessful && navigate(ROUTE.HOME);
+            if (error === undefined) navigate(ROUTE.HOME);
+            if (error) setErrors(error);
           }}
         >
           {(props) => (
@@ -55,6 +57,13 @@ export default function Login({}: Props) {
                     <>
                       <FormLabel>Username:</FormLabel>
                       <Input {...field} placeholder="John Doe" />
+
+                      <Text textColor={"red.400"}>
+                        {
+                          errors?.find((err) => err.field === "username")
+                            ?.message
+                        }
+                      </Text>
                     </>
                   )}
                 </Field>
@@ -64,6 +73,13 @@ export default function Login({}: Props) {
                     <>
                       <FormLabel mt={3}>Password:</FormLabel>
                       <Input {...field} type="password" />
+
+                      <Text textColor={"red.400"}>
+                        {
+                          errors?.find((err) => err.field === "password")
+                            ?.message
+                        }
+                      </Text>
                     </>
                   )}
                 </Field>

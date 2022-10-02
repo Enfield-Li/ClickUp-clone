@@ -4,6 +4,7 @@ import static com.example.clients.UrlConstants.*;
 
 import com.example.auth.dto.AuthorizationResponse;
 import com.example.auth.dto.Credentials;
+import com.example.auth.exception.LoginFailedException;
 import com.example.auth.exception.UserAlreadyExistsException;
 import com.example.clients.jwt.InvalidTokenException;
 import com.example.clients.jwt.JwtUtilities;
@@ -68,7 +69,7 @@ public class AuthorizationService {
     // 1. check user password
     var applicationUser = repository
       .findByUsername(credentials.getUsername())
-      .orElseThrow(() -> new InvalidTokenException());
+      .orElseThrow(() -> new LoginFailedException());
 
     boolean matches = passwordEncoder.matches(
       credentials.getPassword(),
@@ -78,7 +79,7 @@ public class AuthorizationService {
     // 1.5 wrong password
     if (!matches) {
       log.error("Invalid password");
-      throw new InvalidTokenException();
+      throw new LoginFailedException();
     }
 
     var userId = applicationUser.getId();

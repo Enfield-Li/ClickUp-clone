@@ -16,6 +16,19 @@ export type Credentials = {
   password: string;
 };
 
+export type FieldError = {
+  field: string;
+  message: string;
+};
+
+export type FieldErrors = FieldError[];
+
+export type LogInError = {
+  status: number;
+  message: string;
+  errors: FieldError[];
+};
+
 export type User = {
   id: number;
   username: string;
