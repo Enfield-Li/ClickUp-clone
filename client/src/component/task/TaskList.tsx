@@ -88,6 +88,7 @@ export default function TaskList({ sortBy }: Props) {
               }
             >
               <Column
+                state={state}
                 sortBy={sortBy}
                 setState={setState}
                 column={column}

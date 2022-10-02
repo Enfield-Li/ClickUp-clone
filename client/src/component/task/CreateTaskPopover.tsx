@@ -16,6 +16,7 @@ import { Field, FieldAttributes, Form, Formik } from "formik";
 import { useRef } from "react";
 import FocusLock from "react-focus-lock";
 import { ColumnType, SetState, SortBy, State, Task } from "./Data";
+import { createTask } from "./TaskActions";
 
 type NewTask = {
   title: string;
@@ -23,12 +24,13 @@ type NewTask = {
 };
 
 type Props = {
+  state: State;
   sortBy: SortBy;
   column: ColumnType;
   setState: SetState;
 };
 
-export const PopoverForm = ({ setState, column, sortBy }: Props) => {
+export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const focusRef = useRef(null);
 
@@ -60,31 +62,65 @@ export const PopoverForm = ({ setState, column, sortBy }: Props) => {
               title: "",
               description: "",
             }}
+            // onSubmit={async ({ title, description }, { resetForm }) => {
+            //   setState((prv) => {
+            //     const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
+
+            //     const currentTaskArr = copiedTasks?.orderedTasks.find(
+            //       (task) => task.id === column.id
+            //     );
+
+            //     const currentTaskList = currentTaskArr?.taskList;
+            //     const currentTaskArrLength = currentTaskList?.length;
+
+            //     const previousTaskId = currentTaskArrLength
+            //       ? currentTaskList?.[currentTaskArrLength - 1].id
+            //       : undefined;
+
+            //     const newTask: Task = {
+            //       title,
+            //       description,
+            //       previousItem: {},
+            //     };
+            //     newTask[sortBy] = column.id;
+            //     newTask.previousItem[`${sortBy}Id`] = previousTaskId;
+
+            //     currentTaskArr?.taskList.push(newTask);
+
+            //     return copiedTasks;
+            //   });
+            //   resetForm();
+            // }}
             onSubmit={async ({ title, description }, { resetForm }) => {
+              const currentTaskArr = state.orderedTasks.find(
+                (task) => task.id === column.id
+              );
+
+              const currentTaskList = currentTaskArr?.taskList;
+              const currentTaskArrLength = currentTaskList?.length;
+
+              const previousTaskId = currentTaskArrLength
+                ? currentTaskList?.[currentTaskArrLength - 1].id
+                : undefined;
+
+              const newTask: Task = {
+                title,
+                description,
+                previousItem: {},
+              };
+              newTask[sortBy] = column.id;
+              newTask.previousItem[`${sortBy}Id`] = previousTaskId;
+
+              const createdTask = await createTask(newTask);
+
               setState((prv) => {
                 const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
 
-                const currentTaskArr = copiedTasks?.orderedTasks.find(
+                const taskArr = copiedTasks.orderedTasks.find(
                   (task) => task.id === column.id
                 );
 
-                const currentTaskList = currentTaskArr?.taskList;
-                const currentTaskArrLength = currentTaskList?.length;
-                
-                const previousTaskId = currentTaskArrLength
-                  ? currentTaskList?.[currentTaskArrLength - 1].id
-                  : undefined;
-
-                const newTask: Task = {
-                  id: 100,
-                  title,
-                  description,
-                  previousItem: {},
-                };
-                newTask[sortBy] = column.id;
-                newTask.previousItem[`${sortBy}Id`] = previousTaskId;
-
-                currentTaskArr?.taskList.push(newTask);
+                taskArr?.taskList.push(createdTask);
 
                 return copiedTasks;
               });

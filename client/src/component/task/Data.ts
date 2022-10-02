@@ -24,7 +24,7 @@ export type DueDate =
   | "FRIDAY";
 
 export type Task = {
-  id: number;
+  id?: number;
   title: string;
   status?: number;
   dueDate?: number;
