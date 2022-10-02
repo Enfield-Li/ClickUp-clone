@@ -21,6 +21,9 @@ public class RouteConfiguration {
   @Value("${url.customer-service}")
   private String customerServiceUrl;
 
+  @Value("${url.task-service}")
+  private String taskServiceUrl;
+
   @Bean
   public RouteLocator routes(RouteLocatorBuilder builder) {
     return builder
@@ -39,6 +42,14 @@ public class RouteConfiguration {
             .path(CUSTOMER_API_VERSION + "/**")
             .filters(filter -> filter.filter(authenticationFilter))
             .uri(customerServiceUrl)
+      )
+      .route(
+        "task",
+        route ->
+          route
+            .path(TASK_API_VERSION + "/**")
+            .filters(filter -> filter.filter(authenticationFilter))
+            .uri(taskServiceUrl)
       )
       .build();
   }
