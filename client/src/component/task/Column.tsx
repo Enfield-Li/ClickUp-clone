@@ -15,9 +15,9 @@ import { ColumnType, SetState, SortBy, State, TaskList } from "./Data";
 type Props = {
   setState: SetState;
   column: ColumnType;
-  tasks: TaskList;
   isDragging: boolean;
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
+  tasks?: TaskList;
 };
 
 export default function Column({
@@ -27,9 +27,6 @@ export default function Column({
   isDragging,
   setIsDragging,
 }: Props) {
-  // ⬇⬇⬇ Potential bug ⬇⬇⬇
-  if (!tasks) tasks = [];
-
   return (
     <Box width={"280px"}>
       {/* Column header */}
@@ -65,7 +62,7 @@ export default function Column({
             overflow={"auto"}
           >
             {/* Task list */}
-            {tasks.map((task, index) => (
+            {tasks?.map((task, index) => (
               <Card
                 task={task}
                 key={task.id}

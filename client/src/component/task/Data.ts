@@ -140,7 +140,7 @@ export const initialData: TaskList = [
   },
 ];
 
-export type OrderedTasks = TaskList[];
+export type OrderedTasks = { taskList: TaskList; id: number }[];
 export type State = {
   orderedTasks: OrderedTasks;
   unorderedColumns: ColumnOptions;

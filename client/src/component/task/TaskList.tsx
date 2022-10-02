@@ -5,7 +5,11 @@ import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
 import { Columns, initialData, SortBy, columnOptions, State } from "./Data";
-import { lookUpId, processTaskBasedOnSortBy } from "./TaskDataProcessing";
+import {
+  collectAllTasks,
+  lookUpId,
+  processTaskBasedOnSortBy,
+} from "./TaskDataProcessing";
 
 type Props = {
   sortBy: SortBy;
@@ -15,7 +19,7 @@ export default function TaskList({ sortBy }: Props) {
   const [state, setState] = useState<State>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
-  console.log(state)
+  // console.log(state);
 
   // Simulating getting data from api
   useEffect(() => {
@@ -41,7 +45,7 @@ export default function TaskList({ sortBy }: Props) {
       setState({
         ...state,
         orderedTasks: processTaskBasedOnSortBy(
-          state.orderedTasks.flat(),
+          collectAllTasks(state.orderedTasks),
           state.unorderedColumns[sortBy],
           sortBy
         ),
@@ -86,7 +90,11 @@ export default function TaskList({ sortBy }: Props) {
                 setState={setState}
                 column={column}
                 // pass down the tasklist data with stage that matches the order of the respective column
-                tasks={state.orderedTasks[index]}
+                tasks={
+                  state.orderedTasks.find(
+                    (orderedTask) => orderedTask.id === column.id
+                  )?.taskList
+                }
                 isDragging={isDragging}
                 setIsDragging={setIsDragging}
               />
@@ -116,16 +124,13 @@ function handleDragEnd(
 ) {
   setIsDragging(false);
   const { destination, source } = result;
-
   if (!destination) return;
-
   if (
     destination.droppableId === source.droppableId &&
     destination.index === source.index
   ) {
     return;
   }
-
   const sourceTaskColumnIndex = columns.findIndex(
     (column) => column.id === Number(source.droppableId)
   );
@@ -137,15 +142,17 @@ function handleDragEnd(
   const sourceTasksArr = tasks[sourceTaskColumnIndex];
   const destinationTasksArr = tasks[destinationTaskColumnIndex];
 
-  const sourceTask = sourceTasksArr[source.index];
-  const sourceTaskBefore = sourceTasksArr[source.index - 1];
-  const sourceTaskAfter = sourceTasksArr[source.index + 1];
+  const sourceTask = sourceTasksArr.taskList[source.index];
+  const sourceTaskBefore = sourceTasksArr.taskList[source.index - 1];
+  const sourceTaskAfter = sourceTasksArr.taskList[source.index + 1];
 
-  const destinationTask = destinationTasksArr[destination.index];
-  const destinationTaskBefore = destinationTasksArr[destination.index - 1];
-  const destinationTaskAfter = destinationTasksArr[destination.index + 1];
-
-  const sourceTaskIndex = sourceTasksArr.findIndex(
+  const destinationTask = destinationTasksArr.taskList[destination.index];
+  const destinationTaskBefore =
+    destinationTasksArr.taskList[destination.index - 1];
+  const destinationTaskAfter =
+    destinationTasksArr.taskList[destination.index + 1];
+  
+  const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
     (task) => task.id === sourceTask.id
   );
 
@@ -167,7 +174,6 @@ function handleDragEnd(
         ? destinationTaskBefore.id
         : undefined;
       destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
-
       if (sourceTaskAfter) {
         sourceTaskAfter.previousItem[lookUpId[sortBy]] = destinationTask.id;
       }
@@ -179,7 +185,6 @@ function handleDragEnd(
         ? sourceTaskBefore.id
         : undefined;
       sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
-
       if (destinationTaskAfter) {
         destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
       }
@@ -187,7 +192,7 @@ function handleDragEnd(
 
     // move up or down multiple rows
     else {
-      const destinationTaskIndex = sourceTasksArr.findIndex(
+      const destinationTaskIndex = sourceTasksArr.taskList.findIndex(
         (task) => task.id === destinationTask.id
       );
 
@@ -197,7 +202,6 @@ function handleDragEnd(
         sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
           ? sourceTaskBefore.id
           : undefined;
-
         if (destinationTaskAfter)
           destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
         sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
@@ -209,7 +213,6 @@ function handleDragEnd(
           ? destinationTaskBefore.id
           : undefined;
         destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
-
         if (sourceTaskAfter) {
           sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
             ? sourceTaskBefore.id
@@ -218,8 +221,8 @@ function handleDragEnd(
       }
     }
 
-    sourceTasksArr.splice(source.index, 1); // delete original
-    sourceTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
+    sourceTasksArr.taskList.splice(source.index, 1); // delete original
+    sourceTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
 
     /*
      * Drop in a different column
@@ -227,7 +230,6 @@ function handleDragEnd(
   } else {
     // change task stage
     sourceTask[sortBy] = columns[destinationTaskColumnIndex].id;
-
     if (sourceTaskAfter)
       sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
         ? sourceTaskBefore.id
@@ -235,7 +237,8 @@ function handleDragEnd(
 
     // move to an empty column or to the last position
     if (!destinationTask) {
-      const lastElement = destinationTasksArr[destinationTasksArr.length - 1];
+      const lastElement =
+        destinationTasksArr.taskList[destinationTasksArr.taskList.length - 1];
       sourceTask.previousItem[lookUpId[sortBy]] = lastElement
         ? lastElement.id
         : undefined;
@@ -249,7 +252,7 @@ function handleDragEnd(
         : undefined;
     }
 
-    sourceTasksArr.splice(source.index, 1); // delete original
-    destinationTasksArr.splice(destination.index, 0, sourceTask); // insert original to new place
+    sourceTasksArr.taskList.splice(source.index, 1); // delete original
+    destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
   }
 }

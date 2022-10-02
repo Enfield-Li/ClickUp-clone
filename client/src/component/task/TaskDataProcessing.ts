@@ -66,7 +66,9 @@ export function processTaskBasedOnSortBy(
   const nestedTasks: OrderedTasks = [];
 
   for (let i = 0; i < columns.length; i++) {
-    nestedTasks[i] = [];
+    const column = columns[i];
+
+    nestedTasks[i] = { id: column.id, taskList: [] };
 
     const element = columns[i];
     const stageId = element.id;
@@ -76,21 +78,32 @@ export function processTaskBasedOnSortBy(
       const task = tasks[j];
 
       if (task[sortBy] === stageId && !task.previousItem[lookUpId[sortBy]]) {
-        nestedTasks[i][0] = task;
+        nestedTasks[i].taskList[0] = task;
       }
     }
 
     // pushing the entailing task based on, for example, previousItem.statusId
-    for (let k = 0; k < nestedTasks[i].length; k++) {
-      const currentTask = nestedTasks[i][k];
+    for (let k = 0; k < nestedTasks[i].taskList.length; k++) {
+      const currentTask = nestedTasks[i].taskList[k];
 
       const entailingTask = tasks.find(
         (task) => task.previousItem[lookUpId[sortBy]] === currentTask.id
       );
 
-      if (entailingTask) nestedTasks[i].push(entailingTask);
+      if (entailingTask) nestedTasks[i].taskList.push(entailingTask);
     }
   }
 
   return nestedTasks;
+}
+
+export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
+  let taskList: TaskList = [];
+
+  for (let i = 0; i < orderedTasks.length; i++) {
+    const orderedTask = orderedTasks[i];
+    taskList = [...taskList, ...orderedTask.taskList];
+  }
+
+  return taskList;
 }
