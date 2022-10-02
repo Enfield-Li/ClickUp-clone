@@ -7,10 +7,12 @@ export const lookUpId = {
 } as const;
 
 /* 
-  Convert unordered Task[] list to ordered nested Task[][] list group by for example task.priorityId:
+  Convert unordered Task[] list to OrderedTasks group by for example task.priorityId:
   Find all sorting occurrences,
     and, based on the id, generate respective nested list for that id, 
     for example:
+      sortBy = "priority"
+
       from:
         status column data: 
           [
@@ -35,34 +37,38 @@ export const lookUpId = {
             dueDate: 1,
             previousItem: { statusId: 111, dueDateId: 111 },
           },
+
       to:
         [
-          [{
-            id: 111,
-            title: "11111",
-            status: 1,
-            priority: 2,
-            dueDate: 1,
-            previousItem: {},
-          }],
-          [{
-            "id": 222,
-            "title": "22222",
-            "status": 1,
-            "priority": 1,
-            "dueDate": 1,
-            "previousItem": {
-              "statusId": 111,
-              "dueDateId": 111
-            }
-          }]
+          {
+            id: 1, // <- priority id
+            tasks: [{
+              id: 111,
+              title: "11111",
+              status: 1,
+              priority: 2,
+              dueDate: 1,
+              previousItem: {},
+            }]
+          },
+          {
+            id: 2, // <- priority id
+            tasks: [{
+              id: 222,
+              title: "22222",
+              status: 1,
+              priority: 1,
+              dueDate: 1,
+              previousItem: { statusId: 111, dueDateId: 111 },
+            }]
+          }
         ]
 */
 export function processTaskBasedOnSortBy(
   tasks: TaskList,
   columns: Columns,
   sortBy: SortBy
-) {
+): OrderedTasks {
   const nestedTasks: OrderedTasks = [];
 
   for (let i = 0; i < columns.length; i++) {
@@ -97,6 +103,7 @@ export function processTaskBasedOnSortBy(
   return nestedTasks;
 }
 
+// Collect all tasks from OrderedTasks to Task[]
 export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   let taskList: TaskList = [];
 

@@ -68,8 +68,11 @@ export const PopoverForm = ({ setState, column, sortBy }: Props) => {
                   (task) => task.id === column.id
                 );
 
-                const previousTaskId = currentTaskArr?.taskList.length
-                  ? currentTaskArr?.taskList[currentTaskArr.taskList.length - 1].id
+                const currentTaskList = currentTaskArr?.taskList;
+                const currentTaskArrLength = currentTaskList?.length;
+                
+                const previousTaskId = currentTaskArrLength
+                  ? currentTaskList?.[currentTaskArrLength - 1].id
                   : undefined;
 
                 const newTask: Task = {

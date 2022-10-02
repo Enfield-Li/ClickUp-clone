@@ -44,6 +44,7 @@ export default function TaskList({ sortBy }: Props) {
     if (state) {
       setState({
         ...state,
+        // Flat list by processTaskBasedOnSortBy()
         orderedTasks: processTaskBasedOnSortBy(
           collectAllTasks(state.orderedTasks),
           state.unorderedColumns[sortBy],
@@ -90,7 +91,7 @@ export default function TaskList({ sortBy }: Props) {
                 sortBy={sortBy}
                 setState={setState}
                 column={column}
-                // pass down the tasklist data with stage that matches the order of the respective column
+                // Pass down list as per column.id
                 tasks={
                   state.orderedTasks.find(
                     (orderedTask) => orderedTask.id === column.id
