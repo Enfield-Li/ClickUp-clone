@@ -1,11 +1,19 @@
-import { Box, Button, Center, Flex, Spacer, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Spacer,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
-import { ColumnType, SortBy, TaskList } from "./Data";
+import { PopoverForm } from "./CreateTaskPopover";
+import { ColumnType, SetState, SortBy, State, TaskList } from "./Data";
 
 type Props = {
-  sortBy: SortBy;
+  setState: SetState;
   column: ColumnType;
   tasks: TaskList;
   isDragging: boolean;
@@ -13,20 +21,20 @@ type Props = {
 };
 
 export default function Column({
-  sortBy,
+  setState,
   column,
   tasks,
   isDragging,
   setIsDragging,
 }: Props) {
-  const isSortByStatus = sortBy === "status";
-
   // ⬇⬇⬇ Potential bug ⬇⬇⬇
   if (!tasks) tasks = [];
 
   return (
     <Box width={"280px"}>
-      <Flex m={2}>
+      {/* Column header */}
+      <Flex m={2} p={2}>
+        {/* Title */}
         <Text
           color={"green.500"}
           textTransform={"uppercase"}
@@ -36,10 +44,16 @@ export default function Column({
         >
           {column.title}
         </Text>
+
         <Spacer />
-        {/* {isSortByStatus && <i className="bi bi-gear"></i>} */}
-        <i className="bi bi-gear"></i>
+
+        {/* Option */}
+        <Box cursor={"pointer"}>
+          <i className="bi bi-gear"></i>
+        </Box>
       </Flex>
+
+      {/* Column card */}
       <Droppable droppableId={String(column.id)}>
         {(provided, snapshot) => (
           <Box
@@ -50,6 +64,7 @@ export default function Column({
             height={"500px"}
             overflow={"auto"}
           >
+            {/* Task list */}
             {tasks.map((task, index) => (
               <Card
                 task={task}
@@ -61,6 +76,11 @@ export default function Column({
               />
             ))}
             {provided.placeholder}
+
+            {/* Create task popover */}
+            <Center>
+              <PopoverForm setState={setState} column={column} />
+            </Center>
           </Box>
         )}
       </Droppable>

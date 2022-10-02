@@ -23,7 +23,6 @@ public class Task {
   private Integer id;
 
   @NotNull
-  @Column(unique = true)
   private String title;
 
   private Integer status;

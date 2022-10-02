@@ -37,4 +37,10 @@ class TaskController {
     var allTasks = taskService.getAllTasks();
     return ResponseEntity.ok(allTasks);
   }
+
+  @PostMapping
+  ResponseEntity<Task> createTask(@RequestBody Task task) {
+    var allTasks = taskService.createTask(task);
+    return ResponseEntity.ok(allTasks);
+  }
 }

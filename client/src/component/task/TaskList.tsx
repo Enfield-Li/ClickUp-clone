@@ -15,6 +15,7 @@ export default function TaskList({ sortBy }: Props) {
   const [state, setState] = useState<State>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
+  console.log(state)
 
   // Simulating getting data from api
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function TaskList({ sortBy }: Props) {
   }
 
   return (
-    <Box mx={6}>
+    <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
           handleDragEnd(result, state, columns, sortBy, setIsDragging)
@@ -69,10 +70,7 @@ export default function TaskList({ sortBy }: Props) {
           setIsDragging(true);
         }}
       >
-        <Flex
-          overflowY={"auto"}
-          // whiteSpace="nowrap"
-        >
+        <Flex>
           {columns.map((column, index) => (
             <Box
               mx={2}
@@ -85,7 +83,7 @@ export default function TaskList({ sortBy }: Props) {
               }
             >
               <Column
-                sortBy={sortBy}
+                setState={setState}
                 column={column}
                 // pass down the tasklist data with stage that matches the order of the respective column
                 tasks={state.orderedTasks[index]}

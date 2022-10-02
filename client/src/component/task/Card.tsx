@@ -52,7 +52,7 @@ export default function Card({
             <Heading color={headerColor} fontSize={"2xl"} fontFamily={"body"}>
               {task.title}
             </Heading>
-            <Text color={"gray.500"}>Lorem ipsum dolor</Text>
+            <Text color={"gray.400"}>Lorem ipsum dolor</Text>
           </Stack>
         </Box>
       )}
