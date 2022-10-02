@@ -87,6 +87,7 @@ export default function TaskList({ sortBy }: Props) {
               }
             >
               <Column
+                sortBy={sortBy}
                 setState={setState}
                 column={column}
                 // pass down the tasklist data with stage that matches the order of the respective column
@@ -151,7 +152,7 @@ function handleDragEnd(
     destinationTasksArr.taskList[destination.index - 1];
   const destinationTaskAfter =
     destinationTasksArr.taskList[destination.index + 1];
-  
+
   const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
     (task) => task.id === sourceTask.id
   );

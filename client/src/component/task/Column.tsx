@@ -13,6 +13,7 @@ import { PopoverForm } from "./CreateTaskPopover";
 import { ColumnType, SetState, SortBy, State, TaskList } from "./Data";
 
 type Props = {
+  sortBy: SortBy;
   setState: SetState;
   column: ColumnType;
   isDragging: boolean;
@@ -26,6 +27,7 @@ export default function Column({
   tasks,
   isDragging,
   setIsDragging,
+  sortBy,
 }: Props) {
   return (
     <Box width={"280px"}>
@@ -76,7 +78,11 @@ export default function Column({
 
             {/* Create task popover */}
             <Center>
-              <PopoverForm setState={setState} column={column} />
+              <PopoverForm
+                setState={setState}
+                column={column}
+                sortBy={sortBy}
+              />
             </Center>
           </Box>
         )}

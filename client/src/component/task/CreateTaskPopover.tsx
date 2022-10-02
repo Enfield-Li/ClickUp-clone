@@ -15,7 +15,7 @@ import {
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { useRef } from "react";
 import FocusLock from "react-focus-lock";
-import { ColumnType, SetState } from "./Data";
+import { ColumnType, SetState, SortBy, State, Task } from "./Data";
 
 type NewTask = {
   title: string;
@@ -23,11 +23,12 @@ type NewTask = {
 };
 
 type Props = {
+  sortBy: SortBy;
   column: ColumnType;
   setState: SetState;
 };
 
-export const PopoverForm = ({ setState, column }: Props) => {
+export const PopoverForm = ({ setState, column, sortBy }: Props) => {
   const { onOpen, onClose, isOpen } = useDisclosure();
   const focusRef = useRef(null);
 
@@ -59,8 +60,31 @@ export const PopoverForm = ({ setState, column }: Props) => {
               title: "",
               description: "",
             }}
-            onSubmit={async (values, { resetForm }) => {
-              console.log(values);
+            onSubmit={async ({ title, description }, { resetForm }) => {
+              setState((prv) => {
+                const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
+
+                const currentTaskArr = copiedTasks?.orderedTasks.find(
+                  (task) => task.id === column.id
+                );
+
+                const previousTaskId = currentTaskArr?.taskList.length
+                  ? currentTaskArr?.taskList[currentTaskArr.taskList.length - 1].id
+                  : undefined;
+
+                const newTask: Task = {
+                  id: 100,
+                  title,
+                  description,
+                  previousItem: {},
+                };
+                newTask[sortBy] = column.id;
+                newTask.previousItem[`${sortBy}Id`] = previousTaskId;
+
+                currentTaskArr?.taskList.push(newTask);
+
+                return copiedTasks;
+              });
               resetForm();
             }}
           >
