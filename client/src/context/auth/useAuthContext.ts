@@ -11,6 +11,7 @@ import {
 } from "./AuthContextTypes";
 import { ACCESS_TOKEN, AUTH_ACTION } from "../../utils/constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
+import { axiosInstance } from "../../utils/AxiosInterceptor";
 
 export default function useAuthContext() {
   return useContext(AuthContext);
@@ -22,10 +23,9 @@ export async function loginUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
-    const response = await axios.post<UserResponse>(
+    const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_ENDPOINT_LOGIN,
-      credentials,
-      { withCredentials: true }
+      credentials
     );
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
@@ -78,10 +78,9 @@ export async function registerUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
-    const response = await axios.post<UserResponse>(
+    const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_ENDPOINT_REGISTER,
-      credentials,
-      { withCredentials: true }
+      credentials
     );
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
@@ -114,7 +113,7 @@ export async function registerUser(
       });
       return [];
     }
-    
+
     const response = err.response?.data as LogInError;
     console.log(response);
 
@@ -133,17 +132,9 @@ export async function refreshUserToken(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN);
-
-    if (!accessToken) return;
-
-    const response = await axios.post<UserResponse>(
+    const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN,
-      null,
-      {
-        withCredentials: true,
-        headers: { Authorization: `${BEARER} ${accessToken}` },
-      }
+      null
     );
 
     // store accessToken to localStorage
@@ -177,9 +168,7 @@ export function logOutUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   // invalidate session
-  axios.post(API_ENDPOINT.AUTH_ENDPOINT_LOGOUT, null, {
-    withCredentials: true,
-  });
+  axiosInstance.post(API_ENDPOINT.AUTH_ENDPOINT_LOGOUT, null);
 
   // clear local auth state and accessToken
   localStorage.removeItem(ACCESS_TOKEN);

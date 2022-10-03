@@ -1,8 +1,12 @@
 import { useToast } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { ACCESS_TOKEN } from "../utils/constant";
-import useAuthContext, { refreshUserToken } from "../context/auth/useAuthContext";
+import useAuthContext, {
+  refreshUserToken,
+} from "../context/auth/useAuthContext";
 import useGlobalContext from "../context/global/useGlobalContext";
+import axios from "axios";
+import { axiosInstance } from "../utils/AxiosInterceptor";
 
 export default function useInit() {
   const { globalState } = useGlobalContext();
