@@ -102,6 +102,9 @@ public class AuthorizationService {
     // 1. get both tokens
     var accessToken = request.getHeader(AUTHORIZATION);
     var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
+    System.out.println("sessionId when refresh: " + session.getId());
+    System.out.println(accessToken);
+    System.out.println(refreshToken);
 
     // 2. validate tokens and retrieve payload
     var userIdInAccessToken = jwtUtils.getUserIdFromAccessToken(accessToken);
@@ -152,6 +155,11 @@ public class AuthorizationService {
   ) {
     var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
     session.setAttribute(REFRESH_TOKEN, refreshToken);
+
+    System.out.println("sessionId when login: " + session.getId());
+    var refreshToken2 = (String) session.getAttribute(REFRESH_TOKEN);
+    System.out.println("refreshToken2: "+ refreshToken2);
+
 
     var accessToken = jwtUtils.createAccessToken(userId);
 

@@ -1,6 +1,7 @@
 package com.example.task;
 
 import static com.example.clients.UrlConstants.*;
+import static com.example.task.Constants.*;
 
 import com.example.task.model.Task;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ class TaskController {
     return "Got it";
   }
 
-  @GetMapping("/all")
+  @GetMapping(ALL_TASKS)
   ResponseEntity<List<Task>> getAllTasks() {
     var allTasks = taskService.getAllTasks();
     return ResponseEntity.ok(allTasks);

@@ -1,10 +1,19 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
+import { useFetch, useFetchTasks } from "../../hook/useFetch";
+import { API_ENDPOINT } from "../../utils/constant";
 import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
-import { Columns, initialData, SortBy, columnOptions, State } from "./Data";
+import {
+  Columns,
+  initialData,
+  SortBy,
+  columnOptions,
+  State,
+  TaskList,
+} from "./Data";
 import {
   collectAllTasks,
   lookUpId,
@@ -15,7 +24,12 @@ type Props = {
   sortBy: SortBy;
 };
 
-export default function TaskList({ sortBy }: Props) {
+export default function TaskListView({ sortBy }: Props) {
+  const { data, loading, error } = useFetchTasks(
+    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+    sortBy
+  );
+
   const [state, setState] = useState<State>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
@@ -24,14 +38,12 @@ export default function TaskList({ sortBy }: Props) {
   // Simulating getting data from api
   useEffect(() => {
     const columnDataFromApi = columnOptions;
-
     const dataFromAPI = initialData;
     const processedData = processTaskBasedOnSortBy(
       dataFromAPI,
       columnDataFromApi[sortBy],
       sortBy
     );
-
     setState({
       orderedTasks: processedData,
       unorderedColumns: columnDataFromApi,

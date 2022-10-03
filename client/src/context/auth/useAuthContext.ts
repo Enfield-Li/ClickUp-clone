@@ -133,8 +133,7 @@ export async function refreshUserToken(
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN,
-      null
+      API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN
     );
 
     // store accessToken to localStorage

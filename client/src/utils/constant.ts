@@ -8,7 +8,9 @@ const REFRESH_TOKEN = "/refresh_token";
 
 export const AUTH_ENDPOINT = "http://localhost:8083";
 const AUTH_API_VERSION = "/authorization/v1/user";
+
 const TASK_API_VERSION = "/api/v1/task";
+const ALL_TASKS = "/all_tasks";
 
 export const API_ENDPOINT = {
   AUTH_ENDPOINT_LOGIN: AUTH_API_VERSION + LOGIN,
@@ -17,6 +19,7 @@ export const API_ENDPOINT = {
   AUTH_ENDPOINT_REFRESH_TOKEN: AUTH_API_VERSION + REFRESH_TOKEN,
 
   TASK_ENDPOINT: TASK_API_VERSION,
+  TASK_ENDPOINT_ALL_TASKS: TASK_API_VERSION + ALL_TASKS,
 };
 
 export const ROUTE = {

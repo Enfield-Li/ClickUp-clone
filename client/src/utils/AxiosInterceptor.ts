@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ACCESS_TOKEN, AUTH_ENDPOINT, BEARER } from "./constant";
 
 export const axiosInstance = axios.create({
