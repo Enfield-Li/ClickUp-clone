@@ -1,6 +1,5 @@
 import {
   Button,
-  Center,
   FormControl,
   FormLabel,
   Input,
@@ -15,8 +14,18 @@ import {
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { useRef } from "react";
 import FocusLock from "react-focus-lock";
-import { ColumnType, SetState, SortBy, State, Task } from "./Data";
-import { createTask } from "./TaskActions";
+import {
+  ColumnType,
+  lookUpInSortBy,
+  SetState,
+  SortBy,
+  State,
+  Task,
+} from "./Data";
+import {
+  findTheLastTaskIdOnSortByAndColumnId,
+  updateLastTask,
+} from "./TaskDataProcessing";
 
 type NewTask = {
   title: string;
@@ -63,11 +72,31 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
               description: "",
             }}
             onSubmit={async ({ title, description }, { resetForm }) => {
-              const currentTaskArr = state.orderedTasks.find(
+              const sortByDueDate = "dueDate";
+              const dueDateId = 2;
+
+              const sortByPriority = "priority";
+              const priorityId = 3;
+
+              const lastDueDateId = findTheLastTaskIdOnSortByAndColumnId(
+                state.orderedTasks,
+                sortByDueDate,
+                dueDateId
+              );
+
+              const lastPriorityId = findTheLastTaskIdOnSortByAndColumnId(
+                state.orderedTasks,
+                sortByPriority,
+                priorityId
+              );
+
+              console.log({ lastDueDateId, lastPriorityId });
+
+              const currentOrderedTasks = state.orderedTasks.find(
                 (task) => task.id === column.id
               );
 
-              const currentTaskList = currentTaskArr?.taskList;
+              const currentTaskList = currentOrderedTasks?.taskList;
               const currentTaskArrLength = currentTaskList?.length;
 
               const previousTaskId = currentTaskArrLength
@@ -75,26 +104,47 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
                 : undefined;
 
               const newTask: Task = {
+                id: 123,
                 title,
                 description,
-                priority: 1,
-                dueDate: 1,
                 previousItem: {},
                 isLastItem: {},
               };
+
+              newTask.isLastItem[lookUpInSortBy[sortByDueDate]] = true;
+              newTask[sortByDueDate] = dueDateId;
+              newTask.previousItem[`${sortByDueDate}Id`] = lastDueDateId;
+
+              newTask.isLastItem[lookUpInSortBy[sortByPriority]] = true;
+              newTask[sortByPriority] = priorityId;
+              newTask.previousItem[`${sortByPriority}Id`] = lastPriorityId;
+
+              newTask.isLastItem[lookUpInSortBy[sortBy]] = true;
               newTask[sortBy] = column.id;
               newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
-              const createdTask = await createTask(newTask);
-
               setState((prv) => {
                 const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
+
+                if (lastDueDateId) {
+                  updateLastTask(copiedTasks, lastDueDateId, sortByDueDate);
+                }
+                if (lastPriorityId) {
+                  updateLastTask(copiedTasks, lastPriorityId, sortByPriority);
+                }
 
                 const taskArr = copiedTasks.orderedTasks.find(
                   (task) => task.id === column.id
                 );
 
-                taskArr?.taskList.push(createdTask);
+                const lastTask =
+                  taskArr?.taskList[taskArr?.taskList.length - 1];
+
+                if (lastTask) {
+                  lastTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+                }
+
+                taskArr?.taskList.push(newTask);
 
                 return copiedTasks;
               });

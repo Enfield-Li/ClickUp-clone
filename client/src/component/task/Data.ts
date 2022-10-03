@@ -119,8 +119,8 @@ export const initialData: TaskList = [
     title: "44444",
     status: 1,
     priority: 1,
-    dueDate: 1,
-    previousItem: { statusId: 333, priorityId: 333, dueDateId: 333 },
+    dueDate: 2,
+    previousItem: { statusId: 333, priorityId: 333 },
     isLastItem: {},
   },
   {
@@ -128,27 +128,27 @@ export const initialData: TaskList = [
     title: "55555",
     status: 1,
     priority: 1,
-    dueDate: 1,
+    dueDate: 2,
     previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
-    isLastItem: {},
+    isLastItem: { inDueDate: true },
   },
   {
     id: 666,
     title: "66666",
     status: 1,
-    priority: 1,
+    priority: 3,
     dueDate: 1,
-    previousItem: { statusId: 555, priorityId: 555, dueDateId: 555 },
-    isLastItem: {},
+    previousItem: { statusId: 555, priorityId: 777, dueDateId: 333 },
+    isLastItem: { inPriority: true },
   },
   {
     id: 777,
     title: "77777",
     status: 1,
-    priority: 1,
+    priority: 3,
     dueDate: 1,
-    previousItem: { statusId: 666, priorityId: 666, dueDateId: 666 },
-    isLastItem: { inStatus: true, inPriority: true, inDueDate: true },
+    previousItem: { statusId: 666, dueDateId: 666 },
+    isLastItem: { inStatus: true, inDueDate: true },
   },
 ];
 
@@ -158,3 +158,9 @@ export type State = {
   unorderedColumns: ColumnOptions;
 };
 export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
+
+export const lookUpInSortBy = {
+  status: "inStatus",
+  priority: "inPriority",
+  dueDate: "inDueDate",
+} as const;

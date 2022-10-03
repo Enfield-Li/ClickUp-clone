@@ -13,6 +13,7 @@ import {
   columnOptions,
   State,
   TaskList,
+  lookUpInSortBy,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
 import {
@@ -121,12 +122,6 @@ function handleDragEnd(
   sortBy: SortBy,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  const lookUpInSortBy = {
-    status: "inStatus",
-    priority: "inPriority",
-    dueDate: "inDueDate",
-  } as const;
-
   setIsDragging(false);
   const { destination, source } = result;
   if (!destination) return;
