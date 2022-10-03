@@ -13,24 +13,15 @@ public class TaskService {
 
   private final TaskRepository taskRepository;
 
-  public void doStuff() {
-    var task = new Task();
-    task.setTitle("task3");
-
-    var previousItem = new PreviousTask();
-    previousItem.setStatusId(1);
-    task.setPreviousItem(previousItem);
-
-    var saved = taskRepository.save(task);
-
-    System.out.println(saved);
-  }
-
   public List<Task> getAllTasks() {
     return taskRepository.findAll();
   }
 
   public Task createTask(Task task) {
     return taskRepository.save(task);
+  }
+
+  public List<Task> updateTasks(List<Task> tasks) {
+    return taskRepository.saveAll(tasks);
   }
 }

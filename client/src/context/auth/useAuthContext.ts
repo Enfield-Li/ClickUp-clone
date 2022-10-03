@@ -132,6 +132,8 @@ export async function refreshUserToken(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
+    if (!localStorage.getItem(ACCESS_TOKEN)) return;
+
     const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN
     );

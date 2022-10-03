@@ -21,3 +21,16 @@ export async function getAllTasks() {
     console.log(error);
   }
 }
+
+export async function updateTasks(taskList: TaskList) {
+  try {
+    const response = await axiosInstance.put<TaskList>(
+      API_ENDPOINT.TASK_ENDPOINT,
+      taskList
+    );
+
+    console.log(response.data)
+  } catch (error) {
+    console.log(error);
+  }
+}

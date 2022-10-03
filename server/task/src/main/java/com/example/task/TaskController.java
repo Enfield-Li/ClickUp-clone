@@ -27,12 +27,6 @@ class TaskController {
 
   private final TaskService taskService;
 
-  @GetMapping
-  String get() {
-    taskService.doStuff();
-    return "Got it";
-  }
-
   @GetMapping(ALL_TASKS)
   ResponseEntity<List<Task>> getAllTasks() {
     var allTasks = taskService.getAllTasks();
@@ -43,5 +37,11 @@ class TaskController {
   ResponseEntity<Task> createTask(@RequestBody Task task) {
     var allTasks = taskService.createTask(task);
     return ResponseEntity.ok(allTasks);
+  }
+
+  @PutMapping
+  ResponseEntity<List<Task>> updateTasks(@RequestBody List<Task> tasks) {
+    var updatedTasks = taskService.updateTasks(tasks);
+    return ResponseEntity.ok(updatedTasks);
   }
 }

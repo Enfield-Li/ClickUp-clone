@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { useFetch, useFetchTasks } from "../../hook/useFetch";
+import { useFetch, useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import AddColumn from "./AddColumn";
@@ -14,6 +14,7 @@ import {
   State,
   TaskList,
 } from "./Data";
+import { updateTasks } from "./TaskActions";
 import {
   collectAllTasks,
   lookUpId,
@@ -25,30 +26,12 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { data, loading, error } = useFetchTasks(
-    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
-    sortBy
-  );
+  // const {state, setState} = useLocalTasks(sortBy)
+  const { state, loading, error, setState } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
 
-  const [state, setState] = useState<State>();
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
-  // console.log(state);
-
-  // Simulating getting data from api
-  useEffect(() => {
-    const columnDataFromApi = columnOptions;
-    const dataFromAPI = initialData;
-    const processedData = processTaskBasedOnSortBy(
-      dataFromAPI,
-      columnDataFromApi[sortBy],
-      sortBy
-    );
-    setState({
-      orderedTasks: processedData,
-      unorderedColumns: columnDataFromApi,
-    });
-  }, []);
+  console.log(state);
 
   // Sync up state with sortBy
   // column keeps the original data and restructure tasks
@@ -67,6 +50,7 @@ export default function TaskListView({ sortBy }: Props) {
   }, [sortBy]);
 
   if (!state) return <div>Loading</div>;
+  // if (!state || loading) return <div>Loading</div>;
 
   // Define and reorder columns
   let columns: Columns;
@@ -153,6 +137,8 @@ function handleDragEnd(
     (column) => column.id === Number(destination.droppableId)
   );
 
+  const taskForUpdate: TaskList = [];
+
   const tasks = [...state.orderedTasks];
   const sourceTasksArr = tasks[sourceTaskColumnIndex];
   const destinationTasksArr = tasks[destinationTaskColumnIndex];
@@ -191,6 +177,8 @@ function handleDragEnd(
       destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
       if (sourceTaskAfter) {
         sourceTaskAfter.previousItem[lookUpId[sortBy]] = destinationTask.id;
+
+        taskForUpdate.push(sourceTaskAfter);
       }
     }
 
@@ -202,6 +190,8 @@ function handleDragEnd(
       sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
       if (destinationTaskAfter) {
         destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
+
+        taskForUpdate.push(destinationTaskAfter);
       }
     }
 
@@ -217,9 +207,12 @@ function handleDragEnd(
         sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
           ? sourceTaskBefore.id
           : undefined;
-        if (destinationTaskAfter)
-          destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
         sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
+        if (destinationTaskAfter) {
+          destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
+
+          taskForUpdate.push(destinationTaskAfter);
+        }
       }
 
       // move up
@@ -232,6 +225,8 @@ function handleDragEnd(
           sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
             ? sourceTaskBefore.id
             : undefined;
+
+          taskForUpdate.push(sourceTaskAfter);
         }
       }
     }
@@ -245,17 +240,21 @@ function handleDragEnd(
   } else {
     // change task stage
     sourceTask[sortBy] = columns[destinationTaskColumnIndex].id;
-    if (sourceTaskAfter)
+    if (sourceTaskAfter) {
       sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
         ? sourceTaskBefore.id
         : undefined;
 
+      taskForUpdate.push(sourceTaskAfter);
+    }
+
     // move to an empty column or to the last position
     if (!destinationTask) {
-      const lastElement =
+      const lastTaskInDestinationTaskList =
         destinationTasksArr.taskList[destinationTasksArr.taskList.length - 1];
-      sourceTask.previousItem[lookUpId[sortBy]] = lastElement
-        ? lastElement.id
+
+      sourceTask.previousItem[lookUpId[sortBy]] = lastTaskInDestinationTaskList
+        ? lastTaskInDestinationTaskList.id
         : undefined;
     }
 
@@ -270,4 +269,10 @@ function handleDragEnd(
     sourceTasksArr.taskList.splice(source.index, 1); // delete original
     destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
   }
+
+  if (destinationTask) {
+    taskForUpdate.push(destinationTask);
+  }
+  taskForUpdate.push(sourceTask);
+  updateTasks(taskForUpdate);
 }

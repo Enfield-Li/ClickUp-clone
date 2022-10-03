@@ -1,10 +1,10 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { ACCESS_TOKEN } from "../utils/constant";
+import useGlobalContext from "../context/global/useGlobalContext";
 import useAuthContext, {
   refreshUserToken,
 } from "../context/auth/useAuthContext";
-import useGlobalContext from "../context/global/useGlobalContext";
 
 export default function useInit() {
   const { globalState } = useGlobalContext();

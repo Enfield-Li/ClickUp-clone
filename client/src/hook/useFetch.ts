@@ -1,6 +1,12 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { columnOptions, SortBy, State, TaskList } from "../component/task/Data";
+import {
+  columnOptions,
+  initialData,
+  SortBy,
+  State,
+  TaskList,
+} from "../component/task/Data";
 import { processTaskBasedOnSortBy } from "../component/task/TaskDataProcessing";
 import useGlobalContext, {
   indicateLoading,
@@ -38,7 +44,7 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(url: string, sortBy: SortBy) {
-  const [data, setData] = useState<State>();
+  const [state, setState] = useState<State>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
 
@@ -49,13 +55,14 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
       const columnDataFromApi = columnOptions;
       const tasksListData = response.data;
+
       const processedData = processTaskBasedOnSortBy(
         tasksListData,
         columnDataFromApi[sortBy],
         sortBy
       );
 
-      setData({
+      setState({
         orderedTasks: processedData,
         unorderedColumns: columnDataFromApi,
       });
@@ -72,5 +79,26 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     fetchData();
   }, []);
 
-  return { data, loading, error };
+  return { state, loading, error, setState };
+}
+
+export function useLocalTasks(sortBy: SortBy) {
+  const [state, setState] = useState<State>();
+
+  useEffect(() => {
+    const columnDataFromApi = columnOptions;
+    const dataFromAPI = initialData;
+
+    const processedData = processTaskBasedOnSortBy(
+      dataFromAPI,
+      columnDataFromApi[sortBy],
+      sortBy
+    );
+    setState({
+      orderedTasks: processedData,
+      unorderedColumns: columnDataFromApi,
+    });
+  }, []);
+
+  return { state, setState };
 }

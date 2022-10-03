@@ -62,35 +62,6 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
               title: "",
               description: "",
             }}
-            // onSubmit={async ({ title, description }, { resetForm }) => {
-            //   setState((prv) => {
-            //     const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
-
-            //     const currentTaskArr = copiedTasks?.orderedTasks.find(
-            //       (task) => task.id === column.id
-            //     );
-
-            //     const currentTaskList = currentTaskArr?.taskList;
-            //     const currentTaskArrLength = currentTaskList?.length;
-
-            //     const previousTaskId = currentTaskArrLength
-            //       ? currentTaskList?.[currentTaskArrLength - 1].id
-            //       : undefined;
-
-            //     const newTask: Task = {
-            //       title,
-            //       description,
-            //       previousItem: {},
-            //     };
-            //     newTask[sortBy] = column.id;
-            //     newTask.previousItem[`${sortBy}Id`] = previousTaskId;
-
-            //     currentTaskArr?.taskList.push(newTask);
-
-            //     return copiedTasks;
-            //   });
-            //   resetForm();
-            // }}
             onSubmit={async ({ title, description }, { resetForm }) => {
               const currentTaskArr = state.orderedTasks.find(
                 (task) => task.id === column.id
