@@ -1,5 +1,7 @@
 package com.example.task.model;
 
+import static javax.persistence.CascadeType.*;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import static javax.persistence.CascadeType.*;
 
 @Data
 @Entity
@@ -32,4 +33,7 @@ public class Task {
 
   @OneToOne(cascade = { PERSIST, DETACH, MERGE })
   private PreviousTask previousItem;
+
+  @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+  private IsLastItem isLastItem;
 }

@@ -121,7 +121,6 @@ function handleDragEnd(
   sortBy: SortBy,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
 ) {
-  // "status" | "priority" | "dueDate"
   const lookUpInSortBy = {
     status: "inStatus",
     priority: "inPriority",
