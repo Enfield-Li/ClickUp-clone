@@ -26,8 +26,8 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const {state, setState} = useLocalTasks(sortBy)
-  const { state, loading, error, setState } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
+  const { state, setState } = useLocalTasks(sortBy);
+  // const { state, loading, error, setState } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
 
   const [isDragging, setIsDragging] = useState(false);
   const [draggingId, setDraggingId] = useState<number>();
@@ -121,6 +121,13 @@ function handleDragEnd(
   sortBy: SortBy,
   setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
 ) {
+  // "status" | "priority" | "dueDate"
+  const lookUpInSortBy = {
+    status: "inStatus",
+    priority: "inPriority",
+    dueDate: "inDueDate",
+  } as const;
+
   setIsDragging(false);
   const { destination, source } = result;
   if (!destination) return;
@@ -143,6 +150,14 @@ function handleDragEnd(
   const sourceTasksArr = tasks[sourceTaskColumnIndex];
   const destinationTasksArr = tasks[destinationTaskColumnIndex];
 
+  const sourceTasksArrLength = sourceTasksArr.taskList.length;
+  const lastTaskInSourceTasksArr =
+    sourceTasksArr.taskList[sourceTasksArrLength - 1];
+
+  const destinationTasksArrLength = destinationTasksArr.taskList.length;
+  const lastTaskInDestinationTasksArr =
+    destinationTasksArr.taskList[destinationTasksArrLength - 1];
+
   const sourceTask = sourceTasksArr.taskList[source.index];
   const sourceTaskBefore = sourceTasksArr.taskList[source.index - 1];
   const sourceTaskAfter = sourceTasksArr.taskList[source.index + 1];
@@ -152,6 +167,54 @@ function handleDragEnd(
     destinationTasksArr.taskList[destination.index - 1];
   const destinationTaskAfter =
     destinationTasksArr.taskList[destination.index + 1];
+
+  /* 
+     Determine the last element in array
+   */
+  // Drag from middle to the last in the same column
+  const sourceTaskIsNotTheLastElementAndDestinationTaskExist =
+    sourceTask !== lastTaskInSourceTasksArr && destinationTask;
+  if (sourceTaskIsNotTheLastElementAndDestinationTaskExist) {
+    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+    destinationTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+  }
+
+  // Drag from the last to the middle of another column
+  const sourceTaskIsTheLastElementAndDestinationTaskExist =
+    sourceTask === lastTaskInSourceTasksArr && destinationTask;
+  if (sourceTaskIsTheLastElementAndDestinationTaskExist) {
+    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+
+    if (sourceTaskBefore) {
+      sourceTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = true;
+    }
+  }
+
+  // Drag from the middle to the last of another column
+  const sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist =
+    sourceTask !== lastTaskInSourceTasksArr && !destinationTask;
+  if (sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist) {
+    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+
+    if (destinationTaskBefore) {
+      destinationTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+    }
+  }
+
+  // Drag from the last to the last of another column
+  const sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist =
+    sourceTask === lastTaskInSourceTasksArr && !destinationTask;
+  if (sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist) {
+    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+
+    if (sourceTaskBefore) {
+      sourceTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = true;
+    }
+
+    if (destinationTaskBefore) {
+      destinationTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+    }
+  }
 
   const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
     (task) => task.id === sourceTask.id
@@ -250,11 +313,8 @@ function handleDragEnd(
 
     // move to an empty column or to the last position
     if (!destinationTask) {
-      const lastTaskInDestinationTaskList =
-        destinationTasksArr.taskList[destinationTasksArr.taskList.length - 1];
-
-      sourceTask.previousItem[lookUpId[sortBy]] = lastTaskInDestinationTaskList
-        ? lastTaskInDestinationTaskList.id
+      sourceTask.previousItem[lookUpId[sortBy]] = lastTaskInDestinationTasksArr
+        ? lastTaskInDestinationTasksArr.id
         : undefined;
     }
 
@@ -274,5 +334,5 @@ function handleDragEnd(
     taskForUpdate.push(destinationTask);
   }
   taskForUpdate.push(sourceTask);
-  updateTasks(taskForUpdate);
+  // updateTasks(taskForUpdate);
 }

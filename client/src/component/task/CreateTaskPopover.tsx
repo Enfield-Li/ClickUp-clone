@@ -77,7 +77,10 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
               const newTask: Task = {
                 title,
                 description,
+                priority: 1,
+                dueDate: 1,
                 previousItem: {},
+                isLastItem: {},
               };
               newTask[sortBy] = column.id;
               newTask.previousItem[`${sortBy}Id`] = previousTaskId;

@@ -23,20 +23,6 @@ export type DueDate =
   | "THURSDAY"
   | "FRIDAY";
 
-export type Task = {
-  id?: number;
-  title: string;
-  status?: number;
-  dueDate?: number;
-  priority?: number;
-  description?: string;
-  previousItem: {
-    statusId?: number;
-    dueDateId?: number;
-    priorityId?: number;
-  };
-};
-
 export const STATUS = "status";
 export const PRIORITY = "priority";
 export const DUE_DATE = "dueDate";
@@ -76,6 +62,25 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
+export type Task = {
+  id?: number;
+  title: string;
+  status?: number;
+  dueDate?: number;
+  priority?: number;
+  description?: string;
+  isLastItem: {
+    inStatus?: boolean;
+    inPriority?: boolean;
+    inDueDate?: boolean;
+  };
+  previousItem: {
+    statusId?: number;
+    dueDateId?: number;
+    priorityId?: number;
+  };
+};
+
 export type TaskList = Task[];
 export type ColumnType = { id: number; title: string };
 export type Columns = ColumnType[];
@@ -89,6 +94,7 @@ export const initialData: TaskList = [
     priority: 2,
     dueDate: 1,
     previousItem: {},
+    isLastItem: { inPriority: true },
   },
   {
     id: 222,
@@ -97,6 +103,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 111, dueDateId: 111 },
+    isLastItem: {},
   },
   {
     id: 333,
@@ -105,6 +112,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
+    isLastItem: {},
   },
   {
     id: 444,
@@ -113,6 +121,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 333, priorityId: 333, dueDateId: 333 },
+    isLastItem: {},
   },
   {
     id: 555,
@@ -121,6 +130,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
+    isLastItem: {},
   },
   {
     id: 666,
@@ -129,6 +139,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 555, priorityId: 555, dueDateId: 555 },
+    isLastItem: {},
   },
   {
     id: 777,
@@ -137,6 +148,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 666, priorityId: 666, dueDateId: 666 },
+    isLastItem: { inStatus: true, inPriority: true, inDueDate: true },
   },
 ];
 
