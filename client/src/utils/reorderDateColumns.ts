@@ -2,12 +2,38 @@ import { ColumnOptions, SortBy, Columns } from "../component/task/Data";
 import { getWeekDays } from "./getWeekDays";
 import { reorderColumnsOnId } from "./reorderColumnsOnId";
 
+/* 
+    [
+      { id: 1, title: "NO DUE DATE" },
+      { id: 2, title: "OVER DUE" },
+      { id: 3, title: "MONDAY" },
+      { id: 4, title: "TUESDAY" },
+      { id: 5, title: "WEDNESDAY" },
+      { id: 6, title: "THURSDAY" },
+      { id: 7, title: "FRIDAY" },
+      { id: 8, title: "SATURDAY" },
+      { id: 9, title: "SUNDAY" },
+      { id: 10, title: "FUTURE" },
+    ],
+    For instance, today is WEDNESDAY, column gets reordered to:
+    [
+      { "id": 1, "title": "NO DUE DATE" }, 
+      { "id": 2, "title": "OVER DUE" },
+      { "id": 5, "title": "TODAY" },
+      { "id": 6, "title": "TOMORROW" },
+      { "id": 7, "title": "FRIDAY" },
+      { "id": 8, "title": "SATURDAY" },
+      { "id": 9, "title": "SUNDAY" },
+      { "id": 3, "title": "MONDAY" },
+      { "id": 4, "title": "TUESDAY" },
+      { "id": 10, "title": "FUTURE" }
+    ]
+ */
 export function reorderAndRenameColumns(
   sortingOptions: ColumnOptions,
   sortBy: SortBy
 ) {
   const originalColumns = sortingOptions[sortBy];
-  // reorderColumnsOnId(originalColumns);
   const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
 
   // rename columns to Today and Tomorrow

@@ -1,27 +1,16 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { useFetch, useFetchTasks, useLocalTasks } from "../../hook/useFetch";
-import { API_ENDPOINT } from "../../utils/constant";
+import { useLocalTasks } from "../../hook/useFetch";
 import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
+import { Columns, lookUpInSortBy, SortBy, State, TaskList } from "./Data";
 import {
-  Columns,
-  initialData,
-  SortBy,
-  columnOptions,
-  State,
-  TaskList,
-  lookUpInSortBy,
-  OrderedTasks,
-} from "./Data";
-import { updateTasks } from "./TaskActions";
-import {
-  processLookUpDueDateId,
   collectAllTasks,
   LookUpDueDateId,
   lookUpId,
+  processLookUpDueDateId,
   processTaskBasedOnSortBy,
 } from "./TaskDataProcessing";
 
@@ -56,19 +45,19 @@ export default function TaskListView({ sortBy }: Props) {
   if (!state) return <div>Loading</div>;
   // if (!state || loading) return <div>Loading</div>;
 
-  // Define and reorder columns
-  let columns: Columns;
+  // Reorder columns for dueDate type
+  let orderedColumns: Columns;
   if (sortBy === "dueDate") {
-    columns = reorderAndRenameColumns(state.unorderedColumns, sortBy);
+    orderedColumns = reorderAndRenameColumns(state.unorderedColumns, sortBy);
   } else {
-    columns = state.unorderedColumns[sortBy];
+    orderedColumns = state.unorderedColumns[sortBy];
   }
 
   return (
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, columns, sortBy, setIsDragging)
+          handleDragEnd(result, state, orderedColumns, sortBy, setIsDragging)
         }
         onDragStart={(start, provided) => {
           setDraggingId(Number(start.source.droppableId));
@@ -76,7 +65,7 @@ export default function TaskListView({ sortBy }: Props) {
         }}
       >
         <Flex>
-          {columns.map((column, index) => (
+          {orderedColumns.map((column, index) => (
             <Box
               mx={2}
               key={column.id}
@@ -155,12 +144,12 @@ function handleDragEnd(
   const destinationTaskColumnIndex = columns.findIndex(
     (column) => column.id === destinationDroppableId
   );
-  console.log(destinationDroppableId);
-  console.log(columns[destinationTaskColumnIndex].id);
 
   const taskForUpdate: TaskList = [];
 
-  const tasks = [...state.orderedTasks];
+  // const tasks = [...state.orderedTasks]; // <- why will this update state with splice() IDK
+  const tasks = state.orderedTasks; // This works as well
+
   const sourceTasksArr = tasks[sourceTaskColumnIndex];
   const destinationTasksArr = tasks[destinationTaskColumnIndex];
 

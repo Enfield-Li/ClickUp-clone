@@ -178,6 +178,8 @@ export type LookUpDueDateId = {
   [index: number]: number;
 };
 
+// A lookup table that matches the sequence of an reorder and renamed columns
+// after columns been processed by reorderAndRenameColumns() function
 export function processLookUpDueDateId(
   orderedTasks: OrderedTasks,
   columns: Columns,
