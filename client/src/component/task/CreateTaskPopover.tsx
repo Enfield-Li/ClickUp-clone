@@ -16,7 +16,7 @@ import { useRef } from "react";
 import FocusLock from "react-focus-lock";
 import {
   ColumnType,
-  lookUpInSortBy,
+  lookUpIsLastItem,
   SetState,
   SortBy,
   State,
@@ -111,15 +111,15 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
                 isLastItem: {},
               };
 
-              newTask.isLastItem[lookUpInSortBy[sortByDueDate]] = true;
+              newTask.isLastItem[lookUpIsLastItem[sortByDueDate]] = true;
               newTask[sortByDueDate] = dueDateId;
               newTask.previousItem[`${sortByDueDate}Id`] = lastDueDateId;
 
-              newTask.isLastItem[lookUpInSortBy[sortByPriority]] = true;
+              newTask.isLastItem[lookUpIsLastItem[sortByPriority]] = true;
               newTask[sortByPriority] = priorityId;
               newTask.previousItem[`${sortByPriority}Id`] = lastPriorityId;
 
-              newTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+              newTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
               newTask[sortBy] = column.id;
               newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
@@ -141,7 +141,7 @@ export const PopoverForm = ({ state, setState, column, sortBy }: Props) => {
                   taskArr?.taskList[taskArr?.taskList.length - 1];
 
                 if (lastTask) {
-                  lastTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+                  lastTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
                 }
 
                 taskArr?.taskList.push(newTask);

@@ -159,13 +159,13 @@ export type State = {
 };
 export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
 
-export const lookUpInSortBy = {
+export const lookUpIsLastItem = {
   status: "inStatus",
   priority: "inPriority",
   dueDate: "inDueDate",
 } as const;
 
-export const lookUpId = {
+export const lookUpPreviousTaskId = {
   status: "statusId",
   priority: "priorityId",
   dueDate: "dueDateId",

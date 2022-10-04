@@ -3,8 +3,8 @@ import {
   ColumnOptions,
   Columns,
   LookUpDueDateId,
-  lookUpId,
-  lookUpInSortBy,
+  lookUpPreviousTaskId,
+  lookUpIsLastItem,
   OrderedTasks,
   SortBy,
   State,
@@ -86,7 +86,9 @@ export function processTaskBasedOnSortBy(
 
     // Find the first element
     const firstTask = tasks.find(
-      (task) => task[sortBy] === stageId && !task.previousItem[lookUpId[sortBy]]
+      (task) =>
+        task[sortBy] === stageId &&
+        !task.previousItem[lookUpPreviousTaskId[sortBy]]
     );
     if (firstTask) nestedTasks[i].taskList[0] = firstTask;
 
@@ -95,7 +97,8 @@ export function processTaskBasedOnSortBy(
       const currentTask = nestedTasks[i].taskList[k];
 
       const entailingTask = tasks.find(
-        (task) => task.previousItem[lookUpId[sortBy]] === currentTask.id
+        (task) =>
+          task.previousItem[lookUpPreviousTaskId[sortBy]] === currentTask.id
       );
 
       if (entailingTask) nestedTasks[i].taskList.push(entailingTask);
@@ -108,6 +111,7 @@ export function processTaskBasedOnSortBy(
 /* 
     Reorder the dueDate columns. 
     For instance, today is WEDNESDAY, 
+    
     from
       [
         { id: 1, title: "NO DUE DATE" },
@@ -234,7 +238,7 @@ export function updateLastTask(state: State, taskId: number, sortBy: SortBy) {
   state.orderedTasks.forEach((tasks) => {
     tasks.taskList.forEach((task) =>
       task.id === taskId
-        ? (task.isLastItem[lookUpInSortBy[sortBy]] = undefined)
+        ? (task.isLastItem[lookUpIsLastItem[sortBy]] = undefined)
         : task
     );
   });

@@ -7,8 +7,8 @@ import Column from "./Column";
 import {
   Columns,
   LookUpDueDateId,
-  lookUpId,
-  lookUpInSortBy,
+  lookUpPreviousTaskId,
+  lookUpIsLastItem,
   SortBy,
   State,
   TaskList,
@@ -184,18 +184,18 @@ function handleDragEnd(
   const sourceTaskIsNotTheLastElementAndDestinationTaskExist =
     sourceTask !== lastTaskInSourceTasksArr && destinationTask;
   if (sourceTaskIsNotTheLastElementAndDestinationTaskExist) {
-    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
-    destinationTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
+    destinationTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
   }
 
   // Drag from the last to the middle of another column
   const sourceTaskIsTheLastElementAndDestinationTaskExist =
     sourceTask === lastTaskInSourceTasksArr && destinationTask;
   if (sourceTaskIsTheLastElementAndDestinationTaskExist) {
-    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
 
     if (sourceTaskBefore) {
-      sourceTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = true;
+      sourceTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = true;
     }
   }
 
@@ -203,10 +203,10 @@ function handleDragEnd(
   const sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist =
     sourceTask !== lastTaskInSourceTasksArr && !destinationTask;
   if (sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist) {
-    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
 
     if (destinationTaskBefore) {
-      destinationTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+      destinationTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
     }
   }
 
@@ -215,14 +215,14 @@ function handleDragEnd(
     sourceTask === lastTaskInSourceTasksArr && !destinationTask;
   if (sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist) {
     // here
-    sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
+    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
 
     if (sourceTaskBefore) {
-      sourceTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = true;
+      sourceTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = true;
     }
 
     if (destinationTaskBefore) {
-      destinationTaskBefore.isLastItem[lookUpInSortBy[sortBy]] = undefined;
+      destinationTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
     }
   }
 
@@ -244,12 +244,13 @@ function handleDragEnd(
 
     // move up one row
     if (movingUpOneRow) {
-      sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
-        ? destinationTaskBefore.id
-        : undefined;
-      destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
+      sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        destinationTaskBefore ? destinationTaskBefore.id : undefined;
+      destinationTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        sourceTask.id;
       if (sourceTaskAfter) {
-        sourceTaskAfter.previousItem[lookUpId[sortBy]] = destinationTask.id;
+        sourceTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+          destinationTask.id;
 
         taskForUpdate.push(sourceTaskAfter);
       }
@@ -257,12 +258,13 @@ function handleDragEnd(
 
     // move down one row
     else if (moveDownOneRow) {
-      destinationTask.previousItem[lookUpId[sortBy]] = sourceTaskBefore
-        ? sourceTaskBefore.id
-        : undefined;
-      sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
+      destinationTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        sourceTaskBefore ? sourceTaskBefore.id : undefined;
+      sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        destinationTask.id;
       if (destinationTaskAfter) {
-        destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
+        destinationTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.id;
 
         taskForUpdate.push(destinationTaskAfter);
       }
@@ -277,12 +279,13 @@ function handleDragEnd(
       // move down
       const isMoveDown = sourceTaskIndex < destinationTaskIndex;
       if (isMoveDown) {
-        sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
-          ? sourceTaskBefore.id
-          : undefined;
-        sourceTask.previousItem[lookUpId[sortBy]] = destinationTask.id;
+        sourceTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+          sourceTaskBefore ? sourceTaskBefore.id : undefined;
+        sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+          destinationTask.id;
         if (destinationTaskAfter) {
-          destinationTaskAfter.previousItem[lookUpId[sortBy]] = sourceTask.id;
+          destinationTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+            sourceTask.id;
 
           taskForUpdate.push(destinationTaskAfter);
         }
@@ -290,14 +293,13 @@ function handleDragEnd(
 
       // move up
       else {
-        sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
-          ? destinationTaskBefore.id
-          : undefined;
-        destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
+        sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+          destinationTaskBefore ? destinationTaskBefore.id : undefined;
+        destinationTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.id;
         if (sourceTaskAfter) {
-          sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
-            ? sourceTaskBefore.id
-            : undefined;
+          sourceTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+            sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
           taskForUpdate.push(sourceTaskAfter);
         }
@@ -318,26 +320,26 @@ function handleDragEnd(
         : destinationDroppableId;
 
     if (sourceTaskAfter) {
-      sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
-        ? sourceTaskBefore.id
-        : undefined;
+      sourceTaskAfter.previousItem[lookUpPreviousTaskId[sortBy]] =
+        sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
       taskForUpdate.push(sourceTaskAfter);
     }
 
     // move to an empty column or to the last position
     if (!destinationTask) {
-      sourceTask.previousItem[lookUpId[sortBy]] = lastTaskInDestinationTasksArr
-        ? lastTaskInDestinationTasksArr.id
-        : undefined;
+      sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        lastTaskInDestinationTasksArr
+          ? lastTaskInDestinationTasksArr.id
+          : undefined;
     }
 
     // move to the middle or top of the column
     else {
-      destinationTask.previousItem[lookUpId[sortBy]] = sourceTask.id;
-      sourceTask.previousItem[lookUpId[sortBy]] = destinationTaskBefore
-        ? destinationTaskBefore.id
-        : undefined;
+      destinationTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        sourceTask.id;
+      sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
+        destinationTaskBefore ? destinationTaskBefore.id : undefined;
     }
 
     sourceTasksArr.taskList.splice(source.index, 1); // delete original
