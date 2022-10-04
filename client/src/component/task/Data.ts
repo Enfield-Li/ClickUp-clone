@@ -164,3 +164,13 @@ export const lookUpInSortBy = {
   priority: "inPriority",
   dueDate: "inDueDate",
 } as const;
+
+export const lookUpId = {
+  status: "statusId",
+  priority: "priorityId",
+  dueDate: "dueDateId",
+} as const;
+
+export type LookUpDueDateId = {
+  [index: number]: number;
+};

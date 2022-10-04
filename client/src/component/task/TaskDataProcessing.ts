@@ -1,17 +1,15 @@
+import { getWeekDays } from "../../utils/getWeekDays";
 import {
+  ColumnOptions,
   Columns,
+  LookUpDueDateId,
+  lookUpId,
   lookUpInSortBy,
   OrderedTasks,
   SortBy,
   State,
   TaskList,
 } from "./Data";
-
-export const lookUpId = {
-  status: "statusId",
-  priority: "priorityId",
-  dueDate: "dueDateId",
-} as const;
 
 /* 
   Convert unordered Task[] list to OrderedTasks group by for example task.priorityId:
@@ -107,6 +105,74 @@ export function processTaskBasedOnSortBy(
   return nestedTasks;
 }
 
+/* 
+    Reorder the dueDate columns. 
+    For instance, today is WEDNESDAY, 
+    from
+      [
+        { id: 1, title: "NO DUE DATE" },
+        { id: 2, title: "OVER DUE" },
+        { id: 3, title: "MONDAY" },
+        { id: 4, title: "TUESDAY" },
+        { id: 5, title: "WEDNESDAY" },
+        { id: 6, title: "THURSDAY" },
+        { id: 7, title: "FRIDAY" },
+        { id: 8, title: "SATURDAY" },
+        { id: 9, title: "SUNDAY" },
+        { id: 10, title: "FUTURE" },
+      ],
+    to:
+      [
+        { "id": 1, "title": "NO DUE DATE" }, 
+        { "id": 2, "title": "OVER DUE" },
+        { "id": 5, "title": "TODAY" },      // <- rename title
+        { "id": 6, "title": "TOMORROW" },   // <- rename title
+        { "id": 7, "title": "FRIDAY" },
+        { "id": 8, "title": "SATURDAY" },
+        { "id": 9, "title": "SUNDAY" },
+        { "id": 3, "title": "MONDAY" },
+        { "id": 4, "title": "TUESDAY" },
+        { "id": 10, "title": "FUTURE" }
+      ]
+ */
+export function renameAndReorderColumns(
+  sortingOptions: ColumnOptions,
+  sortBy: SortBy
+) {
+  const originalColumns = sortingOptions[sortBy];
+  const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
+
+  // rename columns to Today and Tomorrow
+  const updatedColumns = originalColumns.map((column) => {
+    if (column.title === todayWeekDay) {
+      return { id: column.id, title: "TODAY" };
+    } else if (column.title === tomorrowWeekDay) {
+      return { id: column.id, title: "TOMORROW" };
+    } else {
+      return column;
+    }
+  });
+
+  // put today to the front
+  const columnsLength = updatedColumns.length;
+  const front = updatedColumns.slice(0, 2);
+  const end = updatedColumns.slice(columnsLength - 1, columnsLength + 1);
+
+  const weekDayColumns = updatedColumns.slice(2, columnsLength - 1);
+
+  const todayIndex = weekDayColumns.findIndex(
+    (column) => column.title === "TODAY"
+  );
+  const weekDayEnd = weekDayColumns.slice(0, todayIndex);
+  const weekDayFront = weekDayColumns.slice(
+    todayIndex,
+    weekDayColumns.length + 1
+  );
+  const weekDayColumnsFinal = [...weekDayFront, ...weekDayEnd];
+
+  return [...front, ...weekDayColumnsFinal, ...end];
+}
+
 // Collect all tasks from OrderedTasks to Task[]
 export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   let taskList: TaskList = [];
@@ -173,10 +239,6 @@ export function updateLastTask(state: State, taskId: number, sortBy: SortBy) {
     );
   });
 }
-
-export type LookUpDueDateId = {
-  [index: number]: number;
-};
 
 // A lookup table that matches the sequence of an reorder and renamed columns
 // after columns been processed by reorderAndRenameColumns() function

@@ -2,16 +2,22 @@ import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
 import { useLocalTasks } from "../../hook/useFetch";
-import { reorderAndRenameColumns } from "../../utils/reorderDateColumns";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
-import { Columns, lookUpInSortBy, SortBy, State, TaskList } from "./Data";
 import {
-  collectAllTasks,
+  Columns,
   LookUpDueDateId,
   lookUpId,
+  lookUpInSortBy,
+  SortBy,
+  State,
+  TaskList,
+} from "./Data";
+import {
+  collectAllTasks,
   processLookUpDueDateId,
   processTaskBasedOnSortBy,
+  renameAndReorderColumns,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -48,7 +54,7 @@ export default function TaskListView({ sortBy }: Props) {
   // Reorder columns for dueDate type
   let orderedColumns: Columns;
   if (sortBy === "dueDate") {
-    orderedColumns = reorderAndRenameColumns(state.unorderedColumns, sortBy);
+    orderedColumns = renameAndReorderColumns(state.unorderedColumns, sortBy);
   } else {
     orderedColumns = state.unorderedColumns[sortBy];
   }
