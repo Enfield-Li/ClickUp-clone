@@ -14,10 +14,13 @@ import {
   State,
   TaskList,
   lookUpInSortBy,
+  OrderedTasks,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
 import {
+  processLookUpDueDateId,
   collectAllTasks,
+  LookUpDueDateId,
   lookUpId,
   processTaskBasedOnSortBy,
 } from "./TaskDataProcessing";
@@ -131,12 +134,29 @@ function handleDragEnd(
   ) {
     return;
   }
+
+  const lookUpDueDateId: LookUpDueDateId = {};
+  if (sortBy === "dueDate") {
+    processLookUpDueDateId(state.orderedTasks, columns, lookUpDueDateId);
+  }
+
+  const sourceDroppableId =
+    sortBy === "dueDate"
+      ? lookUpDueDateId[Number(source.droppableId)]
+      : Number(source.droppableId);
+  const destinationDroppableId =
+    sortBy === "dueDate"
+      ? lookUpDueDateId[Number(destination.droppableId)]
+      : Number(destination.droppableId);
+
   const sourceTaskColumnIndex = columns.findIndex(
-    (column) => column.id === Number(source.droppableId)
+    (column) => column.id === sourceDroppableId
   );
   const destinationTaskColumnIndex = columns.findIndex(
-    (column) => column.id === Number(destination.droppableId)
+    (column) => column.id === destinationDroppableId
   );
+  console.log(destinationDroppableId);
+  console.log(columns[destinationTaskColumnIndex].id);
 
   const taskForUpdate: TaskList = [];
 
@@ -199,6 +219,7 @@ function handleDragEnd(
   const sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist =
     sourceTask === lastTaskInSourceTasksArr && !destinationTask;
   if (sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist) {
+    // here
     sourceTask.isLastItem[lookUpInSortBy[sortBy]] = true;
 
     if (sourceTaskBefore) {
@@ -296,7 +317,11 @@ function handleDragEnd(
      */
   } else {
     // change task stage
-    sourceTask[sortBy] = columns[destinationTaskColumnIndex].id;
+    sourceTask[sortBy] =
+      sortBy === "dueDate"
+        ? Number(destination.droppableId)
+        : destinationDroppableId;
+
     if (sourceTaskAfter) {
       sourceTaskAfter.previousItem[lookUpId[sortBy]] = sourceTaskBefore
         ? sourceTaskBefore.id

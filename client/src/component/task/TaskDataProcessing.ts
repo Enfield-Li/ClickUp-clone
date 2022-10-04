@@ -173,3 +173,19 @@ export function updateLastTask(state: State, taskId: number, sortBy: SortBy) {
     );
   });
 }
+
+export type LookUpDueDateId = {
+  [index: number]: number;
+};
+
+export function processLookUpDueDateId(
+  orderedTasks: OrderedTasks,
+  columns: Columns,
+  lookUpDueDateId: LookUpDueDateId
+) {
+  for (let i = 0; i < orderedTasks.length; i++) {
+    const tasks = orderedTasks[i];
+    lookUpDueDateId[tasks.id] = columns[i].id;
+  }
+  return lookUpDueDateId;
+}

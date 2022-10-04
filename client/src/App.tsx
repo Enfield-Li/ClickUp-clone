@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 export default function App() {
   useInit();
   const { getDisclosureProps, isOpen, onToggle } = useDisclosure({
-    defaultIsOpen: true,
+    defaultIsOpen: false,
   });
   const [hidden, setHidden] = useState(!isOpen);
 
