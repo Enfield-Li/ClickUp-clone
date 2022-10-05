@@ -31,9 +31,8 @@ import {
 } from "./Data";
 import {
   collectAllTasks,
-  collectDestinationTasksAndUpdateNewTask,
-  collectDestinationTaskValueList,
-  updatePreviousTasks,
+  updateNewTask,
+  collectPreviousTaskValues,
 } from "./TaskDataProcessing";
 
 export type NewTask = {
@@ -220,27 +219,22 @@ async function submit(
   sortBy: SortBy,
   setState: SetState
 ) {
-  // Initialize new task
+  // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
     id: 123,
     title,
     description,
     previousItem: {},
-    isLastItem: {},
   };
   const allTasks = collectAllTasks(state.orderedTasks);
 
-  // Prepare all update date for newTask's previous task
-  const destinationTaskValueList = collectDestinationTaskValueList(values);
+  // Updates for newTask's previousItem for other sortBy
+  const previousTaskValues = collectPreviousTaskValues(values);
 
-  const destinationTasks = collectDestinationTasksAndUpdateNewTask(
-    destinationTaskValueList,
-    allTasks,
-    newTask
-  );
+  updateNewTask(previousTaskValues, allTasks, newTask);
 
-  // Prepare all update date for newTask
+  // Updates for newTask's previousItem for current sortBy
   const currentOrderedTasks = state.orderedTasks.find(
     (task) => task.id === column.id
   );
@@ -252,7 +246,6 @@ async function submit(
     ? currentTaskList?.[currentTaskArrLength - 1].id
     : undefined;
 
-  newTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
@@ -265,14 +258,7 @@ async function submit(
     const taskArr = copiedTasks.orderedTasks.find(
       (task) => task.id === column.id
     );
-    const lastTask = taskArr?.taskList[taskArr?.taskList.length - 1];
-    if (lastTask) {
-      lastTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
-    }
     taskArr?.taskList.push(newTask);
-
-    // Update all previous tasks state
-    updatePreviousTasks(copiedTasks, destinationTasks);
 
     return copiedTasks;
   });

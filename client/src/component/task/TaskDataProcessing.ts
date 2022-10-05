@@ -1,19 +1,16 @@
 import { getWeekDays } from "../../utils/getWeekDays";
 import { NewTask } from "./CreateTaskPopover";
 import {
-  ColumnOptions,
   Columns,
-  LookUpDueDateId,
-  lookUpPreviousTaskId,
-  lookUpIsLastItem,
-  OrderedTasks,
-  SortBy,
-  State,
-  TaskList,
   DueDate,
   DueDateColumns,
+  LookUpDueDateId,
+  lookUpPreviousTaskId,
+  OrderedTasks,
+  PreviousTaskValues,
+  SortBy,
   Task,
-  DestinationTaskValueList,
+  TaskList,
 } from "./Data";
 
 /* 
@@ -212,12 +209,17 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
       "values": {
         "title": "1111111111111111",
         "description": "",
+        "status": "2",
         "priority": "4",
         "dueDate": "6"
       }
     }
   to:
     [
+      {
+        updateSortBy: "status",
+        id: 2,
+      },
       {
         updateSortBy: "priority",
         id: 4,
@@ -228,10 +230,10 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
       },
     ]
 */
-export function collectDestinationTaskValueList(
+export function collectPreviousTaskValues(
   newTask: NewTask
-): DestinationTaskValueList {
-  const taskListForUpdate: DestinationTaskValueList = [];
+): PreviousTaskValues {
+  const taskListForUpdate: PreviousTaskValues = [];
   for (let i = 0; i < Object.entries(newTask).length; i++) {
     const task = Object.entries(newTask)[i];
     const key = task[0];
@@ -290,52 +292,21 @@ export function findLastTaskId(
   if (lastTask) return lastTask.id;
 }
 
-type DestinationTasksForUpdate = { taskId: number; sortBy: SortBy }[];
-
-export function collectDestinationTasksAndUpdateNewTask(
-  destinationTaskValueList: DestinationTaskValueList,
+export function updateNewTask(
+  previousTaskValues: PreviousTaskValues,
   allTasks: TaskList,
   newTask: Task
-): DestinationTasksForUpdate {
-  const tasksForUpdate: DestinationTasksForUpdate = [];
-
-  for (let i = 0; i < destinationTaskValueList.length; i++) {
-    const taskForUpdate = destinationTaskValueList[i];
+) {
+  for (let i = 0; i < previousTaskValues.length; i++) {
+    const taskForUpdate = previousTaskValues[i];
 
     const updateSortBy = taskForUpdate.updateSortBy;
     const updateSortById = taskForUpdate.columnId;
 
     const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
 
-    if (idResult) {
-      tasksForUpdate[i] = { taskId: 0, sortBy: "status" };
-      tasksForUpdate[i].taskId = idResult;
-      tasksForUpdate[i].sortBy = updateSortBy;
-    }
-
     // Update new task
     newTask[updateSortBy] = updateSortById;
     newTask.previousItem[`${updateSortBy}Id`] = idResult;
-    newTask.isLastItem[lookUpIsLastItem[updateSortBy]] = true;
   }
-
-  return tasksForUpdate;
-}
-
-// Update destination task's isLastItem state
-export function updatePreviousTasks(
-  copiedTasks: State,
-  destinationTasks: DestinationTasksForUpdate
-) {
-  destinationTasks.forEach((destinationTask) => {
-    copiedTasks.orderedTasks.forEach((originalTasks) => {
-      originalTasks.taskList.forEach((originalTask) =>
-        originalTask.id === destinationTask.taskId
-          // last task's isLastItem = undefined
-          ? (originalTask.isLastItem[lookUpIsLastItem[destinationTask.sortBy]] =
-              undefined)
-          : originalTask
-      );
-    });
-  });
 }

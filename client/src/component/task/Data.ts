@@ -76,12 +76,6 @@ export type Task = {
   dueDate?: number;
   priority?: number;
   description?: string;
-  // determine if the task is the last task in the column
-  isLastItem: {
-    inStatus?: boolean;
-    inPriority?: boolean;
-    inDueDate?: boolean;
-  };
   // determine if the task is the first task in the column
   previousItem: {
     statusId?: number;
@@ -103,7 +97,6 @@ export const initialData: TaskList = [
     priority: 2,
     dueDate: 1,
     previousItem: {},
-    isLastItem: { inPriority: true },
   },
   {
     id: 222,
@@ -112,7 +105,6 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 111, dueDateId: 111 },
-    isLastItem: {},
   },
   {
     id: 333,
@@ -121,7 +113,6 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
-    isLastItem: {},
   },
   {
     id: 444,
@@ -130,7 +121,6 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousItem: { statusId: 333, priorityId: 333 },
-    isLastItem: {},
   },
   {
     id: 555,
@@ -139,7 +129,6 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
-    isLastItem: { inDueDate: true },
   },
   {
     id: 666,
@@ -148,7 +137,6 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousItem: { statusId: 555, priorityId: 777, dueDateId: 333 },
-    isLastItem: { inPriority: true },
   },
   {
     id: 777,
@@ -157,7 +145,6 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousItem: { statusId: 666, dueDateId: 666 },
-    isLastItem: { inStatus: true, inDueDate: true },
   },
 ];
 
@@ -187,5 +174,5 @@ export type LookUpDueDateId = {
 };
 
 // Task creation types
-export type DestinationTaskValues = { updateSortBy: SortBy; columnId: number };
-export type DestinationTaskValueList = DestinationTaskValues[];
+export type PreviousTaskValue = { updateSortBy: SortBy; columnId: number };
+export type PreviousTaskValues = PreviousTaskValue[];

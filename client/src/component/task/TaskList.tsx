@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocalTasks } from "../../hook/useFetch";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
@@ -8,7 +8,6 @@ import {
   Columns,
   LookUpDueDateId,
   lookUpPreviousTaskId,
-  lookUpIsLastItem,
   SortBy,
   State,
   TaskList,
@@ -17,7 +16,6 @@ import {
   collectAllTasks,
   processLookUpDueDateId,
   processTaskListOnSortBy,
-  renameAndReorderDueDateColumns,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -157,55 +155,6 @@ function handleDragEnd(
     destinationTasksArr.taskList[destination.index - 1];
   const destinationTaskAfter =
     destinationTasksArr.taskList[destination.index + 1];
-
-  /* 
-     Determine the last element in array
-   */
-  // Drag from middle to the last in the same column
-  const sourceTaskIsNotTheLastElementAndDestinationTaskExist =
-    sourceTask !== lastTaskInSourceTasksArr && destinationTask;
-  if (sourceTaskIsNotTheLastElementAndDestinationTaskExist) {
-    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
-    destinationTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
-  }
-
-  // Drag from the last to the middle of another column
-  const sourceTaskIsTheLastElementAndDestinationTaskExist =
-    sourceTask === lastTaskInSourceTasksArr && destinationTask;
-  if (sourceTaskIsTheLastElementAndDestinationTaskExist) {
-    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
-
-    if (sourceTaskBefore) {
-      sourceTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = true;
-    }
-  }
-
-  // Drag from the middle to the last of another column
-  const sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist =
-    sourceTask !== lastTaskInSourceTasksArr && !destinationTask;
-  if (sourceTaskIsNotTheLastElementAndDestinationTaskDoesNotExist) {
-    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
-
-    if (destinationTaskBefore) {
-      destinationTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
-    }
-  }
-
-  // Drag from the last to the last of another column
-  const sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist =
-    sourceTask === lastTaskInSourceTasksArr && !destinationTask;
-  if (sourceTaskIsTheLastElementAndDestinationTaskDoesNotExist) {
-    // here
-    sourceTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
-
-    if (sourceTaskBefore) {
-      sourceTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = true;
-    }
-
-    if (destinationTaskBefore) {
-      destinationTaskBefore.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
-    }
-  }
 
   const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
     (task) => task.id === sourceTask.id
