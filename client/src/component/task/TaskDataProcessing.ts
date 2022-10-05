@@ -1,8 +1,5 @@
 import { getWeekDays } from "../../utils/getWeekDays";
-import {
-  NewTask,
-  DestinationTaskValueList as DestinationTaskValueList,
-} from "./CreateTaskPopover";
+import { NewTask } from "./CreateTaskPopover";
 import {
   ColumnOptions,
   Columns,
@@ -16,6 +13,7 @@ import {
   DueDate,
   DueDateColumns,
   Task,
+  DestinationTaskValueList,
 } from "./Data";
 
 /* 

@@ -214,9 +214,6 @@ function validateName(value: string) {
   return error;
 }
 
-export type DestinationTaskValues = { updateSortBy: SortBy; columnId: number };
-export type DestinationTaskValueList = DestinationTaskValues[];
-
 async function submit(
   values: NewTask,
   formikHelpers: FormikHelpers<NewTask>,

@@ -76,12 +76,14 @@ export type Task = {
   dueDate?: number;
   priority?: number;
   description?: string;
-  isLastItem: { // determine if the task is the last task in the column
+  // determine if the task is the last task in the column
+  isLastItem: {
     inStatus?: boolean;
     inPriority?: boolean;
     inDueDate?: boolean;
   };
-  previousItem: { // determine if the task is the first task in the column
+  // determine if the task is the first task in the column
+  previousItem: {
     statusId?: number;
     dueDateId?: number;
     priorityId?: number;
@@ -183,3 +185,7 @@ export const lookUpPreviousTaskId = {
 export type LookUpDueDateId = {
   [index: number]: number;
 };
+
+// Task creation types
+export type DestinationTaskValues = { updateSortBy: SortBy; columnId: number };
+export type DestinationTaskValueList = DestinationTaskValues[];
