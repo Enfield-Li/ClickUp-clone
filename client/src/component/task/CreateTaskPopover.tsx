@@ -21,7 +21,6 @@ import { useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import {
-  Columns,
   ColumnType,
   DueDateColumns,
   lookUpIsLastItem,
@@ -31,15 +30,18 @@ import {
   Task,
 } from "./Data";
 import {
-  findTheLastTaskIdOnSortByAndColumnId,
-  updateLastTask,
+  collectAllTasks,
+  collectDestinationTasksAndUpdateNewTask,
+  collectDestinationTaskValues,
+  updatePreviousTasks,
 } from "./TaskDataProcessing";
 
-type NewTask = {
+export type NewTask = {
   title: string;
+  status?: string;
   description?: string;
   priority?: string;
-  date?: string;
+  dueDate?: string;
 };
 
 type Props = {
@@ -68,7 +70,7 @@ export const CreateTaskPopover = ({
       onOpen={onOpen}
       onClose={onClose}
       placement="bottom"
-      closeOnBlur={false}
+      closeOnBlur={true}
     >
       {/* Trigger */}
       <PopoverTrigger>
@@ -88,16 +90,15 @@ export const CreateTaskPopover = ({
             initialValues={{
               title: "",
               description: "",
-              priority: "",
-              date: "",
+              status: "1",
+              priority: "1",
+              dueDate: "1",
             }}
-            onSubmit={
-              (values, helpers) => {
-                // console.log({ title: values.title, description, priority, date });
-                console.log(values);
-              }
-              // submit(values, helpers, state, column, sortBy, setState)
-            }
+            onSubmit={(values, helpers) => {
+              // console.log({ title: values.title, description, priority, date });
+              // console.log(values);
+              submit(values, helpers, state, column, sortBy, setState);
+            }}
           >
             {(props) => (
               <Form>
@@ -126,52 +127,65 @@ export const CreateTaskPopover = ({
                 </Field>
 
                 {/* Task priority */}
-                <Field id="priority" name="priority" as="select">
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <FormControl my={3}>
-                      <Stack spacing={3}>
-                        <Select placeholder="Priority" {...field}>
-                          {state.unorderedColumns.priority.map((priority) => (
-                            <option value={priority.id} key={priority.id}>
-                              {capitalizeFirstLetter(
-                                priority.title.toLowerCase()
-                              )}
-                            </option>
-                          ))}
-                        </Select>
-                      </Stack>
-                    </FormControl>
-                  )}
-                </Field>
+                {sortBy !== "priority" && (
+                  <Field id="priority" name="priority" as="select">
+                    {({ field, form }: FieldAttributes<any>) => (
+                      <FormControl my={3}>
+                        <Stack spacing={3}>
+                          <Select {...field}>
+                            {state.unorderedColumns.priority.map((priority) => (
+                              <option value={priority.id} key={priority.id}>
+                                {capitalizeFirstLetter(
+                                  priority.title.toLowerCase()
+                                )}
+                              </option>
+                            ))}
+                          </Select>
+                        </Stack>
+                      </FormControl>
+                    )}
+                  </Field>
+                )}
 
                 {/* Task dueDate */}
-                <Field id="date" name="date" as="select">
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <FormControl my={3}>
-                      <Flex justifyContent={"space-between"}>
-                        {showDatePicker ? (
-                          <Input {...field} type="date" width="60%" />
-                        ) : (
-                          <Select placeholder="Date" {...field} width="60%">
-                            <option value="Date1">Date 1</option>
-                            <option value="Date2">Date 2</option>
-                            <option value="Date3">Date 3</option>
-                          </Select>
-                        )}
-                        <Center>
-                          <Text
-                            fontSize="xs"
-                            color="blue.300"
-                            cursor="pointer"
-                            onClick={() => setShowDatePicker(!showDatePicker)}
-                          >
-                            {showDatePicker ? "Hide" : "Show"} date picker
-                          </Text>
-                        </Center>
-                      </Flex>
-                    </FormControl>
-                  )}
-                </Field>
+                {sortBy !== "dueDate" && (
+                  <Field id="dueDate" name="dueDate" as="select">
+                    {({ field, form }: FieldAttributes<any>) => (
+                      <FormControl my={3}>
+                        {/* Pick dueDate */}
+                        <Flex justifyContent={"space-between"}>
+                          {showDatePicker ? (
+                            // Date picker
+                            <Input {...field} type="date" width="60%" />
+                          ) : (
+                            // Days select
+                            <Select {...field} width="60%">
+                              {dueDateColumns.map((dueDate) => (
+                                <option value={dueDate.id} key={dueDate.id}>
+                                  {capitalizeFirstLetter(
+                                    dueDate.title.toLowerCase()
+                                  )}
+                                </option>
+                              ))}
+                            </Select>
+                          )}
+
+                          {/* Toggle show pick day/date */}
+                          <Center>
+                            <Text
+                              fontSize="xs"
+                              color="blue.300"
+                              cursor="pointer"
+                              onClick={() => setShowDatePicker(!showDatePicker)}
+                            >
+                              {showDatePicker ? "Hide" : "Show"} date picker
+                            </Text>
+                          </Center>
+                        </Flex>
+                      </FormControl>
+                    )}
+                  </Field>
+                )}
 
                 <Button
                   width={"100%"}
@@ -200,6 +214,9 @@ function validateName(value: string) {
   return error;
 }
 
+export type DestinationTaskValues = { updateSortBy: SortBy; columnId: number };
+export type DestinationTaskValueList = DestinationTaskValues[];
+
 async function submit(
   values: NewTask,
   formikHelpers: FormikHelpers<NewTask>,
@@ -208,27 +225,13 @@ async function submit(
   sortBy: SortBy,
   setState: SetState
 ) {
-  const { title, description, priority, date } = values;
+  const { title, description, priority, dueDate } = values;
+  console.log(values);
 
-  const sortByDueDate = "dueDate";
-  const dueDateId = 2;
+  const destinationTaskValueList = collectDestinationTaskValues(values);
+  console.log({ newTaskValues: destinationTaskValueList });
 
-  const sortByPriority = "priority";
-  const priorityId = 3;
-
-  const lastDueDateId = findTheLastTaskIdOnSortByAndColumnId(
-    state.orderedTasks,
-    sortByDueDate,
-    dueDateId
-  );
-
-  const lastPriorityId = findTheLastTaskIdOnSortByAndColumnId(
-    state.orderedTasks,
-    sortByPriority,
-    priorityId
-  );
-
-  console.log({ lastDueDateId, lastPriorityId });
+  const allTasks = collectAllTasks(state.orderedTasks);
 
   const currentOrderedTasks = state.orderedTasks.find(
     (task) => task.id === column.id
@@ -248,28 +251,22 @@ async function submit(
     previousItem: {},
     isLastItem: {},
   };
-
-  newTask.isLastItem[lookUpIsLastItem[sortByDueDate]] = true;
-  newTask[sortByDueDate] = dueDateId;
-  newTask.previousItem[`${sortByDueDate}Id`] = lastDueDateId;
-
-  newTask.isLastItem[lookUpIsLastItem[sortByPriority]] = true;
-  newTask[sortByPriority] = priorityId;
-  newTask.previousItem[`${sortByPriority}Id`] = lastPriorityId;
+  const destinationTasks = collectDestinationTasksAndUpdateNewTask(
+    destinationTaskValueList,
+    allTasks,
+    newTask
+  );
+  console.log({ previousTasks: destinationTasks });
 
   newTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
+  console.log({ newTask });
 
   setState((prv) => {
     const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
 
-    if (lastDueDateId) {
-      updateLastTask(copiedTasks, lastDueDateId, sortByDueDate);
-    }
-    if (lastPriorityId) {
-      updateLastTask(copiedTasks, lastPriorityId, sortByPriority);
-    }
+    updatePreviousTasks(copiedTasks, destinationTasks);
 
     const taskArr = copiedTasks.orderedTasks.find(
       (task) => task.id === column.id

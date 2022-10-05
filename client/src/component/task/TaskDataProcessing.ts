@@ -1,5 +1,9 @@
 import { getWeekDays } from "../../utils/getWeekDays";
 import {
+  NewTask,
+  DestinationTaskValueList as DestinationTaskValueList,
+} from "./CreateTaskPopover";
+import {
   ColumnOptions,
   Columns,
   LookUpDueDateId,
@@ -11,6 +15,7 @@ import {
   TaskList,
   DueDate,
   DueDateColumns,
+  Task,
 } from "./Data";
 
 /* 
@@ -177,6 +182,20 @@ export function renameAndReorderDueDateColumns(
   return [...front, ...weekDayColumnsFinal, ...end] as DueDateColumns;
 }
 
+// A lookup table that matches the sequence of an reorder and renamed columns
+// after columns been processed by reorderAndRenameColumns() function
+export function processLookUpDueDateId(
+  orderedTasks: OrderedTasks,
+  columns: Columns,
+  lookUpDueDateId: LookUpDueDateId
+) {
+  for (let i = 0; i < orderedTasks.length; i++) {
+    const tasks = orderedTasks[i];
+    lookUpDueDateId[tasks.id] = columns[i].id;
+  }
+  return lookUpDueDateId;
+}
+
 // Collect all tasks from OrderedTasks to Task[]
 export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   let taskList: TaskList = [];
@@ -189,13 +208,55 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   return taskList;
 }
 
+/* 
+  Extract priority and dueDate key/value pairs:
+    {
+      "values": {
+        "title": "1111111111111111",
+        "description": "",
+        "priority": "4",
+        "dueDate": "6"
+      }
+    }
+  to:
+    [
+      {
+        updateSortBy: "priority",
+        id: 4,
+      },
+      {
+        updateSortBy: "dueDate",
+        id: 6,
+      },
+    ]
+*/
+export function collectDestinationTaskValues(
+  newTask: NewTask
+): DestinationTaskValueList {
+  const taskListForUpdate: DestinationTaskValueList = [];
+  for (let i = 0; i < Object.entries(newTask).length; i++) {
+    const task = Object.entries(newTask)[i];
+    const key = task[0];
+    const value = task[1];
+
+    if (key === "dueDate" || key === "priority") {
+      taskListForUpdate[i] = { columnId: 0, updateSortBy: "status" };
+      taskListForUpdate[i].columnId = Number(value);
+      taskListForUpdate[i].updateSortBy = key;
+    }
+  }
+
+  // Clean up empty slots
+  return taskListForUpdate.filter((taskList) => taskList);
+}
+
 // Given sortBy and columnId, find the last element id in all the tasks in the state
-export function findTheLastTaskIdOnSortByAndColumnId(
-  orderedTasks: OrderedTasks,
+export function findTheLastTask(
+  allTasks: TaskList,
   sortBy: SortBy,
   columnId: number
 ): number | undefined {
-  const allTasks = collectAllTasks(orderedTasks);
+  // const allTasks = collectAllTasks(orderedTasks);
 
   const taskListBasedOnSortBy: TaskList = [];
 
@@ -230,30 +291,60 @@ export function findTheLastTaskIdOnSortByAndColumnId(
   const lastTask =
     orderedTaskListBasedOnSortBy[orderedTaskListBasedOnSortBy.length - 1];
 
-  return lastTask.id;
+  if (lastTask) return lastTask.id;
 }
 
-// Update target last task's lastItem attribute
-export function updateLastTask(state: State, taskId: number, sortBy: SortBy) {
-  state.orderedTasks.forEach((tasks) => {
-    tasks.taskList.forEach((task) =>
-      task.id === taskId
-        ? (task.isLastItem[lookUpIsLastItem[sortBy]] = undefined)
-        : task
-    );
-  });
-}
+type DestinationTasksForUpdate = { taskId: number; sortBy: SortBy }[];
 
-// A lookup table that matches the sequence of an reorder and renamed columns
-// after columns been processed by reorderAndRenameColumns() function
-export function processLookUpDueDateId(
-  orderedTasks: OrderedTasks,
-  columns: Columns,
-  lookUpDueDateId: LookUpDueDateId
-) {
-  for (let i = 0; i < orderedTasks.length; i++) {
-    const tasks = orderedTasks[i];
-    lookUpDueDateId[tasks.id] = columns[i].id;
+export function collectDestinationTasksAndUpdateNewTask(
+  destinationTaskValueList: DestinationTaskValueList,
+  allTasks: TaskList,
+  newTask: Task
+): DestinationTasksForUpdate {
+  const tasksForUpdate: DestinationTasksForUpdate = [];
+
+  for (let i = 0; i < destinationTaskValueList.length; i++) {
+    const taskForUpdate = destinationTaskValueList[i];
+
+    const updateSortBy = taskForUpdate.updateSortBy;
+    const updateSortById = taskForUpdate.columnId;
+
+    const idResult = findTheLastTask(allTasks, updateSortBy, updateSortById);
+
+    if (idResult) {
+      tasksForUpdate[i] = { taskId: 0, sortBy: "status" };
+      tasksForUpdate[i].taskId = idResult;
+      tasksForUpdate[i].sortBy = updateSortBy;
+    }
+
+    // Update new task
+    newTask.isLastItem[lookUpIsLastItem[updateSortBy]] = true;
+    newTask[updateSortBy] = updateSortById;
+    newTask.previousItem[`${updateSortBy}Id`] = idResult;
   }
-  return lookUpDueDateId;
+
+  return tasksForUpdate;
+}
+
+// Update destination task (as the previous task)
+export function updatePreviousTasks(
+  copiedTasks: State,
+  destinationTasks: DestinationTasksForUpdate
+) {
+  for (let i = 0; i < destinationTasks.length; i++) {
+    const destinationTask = destinationTasks[i];
+
+    if (destinationTask) {
+      // Update target last task's lastItem attribute
+      copiedTasks.orderedTasks.forEach((originalTasks) => {
+        originalTasks.taskList.forEach((originalTask) =>
+          originalTask.id === destinationTask.taskId
+            ? (originalTask.isLastItem[
+                lookUpIsLastItem[destinationTask.sortBy]
+              ] = undefined)
+            : originalTask
+        );
+      });
+    }
+  }
 }
