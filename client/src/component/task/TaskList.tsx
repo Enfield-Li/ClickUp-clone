@@ -16,8 +16,8 @@ import {
 import {
   collectAllTasks,
   processLookUpDueDateId,
-  processTaskBasedOnSortBy,
-  renameAndReorderColumns,
+  processTaskListOnSortBy,
+  renameAndReorderDueDateColumns,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -25,11 +25,8 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState } = useLocalTasks(sortBy);
+  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
   // const { state, loading, error, setState } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [draggingId, setDraggingId] = useState<number>();
   console.log(state);
 
   // Sync up state with sortBy
@@ -39,7 +36,7 @@ export default function TaskListView({ sortBy }: Props) {
       setState({
         ...state,
         // Flat list by processTaskBasedOnSortBy()
-        orderedTasks: processTaskBasedOnSortBy(
+        orderedTasks: processTaskListOnSortBy(
           collectAllTasks(state.orderedTasks),
           state.unorderedColumns[sortBy],
           sortBy
@@ -48,13 +45,13 @@ export default function TaskListView({ sortBy }: Props) {
     }
   }, [sortBy]);
 
-  if (!state) return <div>Loading</div>;
+  if (!state || !dueDateColumns) return <div>Loading</div>;
   // if (!state || loading) return <div>Loading</div>;
 
-  // Reorder columns for dueDate type
+  // Choose column to display
   let orderedColumns: Columns;
   if (sortBy === "dueDate") {
-    orderedColumns = renameAndReorderColumns(state.unorderedColumns, sortBy);
+    orderedColumns = dueDateColumns;
   } else {
     orderedColumns = state.unorderedColumns[sortBy];
   }
@@ -63,38 +60,24 @@ export default function TaskListView({ sortBy }: Props) {
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, orderedColumns, sortBy, setIsDragging)
+          handleDragEnd(result, state, orderedColumns, sortBy)
         }
-        onDragStart={(start, provided) => {
-          setDraggingId(Number(start.source.droppableId));
-          setIsDragging(true);
-        }}
       >
         <Flex>
           {orderedColumns.map((column, index) => (
-            <Box
-              mx={2}
-              key={column.id}
-              borderRadius={4}
-              border={
-                isDraggingToOtherColumn(isDragging, column.id, draggingId)
-                  ? "dotted"
-                  : "solid transparent"
-              }
-            >
+            <Box mx={2} key={column.id} borderRadius={4}>
               <Column
                 state={state}
                 sortBy={sortBy}
                 setState={setState}
                 column={column}
+                dueDateColumns={dueDateColumns}
                 // Pass down list as per column.id
                 tasks={
                   state.orderedTasks.find(
                     (orderedTask) => orderedTask.id === column.id
                   )?.taskList
                 }
-                isDragging={isDragging}
-                setIsDragging={setIsDragging}
               />
             </Box>
           ))}
@@ -117,10 +100,8 @@ function handleDragEnd(
   result: DropResult,
   state: State,
   columns: Columns,
-  sortBy: SortBy,
-  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>
+  sortBy: SortBy
 ) {
-  setIsDragging(false);
   const { destination, source } = result;
   if (!destination) return;
   if (

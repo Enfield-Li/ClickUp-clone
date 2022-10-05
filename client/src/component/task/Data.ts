@@ -1,3 +1,11 @@
+// Sorting options
+export const STATUS = "status";
+export const PRIORITY = "priority";
+export const DUE_DATE = "dueDate";
+
+export type SortBy = typeof STATUS | typeof PRIORITY | typeof DUE_DATE;
+
+// Columns
 export type Status = "TO DO" | "IN PROGRESS" | "DONE";
 
 export type Priority =
@@ -23,16 +31,14 @@ export type DueDate =
   | "THURSDAY"
   | "FRIDAY";
 
-export const STATUS = "status";
-export const PRIORITY = "priority";
-export const DUE_DATE = "dueDate";
-
-export type SortBy = typeof STATUS | typeof PRIORITY | typeof DUE_DATE;
+export type StatusColumns = { id: number; title: string }[];
+export type PriorityColumns = { id: number; title: Priority }[];
+export type DueDateColumns = { id: number; title: DueDate }[];
 
 export type ColumnOptions = {
-  status: { id: number; title: string }[];
-  priority: { id: number; title: Priority }[];
-  dueDate: { id: number; title: DueDate }[];
+  status: StatusColumns;
+  priority: PriorityColumns;
+  dueDate: DueDateColumns;
 };
 
 export const columnOptions: ColumnOptions = {
@@ -62,6 +68,7 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
+// Tasks
 export type Task = {
   id?: number;
   title: string;
@@ -69,12 +76,12 @@ export type Task = {
   dueDate?: number;
   priority?: number;
   description?: string;
-  isLastItem: {
+  isLastItem: { // determine if the task is the last task in the column
     inStatus?: boolean;
     inPriority?: boolean;
     inDueDate?: boolean;
   };
-  previousItem: {
+  previousItem: { // determine if the task is the first task in the column
     statusId?: number;
     dueDateId?: number;
     priorityId?: number;
@@ -152,6 +159,7 @@ export const initialData: TaskList = [
   },
 ];
 
+// States
 export type OrderedTasks = { taskList: TaskList; id: number }[];
 export type State = {
   orderedTasks: OrderedTasks;
@@ -159,6 +167,7 @@ export type State = {
 };
 export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
 
+// Look up tables
 export const lookUpIsLastItem = {
   status: "inStatus",
   priority: "inPriority",

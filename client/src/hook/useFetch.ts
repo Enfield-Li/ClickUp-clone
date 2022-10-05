@@ -2,12 +2,17 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import {
   columnOptions,
+  Columns,
+  DueDateColumns,
   initialData,
   SortBy,
   State,
   TaskList,
 } from "../component/task/Data";
-import { processTaskBasedOnSortBy } from "../component/task/TaskDataProcessing";
+import {
+  processTaskListOnSortBy,
+  renameAndReorderDueDateColumns,
+} from "../component/task/TaskDataProcessing";
 import useGlobalContext, {
   indicateLoading,
   popUpError,
@@ -56,7 +61,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
       const columnDataFromApi = columnOptions;
       const tasksListData = response.data;
 
-      const processedData = processTaskBasedOnSortBy(
+      const processedData = processTaskListOnSortBy(
         tasksListData,
         columnDataFromApi[sortBy],
         sortBy
@@ -84,21 +89,28 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
 export function useLocalTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
+  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
 
   useEffect(() => {
     const columnDataFromApi = columnOptions;
     const dataFromAPI = initialData;
 
-    const processedData = processTaskBasedOnSortBy(
+    const processedDueDateColumns = renameAndReorderDueDateColumns(
+      columnOptions.dueDate
+    );
+
+    const processedTaskList = processTaskListOnSortBy(
       dataFromAPI,
       columnDataFromApi[sortBy],
       sortBy
     );
+
+    setDueDateColumns(processedDueDateColumns);
     setState({
-      orderedTasks: processedData,
+      orderedTasks: processedTaskList,
       unorderedColumns: columnDataFromApi,
     });
   }, []);
 
-  return { state, setState };
+  return { state, setState, dueDateColumns };
 }

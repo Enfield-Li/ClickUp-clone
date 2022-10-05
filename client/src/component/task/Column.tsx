@@ -9,16 +9,22 @@ import {
 import { Droppable } from "@hello-pangea/dnd";
 import React from "react";
 import Card from "./Card";
-import { PopoverForm } from "./CreateTaskPopover";
-import { ColumnType, SetState, SortBy, State, TaskList } from "./Data";
+import { CreateTaskPopover } from "./CreateTaskPopover";
+import {
+  ColumnType,
+  DueDateColumns,
+  SetState,
+  SortBy,
+  State,
+  TaskList,
+} from "./Data";
 
 type Props = {
   state: State;
   sortBy: SortBy;
   setState: SetState;
   column: ColumnType;
-  isDragging: boolean;
-  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
+  dueDateColumns: DueDateColumns;
   tasks?: TaskList;
 };
 
@@ -27,9 +33,8 @@ export default function Column({
   setState,
   column,
   tasks,
-  isDragging,
-  setIsDragging,
   sortBy,
+  dueDateColumns,
 }: Props) {
   return (
     <Box width={"280px"}>
@@ -72,15 +77,14 @@ export default function Column({
                 key={task.id}
                 index={index}
                 columnId={column.id}
-                isDragging={isDragging}
-                setIsDragging={setIsDragging}
               />
             ))}
             {provided.placeholder}
 
             {/* Create task popover */}
             <Center>
-              <PopoverForm
+              <CreateTaskPopover
+                dueDateColumns={dueDateColumns}
                 state={state}
                 setState={setState}
                 column={column}

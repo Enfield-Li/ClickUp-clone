@@ -9,6 +9,8 @@ import {
   SortBy,
   State,
   TaskList,
+  DueDate,
+  DueDateColumns,
 } from "./Data";
 
 /* 
@@ -69,7 +71,7 @@ import {
           }
         ]
 */
-export function processTaskBasedOnSortBy(
+export function processTaskListOnSortBy(
   tasks: TaskList,
   columns: Columns,
   sortBy: SortBy
@@ -118,8 +120,8 @@ export function processTaskBasedOnSortBy(
         { id: 2, title: "OVER DUE" },
         { id: 3, title: "MONDAY" },
         { id: 4, title: "TUESDAY" },
-        { id: 5, title: "WEDNESDAY" },
-        { id: 6, title: "THURSDAY" },
+        { id: 5, title: "WEDNESDAY" },     // <- rename title
+        { id: 6, title: "THURSDAY" },      // <- rename title
         { id: 7, title: "FRIDAY" },
         { id: 8, title: "SATURDAY" },
         { id: 9, title: "SUNDAY" },
@@ -139,11 +141,9 @@ export function processTaskBasedOnSortBy(
         { "id": 10, "title": "FUTURE" }
       ]
  */
-export function renameAndReorderColumns(
-  sortingOptions: ColumnOptions,
-  sortBy: SortBy
-) {
-  const originalColumns = sortingOptions[sortBy];
+export function renameAndReorderDueDateColumns(
+  originalColumns: { id: number; title: DueDate }[]
+): DueDateColumns {
   const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
 
   // rename columns to Today and Tomorrow
@@ -174,7 +174,7 @@ export function renameAndReorderColumns(
   );
   const weekDayColumnsFinal = [...weekDayFront, ...weekDayEnd];
 
-  return [...front, ...weekDayColumnsFinal, ...end];
+  return [...front, ...weekDayColumnsFinal, ...end] as DueDateColumns;
 }
 
 // Collect all tasks from OrderedTasks to Task[]
@@ -194,7 +194,7 @@ export function findTheLastTaskIdOnSortByAndColumnId(
   orderedTasks: OrderedTasks,
   sortBy: SortBy,
   columnId: number
-) {
+): number | undefined {
   const allTasks = collectAllTasks(orderedTasks);
 
   const taskListBasedOnSortBy: TaskList = [];

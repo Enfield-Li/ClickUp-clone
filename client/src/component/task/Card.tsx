@@ -18,17 +18,9 @@ type Props = {
   task: Task;
   index: number;
   columnId: number;
-  isDragging: boolean;
-  setIsDragging: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Card({
-  task,
-  index,
-  columnId,
-  isDragging,
-  setIsDragging,
-}: Props) {
+export default function Card({ task, index, columnId }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
 
@@ -46,7 +38,6 @@ export default function Card({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           border={snapshot.isDragging ? "1px" : ""}
-          onMouseOver={() => setIsDragging(false)}
         >
           <Stack>
             <Heading color={headerColor} fontSize={"2xl"} fontFamily={"body"}>
