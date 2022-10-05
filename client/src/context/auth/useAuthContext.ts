@@ -115,7 +115,6 @@ export async function registerUser(
     }
 
     const response = err.response?.data as LogInError;
-    console.log(response);
 
     toast({
       title: "Register failed...",

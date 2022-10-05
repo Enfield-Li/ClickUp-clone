@@ -228,7 +228,7 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
       },
     ]
 */
-export function collectDestinationTaskValues(
+export function collectDestinationTaskValueList(
   newTask: NewTask
 ): DestinationTaskValueList {
   const taskListForUpdate: DestinationTaskValueList = [];
@@ -237,7 +237,7 @@ export function collectDestinationTaskValues(
     const key = task[0];
     const value = task[1];
 
-    if (key === "dueDate" || key === "priority") {
+    if (key === "dueDate" || key === "priority" || key === "status") {
       taskListForUpdate[i] = { columnId: 0, updateSortBy: "status" };
       taskListForUpdate[i].columnId = Number(value);
       taskListForUpdate[i].updateSortBy = key;
@@ -248,14 +248,12 @@ export function collectDestinationTaskValues(
   return taskListForUpdate.filter((taskList) => taskList);
 }
 
-// Given sortBy and columnId, find the last element id in all the tasks in the state
-export function findTheLastTask(
+// Given sortBy and columnId, find the last task id in all the tasks in the state
+export function findLastTaskId(
   allTasks: TaskList,
   sortBy: SortBy,
   columnId: number
 ): number | undefined {
-  // const allTasks = collectAllTasks(orderedTasks);
-
   const taskListBasedOnSortBy: TaskList = [];
 
   // Find the first element
@@ -307,7 +305,7 @@ export function collectDestinationTasksAndUpdateNewTask(
     const updateSortBy = taskForUpdate.updateSortBy;
     const updateSortById = taskForUpdate.columnId;
 
-    const idResult = findTheLastTask(allTasks, updateSortBy, updateSortById);
+    const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
 
     if (idResult) {
       tasksForUpdate[i] = { taskId: 0, sortBy: "status" };
@@ -316,33 +314,28 @@ export function collectDestinationTasksAndUpdateNewTask(
     }
 
     // Update new task
-    newTask.isLastItem[lookUpIsLastItem[updateSortBy]] = true;
     newTask[updateSortBy] = updateSortById;
     newTask.previousItem[`${updateSortBy}Id`] = idResult;
+    newTask.isLastItem[lookUpIsLastItem[updateSortBy]] = true;
   }
 
   return tasksForUpdate;
 }
 
-// Update destination task (as the previous task)
+// Update destination task's isLastItem state
 export function updatePreviousTasks(
   copiedTasks: State,
   destinationTasks: DestinationTasksForUpdate
 ) {
-  for (let i = 0; i < destinationTasks.length; i++) {
-    const destinationTask = destinationTasks[i];
-
-    if (destinationTask) {
-      // Update target last task's lastItem attribute
-      copiedTasks.orderedTasks.forEach((originalTasks) => {
-        originalTasks.taskList.forEach((originalTask) =>
-          originalTask.id === destinationTask.taskId
-            ? (originalTask.isLastItem[
-                lookUpIsLastItem[destinationTask.sortBy]
-              ] = undefined)
-            : originalTask
-        );
-      });
-    }
-  }
+  destinationTasks.forEach((destinationTask) => {
+    copiedTasks.orderedTasks.forEach((originalTasks) => {
+      originalTasks.taskList.forEach((originalTask) =>
+        originalTask.id === destinationTask.taskId
+          // last task's isLastItem = undefined
+          ? (originalTask.isLastItem[lookUpIsLastItem[destinationTask.sortBy]] =
+              undefined)
+          : originalTask
+      );
+    });
+  });
 }

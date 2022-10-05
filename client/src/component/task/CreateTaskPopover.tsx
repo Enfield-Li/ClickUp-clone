@@ -32,7 +32,7 @@ import {
 import {
   collectAllTasks,
   collectDestinationTasksAndUpdateNewTask,
-  collectDestinationTaskValues,
+  collectDestinationTaskValueList,
   updatePreviousTasks,
 } from "./TaskDataProcessing";
 
@@ -94,11 +94,9 @@ export const CreateTaskPopover = ({
               priority: "1",
               dueDate: "1",
             }}
-            onSubmit={(values, helpers) => {
-              // console.log({ title: values.title, description, priority, date });
-              // console.log(values);
-              submit(values, helpers, state, column, sortBy, setState);
-            }}
+            onSubmit={(values, helpers) =>
+              submit(values, helpers, state, column, sortBy, setState)
+            }
           >
             {(props) => (
               <Form>
@@ -222,14 +220,27 @@ async function submit(
   sortBy: SortBy,
   setState: SetState
 ) {
-  const { title, description, priority, dueDate } = values;
-  console.log(values);
-
-  const destinationTaskValueList = collectDestinationTaskValues(values);
-  console.log({ newTaskValues: destinationTaskValueList });
-
+  // Initialize new task
+  const { title, description } = values;
+  const newTask: Task = {
+    id: 123,
+    title,
+    description,
+    previousItem: {},
+    isLastItem: {},
+  };
   const allTasks = collectAllTasks(state.orderedTasks);
 
+  // Prepare all update date for newTask's previous task
+  const destinationTaskValueList = collectDestinationTaskValueList(values);
+
+  const destinationTasks = collectDestinationTasksAndUpdateNewTask(
+    destinationTaskValueList,
+    allTasks,
+    newTask
+  );
+
+  // Prepare all update date for newTask
   const currentOrderedTasks = state.orderedTasks.find(
     (task) => task.id === column.id
   );
@@ -241,43 +252,30 @@ async function submit(
     ? currentTaskList?.[currentTaskArrLength - 1].id
     : undefined;
 
-  const newTask: Task = {
-    id: 123,
-    title,
-    description,
-    previousItem: {},
-    isLastItem: {},
-  };
-  const destinationTasks = collectDestinationTasksAndUpdateNewTask(
-    destinationTaskValueList,
-    allTasks,
-    newTask
-  );
-  console.log({ previousTasks: destinationTasks });
-
   newTask.isLastItem[lookUpIsLastItem[sortBy]] = true;
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
-  console.log({ newTask });
 
+  // Update state
   setState((prv) => {
+    // Deep copy
     const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
 
-    updatePreviousTasks(copiedTasks, destinationTasks);
-
+    // Push newTask to current column array
     const taskArr = copiedTasks.orderedTasks.find(
       (task) => task.id === column.id
     );
-
     const lastTask = taskArr?.taskList[taskArr?.taskList.length - 1];
-
     if (lastTask) {
       lastTask.isLastItem[lookUpIsLastItem[sortBy]] = undefined;
     }
-
     taskArr?.taskList.push(newTask);
+
+    // Update all previous tasks state
+    updatePreviousTasks(copiedTasks, destinationTasks);
 
     return copiedTasks;
   });
+
   formikHelpers.resetForm();
 }
