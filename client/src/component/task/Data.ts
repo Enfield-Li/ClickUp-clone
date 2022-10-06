@@ -31,9 +31,10 @@ export type DueDate =
   | "THURSDAY"
   | "FRIDAY";
 
-export type StatusColumns = { id: number; title: string }[];
-export type PriorityColumns = { id: number; title: Priority }[];
-export type DueDateColumns = { id: number; title: DueDate }[];
+type Column<T> = { id: number; title: T; color: string };
+export type StatusColumns = Column<string>[];
+export type PriorityColumns = Column<Priority>[];
+export type DueDateColumns = Column<DueDate>[];
 
 export type ColumnOptions = {
   status: StatusColumns;
@@ -43,28 +44,28 @@ export type ColumnOptions = {
 
 export const columnOptions: ColumnOptions = {
   status: [
-    { id: 1, title: "TO DO" },
-    { id: 2, title: "IN PROGRESS" },
-    { id: 3, title: "DONE" },
+    { id: 1, title: "TO DO", color: "gray.400" },
+    { id: 2, title: "IN PROGRESS", color: "purple.400" },
+    { id: 3, title: "DONE", color: "green.400" },
   ],
   priority: [
-    { id: 1, title: "NO PRIORITY" },
-    { id: 2, title: "URGENT" },
-    { id: 3, title: "HIGH" },
-    { id: 4, title: "NORMAL" },
-    { id: 5, title: "LOW" },
+    { id: 1, title: "NO PRIORITY", color: "gray.400" },
+    { id: 2, title: "URGENT", color: "red.400" },
+    { id: 3, title: "HIGH", color: "yellow.400" },
+    { id: 4, title: "NORMAL", color: "blue.200" },
+    { id: 5, title: "LOW", color: "gray.400" },
   ],
   dueDate: [
-    { id: 1, title: "NO DUE DATE" },
-    { id: 2, title: "OVER DUE" },
-    { id: 3, title: "MONDAY" },
-    { id: 4, title: "TUESDAY" },
-    { id: 5, title: "WEDNESDAY" },
-    { id: 6, title: "THURSDAY" },
-    { id: 7, title: "FRIDAY" },
-    { id: 8, title: "SATURDAY" },
-    { id: 9, title: "SUNDAY" },
-    { id: 10, title: "FUTURE" },
+    { id: 1, title: "NO DUE DATE", color: "gray.400" },
+    { id: 2, title: "OVER DUE", color: "gray.400" },
+    { id: 3, title: "MONDAY", color: "gray.400" },
+    { id: 4, title: "TUESDAY", color: "gray.400" },
+    { id: 5, title: "WEDNESDAY", color: "gray.400" },
+    { id: 6, title: "THURSDAY", color: "gray.400" },
+    { id: 7, title: "FRIDAY", color: "gray.400" },
+    { id: 8, title: "SATURDAY", color: "gray.400" },
+    { id: 9, title: "SUNDAY", color: "gray.400" },
+    { id: 10, title: "FUTURE", color: "gray.400" },
   ],
 };
 
@@ -85,7 +86,7 @@ export type Task = {
 };
 
 export type TaskList = Task[];
-export type ColumnType = { id: number; title: string };
+export type ColumnType = { id: number; title: string; color: string };
 export type Columns = ColumnType[];
 export type InitialData = { tasks: TaskList };
 

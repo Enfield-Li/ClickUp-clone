@@ -25,11 +25,8 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
-  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
-    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
-    sortBy
-  );
+  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  // const { state, loading, error, setState, dueDateColumns } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
   console.log(state);
 
   // Sync up state with sortBy

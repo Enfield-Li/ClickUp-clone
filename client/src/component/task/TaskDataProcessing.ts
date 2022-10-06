@@ -142,19 +142,18 @@ export function processTaskListOnSortBy(
       ]
  */
 export function renameAndReorderDueDateColumns(
-  originalColumns: { id: number; title: DueDate }[]
+  originalColumns: DueDateColumns
 ): DueDateColumns {
   const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
 
   // rename columns to Today and Tomorrow
   const updatedColumns = originalColumns.map((column) => {
     if (column.title === todayWeekDay) {
-      return { id: column.id, title: "TODAY" };
+      column.title = "TODAY";
     } else if (column.title === tomorrowWeekDay) {
-      return { id: column.id, title: "TOMORROW" };
-    } else {
-      return column;
+      column.title = "TOMORROW";
     }
+    return column;
   });
 
   // put today to the front

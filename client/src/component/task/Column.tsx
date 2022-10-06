@@ -39,10 +39,16 @@ export default function Column({
   return (
     <Box width={"280px"}>
       {/* Column header */}
-      <Flex m={2} p={2}>
+      {/* <Box backgroundColor="yellow.500" py="1" borderTopRadius={"sm"}></Box> */}
+      <Flex
+        m={2}
+        p={2}
+        borderTop="2px"
+        borderTopRadius={"sm"}
+        borderColor={column.color}
+      >
         {/* Title */}
         <Text
-          color={"green.500"}
           textTransform={"uppercase"}
           fontWeight={800}
           fontSize={"sm"}
