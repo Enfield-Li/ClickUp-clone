@@ -49,13 +49,20 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(url: string, sortBy: SortBy) {
+  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
   const [state, setState] = useState<State>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   async function fetchData() {
     try {
       setLoading(true);
+
+      // Task data
       const response = await axiosInstance.get<TaskList>(url);
 
       const columnDataFromApi = columnOptions;
@@ -66,6 +73,12 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         columnDataFromApi[sortBy],
         sortBy
       );
+
+      // dueDate columns
+      const processedDueDateColumns = renameAndReorderDueDateColumns(
+        columnDataFromApi.dueDate
+      );
+      setDueDateColumns(processedDueDateColumns);
 
       setState({
         orderedTasks: processedData,
@@ -80,11 +93,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  return { state, loading, error, setState };
+  return { state, loading, error, setState, dueDateColumns };
 }
 
 export function useLocalTasks(sortBy: SortBy) {

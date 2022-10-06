@@ -76,7 +76,7 @@ export type Task = {
   dueDate?: number;
   priority?: number;
   description?: string;
-  // determine if the task is the first task in the column
+  // determine the task order
   previousItem: {
     statusId?: number;
     dueDateId?: number;

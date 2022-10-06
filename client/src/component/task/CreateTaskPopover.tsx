@@ -29,6 +29,7 @@ import {
   State,
   Task,
 } from "./Data";
+import { createTask } from "./TaskActions";
 import {
   collectAllTasks,
   updateNewTask,
@@ -222,7 +223,6 @@ async function submit(
   // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
-    id: 123,
     title,
     description,
     previousItem: {},
@@ -249,6 +249,8 @@ async function submit(
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
+  const taskData = await createTask(newTask);
+
   // Update state
   setState((prv) => {
     // Deep copy
@@ -258,7 +260,7 @@ async function submit(
     const taskArr = copiedTasks.orderedTasks.find(
       (task) => task.id === column.id
     );
-    taskArr?.taskList.push(newTask);
+    if (taskData) taskArr?.taskList.push(taskData);
 
     return copiedTasks;
   });

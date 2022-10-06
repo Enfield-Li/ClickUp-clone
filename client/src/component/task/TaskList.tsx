@@ -1,7 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect } from "react";
-import { useLocalTasks } from "../../hook/useFetch";
+import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
+import { API_ENDPOINT } from "../../utils/constant";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
 import {
@@ -12,6 +13,7 @@ import {
   State,
   TaskList,
 } from "./Data";
+import { updateTasks } from "./TaskActions";
 import {
   collectAllTasks,
   processLookUpDueDateId,
@@ -23,8 +25,11 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
-  // const { state, loading, error, setState } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
+  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
+    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+    sortBy
+  );
   console.log(state);
 
   // Sync up state with sortBy
@@ -84,14 +89,6 @@ export default function TaskListView({ sortBy }: Props) {
       </DragDropContext>
     </Box>
   );
-}
-
-function isDraggingToOtherColumn(
-  isDragging: boolean,
-  columnId: number,
-  draggingId: number | undefined
-) {
-  return isDragging && columnId !== draggingId;
 }
 
 function handleDragEnd(
@@ -280,5 +277,6 @@ function handleDragEnd(
     taskForUpdate.push(destinationTask);
   }
   taskForUpdate.push(sourceTask);
-  // updateTasks(taskForUpdate);
+
+  updateTasks(taskForUpdate);
 }

@@ -3,11 +3,16 @@ import { API_ENDPOINT } from "../../utils/constant";
 import { Task, TaskList } from "./Data";
 
 export async function createTask(task: Task) {
-  const res = await axiosInstance.post<Task>(API_ENDPOINT.TASK_ENDPOINT, task, {
-    withCredentials: true,
-  });
+  try {
+    const res = await axiosInstance.post<Task>(
+      API_ENDPOINT.TASK_ENDPOINT,
+      task
+    );
 
-  return res.data;
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function getAllTasks() {
@@ -29,7 +34,7 @@ export async function updateTasks(taskList: TaskList) {
       taskList
     );
 
-    console.log(response.data)
+    console.log(response.data);
   } catch (error) {
     console.log(error);
   }
