@@ -7,10 +7,12 @@ import AddColumn from "./AddColumn";
 import Column from "./Column";
 import {
   Columns,
+  DUE_DATE,
   LookUpDueDateId,
   lookUpPreviousTaskId,
   SortBy,
   State,
+  STATUS,
   TaskList,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
@@ -50,7 +52,7 @@ export default function TaskListView({ sortBy }: Props) {
 
   // Choose column to display
   let orderedColumns: Columns;
-  if (sortBy === "dueDate") {
+  if (sortBy === DUE_DATE) {
     orderedColumns = dueDateColumns;
   } else {
     orderedColumns = state.unorderedColumns[sortBy];
@@ -81,7 +83,7 @@ export default function TaskListView({ sortBy }: Props) {
               />
             </Box>
           ))}
-          {sortBy === "status" && <AddColumn />}
+          {sortBy === STATUS && <AddColumn />}
         </Flex>
       </DragDropContext>
     </Box>
@@ -104,16 +106,16 @@ function handleDragEnd(
   }
 
   const lookUpDueDateId: LookUpDueDateId = {};
-  if (sortBy === "dueDate") {
+  if (sortBy === DUE_DATE) {
     processLookUpDueDateId(state.orderedTasks, columns, lookUpDueDateId);
   }
 
   const sourceDroppableId =
-    sortBy === "dueDate"
+    sortBy === DUE_DATE
       ? lookUpDueDateId[Number(source.droppableId)]
       : Number(source.droppableId);
   const destinationDroppableId =
-    sortBy === "dueDate"
+    sortBy === DUE_DATE
       ? lookUpDueDateId[Number(destination.droppableId)]
       : Number(destination.droppableId);
 
@@ -239,7 +241,7 @@ function handleDragEnd(
   } else {
     // change task stage
     sourceTask[sortBy] =
-      sortBy === "dueDate"
+      sortBy === DUE_DATE
         ? Number(destination.droppableId)
         : destinationDroppableId;
 

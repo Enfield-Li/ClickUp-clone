@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { SortBy } from "./Data";
+import { SortBy, STATUS } from "./Data";
 import TaskListView from "./TaskList";
 import TaskNavigation from "./TaskNavigation";
 
 type Props = {};
 
 export default function TaskView({}: Props) {
-  const [sortBy, setSortBy] = useState<SortBy>("status");
+  const [sortBy, setSortBy] = useState<SortBy>(STATUS);
 
   return (
     <>

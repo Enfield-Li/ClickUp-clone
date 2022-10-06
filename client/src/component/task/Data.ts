@@ -69,6 +69,27 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
+type PreviousItem = {
+  statusId?: number;
+  dueDateId?: number;
+  priorityId?: number;
+};
+
+type EventType = "UPDATE" | "COMMENT";
+type Event = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  initiatorId: number;
+  initiatorName: string;
+  eventType: EventType;
+  updateTo: number;
+  updateFrom: number;
+  updateAction: UpdateAction;
+};
+
+type UpdateAction = keyof ColumnOptions;
+
 // Tasks
 export type Task = {
   id?: number;
@@ -77,16 +98,17 @@ export type Task = {
   dueDate?: number;
   priority?: number;
   description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  creatorId: number;
+  creatorName: string;
+  events: Event[];
   // determine the task order
-  previousItem: {
-    statusId?: number;
-    dueDateId?: number;
-    priorityId?: number;
-  };
+  previousItem: PreviousItem;
 };
 
 export type TaskList = Task[];
-export type ColumnType = { id: number; title: string; color: string };
+export type ColumnType = Column<string>;
 export type Columns = ColumnType[];
 export type InitialData = { tasks: TaskList };
 
@@ -98,6 +120,11 @@ export const initialData: TaskList = [
     priority: 2,
     dueDate: 1,
     previousItem: {},
+    events: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    creatorId: 1,
+    creatorName: "abc",
   },
   {
     id: 222,
@@ -106,6 +133,11 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 111, dueDateId: 111 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     id: 333,
@@ -114,6 +146,11 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     id: 444,
@@ -122,6 +159,11 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousItem: { statusId: 333, priorityId: 333 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     id: 555,
@@ -130,6 +172,11 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     id: 666,
@@ -138,6 +185,11 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousItem: { statusId: 555, priorityId: 777, dueDateId: 333 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     id: 777,
@@ -146,6 +198,11 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousItem: { statusId: 666, dueDateId: 666 },
+    events: [],
+    creatorId: 1,
+    creatorName: "abc",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 

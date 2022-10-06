@@ -39,7 +39,6 @@ export default function Column({
   return (
     <Box width={"280px"}>
       {/* Column header */}
-      {/* <Box backgroundColor="yellow.500" py="1" borderTopRadius={"sm"}></Box> */}
       <Flex
         m={2}
         p={2}

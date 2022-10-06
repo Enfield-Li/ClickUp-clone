@@ -4,11 +4,14 @@ import {
   Columns,
   DueDate,
   DueDateColumns,
+  DUE_DATE,
   LookUpDueDateId,
   lookUpPreviousTaskId,
   OrderedTasks,
   PreviousTaskValues,
+  PRIORITY,
   SortBy,
+  STATUS,
   Task,
   TaskList,
 } from "./Data";
@@ -238,8 +241,8 @@ export function collectPreviousTaskValues(
     const key = task[0];
     const value = task[1];
 
-    if (key === "dueDate" || key === "priority" || key === "status") {
-      taskListForUpdate[i] = { columnId: 0, updateSortBy: "status" };
+    if (key === DUE_DATE || key === PRIORITY || key === STATUS) {
+      taskListForUpdate[i] = { columnId: 0, updateSortBy: STATUS };
       taskListForUpdate[i].columnId = Number(value);
       taskListForUpdate[i].updateSortBy = key;
     }

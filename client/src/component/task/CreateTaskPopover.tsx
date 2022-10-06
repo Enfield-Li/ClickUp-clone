@@ -23,7 +23,9 @@ import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import {
   ColumnType,
   DueDateColumns,
+  DUE_DATE,
   lookUpIsLastItem,
+  PRIORITY,
   SetState,
   SortBy,
   State,
@@ -125,8 +127,8 @@ export const CreateTaskPopover = ({
                 </Field>
 
                 {/* Task priority */}
-                {sortBy !== "priority" && (
-                  <Field id="priority" name="priority" as="select">
+                {sortBy !== PRIORITY && (
+                  <Field id={PRIORITY} name={PRIORITY} as="select">
                     {({ field, form }: FieldAttributes<any>) => (
                       <FormControl my={3}>
                         <Stack spacing={3}>
@@ -146,8 +148,8 @@ export const CreateTaskPopover = ({
                 )}
 
                 {/* Task dueDate */}
-                {sortBy !== "dueDate" && (
-                  <Field id="dueDate" name="dueDate" as="select">
+                {sortBy !== DUE_DATE && (
+                  <Field id={DUE_DATE} name={DUE_DATE} as="select">
                     {({ field, form }: FieldAttributes<any>) => (
                       <FormControl my={3}>
                         {/* Pick dueDate */}
@@ -223,9 +225,12 @@ async function submit(
   // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
+    creatorId: 1,
+    creatorName: "creatorName",
     title,
     description,
     previousItem: {},
+    events: [],
   };
   const allTasks = collectAllTasks(state.orderedTasks);
 
