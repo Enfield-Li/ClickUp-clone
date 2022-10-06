@@ -14,7 +14,8 @@ export type Priority =
   | "HIGH"
   | "URGENT"
   | "NO PRIORITY"
-  | "DONE";
+  | "DONE"
+  | "FINISHED";
 
 export type DueDate =
   | "OVER DUE"
@@ -29,7 +30,8 @@ export type DueDate =
   | "DONE"
   | "NO DUE DATE"
   | "THURSDAY"
-  | "FRIDAY";
+  | "FRIDAY"
+  | "FINISHED";
 
 type Column<T> = { id: number; title: T; color: string };
 export type StatusColumns = Column<string>[];
@@ -54,6 +56,7 @@ export const columnOptions: ColumnOptions = {
     { id: 3, title: "HIGH", color: "yellow.400" },
     { id: 4, title: "NORMAL", color: "blue.200" },
     { id: 5, title: "LOW", color: "gray.400" },
+    { id: 0, title: "FINISHED", color: "null" },
   ],
   dueDate: [
     { id: 1, title: "NO DUE DATE", color: "gray.400" },
@@ -66,6 +69,7 @@ export const columnOptions: ColumnOptions = {
     { id: 8, title: "SATURDAY", color: "gray.400" },
     { id: 9, title: "SUNDAY", color: "gray.400" },
     { id: 10, title: "FUTURE", color: "gray.400" },
+    { id: 0, title: "FINISHED", color: "null" },
   ],
 };
 
@@ -76,19 +80,18 @@ type PreviousItem = {
 };
 
 type EventType = "UPDATE" | "COMMENT";
+type UpdateAction = keyof ColumnOptions;
 type Event = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
   initiatorId: number;
   initiatorName: string;
-  eventType: EventType;
   updateTo: number;
   updateFrom: number;
+  eventType: EventType;
   updateAction: UpdateAction;
 };
-
-type UpdateAction = keyof ColumnOptions;
 
 // Tasks
 export type Task = {
@@ -121,8 +124,6 @@ export const initialData: TaskList = [
     dueDate: 1,
     previousItem: {},
     events: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
     creatorId: 1,
     creatorName: "abc",
   },
@@ -136,8 +137,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 333,
@@ -149,8 +148,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 444,
@@ -162,8 +159,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 555,
@@ -175,8 +170,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 666,
@@ -188,8 +181,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
     id: 777,
@@ -201,8 +192,6 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
 ];
 

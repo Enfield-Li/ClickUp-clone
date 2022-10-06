@@ -10,6 +10,7 @@ import {
   DUE_DATE,
   LookUpDueDateId,
   lookUpPreviousTaskId,
+  SetState,
   SortBy,
   State,
   STATUS,
@@ -19,7 +20,7 @@ import { updateTasks } from "./TaskActions";
 import {
   collectAllTasks,
   processLookUpDueDateId,
-  processTaskListOnSortBy,
+  groupTaskListOnSortBy,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -37,8 +38,8 @@ export default function TaskListView({ sortBy }: Props) {
     if (state) {
       setState({
         ...state,
-        // Flat list by processTaskBasedOnSortBy()
-        orderedTasks: processTaskListOnSortBy(
+        // Group all tasks into ordered tasks based on sortBy
+        orderedTasks: groupTaskListOnSortBy(
           collectAllTasks(state.orderedTasks),
           state.unorderedColumns[sortBy],
           sortBy
@@ -62,27 +63,31 @@ export default function TaskListView({ sortBy }: Props) {
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, orderedColumns, sortBy)
+          handleDragEnd(result, state, setState, orderedColumns, sortBy)
         }
       >
         <Flex>
-          {orderedColumns.map((column, index) => (
-            <Box mx={2} key={column.id} borderRadius={4}>
-              <Column
-                state={state}
-                sortBy={sortBy}
-                setState={setState}
-                column={column}
-                dueDateColumns={dueDateColumns}
-                // Pass down list as per column.id
-                tasks={
-                  state.orderedTasks.find(
-                    (orderedTask) => orderedTask.id === column.id
-                  )?.taskList
-                }
-              />
-            </Box>
-          ))}
+          {orderedColumns.map(
+            (column, index) =>
+              // Finished task is managed in sortBy === status, and hide from user in other sortBy conditions
+              column.id !== 0 && (
+                <Box mx={2} key={column.id} borderRadius={4}>
+                  <Column
+                    state={state}
+                    sortBy={sortBy}
+                    setState={setState}
+                    column={column}
+                    dueDateColumns={dueDateColumns}
+                    // Pass down list as per column.id
+                    tasks={
+                      state.orderedTasks.find(
+                        (orderedTask) => orderedTask.id === column.id
+                      )?.taskList
+                    }
+                  />
+                </Box>
+              )
+          )}
           {sortBy === STATUS && <AddColumn />}
         </Flex>
       </DragDropContext>
@@ -93,6 +98,7 @@ export default function TaskListView({ sortBy }: Props) {
 function handleDragEnd(
   result: DropResult,
   state: State,
+  setState: SetState,
   columns: Columns,
   sortBy: SortBy
 ) {
@@ -128,11 +134,11 @@ function handleDragEnd(
 
   const taskForUpdate: TaskList = [];
 
-  // const tasks = [...state.orderedTasks]; // <- why will this update state with splice() IDK
-  const tasks = state.orderedTasks; // This works as well
+  const orderedTasks = [...state.orderedTasks]; // <- why will this update state with splice() IDK
+  // const tasks = state.orderedTasks; // This works as well
 
-  const sourceTasksArr = tasks[sourceTaskColumnIndex];
-  const destinationTasksArr = tasks[destinationTaskColumnIndex];
+  const sourceTasksArr = orderedTasks[sourceTaskColumnIndex];
+  const destinationTasksArr = orderedTasks[destinationTaskColumnIndex];
 
   const sourceTasksArrLength = sourceTasksArr.taskList.length;
   const lastTaskInSourceTasksArr =
@@ -161,7 +167,7 @@ function handleDragEnd(
    */
   const isDropInTheSameColumn = source.droppableId === destination.droppableId;
   if (isDropInTheSameColumn) {
-    const movingUpOneRow =
+    const moveUpOneRow =
       sourceTaskBefore === destinationTask &&
       destinationTaskAfter === sourceTask;
     const moveDownOneRow =
@@ -169,7 +175,7 @@ function handleDragEnd(
       destinationTaskBefore === sourceTask;
 
     // move up one row
-    if (movingUpOneRow) {
+    if (moveUpOneRow) {
       sourceTask.previousItem[lookUpPreviousTaskId[sortBy]] =
         destinationTaskBefore ? destinationTaskBefore.id : undefined;
       destinationTask.previousItem[lookUpPreviousTaskId[sortBy]] =
@@ -272,10 +278,43 @@ function handleDragEnd(
     destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
   }
 
+  // Task marked as done
+  if (sourceTask.status === 3) {
+    // Update other column's
+    orderedTasks.forEach((tasks) =>
+      tasks.taskList.forEach((task) => {
+        const sourceTaskPreviousPriorityTask =
+          task.previousItem.priorityId === sourceTask.id;
+
+        if (sourceTaskPreviousPriorityTask) {
+          task.previousItem.priorityId = sourceTask.previousItem.priorityId
+            ? sourceTask.previousItem.priorityId
+            : undefined;
+        }
+
+        const sourceTaskPreviousDueDateTask =
+          task.previousItem.dueDateId === sourceTask.id;
+
+        if (sourceTaskPreviousDueDateTask) {
+          task.previousItem.dueDateId = sourceTask.previousItem.dueDateId
+            ? sourceTask.previousItem.dueDateId
+            : undefined;
+        }
+      })
+    );
+
+    sourceTask.priority = 0;
+    sourceTask.dueDate = 0;
+    sourceTask.previousItem.dueDateId = 0;
+    sourceTask.previousItem.priorityId = 0;
+  }
+
+  setState({ ...state, orderedTasks: orderedTasks });
+
   if (destinationTask) {
     taskForUpdate.push(destinationTask);
   }
-  taskForUpdate.push(sourceTask);
 
-  updateTasks(taskForUpdate);
+  taskForUpdate.push(sourceTask);
+  // updateTasks(taskForUpdate);
 }

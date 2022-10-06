@@ -17,7 +17,8 @@ import {
 } from "./Data";
 
 /* 
-  Convert unordered Task[] list to OrderedTasks group by for example task.priorityId:
+  Group all tasks into ordered tasks based on sortBy 
+  by converting unordered Task[] list and group by for example task.priorityId:
   Find all sorting occurrences,
     and, based on the id, generate respective nested list for that id, 
     for example:
@@ -74,7 +75,7 @@ import {
           }
         ]
 */
-export function processTaskListOnSortBy(
+export function groupTaskListOnSortBy(
   tasks: TaskList,
   columns: Columns,
   sortBy: SortBy

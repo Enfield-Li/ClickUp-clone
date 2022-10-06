@@ -10,7 +10,7 @@ import {
   TaskList,
 } from "../component/task/Data";
 import {
-  processTaskListOnSortBy,
+  groupTaskListOnSortBy,
   renameAndReorderDueDateColumns,
 } from "../component/task/TaskDataProcessing";
 import useGlobalContext, {
@@ -68,7 +68,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
       const columnDataFromApi = columnOptions;
       const tasksListData = response.data;
 
-      const processedData = processTaskListOnSortBy(
+      const processedData = groupTaskListOnSortBy(
         tasksListData,
         columnDataFromApi[sortBy],
         sortBy
@@ -108,7 +108,7 @@ export function useLocalTasks(sortBy: SortBy) {
       columnOptions.dueDate
     );
 
-    const processedTaskList = processTaskListOnSortBy(
+    const processedTaskList = groupTaskListOnSortBy(
       dataFromAPI,
       columnDataFromApi[sortBy],
       sortBy
