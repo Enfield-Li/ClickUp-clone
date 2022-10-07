@@ -57,7 +57,7 @@ class Event {
 
   @NotNull
   @Column(updatable = false, insertable = false)
-  private Long task_id;
+  private Integer task_id;
 
   @JsonIgnore
   @ManyToOne(fetch = LAZY)

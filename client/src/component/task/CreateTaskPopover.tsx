@@ -19,6 +19,7 @@ import {
 import { Field, FieldAttributes, Form, Formik, FormikHelpers } from "formik";
 import { useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
+import useAuthContext from "../../context/auth/useAuthContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import {
   ColumnType,
@@ -32,12 +33,8 @@ import {
   Task,
 } from "./Data";
 import { createTask } from "./TaskActions";
-import {
-  collectAllTasks,
-  updateTask,
-  collectPreviousTaskValues,
-  updateTaskInfoInOtherSortBy,
-} from "./TaskDataProcessing";
+import { updateTaskInfoInOtherSortBy } from "./TaskDataProcessing";
+import { User } from "../../context/auth/AuthContextTypes";
 
 export type NewTask = {
   title: string;
@@ -62,8 +59,9 @@ export const CreateTaskPopover = ({
   sortBy,
   dueDateColumns,
 }: Props) => {
-  const { onOpen, onClose, isOpen } = useDisclosure();
   const focusRef = useRef(null);
+  const { authState } = useAuthContext();
+  const { onOpen, onClose, isOpen } = useDisclosure();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
@@ -98,7 +96,15 @@ export const CreateTaskPopover = ({
               dueDate: "1",
             }}
             onSubmit={(values, helpers) =>
-              submit(values, helpers, state, column, sortBy, setState)
+              submit(
+                values,
+                helpers,
+                state,
+                column,
+                sortBy,
+                setState,
+                authState.user
+              )
             }
           >
             {(props) => (
@@ -221,14 +227,14 @@ async function submit(
   state: State,
   column: ColumnType,
   sortBy: SortBy,
-  setState: SetState
+  setState: SetState,
+  user?: User
 ) {
   // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
-    id: 1234,
-    creatorId: 1,
-    creatorName: "creatorName",
+    creatorId: user!.id,
+    creatorName: user!.username,
     title,
     description,
     previousItem: {},
@@ -251,20 +257,20 @@ async function submit(
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
-  // const taskData = await createTask(newTask);
+  const taskData = await createTask(newTask);
 
   // Update state
-  setState((prv) => {
+  setState((previousState) => {
     // Deep copy
-    const copiedTasks = JSON.parse(JSON.stringify(prv)) as State;
+    const copiedState = JSON.parse(JSON.stringify(previousState)) as State;
 
     // Push newTask to current column array
-    const taskArr = copiedTasks.orderedTasks.find(
+    const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    if (newTask) taskArr?.taskList.push(newTask);
+    if (taskData) taskArr?.taskList.push(taskData);
 
-    return copiedTasks;
+    return copiedState;
   });
 
   formikHelpers.resetForm();

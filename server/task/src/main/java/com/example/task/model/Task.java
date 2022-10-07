@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -63,6 +65,7 @@ public class Task {
   @OneToOne(cascade = { PERSIST, DETACH, MERGE })
   private PreviousTask previousItem;
 
+  @JsonIgnore
   @OneToMany(
     mappedBy = "task",
     fetch = LAZY,

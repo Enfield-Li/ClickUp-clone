@@ -16,14 +16,13 @@ import {
   State,
   STATUS,
   TaskList,
+  OrderedTasks,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
 import {
   collectAllTasks,
   processLookUpDueDateId,
   groupTaskListOnSortBy,
-  collectPreviousTaskValues,
-  updateTask,
   updateTaskInfoInOtherSortBy,
 } from "./TaskDataProcessing";
 
@@ -32,8 +31,11 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
-  // const { state, loading, error, setState, dueDateColumns } = useFetchTasks(API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS, sortBy);
+  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
+    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+    sortBy
+  );
   console.log(state);
 
   // Sync up state with sortBy
@@ -138,8 +140,9 @@ function handleDragEnd(
 
   const taskForUpdate: TaskList = [];
 
-  const orderedTasks = [...state.orderedTasks]; // <- why will this update state with splice() IDK
-  // const tasks = state.orderedTasks; // This works as well
+  const orderedTasks = JSON.parse(
+    JSON.stringify(state.orderedTasks)
+  ) as OrderedTasks;
 
   const sourceTasksArr = orderedTasks[sourceTaskColumnIndex];
   const destinationTasksArr = orderedTasks[destinationTaskColumnIndex];
@@ -284,30 +287,33 @@ function handleDragEnd(
 
   // Move task from unfinished to finished, and erase other sortBy's info
   const moveFromUnfinishedToFinished =
-    sortBy === "status" &&
+    sortBy === STATUS &&
     destination.droppableId === "3" &&
     source.droppableId !== "3";
 
   if (moveFromUnfinishedToFinished) {
-    // Remove task from other sortBy options
+    // Remove task from other sortBy options, by updating the sourceTaskAfter
     orderedTasks.forEach((tasks) =>
       tasks.taskList.forEach((task) => {
-        const sourceTaskPreviousPriorityTask =
+        const sourceTaskAfterInPriority =
           task.previousItem.priorityId === sourceTask.id;
 
-        if (sourceTaskPreviousPriorityTask) {
+        if (sourceTaskAfterInPriority) {
           task.previousItem.priorityId = sourceTask.previousItem.priorityId;
+          taskForUpdate.push(task);
         }
 
-        const sourceTaskPreviousDueDateTask =
+        const sourceTaskAfterInDueDate =
           task.previousItem.dueDateId === sourceTask.id;
 
-        if (sourceTaskPreviousDueDateTask) {
+        if (sourceTaskAfterInDueDate) {
           task.previousItem.dueDateId = sourceTask.previousItem.dueDateId;
+          taskForUpdate.push(task);
         }
       })
     );
 
+    // Update sourceTask
     sourceTask.priority = 0;
     sourceTask.dueDate = 0;
     sourceTask.previousItem.dueDateId = 0;
@@ -316,7 +322,7 @@ function handleDragEnd(
 
   // Move finished task to unfinished, and update other sortBy's info
   const moveFromFinishedToUnfinished =
-    sortBy === "status" &&
+    sortBy === STATUS &&
     destination.droppableId !== "3" &&
     source.droppableId === "3";
 
@@ -327,10 +333,7 @@ function handleDragEnd(
 
   setState({ ...state, orderedTasks: orderedTasks });
 
-  if (destinationTask) {
-    taskForUpdate.push(destinationTask);
-  }
-
+  if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
-  // updateTasks(taskForUpdate);
+  updateTasks(taskForUpdate);
 }
