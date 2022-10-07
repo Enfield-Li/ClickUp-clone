@@ -221,5 +221,9 @@ export type LookUpDueDateId = {
 };
 
 // Task creation types
-export type PreviousTaskValue = { updateSortBy: SortBy; columnId: number };
-export type PreviousTaskValues = PreviousTaskValue[];
+export type TargetColumn = {
+  status?: string | undefined;
+  priority?: string | undefined;
+  dueDate?: string | undefined;
+};
+export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];

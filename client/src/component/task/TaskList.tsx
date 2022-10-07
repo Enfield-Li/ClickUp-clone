@@ -10,6 +10,7 @@ import {
   DUE_DATE,
   LookUpDueDateId,
   lookUpPreviousTaskId,
+  TargetColumn,
   SetState,
   SortBy,
   State,
@@ -21,6 +22,9 @@ import {
   collectAllTasks,
   processLookUpDueDateId,
   groupTaskListOnSortBy,
+  collectPreviousTaskValues,
+  updateTask,
+  updateTaskInfoInOtherSortBy,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -278,27 +282,28 @@ function handleDragEnd(
     destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
   }
 
-  // Task marked as done
-  if (sourceTask.status === 3) {
-    // Update other column's
+  // Move task from unfinished to finished, and erase other sortBy's info
+  const moveFromUnfinishedToFinished =
+    sortBy === "status" &&
+    destination.droppableId === "3" &&
+    source.droppableId !== "3";
+
+  if (moveFromUnfinishedToFinished) {
+    // Remove task from other sortBy options
     orderedTasks.forEach((tasks) =>
       tasks.taskList.forEach((task) => {
         const sourceTaskPreviousPriorityTask =
           task.previousItem.priorityId === sourceTask.id;
 
         if (sourceTaskPreviousPriorityTask) {
-          task.previousItem.priorityId = sourceTask.previousItem.priorityId
-            ? sourceTask.previousItem.priorityId
-            : undefined;
+          task.previousItem.priorityId = sourceTask.previousItem.priorityId;
         }
 
         const sourceTaskPreviousDueDateTask =
           task.previousItem.dueDateId === sourceTask.id;
 
         if (sourceTaskPreviousDueDateTask) {
-          task.previousItem.dueDateId = sourceTask.previousItem.dueDateId
-            ? sourceTask.previousItem.dueDateId
-            : undefined;
+          task.previousItem.dueDateId = sourceTask.previousItem.dueDateId;
         }
       })
     );
@@ -307,6 +312,17 @@ function handleDragEnd(
     sourceTask.dueDate = 0;
     sourceTask.previousItem.dueDateId = 0;
     sourceTask.previousItem.priorityId = 0;
+  }
+
+  // Move finished task to unfinished, and update other sortBy's info
+  const moveFromFinishedToUnfinished =
+    sortBy === "status" &&
+    destination.droppableId !== "3" &&
+    source.droppableId === "3";
+
+  if (moveFromFinishedToUnfinished) {
+    const previousTask: TargetColumn = { dueDate: "1", priority: "1" };
+    updateTaskInfoInOtherSortBy(state, previousTask, sourceTask);
   }
 
   setState({ ...state, orderedTasks: orderedTasks });

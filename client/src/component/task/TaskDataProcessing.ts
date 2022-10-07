@@ -8,9 +8,11 @@ import {
   LookUpDueDateId,
   lookUpPreviousTaskId,
   OrderedTasks,
-  PreviousTaskValues,
+  TargetColumn,
+  TargetTasksInColumn,
   PRIORITY,
   SortBy,
+  State,
   STATUS,
   Task,
   TaskList,
@@ -111,6 +113,17 @@ export function groupTaskListOnSortBy(
     }
   }
 
+  // Collect all the finished tasks
+  for (let i = 0; i < tasks.length; i++) {
+    const currentTask = tasks[i];
+
+    if (currentTask.status === 3) {
+      const id = nestedTasks.length;
+      nestedTasks[id] = { id, taskList: [] };
+      nestedTasks[id].taskList.push(currentTask);
+    }
+  }
+
   return nestedTasks;
 }
 
@@ -194,6 +207,20 @@ export function processLookUpDueDateId(
   return lookUpDueDateId;
 }
 
+// Push task to the other sortBy id === 1 column
+export function updateTaskInfoInOtherSortBy(
+  state: State,
+  previousTask: TargetColumn,
+  taskForUpdate: Task
+) {
+  const allTasks = collectAllTasks(state.orderedTasks);
+
+  // Updates for newTask's previousItem for other sortBy
+  const previousTaskValues = collectPreviousTaskValues(previousTask);
+
+  updateTask(previousTaskValues, allTasks, taskForUpdate);
+}
+
 // Collect all tasks from OrderedTasks to Task[]
 export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   let taskList: TaskList = [];
@@ -234,11 +261,12 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
     ]
 */
 export function collectPreviousTaskValues(
-  newTask: NewTask
-): PreviousTaskValues {
-  const taskListForUpdate: PreviousTaskValues = [];
-  for (let i = 0; i < Object.entries(newTask).length; i++) {
-    const task = Object.entries(newTask)[i];
+  previousTask: TargetColumn
+): TargetTasksInColumn {
+  const taskListForUpdate: TargetTasksInColumn = [];
+
+  for (let i = 0; i < Object.entries(previousTask).length; i++) {
+    const task = Object.entries(previousTask)[i];
     const key = task[0];
     const value = task[1];
 
@@ -251,6 +279,25 @@ export function collectPreviousTaskValues(
 
   // Clean up empty slots
   return taskListForUpdate.filter((taskList) => taskList);
+}
+
+export function updateTask(
+  previousTaskValues: TargetTasksInColumn,
+  allTasks: TaskList,
+  taskForUpdate: Task
+) {
+  for (let i = 0; i < previousTaskValues.length; i++) {
+    const previousTaskValue = previousTaskValues[i];
+
+    const updateSortBy = previousTaskValue.updateSortBy;
+    const updateSortById = previousTaskValue.columnId;
+
+    const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
+
+    // Update new task
+    taskForUpdate[updateSortBy] = updateSortById;
+    taskForUpdate.previousItem[`${updateSortBy}Id`] = idResult;
+  }
 }
 
 // Given sortBy and columnId, find the last task id in all the tasks in the state
@@ -293,23 +340,4 @@ export function findLastTaskId(
     orderedTaskListBasedOnSortBy[orderedTaskListBasedOnSortBy.length - 1];
 
   if (lastTask) return lastTask.id;
-}
-
-export function updateNewTask(
-  previousTaskValues: PreviousTaskValues,
-  allTasks: TaskList,
-  newTask: Task
-) {
-  for (let i = 0; i < previousTaskValues.length; i++) {
-    const taskForUpdate = previousTaskValues[i];
-
-    const updateSortBy = taskForUpdate.updateSortBy;
-    const updateSortById = taskForUpdate.columnId;
-
-    const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
-
-    // Update new task
-    newTask[updateSortBy] = updateSortById;
-    newTask.previousItem[`${updateSortBy}Id`] = idResult;
-  }
 }

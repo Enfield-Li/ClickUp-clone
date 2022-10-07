@@ -34,8 +34,9 @@ import {
 import { createTask } from "./TaskActions";
 import {
   collectAllTasks,
-  updateNewTask,
+  updateTask,
   collectPreviousTaskValues,
+  updateTaskInfoInOtherSortBy,
 } from "./TaskDataProcessing";
 
 export type NewTask = {
@@ -225,6 +226,7 @@ async function submit(
   // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
+    id: 1234,
     creatorId: 1,
     creatorName: "creatorName",
     title,
@@ -232,12 +234,7 @@ async function submit(
     previousItem: {},
     events: [],
   };
-  const allTasks = collectAllTasks(state.orderedTasks);
-
-  // Updates for newTask's previousItem for other sortBy
-  const previousTaskValues = collectPreviousTaskValues(values);
-
-  updateNewTask(previousTaskValues, allTasks, newTask);
+  updateTaskInfoInOtherSortBy(state, values, newTask);
 
   // Updates for newTask's previousItem for current sortBy
   const currentOrderedTasks = state.orderedTasks.find(
@@ -254,7 +251,7 @@ async function submit(
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
-  const taskData = await createTask(newTask);
+  // const taskData = await createTask(newTask);
 
   // Update state
   setState((prv) => {
@@ -265,7 +262,7 @@ async function submit(
     const taskArr = copiedTasks.orderedTasks.find(
       (task) => task.id === column.id
     );
-    if (taskData) taskArr?.taskList.push(taskData);
+    if (newTask) taskArr?.taskList.push(newTask);
 
     return copiedTasks;
   });
