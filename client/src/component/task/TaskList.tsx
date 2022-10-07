@@ -31,11 +31,11 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
-  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
-    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
-    sortBy
-  );
+  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  // const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
+  //   API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+  //   sortBy
+  // );
   console.log(state);
 
   // Sync up state with sortBy
@@ -286,6 +286,8 @@ function handleDragEnd(
   }
 
   // Move task from unfinished to finished, and erase other sortBy's info
+  const statusColumnLen = String(state.unorderedColumns.status.length)
+  
   const moveFromUnfinishedToFinished =
     sortBy === STATUS &&
     destination.droppableId === "3" &&
@@ -323,7 +325,7 @@ function handleDragEnd(
   // Move finished task to unfinished, and update other sortBy's info
   const moveFromFinishedToUnfinished =
     sortBy === STATUS &&
-    destination.droppableId !== "3" &&
+    destination.droppableId !== String(state.unorderedColumns.status.length) &&
     source.droppableId === "3";
 
   if (moveFromFinishedToUnfinished) {
@@ -335,5 +337,5 @@ function handleDragEnd(
 
   if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
-  updateTasks(taskForUpdate);
+  // updateTasks(taskForUpdate);
 }

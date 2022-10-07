@@ -233,6 +233,7 @@ async function submit(
   // Prepare newTask
   const { title, description } = values;
   const newTask: Task = {
+    id: 123,
     creatorId: user!.id,
     creatorName: user!.username,
     title,
@@ -257,7 +258,7 @@ async function submit(
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
-  const taskData = await createTask(newTask);
+  // const taskData = await createTask(newTask);
 
   // Update state
   setState((previousState) => {
@@ -268,7 +269,8 @@ async function submit(
     const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    if (taskData) taskArr?.taskList.push(taskData);
+    // if (taskData) taskArr?.taskList.push(taskData);
+    taskArr?.taskList.push(newTask)
 
     return copiedState;
   });

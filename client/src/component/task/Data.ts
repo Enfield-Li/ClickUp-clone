@@ -34,7 +34,13 @@ export type DueDate =
   | "FINISHED";
 
 type Column<T> = { id: number; title: T; color: string };
-export type StatusColumns = Column<string>[];
+export type StatusColumn = {
+  id: number;
+  title: string;
+  color: string;
+  previousColumnId?: number;
+};
+export type StatusColumns = StatusColumn[];
 export type PriorityColumns = Column<Priority>[];
 export type DueDateColumns = Column<DueDate>[];
 
@@ -47,8 +53,8 @@ export type ColumnOptions = {
 export const columnOptions: ColumnOptions = {
   status: [
     { id: 1, title: "TO DO", color: "gray.400" },
-    { id: 2, title: "IN PROGRESS", color: "purple.400" },
-    { id: 3, title: "DONE", color: "green.400" },
+    { id: 2, title: "IN PROGRESS", color: "purple.400", previousColumnId: 1 },
+    { id: 3, title: "DONE", color: "green.400", previousColumnId: 2 },
   ],
   priority: [
     { id: 1, title: "NO PRIORITY", color: "gray.400" },
