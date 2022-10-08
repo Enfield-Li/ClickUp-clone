@@ -30,14 +30,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .authorizeRequests()
       .antMatchers("/**")
       .permitAll()
-      .and()
-      .sessionManagement()
-      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
-      .addFilterBefore( // Verify JWT on every request
-        new AccessTokenFilter(jwtUtilities),
-        UsernamePasswordAuthenticationFilter.class
-      );
+      // .and()
+      // .sessionManagement()
+      // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      // .and()
+      // .addFilterBefore( // Verify JWT on every request
+      //   new AccessTokenFilter(jwtUtilities),
+      //   UsernamePasswordAuthenticationFilter.class
+      // )
+      ;
 
     // Disable anonymousUser
     http.authorizeRequests().anyRequest().authenticated();

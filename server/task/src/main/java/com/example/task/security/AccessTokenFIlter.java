@@ -1,7 +1,8 @@
 package com.example.task.security;
 
-import static com.example.clients.UrlConstants.*;
+import static com.example.clients.UrlConstants.AUTHORIZATION;
 
+import com.example.clients.jwt.InvalidTokenException;
 import com.example.clients.jwt.JwtUtilities;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -10,13 +11,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.aspectj.apache.bcel.generic.ClassGen;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
+@Log4j2
 public class AccessTokenFilter extends GenericFilterBean {
 
   JwtUtilities jwtUtilities;
@@ -32,15 +32,15 @@ public class AccessTokenFilter extends GenericFilterBean {
     FilterChain filterChain
   )
     throws IOException, ServletException {
-    HttpServletRequest req = (HttpServletRequest) request;
+    var req = (HttpServletRequest) request;
 
-    String accessToken = req.getHeader(AUTHORIZATION);
+    var accessToken = req.getHeader(AUTHORIZATION);
 
     try {
-      Integer userId = jwtUtilities.getUserIdFromAccessToken(accessToken);
+      var userId = jwtUtilities.getUserIdFromAccessToken(accessToken);
 
       if (userId != null) {
-        UsernamePasswordAuthenticationToken authUser = new UsernamePasswordAuthenticationToken(
+        var authUser = new UsernamePasswordAuthenticationToken(
           userId,
           null,
           null
@@ -49,7 +49,8 @@ public class AccessTokenFilter extends GenericFilterBean {
         SecurityContextHolder.getContext().setAuthentication(authUser);
       }
       filterChain.doFilter(request, response);
-    } catch (Exception e) {
+    } catch (InvalidTokenException e) {
+      log.warn("User not authorized" + e);
       var httpResponse = (HttpServletResponse) response;
       httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
     }

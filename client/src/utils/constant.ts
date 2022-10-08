@@ -6,7 +6,7 @@ const LOGOUT = "/logout";
 const REGISTER = "/register";
 const REFRESH_TOKEN = "/refresh_token";
 
-export const AUTH_ENDPOINT = "http://localhost:8083";
+export const AUTH_ENDPOINT = "http://localhost:8084";
 const AUTH_API_VERSION = "/authorization/v1/user";
 
 const TASK_API_VERSION = "/api/v1/task";

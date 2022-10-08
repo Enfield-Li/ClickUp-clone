@@ -1,9 +1,14 @@
 package com.example.task.model;
 
-import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,10 +22,10 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Entity
@@ -58,6 +63,23 @@ public class Task {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
+  @NotNull
+  @ToStringExclude
+  @OneToMany(
+    mappedBy = "task_watcher",
+    fetch = EAGER,
+    cascade = { PERSIST, DETACH, MERGE }
+  )
+  private Set<Participant> watchers = new HashSet<>();
+
+  @ToStringExclude
+  @OneToMany(
+    mappedBy = "task_assignee",
+    fetch = EAGER,
+    cascade = { PERSIST, DETACH, MERGE }
+  )
+  private Set<Participant> assignees = new HashSet<>();
+
   @Column(updatable = false, insertable = false)
   private Integer previous_item_id;
 
@@ -66,10 +88,21 @@ public class Task {
   private PreviousTask previousItem;
 
   @JsonIgnore
+  @ToStringExclude
   @OneToMany(
     mappedBy = "task",
     fetch = LAZY,
     cascade = { PERSIST, DETACH, MERGE }
   )
-  private Set<Event> events;
+  private Set<Event> events = new HashSet<>();
+
+  public void addParticipant(Participant participant) {
+    watchers.add(participant);
+    participant.setTask_watcher(this);
+  }
+
+  public void removeParticipant(Participant participant) {
+    watchers.remove(participant);
+    participant.setTask_watcher(null);
+  }
 }

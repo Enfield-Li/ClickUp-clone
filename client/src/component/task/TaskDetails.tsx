@@ -18,6 +18,13 @@ import {
   EditableInput,
   EditablePreview,
   EditableTextarea,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
 } from "@chakra-ui/react";
 import { Task } from "./Data";
 
@@ -70,9 +77,35 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
             {/* Left side */}
             <Box flexBasis={"50%"}>
               <Flex justifyContent={"space-evenly"} my={3}>
-                <Box>Task status: {task.status}</Box>
-                <Box>Task priority: {task.priority}</Box>
-                <Box>Task dueDate: {task.dueDate}</Box>
+                <Center>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button>Status</Button>
+                    </PopoverTrigger>
+
+                    <Center fontSize={"30px"}>
+                      <i className="bi bi-check-square"></i>
+                    </Center>
+
+                    <PopoverContent width="200px">
+                      {/* <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Search</PopoverHeader> */}
+                      <PopoverBody>
+                        Are you sure you want to have that milkshake?
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+                </Center>
+
+                <Center
+                  border="1px solid"
+                  borderRadius={"50%"}
+                  width="40px"
+                  height="40px"
+                >
+                  <i className="bi bi-flag"></i>
+                </Center>
               </Flex>
 
               {/* Desc */}
@@ -114,7 +147,7 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
             <Box flexBasis={"50%"}>
               <Flex justifyContent={"space-evenly"} my={3}>
                 <Box>Stats 1</Box>
-                <Box>Stats 2</Box>
+                <Box>Task dueDate: {task.dueDate}</Box>
               </Flex>
               <Box>Events</Box>
             </Box>

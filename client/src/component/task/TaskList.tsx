@@ -1,6 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useEffect } from "react";
+import { User } from "../../context/auth/AuthContextTypes";
+import useAuthContext from "../../context/auth/useAuthContext";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import AddColumn from "./AddColumn";
@@ -17,6 +19,7 @@ import {
   STATUS,
   TaskList,
   OrderedTasks,
+  UPDATE,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
 import {
@@ -31,11 +34,12 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
-  // const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
-  //   API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
-  //   sortBy
-  // );
+  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  const { authState } = useAuthContext();
+  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
+    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+    sortBy
+  );
   console.log(state);
 
   // Sync up state with sortBy
@@ -69,7 +73,14 @@ export default function TaskListView({ sortBy }: Props) {
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(result, state, setState, orderedColumns, sortBy)
+          handleDragEnd(
+            result,
+            state,
+            setState,
+            orderedColumns,
+            sortBy,
+            authState.user
+          )
         }
       >
         <Flex>
@@ -106,7 +117,8 @@ function handleDragEnd(
   state: State,
   setState: SetState,
   columns: Columns,
-  sortBy: SortBy
+  sortBy: SortBy,
+  user?: User
 ) {
   const { destination, source } = result;
   if (!destination) return;
@@ -146,10 +158,6 @@ function handleDragEnd(
 
   const sourceTasksArr = orderedTasks[sourceTaskColumnIndex];
   const destinationTasksArr = orderedTasks[destinationTaskColumnIndex];
-
-  const sourceTasksArrLength = sourceTasksArr.taskList.length;
-  const lastTaskInSourceTasksArr =
-    sourceTasksArr.taskList[sourceTasksArrLength - 1];
 
   const destinationTasksArrLength = destinationTasksArr.taskList.length;
   const lastTaskInDestinationTasksArr =
@@ -285,9 +293,9 @@ function handleDragEnd(
     destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
   }
 
-  // Move task from unfinished to finished, and erase other sortBy's info
-  const statusColumnLen = String(state.unorderedColumns.status.length)
-  
+  // Move task from unfinished to finished
+  const statusColumnLen = String(state.unorderedColumns.status.length);
+
   const moveFromUnfinishedToFinished =
     sortBy === STATUS &&
     destination.droppableId === "3" &&
@@ -315,7 +323,7 @@ function handleDragEnd(
       })
     );
 
-    // Update sourceTask
+    // Update sourceTask by cleaning up other sortBy's info
     sourceTask.priority = 0;
     sourceTask.dueDate = 0;
     sourceTask.previousItem.dueDateId = 0;
@@ -335,7 +343,22 @@ function handleDragEnd(
 
   setState({ ...state, orderedTasks: orderedTasks });
 
+  const userId = user!.id;
+  const username = user!.username;
+
+  if (!sourceTask.events) sourceTask.events = [];
+  sourceTask.events.push({
+    initiatorId: userId,
+    initiatorName: username,
+    eventType: UPDATE,
+    updateAction: sortBy,
+    updateFrom: sourceDroppableId,
+    updateTo: destinationDroppableId,
+    participants: [{ userId, username }],
+  });
+
   if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
-  // updateTasks(taskForUpdate);
+  console.log(taskForUpdate);
+  updateTasks(taskForUpdate);
 }

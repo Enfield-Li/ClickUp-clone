@@ -85,18 +85,28 @@ type PreviousItem = {
   priorityId?: number;
 };
 
-type EventType = "UPDATE" | "COMMENT";
+export const UPDATE = "UPDATE";
+export const COMMENT = "COMMENT";
+type EventType = typeof UPDATE | typeof COMMENT;
+
 type UpdateAction = keyof ColumnOptions;
+
+type Participant = {
+  userId: number;
+  username: string;
+};
 type Event = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   initiatorId: number;
   initiatorName: string;
-  updateTo: number;
-  updateFrom: number;
-  eventType: EventType;
-  updateAction: UpdateAction;
+  updateTo?: number;
+  updateFrom?: number;
+  eventType?: EventType;
+  updateAction?: UpdateAction;
+  commentContent?: string;
+  participants: Participant[];
 };
 
 // Tasks
@@ -112,6 +122,8 @@ export type Task = {
   creatorId: number;
   creatorName: string;
   events: Event[];
+  watchers: Participant[];
+  assignees: Participant[];
   // determine the task order
   previousItem: PreviousItem;
 };
@@ -132,6 +144,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 222,
@@ -143,6 +157,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 333,
@@ -154,6 +170,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 444,
@@ -165,6 +183,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 555,
@@ -176,6 +196,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 666,
@@ -187,6 +209,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
   {
     id: 777,
@@ -198,6 +222,8 @@ export const initialData: TaskList = [
     events: [],
     creatorId: 1,
     creatorName: "abc",
+    watchers: [],
+    assignees: [],
   },
 ];
 

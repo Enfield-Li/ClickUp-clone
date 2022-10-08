@@ -232,14 +232,18 @@ async function submit(
 ) {
   // Prepare newTask
   const { title, description } = values;
+  const userId = user!.id;
+  const username = user!.username;
+
   const newTask: Task = {
-    id: 123,
-    creatorId: user!.id,
-    creatorName: user!.username,
+    creatorId: userId,
+    creatorName: username,
     title,
     description,
     previousItem: {},
     events: [],
+    watchers: [{ userId, username }],
+    assignees: [],
   };
   updateTaskInfoInOtherSortBy(state, values, newTask);
 
@@ -258,7 +262,7 @@ async function submit(
   newTask[sortBy] = column.id;
   newTask.previousItem[`${sortBy}Id`] = previousTaskId;
 
-  // const taskData = await createTask(newTask);
+  const newTaskData = await createTask(newTask);
 
   // Update state
   setState((previousState) => {
@@ -269,8 +273,8 @@ async function submit(
     const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    // if (taskData) taskArr?.taskList.push(taskData);
-    taskArr?.taskList.push(newTask)
+    if (newTaskData) taskArr?.taskList.push(newTaskData);
+    // taskArr?.taskList.push(newTask);
 
     return copiedState;
   });

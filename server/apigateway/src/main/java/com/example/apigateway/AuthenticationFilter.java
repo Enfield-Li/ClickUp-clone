@@ -50,6 +50,7 @@ public class AuthenticationFilter implements GatewayFilter {
     ServerWebExchange exchange,
     HttpStatus httpStatus
   ) {
+    log.warn("User not authorized");
     ServerHttpResponse response = exchange.getResponse();
     response.setStatusCode(httpStatus);
     return response.setComplete();
