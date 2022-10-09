@@ -6,10 +6,16 @@ import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
+import com.example.task.dto.EventDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,15 +26,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
@@ -64,7 +70,6 @@ public class Task {
   private LocalDateTime updatedAt;
 
   @NotNull
-  @ToStringExclude
   @OneToMany(
     mappedBy = "task_watcher",
     fetch = EAGER,
@@ -72,7 +77,6 @@ public class Task {
   )
   private Set<Participant> watchers = new HashSet<>();
 
-  @ToStringExclude
   @OneToMany(
     mappedBy = "task_assignee",
     fetch = EAGER,
@@ -88,7 +92,6 @@ public class Task {
   private PreviousTask previousItem;
 
   @JsonIgnore
-  @ToStringExclude
   @OneToMany(
     mappedBy = "task",
     fetch = LAZY,
@@ -104,5 +107,14 @@ public class Task {
   public void removeParticipant(Participant participant) {
     watchers.remove(participant);
     participant.setTask_watcher(null);
+  }
+
+  public void addEvents(Set<Event> eventDTO) {
+    // https://stackoverflow.com/a/30139228/16648127
+    var combinedEvents = Stream
+      .concat(this.events.stream(), eventDTO.stream())
+      .collect(Collectors.toSet());
+    this.events = combinedEvents;
+    eventDTO.forEach(event -> event.setTask(this));
   }
 }

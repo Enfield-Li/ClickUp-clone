@@ -112,7 +112,7 @@ export default function TaskListView({ sortBy }: Props) {
   );
 }
 
-function handleDragEnd(
+async function handleDragEnd(
   result: DropResult,
   state: State,
   setState: SetState,
@@ -346,19 +346,30 @@ function handleDragEnd(
   const userId = user!.id;
   const username = user!.username;
 
-  if (!sourceTask.events) sourceTask.events = [];
-  sourceTask.events.push({
-    initiatorId: userId,
-    initiatorName: username,
-    eventType: UPDATE,
-    updateAction: sortBy,
-    updateFrom: sourceDroppableId,
-    updateTo: destinationDroppableId,
-    participants: [{ userId, username }],
-  });
+  // Override previous update events in client
+  sourceTask.events = [
+    {
+      initiatorId: userId,
+      initiatorName: username,
+      eventType: UPDATE,
+      updateAction: sortBy,
+      updateFrom: sourceDroppableId,
+      updateTo: destinationDroppableId,
+      participants: [{ userId, username }],
+    },
+  ];
 
   if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
-  console.log(taskForUpdate);
-  updateTasks(taskForUpdate);
+  // console.log({ sourceTask });
+  // console.log({ taskForUpdate });
+
+  const updated = await updateTasks({
+    sourceTaskId: sourceTask.id!,
+    tasks: taskForUpdate,
+  });
+  if (updated) {
+    // Clear sourceTask events
+    sourceTask.events = [];
+  }
 }

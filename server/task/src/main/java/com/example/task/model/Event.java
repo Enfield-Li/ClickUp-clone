@@ -4,6 +4,7 @@ import static javax.persistence.CascadeType.DETACH;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
@@ -22,9 +23,9 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import org.apache.commons.lang3.builder.ToStringExclude;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -32,6 +33,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "task")
 public class Event {
 
   @Id
@@ -66,14 +68,14 @@ public class Event {
   private Integer task_id;
 
   @JsonIgnore
+  @ToString.Exclude
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "task_id")
   private Task task;
 
-  @ToStringExclude
   @OneToMany(
     mappedBy = "event",
-    fetch = LAZY,
+    fetch = EAGER,
     cascade = { PERSIST, DETACH, MERGE }
   )
   private Set<Participant> participants = new HashSet<>();

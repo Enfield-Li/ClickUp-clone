@@ -3,10 +3,12 @@ package com.example.task;
 import static com.example.clients.UrlConstants.*;
 import static com.example.task.Constants.*;
 
+import com.example.task.dto.UpdateTaskDTO;
 import com.example.task.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 class TaskController {
 
   private final TaskService taskService;
+  private final EntityManager entityManager;
+  private final TaskRepository taskRepository;
 
   @GetMapping(ALL_TASKS)
   ResponseEntity<List<Task>> getAllTasks() {
@@ -40,8 +44,16 @@ class TaskController {
   }
 
   @PutMapping
-  ResponseEntity<List<Task>> updateTasks(@RequestBody List<Task> tasks) {
-    var updatedTasks = taskService.updateTasks(tasks);
+  ResponseEntity<List<Task>> updateTasks(
+    @RequestBody UpdateTaskDTO updateTaskDTO
+  ) {
+    var updatedTasks = taskService.updateTasks(updateTaskDTO);
     return ResponseEntity.ok(updatedTasks);
+  }
+
+  @GetMapping
+  void test() {
+    var sourceTask = entityManager.find(Task.class, 1);
+    System.out.println(sourceTask.getWatchers());
   }
 }

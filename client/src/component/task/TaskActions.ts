@@ -1,6 +1,6 @@
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
-import { Task, TaskList } from "./Data";
+import { Task, TaskList, UpdateTaskDTO } from "./Data";
 
 export async function createTask(task: Task) {
   try {
@@ -27,14 +27,15 @@ export async function getAllTasks() {
   }
 }
 
-export async function updateTasks(taskList: TaskList) {
+export async function updateTasks(taskList: UpdateTaskDTO) {
   try {
     const response = await axiosInstance.put<TaskList>(
       API_ENDPOINT.TASK_ENDPOINT,
       taskList
     );
 
-    console.log(response.data);
+    console.log({ data: response.data });
+    return true;
   } catch (error) {
     console.log(error);
   }

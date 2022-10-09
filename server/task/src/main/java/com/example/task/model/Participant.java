@@ -10,17 +10,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.apache.commons.lang3.builder.ToStringExclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = { "task_watcher", "event" })
 public class Participant {
 
   @Id
@@ -34,6 +34,7 @@ public class Participant {
   private Integer event_id;
 
   @JsonIgnore
+  @ToString.Exclude
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "event_id")
   private Event event;
@@ -42,7 +43,7 @@ public class Participant {
   private Integer task_watcher_id;
 
   @JsonIgnore
-  @ToStringExclude
+  @ToString.Exclude
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "task_watcher_id")
   private Task task_watcher;
@@ -51,12 +52,8 @@ public class Participant {
   private Integer task_assignee_id;
 
   @JsonIgnore
-  @ToStringExclude
+  @ToString.Exclude
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "task_assignee_id")
   private Task task_assignee;
-
-  public void setTask_watcher(Task task_watcher) {
-    this.task_watcher = task_watcher;
-  }
 }

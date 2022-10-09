@@ -259,3 +259,9 @@ export type TargetColumn = {
   dueDate?: string | undefined;
 };
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
+
+// DTO
+export type UpdateTaskDTO = {
+  sourceTaskId: number;
+  tasks: TaskList;
+};

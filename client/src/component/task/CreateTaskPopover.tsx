@@ -245,6 +245,8 @@ async function submit(
     watchers: [{ userId, username }],
     assignees: [],
   };
+  // console.log(newTask)
+
   updateTaskInfoInOtherSortBy(state, values, newTask);
 
   // Updates for newTask's previousItem for current sortBy
