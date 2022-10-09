@@ -20,17 +20,10 @@ type Props = {
   task: Task;
   state: State;
   index: number;
-  columnId: number;
   setState: SetState;
 };
 
-export default function Card({
-  task,
-  index,
-  columnId,
-  state,
-  setState,
-}: Props) {
+export default function Card({ task, index, state, setState }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
   const { isOpen, onOpen, onClose } = useDisclosure();

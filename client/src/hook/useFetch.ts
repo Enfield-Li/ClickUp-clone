@@ -12,6 +12,7 @@ import {
   TaskList,
 } from "../component/task/Data";
 import {
+  collectAllTasks,
   groupTaskListOnSortBy,
   renameAndReorderDueDateColumns,
 } from "../component/task/TaskDataProcessing";
@@ -52,7 +53,6 @@ export function useFetch<T>(url: string) {
 
 export function useFetchTasks(url: string, sortBy: SortBy) {
   const [state, setState] = useState<State>();
-  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
 
@@ -60,10 +60,19 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     fetchData();
   }, []);
 
-  let orderedColumns: Columns | undefined;
-  if (state)
-    orderedColumns =
-      sortBy === DUE_DATE ? dueDateColumns : state.unorderedColumns[sortBy];
+  // Sync up orderedTasks with columns under sortBy
+  useEffect(() => {
+    if (state) {
+      setState({
+        ...state,
+        orderedTasks: groupTaskListOnSortBy(
+          collectAllTasks(state.orderedTasks),
+          state.unorderedColumns[sortBy],
+          sortBy
+        ),
+      });
+    }
+  }, [sortBy]);
 
   async function fetchData() {
     try {
@@ -81,15 +90,16 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         sortBy
       );
 
-      // dueDate columns
-      const processedDueDateColumns = renameAndReorderDueDateColumns(
+      const dueDateColumns = renameAndReorderDueDateColumns(
         columnDataFromApi.dueDate
       );
-      setDueDateColumns(processedDueDateColumns);
 
       setState({
         orderedTasks: processedData,
-        unorderedColumns: columnDataFromApi,
+        unorderedColumns: {
+          ...columnDataFromApi,
+          dueDate: dueDateColumns,
+        },
       });
     } catch (error) {
       setError(true);
@@ -100,18 +110,17 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     }
   }
 
-  return { state, loading, error, setState, orderedColumns, dueDateColumns };
+  return { state, loading, error, setState };
 }
 
 export function useLocalTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
-  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
 
   useEffect(() => {
     const columnDataFromApi = columnOptions;
     const dataFromAPI = initialData;
 
-    const processedDueDateColumns = renameAndReorderDueDateColumns(
+    const dueDateColumns = renameAndReorderDueDateColumns(
       columnOptions.dueDate
     );
 
@@ -121,12 +130,28 @@ export function useLocalTasks(sortBy: SortBy) {
       sortBy
     );
 
-    setDueDateColumns(processedDueDateColumns);
     setState({
       orderedTasks: processedTaskList,
-      unorderedColumns: columnDataFromApi,
+      unorderedColumns: {
+        ...columnDataFromApi,
+        dueDate: dueDateColumns,
+      },
     });
   }, []);
 
-  return { state, setState, dueDateColumns };
+  // Sync up orderedTasks with columns under sortBy
+  useEffect(() => {
+    if (state) {
+      setState({
+        ...state,
+        orderedTasks: groupTaskListOnSortBy(
+          collectAllTasks(state.orderedTasks),
+          state.unorderedColumns[sortBy],
+          sortBy
+        ),
+      });
+    }
+  }, [sortBy]);
+
+  return { state, setState };
 }

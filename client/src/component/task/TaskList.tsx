@@ -34,66 +34,53 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
+  // const { state, setState } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
-  const { state, loading, error, setState, orderedColumns, dueDateColumns } =
-    useFetchTasks(API_ENDPOINT.TASK_ALL_TASKS, sortBy);
+  const { state, loading, error, setState } = useFetchTasks(
+    API_ENDPOINT.TASK_ALL_TASKS,
+    sortBy
+  );
   console.log(state);
 
-  // Sync up state.orderedTasks with sortBy
-  // column keeps the original data and restructure tasks
-  useEffect(() => {
-    if (state) {
-      setState({
-        ...state,
-        // Group all tasks into ordered tasks based on sortBy
-        orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
-          state.unorderedColumns[sortBy],
-          sortBy
-        ),
-      });
-    }
-  }, [sortBy]);
+  if (!state) return <div>Loading</div>;
 
-  if (!state || !orderedColumns || !dueDateColumns) return <div>Loading</div>;
+  const currentColumns = state.unorderedColumns[sortBy];
 
   return (
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
         onDragEnd={(result) =>
-          handleDragEnd(
-            result,
-            state,
-            setState,
-            orderedColumns,
-            sortBy,
-            authState.user
-          )
+          handleDragEnd(result, state, setState, sortBy, authState.user)
         }
       >
         <Flex>
-          {orderedColumns.map(
-            (column, index) =>
-              // Finished task is managed in sortBy === status, and hide from user in other sortBy conditions
-              column.id !== 0 && (
-                <Box mx={2} key={column.id} borderRadius={4}>
+          {/* Columns and tasks */}
+          {currentColumns.map((currentColumn, index) => {
+            // Task marked as finished is managed in "status", and hidden in other sortBy conditions
+            const isTaskDone = currentColumn.id !== 0;
+
+            return (
+              isTaskDone && (
+                <Box mx={2} key={currentColumn.id} borderRadius={4}>
                   <Column
                     state={state}
                     sortBy={sortBy}
                     setState={setState}
-                    column={column}
-                    dueDateColumns={dueDateColumns}
+                    currentColumn={currentColumn}
+                    dueDateColumns={state.unorderedColumns.dueDate}
                     // Pass down list as per column.id
                     tasks={
                       state.orderedTasks.find(
-                        (orderedTask) => orderedTask.id === column.id
+                        (orderedTask) => orderedTask.id === currentColumn.id
                       )?.taskList
                     }
                   />
                 </Box>
               )
-          )}
+            );
+          })}
+
+          {/* Add column in status */}
           {sortBy === STATUS && <AddColumn />}
         </Flex>
       </DragDropContext>
@@ -105,11 +92,12 @@ async function handleDragEnd(
   result: DropResult,
   state: State,
   setState: SetState,
-  columns: Columns,
   sortBy: SortBy,
   user?: User
 ) {
   const { destination, source } = result;
+  const currentColumns = state.unorderedColumns[sortBy];
+
   if (!destination) return;
   if (
     destination.droppableId === source.droppableId &&
@@ -120,7 +108,7 @@ async function handleDragEnd(
 
   const lookUpDueDateId: LookUpDueDateId = {};
   if (sortBy === DUE_DATE) {
-    processLookUpDueDateId(state.orderedTasks, columns, lookUpDueDateId);
+    processLookUpDueDateId(state.orderedTasks, currentColumns, lookUpDueDateId);
   }
 
   const sourceDroppableId =
@@ -132,10 +120,10 @@ async function handleDragEnd(
       ? lookUpDueDateId[Number(destination.droppableId)]
       : Number(destination.droppableId);
 
-  const sourceTaskColumnIndex = columns.findIndex(
+  const sourceTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === sourceDroppableId
   );
-  const destinationTaskColumnIndex = columns.findIndex(
+  const destinationTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === destinationDroppableId
   );
 
@@ -335,7 +323,8 @@ async function handleDragEnd(
   const userId = user!.id;
   const username = user!.username;
 
-  // Override previous update events in client
+  // Override all previous update events
+  // So as to keep the event consistent when submitting to server
   sourceTask.events = [
     {
       initiatorId: userId,

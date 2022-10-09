@@ -47,7 +47,7 @@ export type NewTask = {
 type Props = {
   state: State;
   sortBy: SortBy;
-  column: ColumnType;
+  currentColumn: ColumnType;
   setState: SetState;
   dueDateColumns: DueDateColumns;
 };
@@ -55,7 +55,7 @@ type Props = {
 export const CreateTaskPopover = ({
   state,
   setState,
-  column,
+  currentColumn,
   sortBy,
   dueDateColumns,
 }: Props) => {
@@ -100,7 +100,7 @@ export const CreateTaskPopover = ({
                 values,
                 helpers,
                 state,
-                column,
+                currentColumn,
                 sortBy,
                 setState,
                 authState.user

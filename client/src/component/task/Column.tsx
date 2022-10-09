@@ -23,7 +23,7 @@ type Props = {
   state: State;
   sortBy: SortBy;
   setState: SetState;
-  column: ColumnType;
+  currentColumn: ColumnType;
   dueDateColumns: DueDateColumns;
   tasks?: TaskList;
 };
@@ -31,7 +31,7 @@ type Props = {
 export default function Column({
   state,
   setState,
-  column,
+  currentColumn,
   tasks,
   sortBy,
   dueDateColumns,
@@ -44,7 +44,7 @@ export default function Column({
         p={2}
         borderTop="2px"
         borderTopRadius={"sm"}
-        borderColor={column.color}
+        borderColor={currentColumn.color}
       >
         {/* Title */}
         <Text
@@ -53,7 +53,7 @@ export default function Column({
           fontSize={"sm"}
           letterSpacing={1.1}
         >
-          {column.title}
+          {currentColumn.title}
         </Text>
 
         <Spacer />
@@ -65,7 +65,7 @@ export default function Column({
       </Flex>
 
       {/* Column card */}
-      <Droppable droppableId={String(column.id)}>
+      <Droppable droppableId={String(currentColumn.id)}>
         {(provided, snapshot) => (
           <Box
             my={2}
@@ -83,7 +83,6 @@ export default function Column({
                 key={task.id}
                 index={index}
                 setState={setState}
-                columnId={column.id}
               />
             ))}
             {provided.placeholder}
@@ -94,7 +93,7 @@ export default function Column({
                 dueDateColumns={dueDateColumns}
                 state={state}
                 setState={setState}
-                column={column}
+                currentColumn={currentColumn}
                 sortBy={sortBy}
               />
             </Center>
