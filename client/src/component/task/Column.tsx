@@ -78,6 +78,7 @@ export default function Column({
             {/* Task list */}
             {tasks?.map((task, index) => (
               <Card
+                state={state}
                 task={task}
                 key={task.id}
                 index={index}

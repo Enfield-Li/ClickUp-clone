@@ -4,9 +4,11 @@ import {
   columnOptions,
   Columns,
   DueDateColumns,
+  DUE_DATE,
   initialData,
   SortBy,
   State,
+  StatusColumns,
   TaskList,
 } from "../component/task/Data";
 import {
@@ -49,14 +51,19 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(url: string, sortBy: SortBy) {
-  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
   const [state, setState] = useState<State>();
+  const [dueDateColumns, setDueDateColumns] = useState<DueDateColumns>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  let orderedColumns: Columns | undefined;
+  if (state)
+    orderedColumns =
+      sortBy === DUE_DATE ? dueDateColumns : state.unorderedColumns[sortBy];
 
   async function fetchData() {
     try {
@@ -93,7 +100,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     }
   }
 
-  return { state, loading, error, setState, dueDateColumns };
+  return { state, loading, error, setState, orderedColumns, dueDateColumns };
 }
 
 export function useLocalTasks(sortBy: SortBy) {

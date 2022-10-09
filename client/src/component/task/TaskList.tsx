@@ -36,13 +36,11 @@ type Props = {
 export default function TaskListView({ sortBy }: Props) {
   // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
-  const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
-    API_ENDPOINT.TASK_ALL_TASKS,
-    sortBy
-  );
+  const { state, loading, error, setState, orderedColumns, dueDateColumns } =
+    useFetchTasks(API_ENDPOINT.TASK_ALL_TASKS, sortBy);
   console.log(state);
 
-  // Sync up state with sortBy
+  // Sync up state.orderedTasks with sortBy
   // column keeps the original data and restructure tasks
   useEffect(() => {
     if (state) {
@@ -58,16 +56,7 @@ export default function TaskListView({ sortBy }: Props) {
     }
   }, [sortBy]);
 
-  if (!state || !dueDateColumns) return <div>Loading</div>;
-  // if (!state || loading) return <div>Loading</div>;
-
-  // Choose column to display
-  let orderedColumns: Columns;
-  if (sortBy === DUE_DATE) {
-    orderedColumns = dueDateColumns;
-  } else {
-    orderedColumns = state.unorderedColumns[sortBy];
-  }
+  if (!state || !orderedColumns || !dueDateColumns) return <div>Loading</div>;
 
   return (
     <Box px={3} overflowY={"auto"}>

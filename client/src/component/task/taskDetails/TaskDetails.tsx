@@ -26,14 +26,23 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Tooltip,
+  Select,
 } from "@chakra-ui/react";
-import { SetState, UpdateTaskDescDTO, Task, UpdateTaskTitleDTO } from "./Data";
+import {
+  SetState,
+  UpdateTaskDescDTO,
+  Task,
+  UpdateTaskTitleDTO,
+  State,
+} from "../Data";
 import produce from "immer";
-import { axiosInstance } from "../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../utils/constant";
+import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../../utils/constant";
+import SelectOption from "./SelectOption";
 
 type Props = {
   task: Task;
+  state: State;
   isOpen: boolean;
   onClose: () => void;
   setState: SetState;
@@ -41,6 +50,7 @@ type Props = {
 
 export default function TaskDetails({
   isOpen,
+  state,
   onClose,
   task,
   setState,
@@ -104,12 +114,11 @@ export default function TaskDetails({
                       </Center>
                     </Tooltip>
 
+                    {/* Set status */}
                     <PopoverContent width="200px">
-                      {/* <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverHeader>Search</PopoverHeader> */}
                       <PopoverBody>
-                        Are you sure you want to have that milkshake?
+                        {/* {state.unorderedColumns.} */}
+                        <SelectOption />
                       </PopoverBody>
                     </PopoverContent>
                   </Popover>
@@ -117,6 +126,7 @@ export default function TaskDetails({
 
                 <Tooltip label="Set priority" placement="top" hasArrow>
                   <Center
+                    cursor={"pointer"}
                     border="1px solid"
                     borderRadius={"50%"}
                     width="40px"
