@@ -1,5 +1,8 @@
-import { GLOBAL_ACTION } from "../../utils/constant";
-import { GlobalStateType, GlobalActionType } from "./GlobalContextTypes";
+import {
+  GlobalStateType,
+  GlobalActionType,
+  GLOBAL_ACTION,
+} from "./GlobalContextTypes";
 
 export default function globalReducer(
   state: GlobalStateType,

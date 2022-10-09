@@ -25,16 +25,26 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Tooltip,
 } from "@chakra-ui/react";
-import { Task } from "./Data";
+import { SetState, UpdateTaskDescDTO, Task, UpdateTaskTitleDTO } from "./Data";
+import produce from "immer";
+import { axiosInstance } from "../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../utils/constant";
 
 type Props = {
   task: Task;
   isOpen: boolean;
   onClose: () => void;
+  setState: SetState;
 };
 
-export default function TaskDetails({ isOpen, onClose, task }: Props) {
+export default function TaskDetails({
+  isOpen,
+  onClose,
+  task,
+  setState,
+}: Props) {
   const initialRef = useRef(null);
 
   return (
@@ -53,13 +63,14 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
             <Editable mr={6} defaultValue={task.title}>
               <EditablePreview />
               <EditableInput
+                onKeyDown={(e) =>
+                  e.key === "Enter" &&
+                  e.currentTarget.value !== task.title &&
+                  updateTaskTitle(task!.id!, e.currentTarget.value, setState)
+                }
                 onBlur={(e) => {
-                  if (e.target.value === task.title) {
-                    console.log("unchanged");
-                  } else {
-                    console.log("Changed value: ", {
-                      value: e.target.value,
-                    });
+                  if (e.target.value !== task.title) {
+                    updateTaskTitle(task!.id!, e.currentTarget.value, setState);
                   }
                 }}
               />
@@ -83,9 +94,15 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
                       <Button>Status</Button>
                     </PopoverTrigger>
 
-                    <Center fontSize={"30px"}>
-                      <i className="bi bi-check-square"></i>
-                    </Center>
+                    <Tooltip label="Set to complete" placement="top" hasArrow>
+                      <Center
+                        cursor={"pointer"}
+                        fontSize={"30px"}
+                        onClick={() => console.log("finished")}
+                      >
+                        <i className="bi bi-check-square"></i>
+                      </Center>
+                    </Tooltip>
 
                     <PopoverContent width="200px">
                       {/* <PopoverArrow />
@@ -98,14 +115,17 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
                   </Popover>
                 </Center>
 
-                <Center
-                  border="1px solid"
-                  borderRadius={"50%"}
-                  width="40px"
-                  height="40px"
-                >
-                  <i className="bi bi-flag"></i>
-                </Center>
+                <Tooltip label="Set priority" placement="top" hasArrow>
+                  <Center
+                    border="1px solid"
+                    borderRadius={"50%"}
+                    width="40px"
+                    height="40px"
+                    onClick={() => console.log("choose priority")}
+                  >
+                    <i className="bi bi-flag"></i>
+                  </Center>
+                </Tooltip>
               </Flex>
 
               {/* Desc */}
@@ -126,12 +146,12 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
                   <EditablePreview />
                   <EditableTextarea
                     onBlur={(e) => {
-                      if (e.target.value === task.description) {
-                        console.log("unchanged");
-                      } else {
-                        console.log("Changed value: ", {
-                          value: e.target.value,
-                        });
+                      if (e.target.value !== task.title) {
+                        updateTaskDesc(
+                          task!.id!,
+                          e.currentTarget.value,
+                          setState
+                        );
                       }
                     }}
                   />
@@ -166,4 +186,70 @@ export default function TaskDetails({ isOpen, onClose, task }: Props) {
       </ModalContent>
     </Modal>
   );
+}
+
+async function updateTaskDesc(
+  taskId: number,
+  newDesc: string,
+  setState: SetState
+) {
+  try {
+    const updateTaskDescDTO: UpdateTaskDescDTO = {
+      id: taskId,
+      newDesc,
+    };
+
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_DESC,
+      updateTaskDescDTO
+    );
+
+    if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) =>
+                task.id === taskId ? (task.description = newDesc) : task
+              )
+            );
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function updateTaskTitle(
+  taskId: number,
+  newTitle: string,
+  setState: SetState
+) {
+  try {
+    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
+      id: taskId,
+      newTitle,
+    };
+
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_TITLE,
+      updateTaskTitleDTO
+    );
+
+    if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) =>
+                task.id === taskId ? (task.title = newTitle) : task
+              )
+            );
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }

@@ -1,5 +1,3 @@
-import { GLOBAL_ACTION } from "../../utils/constant";
-
 export type GlobalContextType = {
   globalState: GlobalStateType;
   globalDispatch: React.Dispatch<GlobalActionType>;
@@ -23,3 +21,8 @@ type IndicateLoadingState = {
   type: typeof GLOBAL_ACTION.LOADING_STATE;
   payload: boolean;
 };
+
+export const GLOBAL_ACTION = {
+  NEW_ERROR: "NEW_ERROR",
+  LOADING_STATE: "LOADING_STATE",
+} as const;

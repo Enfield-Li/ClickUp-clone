@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import com.example.task.model.Event;
 import com.example.task.model.PreviousTask;
 
-public record SourceTaskForUpdate(
+public record TaskDTO(
    @NotNull Integer id,
    @NotNull String title,
    @NotNull Integer status,

@@ -6,7 +6,7 @@ import com.example.task.model.Task;
 
 import lombok.NonNull;
 
-public record UpdateTaskDTO(
+public record UpdateTasksPositionDTO(
   @NonNull Integer sourceTaskId,
-  List<SourceTaskForUpdate> tasks
+  List<TaskDTO> taskList
 ) {}

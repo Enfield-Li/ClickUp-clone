@@ -29,14 +29,14 @@ public class CustomerService {
     customerRepository.saveAndFlush(customer);
     // Customer savedCustomer = customerRepository.save(customer);
 
-    FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(
-      customer.getId()
-    );
-    // FraudCheckResponse fraudcheckRespose = restTemplate.getForObject(
-    //   "http://FRAUD-SERVICE/api/v1/fraud-check/{customerId}",
-    //   FraudCheckResponse.class,
+    // FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(
     //   customer.getId()
     // );
+    FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
+      "http://FRAUD-SERVICE/api/v1/fraud-check/{customerId}",
+      FraudCheckResponse.class,
+      customer.getId()
+    );
 
     if (fraudCheckResponse.getIsFraudster()) {
       throw new IllegalStateException("fraudster");

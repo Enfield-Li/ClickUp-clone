@@ -13,16 +13,17 @@ import {
   DraggableStateSnapshot,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Task } from "./Data";
+import { SetState, Task } from "./Data";
 import TaskDetails from "./TaskDetails";
 
 type Props = {
   task: Task;
   index: number;
   columnId: number;
+  setState: SetState;
 };
 
-export default function Card({ task, index, columnId }: Props) {
+export default function Card({ task, index, columnId, setState }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +57,12 @@ export default function Card({ task, index, columnId }: Props) {
       </Draggable>
 
       {/* Task details inside Modal */}
-      <TaskDetails isOpen={isOpen} onClose={onClose} task={task} />
+      <TaskDetails
+        isOpen={isOpen}
+        onClose={onClose}
+        setState={setState}
+        task={task}
+      />
     </>
   );
 }

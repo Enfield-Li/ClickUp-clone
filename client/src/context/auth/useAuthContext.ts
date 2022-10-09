@@ -4,12 +4,13 @@ import React, { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import {
   AuthActionType,
+  AUTH_ACTION,
   Credentials,
   LogInError,
   User,
   UserResponse,
 } from "./AuthContextTypes";
-import { ACCESS_TOKEN, AUTH_ACTION } from "../../utils/constant";
+import { ACCESS_TOKEN } from "../../utils/constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 
@@ -24,7 +25,7 @@ export async function loginUser(
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_ENDPOINT_LOGIN,
+      API_ENDPOINT.AUTH_LOGIN,
       credentials
     );
     // store accessToken to localStorage
@@ -79,7 +80,7 @@ export async function registerUser(
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_ENDPOINT_REGISTER,
+      API_ENDPOINT.AUTH_REGISTER,
       credentials
     );
     // store accessToken to localStorage
@@ -134,7 +135,7 @@ export async function refreshUserToken(
     if (!localStorage.getItem(ACCESS_TOKEN)) return;
 
     const response = await axiosInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_ENDPOINT_REFRESH_TOKEN
+      API_ENDPOINT.AUTH_REFRESH_TOKEN
     );
 
     // store accessToken to localStorage
@@ -168,7 +169,7 @@ export function logOutUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   // invalidate session
-  axiosInstance.post(API_ENDPOINT.AUTH_ENDPOINT_LOGOUT, null);
+  axiosInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
 
   // clear local auth state and accessToken
   localStorage.removeItem(ACCESS_TOKEN);

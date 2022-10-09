@@ -81,6 +81,7 @@ export default function Column({
                 task={task}
                 key={task.id}
                 index={index}
+                setState={setState}
                 columnId={column.id}
               />
             ))}

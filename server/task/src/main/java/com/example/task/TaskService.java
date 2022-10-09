@@ -1,6 +1,8 @@
 package com.example.task;
 
-import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.UpdateTaskDescDTO;
+import com.example.task.dto.UpdateTaskTitleDTO;
+import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.model.Event;
 import com.example.task.model.PreviousTask;
 import com.example.task.model.Task;
@@ -30,10 +32,15 @@ public class TaskService {
   }
 
   @Transactional
-  public List<Task> updateTasks(UpdateTaskDTO updateTaskDTO) {
-    var sourceTaskId = updateTaskDTO.sourceTaskId();
-    var tasksForUpdate = updateTaskDTO.tasks();
-    var sourceTaskPayload = tasksForUpdate
+  public Boolean updateTasksPosition(
+    UpdateTasksPositionDTO updateTasksPositionDTO
+  ) {
+    // When updating sourceTask, a new event will be created for it
+    // need to manage/update it's relationship with event and the nested participant
+    var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
+    var taskList = updateTasksPositionDTO.taskList();
+
+    var sourceTaskPayload = taskList
       .stream()
       .filter(task -> task.id() == sourceTaskId)
       .findAny();
@@ -43,20 +50,20 @@ public class TaskService {
     sourceTask.addEvents(sourceTaskPayload.get().events());
 
     var tasks = new ArrayList<Task>();
-    tasksForUpdate.forEach(
-      taskForUpdate -> {
+    taskList.forEach(
+      taskDTO -> {
         var task = Task
           .builder()
-          .id(taskForUpdate.id())
-          .title(taskForUpdate.title())
-          .status(taskForUpdate.status())
-          .dueDate(taskForUpdate.dueDate())
-          .priority(taskForUpdate.priority())
-          .description(taskForUpdate.description())
-          .creatorId(taskForUpdate.creatorId())
-          .creatorName(taskForUpdate.creatorName())
-          .previousItem(taskForUpdate.previousItem())
-          .events(taskForUpdate.events())
+          .id(taskDTO.id())
+          .title(taskDTO.title())
+          .status(taskDTO.status())
+          .dueDate(taskDTO.dueDate())
+          .priority(taskDTO.priority())
+          .description(taskDTO.description())
+          .creatorId(taskDTO.creatorId())
+          .creatorName(taskDTO.creatorName())
+          .previousItem(taskDTO.previousItem())
+          .events(taskDTO.events())
           .build();
 
         tasks.add(task);
@@ -64,7 +71,6 @@ public class TaskService {
     );
 
     // Manage relationship
-    System.out.println(tasks);
     tasks
       .stream()
       .map(
@@ -75,8 +81,29 @@ public class TaskService {
       )
       .collect(Collectors.toList());
 
-    return taskRepository.saveAll(tasks);
+    taskRepository.saveAll(tasks);
+    return true;
   }
+
+  @Transactional
+  public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
+    var id = updateTaskTitleDTO.id();
+    var newTitle = updateTaskTitleDTO.newTitle();
+
+    return taskRepository.updateTaskTitle(newTitle, id) > 0;
+  }
+
+  @Transactional
+  public Boolean updateTaskDesc(UpdateTaskDescDTO updateTaskDescDTO) {
+    var id = updateTaskDescDTO.id();
+    var newDesc = updateTaskDescDTO.newDesc();
+
+    return taskRepository.updateTaskDesc(newDesc, id) > 0;
+  }
+
+  // public String updateTasksXXX() {
+  //   return null;
+  // }
 
   private Task setTaskWatcherForEvents(Task task) {
     task.getWatchers().forEach(watcher -> watcher.setTask_watcher(task));

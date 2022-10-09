@@ -37,7 +37,7 @@ export default function TaskListView({ sortBy }: Props) {
   // const { state, setState, dueDateColumns } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
   const { state, loading, error, setState, dueDateColumns } = useFetchTasks(
-    API_ENDPOINT.TASK_ENDPOINT_ALL_TASKS,
+    API_ENDPOINT.TASK_ALL_TASKS,
     sortBy
   );
   console.log(state);
@@ -366,7 +366,7 @@ async function handleDragEnd(
 
   const updated = await updateTasks({
     sourceTaskId: sourceTask.id!,
-    tasks: taskForUpdate,
+    taskList: taskForUpdate,
   });
   if (updated) {
     // Clear sourceTask events

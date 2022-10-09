@@ -3,7 +3,9 @@ package com.example.task;
 import static com.example.clients.UrlConstants.*;
 import static com.example.task.Constants.*;
 
-import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.UpdateTaskDescDTO;
+import com.example.task.dto.UpdateTaskTitleDTO;
+import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.model.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,12 @@ class TaskController {
   private final EntityManager entityManager;
   private final TaskRepository taskRepository;
 
+  @GetMapping
+  void test() {
+    var sourceTask = entityManager.find(Task.class, 1);
+    System.out.println(sourceTask.getWatchers());
+  }
+
   @GetMapping(ALL_TASKS)
   ResponseEntity<List<Task>> getAllTasks() {
     var allTasks = taskService.getAllTasks();
@@ -44,16 +52,26 @@ class TaskController {
   }
 
   @PutMapping
-  ResponseEntity<List<Task>> updateTasks(
-    @RequestBody UpdateTaskDTO updateTaskDTO
+  ResponseEntity<Boolean> updateTasksPosition(
+    @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
   ) {
-    var updatedTasks = taskService.updateTasks(updateTaskDTO);
+    var updatedTasks = taskService.updateTasksPosition(updateTasksPositionDTO);
     return ResponseEntity.ok(updatedTasks);
   }
 
-  @GetMapping
-  void test() {
-    var sourceTask = entityManager.find(Task.class, 1);
-    System.out.println(sourceTask.getWatchers());
+  @PutMapping("/update_title")
+  ResponseEntity<Boolean> updateTaskTitle(
+    @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
+  ) {
+    var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
+    return ResponseEntity.ok(updated);
+  }
+
+  @PutMapping("/update_desc")
+  ResponseEntity<Boolean> updateTasksDesc(
+    @RequestBody UpdateTaskDescDTO updateTaskDescDTO
+  ) {
+    var updated = taskService.updateTaskDesc(updateTaskDescDTO);
+    return ResponseEntity.ok(updated);
   }
 }

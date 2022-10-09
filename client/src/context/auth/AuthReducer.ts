@@ -1,5 +1,4 @@
-import { AUTH_ACTION } from "../../utils/constant";
-import { AuthStateType, AuthActionType } from "./AuthContextTypes";
+import { AuthStateType, AuthActionType, AUTH_ACTION } from "./AuthContextTypes";
 
 export default function authReducer(
   state: AuthStateType,

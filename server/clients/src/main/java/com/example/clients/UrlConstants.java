@@ -8,4 +8,6 @@ public class UrlConstants {
     "/authorization/v1/user";
 
   public static final String TASK_API_VERSION = "/api/v1/task";
+  public static final String UPDATE_TASK_TITLE = "/update_title";
+  public static final String UPDATE_TASK_DESC = "/update_desc";
 }
