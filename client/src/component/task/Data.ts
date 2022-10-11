@@ -86,8 +86,13 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
-type PreviousItem = {
+type PreviousTask = {
   statusId?: number;
+  dueDateId?: number;
+  priorityId?: number;
+};
+
+type PreviousTaskBeforeFinish = {
   dueDateId?: number;
   priorityId?: number;
 };
@@ -133,7 +138,8 @@ export type Task = {
   watchers: Participant[];
   assignees: Participant[];
   // determine the task order
-  previousTask: PreviousItem;
+  previousTask: PreviousTask;
+  previousTaskBeforeFinish: PreviousTaskBeforeFinish;
 };
 
 export type TaskList = Task[];
@@ -154,6 +160,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 222,
@@ -167,6 +174,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 333,
@@ -180,6 +188,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 444,
@@ -193,6 +202,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 555,
@@ -206,6 +216,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 666,
@@ -219,6 +230,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
   {
     id: 777,
@@ -232,6 +244,7 @@ export const initialData: TaskList = [
     creatorName: "abc",
     watchers: [],
     assignees: [],
+    previousTaskBeforeFinish: {},
   },
 ];
 

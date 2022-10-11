@@ -272,8 +272,6 @@ async function handleDragEnd(
   }
 
   // Move task from unfinished to finished
-  const statusColumnLen = String(state.columnOptions.status.length);
-
   const moveFromUnfinishedToFinished =
     sortBy === STATUS &&
     destination.droppableId === "3" &&
@@ -302,6 +300,8 @@ async function handleDragEnd(
     );
 
     // Update sourceTask by cleaning up other sortBy's info
+    sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
+    sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
     sourceTask.priority = 0;
     sourceTask.dueDate = 0;
     sourceTask.previousTask.dueDateId = 0;
@@ -315,7 +315,21 @@ async function handleDragEnd(
     source.droppableId === "3";
 
   if (moveFromFinishedToUnfinished) {
-    const previousTask: TargetColumn = { dueDate: "1", priority: "1" };
+    const previousDueDateIdBeforeFinish =
+      sourceTask.previousTaskBeforeFinish.dueDateId;
+
+    const previousPriorityIdBeforeFinish =
+      sourceTask.previousTaskBeforeFinish.priorityId;
+
+    const previousTask: TargetColumn = {
+      dueDate: previousDueDateIdBeforeFinish
+        ? String(previousDueDateIdBeforeFinish)
+        : "1",
+      priority: previousPriorityIdBeforeFinish
+        ? String(previousPriorityIdBeforeFinish)
+        : "1",
+    };
+
     updateTaskInfoInOtherSortBy(state, previousTask, sourceTask);
   }
 
