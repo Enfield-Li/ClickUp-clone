@@ -1,4 +1,9 @@
-import { getWeekDays } from "../../utils/getWeekDays";
+import {
+  getNextNWeekDay,
+  getOneWholeWeekLocalDateString,
+  getTodayYMDString,
+  getWeekDays,
+} from "../../utils/getWeekDays";
 import { NewTask } from "./CreateTaskPopover";
 import {
   Columns,
@@ -82,34 +87,32 @@ export function groupTaskListOnSortBy(
   columns: Columns,
   sortBy: SortBy
 ): OrderedTasks {
-  const nestedTasks: OrderedTasks = [];
+  const orderedTasks: OrderedTasks = [];
 
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
+    const columnId = column.id;
 
-    nestedTasks[i] = { id: column.id, taskList: [] };
-
-    const element = columns[i];
-    const stageId = element.id;
+    orderedTasks[i] = { id: columnId, taskList: [] };
 
     // Find the first element
     const firstTask = tasks.find(
       (task) =>
-        task[sortBy] === stageId &&
-        !task.previousItem[lookUpPreviousTaskId[sortBy]]
+        task[sortBy] === columnId &&
+        !task.previousTask[lookUpPreviousTaskId[sortBy]]
     );
-    if (firstTask) nestedTasks[i].taskList[0] = firstTask;
+    if (firstTask) orderedTasks[i].taskList[0] = firstTask;
 
     // Find all the entailing element based on sortBy
-    for (let k = 0; k < nestedTasks[i].taskList.length; k++) {
-      const currentTask = nestedTasks[i].taskList[k];
+    for (let k = 0; k < orderedTasks[i].taskList.length; k++) {
+      const currentTask = orderedTasks[i].taskList[k];
 
       const entailingTask = tasks.find(
         (task) =>
-          task.previousItem[lookUpPreviousTaskId[sortBy]] === currentTask.id
+          task.previousTask[lookUpPreviousTaskId[sortBy]] === currentTask.id
       );
 
-      if (entailingTask) nestedTasks[i].taskList.push(entailingTask);
+      if (entailingTask) orderedTasks[i].taskList.push(entailingTask);
     }
   }
 
@@ -118,17 +121,17 @@ export function groupTaskListOnSortBy(
     const currentTask = tasks[i];
 
     if (currentTask.status === 3) {
-      const id = nestedTasks.length;
-      nestedTasks[id] = { id, taskList: [] };
-      nestedTasks[id].taskList.push(currentTask);
+      const id = orderedTasks.length;
+      orderedTasks[id] = { id, taskList: [] };
+      orderedTasks[id].taskList.push(currentTask);
     }
   }
 
-  return nestedTasks;
+  return orderedTasks;
 }
 
 /* 
-    Reorder the dueDate columns. 
+    Reorder and rename the dueDate columns. 
     For instance, today is WEDNESDAY, 
     
     from
@@ -137,8 +140,8 @@ export function groupTaskListOnSortBy(
         { id: 2, title: "OVER DUE" },
         { id: 3, title: "MONDAY" },
         { id: 4, title: "TUESDAY" },
-        { id: 5, title: "WEDNESDAY" },     // <- rename title
-        { id: 6, title: "THURSDAY" },      // <- rename title
+        { id: 5, title: "WEDNESDAY" },     // <- Reorder and rename title
+        { id: 6, title: "THURSDAY" },      // <- Reorder and rename title
         { id: 7, title: "FRIDAY" },
         { id: 8, title: "SATURDAY" },
         { id: 9, title: "SUNDAY" },
@@ -148,37 +151,28 @@ export function groupTaskListOnSortBy(
       [
         { "id": 1, "title": "NO DUE DATE" }, 
         { "id": 2, "title": "OVER DUE" },
-        { "id": 5, "title": "TODAY" },      // <- rename title
-        { "id": 6, "title": "TOMORROW" },   // <- rename title
-        { "id": 7, "title": "FRIDAY" },
-        { "id": 8, "title": "SATURDAY" },
-        { "id": 9, "title": "SUNDAY" },
-        { "id": 3, "title": "MONDAY" },
-        { "id": 4, "title": "TUESDAY" },
+        { "id": 5, "title": "TODAY",    localDateStr: "10/10/2022" },   // <- Reorder and rename title
+        { "id": 6, "title": "TOMORROW", localDateStr: "10/11/2022" },   // <- Reorder and rename title
+        { "id": 7, "title": "FRIDAY",   localDateStr: "10/12/2022" },
+        { "id": 8, "title": "SATURDAY", localDateStr: "10/13/2022" },
+        { "id": 9, "title": "SUNDAY",   localDateStr: "10/14/2022" },
+        { "id": 3, "title": "MONDAY",   localDateStr: "10/15/2022" },
+        { "id": 4, "title": "TUESDAY",  localDateStr: "10/16/2022" },
         { "id": 10, "title": "FUTURE" }
       ]
  */
-export function renameAndReorderDueDateColumns(
+export function initializeDueDataColumns(
   originalColumns: DueDateColumns
 ): DueDateColumns {
-  const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
-
   // rename columns to Today and Tomorrow
-  const updatedColumns = originalColumns.map((column) => {
-    if (column.title === todayWeekDay) {
-      column.title = "TODAY";
-    } else if (column.title === tomorrowWeekDay) {
-      column.title = "TOMORROW";
-    }
-    return column;
-  });
+  const updatedColumns = renameDueDateColumns(originalColumns);
 
   // put today to the front
   const columnsLength = updatedColumns.length;
   const front = updatedColumns.slice(0, 2);
-  const end = updatedColumns.slice(columnsLength - 1, columnsLength + 1);
+  const end = updatedColumns.slice(columnsLength - 2, columnsLength);
 
-  const weekDayColumns = updatedColumns.slice(2, columnsLength - 1);
+  const weekDayColumns = updatedColumns.slice(2, columnsLength - 2);
 
   const todayIndex = weekDayColumns.findIndex(
     (column) => column.title === "TODAY"
@@ -190,7 +184,30 @@ export function renameAndReorderDueDateColumns(
   );
   const weekDayColumnsFinal = [...weekDayFront, ...weekDayEnd];
 
+  // Adding date string identifier
+  const thisWeekLocalDateString = getOneWholeWeekLocalDateString();
+  for (let i = 0; i < weekDayColumnsFinal.length; i++) {
+    const weekDay = weekDayColumnsFinal[i];
+    weekDay.localDateStr = thisWeekLocalDateString[i];
+  }
+
   return [...front, ...weekDayColumnsFinal, ...end] as DueDateColumns;
+}
+
+// Week of current/next day column turns to "TODAY" and "TOMORROW"
+function renameDueDateColumns(dueDateColumns: DueDateColumns) {
+  const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
+
+  dueDateColumns.map((column) => {
+    if (column.title === todayWeekDay) {
+      column.title = "TODAY";
+    } else if (column.title === tomorrowWeekDay) {
+      column.title = "TOMORROW";
+    }
+    return column;
+  });
+
+  return dueDateColumns;
 }
 
 // A lookup table that matches the sequence of an reorder and renamed columns
@@ -207,16 +224,33 @@ export function processLookUpDueDateId(
   return lookUpDueDateId;
 }
 
+export function getDueDateColumnFromDateString(
+  dueDateColumn: DueDateColumns,
+  inputDateString: string
+) {
+  const targetColumn = dueDateColumn.find(
+    (column) => column.localDateStr === inputDateString
+  );
+  if (targetColumn) return targetColumn?.id;
+
+  const todayDate = new Date();
+  const oneWeekLater = getNextNWeekDay(6);
+  const inputDate = new Date(inputDateString);
+
+  if (todayDate > inputDate) return 1;
+  if (inputDate > oneWeekLater) return 10;
+}
+
 // Push task to the other sortBy id === 1 column
 export function updateTaskInfoInOtherSortBy(
   state: State,
-  previousTask: TargetColumn,
+  targetColumn: TargetColumn,
   taskForUpdate: Task
 ) {
   const allTasks = collectAllTasks(state.orderedTasks);
 
   // Updates for newTask's previousItem for other sortBy
-  const previousTaskValues = collectPreviousTaskValues(previousTask);
+  const previousTaskValues = collectPreviousTaskValues(targetColumn);
 
   updateTask(previousTaskValues, allTasks, taskForUpdate);
 }
@@ -296,7 +330,7 @@ export function updateTask(
 
     // Update new task
     taskForUpdate[updateSortBy] = updateSortById;
-    taskForUpdate.previousItem[`${updateSortBy}Id`] = idResult;
+    taskForUpdate.previousTask[`${updateSortBy}Id`] = idResult;
   }
 }
 
@@ -321,7 +355,7 @@ export function findLastTaskId(
   const orderedTaskListBasedOnSortBy: TaskList = [];
 
   const firstTask = taskListBasedOnSortBy.find(
-    (task) => !task.previousItem[`${sortBy}Id`]
+    (task) => !task.previousTask[`${sortBy}Id`]
   );
   if (firstTask) orderedTaskListBasedOnSortBy[0] = firstTask;
 
@@ -329,7 +363,7 @@ export function findLastTaskId(
   for (let i = 0; i < orderedTaskListBasedOnSortBy.length; i++) {
     const currentTask = orderedTaskListBasedOnSortBy[i];
     const entailingTask = taskListBasedOnSortBy.find(
-      (task) => task.previousItem[`${sortBy}Id`] === currentTask.id
+      (task) => task.previousTask[`${sortBy}Id`] === currentTask.id
     );
 
     if (entailingTask) orderedTaskListBasedOnSortBy.push(entailingTask);

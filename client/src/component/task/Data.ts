@@ -33,7 +33,14 @@ export type DueDate =
   | "FRIDAY"
   | "FINISHED";
 
-type Column<T> = { id: number; title: T; color: string };
+interface Column<T> {
+  id: number;
+  title: T;
+  color: string;
+}
+interface DueDateColumn extends Column<DueDate> {
+  localDateStr?: string;
+}
 export type StatusColumn = {
   id: number;
   title: string;
@@ -42,7 +49,7 @@ export type StatusColumn = {
 };
 export type StatusColumns = StatusColumn[];
 export type PriorityColumns = Column<Priority>[];
-export type DueDateColumns = Column<DueDate>[];
+export type DueDateColumns = DueDateColumn[];
 
 export type ColumnOptions = {
   status: StatusColumns;
@@ -115,6 +122,7 @@ export type Task = {
   title: string;
   status?: number;
   dueDate?: number;
+  date?: Date;
   priority?: number;
   description?: string;
   createdAt?: Date;
@@ -125,7 +133,7 @@ export type Task = {
   watchers: Participant[];
   assignees: Participant[];
   // determine the task order
-  previousItem: PreviousItem;
+  previousTask: PreviousItem;
 };
 
 export type TaskList = Task[];
@@ -140,7 +148,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 2,
     dueDate: 1,
-    previousItem: {},
+    previousTask: {},
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -153,7 +161,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 1,
     dueDate: 1,
-    previousItem: { statusId: 111, dueDateId: 111 },
+    previousTask: { statusId: 111, dueDateId: 111 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -166,7 +174,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 1,
     dueDate: 1,
-    previousItem: { statusId: 222, priorityId: 222, dueDateId: 222 },
+    previousTask: { statusId: 222, priorityId: 222, dueDateId: 222 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -179,7 +187,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 1,
     dueDate: 2,
-    previousItem: { statusId: 333, priorityId: 333 },
+    previousTask: { statusId: 333, priorityId: 333 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -192,7 +200,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 1,
     dueDate: 2,
-    previousItem: { statusId: 444, priorityId: 444, dueDateId: 444 },
+    previousTask: { statusId: 444, priorityId: 444, dueDateId: 444 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -205,7 +213,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 3,
     dueDate: 1,
-    previousItem: { statusId: 555, priorityId: 777, dueDateId: 333 },
+    previousTask: { statusId: 555, priorityId: 777, dueDateId: 333 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -218,7 +226,7 @@ export const initialData: TaskList = [
     status: 1,
     priority: 3,
     dueDate: 1,
-    previousItem: { statusId: 666, dueDateId: 666 },
+    previousTask: { statusId: 666, dueDateId: 666 },
     events: [],
     creatorId: 1,
     creatorName: "abc",
@@ -228,10 +236,10 @@ export const initialData: TaskList = [
 ];
 
 // States
-export type OrderedTasks = { taskList: TaskList; id: number }[];
+export type OrderedTasks = { id: number; taskList: TaskList }[];
 export type State = {
   orderedTasks: OrderedTasks;
-  unorderedColumns: ColumnOptions;
+  columnOptions: ColumnOptions;
 };
 export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
 

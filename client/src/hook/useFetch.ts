@@ -14,7 +14,7 @@ import {
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
-  renameAndReorderDueDateColumns,
+  initializeDueDataColumns,
 } from "../component/task/TaskDataProcessing";
 import useGlobalContext, {
   indicateLoading,
@@ -67,7 +67,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         ...state,
         orderedTasks: groupTaskListOnSortBy(
           collectAllTasks(state.orderedTasks),
-          state.unorderedColumns[sortBy],
+          state.columnOptions[sortBy],
           sortBy
         ),
       });
@@ -84,19 +84,19 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
       const columnDataFromApi = columnOptions;
       const tasksListData = response.data;
 
-      const processedData = groupTaskListOnSortBy(
+      const orderedTasks = groupTaskListOnSortBy(
         tasksListData,
         columnDataFromApi[sortBy],
         sortBy
       );
 
-      const dueDateColumns = renameAndReorderDueDateColumns(
+      const dueDateColumns = initializeDueDataColumns(
         columnDataFromApi.dueDate
       );
 
       setState({
-        orderedTasks: processedData,
-        unorderedColumns: {
+        orderedTasks,
+        columnOptions: {
           ...columnDataFromApi,
           dueDate: dueDateColumns,
         },
@@ -120,19 +120,17 @@ export function useLocalTasks(sortBy: SortBy) {
     const columnDataFromApi = columnOptions;
     const dataFromAPI = initialData;
 
-    const dueDateColumns = renameAndReorderDueDateColumns(
-      columnOptions.dueDate
-    );
+    const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
 
-    const processedTaskList = groupTaskListOnSortBy(
+    const orderedTasks = groupTaskListOnSortBy(
       dataFromAPI,
       columnDataFromApi[sortBy],
       sortBy
     );
 
     setState({
-      orderedTasks: processedTaskList,
-      unorderedColumns: {
+      orderedTasks,
+      columnOptions: {
         ...columnDataFromApi,
         dueDate: dueDateColumns,
       },
@@ -146,7 +144,7 @@ export function useLocalTasks(sortBy: SortBy) {
         ...state,
         orderedTasks: groupTaskListOnSortBy(
           collectAllTasks(state.orderedTasks),
-          state.unorderedColumns[sortBy],
+          state.columnOptions[sortBy],
           sortBy
         ),
       });

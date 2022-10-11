@@ -5,6 +5,7 @@ import useGlobalContext from "../context/global/useGlobalContext";
 import useAuthContext, {
   refreshUserToken,
 } from "../context/auth/useAuthContext";
+import { getTodayYMDString } from "../utils/getWeekDays";
 
 export default function useInit() {
   const { globalState } = useGlobalContext();

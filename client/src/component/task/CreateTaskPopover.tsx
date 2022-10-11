@@ -33,8 +33,15 @@ import {
   Task,
 } from "./Data";
 import { createTask } from "./TaskActions";
-import { updateTaskInfoInOtherSortBy } from "./TaskDataProcessing";
+import {
+  getDueDateColumnFromDateString,
+  updateTaskInfoInOtherSortBy,
+} from "./TaskDataProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
+import {
+  getNextNWeekDayString,
+  getTodayYMDString,
+} from "../../utils/getWeekDays";
 
 export type NewTask = {
   title: string;
@@ -140,7 +147,7 @@ export const CreateTaskPopover = ({
                       <FormControl my={3}>
                         <Stack spacing={3}>
                           <Select {...field}>
-                            {state.unorderedColumns.priority.map((priority) => (
+                            {state.columnOptions.priority.map((priority) => (
                               <option value={priority.id} key={priority.id}>
                                 {capitalizeFirstLetter(
                                   priority.title.toLowerCase()
@@ -222,7 +229,7 @@ function validateName(value: string) {
 }
 
 async function submit(
-  values: NewTask,
+  formValues: NewTask,
   formikHelpers: FormikHelpers<NewTask>,
   state: State,
   column: ColumnType,
@@ -231,23 +238,36 @@ async function submit(
   user?: User
 ) {
   // Prepare newTask
-  const { title, description } = values;
+  const { title, description, dueDate, priority, status } = formValues;
+  const today = getTodayYMDString();
+  console.log({ dueDate, today });
   const userId = user!.id;
   const username = user!.username;
 
   const newTask: Task = {
+    id: 123,
     creatorId: userId,
     creatorName: username,
     title,
     description,
-    previousItem: {},
+    previousTask: {},
     events: [],
     watchers: [{ userId, username }],
     assignees: [],
+    date: new Date(),
   };
-  // console.log(newTask)
 
-  updateTaskInfoInOtherSortBy(state, values, newTask);
+  const targetColumn = { dueDate, priority, status };
+  if (dueDate && dueDate.length > 1) {
+    const columnId = getDueDateColumnFromDateString(
+      state.columnOptions.dueDate,
+      dueDate
+    );
+
+    if (columnId) targetColumn.dueDate = String(columnId);
+  }
+
+  updateTaskInfoInOtherSortBy(state, targetColumn, newTask);
 
   // Updates for newTask's previousItem for current sortBy
   const currentOrderedTasks = state.orderedTasks.find(
@@ -262,9 +282,9 @@ async function submit(
     : undefined;
 
   newTask[sortBy] = column.id;
-  newTask.previousItem[`${sortBy}Id`] = previousTaskId;
+  newTask.previousTask[`${sortBy}Id`] = previousTaskId;
 
-  const newTaskData = await createTask(newTask);
+  // const newTaskData = await createTask(newTask);
 
   // Update state
   setState((previousState) => {
@@ -275,8 +295,8 @@ async function submit(
     const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    if (newTaskData) taskArr?.taskList.push(newTaskData);
-    // taskArr?.taskList.push(newTask);
+    // if (newTaskData) taskArr?.taskList.push(newTaskData);
+    taskArr?.taskList.push(newTask);
 
     return copiedState;
   });
