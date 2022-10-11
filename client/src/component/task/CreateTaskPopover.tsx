@@ -42,6 +42,7 @@ import {
   getNextNWeekDayString,
   getTodayYMDString,
 } from "../../utils/getWeekDays";
+import { getRandomNumber } from "../../utils/getRandomNumber";
 
 export type NewTask = {
   title: string;
@@ -70,6 +71,7 @@ export const CreateTaskPopover = ({
   const { authState } = useAuthContext();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const isTaskDone = sortBy === "status" && currentColumn.id === 3;
 
   return (
     <Popover
@@ -110,6 +112,7 @@ export const CreateTaskPopover = ({
                 currentColumn,
                 sortBy,
                 setState,
+                isTaskDone,
                 authState.user
               )
             }
@@ -141,7 +144,7 @@ export const CreateTaskPopover = ({
                 </Field>
 
                 {/* Task priority */}
-                {sortBy !== PRIORITY && (
+                {sortBy !== PRIORITY && !isTaskDone && (
                   <Field id={PRIORITY} name={PRIORITY} as="select">
                     {({ field, form }: FieldAttributes<any>) => (
                       <FormControl my={3}>
@@ -162,7 +165,7 @@ export const CreateTaskPopover = ({
                 )}
 
                 {/* Task dueDate */}
-                {sortBy !== DUE_DATE && (
+                {sortBy !== DUE_DATE && !isTaskDone && (
                   <Field id={DUE_DATE} name={DUE_DATE} as="select">
                     {({ field, form }: FieldAttributes<any>) => (
                       <FormControl my={3}>
@@ -235,17 +238,16 @@ async function submit(
   column: ColumnType,
   sortBy: SortBy,
   setState: SetState,
+  isTaskDone: boolean,
   user?: User
 ) {
   // Prepare newTask
   const { title, description, dueDate, priority, status } = formValues;
-  const today = getTodayYMDString();
-  console.log({ dueDate, today });
   const userId = user!.id;
   const username = user!.username;
 
   const newTask: Task = {
-    id: 123,
+    id: getRandomNumber(10, 1000),
     creatorId: userId,
     creatorName: username,
     title,
@@ -267,7 +269,15 @@ async function submit(
     if (columnId) targetColumn.dueDate = String(columnId);
   }
 
-  updateTaskInfoInOtherSortBy(state, targetColumn, newTask);
+  // update other column's state and previousTask info
+  if (isTaskDone) {
+    newTask.priority = 0;
+    newTask.dueDate = 0;
+    // newTask.previousTask.dueDateId = 0;
+    // newTask.previousTask.priorityId = 0;
+  } else {
+    updateTaskInfoInOtherSortBy(state, targetColumn, newTask);
+  }
 
   // Updates for newTask's previousItem for current sortBy
   const currentOrderedTasks = state.orderedTasks.find(

@@ -58,10 +58,10 @@ export default function TaskListView({ sortBy }: Props) {
           {/* Columns and tasks */}
           {currentColumns.map((currentColumn, index) => {
             // Task marked as finished is managed in "status", and hidden in other sortBy conditions
-            const columnWithTaskDone = currentColumn.id !== 0;
+            const columnWithTaskStatusDone = currentColumn.id !== 0;
 
             return (
-              columnWithTaskDone && (
+              columnWithTaskStatusDone && (
                 <Box mx={2} key={currentColumn.id} borderRadius={4}>
                   <Column
                     state={state}
@@ -319,6 +319,7 @@ async function handleDragEnd(
     updateTaskInfoInOtherSortBy(state, previousTask, sourceTask);
   }
 
+  // sourceTasksArr.taskList.splice(source.index, 1);
   setState({ ...state, orderedTasks: orderedTasks });
 
   const userId = user!.id;
@@ -343,12 +344,12 @@ async function handleDragEnd(
   // console.log({ sourceTask });
   // console.log({ taskForUpdate });
 
-  const updated = await updateTasks({
-    sourceTaskId: sourceTask.id!,
-    taskList: taskForUpdate,
-  });
-  if (updated) {
-    // Clear sourceTask events
-    sourceTask.events = [];
-  }
+  // const updated = await updateTasks({
+  //   sourceTaskId: sourceTask.id!,
+  //   taskList: taskForUpdate,
+  // });
+  // if (updated) {
+  //   // Clear sourceTask events
+  //   sourceTask.events = [];
+  // }
 }

@@ -83,7 +83,7 @@ import {
         ]
 */
 export function groupTaskListOnSortBy(
-  tasks: TaskList,
+  allTasks: TaskList,
   columns: Columns,
   sortBy: SortBy
 ): OrderedTasks {
@@ -96,7 +96,7 @@ export function groupTaskListOnSortBy(
     orderedTasks[i] = { id: columnId, taskList: [] };
 
     // Find the first element
-    const firstTask = tasks.find(
+    const firstTask = allTasks.find(
       (task) =>
         task[sortBy] === columnId &&
         !task.previousTask[lookUpPreviousTaskId[sortBy]]
@@ -107,7 +107,7 @@ export function groupTaskListOnSortBy(
     for (let k = 0; k < orderedTasks[i].taskList.length; k++) {
       const currentTask = orderedTasks[i].taskList[k];
 
-      const entailingTask = tasks.find(
+      const entailingTask = allTasks.find(
         (task) =>
           task.previousTask[lookUpPreviousTaskId[sortBy]] === currentTask.id
       );
@@ -117,13 +117,12 @@ export function groupTaskListOnSortBy(
   }
 
   // Collect all the finished tasks
-  for (let i = 0; i < tasks.length; i++) {
-    const currentTask = tasks[i];
+  for (let i = 1; i < allTasks.length; i++) {
+    const currentTask = allTasks[i];
 
     if (currentTask.status === 3) {
-      const id = orderedTasks.length;
-      orderedTasks[id] = { id, taskList: [] };
-      orderedTasks[id].taskList.push(currentTask);
+      const doneTasks = orderedTasks.find((tasks) => tasks.id === 0);
+      doneTasks?.taskList.push(currentTask);
     }
   }
 
@@ -245,14 +244,14 @@ export function getDueDateColumnFromDateString(
 export function updateTaskInfoInOtherSortBy(
   state: State,
   targetColumn: TargetColumn,
-  taskForUpdate: Task
+  sourceTask: Task
 ) {
   const allTasks = collectAllTasks(state.orderedTasks);
 
   // Updates for newTask's previousItem for other sortBy
   const previousTaskValues = collectPreviousTaskValues(targetColumn);
 
-  updateTask(previousTaskValues, allTasks, taskForUpdate);
+  updateTask(previousTaskValues, allTasks, sourceTask);
 }
 
 // Collect all tasks from OrderedTasks to Task[]
@@ -318,7 +317,7 @@ export function collectPreviousTaskValues(
 export function updateTask(
   previousTaskValues: TargetTasksInColumn,
   allTasks: TaskList,
-  taskForUpdate: Task
+  sourceTask: Task
 ) {
   for (let i = 0; i < previousTaskValues.length; i++) {
     const previousTaskValue = previousTaskValues[i];
@@ -329,8 +328,8 @@ export function updateTask(
     const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
 
     // Update new task
-    taskForUpdate[updateSortBy] = updateSortById;
-    taskForUpdate.previousTask[`${updateSortBy}Id`] = idResult;
+    sourceTask[updateSortBy] = updateSortById;
+    sourceTask.previousTask[`${updateSortBy}Id`] = idResult;
   }
 }
 
