@@ -103,7 +103,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<!-- https://stackoverflow.com/q/42921490/16648127
-					https://www.baeldung.com/spring-boot-repackage-vs-mvn-package -->
+					https://www.baeldung.com/spring-boot-repackage-vs-mvn-package 
+					https://docs.spring.io/spring-boot/docs/2.7.4/maven-plugin/reference/htmlsingle/#packaging -->
 				<executions>
 					<execution>
 						<goals>
