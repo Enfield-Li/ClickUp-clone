@@ -6,6 +6,7 @@ import App from "./App";
 import AuthStateProvider from "./context/auth/AuthContext";
 import GlobalStateProvider from "./context/global/GlobalContext";
 import { ChakraProvider, theme } from "@chakra-ui/react";
+import TaskDetailProvider from "./context/task_detail/TaskDetailContext";
 // import reportWebVitals from "./reportWebVitals"
 // import * as serviceWorker from "./serviceWorker"
 
@@ -17,12 +18,14 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthStateProvider>
-        <GlobalStateProvider>
-          <ColorModeScript />
-          <ChakraProvider theme={theme}>
-            <App />
-          </ChakraProvider>
-        </GlobalStateProvider>
+        <TaskDetailProvider>
+          <GlobalStateProvider>
+            <ColorModeScript />
+            <ChakraProvider theme={theme}>
+              <App />
+            </ChakraProvider>
+          </GlobalStateProvider>
+        </TaskDetailProvider>
       </AuthStateProvider>
     </BrowserRouter>
   </React.StrictMode>

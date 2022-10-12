@@ -1,21 +1,9 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Center,
-  Heading,
-  Link,
-  Stack,
-  Text,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, Link, Text, VStack } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import useGlobalContext, {
   indicateLoading,
   popUpError,
 } from "../../context/global/useGlobalContext";
-import ToastButton from "../custom/ToastButton";
 
 type Props = {};
 

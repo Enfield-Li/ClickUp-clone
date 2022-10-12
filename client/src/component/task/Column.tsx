@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import React from "react";
-import Card from "./Card";
+import TaskCard from "./TaskCard";
 import { CreateTaskPopover } from "./CreateTaskPopover";
 import {
   ColumnType,
@@ -77,7 +77,7 @@ export default function Column({
           >
             {/* Task list */}
             {tasks?.map((task, index) => (
-              <Card
+              <TaskCard
                 state={state}
                 task={task}
                 key={task.id}

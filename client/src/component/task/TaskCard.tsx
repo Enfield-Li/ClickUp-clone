@@ -1,20 +1,7 @@
-import {
-  Box,
-  Center,
-  Heading,
-  Text,
-  Stack,
-  Avatar,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {
-  Draggable,
-  DraggableStateSnapshot,
-  Droppable,
-} from "@hello-pangea/dnd";
+import { Box, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Draggable } from "@hello-pangea/dnd";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SetState, State, Task } from "./Data";
-import TaskDetails from "./taskDetails/TaskDetails";
 
 type Props = {
   task: Task;
@@ -24,7 +11,7 @@ type Props = {
   currentColumnId: number;
 };
 
-export default function Card({
+export default function TaskCard({
   task,
   index,
   state,
@@ -33,11 +20,10 @@ export default function Card({
 }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen, setTaskUpdateInfo, setTask } = useTaskDetailContext();
 
   return (
     <>
-      {/* Task card */}
       <Draggable draggableId={String(task.id)} index={index}>
         {(provided, snapshot) => (
           <Box
@@ -47,7 +33,11 @@ export default function Card({
             bg={bgColor}
             rounded={"md"}
             boxShadow={"xl"}
-            onClick={onOpen}
+            onClick={() => {
+              onOpen();
+              setTask(task);
+              setTaskUpdateInfo({ state, setState, currentColumnId });
+            }}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -62,16 +52,6 @@ export default function Card({
           </Box>
         )}
       </Draggable>
-
-      {/* Task details inside Modal */}
-      <TaskDetails
-        state={state}
-        isOpen={isOpen}
-        onClose={onClose}
-        setState={setState}
-        currentTask={task}
-        currentColumnId={currentColumnId}
-      />
     </>
   );
 }

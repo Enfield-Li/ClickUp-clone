@@ -1,63 +1,60 @@
-import React, { useRef, useState } from "react";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-  Flex,
   Box,
-  Divider,
+  Button,
   Center,
-  background,
+  Divider,
   Editable,
   EditableInput,
   EditablePreview,
   EditableTextarea,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Popover,
-  PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Tooltip,
-  Select,
 } from "@chakra-ui/react";
-import {
-  SetState,
-  UpdateTaskDescDTO,
-  Task,
-  UpdateTaskTitleDTO,
-  State,
-} from "../Data";
 import produce from "immer";
+import { useRef } from "react";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
+import { SetState, UpdateTaskDescDTO, UpdateTaskTitleDTO } from "../Data";
 import SelectOption, { updateCurrentTask } from "./SelectOption";
 
-type Props = {
-  state: State;
-  isOpen: boolean;
-  currentTask: Task;
-  setState: SetState;
-  onClose: () => void;
-  currentColumnId: number;
-};
+type Props = {};
 
-export default function TaskDetails({
-  state,
-  isOpen,
-  onClose,
-  setState,
-  currentTask,
-  currentColumnId,
-}: Props) {
+export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
+  const {
+    isOpen,
+    onClose,
+    setTask,
+    taskUpdateInfo,
+    setTaskUpdateInfo,
+    task: currentTask,
+  } = useTaskDetailContext();
+
+  if (!currentTask || !taskUpdateInfo)
+    return (
+      <>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalBody>loading</ModalBody>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+
+  const { state, setState, currentColumnId } = taskUpdateInfo;
 
   return (
     <Modal
