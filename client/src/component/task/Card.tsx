@@ -21,9 +21,16 @@ type Props = {
   state: State;
   index: number;
   setState: SetState;
+  currentColumnId: number;
 };
 
-export default function Card({ task, index, state, setState }: Props) {
+export default function Card({
+  task,
+  index,
+  state,
+  setState,
+  currentColumnId,
+}: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,7 +69,8 @@ export default function Card({ task, index, state, setState }: Props) {
         isOpen={isOpen}
         onClose={onClose}
         setState={setState}
-        task={task}
+        currentTask={task}
+        currentColumnId={currentColumnId}
       />
     </>
   );

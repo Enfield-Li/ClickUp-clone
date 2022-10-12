@@ -26,7 +26,7 @@ import {
   collectAllTasks,
   processLookUpDueDateId,
   groupTaskListOnSortBy,
-  updateTaskInfoInOtherSortBy,
+  updateTaskPositionInColumn,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -280,21 +280,21 @@ async function handleDragEnd(
   if (moveFromUnfinishedToFinished) {
     // Remove task from other sortBy options, by updating the sourceTaskAfter
     orderedTasks.forEach((tasks) =>
-      tasks.taskList.forEach((task) => {
+      tasks.taskList.forEach((taskAfter) => {
         const sourceTaskAfterInPriority =
-          task.previousTask.priorityId === sourceTask.id;
+          taskAfter.previousTask.priorityId === sourceTask.id;
+        const sourceTaskAfterInDueDate =
+          taskAfter.previousTask.dueDateId === sourceTask.id;
 
         if (sourceTaskAfterInPriority) {
-          task.previousTask.priorityId = sourceTask.previousTask.priorityId;
-          taskForUpdate.push(task);
-        }
+          taskAfter.previousTask.priorityId =
+            sourceTask.previousTask.priorityId;
 
-        const sourceTaskAfterInDueDate =
-          task.previousTask.dueDateId === sourceTask.id;
+          taskForUpdate.push(taskAfter);
+        } else if (sourceTaskAfterInDueDate) {
+          taskAfter.previousTask.dueDateId = sourceTask.previousTask.dueDateId;
 
-        if (sourceTaskAfterInDueDate) {
-          task.previousTask.dueDateId = sourceTask.previousTask.dueDateId;
-          taskForUpdate.push(task);
+          taskForUpdate.push(taskAfter);
         }
       })
     );
@@ -330,7 +330,7 @@ async function handleDragEnd(
         : "1",
     };
 
-    updateTaskInfoInOtherSortBy(state, previousTask, sourceTask);
+    updateTaskPositionInColumn(state, previousTask, sourceTask);
   }
 
   // sourceTasksArr.taskList.splice(source.index, 1);

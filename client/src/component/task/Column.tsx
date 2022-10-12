@@ -83,6 +83,7 @@ export default function Column({
                 key={task.id}
                 index={index}
                 setState={setState}
+                currentColumnId={currentColumn.id}
               />
             ))}
             {provided.placeholder}

@@ -241,7 +241,7 @@ export function getDueDateColumnFromDateString(
 }
 
 // Push task to the other sortBy id === 1 column
-export function updateTaskInfoInOtherSortBy(
+export function updateTaskPositionInColumn(
   state: State,
   targetColumn: TargetColumn,
   sourceTask: Task

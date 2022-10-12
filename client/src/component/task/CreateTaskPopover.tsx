@@ -35,7 +35,7 @@ import {
 import { createTask } from "./TaskActions";
 import {
   getDueDateColumnFromDateString,
-  updateTaskInfoInOtherSortBy,
+  updateTaskPositionInColumn,
 } from "./TaskDataProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
 import {
@@ -277,7 +277,7 @@ async function submit(
     // newTask.previousTask.dueDateId = 0;
     // newTask.previousTask.priorityId = 0;
   } else {
-    updateTaskInfoInOtherSortBy(state, targetColumn, newTask);
+    updateTaskPositionInColumn(state, targetColumn, newTask);
   }
 
   // Updates for newTask's previousItem for current sortBy

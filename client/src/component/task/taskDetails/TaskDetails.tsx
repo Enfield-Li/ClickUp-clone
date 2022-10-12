@@ -41,19 +41,21 @@ import { API_ENDPOINT } from "../../../utils/constant";
 import SelectOption from "./SelectOption";
 
 type Props = {
-  task: Task;
   state: State;
   isOpen: boolean;
-  onClose: () => void;
+  currentTask: Task;
   setState: SetState;
+  onClose: () => void;
+  currentColumnId: number;
 };
 
 export default function TaskDetails({
-  isOpen,
   state,
+  isOpen,
   onClose,
-  task,
   setState,
+  currentTask: task,
+  currentColumnId,
 }: Props) {
   const initialRef = useRef(null);
 
@@ -104,6 +106,7 @@ export default function TaskDetails({
                       <Button>Status</Button>
                     </PopoverTrigger>
 
+                    {/* Complete CheckBox */}
                     <Tooltip label="Set to complete" placement="top" hasArrow>
                       <Center
                         cursor={"pointer"}
@@ -114,11 +117,16 @@ export default function TaskDetails({
                       </Center>
                     </Tooltip>
 
-                    {/* Set status */}
+                    {/* Status flag */}
                     <PopoverContent width="200px">
-                      <PopoverBody>
-                        {/* {state.unorderedColumns.} */}
-                        <SelectOption />
+                      <PopoverBody shadow={"2xl"}>
+                        <SelectOption
+                          state={state}
+                          currentTask={task}
+                          setState={setState}
+                          currentColumnId={currentColumnId}
+                          statusColumns={state.columnOptions.status}
+                        />
                       </PopoverBody>
                     </PopoverContent>
                   </Popover>
