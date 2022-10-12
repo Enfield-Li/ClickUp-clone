@@ -38,7 +38,7 @@ import {
 import produce from "immer";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import SelectOption from "./SelectOption";
+import SelectOption, { updateCurrentTask } from "./SelectOption";
 
 type Props = {
   state: State;
@@ -54,7 +54,7 @@ export default function TaskDetails({
   isOpen,
   onClose,
   setState,
-  currentTask: task,
+  currentTask,
   currentColumnId,
 }: Props) {
   const initialRef = useRef(null);
@@ -72,17 +72,25 @@ export default function TaskDetails({
         {/* Header */}
         <ModalHeader mb={"-4"}>
           <Flex>
-            <Editable mr={6} defaultValue={task.title}>
+            <Editable mr={6} defaultValue={currentTask.title}>
               <EditablePreview />
               <EditableInput
                 onKeyDown={(e) =>
                   e.key === "Enter" &&
-                  e.currentTarget.value !== task.title &&
-                  updateTaskTitle(task!.id!, e.currentTarget.value, setState)
+                  e.currentTarget.value !== currentTask.title &&
+                  updateTaskTitle(
+                    currentTask!.id!,
+                    e.currentTarget.value,
+                    setState
+                  )
                 }
                 onBlur={(e) => {
-                  if (e.target.value !== task.title) {
-                    updateTaskTitle(task!.id!, e.currentTarget.value, setState);
+                  if (e.target.value !== currentTask.title) {
+                    updateTaskTitle(
+                      currentTask!.id!,
+                      e.currentTarget.value,
+                      setState
+                    );
                   }
                 }}
               />
@@ -111,7 +119,14 @@ export default function TaskDetails({
                       <Center
                         cursor={"pointer"}
                         fontSize={"30px"}
-                        onClick={() => console.log("finished")}
+                        onClick={() =>
+                          updateCurrentTask(
+                            currentTask,
+                            setState,
+                            3,
+                            currentColumnId
+                          )
+                        }
                       >
                         <i className="bi bi-check-square"></i>
                       </Center>
@@ -121,9 +136,8 @@ export default function TaskDetails({
                     <PopoverContent width="200px">
                       <PopoverBody shadow={"2xl"}>
                         <SelectOption
-                          state={state}
-                          currentTask={task}
                           setState={setState}
+                          currentTask={currentTask}
                           currentColumnId={currentColumnId}
                           statusColumns={state.columnOptions.status}
                         />
@@ -158,15 +172,15 @@ export default function TaskDetails({
 
                 <Editable
                   width="100%"
-                  defaultValue={task.description}
+                  defaultValue={currentTask.description}
                   placeholder="Add some desc"
                 >
                   <EditablePreview />
                   <EditableTextarea
                     onBlur={(e) => {
-                      if (e.target.value !== task.title) {
+                      if (e.target.value !== currentTask.title) {
                         updateTaskDesc(
-                          task!.id!,
+                          currentTask!.id!,
                           e.currentTarget.value,
                           setState
                         );
@@ -185,7 +199,7 @@ export default function TaskDetails({
             <Box flexBasis={"50%"}>
               <Flex justifyContent={"space-evenly"} my={3}>
                 <Box>Stats 1</Box>
-                <Box>Task dueDate: {task.dueDate}</Box>
+                <Box>Task dueDate: {currentTask.dueDate}</Box>
               </Flex>
               <Box>Events</Box>
             </Box>
