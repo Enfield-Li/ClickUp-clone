@@ -16,7 +16,8 @@
 		<module>notification</module>
 		<module>amqp</module>
 		<module>auth</module>
-    <module>task</module>
+		<module>task</module>
+		<module>taskEvent</module>
 	</modules>
 
 	<name>muti-module</name>
