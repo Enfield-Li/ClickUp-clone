@@ -3,7 +3,7 @@ package com.example.task;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
-import com.example.task.model.Event;
+import com.example.task.dto.eventDTO.EventDTO;
 import com.example.task.model.PreviousTask;
 import com.example.task.model.Task;
 import java.util.ArrayList;
@@ -40,15 +40,16 @@ public class TaskService {
     var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
     var taskList = updateTasksPositionDTO.taskList();
 
-    var sourceTaskPayload = taskList
+    var sourceTask = taskList
       .stream()
       .filter(task -> task.id() == sourceTaskId)
       .findAny();
 
-    var sourceTask = entityManager.find(Task.class, sourceTaskId);
-    sourceTask.getEvents();
-    sourceTask.addEvents(sourceTaskPayload.get().events());
+    // var sourceTask = entityManager.find(Task.class, sourceTaskId);
+    // sourceTask.getEvents();
+    // sourceTask.addEvents(sourceTaskPayload.get().events());
 
+    // DTO to entity
     var tasks = new ArrayList<Task>();
     taskList.forEach(
       taskDTO -> {
@@ -62,24 +63,24 @@ public class TaskService {
           .description(taskDTO.description())
           .creatorId(taskDTO.creatorId())
           .creatorName(taskDTO.creatorName())
-          .previousItem(taskDTO.previousItem())
-          .events(taskDTO.events())
+          .previousTask(taskDTO.previousTask())
+          .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
           .build();
 
         tasks.add(task);
       }
     );
 
-    // Manage relationship
-    tasks
-      .stream()
-      .map(
-        task ->
-          task.getId() == sourceTaskId
-            ? setEventForParticipantInTask(task)
-            : task
-      )
-      .collect(Collectors.toList());
+    // // Manage relationship
+    // tasks
+    //   .stream()
+    //   .map(
+    //     task ->
+    //       task.getId() == sourceTaskId
+    //         ? setEventForParticipantInTask(task)
+    //         : task
+    //   )
+    //   .collect(Collectors.toList());
 
     taskRepository.saveAll(tasks);
     return true;
@@ -106,17 +107,17 @@ public class TaskService {
   // }
 
   private Task setTaskWatcherForEvents(Task task) {
-    task.getWatchers().forEach(watcher -> watcher.setTask_watcher(task));
+    task.getWatchers().forEach(watcher -> watcher.setTaskWatcher(task));
     return task;
   }
 
-  private Task setEventForParticipantInTask(Task task) {
-    task.getEvents().forEach(event -> setEventForParticipant(event));
-    return task;
-  }
+  // private Task setEventForParticipantInTask(Task task) {
+  //   task.getEvents().forEach(event -> setEventForParticipant(event));
+  //   return task;
+  // }
 
-  private Event setEventForParticipant(Event event) {
-    event.getParticipants().forEach(participant -> participant.setEvent(event));
-    return event;
-  }
+  // private Event setEventForParticipant(Event event) {
+  //   event.getParticipants().forEach(participant -> participant.setEvent(event));
+  //   return event;
+  // }
 }

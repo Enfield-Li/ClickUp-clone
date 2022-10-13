@@ -1,4 +1,4 @@
-package com.example.task.model;
+package com.example.task.dto.eventDTO;
 
 public enum EventType {
   UPDATE,

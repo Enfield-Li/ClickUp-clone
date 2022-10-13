@@ -109,6 +109,7 @@ type Participant = {
 };
 type Event = {
   id?: number;
+  taskId: number;
   createdAt?: Date;
   updatedAt?: Date;
   initiatorId: number;

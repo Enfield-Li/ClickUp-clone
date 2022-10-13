@@ -2,11 +2,9 @@ package com.example.taskEvent;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-// import org.springframework.cloud.openfeign.EnableFeignClients;
+// import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
-@EnableEurekaClient
-// @EnableFeignClients(basePackages = "com.example.clients")
+// @EnableEurekaClient
 @SpringBootApplication(
   scanBasePackages = { "com.example.amqp", "com.example.taskEvent" }
 )

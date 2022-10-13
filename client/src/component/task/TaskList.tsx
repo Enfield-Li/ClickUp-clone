@@ -34,12 +34,12 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState } = useLocalTasks(sortBy);
+  // const { state, setState } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
-  // const { state, loading, error, setState } = useFetchTasks(
-  //   API_ENDPOINT.TASK_ALL_TASKS,
-  //   sortBy
-  // );
+  const { state, loading, error, setState } = useFetchTasks(
+    API_ENDPOINT.TASK_ALL_TASKS,
+    sortBy
+  );
   console.log(state);
 
   // if (!state || loading) return <div>Loading</div>;
@@ -281,17 +281,22 @@ async function handleDragEnd(
     // Remove task from other sortBy options, by updating the sourceTaskAfter
     orderedTasks.forEach((tasks) =>
       tasks.taskList.forEach((taskAfter) => {
+        // Update priority
         const sourceTaskAfterInPriority =
           taskAfter.previousTask.priorityId === sourceTask.id;
-        const sourceTaskAfterInDueDate =
-          taskAfter.previousTask.dueDateId === sourceTask.id;
 
         if (sourceTaskAfterInPriority) {
           taskAfter.previousTask.priorityId =
             sourceTask.previousTask.priorityId;
 
           taskForUpdate.push(taskAfter);
-        } else if (sourceTaskAfterInDueDate) {
+        }
+
+        // Update dueDate
+        const sourceTaskAfterInDueDate =
+          taskAfter.previousTask.dueDateId === sourceTask.id;
+
+        if (sourceTaskAfterInDueDate) {
           taskAfter.previousTask.dueDateId = sourceTask.previousTask.dueDateId;
 
           taskForUpdate.push(taskAfter);
@@ -300,6 +305,9 @@ async function handleDragEnd(
     );
 
     // Update sourceTask by cleaning up other sortBy's info
+    // if (!sourceTask.previousTaskBeforeFinish) {
+    //   sourceTask.previousTaskBeforeFinish = {};
+    // }
     sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
     sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
     sourceTask.priority = 0;
@@ -315,6 +323,9 @@ async function handleDragEnd(
     source.droppableId === "3";
 
   if (isSetToUnfinished) {
+    // if (!sourceTask.previousTaskBeforeFinish) {
+    //   sourceTask.previousTaskBeforeFinish = {};
+    // }
     const previousDueDateIdBeforeFinish =
       sourceTask.previousTaskBeforeFinish.dueDateId;
 
@@ -341,29 +352,29 @@ async function handleDragEnd(
 
   // Override all previous update events
   // So as to keep the event consistent when submitting to server
-  sourceTask.events = [
-    {
-      initiatorId: userId,
-      initiatorName: username,
-      eventType: UPDATE,
-      updateAction: sortBy,
-      updateFrom: sourceDroppableId,
-      updateTo: destinationDroppableId,
-      participants: [{ userId, username }],
-    },
-  ];
+  if (sourceTask.id)
+    sourceTask.events = [
+      {
+        taskId: sourceTask.id,
+        initiatorId: userId,
+        initiatorName: username,
+        eventType: UPDATE,
+        updateAction: sortBy,
+        updateFrom: sourceDroppableId,
+        updateTo: destinationDroppableId,
+        participants: [{ userId, username }],
+      },
+    ];
 
   if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
-  // console.log({ sourceTask });
-  // console.log({ taskForUpdate });
 
-  // const updated = await updateTasks({
-  //   sourceTaskId: sourceTask.id!,
-  //   taskList: taskForUpdate,
-  // });
-  // if (updated) {
-  //   // Clear sourceTask events
-  //   sourceTask.events = [];
-  // }
+  const updated = await updateTasks({
+    sourceTaskId: sourceTask.id!,
+    taskList: taskForUpdate,
+  });
+  if (updated) {
+    // Clear sourceTask events
+    sourceTask.events = [];
+  }
 }

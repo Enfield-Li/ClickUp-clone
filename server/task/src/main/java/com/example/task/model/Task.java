@@ -6,7 +6,6 @@ import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
-import com.example.task.dto.EventDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -71,50 +70,42 @@ public class Task {
 
   @NotNull
   @OneToMany(
-    mappedBy = "task_watcher",
+    mappedBy = "taskWatcher",
     fetch = EAGER,
     cascade = { PERSIST, DETACH, MERGE }
   )
   private Set<Participant> watchers = new HashSet<>();
 
   @OneToMany(
-    mappedBy = "task_assignee",
+    mappedBy = "taskAssignee",
     fetch = EAGER,
     cascade = { PERSIST, DETACH, MERGE }
   )
   private Set<Participant> assignees = new HashSet<>();
 
+  @JsonIgnore
   @Column(updatable = false, insertable = false)
-  private Integer previous_item_id;
+  private Integer previousTaskId;
 
-  @JoinColumn(name = "previous_item_id")
+  @JoinColumn(name = "previousTaskId")
   @OneToOne(cascade = { PERSIST, DETACH, MERGE })
-  private PreviousTask previousItem;
+  private PreviousTask previousTask;
 
   @JsonIgnore
-  @OneToMany(
-    mappedBy = "task",
-    fetch = LAZY,
-    cascade = { PERSIST, DETACH, MERGE }
-  )
-  private Set<Event> events = new HashSet<>();
+  @Column(updatable = false, insertable = false)
+  private Integer previousTaskBeforeFinishId;
+
+  @JoinColumn(name = "previousTaskBeforeFinishId")
+  @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+  private PreviousTaskBeforeFinish previousTaskBeforeFinish;
 
   public void addParticipant(Participant participant) {
     watchers.add(participant);
-    participant.setTask_watcher(this);
+    participant.setTaskWatcher(this);
   }
 
   public void removeParticipant(Participant participant) {
     watchers.remove(participant);
-    participant.setTask_watcher(null);
-  }
-
-  public void addEvents(Set<Event> eventDTO) {
-    // https://stackoverflow.com/a/30139228/16648127
-    var combinedEvents = Stream
-      .concat(this.events.stream(), eventDTO.stream())
-      .collect(Collectors.toSet());
-    this.events = combinedEvents;
-    eventDTO.forEach(event -> event.setTask(this));
+    participant.setTaskWatcher(null);
   }
 }

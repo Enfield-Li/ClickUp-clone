@@ -1,4 +1,4 @@
-package com.example.task.model;
+package com.example.taskEvent.model;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -20,7 +19,6 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "taskWatcher" })
 public class Participant {
 
   @Id
@@ -29,24 +27,15 @@ public class Participant {
 
   private Integer userId;
   private String username;
-
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
   private Integer taskWatcherId;
-
-  @JsonIgnore
-  @ToString.Exclude
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "taskWatcherId")
-  private Task taskWatcher;
-
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
   private Integer taskAssigneeId;
 
+  @Column(updatable = false, insertable = false)
+  private Integer eventId;
+
   @JsonIgnore
   @ToString.Exclude
   @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "taskAssigneeId")
-  private Task taskAssignee;
+  @JoinColumn(name = "eventId")
+  private TaskEvent event;
 }
