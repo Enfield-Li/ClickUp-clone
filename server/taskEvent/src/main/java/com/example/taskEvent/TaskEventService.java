@@ -1,8 +1,6 @@
 package com.example.taskEvent;
 
-import static com.example.amqp.exchange.Notification.*;
-
-import com.example.amqp.RabbitMqMessageProducer;
+import com.example.taskEvent.model.TaskEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +9,17 @@ import org.springframework.stereotype.Service;
 public class TaskEventService {
 
   private final TaskEventRepository taskEventRepository;
-  private final RabbitMqMessageProducer rabbitMQMessageProducer;
+
+  public void insertEvent(TaskEvent taskEvent) {
+    setTaskEventForParticipant(taskEvent);
+    taskEventRepository.save(taskEvent);
+  }
+
+  private TaskEvent setTaskEventForParticipant(TaskEvent taskEvent) {
+    taskEvent
+      .getParticipants()
+      .forEach(participant -> participant.setTaskEvent(taskEvent));
+
+    return taskEvent;
+  }
 }

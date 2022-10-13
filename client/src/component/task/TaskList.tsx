@@ -353,7 +353,7 @@ async function handleDragEnd(
   // Override all previous update events
   // So as to keep the event consistent when submitting to server
   if (sourceTask.id)
-    sourceTask.events = [
+    sourceTask.taskEvents = [
       {
         taskId: sourceTask.id,
         initiatorId: userId,
@@ -375,6 +375,6 @@ async function handleDragEnd(
   });
   if (updated) {
     // Clear sourceTask events
-    sourceTask.events = [];
+    sourceTask.taskEvents = [];
   }
 }

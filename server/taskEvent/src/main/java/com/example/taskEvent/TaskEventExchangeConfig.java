@@ -1,6 +1,6 @@
-package com.example.notification;
+package com.example.taskEvent;
 
-import static com.example.amqp.exchange.Notification.*;
+import static com.example.amqp.exchange.TaskEvent.*;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class NotificationConfig {
+public class TaskEventExchangeConfig {
 
   @Bean
   public TopicExchange internalTopicExchange() {
@@ -19,7 +19,7 @@ public class NotificationConfig {
 
   @Bean
   public Queue notificationQueue() {
-    return new Queue(notificationQueue);
+    return new Queue(taskEventQueue);
   }
 
   @Bean
@@ -27,6 +27,6 @@ public class NotificationConfig {
     return BindingBuilder
       .bind(notificationQueue())
       .to(internalTopicExchange())
-      .with(notificationRoutingKey);
+      .with(taskEventRoutingKey);
   }
 }

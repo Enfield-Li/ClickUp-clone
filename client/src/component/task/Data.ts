@@ -107,7 +107,7 @@ type Participant = {
   userId: number;
   username: string;
 };
-type Event = {
+type TaskEvent = {
   id?: number;
   taskId: number;
   createdAt?: Date;
@@ -135,7 +135,7 @@ export type Task = {
   updatedAt?: Date;
   creatorId: number;
   creatorName: string;
-  events: Event[];
+  taskEvents: TaskEvent[];
   watchers: Participant[];
   assignees: Participant[];
   // determine the task order
@@ -156,7 +156,7 @@ export const initialData: TaskList = [
     priority: 2,
     dueDate: 1,
     previousTask: {},
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -170,7 +170,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousTask: { statusId: 111, dueDateId: 111 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -184,7 +184,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 1,
     previousTask: { statusId: 222, priorityId: 222, dueDateId: 222 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -198,7 +198,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousTask: { statusId: 333, priorityId: 333 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -212,7 +212,7 @@ export const initialData: TaskList = [
     priority: 1,
     dueDate: 2,
     previousTask: { statusId: 444, priorityId: 444, dueDateId: 444 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -226,7 +226,7 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousTask: { statusId: 555, priorityId: 777, dueDateId: 333 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
@@ -240,7 +240,7 @@ export const initialData: TaskList = [
     priority: 3,
     dueDate: 1,
     previousTask: { statusId: 666, dueDateId: 666 },
-    events: [],
+    taskEvents: [],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],

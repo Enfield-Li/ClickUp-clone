@@ -30,6 +30,7 @@ public class Participant {
   private Integer taskWatcherId;
   private Integer taskAssigneeId;
 
+  @JsonIgnore
   @Column(updatable = false, insertable = false)
   private Integer eventId;
 
@@ -37,5 +38,5 @@ public class Participant {
   @ToString.Exclude
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "eventId")
-  private TaskEvent event;
+  private TaskEvent taskEvent;
 }

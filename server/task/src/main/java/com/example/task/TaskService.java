@@ -1,9 +1,9 @@
 package com.example.task;
 
+import com.example.clients.taskEvent.eventDTO.TaskEventDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
-import com.example.task.dto.eventDTO.EventDTO;
 import com.example.task.model.PreviousTask;
 import com.example.task.model.Task;
 import java.util.ArrayList;
@@ -110,14 +110,4 @@ public class TaskService {
     task.getWatchers().forEach(watcher -> watcher.setTaskWatcher(task));
     return task;
   }
-
-  // private Task setEventForParticipantInTask(Task task) {
-  //   task.getEvents().forEach(event -> setEventForParticipant(event));
-  //   return task;
-  // }
-
-  // private Event setEventForParticipant(Event event) {
-  //   event.getParticipants().forEach(participant -> participant.setEvent(event));
-  //   return event;
-  // }
 }

@@ -5,6 +5,8 @@ import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
+import com.example.clients.taskEvent.eventDTO.TaskEventType;
+import com.example.clients.taskEvent.eventDTO.TaskEventUpdateType;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +41,7 @@ public class TaskEvent {
   private Integer updateFrom;
 
   @Enumerated(EnumType.STRING)
-  private UpdateAction updateAction;
+  private TaskEventUpdateType updateAction;
 
   // or comment
   private String commentContent;
@@ -58,7 +60,7 @@ public class TaskEvent {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private EventType eventType;
+  private TaskEventType eventType;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -70,7 +72,7 @@ public class TaskEvent {
   private Integer taskId;
 
   @OneToMany(
-    mappedBy = "event",
+    mappedBy = "taskEvent",
     fetch = EAGER,
     cascade = { PERSIST, DETACH, MERGE }
   )

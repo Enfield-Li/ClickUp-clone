@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import com.example.task.dto.eventDTO.EventDTO;
+import com.example.clients.taskEvent.eventDTO.TaskEventDTO;
 import com.example.task.model.PreviousTask;
 import com.example.task.model.PreviousTaskBeforeFinish;
 
@@ -19,5 +19,5 @@ public record TaskDTO(
    @NotNull String creatorName,
    PreviousTask previousTask,
    PreviousTaskBeforeFinish previousTaskBeforeFinish,
-   Set<EventDTO> events
+   Set<TaskEventDTO> events
 ) {}

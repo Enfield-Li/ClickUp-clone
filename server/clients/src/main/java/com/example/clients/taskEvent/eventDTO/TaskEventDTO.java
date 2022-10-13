@@ -1,10 +1,10 @@
-package com.example.task.dto.eventDTO;
+package com.example.clients.taskEvent.eventDTO;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
 
-public record EventDTO(
+public record TaskEventDTO(
   Integer id,
   Integer updateTo,
   Integer updateFrom,
@@ -15,9 +15,9 @@ public record EventDTO(
   @NotNull Integer taskId,
   @NotNull Integer initiatorId,
   @NotNull String initiatorName,
-  @NotNull EventType eventType,
-  UpdateAction updateAction,
+  @NotNull TaskEventType eventType,
+  TaskEventUpdateType updateAction,
 
-  EventDTO parentComment,
-  Set<EventDTO> childrenComments
+  TaskEventDTO parentComment,
+  Set<TaskEventDTO> childrenComments
 ) {}

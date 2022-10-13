@@ -253,7 +253,7 @@ async function submit(
     title,
     description,
     previousTask: {},
-    events: [],
+    taskEvents: [],
     watchers: [{ userId, username }],
     assignees: [],
     date: new Date(),
