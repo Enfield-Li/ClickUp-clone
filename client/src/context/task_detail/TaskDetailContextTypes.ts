@@ -1,8 +1,10 @@
 import { SetState, State, Task } from "../../component/task/Data";
 
+export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
+
 export type TaskDetailContextType = {
   task: Task | undefined;
-  setTask: React.Dispatch<React.SetStateAction<Task | undefined>>;
+  setTask: SetTask;
   taskUpdateInfo: TaskUpdateInfo | undefined;
   setTaskUpdateInfo: React.Dispatch<
     React.SetStateAction<TaskUpdateInfo | undefined>

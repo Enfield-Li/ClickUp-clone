@@ -1,6 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import produce from "immer";
 import React from "react";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import {
   ColumnType,
   SetState,
@@ -12,6 +13,8 @@ import {
 import { updateTaskPositionInColumn } from "../TaskDataProcessing";
 
 type Props = {
+  task: Task;
+  setTask: SetTask;
   currentTask: Task;
   setState: SetState;
   currentColumnId: number;
@@ -19,6 +22,8 @@ type Props = {
 };
 
 export default function SelectOption({
+  task,
+  setTask,
   setState,
   currentTask,
   statusColumns,
@@ -33,9 +38,15 @@ export default function SelectOption({
           rounded="sm"
           cursor="pointer"
           _hover={{ backgroundColor: column.color }}
-          onClick={() =>
-            updateCurrentTask(currentTask, setState, column.id, currentColumnId)
-          }
+          onClick={() => {
+            setTask({ ...task, status: column.id });
+            updateCurrentTask(
+              currentTask,
+              setState,
+              column.id,
+              currentColumnId
+            );
+          }}
         >
           <Flex alignItems="center">
             <Box

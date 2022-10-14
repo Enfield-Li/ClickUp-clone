@@ -34,12 +34,12 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const { state, setState } = useLocalTasks(sortBy);
+  const { state, setState } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
-  const { state, loading, error, setState } = useFetchTasks(
-    API_ENDPOINT.TASK_ALL_TASKS,
-    sortBy
-  );
+  // const { state, loading, error, setState } = useFetchTasks(
+  //   API_ENDPOINT.TASK_ALL_TASKS,
+  //   sortBy
+  // );
   console.log(state);
 
   // if (!state || loading) return <div>Loading</div>;

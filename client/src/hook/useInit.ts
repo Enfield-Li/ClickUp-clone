@@ -15,12 +15,12 @@ export default function useInit() {
 
   useEffect(() => {
     authDispatch({ type: "LOGIN_USER", payload: { id: 3, username: "user" } });
-    refreshUserToken(authDispatch, toast);
-    if (accessToken) {
-      setInterval(() => {
-        refreshUserToken(authDispatch, toast);
-      }, 1790000); // 29 min and 50 sec
-    }
+    // refreshUserToken(authDispatch, toast);
+    // if (accessToken) {
+    //   setInterval(() => {
+    //     refreshUserToken(authDispatch, toast);
+    //   }, 1790000); // 29 min and 50 sec
+    // }
   }, []);
 
   // toast for indicating network error
