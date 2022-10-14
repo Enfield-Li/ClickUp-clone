@@ -1,10 +1,7 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { createContext, useState } from "react";
 import { Task } from "../../component/task/Data";
-import {
-  TaskDetailContextType,
-  TaskUpdateInfo,
-} from "./TaskDetailContextTypes";
+import { TaskDetailContextType, TaskDetails } from "./TaskDetailContextTypes";
 
 export const GlobalContext = createContext({} as TaskDetailContextType);
 
@@ -15,7 +12,7 @@ type ProviderType = {
 export default function TaskDetailProvider({ children }: ProviderType) {
   const [task, setTask] = useState<Task>();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [taskUpdateInfo, setTaskUpdateInfo] = useState<TaskUpdateInfo>();
+  const [taskDetails, setTaskDetails] = useState<TaskDetails>();
 
   return (
     <GlobalContext.Provider
@@ -25,8 +22,8 @@ export default function TaskDetailProvider({ children }: ProviderType) {
         isOpen,
         onOpen,
         onClose,
-        taskUpdateInfo,
-        setTaskUpdateInfo,
+        taskDetails,
+        setTaskDetails,
       }}
     >
       {children}

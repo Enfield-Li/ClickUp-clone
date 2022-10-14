@@ -5,10 +5,8 @@ export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
 export type TaskDetailContextType = {
   task: Task | undefined;
   setTask: SetTask;
-  taskUpdateInfo: TaskUpdateInfo | undefined;
-  setTaskUpdateInfo: React.Dispatch<
-    React.SetStateAction<TaskUpdateInfo | undefined>
-  >;
+  taskDetails: TaskDetails | undefined;
+  setTaskDetails: React.Dispatch<React.SetStateAction<TaskDetails | undefined>>;
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
@@ -18,7 +16,7 @@ export type TaskDetailStateType = {
   globalState: Task | undefined;
 };
 
-export type TaskUpdateInfo = {
+export type TaskDetails = {
   state: State;
   setState: SetState;
   currentColumnId: number;

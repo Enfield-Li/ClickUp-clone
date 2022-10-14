@@ -1,15 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import produce from "immer";
-import React from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import {
-  ColumnType,
-  SetState,
-  State,
-  StatusColumns,
-  TargetColumn,
-  Task,
-} from "../Data";
+import { SetState, StatusColumns, TargetColumn, Task } from "../Data";
 import { updateTaskPositionInColumn } from "../TaskDataProcessing";
 
 type Props = {
@@ -39,11 +31,16 @@ export default function SelectOption({
           cursor="pointer"
           _hover={{ backgroundColor: column.color }}
           onClick={() => {
-            setTask({ ...task, status: column.id });
+            const targetColumnId = column.id;
+            if (currentColumnId === targetColumnId) return;
+
+            // Update task state in taskDetail
+            setTask({ ...task, status: targetColumnId });
+            // Update task in state
             updateCurrentTask(
               currentTask,
               setState,
-              column.id,
+              targetColumnId,
               currentColumnId
             );
           }}
@@ -70,12 +67,9 @@ export default function SelectOption({
 export function updateCurrentTask(
   currentTask: Task,
   setState: SetState,
-  columnId: number,
+  targetColumnId: number,
   currentColumnId: number
 ) {
-  // Check if task moved to other column
-  if (currentColumnId === columnId) return;
-
   setState((previousState) => {
     if (previousState) {
       return produce(previousState, (draftState) => {
@@ -111,7 +105,7 @@ export function updateCurrentTask(
         }
 
         // Task sets to finished
-        const isSetToFinished = columnId === 3;
+        const isSetToFinished = targetColumnId === 3;
         if (isSetToFinished) {
           draftState.orderedTasks.forEach((tasks) =>
             tasks.taskList.forEach((taskAfter) => {
@@ -171,12 +165,12 @@ export function updateCurrentTask(
         // update sourceTask with value in the new column
         updateTaskPositionInColumn(
           draftState,
-          { status: String(columnId) },
+          { status: String(targetColumnId) },
           currentTaskCopy
         );
 
         const targetColumn = draftState.orderedTasks.find(
-          (tasks) => tasks.id === columnId
+          (tasks) => tasks.id === targetColumnId
         );
 
         // Insert currentTaskCopy into new column

@@ -1,5 +1,6 @@
 import { Box, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
+import { useEffect } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SetState, State, Task } from "./Data";
 
@@ -20,7 +21,12 @@ export default function TaskCard({
 }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { onOpen, setTaskUpdateInfo, setTask } = useTaskDetailContext();
+  const { onOpen, setTaskDetails, setTask } = useTaskDetailContext();
+
+  // Sync up taskDetail with state
+  useEffect(() => {
+    setTaskDetails({ state, setState, currentColumnId });
+  }, [state]);
 
   return (
     <>
@@ -36,7 +42,7 @@ export default function TaskCard({
             onClick={() => {
               onOpen();
               setTask(task);
-              setTaskUpdateInfo({ state, setState, currentColumnId });
+              setTaskDetails({ state, setState, currentColumnId });
             }}
             ref={provided.innerRef}
             {...provided.draggableProps}

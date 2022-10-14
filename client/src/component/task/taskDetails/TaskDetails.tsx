@@ -22,13 +22,19 @@ type Props = {};
 
 export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
-  const { isOpen, onClose, setTask, taskUpdateInfo, setTaskUpdateInfo, task } =
-    useTaskDetailContext();
+  const {
+    isOpen,
+    onClose,
+    setTask,
+    taskDetails,
+    setTaskDetails,
+    task,
+  } = useTaskDetailContext();
 
-  if (!task || !taskUpdateInfo)
+  if (!task || !taskDetails)
     return <TaskDetailLoading isOpen={isOpen} onClose={onClose} />;
 
-  const { state, setState, currentColumnId } = taskUpdateInfo;
+  const { state, setState, currentColumnId } = taskDetails;
 
   return (
     <Modal
