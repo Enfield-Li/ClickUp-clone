@@ -1,6 +1,6 @@
 package com.example.notification.message;
 
-import static com.example.amqp.exchange.Notification.*;
+import static com.example.amqp.exchange.NotificationExchange.*;
 
 import com.example.clients.notification.NotificationRequest;
 import com.example.notification.NotificationService;

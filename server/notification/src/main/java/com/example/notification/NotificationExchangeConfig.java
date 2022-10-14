@@ -1,6 +1,6 @@
 package com.example.notification;
 
-import static com.example.amqp.exchange.Notification.*;
+import static com.example.amqp.exchange.NotificationExchange.*;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

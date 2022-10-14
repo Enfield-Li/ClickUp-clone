@@ -1,6 +1,6 @@
 package com.example.taskEvent;
 
-import static com.example.amqp.exchange.TaskEvent.*;
+import static com.example.amqp.exchange.TaskEventExchange.*;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

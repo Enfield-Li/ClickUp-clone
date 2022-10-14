@@ -1,5 +1,8 @@
 package com.example.task;
 
+import static com.example.amqp.exchange.TaskEventExchange.*;
+
+import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.taskEvent.eventDTO.TaskEventDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
@@ -20,6 +23,7 @@ public class TaskService {
 
   private final EntityManager entityManager;
   private final TaskRepository taskRepository;
+  private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
   public List<Task> getAllTasks() {
     return taskRepository.findAll();
@@ -27,7 +31,7 @@ public class TaskService {
 
   public Task createTask(Task task) {
     // Manage relationship
-    setTaskWatcherForEvents(task);
+    setTaskForWatcher(task);
     return taskRepository.save(task);
   }
 
@@ -45,9 +49,11 @@ public class TaskService {
       .filter(task -> task.id() == sourceTaskId)
       .findAny();
 
-    // var sourceTask = entityManager.find(Task.class, sourceTaskId);
-    // sourceTask.getEvents();
-    // sourceTask.addEvents(sourceTaskPayload.get().events());
+    rabbitMQMessageProducer.publish(
+      internalExchange,
+      taskEventRoutingKey,
+      sourceTask.get().taskEvents()
+    );
 
     // DTO to entity
     var tasks = new ArrayList<Task>();
@@ -65,22 +71,14 @@ public class TaskService {
           .creatorName(taskDTO.creatorName())
           .previousTask(taskDTO.previousTask())
           .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
+          .watchers(taskDTO.watchers())
+          .assignees(taskDTO.assignees())
           .build();
 
+        setTaskFroWatcherAndAssignee(task);
         tasks.add(task);
       }
     );
-
-    // // Manage relationship
-    // tasks
-    //   .stream()
-    //   .map(
-    //     task ->
-    //       task.getId() == sourceTaskId
-    //         ? setEventForParticipantInTask(task)
-    //         : task
-    //   )
-    //   .collect(Collectors.toList());
 
     taskRepository.saveAll(tasks);
     return true;
@@ -102,11 +100,16 @@ public class TaskService {
     return taskRepository.updateTaskDesc(newDesc, id) > 0;
   }
 
-  // public String updateTasksXXX() {
-  //   return null;
-  // }
+  private Task setTaskFroWatcherAndAssignee(Task task) {
+    return setTaskForAssignee(setTaskForWatcher(task));
+  }
 
-  private Task setTaskWatcherForEvents(Task task) {
+  private Task setTaskForAssignee(Task task) {
+    task.getAssignees().forEach(assignee -> assignee.setTaskAssignee(task));
+    return task;
+  }
+
+  private Task setTaskForWatcher(Task task) {
     task.getWatchers().forEach(watcher -> watcher.setTaskWatcher(task));
     return task;
   }

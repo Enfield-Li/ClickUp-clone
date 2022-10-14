@@ -1,6 +1,6 @@
 package com.example.amqp.exchange;
 
-public class TaskEvent {
+public class TaskEventExchange {
 
   public static final String internalExchange = "internal.exchange";
 

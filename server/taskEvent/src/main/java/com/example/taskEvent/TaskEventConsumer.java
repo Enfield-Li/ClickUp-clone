@@ -1,9 +1,10 @@
 package com.example.taskEvent;
 
-import static com.example.amqp.exchange.TaskEvent.*;
+import static com.example.amqp.exchange.TaskEventExchange.*;
 
 import com.example.clients.notification.NotificationRequest;
 import com.example.clients.taskEvent.eventDTO.TaskEventDTO;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,7 +18,8 @@ public class TaskEventConsumer {
   private final TaskEventService taskEventService;
 
   @RabbitListener(queues = taskEventQueue)
-  public void consumer(TaskEventDTO taskEventDTO) {
-    System.out.println(taskEventQueue.toString());
+  public void consumer(List<TaskEventDTO> taskEventDTOs) {
+    log.info("Consumed {} from queue", taskEventDTOs.get(0).toString());
+    taskEventService.addTaskEvent(taskEventDTOs.get(0));
   }
 }

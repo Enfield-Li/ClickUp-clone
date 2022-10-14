@@ -11,14 +11,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "taskEvent")
 public class Participant {
 
   @Id
@@ -27,8 +31,6 @@ public class Participant {
 
   private Integer userId;
   private String username;
-  private Integer taskWatcherId;
-  private Integer taskAssigneeId;
 
   @JsonIgnore
   @Column(updatable = false, insertable = false)

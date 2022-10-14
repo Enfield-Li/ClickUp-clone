@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(
-  scanBasePackages = { "com.example.task", "com.example.clients" }
+  scanBasePackages = { "com.example.task", "com.example.clients", "com.example.amqp" }
 )
 public class TaskApplication {
 

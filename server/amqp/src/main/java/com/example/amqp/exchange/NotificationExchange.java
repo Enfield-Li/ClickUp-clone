@@ -1,6 +1,6 @@
 package com.example.amqp.exchange;
 
-public class Notification {
+public class NotificationExchange {
 
   public static final String internalExchange = "internal.exchange";
 
