@@ -257,7 +257,6 @@ async function submit(
     watchers: [{ userId, username }],
     assignees: [],
     date: new Date(),
-    previousTaskBeforeFinish: {},
   };
 
   const targetColumn = { dueDate, priority, status };

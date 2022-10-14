@@ -274,8 +274,8 @@ async function handleDragEnd(
   // Move task from unfinished to finished
   const isSetToFinished =
     sortBy === STATUS &&
-    destination.droppableId === "3" &&
-    source.droppableId !== "3";
+    destination.droppableId === "3" && // Hard code column
+    source.droppableId !== "3"; // Hard code column
 
   if (isSetToFinished) {
     // Remove task from other sortBy options, by updating the sourceTaskAfter
@@ -305,9 +305,9 @@ async function handleDragEnd(
     );
 
     // Update sourceTask by cleaning up other sortBy's info
-    // if (!sourceTask.previousTaskBeforeFinish) {
-    //   sourceTask.previousTaskBeforeFinish = {};
-    // }
+    if (!sourceTask.previousTaskBeforeFinish) {
+      sourceTask.previousTaskBeforeFinish = {};
+    }
     sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
     sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
     sourceTask.priority = 0;
@@ -320,25 +320,22 @@ async function handleDragEnd(
   const isSetToUnfinished =
     sortBy === STATUS &&
     destination.droppableId !== String(state.columnOptions.status.length) &&
-    source.droppableId === "3";
+    source.droppableId === "3"; // Hard code column
 
   if (isSetToUnfinished) {
-    // if (!sourceTask.previousTaskBeforeFinish) {
-    //   sourceTask.previousTaskBeforeFinish = {};
-    // }
     const previousDueDateIdBeforeFinish =
-      sourceTask.previousTaskBeforeFinish.dueDateId;
+      sourceTask.previousTaskBeforeFinish?.dueDateId;
 
     const previousPriorityIdBeforeFinish =
-      sourceTask.previousTaskBeforeFinish.priorityId;
+      sourceTask.previousTaskBeforeFinish?.priorityId;
 
     const targetColumn: TargetColumn = {
       dueDate: previousDueDateIdBeforeFinish
         ? String(previousDueDateIdBeforeFinish)
-        : "1",
+        : "1", // Fall back to default column
       priority: previousPriorityIdBeforeFinish
         ? String(previousPriorityIdBeforeFinish)
-        : "1",
+        : "1", // Fall back to default column
     };
 
     updateTaskPositionInColumn(state, targetColumn, sourceTask);

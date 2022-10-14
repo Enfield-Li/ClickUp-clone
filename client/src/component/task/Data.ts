@@ -140,7 +140,7 @@ export type Task = {
   assignees: Participant[];
   // determine the task order
   previousTask: PreviousTask;
-  previousTaskBeforeFinish: PreviousTaskBeforeFinish;
+  previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };
 
 export type TaskList = Task[];

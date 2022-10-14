@@ -123,6 +123,9 @@ export function updateCurrentTask(
           );
 
           // Update currentTaskCopy by cleaning up other sortBy's info
+          if (!currentTaskCopy.previousTaskBeforeFinish) {
+            currentTaskCopy.previousTaskBeforeFinish = {};
+          }
           currentTaskCopy.previousTaskBeforeFinish.dueDateId =
             currentTaskCopy.dueDate;
           currentTaskCopy.previousTaskBeforeFinish.priorityId =
@@ -137,10 +140,10 @@ export function updateCurrentTask(
         const isSetToUnfinished = currentColumnId === 3;
         if (isSetToUnfinished) {
           const previousDueDateIdBeforeFinish =
-            currentTaskCopy.previousTaskBeforeFinish.dueDateId;
+            currentTaskCopy.previousTaskBeforeFinish?.dueDateId;
 
           const previousPriorityIdBeforeFinish =
-            currentTaskCopy.previousTaskBeforeFinish.priorityId;
+            currentTaskCopy.previousTaskBeforeFinish?.priorityId;
 
           const targetColumn: TargetColumn = {
             dueDate: previousDueDateIdBeforeFinish
