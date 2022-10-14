@@ -1,19 +1,18 @@
 import {
-  Flex,
-  Center,
-  Popover,
-  PopoverTrigger,
+  Box,
   Button,
-  Tooltip,
-  PopoverContent,
-  PopoverBody,
+  Center,
   Editable,
   EditablePreview,
   EditableTextarea,
-  Box,
+  Flex,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
@@ -24,7 +23,8 @@ import {
   UpdateTaskDescDTO,
   UpdateTaskTitleDTO,
 } from "../Data";
-import SelectOption, { updateCurrentTask } from "./SelectOption";
+import PriorityOptions from "./PriorityOptions";
+import StatusOptions, { updateCurrentTask } from "./StatusOptions";
 
 type Props = {
   task: Task;
@@ -49,61 +49,85 @@ export default function TaskInfo({
   return (
     <Box flexBasis={"50%"}>
       <Flex justifyContent={"space-evenly"} my={3}>
+        {/* Status */}
         <Center>
           <Popover>
-            <PopoverTrigger>
-              <Button colorScheme={buttonColor}>{column?.title}</Button>
-            </PopoverTrigger>
+            {({ onClose }) => (
+              // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
+              <>
+                <PopoverTrigger>
+                  <Button colorScheme={buttonColor}>{column?.title}</Button>
+                </PopoverTrigger>
 
-            {/* Complete CheckBox */}
-            {task.status !== 3 && (
-              <Tooltip label="Set to complete" placement="top" hasArrow>
-                <Center
-                  cursor={"pointer"}
-                  fontSize={"30px"}
-                  _hover={{ color: "yellow.400" }}
-                  onClick={() => {
-                    setTask({ ...task, status: 3 });
-                    updateCurrentTask(task, setState, 3, currentColumnId);
-                  }}
-                >
-                  <i className="bi bi-check-square"></i>
-                </Center>
-              </Tooltip>
+                {/* Task finish checkbox */}
+                {task.status !== 3 && (
+                  <Tooltip label="Set to complete" placement="top" hasArrow>
+                    <Center
+                      cursor={"pointer"}
+                      fontSize={"30px"}
+                      _hover={{ color: "yellow.400" }}
+                      onClick={() => {
+                        setTask({ ...task, status: 3 });
+                        updateCurrentTask(task, setState, 3, currentColumnId);
+                      }}
+                    >
+                      <i className="bi bi-check-square"></i>
+                    </Center>
+                  </Tooltip>
+                )}
+
+                {/* Status option */}
+                <PopoverContent width="200px">
+                  <PopoverBody shadow={"2xl"}>
+                    <StatusOptions
+                      task={task}
+                      setTask={setTask}
+                      onClose={onClose}
+                      setState={setState}
+                      currentTask={task}
+                      currentColumnId={currentColumnId}
+                      statusColumns={state.columnOptions.status}
+                    />
+                  </PopoverBody>
+                </PopoverContent>
+              </>
             )}
-
-            {/* Choose status */}
-            <PopoverContent width="200px">
-              <PopoverBody shadow={"2xl"}>
-                <SelectOption
-                  task={task}
-                  setTask={setTask}
-                  setState={setState}
-                  currentTask={task}
-                  currentColumnId={currentColumnId}
-                  statusColumns={state.columnOptions.status}
-                />
-              </PopoverBody>
-            </PopoverContent>
           </Popover>
         </Center>
 
-        <Tooltip label="Set priority" placement="top" hasArrow>
-          <Center
-            cursor={"pointer"}
-            border="1px dashed"
-            borderRadius={"50%"}
-            width="40px"
-            height="40px"
-            onClick={() => {
-              console.log("choose priority");
-              setTask({ ...task, priority: 1 });
-            }}
-            _hover={{ color: "purple.400" }}
-          >
-            <i className="bi bi-flag"></i>
-          </Center>
-        </Tooltip>
+        {/* Priority */}
+        {/* https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805 */}
+        <Popover>
+          {({ onClose }) => (
+            <>
+              <Tooltip hasArrow placement="top" label="Set priority">
+                <Box display="inline-block">
+                  <PopoverTrigger>
+                    <Center
+                      cursor={"pointer"}
+                      border="1px dashed"
+                      borderRadius={"50%"}
+                      width="40px"
+                      height="40px"
+                      _hover={{ color: "purple.400" }}
+                    >
+                      <i className="bi bi-flag"></i>
+                    </Center>
+                  </PopoverTrigger>
+                </Box>
+              </Tooltip>
+
+              <PopoverContent width="200px">
+                <PopoverBody shadow={"2xl"} m={0} p={0}>
+                  <PriorityOptions
+                    onClose={onClose}
+                    priorityColumns={state.columnOptions.priority}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
       </Flex>
 
       {/* Desc */}

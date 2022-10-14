@@ -11,10 +11,12 @@ type Props = {
   setState: SetState;
   currentColumnId: number;
   statusColumns: StatusColumns;
+  onClose: () => void;
 };
 
-export default function SelectOption({
+export default function StatusOptions({
   task,
+  onClose,
   setTask,
   setState,
   currentTask,
@@ -32,6 +34,7 @@ export default function SelectOption({
           _hover={{ backgroundColor: column.color }}
           onClick={() => {
             const targetColumnId = column.id;
+            onClose();
             if (currentColumnId === targetColumnId) return;
 
             // Update task state in taskDetail
