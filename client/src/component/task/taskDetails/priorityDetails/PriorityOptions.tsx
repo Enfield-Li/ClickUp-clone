@@ -1,6 +1,8 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
+import produce from "immer";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { SetState, Task } from "../../Data";
+import { PRIORITY, SetState, SortBy, Task } from "../../Data";
+import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void };
 
@@ -33,11 +35,12 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                   onOptionClose();
                   const targetPriorityColumnId = priority.id;
                   setTask({ ...task!, priority: targetPriorityColumnId });
-                  // updateTaskPriority(
-                  //   currentTask,
-                  //   setState,
-                  //   targetPriorityColumnId
-                  // );
+                  updateTaskPriority(
+                    sortBy,
+                    task!,
+                    setState,
+                    targetPriorityColumnId
+                  );
                 }}
                 _hover={{ backgroundColor: "blue.600" }}
               >
@@ -57,34 +60,70 @@ export default function PriorityOptions({ onOptionClose }: Props) {
 }
 
 function updateTaskPriority(
+  sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
   targetPriorityColumnId: number
 ) {
-  // setState((previousState) => {
-  //   if (previousState) {
-  //     return produce(previousState, (draftState) => {
-  //       draftState.orderedTasks.forEach((taskList) =>
-  //         taskList.taskList.forEach((task) => {
-  //           // Update currentTask's priority position
-  //           const isCurrentTask = task.id === currentTask.id;
-  //           if (isCurrentTask) {
-  //             updateTaskPositionInColumn(
-  //               draftState,
-  //               { priority: String(targetPriorityColumnId) },
-  //               task
-  //             );
-  //           }
-  //           // Update sourceTaskAfter's priority position
-  //           const sourceTaskAfterInPriority =
-  //             task.previousTask.priorityId === currentTask.id;
-  //           if (sourceTaskAfterInPriority) {
-  //             task.previousTask.priorityId =
-  //               currentTask.previousTask.priorityId;
-  //           }
-  //         })
-  //       );
-  //     });
-  //   }
-  // });
+  setState((previousState) => {
+    if (previousState) {
+      return produce(previousState, (draftState) => {
+        // Update Stats
+        draftState.orderedTasks.forEach((taskList) =>
+          taskList.taskList.forEach((task) => {
+            const isSourceTask = task.id === currentTask.id;
+            if (isSourceTask) {
+              updateTaskPositionInColumn(
+                draftState,
+                { priority: String(targetPriorityColumnId) },
+                task
+              );
+            }
+
+            // Update sourceTaskAfter's priority stats
+            const isSourceTaskAfter =
+              task.previousTask.priorityId === currentTask.id;
+            if (isSourceTaskAfter) {
+              task.previousTask.priorityId =
+                currentTask.previousTask.priorityId;
+            }
+          })
+        );
+
+        // Update positions
+        const currentColumnId = draftState.orderedTasks.find((tasks) =>
+          tasks.taskList.find((task) => task.id === currentTask.id)
+        )?.id;
+
+        // Delete sourceTask from original column
+        const sourceColumn = draftState.orderedTasks.find(
+          (tasks) => tasks.id === currentColumnId
+        );
+
+        const sourceTask = sourceColumn?.taskList.find(
+          (task) => task.id === currentTask.id
+        );
+
+        const destinationColumn = draftState.orderedTasks.find(
+          (tasks) => tasks.id === targetPriorityColumnId
+        );
+
+        const currentTaskIndexInSourceColumn = sourceColumn?.taskList.findIndex(
+          (task) => task.id === sourceTask?.id
+        );
+
+        // Remove from current column and push task to finished column
+        if (sortBy === PRIORITY) {
+          const sourceTaskIndex =
+            currentTaskIndexInSourceColumn ||
+            currentTaskIndexInSourceColumn === 0;
+          if (sourceTaskIndex && sourceTask) {
+            sourceColumn?.taskList.splice(currentTaskIndexInSourceColumn, 1);
+
+            destinationColumn?.taskList.push(sourceTask);
+          }
+        }
+      });
+    }
+  });
 }

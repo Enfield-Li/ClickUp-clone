@@ -1,6 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
+import produce from "immer";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { SetState, Task } from "../../Data";
+import { SetState, SortBy, STATUS, TargetColumn, Task } from "../../Data";
+import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void };
 
@@ -36,11 +38,12 @@ export default function StatusOptions({ onOptionClose }: Props) {
                 // Update task state in taskDetail
                 setTask({ ...task!, status: targetStatusColumnId });
                 // Update task in state
-                // updateCurrentTaskStatus(
-                //   currentTask  ,
-                //   setState,
-                //   targetStatusColumnId
-                // );
+                updateCurrentTaskStatus(
+                  sortBy,
+                  task!,
+                  setState,
+                  targetStatusColumnId
+                );
               }}
             >
               <Flex alignItems="center">
@@ -64,94 +67,135 @@ export default function StatusOptions({ onOptionClose }: Props) {
 }
 
 export function updateCurrentTaskStatus(
+  sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
   targetStatusColumnId: number
 ) {
-  // setState((previousState) => {
-  //   if (previousState) {
-  //     return produce(previousState, (draftState) => {
-  //       const currentTaskCopy = JSON.parse(JSON.stringify(currentTask)) as Task;
-  //       // Delete sourceTask from original column
-  //       const originalColumn = draftState.orderedTasks.find(
-  //         (tasks) => tasks.id === currentColumnId
-  //       );
-  //       if (originalColumn) {
-  //         const currentTaskIndexInOriginalColumn =
-  //           originalColumn?.taskList.findIndex(
-  //             (task) => task.id === currentTaskCopy.id
-  //           );
-  //         originalColumn.taskList.splice(currentTaskIndexInOriginalColumn, 1);
-  //         // Update sourceTaskAfter
-  //         const sourceTaskAfter = originalColumn.taskList.find(
-  //           (task) => task.previousTask.statusId === currentTaskCopy.id
-  //         );
-  //         if (sourceTaskAfter) {
-  //           sourceTaskAfter.previousTask.statusId =
-  //             currentTaskCopy.previousTask.statusId;
-  //         }
-  //       }
-  //       // Task sets to finished
-  //       const isSetToFinished = targetStatusColumnId === 3;
-  //       if (isSetToFinished) {
-  //         draftState.orderedTasks.forEach((tasks) =>
-  //           tasks.taskList.forEach((taskAfter) => {
-  //             const sourceTaskAfterInPriority =
-  //               taskAfter.previousTask.priorityId === currentTaskCopy.id;
-  //             if (sourceTaskAfterInPriority) {
-  //               taskAfter.previousTask.priorityId =
-  //                 currentTaskCopy.previousTask.priorityId;
-  //             }
-  //             const sourceTaskAfterInDueDate =
-  //               taskAfter.previousTask.dueDateId === currentTaskCopy.id;
-  //             if (sourceTaskAfterInDueDate) {
-  //               taskAfter.previousTask.dueDateId =
-  //                 currentTaskCopy.previousTask.dueDateId;
-  //             }
-  //           })
-  //         );
-  //         // Update currentTaskCopy by cleaning up other sortBy's info
-  //         if (!currentTaskCopy.previousTaskBeforeFinish) {
-  //           currentTaskCopy.previousTaskBeforeFinish = {};
-  //         }
-  //         currentTaskCopy.previousTaskBeforeFinish.dueDateId =
-  //           currentTaskCopy.dueDate;
-  //         currentTaskCopy.previousTaskBeforeFinish.priorityId =
-  //           currentTaskCopy.priority;
-  //         currentTaskCopy.priority = 0;
-  //         currentTaskCopy.dueDate = 0;
-  //         currentTaskCopy.previousTask.dueDateId = 0;
-  //         currentTaskCopy.previousTask.priorityId = 0;
-  //       }
-  //       // Task sets to unfinished
-  //       const isSetToUnfinished = currentColumnId === 3;
-  //       if (isSetToUnfinished) {
-  //         const previousDueDateIdBeforeFinish =
-  //           currentTaskCopy.previousTaskBeforeFinish?.dueDateId;
-  //         const previousPriorityIdBeforeFinish =
-  //           currentTaskCopy.previousTaskBeforeFinish?.priorityId;
-  //         const targetColumn: TargetColumn = {
-  //           dueDate: previousDueDateIdBeforeFinish
-  //             ? String(previousDueDateIdBeforeFinish)
-  //             : "1",
-  //           priority: previousPriorityIdBeforeFinish
-  //             ? String(previousPriorityIdBeforeFinish)
-  //             : "1",
-  //         };
-  //         updateTaskPositionInColumn(draftState, targetColumn, currentTaskCopy);
-  //       }
-  //       // update sourceTask with value in the new column
-  //       updateTaskPositionInColumn(
-  //         draftState,
-  //         { status: String(targetStatusColumnId) },
-  //         currentTaskCopy
-  //       );
-  //       const targetColumn = draftState.orderedTasks.find(
-  //         (tasks) => tasks.id === targetStatusColumnId
-  //       );
-  //       // Insert currentTaskCopy into new column
-  //       if (targetColumn) targetColumn.taskList.push(currentTaskCopy);
-  //     });
-  //   }
-  // });
+  setState((previousState) => {
+    if (previousState) {
+      return produce(previousState, (draftState) => {
+        const currentColumnId = draftState.orderedTasks.find((tasks) =>
+          tasks.taskList.find((task) => task.id === currentTask.id)
+        )?.id;
+
+        const sourceColumn = draftState.orderedTasks.find(
+          (tasks) => tasks.id === currentColumnId
+        );
+
+        const sourceTask = sourceColumn?.taskList.find(
+          (task) => task.id === currentTask.id
+        );
+
+        if (sourceTask) {
+          const currentTaskIndexInSourceColumn =
+            sourceColumn?.taskList.findIndex(
+              (task) => task.id === sourceTask.id
+            );
+
+          // Current column
+          const sourceTaskIndex =
+            currentTaskIndexInSourceColumn ||
+            currentTaskIndexInSourceColumn === 0;
+          if (sourceTaskIndex) {
+            // Delete sourceTask from sourceColumn when sortBy === "status"
+            if (sortBy === STATUS) {
+              sourceColumn?.taskList.splice(currentTaskIndexInSourceColumn, 1);
+            }
+
+            // Update sourceTaskAfter
+            const sourceTaskAfter = sourceColumn?.taskList.find(
+              (task) => task.previousTask.statusId === sourceTask.id
+            );
+            if (sourceTaskAfter) {
+              sourceTaskAfter.previousTask.statusId =
+                sourceTask.previousTask.statusId;
+            }
+
+            // Task sets to finished
+            const isSetToFinished = targetStatusColumnId === 3;
+            if (isSetToFinished) {
+              draftState.orderedTasks.forEach((tasks) =>
+                tasks.taskList.forEach((taskAfter) => {
+                  const sourceTaskAfterInPriority =
+                    taskAfter.previousTask.priorityId === sourceTask.id;
+                  if (sourceTaskAfterInPriority) {
+                    taskAfter.previousTask.priorityId =
+                      sourceTask.previousTask.priorityId;
+                  }
+
+                  const sourceTaskAfterInDueDate =
+                    taskAfter.previousTask.dueDateId === sourceTask.id;
+                  if (sourceTaskAfterInDueDate) {
+                    taskAfter.previousTask.dueDateId =
+                      sourceTask.previousTask.dueDateId;
+                  }
+                })
+              );
+
+              // Update currentTaskCopy by cleaning up other sortBy's info
+              if (!sourceTask.previousTaskBeforeFinish) {
+                sourceTask.previousTaskBeforeFinish = {};
+              }
+              sourceTask.previousTaskBeforeFinish.dueDateId =
+                sourceTask.dueDate;
+              sourceTask.previousTaskBeforeFinish.priorityId =
+                sourceTask.priority;
+              sourceTask.priority = 0;
+              sourceTask.dueDate = 0;
+              sourceTask.previousTask.dueDateId = 0;
+              sourceTask.previousTask.priorityId = 0;
+
+              // Remove from current column and push task to finished column
+              if (sortBy !== STATUS) {
+                sourceColumn?.taskList.splice(
+                  currentTaskIndexInSourceColumn,
+                  1
+                );
+
+                const finishedColumn = draftState.orderedTasks.find(
+                  (tasks) => tasks.id === 0
+                );
+                finishedColumn?.taskList.push(sourceTask);
+              }
+            }
+          }
+
+          // Task sets to unfinished
+          const isSetToUnfinished = currentColumnId === 3;
+          if (isSetToUnfinished) {
+            const previousDueDateIdBeforeFinish =
+              sourceTask.previousTaskBeforeFinish?.dueDateId;
+            const previousPriorityIdBeforeFinish =
+              sourceTask.previousTaskBeforeFinish?.priorityId;
+
+            const targetColumn: TargetColumn = {
+              dueDate: previousDueDateIdBeforeFinish
+                ? String(previousDueDateIdBeforeFinish)
+                : "1",
+              priority: previousPriorityIdBeforeFinish
+                ? String(previousPriorityIdBeforeFinish)
+                : "1",
+            };
+            updateTaskPositionInColumn(draftState, targetColumn, sourceTask);
+          }
+
+          // update sourceTask with value in the new column
+          updateTaskPositionInColumn(
+            draftState,
+            { status: String(targetStatusColumnId) },
+            sourceTask
+          );
+          const destinationColumn = draftState.orderedTasks.find(
+            (tasks) => tasks.id === targetStatusColumnId
+          );
+
+          // Push sourceTask to destinationColumn when sortBy === "status"
+          if (sortBy === STATUS) {
+            destinationColumn?.taskList.push(sourceTask);
+          }
+        }
+      });
+    }
+  });
 }

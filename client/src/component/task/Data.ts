@@ -138,8 +138,9 @@ export type Task = {
   taskEvents: TaskEvent[];
   watchers: Participant[];
   assignees: Participant[];
-  // determine the task order
+  // Determine the task order
   previousTask: PreviousTask;
+  // Keep previousTask record when set to finish
   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };
 
