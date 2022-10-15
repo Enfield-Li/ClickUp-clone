@@ -21,12 +21,19 @@ export default function TaskCard({
 }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { onOpen, setTaskDetails, setTask } = useTaskDetailContext();
+  const { isOpen, onOpen, setTaskStateContext, setTask } =
+    useTaskDetailContext();
 
   // Sync up taskDetail with state
   useEffect(() => {
-    setTaskDetails({ state, setState, currentColumnId });
-  }, [state]);
+    if (isOpen) {
+      setTaskStateContext({
+        columnOptions: state.columnOptions,
+        setState,
+        currentColumnId,
+      });
+    }
+  }, [state, isOpen, currentColumnId]);
 
   return (
     <>
@@ -42,7 +49,11 @@ export default function TaskCard({
             onClick={() => {
               onOpen();
               setTask(task);
-              setTaskDetails({ state, setState, currentColumnId });
+              setTaskStateContext({
+                columnOptions: state.columnOptions,
+                setState,
+                currentColumnId,
+              });
             }}
             ref={provided.innerRef}
             {...provided.draggableProps}

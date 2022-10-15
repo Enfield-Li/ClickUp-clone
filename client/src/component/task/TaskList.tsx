@@ -366,12 +366,12 @@ async function handleDragEnd(
   if (destinationTask) taskForUpdate.push(destinationTask);
   taskForUpdate.push(sourceTask);
 
-  const updated = await updateTasks({
-    sourceTaskId: sourceTask.id!,
-    taskList: taskForUpdate,
-  });
-  if (updated) {
-    // Clear sourceTask events
-    sourceTask.taskEvents = [];
-  }
+  // const updated = await updateTasks({
+  //   sourceTaskId: sourceTask.id!,
+  //   taskList: taskForUpdate,
+  // });
+  // if (updated) {
+  //   // Clear sourceTask events
+  //   sourceTask.taskEvents = [];
+  // }
 }

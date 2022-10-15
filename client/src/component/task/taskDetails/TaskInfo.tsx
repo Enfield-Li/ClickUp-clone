@@ -17,6 +17,7 @@ import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
 import {
+  ColumnOptions,
   SetState,
   State,
   Task,
@@ -24,27 +25,32 @@ import {
   UpdateTaskTitleDTO,
 } from "../Data";
 import PriorityOptions from "./PriorityOptions";
-import StatusOptions, { updateCurrentTask } from "./StatusOptions";
+import StatusOptions, { updateCurrentTaskStatus } from "./StatusOptions";
 
 type Props = {
   task: Task;
-  state: State;
   setTask: SetTask;
   setState: SetState;
   currentColumnId: number;
+  columnOptions: ColumnOptions;
 };
 
 export default function TaskInfo({
   task,
-  state,
   setTask,
   setState,
   currentColumnId,
+  columnOptions,
 }: Props) {
-  const column = state.columnOptions.status.find(
+  const column = columnOptions.status.find(
     (column) => column.id === task.status
   );
-  const buttonColor = column?.color.split(".")[0];
+  const statusButtonColor = column?.color.split(".")[0];
+
+  const currentTaskPriority = columnOptions.priority.find(
+    (priority) => priority.id === task.priority
+  );
+  const priorityFlagColor = currentTaskPriority?.color;
 
   return (
     <Box flexBasis={"50%"}>
@@ -56,7 +62,9 @@ export default function TaskInfo({
               // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
               <>
                 <PopoverTrigger>
-                  <Button colorScheme={buttonColor}>{column?.title}</Button>
+                  <Button colorScheme={statusButtonColor}>
+                    {column?.title}
+                  </Button>
                 </PopoverTrigger>
 
                 {/* Task finish checkbox */}
@@ -68,7 +76,12 @@ export default function TaskInfo({
                       _hover={{ color: "yellow.400" }}
                       onClick={() => {
                         setTask({ ...task, status: 3 });
-                        updateCurrentTask(task, setState, 3, currentColumnId);
+                        updateCurrentTaskStatus(
+                          task,
+                          setState,
+                          3,
+                          currentColumnId
+                        );
                       }}
                     >
                       <i className="bi bi-check-square"></i>
@@ -80,13 +93,12 @@ export default function TaskInfo({
                 <PopoverContent width="200px">
                   <PopoverBody shadow={"2xl"}>
                     <StatusOptions
-                      task={task}
                       setTask={setTask}
                       onClose={onClose}
-                      setState={setState}
                       currentTask={task}
+                      setState={setState}
                       currentColumnId={currentColumnId}
-                      statusColumns={state.columnOptions.status}
+                      statusColumns={columnOptions.status}
                     />
                   </PopoverBody>
                 </PopoverContent>
@@ -104,11 +116,12 @@ export default function TaskInfo({
                 <Box display="inline-block">
                   <PopoverTrigger>
                     <Center
+                      width="40px"
+                      height="40px"
                       cursor={"pointer"}
                       border="1px dashed"
                       borderRadius={"50%"}
-                      width="40px"
-                      height="40px"
+                      color={priorityFlagColor}
                       _hover={{ color: "purple.400" }}
                     >
                       <i className="bi bi-flag"></i>
@@ -121,7 +134,11 @@ export default function TaskInfo({
                 <PopoverBody shadow={"2xl"} m={0} p={0}>
                   <PriorityOptions
                     onClose={onClose}
-                    priorityColumns={state.columnOptions.priority}
+                    setTask={setTask}
+                    currentTask={task}
+                    setState={setState}
+                    currentColumnId={currentColumnId}
+                    priorityColumns={columnOptions.priority}
                   />
                 </PopoverBody>
               </PopoverContent>

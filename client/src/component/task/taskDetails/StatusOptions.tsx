@@ -5,7 +5,6 @@ import { SetState, StatusColumns, TargetColumn, Task } from "../Data";
 import { updateTaskPositionInColumn } from "../TaskDataProcessing";
 
 type Props = {
-  task: Task;
   setTask: SetTask;
   currentTask: Task;
   setState: SetState;
@@ -15,7 +14,6 @@ type Props = {
 };
 
 export default function StatusOptions({
-  task,
   onClose,
   setTask,
   setState,
@@ -25,54 +23,58 @@ export default function StatusOptions({
 }: Props) {
   return (
     <>
-      {statusColumns.map((column) => (
-        <Box
-          my="1"
-          key={column.id}
-          rounded="sm"
-          cursor="pointer"
-          _hover={{ backgroundColor: column.color }}
-          onClick={() => {
-            const targetColumnId = column.id;
-            onClose();
-            if (currentColumnId === targetColumnId) return;
-
-            // Update task state in taskDetail
-            setTask({ ...task, status: targetColumnId });
-            // Update task in state
-            updateCurrentTask(
-              currentTask,
-              setState,
-              targetColumnId,
-              currentColumnId
-            );
-          }}
-        >
-          <Flex alignItems="center">
+      {statusColumns.map(
+        (column) =>
+          // Hide current column option
+          column.id !== currentColumnId && (
             <Box
-              ml="3"
-              mr="2"
+              my="1"
+              key={column.id}
               rounded="sm"
-              width="10px"
-              height="10px"
-              backgroundColor={column.color}
-            ></Box>
+              cursor="pointer"
+              _hover={{ backgroundColor: column.color }}
+              onClick={() => {
+                onClose();
+                const targetStatusColumnId = column.id;
 
-            {/* Title */}
-            <Box>{column.title}</Box>
-          </Flex>
-        </Box>
-      ))}
+                // Update task state in taskDetail
+                setTask({ ...currentTask, status: targetStatusColumnId });
+                // Update task in state
+                updateCurrentTaskStatus(
+                  currentTask,
+                  setState,
+                  targetStatusColumnId,
+                  currentColumnId
+                );
+              }}
+            >
+              <Flex alignItems="center">
+                <Box
+                  ml="3"
+                  mr="2"
+                  rounded="sm"
+                  width="10px"
+                  height="10px"
+                  backgroundColor={column.color}
+                ></Box>
+
+                {/* Title */}
+                <Box>{column.title}</Box>
+              </Flex>
+            </Box>
+          )
+      )}
     </>
   );
 }
 
-export function updateCurrentTask(
+export function updateCurrentTaskStatus(
   currentTask: Task,
   setState: SetState,
-  targetColumnId: number,
+  targetStatusColumnId: number,
   currentColumnId: number
 ) {
+  console.log({ currentColumnId });
   setState((previousState) => {
     if (previousState) {
       return produce(previousState, (draftState) => {
@@ -89,26 +91,21 @@ export function updateCurrentTask(
               (task) => task.id === currentTaskCopy.id
             );
 
-          if (
-            currentTaskIndexInOriginalColumn ||
-            currentTaskIndexInOriginalColumn === 0
-          ) {
-            originalColumn.taskList.splice(currentTaskIndexInOriginalColumn, 1);
+          originalColumn.taskList.splice(currentTaskIndexInOriginalColumn, 1);
 
-            // Update sourceTaskAfter
-            const sourceTaskAfter = originalColumn.taskList.find(
-              (task) => task.previousTask.statusId === currentTaskCopy.id
-            );
+          // Update sourceTaskAfter
+          const sourceTaskAfter = originalColumn.taskList.find(
+            (task) => task.previousTask.statusId === currentTaskCopy.id
+          );
 
-            if (sourceTaskAfter) {
-              sourceTaskAfter.previousTask.statusId =
-                currentTaskCopy.previousTask.statusId;
-            }
+          if (sourceTaskAfter) {
+            sourceTaskAfter.previousTask.statusId =
+              currentTaskCopy.previousTask.statusId;
           }
         }
 
         // Task sets to finished
-        const isSetToFinished = targetColumnId === 3;
+        const isSetToFinished = targetStatusColumnId === 3;
         if (isSetToFinished) {
           draftState.orderedTasks.forEach((tasks) =>
             tasks.taskList.forEach((taskAfter) => {
@@ -168,12 +165,12 @@ export function updateCurrentTask(
         // update sourceTask with value in the new column
         updateTaskPositionInColumn(
           draftState,
-          { status: String(targetColumnId) },
+          { status: String(targetStatusColumnId) },
           currentTaskCopy
         );
 
         const targetColumn = draftState.orderedTasks.find(
-          (tasks) => tasks.id === targetColumnId
+          (tasks) => tasks.id === targetStatusColumnId
         );
 
         // Insert currentTaskCopy into new column
