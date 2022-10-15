@@ -14,7 +14,11 @@ type ProviderType = {
 
 export default function TaskDetailProvider({ children }: ProviderType) {
   const [task, setTask] = useState<Task>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
   const [taskStateContext, setTaskStateContext] = useState<TaskStateContext>();
 
   return (
@@ -23,8 +27,8 @@ export default function TaskDetailProvider({ children }: ProviderType) {
         task,
         setTask,
         isOpen,
-        onOpen,
-        onClose,
+        onModalOpen,
+        onModalClose,
         taskStateContext,
         setTaskStateContext,
       }}

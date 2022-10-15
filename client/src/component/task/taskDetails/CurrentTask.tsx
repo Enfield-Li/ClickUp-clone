@@ -7,51 +7,36 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import {
-  ColumnOptions,
-  SetState,
-  Task,
-  UpdateTaskDescDTO,
-  UpdateTaskTitleDTO,
-} from "../Data";
+import { SetState, UpdateTaskDescDTO, UpdateTaskTitleDTO } from "../Data";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";
 
-type Props = {
-  task: Task;
-  setTask: SetTask;
-  setState: SetState;
-  columnOptions: ColumnOptions;
-};
+type Props = {};
 
-export default function CurrentTask({
-  task,
-  setTask,
-  setState,
-  columnOptions,
-}: Props) {
-  console.log({ task });
+export default function CurrentTask({}: Props) {
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
+
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
   return (
     <Box flexBasis={"50%"}>
       <Flex justifyContent={"space-evenly"} my={3}>
         {/* Status */}
-        <StatusDetails
-          task={task}
-          setTask={setTask}
-          setState={setState}
-          columnOptions={columnOptions}
-        />
+        <StatusDetails />
 
         {/* Priority */}
-        <PriorityDetails
-          task={task}
-          setTask={setTask}
-          setState={setState}
-          columnOptions={columnOptions}
-        />
+        <PriorityDetails />
       </Flex>
 
       {/* Desc */}
@@ -66,13 +51,13 @@ export default function CurrentTask({
 
         <Editable
           width="100%"
-          defaultValue={task.description}
+          defaultValue={task!.description}
           placeholder="Add some desc"
         >
           <EditablePreview />
           <EditableTextarea
             onBlur={(e) => {
-              if (e.target.value !== task.title) {
+              if (e.target.value !== task!.title) {
                 updateTaskDesc(task!.id!, e.currentTarget.value, setState);
               }
             }}

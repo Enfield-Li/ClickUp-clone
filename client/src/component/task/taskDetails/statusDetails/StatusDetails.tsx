@@ -1,38 +1,39 @@
 import {
+  Button,
   Center,
   Popover,
-  PopoverTrigger,
-  Button,
-  Tooltip,
-  PopoverContent,
   PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
 } from "@chakra-ui/react";
-import { SetTask } from "../../../../context/task_detail/TaskDetailContextTypes";
-import { ColumnOptions, SetState, Task } from "../../Data";
-import StatusOptions, { updateCurrentTaskStatus } from "./StatusOptions";
+import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import StatusOptions from "./StatusOptions";
 
-type Props = {
-  task: Task;
-  setTask: SetTask;
-  setState: SetState;
-  columnOptions: ColumnOptions;
-};
+type Props = {};
 
-export default function StatusDetails({
-  task,
-  setTask,
-  setState,
-  columnOptions,
-}: Props) {
+export default function StatusDetails({}: Props) {
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
+
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
   const column = columnOptions.status.find(
-    (column) => column.id === task.status
+    (column) => column.id === task!.status
   );
   const statusButtonColor = column?.color.split(".")[0];
 
   return (
     <Center>
       <Popover>
-        {({ onClose }) => (
+        {({ onClose: onOptionClose }) => (
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <PopoverTrigger>
@@ -40,14 +41,14 @@ export default function StatusDetails({
             </PopoverTrigger>
 
             {/* Set to finish */}
-            {task.status !== 3 && (
+            {task!.status !== 3 && (
               <Tooltip label="Set to complete" placement="top" hasArrow>
                 <Center
                   cursor={"pointer"}
                   fontSize={"30px"}
                   _hover={{ color: "yellow.400" }}
                   onClick={() => {
-                    setTask({ ...task, status: 3 });
+                    setTask({ ...task!, status: 3 });
                     // updateCurrentTaskStatus(task, setState, 3);
                   }}
                 >
@@ -59,13 +60,7 @@ export default function StatusDetails({
             {/* Status option */}
             <PopoverContent width="200px">
               <PopoverBody shadow={"2xl"}>
-                <StatusOptions
-                  task={task}
-                  setTask={setTask}
-                  onClose={onClose}
-                  setState={setState}
-                  statusColumns={columnOptions.status}
-                />
+                <StatusOptions onOptionClose={onOptionClose} />
               </PopoverBody>
             </PopoverContent>
           </>

@@ -1,15 +1,26 @@
-import { Flex, Box } from "@chakra-ui/react";
-import React from "react";
-import { Task } from "../Data";
+import { Box, Flex } from "@chakra-ui/react";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 
-type Props = { task: Task };
+type Props = {};
 
-export default function TaskEvent({ task }: Props) {
+export default function TaskEvent({}: Props) {
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
+
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
   return (
     <Box flexBasis={"50%"}>
       <Flex justifyContent={"space-evenly"} my={3}>
         <Box>Stats 1</Box>
-        <Box>Task dueDate: {task.dueDate}</Box>
+        <Box>Task dueDate: {task!.dueDate}</Box>
       </Flex>
       <Box>Events</Box>
     </Box>

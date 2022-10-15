@@ -13,27 +13,30 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import TaskDetailHead from "./TaskDetailHead";
-import TaskDetailLoading from "./TaskDetailLoading";
-import TaskEvent from "./TaskEvent";
 import CurrentTask from "./CurrentTask";
+import TaskDetailHead from "./TaskDetailHead";
+import TaskEvent from "./TaskEvent";
 
 type Props = {};
 
 export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
-  const { task, isOpen, onClose, setTask, taskStateContext } =
-    useTaskDetailContext();
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
 
-  if (!task || !taskStateContext)
-    return <TaskDetailLoading isOpen={isOpen} onClose={onClose} />;
-
-  const { setState, columnOptions } = taskStateContext;
+  const { setState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onModalClose}
       size="6xl"
       initialFocusRef={initialRef}
     >
@@ -42,19 +45,14 @@ export default function TaskDetailModal({}: Props) {
       <ModalContent>
         {/* Header */}
         <ModalHeader mb={"-4"}>
-          <TaskDetailHead task={task} setState={setState} />
+          <TaskDetailHead />
         </ModalHeader>
 
         {/* Body */}
         <ModalBody minHeight="450px">
           <Flex>
             {/* Left side */}
-            <CurrentTask
-              task={task}
-              setTask={setTask}
-              setState={setState}
-              columnOptions={columnOptions}
-            />
+            <CurrentTask />
 
             {/* Divider */}
             <Center>
@@ -62,7 +60,7 @@ export default function TaskDetailModal({}: Props) {
             </Center>
 
             {/* Right side */}
-            <TaskEvent task={task} />
+            <TaskEvent />
           </Flex>
         </ModalBody>
 
@@ -71,7 +69,7 @@ export default function TaskDetailModal({}: Props) {
 
         {/* Footer */}
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
+          <Button colorScheme="blue" mr={3} onClick={onModalClose}>
             Close
           </Button>
         </ModalFooter>

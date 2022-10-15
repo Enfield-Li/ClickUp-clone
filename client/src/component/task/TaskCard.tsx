@@ -12,7 +12,7 @@ type Props = {
 export default function TaskCard({ task, index }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { onOpen, setTask } = useTaskDetailContext();
+  const { onModalOpen: onOpen, setTask } = useTaskDetailContext();
 
   return (
     <>

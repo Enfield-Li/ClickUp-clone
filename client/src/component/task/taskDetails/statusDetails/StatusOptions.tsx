@@ -1,45 +1,40 @@
 import { Box, Flex } from "@chakra-ui/react";
-import produce from "immer";
-import { SetTask } from "../../../../context/task_detail/TaskDetailContextTypes";
-import { SetState, StatusColumns, TargetColumn, Task } from "../../Data";
-import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
+import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { SetState, Task } from "../../Data";
 
-type Props = {
-  task: Task;
-  setTask: SetTask;
-  setState: SetState;
-  onClose: () => void;
-  statusColumns: StatusColumns;
-};
+type Props = { onOptionClose: () => void };
 
-export default function StatusOptions({
-  task,
-  setTask,
-  onClose,
-  setState,
-  statusColumns,
-}: Props) {
+export default function StatusOptions({ onOptionClose }: Props) {
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
+
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
   return (
     <>
-      {statusColumns.map(
+      {columnOptions.status.map(
         (column) =>
-          task.status !== column.id && (
+          task!.status !== column.id && (
             // Hide current column option
             <Box
               my="1"
-              key={column.id}
               rounded="sm"
+              key={column.id}
               cursor="pointer"
               _hover={{ backgroundColor: column.color }}
               onClick={() => {
-                onClose();
+                onOptionClose();
                 const targetStatusColumnId = column.id;
-                if (targetStatusColumnId === task.status) {
-                  console.log("same");
-                }
 
                 // Update task state in taskDetail
-                setTask({ ...task, status: targetStatusColumnId });
+                setTask({ ...task!, status: targetStatusColumnId });
                 // Update task in state
                 // updateCurrentTaskStatus(
                 //   currentTask  ,

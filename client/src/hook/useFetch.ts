@@ -116,7 +116,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
 export function useLocalTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
-  const { setTaskStateContext } = useTaskDetailContext();
+  const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
 
   useEffect(() => {
     const columnDataFromApi = columnOptions;
@@ -134,7 +134,11 @@ export function useLocalTasks(sortBy: SortBy) {
       sortBy
     );
 
-    setTaskStateContext({ columnOptions: columnOptionsUpdated, setState });
+    setTaskStateContext({
+      columnOptions: columnOptionsUpdated,
+      setState,
+      sortBy,
+    });
 
     setState({
       orderedTasks,
@@ -144,7 +148,12 @@ export function useLocalTasks(sortBy: SortBy) {
 
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
-    if (state) {
+    if (state && taskStateContext) {
+      setTaskStateContext({
+        ...taskStateContext,
+        sortBy,
+      });
+
       setState({
         ...state,
         orderedTasks: groupTaskListOnSortBy(

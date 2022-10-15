@@ -1,40 +1,38 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
-import produce from "immer";
-import { SetTask } from "../../../../context/task_detail/TaskDetailContextTypes";
-import { PriorityColumns, SetState, Task } from "../../Data";
-import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
+import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { SetState, Task } from "../../Data";
 
-type Props = {
-  task: Task;
-  setTask: SetTask;
-  setState: SetState;
-  onClose: () => void;
-  priorityColumns: PriorityColumns;
-};
+type Props = { onOptionClose: () => void };
 
-export default function PriorityOptions({
-  task,
-  setTask,
-  setState,
-  priorityColumns,
-  onClose,
-}: Props) {
+export default function PriorityOptions({ onOptionClose }: Props) {
+  const {
+    task,
+    isOpen,
+    setTask,
+    onModalOpen,
+    onModalClose,
+    taskStateContext,
+    setTaskStateContext,
+  } = useTaskDetailContext();
+
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
   return (
     <>
-      {priorityColumns.map(
+      {columnOptions.priority.map(
         (priority) =>
-          // Hide finished task and current priority stage
+          // Hide finished column and current priority stage
           priority.id !== 0 &&
-          task.priority !== priority.id && (
+          task!.priority !== priority.id && (
             <Box key={priority.id}>
               <Flex
                 p={3}
                 rounded="sm"
                 cursor="pointer"
                 onClick={() => {
-                  onClose();
+                  onOptionClose();
                   const targetPriorityColumnId = priority.id;
-                  setTask({ ...task, priority: targetPriorityColumnId });
+                  setTask({ ...task!, priority: targetPriorityColumnId });
                   // updateTaskPriority(
                   //   currentTask,
                   //   setState,
