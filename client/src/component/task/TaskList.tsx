@@ -27,7 +27,7 @@ import {
   collectAllTasks,
   processLookUpDueDateId,
   groupTaskListOnSortBy,
-  updateTaskPositionInColumn,
+  updateTaskStatsInColumn,
 } from "./TaskDataProcessing";
 
 type Props = {
@@ -35,7 +35,7 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  const { state, setState } = useLocalTasks(sortBy);
+  const { state, setState, loading } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
   // const { state, loading, error, setState } = useFetchTasks(
   //   API_ENDPOINT.TASK_ALL_TASKS,
@@ -43,8 +43,7 @@ export default function TaskListView({ sortBy }: Props) {
   // );
   console.log(state);
 
-  // if (!state || loading) return <div>Loading</div>;
-  if (!state) return <div>Loading</div>;
+  if (!state || loading) return <div>Loading</div>;
 
   const currentColumns = state.columnOptions[sortBy];
 
@@ -338,7 +337,7 @@ async function handleDragEnd(
             : "1", // Fall back to default column
         };
 
-        updateTaskPositionInColumn(draftState, targetColumn, sourceTask);
+        updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
       }
 
       const userId = user!.id;

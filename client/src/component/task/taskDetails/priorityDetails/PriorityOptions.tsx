@@ -2,7 +2,7 @@ import { Box, Divider, Flex } from "@chakra-ui/react";
 import produce from "immer";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import { PRIORITY, SetState, SortBy, Task } from "../../Data";
-import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
+import { updateTaskStatsInColumn } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void };
 
@@ -73,7 +73,7 @@ function updateTaskPriority(
           taskList.taskList.forEach((task) => {
             const isSourceTask = task.id === currentTask.id;
             if (isSourceTask) {
-              updateTaskPositionInColumn(
+              updateTaskStatsInColumn(
                 draftState,
                 { priority: String(targetPriorityColumnId) },
                 task

@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import StatusOptions from "./StatusOptions";
+import StatusOptions, { updateCurrentTaskStatus } from "./StatusOptions";
 
 type Props = {};
 
@@ -49,7 +49,7 @@ export default function StatusDetails({}: Props) {
                   _hover={{ color: "yellow.400" }}
                   onClick={() => {
                     setTask({ ...task!, status: 3 });
-                    // updateCurrentTaskStatus(task, setState, 3);
+                    updateCurrentTaskStatus(sortBy, task!, setState, 3);
                   }}
                 >
                   <i className="bi bi-check-square"></i>

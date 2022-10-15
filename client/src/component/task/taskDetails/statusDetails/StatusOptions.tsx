@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import produce from "immer";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import { SetState, SortBy, STATUS, TargetColumn, Task } from "../../Data";
-import { updateTaskPositionInColumn } from "../../TaskDataProcessing";
+import { updateTaskStatsInColumn } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void };
 
@@ -177,11 +177,11 @@ export function updateCurrentTaskStatus(
                 ? String(previousPriorityIdBeforeFinish)
                 : "1",
             };
-            updateTaskPositionInColumn(draftState, targetColumn, sourceTask);
+            updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
           }
 
           // update sourceTask with value in the new column
-          updateTaskPositionInColumn(
+          updateTaskStatsInColumn(
             draftState,
             { status: String(targetStatusColumnId) },
             sourceTask

@@ -54,8 +54,9 @@ export function useFetch<T>(url: string) {
 
 export function useFetchTasks(url: string, sortBy: SortBy) {
   const [state, setState] = useState<State>();
-  const [loading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<boolean>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
 
   useEffect(() => {
     fetchData();
@@ -63,16 +64,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
-    if (state) {
-      setState({
-        ...state,
-        orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
-          state.columnOptions[sortBy],
-          sortBy
-        ),
-      });
-    }
+    updateLocalState();
   }, [sortBy]);
 
   async function fetchData() {
@@ -95,12 +87,20 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         columnDataFromApi.dueDate
       );
 
+      const columnOptionsUpdated = {
+        ...columnDataFromApi,
+        dueDate: dueDateColumns,
+      };
+
+      setTaskStateContext({
+        columnOptions: columnOptionsUpdated,
+        setState,
+        sortBy,
+      });
+
       setState({
         orderedTasks,
-        columnOptions: {
-          ...columnDataFromApi,
-          dueDate: dueDateColumns,
-        },
+        columnOptions: columnOptionsUpdated,
       });
     } catch (error) {
       setError(true);
@@ -111,14 +111,50 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     }
   }
 
-  return { state, loading, error, setState };
+  async function updateLocalState() {
+    setLoading(true);
+    await sleep(20);
+
+    if (state && taskStateContext) {
+      setTaskStateContext({
+        ...taskStateContext,
+        sortBy,
+      });
+
+      setState({
+        ...state,
+        orderedTasks: groupTaskListOnSortBy(
+          collectAllTasks(state.orderedTasks),
+          state.columnOptions[sortBy],
+          sortBy
+        ),
+      });
+    }
+
+    setLoading(false);
+  }
+
+  return { state, setState, loading, error };
 }
 
 export function useLocalTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
+  const [loading, setLoading] = useState(false);
   const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
 
   useEffect(() => {
+    fetchLocalData();
+  }, []);
+
+  // Sync up orderedTasks with columns under sortBy
+  useEffect(() => {
+    updateLocalState();
+  }, [sortBy]);
+
+  async function fetchLocalData() {
+    setLoading(true);
+    await sleep(20);
+
     const columnDataFromApi = columnOptions;
     const dataFromAPI = initialData;
 
@@ -144,10 +180,14 @@ export function useLocalTasks(sortBy: SortBy) {
       orderedTasks,
       columnOptions: columnOptionsUpdated,
     });
-  }, []);
 
-  // Sync up orderedTasks with columns under sortBy
-  useEffect(() => {
+    setLoading(false);
+  }
+
+  async function updateLocalState() {
+    setLoading(true);
+    await sleep(20);
+
     if (state && taskStateContext) {
       setTaskStateContext({
         ...taskStateContext,
@@ -163,7 +203,13 @@ export function useLocalTasks(sortBy: SortBy) {
         ),
       });
     }
-  }, [sortBy]);
 
-  return { state, setState };
+    setLoading(false);
+  }
+
+  return { state, setState, loading };
 }
+
+const sleep = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

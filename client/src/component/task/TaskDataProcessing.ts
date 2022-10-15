@@ -236,12 +236,14 @@ export function getDueDateColumnFromDateString(
   const oneWeekLater = getNextNWeekDay(6);
   const inputDate = new Date(inputDateString);
 
-  if (todayDate > inputDate) return 1;
-  if (inputDate > oneWeekLater) return 10;
+  if (todayDate > inputDate) return 2; // Overdue
+  if (inputDate > oneWeekLater) return 10; // Future
+
+  return 1; // Default No due date
 }
 
 // Push task to the other sortBy id === 1 column
-export function updateTaskPositionInColumn(
+export function updateTaskStatsInColumn(
   state: State,
   targetColumn: TargetColumn,
   sourceTask: Task

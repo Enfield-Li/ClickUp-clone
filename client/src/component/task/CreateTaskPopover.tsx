@@ -35,7 +35,7 @@ import {
 import { createTask } from "./TaskActions";
 import {
   getDueDateColumnFromDateString,
-  updateTaskPositionInColumn,
+  updateTaskStatsInColumn,
 } from "./TaskDataProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
 import {
@@ -243,6 +243,7 @@ async function submit(
 ) {
   // Prepare newTask
   const { title, description, dueDate, priority, status } = formValues;
+  console.log({ dueDate });
   const userId = user!.id;
   const username = user!.username;
 
@@ -260,23 +261,23 @@ async function submit(
   };
 
   const targetColumn = { dueDate, priority, status };
+
+  // Use date picker
   if (dueDate && dueDate.length > 1) {
-    const columnId = getDueDateColumnFromDateString(
+    const dueDateColumnId = getDueDateColumnFromDateString(
       state.columnOptions.dueDate,
       dueDate
     );
 
-    if (columnId) targetColumn.dueDate = String(columnId);
+    targetColumn.dueDate = String(dueDateColumnId);
   }
 
-  // update other column's state and previousTask info
+  // Task is finished, hide from other column options
   if (isTaskDone) {
     newTask.priority = 0;
     newTask.dueDate = 0;
-    // newTask.previousTask.dueDateId = 0;
-    // newTask.previousTask.priorityId = 0;
   } else {
-    updateTaskPositionInColumn(state, targetColumn, newTask);
+    updateTaskStatsInColumn(state, targetColumn, newTask);
   }
 
   // Updates for newTask's previousItem for current sortBy
