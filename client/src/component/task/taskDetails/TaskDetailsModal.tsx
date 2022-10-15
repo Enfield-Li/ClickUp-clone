@@ -16,25 +16,19 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import TaskDetailHead from "./TaskDetailHead";
 import TaskDetailLoading from "./TaskDetailLoading";
 import TaskEvent from "./TaskEvent";
-import TaskInfo from "./TaskInfo";
+import CurrentTask from "./CurrentTask";
 
 type Props = {};
 
 export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
-  const {
-    task,
-    isOpen,
-    onClose,
-    setTask,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
+  const { task, isOpen, onClose, setTask, taskStateContext } =
+    useTaskDetailContext();
 
   if (!task || !taskStateContext)
     return <TaskDetailLoading isOpen={isOpen} onClose={onClose} />;
 
-  const { setState, currentColumnId, columnOptions } = taskStateContext;
+  const { setState, columnOptions } = taskStateContext;
 
   return (
     <Modal
@@ -55,12 +49,11 @@ export default function TaskDetailModal({}: Props) {
         <ModalBody minHeight="450px">
           <Flex>
             {/* Left side */}
-            <TaskInfo
+            <CurrentTask
               task={task}
               setTask={setTask}
               setState={setState}
               columnOptions={columnOptions}
-              currentColumnId={currentColumnId}
             />
 
             {/* Divider */}

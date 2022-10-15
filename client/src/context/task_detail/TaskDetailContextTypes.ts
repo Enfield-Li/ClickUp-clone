@@ -1,22 +1,17 @@
-import {
-  ColumnOptions,
-  SetState,
-  State,
-  Task,
-} from "../../component/task/Data";
+import { ColumnOptions, SetState, Task } from "../../component/task/Data";
 
 export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
 
 export type TaskDetailContextType = {
-  task: Task | undefined;
+  task?: Task;
   setTask: SetTask;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
   taskStateContext: TaskStateContext | undefined;
   setTaskStateContext: React.Dispatch<
     React.SetStateAction<TaskStateContext | undefined>
   >;
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
 };
 
 export type TaskDetailStateType = {
@@ -25,6 +20,5 @@ export type TaskDetailStateType = {
 
 export type TaskStateContext = {
   setState: SetState;
-  currentColumnId: number;
   columnOptions: ColumnOptions;
 };

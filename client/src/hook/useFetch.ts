@@ -20,6 +20,7 @@ import useGlobalContext, {
   indicateLoading,
   popUpError,
 } from "../context/global/useGlobalContext";
+import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
 
 export function useFetch<T>(url: string) {
@@ -115,12 +116,17 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
 export function useLocalTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
+  const { setTaskStateContext } = useTaskDetailContext();
 
   useEffect(() => {
     const columnDataFromApi = columnOptions;
     const dataFromAPI = initialData;
 
     const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
+    const columnOptionsUpdated = {
+      ...columnDataFromApi,
+      dueDate: dueDateColumns,
+    };
 
     const orderedTasks = groupTaskListOnSortBy(
       dataFromAPI,
@@ -128,12 +134,11 @@ export function useLocalTasks(sortBy: SortBy) {
       sortBy
     );
 
+    setTaskStateContext({ columnOptions: columnOptionsUpdated, setState });
+
     setState({
       orderedTasks,
-      columnOptions: {
-        ...columnDataFromApi,
-        dueDate: dueDateColumns,
-      },
+      columnOptions: columnOptionsUpdated,
     });
   }, []);
 

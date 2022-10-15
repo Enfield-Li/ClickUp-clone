@@ -6,34 +6,13 @@ import { SetState, State, Task } from "./Data";
 
 type Props = {
   task: Task;
-  state: State;
   index: number;
-  setState: SetState;
-  currentColumnId: number;
 };
 
-export default function TaskCard({
-  task,
-  index,
-  state,
-  setState,
-  currentColumnId,
-}: Props) {
+export default function TaskCard({ task, index }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { isOpen, onOpen, setTaskStateContext, setTask } =
-    useTaskDetailContext();
-
-  // Sync up taskDetail with state
-  useEffect(() => {
-    if (isOpen) {
-      setTaskStateContext({
-        columnOptions: state.columnOptions,
-        setState,
-        currentColumnId,
-      });
-    }
-  }, [state, isOpen, currentColumnId]);
+  const { onOpen, setTask } = useTaskDetailContext();
 
   return (
     <>
@@ -49,11 +28,6 @@ export default function TaskCard({
             onClick={() => {
               onOpen();
               setTask(task);
-              setTaskStateContext({
-                columnOptions: state.columnOptions,
-                setState,
-                currentColumnId,
-              });
             }}
             ref={provided.innerRef}
             {...provided.draggableProps}

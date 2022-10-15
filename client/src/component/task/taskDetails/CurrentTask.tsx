@@ -1,0 +1,150 @@
+import {
+  Box,
+  Center,
+  Editable,
+  EditablePreview,
+  EditableTextarea,
+  Flex,
+} from "@chakra-ui/react";
+import produce from "immer";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
+import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../../utils/constant";
+import {
+  ColumnOptions,
+  SetState,
+  Task,
+  UpdateTaskDescDTO,
+  UpdateTaskTitleDTO,
+} from "../Data";
+import PriorityDetails from "./priorityDetails/PriorityDetails";
+import StatusDetails from "./statusDetails/StatusDetails";
+
+type Props = {
+  task: Task;
+  setTask: SetTask;
+  setState: SetState;
+  columnOptions: ColumnOptions;
+};
+
+export default function CurrentTask({
+  task,
+  setTask,
+  setState,
+  columnOptions,
+}: Props) {
+  console.log({ task });
+  return (
+    <Box flexBasis={"50%"}>
+      <Flex justifyContent={"space-evenly"} my={3}>
+        {/* Status */}
+        <StatusDetails
+          task={task}
+          setTask={setTask}
+          setState={setState}
+          columnOptions={columnOptions}
+        />
+
+        {/* Priority */}
+        <PriorityDetails
+          task={task}
+          setTask={setTask}
+          setState={setState}
+          columnOptions={columnOptions}
+        />
+      </Flex>
+
+      {/* Desc */}
+      <Box>
+        <Flex>
+          Desc:
+          <Center opacity={"40%"}>
+            {/* Edit button */}
+            <i className="bi bi-pencil-square"></i>
+          </Center>
+        </Flex>
+
+        <Editable
+          width="100%"
+          defaultValue={task.description}
+          placeholder="Add some desc"
+        >
+          <EditablePreview />
+          <EditableTextarea
+            onBlur={(e) => {
+              if (e.target.value !== task.title) {
+                updateTaskDesc(task!.id!, e.currentTarget.value, setState);
+              }
+            }}
+          />
+        </Editable>
+      </Box>
+    </Box>
+  );
+}
+
+export async function updateTaskDesc(
+  taskId: number,
+  newDesc: string,
+  setState: SetState
+) {
+  try {
+    const updateTaskDescDTO: UpdateTaskDescDTO = {
+      id: taskId,
+      newDesc,
+    };
+
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_DESC,
+      updateTaskDescDTO
+    );
+
+    if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) =>
+                task.id === taskId ? (task.description = newDesc) : task
+              )
+            );
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateTaskTitle(
+  taskId: number,
+  newTitle: string,
+  setState: SetState
+) {
+  try {
+    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
+      id: taskId,
+      newTitle,
+    };
+
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_TITLE,
+      updateTaskTitleDTO
+    );
+
+    if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) =>
+                task.id === taskId ? (task.title = newTitle) : task
+              )
+            );
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}

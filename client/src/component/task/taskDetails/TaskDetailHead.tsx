@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { SetState, Task } from "../Data";
-import { updateTaskTitle } from "./TaskInfo";
+import { updateTaskTitle } from "./CurrentTask";
 
 type Props = {
   task: Task;
