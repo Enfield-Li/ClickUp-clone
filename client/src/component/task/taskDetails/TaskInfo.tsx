@@ -10,7 +10,7 @@ import produce from "immer";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import { SetState, UpdateTaskDescDTO, UpdateTaskTitleDTO } from "../Data";
+import { SetState, UpdateTaskDescDTO } from "../Data";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";
 
@@ -28,6 +28,7 @@ export default function TaskInfo({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
+  console.log(task);
 
   return (
     <Box flexBasis={"50%"}>
@@ -91,39 +92,6 @@ export async function updateTaskDesc(
             draftState.orderedTasks.forEach((tasks) =>
               tasks.taskList.forEach((task) =>
                 task.id === taskId ? (task.description = newDesc) : task
-              )
-            );
-        })
-      );
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function updateTaskTitle(
-  taskId: number,
-  newTitle: string,
-  setState: SetState
-) {
-  try {
-    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
-      id: taskId,
-      newTitle,
-    };
-
-    const response = await axiosInstance.put<boolean>(
-      API_ENDPOINT.TASK_UPDATE_TITLE,
-      updateTaskTitleDTO
-    );
-
-    if (response.data) {
-      setState((previousState) =>
-        produce(previousState, (draftState) => {
-          if (draftState)
-            draftState.orderedTasks.forEach((tasks) =>
-              tasks.taskList.forEach((task) =>
-                task.id === taskId ? (task.title = newTitle) : task
               )
             );
         })

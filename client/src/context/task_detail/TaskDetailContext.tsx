@@ -6,7 +6,7 @@ import {
   TaskStateContext,
 } from "./TaskDetailContextTypes";
 
-export const GlobalContext = createContext({} as TaskDetailContextType);
+export const TaskDetailContext = createContext({} as TaskDetailContextType);
 
 type ProviderType = {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export default function TaskDetailProvider({ children }: ProviderType) {
   const [taskStateContext, setTaskStateContext] = useState<TaskStateContext>();
 
   return (
-    <GlobalContext.Provider
+    <TaskDetailContext.Provider
       value={{
         task,
         setTask,
@@ -34,6 +34,6 @@ export default function TaskDetailProvider({ children }: ProviderType) {
       }}
     >
       {children}
-    </GlobalContext.Provider>
+    </TaskDetailContext.Provider>
   );
 }

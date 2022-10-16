@@ -12,7 +12,7 @@ type Props = {
 export default function TaskCard({ task, index }: Props) {
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
-  const { onModalOpen: onOpen, setTask } = useTaskDetailContext();
+  const { onModalOpen, setTask, isModalOpen } = useTaskDetailContext();
 
   return (
     <>
@@ -26,7 +26,7 @@ export default function TaskCard({ task, index }: Props) {
             rounded={"md"}
             boxShadow={"xl"}
             onClick={() => {
-              onOpen();
+              onModalOpen();
               setTask(task);
             }}
             ref={provided.innerRef}

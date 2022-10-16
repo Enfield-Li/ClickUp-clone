@@ -1,15 +1,10 @@
-import { Box, Button, Center, Flex, Input, Select } from "@chakra-ui/react";
-import produce from "immer";
+import { Box, Button, Center, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { SetTask } from "../../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext, {
+  updateTaskPriorityOrDueDate,
+} from "../../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
-import { SortBy, Task, SetState, PRIORITY, DUE_DATE } from "../../Data";
-import {
-  getDueDateColumnFromDateString,
-  updateTaskStatsInColumn,
-} from "../../TaskDataProcessing";
-import { updateTaskPriorityOrDueDate } from "../priorityDetails/PriorityOptions";
+import { getDueDateColumnFromDateString } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void; isOptionOpen: boolean };
 

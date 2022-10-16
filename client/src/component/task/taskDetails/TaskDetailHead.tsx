@@ -5,9 +5,12 @@ import {
   EditablePreview,
   Flex,
 } from "@chakra-ui/react";
+import produce from "immer";
 import { useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { updateTaskTitle } from "./TaskInfo";
+import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../../utils/constant";
+import { SetState, UpdateTaskTitleDTO } from "../Data";
 
 type Props = {};
 
@@ -55,4 +58,37 @@ export default function TaskDetailHead({}: Props) {
       )}
     </Flex>
   );
+}
+
+export async function updateTaskTitle(
+  taskId: number,
+  newTitle: string,
+  setState: SetState
+) {
+  try {
+    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
+      id: taskId,
+      newTitle,
+    };
+
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_TITLE,
+      updateTaskTitleDTO
+    );
+
+    if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) =>
+                task.id === taskId ? (task.title = newTitle) : task
+              )
+            );
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }

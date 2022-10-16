@@ -7,8 +7,10 @@ import {
   PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import StatusOptions, { updateCurrentTaskStatus } from "./StatusOptions";
+import useTaskDetailContext, {
+  updateCurrentTaskStatus,
+} from "../../../../context/task_detail/useTaskDetailContext";
+import StatusOptions from "./StatusOptions";
 
 type Props = {};
 
