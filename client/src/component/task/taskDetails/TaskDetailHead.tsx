@@ -5,15 +5,18 @@ import {
   EditablePreview,
   Flex,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { updateTaskTitle } from "./TaskInfo";
 
 type Props = {};
 
 export default function TaskDetailHead({}: Props) {
+  const [showEditIcon, setShowEditIcon] = useState(true);
+
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,
@@ -25,15 +28,18 @@ export default function TaskDetailHead({}: Props) {
 
   return (
     <Flex>
+      {/* Title */}
       <Editable mr={6} defaultValue={task!.title}>
         <EditablePreview />
         <EditableInput
-          onKeyDown={(e) =>
-            e.key === "Enter" &&
-            e.currentTarget.value !== task!.title &&
-            updateTaskTitle(task!.id!, e.currentTarget.value, setState)
-          }
+          onFocus={() => setShowEditIcon(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && e.currentTarget.value !== task!.title) {
+              updateTaskTitle(task!.id!, e.currentTarget.value, setState);
+            }
+          }}
           onBlur={(e) => {
+            setShowEditIcon(true);
             if (e.target.value !== task!.title) {
               updateTaskTitle(task!.id!, e.currentTarget.value, setState);
             }
@@ -41,9 +47,12 @@ export default function TaskDetailHead({}: Props) {
         />
       </Editable>
 
-      <Center opacity={"40%"}>
-        <i className="bi bi-pencil-square"></i>
-      </Center>
+      {/* Edit */}
+      {showEditIcon && (
+        <Center opacity={"40%"}>
+          <i className="bi bi-pencil-square"></i>
+        </Center>
+      )}
     </Flex>
   );
 }

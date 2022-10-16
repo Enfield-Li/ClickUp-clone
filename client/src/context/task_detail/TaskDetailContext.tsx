@@ -15,7 +15,7 @@ type ProviderType = {
 export default function TaskDetailProvider({ children }: ProviderType) {
   const [task, setTask] = useState<Task>();
   const {
-    isOpen,
+    isOpen: isModalOpen,
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
@@ -26,7 +26,7 @@ export default function TaskDetailProvider({ children }: ProviderType) {
       value={{
         task,
         setTask,
-        isOpen,
+        isModalOpen,
         onModalOpen,
         onModalClose,
         taskStateContext,

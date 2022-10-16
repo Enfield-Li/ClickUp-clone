@@ -19,7 +19,7 @@ type Props = {};
 export default function TaskInfo({}: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,

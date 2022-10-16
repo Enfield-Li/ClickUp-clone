@@ -9,7 +9,7 @@ type Props = {};
 
 export default function TaskView({}: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(STATUS);
-  const { isOpen } = useTaskDetailContext();
+  const { isModalOpen } = useTaskDetailContext();
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function TaskView({}: Props) {
       <TaskListView sortBy={sortBy} />
 
       {/* Task details inside Modal */}
-      {isOpen && <TaskDetailModal />}
+      {isModalOpen && <TaskDetailModal />}
     </>
   );
 }

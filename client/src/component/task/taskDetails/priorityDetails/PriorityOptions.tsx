@@ -1,7 +1,14 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
 import produce from "immer";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { PRIORITY, SetState, SortBy, Task } from "../../Data";
+import {
+  PRIORITY,
+  SetState,
+  SortBy,
+  TargetColumn,
+  Task,
+  lookUpPreviousTaskId,
+} from "../../Data";
 import { updateTaskStatsInColumn } from "../../TaskDataProcessing";
 
 type Props = { onOptionClose: () => void };
@@ -9,7 +16,7 @@ type Props = { onOptionClose: () => void };
 export default function PriorityOptions({ onOptionClose }: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,
@@ -33,14 +40,19 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                 cursor="pointer"
                 onClick={() => {
                   onOptionClose();
+
                   const targetPriorityColumnId = priority.id;
-                  setTask({ ...task!, priority: targetPriorityColumnId });
-                  updateTaskPriority(
+
+                  // Update list state
+                  updateTaskPriorityOrDueDate(
                     sortBy,
                     task!,
                     setState,
+                    "priority",
                     targetPriorityColumnId
                   );
+                  // Update modal task state
+                  setTask({ ...task!, priority: targetPriorityColumnId });
                 }}
                 _hover={{ backgroundColor: "blue.600" }}
               >
@@ -59,33 +71,36 @@ export default function PriorityOptions({ onOptionClose }: Props) {
   );
 }
 
-function updateTaskPriority(
+export function updateTaskPriorityOrDueDate(
   sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
-  targetPriorityColumnId: number
+  targetColumnKey: keyof typeof lookUpPreviousTaskId,
+  targetColumnId: number
 ) {
+  const targetColumn: TargetColumn =
+    targetColumnKey === "dueDate"
+      ? { dueDate: String(targetColumnId) }
+      : { priority: String(targetColumnId) };
+
   setState((previousState) => {
     if (previousState) {
       return produce(previousState, (draftState) => {
-        // Update Stats
+        // Update sourceTask's Stats
         draftState.orderedTasks.forEach((taskList) =>
           taskList.taskList.forEach((task) => {
             const isSourceTask = task.id === currentTask.id;
             if (isSourceTask) {
-              updateTaskStatsInColumn(
-                draftState,
-                { priority: String(targetPriorityColumnId) },
-                task
-              );
+              updateTaskStatsInColumn(draftState, targetColumn, task);
             }
 
-            // Update sourceTaskAfter's priority stats
+            // Update sourceTaskAfter's stats
             const isSourceTaskAfter =
-              task.previousTask.priorityId === currentTask.id;
+              task.previousTask[lookUpPreviousTaskId[targetColumnKey]] ===
+              currentTask.id;
             if (isSourceTaskAfter) {
-              task.previousTask.priorityId =
-                currentTask.previousTask.priorityId;
+              task.previousTask[lookUpPreviousTaskId[targetColumnKey]] =
+                currentTask.previousTask[lookUpPreviousTaskId[targetColumnKey]];
             }
           })
         );
@@ -95,7 +110,6 @@ function updateTaskPriority(
           tasks.taskList.find((task) => task.id === currentTask.id)
         )?.id;
 
-        // Delete sourceTask from original column
         const sourceColumn = draftState.orderedTasks.find(
           (tasks) => tasks.id === currentColumnId
         );
@@ -105,7 +119,7 @@ function updateTaskPriority(
         );
 
         const destinationColumn = draftState.orderedTasks.find(
-          (tasks) => tasks.id === targetPriorityColumnId
+          (tasks) => tasks.id === targetColumnId
         );
 
         const currentTaskIndexInSourceColumn = sourceColumn?.taskList.findIndex(
@@ -113,7 +127,7 @@ function updateTaskPriority(
         );
 
         // Remove from current column and push task to finished column
-        if (sortBy === PRIORITY) {
+        if (sortBy === targetColumnKey) {
           const sourceTaskIndex =
             currentTaskIndexInSourceColumn ||
             currentTaskIndexInSourceColumn === 0;

@@ -13,7 +13,7 @@ type Props = {};
 export default function DueDateDetails({}: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,
@@ -26,7 +26,7 @@ export default function DueDateDetails({}: Props) {
   return (
     <>
       <Popover>
-        {({ onClose: onOptionClose }) => (
+        {({ onClose: onOptionClose, isOpen: isOptionOpen }) => (
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <PopoverTrigger>
@@ -46,7 +46,10 @@ export default function DueDateDetails({}: Props) {
             {/* DueDate option */}
             <PopoverContent width="200px">
               <PopoverBody shadow={"2xl"} p={0}>
-                <DueDateOptions onOptionClose={onOptionClose} />
+                <DueDateOptions
+                  onOptionClose={onOptionClose}
+                  isOptionOpen={isOptionOpen}
+                />
               </PopoverBody>
             </PopoverContent>
           </>

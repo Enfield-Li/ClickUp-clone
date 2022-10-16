@@ -15,7 +15,7 @@ type Props = {};
 export default function PriorityDetails({}: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     onModalClose: onClose,
     setTask,
     taskStateContext,

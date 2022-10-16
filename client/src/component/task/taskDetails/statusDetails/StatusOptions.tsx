@@ -9,7 +9,7 @@ type Props = { onOptionClose: () => void };
 export default function StatusOptions({ onOptionClose }: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,

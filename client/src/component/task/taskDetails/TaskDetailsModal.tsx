@@ -23,7 +23,7 @@ export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,
@@ -35,7 +35,7 @@ export default function TaskDetailModal({}: Props) {
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={isModalOpen}
       onClose={onModalClose}
       size="6xl"
       initialFocusRef={initialRef}

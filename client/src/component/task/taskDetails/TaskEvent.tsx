@@ -8,7 +8,7 @@ type Props = {};
 export default function TaskEvent({}: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,

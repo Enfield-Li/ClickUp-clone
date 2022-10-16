@@ -10,7 +10,7 @@ export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
 export type TaskDetailContextType = {
   task?: Task;
   setTask: SetTask;
-  isOpen: boolean;
+  isModalOpen: boolean;
   onModalOpen: () => void;
   onModalClose: () => void;
   taskStateContext: TaskStateContext | undefined;

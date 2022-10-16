@@ -1,7 +1,7 @@
 import {
   getNextNWeekDay,
-  getOneWholeWeekLocalDateString,
   getTodayYMDString,
+  getOneWholeWeekLocalDateString,
   getWeekDays,
 } from "../../utils/getWeekDays";
 import { NewTask } from "./CreateTaskPopover";

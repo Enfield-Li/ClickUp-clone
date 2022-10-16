@@ -15,7 +15,7 @@ type Props = {};
 export default function StatusDetails({}: Props) {
   const {
     task,
-    isOpen,
+    isModalOpen,
     setTask,
     onModalOpen,
     onModalClose,

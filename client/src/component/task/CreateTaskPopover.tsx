@@ -261,7 +261,7 @@ async function submit(
   };
 
   const targetColumn = { dueDate, priority, status };
-
+console.log(dueDate)
   // Use date picker
   if (dueDate && dueDate.length > 1) {
     const dueDateColumnId = getDueDateColumnFromDateString(
