@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import CurrentTask from "./CurrentTask";
+import TaskInfo from "./TaskInfo";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
 
@@ -52,7 +52,7 @@ export default function TaskDetailModal({}: Props) {
         <ModalBody minHeight="450px">
           <Flex>
             {/* Left side */}
-            <CurrentTask />
+            <TaskInfo />
 
             {/* Divider */}
             <Center>

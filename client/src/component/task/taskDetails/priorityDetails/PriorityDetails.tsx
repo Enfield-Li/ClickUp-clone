@@ -42,6 +42,7 @@ export default function PriorityDetails({}: Props) {
                   width="40px"
                   height="40px"
                   cursor={"pointer"}
+                  fontSize={"20px"}
                   border="1px dashed"
                   borderRadius={"50%"}
                   color={priorityFlagColor}

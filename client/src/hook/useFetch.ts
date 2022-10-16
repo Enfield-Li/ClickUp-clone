@@ -113,21 +113,24 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
   async function updateLocalState() {
     setLoading(true);
-    await sleep(20);
 
     if (state && taskStateContext) {
-      setTaskStateContext({
-        ...taskStateContext,
-        sortBy,
-      });
+      await new Promise<void>((resolve) => {
+        setTaskStateContext({
+          ...taskStateContext,
+          sortBy,
+        });
 
-      setState({
-        ...state,
-        orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
-          state.columnOptions[sortBy],
-          sortBy
-        ),
+        setState({
+          ...state,
+          orderedTasks: groupTaskListOnSortBy(
+            collectAllTasks(state.orderedTasks),
+            state.columnOptions[sortBy],
+            sortBy
+          ),
+        });
+
+        resolve();
       });
     }
 
@@ -153,32 +156,33 @@ export function useLocalTasks(sortBy: SortBy) {
 
   async function fetchLocalData() {
     setLoading(true);
-    await sleep(20);
 
-    const columnDataFromApi = columnOptions;
-    const dataFromAPI = initialData;
+    await new Promise<void>((resolve) => {
+      const columnDataFromApi = columnOptions;
+      const dataFromAPI = initialData;
 
-    const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
-    const columnOptionsUpdated = {
-      ...columnDataFromApi,
-      dueDate: dueDateColumns,
-    };
+      const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
+      const columnOptionsUpdated = {
+        ...columnDataFromApi,
+        dueDate: dueDateColumns,
+      };
 
-    const orderedTasks = groupTaskListOnSortBy(
-      dataFromAPI,
-      columnDataFromApi[sortBy],
-      sortBy
-    );
+      const orderedTasks = groupTaskListOnSortBy(
+        dataFromAPI,
+        columnDataFromApi[sortBy],
+        sortBy
+      );
 
-    setTaskStateContext({
-      columnOptions: columnOptionsUpdated,
-      setState,
-      sortBy,
-    });
+      setTaskStateContext({
+        columnOptions: columnOptionsUpdated,
+        setState,
+        sortBy,
+      });
 
-    setState({
-      orderedTasks,
-      columnOptions: columnOptionsUpdated,
+      setState({
+        orderedTasks,
+        columnOptions: columnOptionsUpdated,
+      });
     });
 
     setLoading(false);
@@ -186,21 +190,24 @@ export function useLocalTasks(sortBy: SortBy) {
 
   async function updateLocalState() {
     setLoading(true);
-    await sleep(20);
 
     if (state && taskStateContext) {
-      setTaskStateContext({
-        ...taskStateContext,
-        sortBy,
-      });
+      await new Promise<void>((resolve) => {
+        setTaskStateContext({
+          ...taskStateContext,
+          sortBy,
+        });
 
-      setState({
-        ...state,
-        orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
-          state.columnOptions[sortBy],
-          sortBy
-        ),
+        setState({
+          ...state,
+          orderedTasks: groupTaskListOnSortBy(
+            collectAllTasks(state.orderedTasks),
+            state.columnOptions[sortBy],
+            sortBy
+          ),
+        });
+
+        resolve();
       });
     }
 

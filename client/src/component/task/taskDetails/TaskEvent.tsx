@@ -1,5 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import DueDateDetails from "./dueDateDetails/DueDateDetails";
 
 type Props = {};
 
@@ -20,7 +22,8 @@ export default function TaskEvent({}: Props) {
     <Box flexBasis={"50%"}>
       <Flex justifyContent={"space-evenly"} my={3}>
         <Box>Stats 1</Box>
-        <Box>Task dueDate: {task!.dueDate}</Box>
+
+        <DueDateDetails />
       </Flex>
       <Box>Events</Box>
     </Box>

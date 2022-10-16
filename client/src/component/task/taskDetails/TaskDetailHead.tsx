@@ -6,7 +6,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { updateTaskTitle } from "./CurrentTask";
+import { updateTaskTitle } from "./TaskInfo";
 
 type Props = {};
 

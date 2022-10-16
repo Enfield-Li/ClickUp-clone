@@ -16,7 +16,7 @@ import StatusDetails from "./statusDetails/StatusDetails";
 
 type Props = {};
 
-export default function CurrentTask({}: Props) {
+export default function TaskInfo({}: Props) {
   const {
     task,
     isOpen,
