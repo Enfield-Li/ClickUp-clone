@@ -9,23 +9,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-  @Modifying
-  @Query(
-    value = "UPDATE task SET title = :title WHERE id = :id",
-    nativeQuery = true
-  )
-  Integer updateTaskTitle(
-    @Param("title") String title,
-    @Param("id") Integer id
-  );
+    @Modifying
+    @Query(
+        value = "UPDATE task SET title = :title WHERE id = :id",
+        nativeQuery = true
+    )
+    Integer updateTaskTitle(
+        @Param("title") String title,
+        @Param("id") Integer id
+    );
 
-  @Modifying
-  @Query(
-    value = "UPDATE task SET description = :description WHERE id = :id",
-    nativeQuery = true
-  )
-  Integer updateTaskDesc(
-    @Param("description") String description,
-    @Param("id") Integer id
-  );
+    @Modifying
+    @Query(
+        value = "UPDATE task SET description = :description WHERE id = :id",
+        nativeQuery = true
+    )
+    Integer updateTaskDesc(
+        @Param("description") String description,
+        @Param("id") Integer id
+    );
 }

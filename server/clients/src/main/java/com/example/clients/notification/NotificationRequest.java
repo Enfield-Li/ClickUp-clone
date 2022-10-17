@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NotificationRequest {
 
-  Integer toCustomerId;
-  String toCustomerName;
-  String message;
+    Integer toCustomerId;
+    String toCustomerName;
+    String message;
 }

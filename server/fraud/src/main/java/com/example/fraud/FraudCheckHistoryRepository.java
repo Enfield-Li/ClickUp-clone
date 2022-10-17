@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FraudCheckHistoryRepository
-  extends JpaRepository<FraudCheckHistory, Integer> {}
+    extends JpaRepository<FraudCheckHistory, Integer> {}

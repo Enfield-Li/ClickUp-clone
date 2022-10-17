@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NotificationConsumer {
 
-  private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
-  @RabbitListener(queues = notificationQueue)
-  public void consumer(NotificationRequest notificationRequest) {
-    log.info("Consumed {} from queue", notificationRequest);
-    notificationService.receive(notificationRequest);
-  }
+    @RabbitListener(queues = notificationQueue)
+    public void consumer(NotificationRequest notificationRequest) {
+        log.info("Consumed {} from queue", notificationRequest);
+        notificationService.receive(notificationRequest);
+    }
 }

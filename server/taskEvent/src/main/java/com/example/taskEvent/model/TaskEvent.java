@@ -34,49 +34,50 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 public class TaskEvent {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  // Update action
-  private Integer updateTo;
-  private Integer updateFrom;
+    // Update action
+    private Integer updateTo;
+    private Integer updateFrom;
 
-  @Enumerated(EnumType.STRING)
-  private TaskEventUpdateType updateAction;
+    @Enumerated(EnumType.STRING)
+    private TaskEventUpdateType updateAction;
 
-  // or comment
-  private String commentContent;
+    // or comment
+    private String commentContent;
 
-  @ManyToOne
-  private TaskEvent parentComment;
+    @ManyToOne
+    private TaskEvent parentComment;
 
-  @OneToMany(mappedBy = "parentComment")
-  private Set<TaskEvent> childrenComments;
+    @OneToMany(mappedBy = "parentComment")
+    private Set<TaskEvent> childrenComments;
 
-  @NotNull
-  private Integer initiatorId;
+    @NotNull
+    private Integer initiatorId;
 
-  @NotNull
-  private String initiatorName;
+    @NotNull
+    private String initiatorName;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private TaskEventType eventType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TaskEventType eventType;
 
-  @CreationTimestamp
-  private LocalDateTime createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
-  @NotNull
-  private Integer taskId;
+    @NotNull
+    private Integer taskId;
 
-  @OneToMany(
-    mappedBy = "taskEvent",
-    fetch = EAGER,
-    cascade = { PERSIST, DETACH, MERGE }
-  )
-  private Set<Participant> participants = new HashSet<>();
+    @OneToMany(
+        mappedBy = "taskEvent",
+        fetch = EAGER,
+        cascade = { PERSIST, DETACH, MERGE }
+    )
+    @Builder.Default
+    private Set<Participant> participants = new HashSet<>();
 }

@@ -25,20 +25,20 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = "taskEvent")
 public class Participant {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  private Integer userId;
-  private String username;
+    private Integer userId;
+    private String username;
 
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
-  private Integer eventId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer eventId;
 
-  @JsonIgnore
-  @ToString.Exclude
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "eventId")
-  private TaskEvent taskEvent;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "eventId")
+    private TaskEvent taskEvent;
 }

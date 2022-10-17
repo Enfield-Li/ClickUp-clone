@@ -10,13 +10,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class AppConfig {
 
-  @Bean
-  public OpenAPI customOpenAPI() {
-    return new OpenAPI().components(new Components());
-  }
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI().components(new Components());
+    }
 
-  @Bean
-  PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

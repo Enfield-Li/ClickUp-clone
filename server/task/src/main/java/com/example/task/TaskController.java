@@ -29,49 +29,51 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 class TaskController {
 
-  private final TaskService taskService;
-  private final EntityManager entityManager;
-  private final TaskRepository taskRepository;
+    private final TaskService taskService;
+    private final EntityManager entityManager;
+    private final TaskRepository taskRepository;
 
-  @GetMapping
-  void test() {
-    var sourceTask = entityManager.find(Task.class, 1);
-    System.out.println(sourceTask.getWatchers());
-  }
+    @GetMapping
+    void test() {
+        var sourceTask = entityManager.find(Task.class, 1);
+        System.out.println(sourceTask.getWatchers());
+    }
 
-  @GetMapping(ALL_TASKS)
-  ResponseEntity<List<Task>> getAllTasks() {
-    var allTasks = taskService.getAllTasks();
-    return ResponseEntity.ok(allTasks);
-  }
+    @GetMapping(ALL_TASKS)
+    ResponseEntity<List<Task>> getAllTasks() {
+        var allTasks = taskService.getAllTasks();
+        return ResponseEntity.ok(allTasks);
+    }
 
-  @PostMapping
-  ResponseEntity<Task> createTask(@RequestBody Task task) {
-    var allTasks = taskService.createTask(task);
-    return ResponseEntity.ok(allTasks);
-  }
+    @PostMapping
+    ResponseEntity<Task> createTask(@RequestBody Task task) {
+        var allTasks = taskService.createTask(task);
+        return ResponseEntity.ok(allTasks);
+    }
 
-  @PutMapping
-  ResponseEntity<Boolean> updateTasksPosition(
-    @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
-  ) {
-    var updatedTasks = taskService.updateTasksPosition(updateTasksPositionDTO);
-    return ResponseEntity.ok(updatedTasks);
-  }
+    @PutMapping
+    ResponseEntity<Boolean> updateTasksPosition(
+        @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
+    ) {
+        var updatedTasks = taskService.updateTasksPosition(
+            updateTasksPositionDTO
+        );
+        return ResponseEntity.ok(updatedTasks);
+    }
 
-  @PutMapping("/update_title")
-  ResponseEntity<Boolean> updateTaskTitle(
-    @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
-  ) {
-    var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
-    return ResponseEntity.ok(updated);
-  }
+    @PutMapping("/update_title")
+    ResponseEntity<Boolean> updateTaskTitle(
+        @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
+    ) {
+        var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
+        return ResponseEntity.ok(updated);
+    }
 
-  @PutMapping("/update_desc")
-  ResponseEntity<Boolean> updateTasksDesc(
-    @RequestBody UpdateTaskDescDTO updateTaskDescDTO
-  ) {
-    var updated = taskService.updateTaskDesc(updateTaskDescDTO);
-    return ResponseEntity.ok(updated);
-  }
+    @PutMapping("/update_desc")
+    ResponseEntity<Boolean> updateTasksDesc(
+        @RequestBody UpdateTaskDescDTO updateTaskDescDTO
+    ) {
+        var updated = taskService.updateTaskDesc(updateTaskDescDTO);
+        return ResponseEntity.ok(updated);
+    }
 }

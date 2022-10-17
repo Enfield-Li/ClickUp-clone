@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Notification {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer notificationId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer notificationId;
 
-  private Integer toCustomerId;
-  private String toCustomerEmail;
-  private String sender;
-  private String message;
-  private LocalDateTime sentAt;
+    private Integer toCustomerId;
+    private String toCustomerEmail;
+    private String sender;
+    private String message;
+    private LocalDateTime sentAt;
 }

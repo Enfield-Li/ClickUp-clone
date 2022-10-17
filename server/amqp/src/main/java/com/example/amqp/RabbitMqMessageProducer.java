@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMqMessageProducer {
 
-  @Autowired
-  AmqpTemplate amqpTemplate;
+    @Autowired
+    AmqpTemplate amqpTemplate;
 
-  public void publish(String exchange, String routingKey, Object payload) {
-    amqpTemplate.convertAndSend(exchange, routingKey, payload);
+    public void publish(String exchange, String routingKey, Object payload) {
+        amqpTemplate.convertAndSend(exchange, routingKey, payload);
 
-    log.info(
-      "Published to {} using routingKey {} with payload: {}",
-      exchange,
-      routingKey,
-      payload
-    );
-  }
+        log.info(
+            "Published to {} using routingKey {} with payload: {}",
+            exchange,
+            routingKey,
+            payload
+        );
+    }
 }

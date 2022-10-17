@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FraudCheckResponse {
 
-  Boolean isFraudster;
+    Boolean isFraudster;
 }

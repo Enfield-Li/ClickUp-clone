@@ -10,20 +10,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ErrorResponse {
 
-  private final Integer status;
-  private final String message;
-
-  private List<ValidationError> errors = new ArrayList<>();
-
-  @Data
-  @RequiredArgsConstructor
-  public class ValidationError {
-
-    private final String field;
+    private final Integer status;
     private final String message;
-  }
 
-  public void addValidationError(String field, String message) {
-    errors.add(new ValidationError(field, message));
-  }
+    private List<ValidationError> errors = new ArrayList<>();
+
+    @Data
+    @RequiredArgsConstructor
+    public class ValidationError {
+
+        private final String field;
+        private final String message;
+    }
+
+    public void addValidationError(String field, String message) {
+        errors.add(new ValidationError(field, message));
+    }
 }

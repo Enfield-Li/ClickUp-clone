@@ -19,40 +19,40 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class AuthenticationFilter implements GatewayFilter {
 
-  @Autowired
-  JwtUtilities jwtUtils;
+    @Autowired
+    JwtUtilities jwtUtils;
 
-  @Override
-  public Mono<Void> filter(
-    ServerWebExchange exchange,
-    GatewayFilterChain chain
-  ) {
-    ServerHttpRequest request = exchange.getRequest();
+    @Override
+    public Mono<Void> filter(
+        ServerWebExchange exchange,
+        GatewayFilterChain chain
+    ) {
+        ServerHttpRequest request = exchange.getRequest();
 
-    var authHeader = request.getHeaders().get(AUTHORIZATION);
+        var authHeader = request.getHeaders().get(AUTHORIZATION);
 
-    // An auth request must have "Authorization" header to carry access token
-    if (authHeader == null) {
-      return onAuthenticationError(exchange, HttpStatus.FORBIDDEN);
+        // An auth request must have "Authorization" header to carry access token
+        if (authHeader == null) {
+            return onAuthenticationError(exchange, HttpStatus.FORBIDDEN);
+        }
+
+        try {
+            jwtUtils.validateAccessToken(authHeader.get(0));
+        } catch (Exception e) {
+            log.error(e);
+            return onAuthenticationError(exchange, HttpStatus.FORBIDDEN);
+        }
+
+        return chain.filter(exchange);
     }
 
-    try {
-      jwtUtils.validateAccessToken(authHeader.get(0));
-    } catch (Exception e) {
-      log.error(e);
-      return onAuthenticationError(exchange, HttpStatus.FORBIDDEN);
+    private Mono<Void> onAuthenticationError(
+        ServerWebExchange exchange,
+        HttpStatus httpStatus
+    ) {
+        log.warn("User not authorized");
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(httpStatus);
+        return response.setComplete();
     }
-
-    return chain.filter(exchange);
-  }
-
-  private Mono<Void> onAuthenticationError(
-    ServerWebExchange exchange,
-    HttpStatus httpStatus
-  ) {
-    log.warn("User not authorized");
-    ServerHttpResponse response = exchange.getResponse();
-    response.setStatusCode(httpStatus);
-    return response.setComplete();
-  }
 }

@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FraudCheckHistory {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
 
-  private Integer customerId;
-  private Boolean isFraudster;
-  private LocalDateTime createdAt;
+    private Integer customerId;
+    private Boolean isFraudster;
+    private LocalDateTime createdAt;
 }

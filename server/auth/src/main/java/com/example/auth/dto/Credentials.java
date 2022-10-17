@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class Credentials {
 
-  @Size(min = 3, message = "Username must be longer than 3 characters.")
-  private String username;
+    @Size(min = 3, message = "Username must be longer than 3 characters.")
+    private String username;
 
-  @Size(min = 7, message = "Password must be longer than 7 characters.")
-  private String password;
+    @Size(min = 7, message = "Password must be longer than 7 characters.")
+    private String password;
 }

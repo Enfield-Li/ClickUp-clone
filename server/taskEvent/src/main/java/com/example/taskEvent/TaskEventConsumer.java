@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskEventConsumer {
 
-  private final TaskEventService taskEventService;
+    private final TaskEventService taskEventService;
 
-  @RabbitListener(queues = taskEventQueue)
-  public void consumer(List<TaskEventDTO> taskEventDTOs) {
-    log.info("Consumed {} from queue", taskEventDTOs.get(0).toString());
-    taskEventService.addTaskEvent(taskEventDTOs.get(0));
-  }
+    @RabbitListener(queues = taskEventQueue)
+    public void consumer(List<TaskEventDTO> taskEventDTOs) {
+        log.info("Consumed {} from queue", taskEventDTOs.get(0).toString());
+        taskEventService.addTaskEvent(taskEventDTOs.get(0));
+    }
 }

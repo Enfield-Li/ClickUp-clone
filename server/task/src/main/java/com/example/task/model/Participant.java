@@ -23,30 +23,30 @@ import lombok.ToString;
 @EqualsAndHashCode(exclude = { "taskWatcher" })
 public class Participant {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  private Integer userId;
-  private String username;
+    private Integer userId;
+    private String username;
 
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
-  private Integer taskWatcherId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer taskWatcherId;
 
-  @JsonIgnore
-  @ToString.Exclude
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "taskWatcherId")
-  private Task taskWatcher;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "taskWatcherId")
+    private Task taskWatcher;
 
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
-  private Integer taskAssigneeId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer taskAssigneeId;
 
-  @JsonIgnore
-  @ToString.Exclude
-  @ManyToOne(fetch = LAZY)
-  @JoinColumn(name = "taskAssigneeId")
-  private Task taskAssignee;
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "taskAssigneeId")
+    private Task taskAssignee;
 }

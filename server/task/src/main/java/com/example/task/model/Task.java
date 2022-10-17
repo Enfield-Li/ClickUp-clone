@@ -38,74 +38,74 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 public class Task {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @NotNull
-  private String title;
+    @NotNull
+    private String title;
 
-  @NotNull
-  private Integer status;
+    @NotNull
+    private Integer status;
 
-  @NotNull
-  private Integer dueDate;
+    @NotNull
+    private Integer dueDate;
 
-  @NotNull
-  private Integer priority;
+    @NotNull
+    private Integer priority;
 
-  private String description;
+    private String description;
 
-  @NotNull
-  private Integer creatorId;
+    @NotNull
+    private Integer creatorId;
 
-  @NotNull
-  private String creatorName;
+    @NotNull
+    private String creatorName;
 
-  @CreationTimestamp
-  private LocalDateTime createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
-  @NotNull
-  @OneToMany(
-    mappedBy = "taskWatcher",
-    fetch = EAGER,
-    cascade = { PERSIST, DETACH, MERGE }
-  )
-  private Set<Participant> watchers = new HashSet<>();
+    @NotNull
+    @OneToMany(
+        mappedBy = "taskWatcher",
+        fetch = EAGER,
+        cascade = { PERSIST, DETACH, MERGE }
+    )
+    private Set<Participant> watchers = new HashSet<>();
 
-  @OneToMany(
-    mappedBy = "taskAssignee",
-    fetch = EAGER,
-    cascade = { PERSIST, DETACH, MERGE }
-  )
-  private Set<Participant> assignees = new HashSet<>();
+    @OneToMany(
+        mappedBy = "taskAssignee",
+        fetch = EAGER,
+        cascade = { PERSIST, DETACH, MERGE }
+    )
+    private Set<Participant> assignees = new HashSet<>();
 
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
-  private Integer previousTaskId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer previousTaskId;
 
-  @JoinColumn(name = "previousTaskId")
-  @OneToOne(cascade = { PERSIST, DETACH, MERGE })
-  private PreviousTask previousTask;
+    @JoinColumn(name = "previousTaskId")
+    @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+    private PreviousTask previousTask;
 
-  @JsonIgnore
-  @Column(updatable = false, insertable = false)
-  private Integer previousTaskBeforeFinishId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer previousTaskBeforeFinishId;
 
-  @JoinColumn(name = "previousTaskBeforeFinishId")
-  @OneToOne(cascade = { PERSIST, DETACH, MERGE })
-  private PreviousTaskBeforeFinish previousTaskBeforeFinish;
+    @JoinColumn(name = "previousTaskBeforeFinishId")
+    @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+    private PreviousTaskBeforeFinish previousTaskBeforeFinish;
 
-  public void addParticipant(Participant participant) {
-    watchers.add(participant);
-    participant.setTaskWatcher(this);
-  }
+    public void addParticipant(Participant participant) {
+        watchers.add(participant);
+        participant.setTaskWatcher(this);
+    }
 
-  public void removeParticipant(Participant participant) {
-    watchers.remove(participant);
-    participant.setTaskWatcher(null);
-  }
+    public void removeParticipant(Participant participant) {
+        watchers.remove(participant);
+        participant.setTaskWatcher(null);
+    }
 }

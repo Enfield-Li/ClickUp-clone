@@ -12,21 +12,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TaskEventExchangeConfig {
 
-  @Bean
-  public TopicExchange internalTopicExchange() {
-    return new TopicExchange(internalExchange);
-  }
+    @Bean
+    public TopicExchange internalTopicExchange() {
+        return new TopicExchange(internalExchange);
+    }
 
-  @Bean
-  public Queue notificationQueue() {
-    return new Queue(taskEventQueue);
-  }
+    @Bean
+    public Queue notificationQueue() {
+        return new Queue(taskEventQueue);
+    }
 
-  @Bean
-  public Binding internalToNotificationBinding() {
-    return BindingBuilder
-      .bind(notificationQueue())
-      .to(internalTopicExchange())
-      .with(taskEventRoutingKey);
-  }
+    @Bean
+    public Binding internalToNotificationBinding() {
+        return BindingBuilder
+            .bind(notificationQueue())
+            .to(internalTopicExchange())
+            .with(taskEventRoutingKey);
+    }
 }

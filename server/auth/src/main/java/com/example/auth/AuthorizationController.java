@@ -19,39 +19,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AUTHORIZATION_API_VERSION)
 class AuthorizationController {
 
-  private final AuthorizationService authorizationService;
+    private final AuthorizationService authorizationService;
 
-  @PostMapping(REGISTER)
-  ResponseEntity<AuthorizationResponse> register(
-    @Valid @RequestBody Credentials credentials
-  ) {
-    var userResponse = authorizationService.register(credentials);
-    return ResponseEntity.ok(userResponse);
-  }
+    @PostMapping(REGISTER)
+    ResponseEntity<AuthorizationResponse> register(
+        @Valid @RequestBody Credentials credentials
+    ) {
+        var userResponse = authorizationService.register(credentials);
+        return ResponseEntity.ok(userResponse);
+    }
 
-  @PostMapping(LOGIN)
-  ResponseEntity<AuthorizationResponse> login(
-    @Valid @RequestBody Credentials credentials
-  ) {
-    var userResponse = authorizationService.login(credentials);
-    return ResponseEntity.ok(userResponse);
-  }
+    @PostMapping(LOGIN)
+    ResponseEntity<AuthorizationResponse> login(
+        @Valid @RequestBody Credentials credentials
+    ) {
+        var userResponse = authorizationService.login(credentials);
+        return ResponseEntity.ok(userResponse);
+    }
 
-  @PostMapping(REFRESH_TOKEN)
-  ResponseEntity<AuthorizationResponse> refreshToken(
-    HttpServletRequest request
-  ) {
-    var userResponse = authorizationService.refreshToken();
-    return ResponseEntity.ok(userResponse);
-  }
+    @PostMapping(REFRESH_TOKEN)
+    ResponseEntity<AuthorizationResponse> refreshToken(
+        HttpServletRequest request
+    ) {
+        var userResponse = authorizationService.refreshToken();
+        return ResponseEntity.ok(userResponse);
+    }
 
-  @PostMapping(LOGOUT)
-  void logout() {
-    authorizationService.logout();
-  }
+    @PostMapping(LOGOUT)
+    void logout() {
+        authorizationService.logout();
+    }
 
-  @PostMapping(CHANGE_PASSWORD)
-  void changePassword() {
-    authorizationService.changePassword();
-  }
+    @PostMapping(CHANGE_PASSWORD)
+    void changePassword() {
+        authorizationService.changePassword();
+    }
 }

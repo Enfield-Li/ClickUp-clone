@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(CUSTOMER_API_VERSION)
 class CustomerController {
 
-  private final CustomerService customerService;
+    private final CustomerService customerService;
 
-  @GetMapping
-  String test() {
-    System.out.println("***called***");
-    return "Got it";
-  }
+    @GetMapping
+    String test() {
+        System.out.println("***called***");
+        return "Got it";
+    }
 
-  @PostMapping
-  void registerCustomer(
-    @RequestBody CustomerRegistrationRequest customerRegistrationRequest
-  ) {
-    log.info("new customer registration {}", customerRegistrationRequest);
-    customerService.registerCustomer(customerRegistrationRequest);
-  }
+    @PostMapping
+    void registerCustomer(
+        @RequestBody CustomerRegistrationRequest customerRegistrationRequest
+    ) {
+        log.info("new customer registration {}", customerRegistrationRequest);
+        customerService.registerCustomer(customerRegistrationRequest);
+    }
 }

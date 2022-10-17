@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PreviousTask {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  private Integer statusId;
-  private Integer dueDateId;
-  private Integer priorityId;
+    private Integer statusId;
+    private Integer dueDateId;
+    private Integer priorityId;
 }

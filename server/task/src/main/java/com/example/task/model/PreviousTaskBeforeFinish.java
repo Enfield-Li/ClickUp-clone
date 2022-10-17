@@ -10,10 +10,10 @@ import lombok.Data;
 @Entity
 public class PreviousTaskBeforeFinish {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  private Integer dueDateId;
-  private Integer priorityId;
+    private Integer dueDateId;
+    private Integer priorityId;
 }

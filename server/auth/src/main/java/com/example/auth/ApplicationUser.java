@@ -18,18 +18,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ApplicationUser {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @NotNull
-  @JsonIgnore
-  private String password;
+    @NotNull
+    @JsonIgnore
+    private String password;
 
-  @NotNull
-  private String username;
+    @NotNull
+    private String username;
 
-  @NotNull
-  @Builder.Default
-  private Integer refreshTokenVersion = 0;
+    @NotNull
+    @Builder.Default
+    private Integer refreshTokenVersion = 0;
 }

@@ -9,18 +9,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NotificationService {
 
-  private final NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
 
-  public void receive(NotificationRequest notificationRequest) {
-    notificationRepository.save(
-      Notification
-        .builder()
-        .toCustomerId(notificationRequest.getToCustomerId())
-        .toCustomerEmail(notificationRequest.getToCustomerName())
-        .sender("user1")
-        .message(notificationRequest.getMessage())
-        .sentAt(LocalDateTime.now())
-        .build()
-    );
-  }
+    public void receive(NotificationRequest notificationRequest) {
+        notificationRepository.save(
+            Notification
+                .builder()
+                .toCustomerId(notificationRequest.getToCustomerId())
+                .toCustomerEmail(notificationRequest.getToCustomerName())
+                .sender("user1")
+                .message(notificationRequest.getMessage())
+                .sentAt(LocalDateTime.now())
+                .build()
+        );
+    }
 }

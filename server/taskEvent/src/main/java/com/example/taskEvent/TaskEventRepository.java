@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskEventRepository extends JpaRepository<TaskEvent, Integer> {
-  List<TaskEvent> findAllByTaskId(Integer taskId);
+    List<TaskEvent> findAllByTaskId(Integer taskId);
 }

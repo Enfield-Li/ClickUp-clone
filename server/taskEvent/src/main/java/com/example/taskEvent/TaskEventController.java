@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(TASK_EVENT_API_VERSION)
 class TaskEventController {
 
-  private final TaskEventService taskEventService;
+    private final TaskEventService taskEventService;
 
-  @GetMapping
-  ResponseEntity<List<TaskEvent>> getAllTaskEvents(
-    @RequestParam Integer taskId
-  ) {
-    var allTaskEvents = taskEventService.getAllTaskEvents(taskId);
+    @GetMapping
+    ResponseEntity<List<TaskEvent>> getAllTaskEvents(
+        @RequestParam Integer taskId
+    ) {
+        var allTaskEvents = taskEventService.getAllTaskEvents(taskId);
 
-    return ResponseEntity.ok(allTaskEvents);
-  }
+        return ResponseEntity.ok(allTaskEvents);
+    }
 }

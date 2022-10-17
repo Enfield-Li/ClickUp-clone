@@ -366,10 +366,7 @@ async function handleDragEnd(
         sourceTaskId: sourceTask.id!,
         taskList: taskListForUpdate,
       };
-      updateTasks({
-        sourceTaskId: sourceTask.id!,
-        taskList: taskListForUpdate,
-      });
+      updateTasks(updateTaskListDTO);
 
       // Clear events from state task
       sourceTask.taskEvents = [];

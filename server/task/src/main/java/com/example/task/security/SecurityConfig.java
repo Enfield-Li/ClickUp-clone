@@ -13,34 +13,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  JwtUtilities jwtUtilities;
+    @Autowired
+    JwtUtilities jwtUtilities;
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-      .cors()
-      .and()
-      .csrf()
-      .disable()
-      .formLogin()
-      .disable()
-      .logout()
-      .disable()
-      .authorizeRequests()
-      .antMatchers("/**")
-      .permitAll()
-      // .and()
-      // .sessionManagement()
-      // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      // .and()
-      // .addFilterBefore( // Verify JWT on every request
-      //   new AccessTokenFilter(jwtUtilities),
-      //   UsernamePasswordAuthenticationFilter.class
-      // )
-      ;
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .cors()
+            .and()
+            .csrf()
+            .disable()
+            .formLogin()
+            .disable()
+            .logout()
+            .disable()
+            .authorizeRequests()
+            .antMatchers("/**")
+            .permitAll()// .sessionManagement() // .and()
+        // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        // .and()
+        // .addFilterBefore( // Verify JWT on every request
+        //   new AccessTokenFilter(jwtUtilities),
+        //   UsernamePasswordAuthenticationFilter.class
+        // )
+        ;
 
-    // Disable anonymousUser
-    http.authorizeRequests().anyRequest().authenticated();
-  }
+        // Disable anonymousUser
+        http.authorizeRequests().anyRequest().authenticated();
+    }
 }
