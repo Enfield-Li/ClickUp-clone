@@ -21,6 +21,7 @@ import {
   TaskList,
   OrderedTasks,
   UPDATE,
+  UpdateListTaskDTO,
 } from "./Data";
 import { updateTasks } from "./TaskActions";
 import {
@@ -130,7 +131,7 @@ async function handleDragEnd(
 
   setState(
     produce(state, (draftState) => {
-      const taskForUpdate: TaskList = [];
+      const taskListForUpdate: TaskList = [];
 
       const sourceTasksArr = draftState.orderedTasks[sourceTaskColumnIndex];
       const destinationTasksArr =
@@ -177,7 +178,7 @@ async function handleDragEnd(
             sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
               destinationTask.id;
 
-            taskForUpdate.push(sourceTaskAfter);
+            taskListForUpdate.push(sourceTaskAfter);
           }
         }
 
@@ -191,7 +192,7 @@ async function handleDragEnd(
             destinationTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
               sourceTask.id;
 
-            taskForUpdate.push(destinationTaskAfter);
+            taskListForUpdate.push(destinationTaskAfter);
           }
         }
 
@@ -212,7 +213,7 @@ async function handleDragEnd(
               destinationTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
                 sourceTask.id;
 
-              taskForUpdate.push(destinationTaskAfter);
+              taskListForUpdate.push(destinationTaskAfter);
             }
           }
 
@@ -226,7 +227,7 @@ async function handleDragEnd(
               sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
                 sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
-              taskForUpdate.push(sourceTaskAfter);
+              taskListForUpdate.push(sourceTaskAfter);
             }
           }
         }
@@ -245,7 +246,7 @@ async function handleDragEnd(
           sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
             sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
-          taskForUpdate.push(sourceTaskAfter);
+          taskListForUpdate.push(sourceTaskAfter);
         }
 
         // move to an empty column or to the last position
@@ -286,7 +287,7 @@ async function handleDragEnd(
               taskAfter.previousTask.priorityId =
                 sourceTask.previousTask.priorityId;
 
-              taskForUpdate.push(taskAfter);
+              taskListForUpdate.push(taskAfter);
             }
 
             // Update dueDate
@@ -297,7 +298,7 @@ async function handleDragEnd(
               taskAfter.previousTask.dueDateId =
                 sourceTask.previousTask.dueDateId;
 
-              taskForUpdate.push(taskAfter);
+              taskListForUpdate.push(taskAfter);
             }
           })
         );
@@ -345,31 +346,33 @@ async function handleDragEnd(
 
       // Override all previous update events
       // So as to keep the event consistent when submitting to server
-      if (sourceTask.id)
-        sourceTask.taskEvents = [
-          {
-            taskId: sourceTask.id,
-            initiatorId: userId,
-            initiatorName: username,
-            eventType: UPDATE,
-            updateAction: sortBy,
-            updateFrom: sourceColumnId,
-            updateTo: destinationColumnId,
-            participants: [{ userId, username }],
-          },
-        ];
+      sourceTask.taskEvents = [
+        {
+          taskId: sourceTask.id!,
+          initiatorId: userId,
+          initiatorName: username,
+          eventType: UPDATE,
+          updateAction: sortBy,
+          updateFrom: sourceColumnId,
+          updateTo: destinationColumnId,
+          participants: [{ userId, username }],
+        },
+      ];
 
-      if (destinationTask) taskForUpdate.push(destinationTask);
-      taskForUpdate.push(sourceTask);
+      if (destinationTask) taskListForUpdate.push(destinationTask);
+      taskListForUpdate.push(sourceTask);
 
-      // const updated = await updateTasks({
-      //   sourceTaskId: sourceTask.id!,
-      //   taskList: taskForUpdate,
-      // });
-      // if (updated) {
-      //   // Clear sourceTask events
-      //   sourceTask.taskEvents = [];
-      // }
+      const updateTaskListDTO: UpdateListTaskDTO = {
+        sourceTaskId: sourceTask.id!,
+        taskList: taskListForUpdate,
+      };
+      updateTasks({
+        sourceTaskId: sourceTask.id!,
+        taskList: taskListForUpdate,
+      });
+
+      // Clear events from state task
+      sourceTask.taskEvents = [];
     })
   );
 }

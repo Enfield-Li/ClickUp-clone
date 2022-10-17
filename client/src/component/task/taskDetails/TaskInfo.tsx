@@ -28,7 +28,6 @@ export default function TaskInfo({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
-  console.log(task);
 
   return (
     <Box flexBasis={"50%"}>

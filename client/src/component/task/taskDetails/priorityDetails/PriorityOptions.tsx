@@ -1,4 +1,5 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
+import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../../context/task_detail/useTaskDetailContext";
@@ -6,6 +7,7 @@ import useTaskDetailContext, {
 type Props = { onOptionClose: () => void };
 
 export default function PriorityOptions({ onOptionClose }: Props) {
+  const { authState } = useAuthContext();
   const {
     task,
     isModalOpen,
@@ -41,7 +43,8 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                     task!,
                     setState,
                     "priority",
-                    targetPriorityColumnId
+                    targetPriorityColumnId,
+                    authState.user!
                   );
                   // Update modal task state
                   setTask({ ...task!, priority: targetPriorityColumnId });

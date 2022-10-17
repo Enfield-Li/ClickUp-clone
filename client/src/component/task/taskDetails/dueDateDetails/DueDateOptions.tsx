@@ -1,5 +1,6 @@
 import { Box, Button, Center, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../../context/task_detail/useTaskDetailContext";
@@ -11,6 +12,7 @@ type Props = { onOptionClose: () => void; isOptionOpen: boolean };
 export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dueDate, setDueDate] = useState<string>();
+  const { authState } = useAuthContext();
 
   useEffect(() => {
     // Reset to hide date picker
@@ -70,7 +72,8 @@ export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
                     task!,
                     setState,
                     "dueDate",
-                    targetDueDateColumnId
+                    targetDueDateColumnId,
+                    authState.user!
                   );
 
                   // Update modal task state
@@ -105,7 +108,8 @@ export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
                     task!,
                     setState,
                     "dueDate",
-                    targetDueDateColumnId
+                    targetDueDateColumnId,
+                    authState.user!
                   );
                   // Update modal task state
                   setTask({ ...task!, dueDate: targetDueDateColumnId });

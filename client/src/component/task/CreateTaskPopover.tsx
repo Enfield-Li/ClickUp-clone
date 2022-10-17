@@ -295,7 +295,7 @@ console.log(dueDate)
   newTask[sortBy] = column.id;
   newTask.previousTask[`${sortBy}Id`] = previousTaskId;
 
-  // const newTaskData = await createTask(newTask);
+  const newTaskData = await createTask(newTask);
 
   // Update state
   setState((previousState) => {
@@ -306,8 +306,8 @@ console.log(dueDate)
     const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    // if (newTaskData) taskArr?.taskList.push(newTaskData);
-    taskArr?.taskList.push(newTask);
+    if (newTaskData) taskArr?.taskList.push(newTaskData);
+    // taskArr?.taskList.push(newTask);
 
     return copiedState;
   });

@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
+import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../../context/task_detail/useTaskDetailContext";
@@ -15,6 +16,7 @@ import StatusOptions from "./StatusOptions";
 type Props = {};
 
 export default function StatusDetails({}: Props) {
+  const { authState } = useAuthContext();
   const {
     task,
     isModalOpen,
@@ -51,7 +53,13 @@ export default function StatusDetails({}: Props) {
                   _hover={{ color: "yellow.400" }}
                   onClick={() => {
                     setTask({ ...task!, status: 3 });
-                    updateCurrentTaskStatus(sortBy, task!, setState, 3);
+                    updateCurrentTaskStatus(
+                      sortBy,
+                      task!,
+                      setState,
+                      3,
+                      authState.user!
+                    );
                   }}
                 >
                   <i className="bi bi-check-square"></i>

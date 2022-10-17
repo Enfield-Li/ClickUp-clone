@@ -284,7 +284,7 @@ export type TargetColumn = {
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
 
 // DTO
-export type UpdateTaskDTO = {
+export type UpdateListTaskDTO = {
   sourceTaskId: number;
   taskList: TaskList;
 };

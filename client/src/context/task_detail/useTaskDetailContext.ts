@@ -7,8 +7,13 @@ import {
   TargetColumn,
   SetState,
   lookUpPreviousTaskId,
+  TaskList,
+  UPDATE,
+  UpdateListTaskDTO,
 } from "../../component/task/Data";
+import { updateTasks } from "../../component/task/TaskActions";
 import { updateTaskStatsInColumn } from "../../component/task/TaskDataProcessing";
+import { User } from "../auth/AuthContextTypes";
 import { TaskDetailContext as TaskDetailContext } from "./TaskDetailContext";
 
 export default function useTaskDetailContext() {
@@ -19,11 +24,16 @@ export function updateCurrentTaskStatus(
   sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
-  targetStatusColumnId: number
+  targetStatusColumnId: number,
+  user: User
 ) {
+  const { id: userId, username } = user;
+
   setState((previousState) => {
     if (previousState) {
       return produce(previousState, (draftState) => {
+        const taskListForUpdate: TaskList = [];
+
         const currentColumnId = draftState.orderedTasks.find((tasks) =>
           tasks.taskList.find((task) => task.id === currentTask.id)
         )?.id;
@@ -34,6 +44,10 @@ export function updateCurrentTaskStatus(
 
         const sourceTask = sourceColumn?.taskList.find(
           (task) => task.id === currentTask.id
+        );
+
+        const finishedColumn = draftState.orderedTasks.find(
+          (tasks) => tasks.id === 0
         );
 
         if (sourceTask) {
@@ -59,6 +73,8 @@ export function updateCurrentTaskStatus(
             if (sourceTaskAfter) {
               sourceTaskAfter.previousTask.statusId =
                 sourceTask.previousTask.statusId;
+
+              taskListForUpdate.push(sourceTaskAfter);
             }
 
             // Task sets to finished
@@ -71,6 +87,8 @@ export function updateCurrentTaskStatus(
                   if (sourceTaskAfterInPriority) {
                     taskAfter.previousTask.priorityId =
                       sourceTask.previousTask.priorityId;
+
+                    taskListForUpdate.push(taskAfter);
                   }
 
                   const sourceTaskAfterInDueDate =
@@ -78,11 +96,13 @@ export function updateCurrentTaskStatus(
                   if (sourceTaskAfterInDueDate) {
                     taskAfter.previousTask.dueDateId =
                       sourceTask.previousTask.dueDateId;
+
+                    taskListForUpdate.push(taskAfter);
                   }
                 })
               );
 
-              // Update currentTaskCopy by cleaning up other sortBy's info
+              // Update sourceTask by cleaning up other sortBy's info
               if (!sourceTask.previousTaskBeforeFinish) {
                 sourceTask.previousTaskBeforeFinish = {};
               }
@@ -95,16 +115,13 @@ export function updateCurrentTaskStatus(
               sourceTask.previousTask.dueDateId = 0;
               sourceTask.previousTask.priorityId = 0;
 
-              // Remove from current column and push task to finished column
+              // Remove sourceTask from current column and push finished column
               if (sortBy !== STATUS) {
                 sourceColumn?.taskList.splice(
                   currentTaskIndexInSourceColumn,
                   1
                 );
 
-                const finishedColumn = draftState.orderedTasks.find(
-                  (tasks) => tasks.id === 0
-                );
                 finishedColumn?.taskList.push(sourceTask);
               }
             }
@@ -126,6 +143,7 @@ export function updateCurrentTaskStatus(
                 ? String(previousPriorityIdBeforeFinish)
                 : "1",
             };
+
             updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
           }
 
@@ -143,6 +161,31 @@ export function updateCurrentTaskStatus(
           if (sortBy === STATUS) {
             destinationColumn?.taskList.push(sourceTask);
           }
+
+          sourceTask.taskEvents = [
+            {
+              taskId: sourceTask.id!,
+              initiatorId: userId,
+              initiatorName: username,
+              eventType: UPDATE,
+              updateAction: sortBy,
+              updateFrom: currentColumnId,
+              updateTo: targetStatusColumnId,
+              participants: [{ userId, username }],
+            },
+          ];
+
+          taskListForUpdate.push(sourceTask);
+
+          const updateTaskListDTO: UpdateListTaskDTO = {
+            sourceTaskId: sourceTask.id!,
+            taskList: taskListForUpdate,
+          };
+
+          updateTasks(updateTaskListDTO);
+
+          // Clear events from state task
+          sourceTask.taskEvents = [];
         }
       });
     }
@@ -153,9 +196,13 @@ export function updateTaskPriorityOrDueDate(
   sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
-  targetColumnKey: keyof typeof lookUpPreviousTaskId,
-  targetColumnId: number
+  targetColumnKey: SortBy,
+  targetColumnId: number,
+  user: User
 ) {
+  const taskListForUpdate: TaskList = [];
+  const { id: userId, username } = user;
+
   const targetColumn: TargetColumn =
     targetColumnKey === "dueDate"
       ? { dueDate: String(targetColumnId) }
@@ -179,6 +226,8 @@ export function updateTaskPriorityOrDueDate(
             if (isSourceTaskAfter) {
               task.previousTask[lookUpPreviousTaskId[targetColumnKey]] =
                 currentTask.previousTask[lookUpPreviousTaskId[targetColumnKey]];
+
+              taskListForUpdate.push(task);
             }
           })
         );
@@ -204,16 +253,41 @@ export function updateTaskPriorityOrDueDate(
           (task) => task.id === sourceTask?.id
         );
 
-        // Remove from current column and push task to finished column
-        if (sortBy === targetColumnKey) {
-          const sourceTaskIndex =
-            currentTaskIndexInSourceColumn ||
-            currentTaskIndexInSourceColumn === 0;
-          if (sourceTaskIndex && sourceTask) {
-            sourceColumn?.taskList.splice(currentTaskIndexInSourceColumn, 1);
-
-            destinationColumn?.taskList.push(sourceTask);
+        if (sourceTask) {
+          // Remove from current column and push task to finished column
+          if (sortBy === targetColumnKey) {
+            const sourceTaskIndex =
+              currentTaskIndexInSourceColumn ||
+              currentTaskIndexInSourceColumn === 0;
+            if (sourceTaskIndex) {
+              sourceColumn?.taskList.splice(currentTaskIndexInSourceColumn, 1);
+              destinationColumn?.taskList.push(sourceTask);
+            }
           }
+
+          sourceTask.taskEvents = [
+            {
+              taskId: sourceTask.id!,
+              initiatorId: userId,
+              initiatorName: username,
+              eventType: UPDATE,
+              updateAction: sortBy,
+              updateFrom: currentColumnId,
+              updateTo: targetColumnId,
+              participants: [{ userId, username }],
+            },
+          ];
+          taskListForUpdate.push(sourceTask);
+
+          const updateTaskListDTO: UpdateListTaskDTO = {
+            sourceTaskId: sourceTask.id!,
+            taskList: taskListForUpdate,
+          };
+
+          updateTasks(updateTaskListDTO);
+
+          // Clear events from state task
+          sourceTask.taskEvents = [];
         }
       });
     }

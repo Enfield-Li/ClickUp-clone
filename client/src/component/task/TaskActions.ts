@@ -1,6 +1,7 @@
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
-import { Task, TaskList, UpdateTaskDTO } from "./Data";
+import { toPlainObject } from "../../utils/proxyToObject";
+import { Task, TaskList, UpdateListTaskDTO } from "./Data";
 
 export async function createTask(task: Task) {
   try {
@@ -24,14 +25,13 @@ export async function getAllTasks() {
   }
 }
 
-export async function updateTasks(taskList: UpdateTaskDTO) {
+export async function updateTasks(updateTaskListDto: UpdateListTaskDTO) {
+  console.log(toPlainObject(updateTaskListDto));
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,
-      taskList
+      toPlainObject(updateTaskListDto)
     );
-
-    return response.data;
   } catch (error) {
     console.log(error);
   }
