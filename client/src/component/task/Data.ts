@@ -99,47 +99,67 @@ type PreviousTaskBeforeFinish = {
 
 export const UPDATE = "UPDATE";
 export const COMMENT = "COMMENT";
-type EventType = typeof UPDATE | typeof COMMENT;
 
-type UpdateAction = keyof ColumnOptions;
+type Field =
+  | typeof STATUS
+  | typeof PRIORITY
+  | typeof DUE_DATE
+  | "title"
+  | "assignee"
+  | "watcher"
+  | "comment";
+
+type Likes = {};
 
 type Participant = {
   userId: number;
   username: string;
 };
-type TaskEvent = {
+
+interface BaseEvent {
   id?: number;
+  field?: Field;
   taskId: number;
   createdAt?: Date;
   updatedAt?: Date;
   initiatorId: number;
   initiatorName: string;
-  updateTo?: number;
-  updateFrom?: number;
-  eventType?: EventType;
-  updateAction?: UpdateAction;
-  commentContent?: string;
-  participants: Participant[];
+}
+
+type Reaction = {
+  id?: number;
+  userId: number;
+  username: string;
+  reaction: string;
 };
 
-// Tasks
+export interface UpdateEvent extends BaseEvent {
+  after?: string;
+  before?: string;
+}
+
+export interface CommentEvent extends BaseEvent {
+  content: string;
+  reactions: Reaction[];
+}
+
 export type Task = {
   id?: number;
+  date?: Date;
   title: string;
   status?: number;
   dueDate?: number;
-  date?: Date;
   priority?: number;
-  description?: string;
   createdAt?: Date;
   updatedAt?: Date;
   creatorId: number;
   creatorName: string;
-  taskEvents: TaskEvent[];
+  description?: string;
   watchers: Participant[];
   assignees: Participant[];
   // Determine the task order
   previousTask: PreviousTask;
+  taskEvents: UpdateEvent[] | CommentEvent[];
   // Keep previousTask record when set to finish
   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };

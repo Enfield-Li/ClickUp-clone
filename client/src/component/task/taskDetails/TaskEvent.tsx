@@ -1,6 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { isComment } from "../../../utils/isComment";
 import DueDateDetails from "./dueDateDetails/DueDateDetails";
 
 type Props = {};
@@ -25,7 +26,14 @@ export default function TaskEvent({}: Props) {
 
         <DueDateDetails />
       </Flex>
-      <Box>Events</Box>
+      <Box m={3}>
+        <Box>Events:</Box>
+        <Box>
+          {task?.taskEvents.map(
+            (event) => isComment(event) && <Box>{event.content}</Box>
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 }

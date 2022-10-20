@@ -167,11 +167,9 @@ export function updateCurrentTaskStatus(
               taskId: sourceTask.id!,
               initiatorId: userId,
               initiatorName: username,
-              eventType: UPDATE,
-              updateAction: sortBy,
-              updateFrom: currentColumnId,
-              updateTo: targetStatusColumnId,
-              participants: [{ userId, username }],
+              field: sortBy,
+              after: String(currentColumnId),
+              before: String(targetStatusColumnId),
             },
           ];
 
@@ -270,11 +268,9 @@ export function updateTaskPriorityOrDueDate(
               taskId: sourceTask.id!,
               initiatorId: userId,
               initiatorName: username,
-              eventType: UPDATE,
-              updateAction: sortBy,
-              updateFrom: currentColumnId,
-              updateTo: targetColumnId,
-              participants: [{ userId, username }],
+              field: sortBy,
+              after: String(currentColumnId),
+              before: String(targetColumnId),
             },
           ];
           taskListForUpdate.push(sourceTask);

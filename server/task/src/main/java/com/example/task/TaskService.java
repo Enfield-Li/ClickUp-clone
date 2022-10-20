@@ -3,7 +3,7 @@ package com.example.task;
 import static com.example.amqp.exchange.TaskEventExchange.*;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.taskEvent.eventDTO.TaskEventDTO;
+import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -52,7 +52,7 @@ public class TaskService {
         rabbitMQMessageProducer.publish(
             internalExchange,
             taskEventRoutingKey,
-            sourceTask.get().taskEvents()
+            sourceTask.get().updateEvents()
         );
 
         // DTO to entity

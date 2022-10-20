@@ -1,4 +1,4 @@
-package com.example.taskEvent;
+package com.example.taskEvent.queue;
 
 import static com.example.amqp.exchange.TaskEventExchange.*;
 

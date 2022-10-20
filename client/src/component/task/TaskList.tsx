@@ -351,11 +351,9 @@ async function handleDragEnd(
           taskId: sourceTask.id!,
           initiatorId: userId,
           initiatorName: username,
-          eventType: UPDATE,
-          updateAction: sortBy,
-          updateFrom: sourceColumnId,
-          updateTo: destinationColumnId,
-          participants: [{ userId, username }],
+          field: sortBy,
+          after: String(sourceColumnId),
+          before: String(destinationColumnId),
         },
       ];
 

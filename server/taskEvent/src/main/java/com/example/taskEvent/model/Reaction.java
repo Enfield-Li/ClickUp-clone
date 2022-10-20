@@ -10,35 +10,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
+//To use the @Data annotation you should add the Lombok dependency.
 @Data
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(exclude = "taskEvent")
-public class Participant {
+public class Reaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     private Integer userId;
+
+    @NotNull
     private String username;
+
+    @NotNull
+    private String reaction;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
-    private Integer eventId;
+    private Integer commentEventId;
 
     @JsonIgnore
-    @ToString.Exclude
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "eventId")
-    private TaskEvent taskEvent;
+    @JoinColumn(name = "commentEventId")
+    private CommentEvent commentEvent;
 }
