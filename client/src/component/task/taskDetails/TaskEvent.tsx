@@ -9,23 +9,15 @@ import UpdateEvents from "./taskEvent/updateEvents";
 type Props = {};
 
 export default function TaskEvent({}: Props) {
-  const {
-    task,
-    isModalOpen,
-    setTask,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
-
-  const { setState, sortBy, columnOptions } = taskStateContext!;
-  console.log({ task });
+  const { task } = useTaskDetailContext();
 
   return (
     <Box flexBasis={"50%"}>
       <Flex justifyContent={"space-evenly"} my={3}>
-        <Box>Stats 1</Box>
+        <Flex flexDirection="column">
+          <Box opacity="50%">CREATED</Box>
+          <Box opacity="65%">{task?.createdAt?.toLocaleDateString()}</Box>
+        </Flex>
         <DueDateDetails />
       </Flex>
 
@@ -37,13 +29,13 @@ export default function TaskEvent({}: Props) {
         // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
       >
         {task?.taskEvents.map((event) => (
-          <Box key={getRandomNumberNoLimit()}>
+          <Box key={event.id}>
             {isCommentEvent(event) ? (
-              <Box my={2}>
+              <Box py={1}>
                 <CommentEvents commentEvent={event} />
               </Box>
             ) : (
-              <Box my={2}>
+              <Box py={1}>
                 <UpdateEvents updateEvent={event} />
               </Box>
             )}

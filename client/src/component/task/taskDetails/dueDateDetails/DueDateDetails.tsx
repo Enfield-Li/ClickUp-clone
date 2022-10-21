@@ -22,6 +22,7 @@ export default function DueDateDetails({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
+  const isTaskFinished = task?.dueDate === 0 || task?.dueDate === 1;
 
   return (
     <>
@@ -33,6 +34,7 @@ export default function DueDateDetails({}: Props) {
               <Center
                 width="40px"
                 height="40px"
+                opacity="65%"
                 fontSize={"20px"}
                 cursor={"pointer"}
                 border="1px dashed"

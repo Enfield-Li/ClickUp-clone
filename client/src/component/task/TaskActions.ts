@@ -26,7 +26,6 @@ export async function getAllTasks() {
 }
 
 export async function updateTasks(updateTaskListDto: UpdateListTaskDTO) {
-  console.log(toPlainObject(updateTaskListDto));
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,

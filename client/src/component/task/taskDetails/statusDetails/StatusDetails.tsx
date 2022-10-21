@@ -48,8 +48,9 @@ export default function StatusDetails({}: Props) {
             {task!.status !== 3 && (
               <Tooltip label="Set to complete" placement="top" hasArrow>
                 <Center
-                  cursor={"pointer"}
+                  opacity="65%"
                   fontSize={"30px"}
+                  cursor={"pointer"}
                   _hover={{ color: "yellow.400" }}
                   onClick={() => {
                     setTask({ ...task!, status: 3 });
