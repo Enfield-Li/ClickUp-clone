@@ -35,22 +35,22 @@ export default function TaskDetailModal({}: Props) {
 
   return (
     <Modal
+      size="6xl"
       isOpen={isModalOpen}
       onClose={onModalClose}
-      size="6xl"
       initialFocusRef={initialRef}
     >
       <ModalOverlay />
 
-      <ModalContent>
+      <ModalContent height="540px">
         {/* Header */}
         <ModalHeader mb={"-4"}>
           <TaskDetailHead />
         </ModalHeader>
 
         {/* Body */}
-        <ModalBody minHeight="450px">
-          <Flex>
+        <ModalBody>
+          <Flex height="100%">
             {/* Left side */}
             <TaskInfo />
 

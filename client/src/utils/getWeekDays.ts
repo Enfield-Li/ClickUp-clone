@@ -91,3 +91,9 @@ export function getOneWeekAfterLocalDateString() {
   date.setDate(date.getDate() + 7);
   return date.toLocaleDateString();
 }
+
+export function getDaysBefore(days: number) {
+  var date = new Date();
+  date.setDate(date.getDate() - days);
+  return date;
+}

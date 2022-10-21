@@ -349,8 +349,8 @@ async function handleDragEnd(
       sourceTask.taskEvents = [
         {
           taskId: sourceTask.id!,
-          initiatorId: userId,
-          initiatorName: username,
+          userId: userId,
+          username: username,
           field: sortBy,
           after: String(sourceColumnId),
           before: String(destinationColumnId),

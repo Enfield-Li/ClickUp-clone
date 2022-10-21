@@ -165,8 +165,8 @@ export function updateCurrentTaskStatus(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              initiatorId: userId,
-              initiatorName: username,
+              userId: userId,
+              username: username,
               field: sortBy,
               after: String(currentColumnId),
               before: String(targetStatusColumnId),
@@ -266,8 +266,8 @@ export function updateTaskPriorityOrDueDate(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              initiatorId: userId,
-              initiatorName: username,
+              userId: userId,
+              username: username,
               field: sortBy,
               after: String(currentColumnId),
               before: String(targetColumnId),

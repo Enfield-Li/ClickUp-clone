@@ -1,3 +1,5 @@
+import { getDaysBefore } from "../../utils/getWeekDays";
+
 // Sorting options
 export const STATUS = "status";
 export const PRIORITY = "priority";
@@ -38,17 +40,19 @@ interface Column<T> {
   title: T;
   color: string;
 }
-interface DueDateColumn extends Column<DueDate> {
+export interface DueDateColumn extends Column<DueDate> {
   localDateStr?: string;
 }
+export type PriorityColumn = Column<Priority>;
 export type StatusColumn = {
   id: number;
   title: string;
   color: string;
   previousColumnId?: number;
 };
+
 export type StatusColumns = StatusColumn[];
-export type PriorityColumns = Column<Priority>[];
+export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
 
 export type ColumnOptions = {
@@ -98,18 +102,16 @@ type PreviousTaskBeforeFinish = {
 };
 
 export const UPDATE = "UPDATE";
-export const COMMENT = "COMMENT";
+export const COMMENT = "comment";
 
-type Field =
+export type Field =
   | typeof STATUS
   | typeof PRIORITY
   | typeof DUE_DATE
   | "title"
   | "assignee"
   | "watcher"
-  | "comment";
-
-type Likes = {};
+  | typeof COMMENT;
 
 type Participant = {
   userId: number;
@@ -118,12 +120,12 @@ type Participant = {
 
 interface BaseEvent {
   id?: number;
-  field?: Field;
+  field: Field;
   taskId: number;
   createdAt?: Date;
   updatedAt?: Date;
-  initiatorId: number;
-  initiatorName: string;
+  userId: number;
+  username: string;
 }
 
 type Reaction = {
@@ -159,7 +161,7 @@ export type Task = {
   assignees: Participant[];
   // Determine the task order
   previousTask: PreviousTask;
-  taskEvents: UpdateEvent[] | CommentEvent[];
+  taskEvents: (UpdateEvent | CommentEvent)[];
   // Keep previousTask record when set to finish
   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };
@@ -177,7 +179,69 @@ export const initialData: TaskList = [
     priority: 2,
     dueDate: 1,
     previousTask: {},
-    taskEvents: [],
+    taskEvents: [
+      {
+        field: "comment",
+        content:
+          "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        reactions: [],
+        taskId: 111,
+        userId: 3,
+        username: "user",
+        createdAt: getDaysBefore(10),
+        updatedAt: getDaysBefore(3),
+      },
+      {
+        field: "title",
+        before: "11112",
+        after: "11111",
+        taskId: 111,
+        userId: 3,
+        username: "user",
+        createdAt: getDaysBefore(9),
+        updatedAt: getDaysBefore(1),
+      },
+      {
+        field: "status",
+        before: "2",
+        after: "1",
+        taskId: 111,
+        userId: 3,
+        username: "user",
+        createdAt: getDaysBefore(9),
+        updatedAt: getDaysBefore(1),
+      },
+      //   {
+      //     field: "title",
+      //     before: "11112",
+      //     after: "11111",
+      //     taskId: 111,
+      //     userId: 3,
+      //     username: "user",
+      //     createdAt: getDaysBefore(9),
+      //     updatedAt: getDaysBefore(1),
+      //   },
+      //   {
+      //     field: "title",
+      //     before: "11112",
+      //     after: "11111",
+      //     taskId: 111,
+      //     userId: 3,
+      //     username: "user",
+      //     createdAt: getDaysBefore(9),
+      //     updatedAt: getDaysBefore(1),
+      //   },
+      //   {
+      //     field: "title",
+      //     before: "11112",
+      //     after: "11111",
+      //     taskId: 111,
+      //     userId: 3,
+      //     username: "user",
+      //     createdAt: getDaysBefore(9),
+      //     updatedAt: getDaysBefore(1),
+      //   },
+    ],
     creatorId: 1,
     creatorName: "abc",
     watchers: [],
