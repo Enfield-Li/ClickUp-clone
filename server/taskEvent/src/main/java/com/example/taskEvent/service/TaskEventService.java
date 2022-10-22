@@ -2,7 +2,6 @@ package com.example.taskEvent.service;
 
 import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.model.UpdateEvent;
-import com.example.taskEvent.repository.CommentEventRepository;
 import com.example.taskEvent.repository.UpdateEventRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class TaskEventService {
 
     private final UpdateEventRepository updateEventRepository;
-    private final CommentEventRepository commentEventRepository;
 
     public void addUpdateEvent(UpdateEventDTO updateEventDTO) {
         var taskEvent = UpdateEvent.toUpdateEvent(updateEventDTO);

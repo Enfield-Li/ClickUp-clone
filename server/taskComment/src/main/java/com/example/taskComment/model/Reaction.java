@@ -1,15 +1,18 @@
-package com.example.taskEvent.model;
+package com.example.taskComment.model;
 
+import static javax.persistence.CascadeType.DETACH;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.LAZY;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -31,11 +34,10 @@ public class Reaction {
     private String reaction;
 
     @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer commentEventId;
-
-    @JsonIgnore
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "commentEventId")
-    private CommentEvent commentEvent;
+    @ManyToMany(
+        mappedBy = "reactions",
+        cascade = { PERSIST, DETACH, MERGE },
+        fetch = LAZY
+    )
+    private Set<TaskComment> taskComments = new HashSet<>();
 }
