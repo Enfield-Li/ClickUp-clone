@@ -19,8 +19,6 @@ import {
   State,
   STATUS,
   TaskList,
-  OrderedTasks,
-  UPDATE,
   UpdateListTaskDTO,
 } from "./Data";
 import { updateTasks } from "./TaskActions";

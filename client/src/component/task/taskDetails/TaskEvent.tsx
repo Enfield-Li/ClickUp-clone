@@ -1,11 +1,14 @@
 import { Box, Center, Divider, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { isCommentEvent } from "../../../utils/isComment";
+import {
+  isAssignmentEvent,
+  isCommentEvent,
+} from "../../../utils/determinEvent";
 import CommentEvents from "./taskEvent/CommentEvents";
 import DueDateDetails from "./dueDateDetails/DueDateDetails";
 import UpdateEvents from "./taskEvent/updateEvents";
 import TaskCreatorInfo from "./taskEvent/CreateTaskInfo";
+import AssignmentEvents from "./taskEvent/AssignmentEvents";
 
 type Props = {};
 
@@ -46,15 +49,15 @@ export default function TaskEvent({}: Props) {
       >
         {task?.taskEvents.map((event) => (
           <Box key={event.id}>
-            {isCommentEvent(event) ? (
-              <Box py={1}>
+            <Box py={1}>
+              {isCommentEvent(event) ? (
                 <CommentEvents commentEvent={event} />
-              </Box>
-            ) : (
-              <Box py={1}>
+              ) : isAssignmentEvent(event) ? (
+                <AssignmentEvents assignmentEvent={event} />
+              ) : (
                 <UpdateEvents updateEvent={event} />
-              </Box>
-            )}
+              )}
+            </Box>
           </Box>
         ))}
         <TaskCreatorInfo />

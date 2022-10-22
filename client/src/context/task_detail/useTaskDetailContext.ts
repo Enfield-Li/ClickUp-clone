@@ -8,7 +8,6 @@ import {
   SetState,
   lookUpPreviousTaskId,
   TaskList,
-  UPDATE,
   UpdateListTaskDTO,
 } from "../../component/task/Data";
 import { updateTasks } from "../../component/task/TaskActions";

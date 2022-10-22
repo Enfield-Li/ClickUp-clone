@@ -101,16 +101,18 @@ type PreviousTaskBeforeFinish = {
   priorityId?: number;
 };
 
-export const UPDATE = "UPDATE";
 export const COMMENT = "comment";
+export const TITLE = "title";
+export const ASSIGNEE = "assignee";
+export const WATCHER = "watcher";
 
 export type Field =
   | typeof STATUS
   | typeof PRIORITY
   | typeof DUE_DATE
-  | "title"
-  | "assignee"
-  | "watcher"
+  | typeof TITLE
+  | typeof ASSIGNEE
+  | typeof WATCHER
   | typeof COMMENT;
 
 type Participant = {
@@ -135,8 +137,13 @@ type Reaction = {
   reaction: string;
 };
 
+export interface AssignmentEvent extends BaseEvent {
+  action: "added" | "removed";
+  user: Participant;
+}
+
 export interface UpdateEvent extends BaseEvent {
-  after?: string;
+  after: string;
   before?: string;
 }
 
@@ -161,7 +168,7 @@ export type Task = {
   assignees: Participant[];
   // Determine the task order
   previousTask: PreviousTask;
-  taskEvents: (UpdateEvent | CommentEvent)[];
+  taskEvents: (UpdateEvent | CommentEvent | AssignmentEvent)[];
   // Keep previousTask record when set to finish
   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };
@@ -247,16 +254,28 @@ export const initialData: TaskList = [
         createdAt: getDaysBefore(9),
         updatedAt: getDaysBefore(1),
       },
-      //   {
-      //     field: "title",
-      //     before: "11112",
-      //     after: "11111",
-      //     taskId: 111,
-      //     userId: 3,
-      //     username: "user",
-      //     createdAt: getDaysBefore(9),
-      //     updatedAt: getDaysBefore(1),
-      //   },
+      {
+        id: 7,
+        field: "assignee",
+        taskId: 111,
+        userId: 3,
+        username: "user",
+        createdAt: getDaysBefore(9),
+        updatedAt: getDaysBefore(1),
+        action: "added",
+        user: { userId: 3, username: "user" },
+      },
+      {
+        id: 8,
+        field: "watcher",
+        taskId: 111,
+        userId: 3,
+        username: "user",
+        createdAt: getDaysBefore(9),
+        updatedAt: getDaysBefore(1),
+        action: "removed",
+        user: { userId: 4, username: "abc" },
+      },
     ],
     creatorId: 1,
     creatorName: "abc",

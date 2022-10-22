@@ -27,7 +27,6 @@ export default function StatusDetails({}: Props) {
     (column) => column.id === task!.status
   );
   const statusButtonColor = column?.color.split(".")[0];
-  console.log({ statusButtonColor });
 
   return (
     <Center>
