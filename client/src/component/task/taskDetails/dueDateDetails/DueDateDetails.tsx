@@ -32,14 +32,14 @@ export default function DueDateDetails({}: Props) {
           <>
             <PopoverTrigger>
               <Center
-                width="40px"
-                height="40px"
-                opacity="65%"
-                fontSize={"20px"}
+                width="35px"
+                height="35px"
+                opacity="55%"
+                fontSize={"17px"}
                 cursor={"pointer"}
                 border="1px dashed"
                 borderRadius={"50%"}
-                _hover={{ color: "purple.400" }}
+                _hover={{ color: "purple.400", opacity: "100%" }}
               >
                 <i className="bi bi-calendar2-check"></i>
               </Center>

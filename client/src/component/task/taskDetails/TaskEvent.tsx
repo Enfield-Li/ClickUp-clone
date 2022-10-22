@@ -1,10 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { isCommentEvent } from "../../../utils/isComment";
 import CommentEvents from "./taskEvent/CommentEvents";
 import DueDateDetails from "./dueDateDetails/DueDateDetails";
 import UpdateEvents from "./taskEvent/updateEvents";
+import TaskCreatorInfo from "./taskEvent/CreateTaskInfo";
 
 type Props = {};
 
@@ -13,16 +14,31 @@ export default function TaskEvent({}: Props) {
 
   return (
     <Box flexBasis={"50%"}>
-      <Flex justifyContent={"space-evenly"} my={3}>
-        <Flex flexDirection="column">
+      <Flex
+        py={4}
+        pl={4}
+        mr={4}
+        borderBottom="1px"
+        borderBottomColor="gray.500"
+      >
+        {/* Created at */}
+        <Box fontSize="small" height="35px" mr={2}>
           <Box opacity="50%">CREATED</Box>
           <Box opacity="65%">{task?.createdAt?.toLocaleDateString()}</Box>
-        </Flex>
-        <DueDateDetails />
+        </Box>
+
+        <Center mx={4}>
+          <Divider orientation="vertical" borderColor="gray.500" />
+        </Center>
+
+        {/* DueDate */}
+        <Box mx={4}>
+          <DueDateDetails />
+        </Box>
       </Flex>
 
       <Flex
-        px={4}
+        px={3}
         height="335px"
         overflow="auto"
         flexDirection="column-reverse"
@@ -41,6 +57,7 @@ export default function TaskEvent({}: Props) {
             )}
           </Box>
         ))}
+        <TaskCreatorInfo />
       </Flex>
     </Box>
   );

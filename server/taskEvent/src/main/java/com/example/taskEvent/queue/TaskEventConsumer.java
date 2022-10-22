@@ -4,8 +4,7 @@ import static com.example.amqp.exchange.TaskEventExchange.*;
 
 import com.example.clients.notification.NotificationRequest;
 import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
-import com.example.taskEvent.service.UpdateEventService;
-
+import com.example.taskEvent.service.TaskEventService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskEventConsumer {
 
-    private final UpdateEventService taskEventService;
+    private final TaskEventService taskEventService;
 
     @RabbitListener(queues = taskEventQueue)
     public void consumer(List<UpdateEventDTO> updateEventDTO) {

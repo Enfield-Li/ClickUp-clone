@@ -3,7 +3,7 @@ package com.example.taskEvent.controller;
 import static com.example.clients.UrlConstants.TASK_EVENT_API_VERSION;
 
 import com.example.taskEvent.model.UpdateEvent;
-import com.example.taskEvent.service.UpdateEventService;
+import com.example.taskEvent.service.TaskEventService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(TASK_EVENT_API_VERSION)
-class UpdateEventController {
+class TaskEventController {
 
-    private final UpdateEventService taskEventService;
+    private final TaskEventService taskEventService;
 
     @GetMapping("/{taskId}")
     ResponseEntity<List<UpdateEvent>> getAllTaskEvents(

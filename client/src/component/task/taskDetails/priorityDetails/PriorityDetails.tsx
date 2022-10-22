@@ -29,7 +29,6 @@ export default function PriorityDetails({}: Props) {
     (priority) => priority.id === task!.priority
   );
   const priorityFlagColor = currentTaskPriority?.color;
-  const isTaskFinished = task?.priority === 0;
 
   return (
     // https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805
@@ -40,16 +39,15 @@ export default function PriorityDetails({}: Props) {
             <Box display="inline-block">
               <PopoverTrigger>
                 <Center
-                  width="40px"
-                  height="40px"
+                  width="35px"
+                  height="35px"
                   opacity="65%"
                   cursor={"pointer"}
-                  fontSize={"20px"}
+                  fontSize={"17px"}
                   border="1px dashed"
                   borderRadius={"50%"}
                   color={priorityFlagColor}
-                  _hover={{ color: "purple.400" }}
-                  //   opacity={isTaskFinished ? "60%" : undefined}
+                  _hover={{ color: "purple.400", opacity: "100%" }}
                 >
                   <i className="bi bi-flag"></i>
                 </Center>

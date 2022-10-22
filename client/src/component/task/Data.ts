@@ -63,12 +63,12 @@ export type ColumnOptions = {
 
 export const columnOptions: ColumnOptions = {
   status: [
-    { id: 1, title: "TO DO", color: "linkedin.400" },
+    { id: 1, title: "TO DO", color: "blue.300" },
     { id: 2, title: "IN PROGRESS", color: "purple.400", previousColumnId: 1 },
     { id: 3, title: "DONE", color: "green.400", previousColumnId: 2 },
   ],
   priority: [
-    { id: 1, title: "NO PRIORITY", color: "linkedin.400" },
+    { id: 1, title: "NO PRIORITY", color: "gray.400" },
     { id: 2, title: "URGENT", color: "red.400" },
     { id: 3, title: "HIGH", color: "yellow.400" },
     { id: 4, title: "NORMAL", color: "blue.200" },

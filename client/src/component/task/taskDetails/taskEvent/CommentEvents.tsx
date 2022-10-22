@@ -11,6 +11,7 @@ export default function CommentEvents({ commentEvent }: Props) {
   return (
     <Flex>
       <Center
+        ml={1}
         mr={3}
         width="30px"
         height="30px"

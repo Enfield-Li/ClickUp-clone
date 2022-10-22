@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Divider,
   Editable,
   EditablePreview,
   EditableTextarea,
@@ -11,6 +12,7 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
 import { SetState, UpdateTaskDescDTO } from "../Data";
+import TaskOptions from "./taskOptions/DeleteTask";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";
 
@@ -31,12 +33,30 @@ export default function TaskInfo({}: Props) {
 
   return (
     <Box flexBasis={"50%"}>
-      <Flex justifyContent={"space-evenly"} my={3}>
-        {/* Status */}
-        <StatusDetails />
+      <Flex
+        py={4}
+        borderBottom="1px"
+        borderBottomColor="gray.500"
+        justifyContent="space-between"
+      >
+        <Flex>
+          {/* Status */}
+          <Box mr={4}>
+            <StatusDetails />
+          </Box>
 
-        {/* Priority */}
-        <PriorityDetails />
+          {/* Divider */}
+          <Center mx={4}>
+            <Divider orientation="vertical" borderColor="gray.500" />
+          </Center>
+
+          {/* Priority */}
+          <Box mx={4}>
+            <PriorityDetails />
+          </Box>
+        </Flex>
+
+        <TaskOptions />
       </Flex>
 
       {/* Desc */}

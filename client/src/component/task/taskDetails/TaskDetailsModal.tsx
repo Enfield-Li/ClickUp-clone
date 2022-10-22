@@ -50,13 +50,13 @@ export default function TaskDetailModal({}: Props) {
 
         {/* Body */}
         <ModalBody>
-          <Flex height="100%">
+          <Flex height="100%" justifyContent="center" alignContent="center">
             {/* Left side */}
             <TaskInfo />
 
             {/* Divider */}
             <Center>
-              <Divider orientation="vertical" />
+              <Divider orientation="vertical" borderColor="gray.500" />
             </Center>
 
             {/* Right side */}

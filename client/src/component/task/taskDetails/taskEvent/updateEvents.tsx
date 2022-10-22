@@ -15,7 +15,6 @@ export default function UpdateEvents({ updateEvent }: Props) {
         {/* Someone */}
         <Box
           p={1}
-          px={2}
           rounded="sm"
           cursor="pointer"
           _hover={{
@@ -31,13 +30,13 @@ export default function UpdateEvents({ updateEvent }: Props) {
         </Box>
 
         {/* changed something from */}
-        <Box opacity="65%">changed {updateEvent.field} from&nbsp;</Box>
+        <Box opacity="65%">&nbsp;changed {updateEvent.field} from&nbsp;</Box>
 
         {/* Before */}
         {updateEvent.before ? (
           <BeforeAndAfter beforeOrAfter="before" updateEvent={updateEvent} />
         ) : (
-          "none"
+          "None"
         )}
 
         {/* to */}

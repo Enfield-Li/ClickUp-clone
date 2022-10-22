@@ -3,9 +3,8 @@ package com.example.taskEvent.controller;
 import static com.example.clients.UrlConstants.TASK_EVENT_API_VERSION;
 
 import com.example.taskEvent.dto.CommentEventDTO;
-import com.example.taskEvent.model.UpdateEvent;
 import com.example.taskEvent.service.CommentEventService;
-import com.example.taskEvent.service.UpdateEventService;
+import com.example.taskEvent.service.TaskEventService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
