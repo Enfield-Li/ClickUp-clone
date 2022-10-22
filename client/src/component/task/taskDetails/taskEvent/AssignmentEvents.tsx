@@ -1,7 +1,7 @@
 import { Flex, Box } from "@chakra-ui/react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../../utils/calculateTime";
-import { AssignmentEvent } from "../../Data";
+import { AssignmentEvent } from "../../taskTypes";
 
 type Props = { assignmentEvent: AssignmentEvent };
 
@@ -28,7 +28,7 @@ export default function AssignmentEvents({ assignmentEvent }: Props) {
         </Box>
 
         <Box opacity="65%">
-          {assignmentEvent.action}&nbsp;{assignmentEvent.field}:&nbsp;
+          {assignmentEvent.assignmentAction}&nbsp;{assignmentEvent.field}:&nbsp;
         </Box>
 
         <Box
@@ -40,10 +40,10 @@ export default function AssignmentEvents({ assignmentEvent }: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user!.id === assignmentEvent.user.userId ? (
+          {authState.user!.id === assignmentEvent.assignedUser.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
-            <Box>{assignmentEvent.user.username}</Box>
+            <Box>{assignmentEvent.assignedUser.username}</Box>
           )}
         </Box>
       </Flex>

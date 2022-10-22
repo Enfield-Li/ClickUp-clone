@@ -1,6 +1,6 @@
 package com.example.taskEvent.service;
 
-import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
+import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.dto.CommentEventDTO;
 import com.example.taskEvent.model.UpdateEvent;
 import com.example.taskEvent.repository.CommentEventRepository;

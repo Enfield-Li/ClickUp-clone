@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { createContext, useState } from "react";
-import { Task } from "../../component/task/Data";
+import { Task } from "../../component/task/taskTypes";
 import {
   TaskDetailContextType,
   TaskStateContext,

@@ -8,9 +8,9 @@ import {
   SetState,
   lookUpPreviousTaskId,
   TaskList,
-  UpdateListTaskDTO,
-} from "../../component/task/Data";
-import { updateTasks } from "../../component/task/TaskActions";
+  UpdateTasksPositionDTO,
+} from "../../component/task/taskTypes";
+import { updateTasksPosition } from "../../component/task/TaskActions";
 import { updateTaskStatsInColumn } from "../../component/task/TaskDataProcessing";
 import { User } from "../auth/AuthContextTypes";
 import { TaskDetailContext as TaskDetailContext } from "./TaskDetailContext";
@@ -167,19 +167,19 @@ export function updateCurrentTaskStatus(
               userId: userId,
               username: username,
               field: sortBy,
-              after: String(currentColumnId),
-              before: String(targetStatusColumnId),
+              afterUpdate: String(currentColumnId),
+              beforeUpdate: String(targetStatusColumnId),
             },
           ];
 
           taskListForUpdate.push(sourceTask);
 
-          const updateTaskListDTO: UpdateListTaskDTO = {
+          const updateTaskListDTO: UpdateTasksPositionDTO = {
             sourceTaskId: sourceTask.id!,
-            taskList: taskListForUpdate,
+            taskDtoList: taskListForUpdate,
           };
 
-          updateTasks(updateTaskListDTO);
+          updateTasksPosition(updateTaskListDTO);
 
           // Clear events from state task
           sourceTask.taskEvents = [];
@@ -268,18 +268,18 @@ export function updateTaskPriorityOrDueDate(
               userId: userId,
               username: username,
               field: sortBy,
-              after: String(currentColumnId),
-              before: String(targetColumnId),
+              afterUpdate: String(currentColumnId),
+              beforeUpdate: String(targetColumnId),
             },
           ];
           taskListForUpdate.push(sourceTask);
 
-          const updateTaskListDTO: UpdateListTaskDTO = {
+          const updateTaskListDTO: UpdateTasksPositionDTO = {
             sourceTaskId: sourceTask.id!,
-            taskList: taskListForUpdate,
+            taskDtoList: taskListForUpdate,
           };
 
-          updateTasks(updateTaskListDTO);
+          updateTasksPosition(updateTaskListDTO);
 
           // Clear events from state task
           sourceTask.taskEvents = [];

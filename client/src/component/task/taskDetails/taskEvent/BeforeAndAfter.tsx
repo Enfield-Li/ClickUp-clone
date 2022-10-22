@@ -1,13 +1,23 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { ColumnOptions, Columns, Field, SortBy, UpdateEvent } from "../../Data";
+import {
+  ColumnOptions,
+  Columns,
+  Field,
+  SortBy,
+  UpdateEvent,
+  BeforeOrAfterUpdate,
+} from "../../taskTypes";
 
 type Props = {
   updateEvent: UpdateEvent;
-  beforeOrAfter: "before" | "after";
+  beforeOrAfterUpdate: keyof BeforeOrAfterUpdate;
 };
 
-export default function BeforeAndAfter({ updateEvent, beforeOrAfter }: Props) {
+export default function BeforeAndAfter({
+  updateEvent,
+  beforeOrAfterUpdate,
+}: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
@@ -32,11 +42,11 @@ export default function BeforeAndAfter({ updateEvent, beforeOrAfter }: Props) {
     }
   }
 
-  if (isStatusField(updateEvent.field) && updateEvent[beforeOrAfter]) {
+  if (isStatusField(updateEvent.field) && updateEvent[beforeOrAfterUpdate]) {
     const column = getColumn(
       columnOptions,
       updateEvent,
-      updateEvent[beforeOrAfter]!
+      updateEvent[beforeOrAfterUpdate]!
     );
 
     // status square icon
@@ -74,7 +84,7 @@ export default function BeforeAndAfter({ updateEvent, beforeOrAfter }: Props) {
       </Flex>
     );
   } else {
-    element = <Box>{updateEvent[beforeOrAfter]}</Box>;
+    element = <Box>{updateEvent[beforeOrAfterUpdate]}</Box>;
   }
 
   return element;

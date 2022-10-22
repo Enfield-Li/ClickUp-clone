@@ -1,7 +1,7 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../../utils/calculateTime";
-import { CommentEvent } from "../../Data";
+import { CommentEvent } from "../../taskTypes";
 
 type Props = { commentEvent: CommentEvent };
 
@@ -37,7 +37,7 @@ export default function CommentEvents({ commentEvent }: Props) {
         </Flex>
 
         <Box mt={3} ml={2} overflowWrap="break-word" wordBreak="break-all">
-          {commentEvent.content}
+          {commentEvent.comment}
         </Box>
       </Box>
     </Flex>

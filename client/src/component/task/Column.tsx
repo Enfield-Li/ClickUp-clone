@@ -17,7 +17,7 @@ import {
   SortBy,
   State,
   TaskList,
-} from "./Data";
+} from "./taskTypes";
 
 type Props = {
   state: State;

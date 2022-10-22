@@ -4,17 +4,13 @@ import static javax.persistence.CascadeType.DETACH;
 import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
+import com.example.task.dto.TaskDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,7 +45,7 @@ public class Task {
     private Integer status;
 
     @NotNull
-    private Integer dueDate;
+    private Date dueDate;
 
     @NotNull
     private Integer priority;
@@ -74,6 +70,7 @@ public class Task {
         fetch = EAGER,
         cascade = { PERSIST, DETACH, MERGE }
     )
+    @Builder.Default
     private Set<Participant> watchers = new HashSet<>();
 
     @OneToMany(
@@ -81,6 +78,7 @@ public class Task {
         fetch = EAGER,
         cascade = { PERSIST, DETACH, MERGE }
     )
+    @Builder.Default
     private Set<Participant> assignees = new HashSet<>();
 
     @JsonIgnore
@@ -99,13 +97,31 @@ public class Task {
     @OneToOne(cascade = { PERSIST, DETACH, MERGE })
     private PreviousTaskBeforeFinish previousTaskBeforeFinish;
 
-    public void addParticipant(Participant participant) {
-        watchers.add(participant);
-        participant.setTaskWatcher(this);
+    public void addWatcher(Participant userInfo) {
+        watchers.add(userInfo);
+        userInfo.setTaskWatcher(this);
     }
 
-    public void removeParticipant(Participant participant) {
-        watchers.remove(participant);
-        participant.setTaskWatcher(null);
+    public void removeWatcher(Participant userInfo) {
+        watchers.remove(userInfo);
+        userInfo.setTaskWatcher(null);
+    }
+
+    public static Task toTask(TaskDTO taskDTO) {
+        return Task
+            .builder()
+            .id(taskDTO.id())
+            .title(taskDTO.title())
+            .status(taskDTO.status())
+            .dueDate(taskDTO.dueDate())
+            .priority(taskDTO.priority())
+            .description(taskDTO.description())
+            .creatorId(taskDTO.creatorId())
+            .creatorName(taskDTO.creatorName())
+            .previousTask(taskDTO.previousTask())
+            .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
+            .watchers(taskDTO.watchers())
+            .assignees(taskDTO.assignees())
+            .build();
     }
 }

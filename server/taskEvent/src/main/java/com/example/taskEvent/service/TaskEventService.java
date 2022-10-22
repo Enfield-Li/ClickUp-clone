@@ -1,6 +1,6 @@
 package com.example.taskEvent.service;
 
-import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
+import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.model.UpdateEvent;
 import com.example.taskEvent.repository.CommentEventRepository;
 import com.example.taskEvent.repository.UpdateEventRepository;
@@ -15,7 +15,7 @@ public class TaskEventService {
     private final UpdateEventRepository updateEventRepository;
     private final CommentEventRepository commentEventRepository;
 
-    public void addTaskEvent(UpdateEventDTO updateEventDTO) {
+    public void addUpdateEvent(UpdateEventDTO updateEventDTO) {
         var taskEvent = UpdateEvent.toUpdateEvent(updateEventDTO);
 
         updateEventRepository.save(taskEvent);

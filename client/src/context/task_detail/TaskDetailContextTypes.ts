@@ -3,7 +3,7 @@ import {
   SetState,
   SortBy,
   Task,
-} from "../../component/task/Data";
+} from "../../component/task/taskTypes";
 
 export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
 

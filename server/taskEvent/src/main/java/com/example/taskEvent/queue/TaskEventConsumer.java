@@ -3,7 +3,7 @@ package com.example.taskEvent.queue;
 import static com.example.amqp.exchange.TaskEventExchange.*;
 
 import com.example.clients.notification.NotificationRequest;
-import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
+import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.service.TaskEventService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class TaskEventConsumer {
     private final TaskEventService taskEventService;
 
     @RabbitListener(queues = taskEventQueue)
-    public void consumer(List<UpdateEventDTO> updateEventDTO) {
+    public void consumeUpdateEvent(List<UpdateEventDTO> updateEventDTO) {
         log.info("Consumed {} from queue", updateEventDTO.get(0).toString());
-        taskEventService.addTaskEvent(updateEventDTO.get(0));
+        taskEventService.addUpdateEvent(updateEventDTO.get(0));
     }
 }

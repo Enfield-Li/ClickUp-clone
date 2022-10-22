@@ -1,7 +1,7 @@
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
 import { toPlainObject } from "../../utils/proxyToObject";
-import { Task, TaskList, UpdateListTaskDTO } from "./Data";
+import { Task, TaskList, UpdateTasksPositionDTO } from "./taskTypes";
 
 export async function createTask(task: Task) {
   try {
@@ -25,13 +25,24 @@ export async function getAllTasks() {
   }
 }
 
-export async function updateTasks(updateTaskListDto: UpdateListTaskDTO) {
+export async function updateTasksPosition(
+  updateTasksPositionDTO: UpdateTasksPositionDTO
+) {
+  console.log({ updateTaskPositionDTO: toPlainObject(updateTasksPositionDTO) });
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,
-      toPlainObject(updateTaskListDto)
+      toPlainObject(updateTasksPositionDTO)
     );
   } catch (error) {
     console.log(error);
   }
 }
+
+export async function createComment() {}
+
+export async function assignTask() {}
+
+export async function addAssignee() {}
+
+export async function addWatcher() {}

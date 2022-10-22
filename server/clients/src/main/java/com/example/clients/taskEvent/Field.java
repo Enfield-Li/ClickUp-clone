@@ -1,4 +1,4 @@
-package com.example.clients.taskEvent.updateEventDTO;
+package com.example.clients.taskEvent;
 
 public enum Field {
     status,

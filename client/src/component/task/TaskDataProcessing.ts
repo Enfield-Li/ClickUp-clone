@@ -21,7 +21,7 @@ import {
   STATUS,
   Task,
   TaskList,
-} from "./Data";
+} from "./taskTypes";
 
 /* 
   Group all tasks into ordered tasks based on sortBy 

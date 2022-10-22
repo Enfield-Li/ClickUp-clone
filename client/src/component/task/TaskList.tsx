@@ -19,9 +19,9 @@ import {
   State,
   STATUS,
   TaskList,
-  UpdateListTaskDTO,
-} from "./Data";
-import { updateTasks } from "./TaskActions";
+  UpdateTasksPositionDTO,
+} from "./taskTypes";
+import { updateTasksPosition } from "./TaskActions";
 import {
   collectAllTasks,
   processLookUpDueDateId,
@@ -36,10 +36,10 @@ type Props = {
 export default function TaskListView({ sortBy }: Props) {
   const { state, setState, loading } = useLocalTasks(sortBy);
   const { authState } = useAuthContext();
-  // const { state, loading, error, setState } = useFetchTasks(
-  //   API_ENDPOINT.TASK_ALL_TASKS,
-  //   sortBy
-  // );
+  //   const { state, loading, error, setState } = useFetchTasks(
+  //     API_ENDPOINT.TASK_ALL_TASKS,
+  //     sortBy
+  //   );
   console.log(state);
 
   if (!state || loading) return <div>Loading</div>;
@@ -350,19 +350,19 @@ async function handleDragEnd(
           userId: userId,
           username: username,
           field: sortBy,
-          after: String(sourceColumnId),
-          before: String(destinationColumnId),
+          afterUpdate: String(sourceColumnId),
+          beforeUpdate: String(destinationColumnId),
         },
       ];
 
       if (destinationTask) taskListForUpdate.push(destinationTask);
       taskListForUpdate.push(sourceTask);
 
-      const updateTaskListDTO: UpdateListTaskDTO = {
+      const updateTaskListDTO: UpdateTasksPositionDTO = {
         sourceTaskId: sourceTask.id!,
-        taskList: taskListForUpdate,
+        taskDtoList: taskListForUpdate,
       };
-      updateTasks(updateTaskListDTO);
+      updateTasksPosition(updateTaskListDTO);
 
       // Clear events from state task
       sourceTask.taskEvents = [];

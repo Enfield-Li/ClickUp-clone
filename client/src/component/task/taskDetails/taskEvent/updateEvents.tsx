@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../../utils/calculateTime";
-import { UpdateEvent } from "../../Data";
+import { UpdateEvent } from "../../taskTypes";
 import BeforeAndAfter from "./BeforeAndAfter";
 
 type Props = { updateEvent: UpdateEvent };
@@ -33,8 +33,11 @@ export default function UpdateEvents({ updateEvent }: Props) {
         <Box opacity="65%">&nbsp;changed {updateEvent.field} from&nbsp;</Box>
 
         {/* Before */}
-        {updateEvent.before ? (
-          <BeforeAndAfter beforeOrAfter="before" updateEvent={updateEvent} />
+        {updateEvent.beforeUpdate ? (
+          <BeforeAndAfter
+            beforeOrAfterUpdate="beforeUpdate"
+            updateEvent={updateEvent}
+          />
         ) : (
           "None"
         )}
@@ -43,7 +46,10 @@ export default function UpdateEvents({ updateEvent }: Props) {
         <Box opacity="65%">&nbsp;to&nbsp;</Box>
 
         {/* After */}
-        <BeforeAndAfter beforeOrAfter="after" updateEvent={updateEvent} />
+        <BeforeAndAfter
+          beforeOrAfterUpdate="afterUpdate"
+          updateEvent={updateEvent}
+        />
       </Flex>
 
       <Box opacity="65%">{calculateTime(updateEvent.createdAt!)}</Box>

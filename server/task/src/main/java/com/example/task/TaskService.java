@@ -1,17 +1,15 @@
 package com.example.task;
 
-import static com.example.amqp.exchange.TaskEventExchange.*;
+import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
+import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.taskEvent.updateEventDTO.UpdateEventDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
-import com.example.task.model.PreviousTask;
 import com.example.task.model.Task;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,9 +38,8 @@ public class TaskService {
         UpdateTasksPositionDTO updateTasksPositionDTO
     ) {
         // When updating sourceTask, a new event will be created for it
-        // need to manage/update it's relationship with event and the nested participant
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
-        var taskList = updateTasksPositionDTO.taskList();
+        var taskList = updateTasksPositionDTO.taskDtoList();
 
         var sourceTask = taskList
             .stream()
@@ -52,31 +49,14 @@ public class TaskService {
         rabbitMQMessageProducer.publish(
             internalExchange,
             taskEventRoutingKey,
-            sourceTask.get().updateEvents()
+            sourceTask.get().taskEvents()
         );
 
         // DTO to entity
         var tasks = new ArrayList<Task>();
         taskList.forEach(
             taskDTO -> {
-                var task = Task
-                    .builder()
-                    .id(taskDTO.id())
-                    .title(taskDTO.title())
-                    .status(taskDTO.status())
-                    .dueDate(taskDTO.dueDate())
-                    .priority(taskDTO.priority())
-                    .description(taskDTO.description())
-                    .creatorId(taskDTO.creatorId())
-                    .creatorName(taskDTO.creatorName())
-                    .previousTask(taskDTO.previousTask())
-                    .previousTaskBeforeFinish(
-                        taskDTO.previousTaskBeforeFinish()
-                    )
-                    .watchers(taskDTO.watchers())
-                    .assignees(taskDTO.assignees())
-                    .build();
-
+                var task = Task.toTask(taskDTO);
                 setTaskFroWatcherAndAssignee(task);
                 tasks.add(task);
             }

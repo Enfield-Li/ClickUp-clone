@@ -10,7 +10,7 @@ import { useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import { SetState, UpdateTaskTitleDTO } from "../Data";
+import { SetState, UpdateTaskTitleDTO } from "../taskTypes";
 
 type Props = {};
 

@@ -5,13 +5,13 @@ import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
+import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.dto.CommentEventDTO;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +27,7 @@ import lombok.experimental.SuperBuilder;
 public class CommentEvent extends BaseEvent {
 
     @NotNull
-    private String content;
+    private String comment;
 
     @OneToMany(
         mappedBy = "commentEvent",
@@ -35,17 +35,4 @@ public class CommentEvent extends BaseEvent {
         cascade = { PERSIST, DETACH, MERGE }
     )
     private Set<Reaction> reactions = new HashSet<>();
-
-    public static CommentEvent toCommentEvent(CommentEventDTO commentEventDTO) {
-        return CommentEvent
-            .builder()
-            .id(commentEventDTO.id())
-            .field(commentEventDTO.field())
-            .taskId(commentEventDTO.taskId())
-            .userId(commentEventDTO.userId())
-            .username(commentEventDTO.username())
-            .content(commentEventDTO.content())
-            .reactions(commentEventDTO.reactions())
-            .build();
-    }
 }

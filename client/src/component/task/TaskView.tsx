@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SortBy, STATUS } from "./Data";
+import { SortBy, STATUS } from "./taskTypes";
 import TaskDetailModal from "./taskDetails/TaskDetailsModal";
 import TaskListView from "./TaskList";
 import TaskNavigation from "./TaskNavigation";

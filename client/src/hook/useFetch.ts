@@ -1,27 +1,15 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import {
-  columnOptions,
-  Columns,
-  DueDateColumns,
-  DUE_DATE,
-  initialData,
-  SortBy,
-  State,
-  StatusColumns,
-  TaskList,
-} from "../component/task/Data";
+import { SortBy, State, TaskList } from "../component/task/taskTypes";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
   initializeDueDataColumns,
 } from "../component/task/TaskDataProcessing";
-import useGlobalContext, {
-  indicateLoading,
-  popUpError,
-} from "../context/global/useGlobalContext";
+import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
+import { columnOptions, initialData } from "../utils/mockData";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();

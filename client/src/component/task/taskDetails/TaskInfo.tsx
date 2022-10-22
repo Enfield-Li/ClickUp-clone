@@ -11,7 +11,7 @@ import produce from "immer";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import { SetState, UpdateTaskDescDTO } from "../Data";
+import { SetState, UpdateTaskDescDTO } from "../taskTypes";
 import TaskOptions from "./taskOptions/DeleteTask";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";

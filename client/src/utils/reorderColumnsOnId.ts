@@ -1,4 +1,4 @@
-import { Columns } from "./../component/task/Data";
+import { Columns } from "../component/task/taskTypes";
 
 // reorder column based on id
 export function reorderColumnsOnId(columns: Columns) {

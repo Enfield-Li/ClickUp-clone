@@ -2,7 +2,7 @@ import { Box, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SetState, State, Task } from "./Data";
+import { SetState, State, Task } from "./taskTypes";
 
 type Props = {
   task: Task;

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import com.example.clients.taskEvent.updateEventDTO.Field;
+import com.example.clients.taskEvent.Field;
 import com.example.taskEvent.model.Reaction;
 
 public record CommentEventDTO(
@@ -15,6 +15,6 @@ public record CommentEventDTO(
     @NotNull Integer userId,
     @NotNull String username,
 
-    @NotNull String content,
+    @NotNull String commentContent,
     Set<Reaction> reactions
 ) {}

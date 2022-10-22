@@ -1,65 +1,5 @@
-import { getDaysBefore } from "../../utils/getWeekDays";
-
-// Sorting options
-export const STATUS = "status";
-export const PRIORITY = "priority";
-export const DUE_DATE = "dueDate";
-
-export type SortBy = typeof STATUS | typeof PRIORITY | typeof DUE_DATE;
-
-// Columns
-export type Status = "TO DO" | "IN PROGRESS" | "DONE";
-
-export type Priority =
-  | "LOW"
-  | "NORMAL"
-  | "HIGH"
-  | "URGENT"
-  | "NO PRIORITY"
-  | "DONE"
-  | "FINISHED";
-
-export type DueDate =
-  | "OVER DUE"
-  | "TODAY"
-  | "TOMORROW"
-  | "SATURDAY"
-  | "SUNDAY"
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "FUTURE"
-  | "DONE"
-  | "NO DUE DATE"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "FINISHED";
-
-interface Column<T> {
-  id: number;
-  title: T;
-  color: string;
-}
-export interface DueDateColumn extends Column<DueDate> {
-  localDateStr?: string;
-}
-export type PriorityColumn = Column<Priority>;
-export type StatusColumn = {
-  id: number;
-  title: string;
-  color: string;
-  previousColumnId?: number;
-};
-
-export type StatusColumns = StatusColumn[];
-export type PriorityColumns = PriorityColumn[];
-export type DueDateColumns = DueDateColumn[];
-
-export type ColumnOptions = {
-  status: StatusColumns;
-  priority: PriorityColumns;
-  dueDate: DueDateColumns;
-};
+import { ColumnOptions, TaskList } from "../component/task/taskTypes";
+import { getDaysBefore } from "./getWeekDays";
 
 export const columnOptions: ColumnOptions = {
   status: [
@@ -90,94 +30,6 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
-type PreviousTask = {
-  statusId?: number;
-  dueDateId?: number;
-  priorityId?: number;
-};
-
-type PreviousTaskBeforeFinish = {
-  dueDateId?: number;
-  priorityId?: number;
-};
-
-export const COMMENT = "comment";
-export const TITLE = "title";
-export const ASSIGNEE = "assignee";
-export const WATCHER = "watcher";
-
-export type Field =
-  | typeof STATUS
-  | typeof PRIORITY
-  | typeof DUE_DATE
-  | typeof TITLE
-  | typeof ASSIGNEE
-  | typeof WATCHER
-  | typeof COMMENT;
-
-type Participant = {
-  userId: number;
-  username: string;
-};
-
-interface BaseEvent {
-  id?: number;
-  field: Field;
-  taskId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  userId: number;
-  username: string;
-}
-
-type Reaction = {
-  id?: number;
-  userId: number;
-  username: string;
-  reaction: string;
-};
-
-export interface AssignmentEvent extends BaseEvent {
-  action: "added" | "removed";
-  user: Participant;
-}
-
-export interface UpdateEvent extends BaseEvent {
-  after: string;
-  before?: string;
-}
-
-export interface CommentEvent extends BaseEvent {
-  content: string;
-  reactions: Reaction[];
-}
-
-export type Task = {
-  id?: number;
-  date?: Date;
-  title: string;
-  status?: number;
-  dueDate?: number;
-  priority?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  creatorId: number;
-  creatorName: string;
-  description?: string;
-  watchers: Participant[];
-  assignees: Participant[];
-  // Determine the task order
-  previousTask: PreviousTask;
-  taskEvents: (UpdateEvent | CommentEvent | AssignmentEvent)[];
-  // Keep previousTask record when set to finish
-  previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
-};
-
-export type TaskList = Task[];
-export type ColumnType = Column<string>;
-export type Columns = ColumnType[];
-export type InitialData = { tasks: TaskList };
-
 export const initialData: TaskList = [
   {
     id: 111,
@@ -191,7 +43,7 @@ export const initialData: TaskList = [
       {
         id: 1,
         field: "comment",
-        content:
+        comment:
           "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
         reactions: [],
         taskId: 111,
@@ -203,8 +55,8 @@ export const initialData: TaskList = [
       {
         id: 2,
         field: "title",
-        before: "11112",
-        after: "11111",
+        beforeUpdate: "11112",
+        afterUpdate: "11111",
         taskId: 111,
         userId: 3,
         username: "user",
@@ -214,8 +66,8 @@ export const initialData: TaskList = [
       {
         id: 4,
         field: "status",
-        before: "1",
-        after: "2",
+        beforeUpdate: "1",
+        afterUpdate: "2",
         taskId: 111,
         userId: 2,
         username: "user2",
@@ -225,7 +77,7 @@ export const initialData: TaskList = [
       {
         id: 3,
         field: "status",
-        after: "1",
+        afterUpdate: "1",
         taskId: 111,
         userId: 3,
         username: "user",
@@ -235,8 +87,8 @@ export const initialData: TaskList = [
       {
         id: 5,
         field: "priority",
-        before: "2",
-        after: "3",
+        beforeUpdate: "2",
+        afterUpdate: "3",
         taskId: 111,
         userId: 3,
         username: "user",
@@ -246,8 +98,8 @@ export const initialData: TaskList = [
       {
         id: 6,
         field: "dueDate",
-        before: "3",
-        after: "2",
+        beforeUpdate: "3",
+        afterUpdate: "2",
         taskId: 111,
         userId: 3,
         username: "user",
@@ -262,8 +114,8 @@ export const initialData: TaskList = [
         username: "user",
         createdAt: getDaysBefore(9),
         updatedAt: getDaysBefore(1),
-        action: "added",
-        user: { userId: 3, username: "user" },
+        assignmentAction: "added",
+        assignedUser: { userId: 3, username: "user" },
       },
       {
         id: 8,
@@ -273,8 +125,8 @@ export const initialData: TaskList = [
         username: "user",
         createdAt: getDaysBefore(9),
         updatedAt: getDaysBefore(1),
-        action: "removed",
-        user: { userId: 4, username: "abc" },
+        assignmentAction: "removed",
+        assignedUser: { userId: 4, username: "abc" },
       },
     ],
     creatorId: 1,
@@ -368,52 +220,3 @@ export const initialData: TaskList = [
     previousTaskBeforeFinish: {},
   },
 ];
-
-// States
-export type OrderedTasks = { id: number; taskList: TaskList }[];
-export type State = {
-  orderedTasks: OrderedTasks;
-  columnOptions: ColumnOptions;
-};
-export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
-
-// Look up tables
-export const lookUpIsLastItem = {
-  status: "inStatus",
-  priority: "inPriority",
-  dueDate: "inDueDate",
-} as const;
-
-export const lookUpPreviousTaskId = {
-  status: "statusId",
-  priority: "priorityId",
-  dueDate: "dueDateId",
-} as const;
-
-export type LookUpDueDateId = {
-  [index: number]: number;
-};
-
-// Task creation types
-export type TargetColumn = {
-  status?: string | undefined;
-  priority?: string | undefined;
-  dueDate?: string | undefined;
-};
-export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
-
-// DTO
-export type UpdateListTaskDTO = {
-  sourceTaskId: number;
-  taskList: TaskList;
-};
-
-export type UpdateTaskTitleDTO = {
-  id: number;
-  newTitle: string;
-};
-
-export type UpdateTaskDescDTO = {
-  id: number;
-  newDesc: string;
-};

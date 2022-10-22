@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 
-//To use the @Data annotation you should add the Lombok dependency.
 @Data
 @Entity
 public class Reaction {
@@ -28,7 +27,7 @@ public class Reaction {
     @NotNull
     private String username;
 
-    @NotNull
+    // @NotNull
     private String reaction;
 
     @JsonIgnore
