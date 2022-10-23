@@ -1,13 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
-  updateCurrentTaskStatus,
+    updateCurrentTaskStatus
 } from "../../../../context/task_detail/useTaskDetailContext";
 
 type Props = { onOptionClose: () => void };
 
 export default function StatusOptions({ onOptionClose }: Props) {
-  const { authState } = useAuthContext();
   const {
     task,
     isModalOpen,
@@ -43,8 +41,7 @@ export default function StatusOptions({ onOptionClose }: Props) {
                   sortBy,
                   task!,
                   setState,
-                  targetStatusColumnId,
-                  authState.user!
+                  targetStatusColumnId
                 );
               }}
             >

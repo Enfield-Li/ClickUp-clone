@@ -5,7 +5,8 @@ import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
-import com.example.task.dto.TaskDTO;
+import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.unused.CreateTaskDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -44,8 +45,7 @@ public class Task {
     @NotNull
     private Integer status;
 
-    @NotNull
-    private Date dueDate;
+    private Date expectedDueDate;
 
     @NotNull
     private Integer priority;
@@ -107,21 +107,43 @@ public class Task {
         userInfo.setTaskWatcher(null);
     }
 
-    public static Task toTask(TaskDTO taskDTO) {
+    public static Task updateTaskDtoToTask(
+        UpdateTaskDTO taskDTO,
+        Integer creatorId,
+        String creatorName
+    ) {
         return Task
             .builder()
+            .creatorId(creatorId)
+            .creatorName(creatorName)
             .id(taskDTO.id())
             .title(taskDTO.title())
             .status(taskDTO.status())
-            .dueDate(taskDTO.dueDate())
             .priority(taskDTO.priority())
-            .description(taskDTO.description())
-            .creatorId(taskDTO.creatorId())
-            .creatorName(taskDTO.creatorName())
-            .previousTask(taskDTO.previousTask())
-            .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
             .watchers(taskDTO.watchers())
             .assignees(taskDTO.assignees())
+            .description(taskDTO.description())
+            .previousTask(taskDTO.previousTask())
+            .expectedDueDate(taskDTO.expectedDueDate())
+            .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
+            .build();
+    }
+
+    public static Task createTaskDtoToTask(
+        CreateTaskDTO createTaskDTO,
+        Integer creatorId,
+        String creatorName
+    ) {
+        return Task
+            .builder()
+            .creatorId(creatorId)
+            .creatorName(creatorName)
+            .title(createTaskDTO.title())
+            .status(createTaskDTO.status())
+            .priority(createTaskDTO.priority())
+            .description(createTaskDTO.description())
+            .previousTask(createTaskDTO.previousTask())
+            .expectedDueDate(createTaskDTO.expectedDueDate())
             .build();
     }
 }

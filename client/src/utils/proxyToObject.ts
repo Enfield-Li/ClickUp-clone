@@ -1,3 +1,3 @@
-export function toPlainObject(proxy: object) {
-  return JSON.parse(JSON.stringify(proxy));
+export function toPlainObject(object?: object) {
+  return JSON.parse(JSON.stringify(object));
 }

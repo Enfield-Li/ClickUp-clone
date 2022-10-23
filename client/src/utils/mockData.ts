@@ -1,7 +1,7 @@
 import { ColumnOptions, TaskList } from "../component/task/taskTypes";
-import { getDaysBefore } from "./getWeekDays";
+import { getDaysBefore, getNextNWeekDay } from "./getWeekDays";
 
-export const columnOptions: ColumnOptions = {
+export const mockColumnOptions: ColumnOptions = {
   status: [
     { id: 1, title: "TO DO", color: "blue.300" },
     { id: 2, title: "IN PROGRESS", color: "purple.400", previousColumnId: 1 },
@@ -30,13 +30,14 @@ export const columnOptions: ColumnOptions = {
   ],
 };
 
-export const initialData: TaskList = [
+export const mockTaskList: TaskList = [
   {
     id: 111,
     title: "11111",
     status: 1,
     priority: 2,
-    dueDate: 1,
+    // dueDate: 1,
+    expectedDueDate: undefined,
     previousTask: {},
     createdAt: getDaysBefore(11),
     taskEvents: [
@@ -49,6 +50,18 @@ export const initialData: TaskList = [
         taskId: 111,
         userId: 3,
         username: "user",
+        createdAt: getDaysBefore(10),
+        updatedAt: getDaysBefore(3),
+      },
+      {
+        id: 9,
+        field: "comment",
+        comment:
+          "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+        reactions: [],
+        taskId: 111,
+        userId: 31,
+        username: "user31",
         createdAt: getDaysBefore(10),
         updatedAt: getDaysBefore(3),
       },
@@ -140,7 +153,8 @@ export const initialData: TaskList = [
     title: "22222",
     status: 1,
     priority: 1,
-    dueDate: 1,
+    // dueDate: 1,
+    expectedDueDate: undefined,
     previousTask: { statusId: 111, dueDateId: 111 },
     taskEvents: [],
     creatorId: 1,
@@ -154,7 +168,8 @@ export const initialData: TaskList = [
     title: "33333",
     status: 1,
     priority: 1,
-    dueDate: 1,
+    // dueDate: 1,
+    expectedDueDate: undefined,
     previousTask: { statusId: 222, priorityId: 222, dueDateId: 222 },
     taskEvents: [],
     creatorId: 1,
@@ -168,7 +183,8 @@ export const initialData: TaskList = [
     title: "44444",
     status: 1,
     priority: 1,
-    dueDate: 2,
+    // dueDate: 2,
+    expectedDueDate: getNextNWeekDay(-5),
     previousTask: { statusId: 333, priorityId: 333 },
     taskEvents: [],
     creatorId: 1,
@@ -182,7 +198,8 @@ export const initialData: TaskList = [
     title: "55555",
     status: 1,
     priority: 1,
-    dueDate: 2,
+    // dueDate: 2,
+    expectedDueDate: getNextNWeekDay(-6),
     previousTask: { statusId: 444, priorityId: 444, dueDateId: 444 },
     taskEvents: [],
     creatorId: 1,
@@ -196,7 +213,8 @@ export const initialData: TaskList = [
     title: "66666",
     status: 1,
     priority: 3,
-    dueDate: 1,
+    // dueDate: 1,
+    expectedDueDate: undefined,
     previousTask: { statusId: 555, priorityId: 777, dueDateId: 333 },
     taskEvents: [],
     creatorId: 1,
@@ -210,7 +228,8 @@ export const initialData: TaskList = [
     title: "77777",
     status: 1,
     priority: 3,
-    dueDate: 1,
+    // dueDate: 1,
+    expectedDueDate: undefined,
     previousTask: { statusId: 666, dueDateId: 666 },
     taskEvents: [],
     creatorId: 1,

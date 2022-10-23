@@ -7,6 +7,7 @@ import com.example.amqp.RabbitMqMessageProducer;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
+import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Task;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,12 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task createTask(Task task) {
-        // Manage relationship
-        setTaskForWatcher(task);
-        return taskRepository.save(task);
+    public Task createTask(CreateTaskDTO createTaskDTO) {
+        // TODO: Manage relationship
+        // setTaskForWatcher(task);
+        return taskRepository.save(
+            Task.createTaskDtoToTask(createTaskDTO, 3, "user")
+        );
     }
 
     @Transactional
@@ -39,13 +42,14 @@ public class TaskService {
     ) {
         // When updating sourceTask, a new event will be created for it
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
-        var taskList = updateTasksPositionDTO.taskDtoList();
+        var taskDtoList = updateTasksPositionDTO.taskDtoList();
 
-        var sourceTask = taskList
+        var sourceTask = taskDtoList
             .stream()
             .filter(task -> task.id() == sourceTaskId)
             .findAny();
 
+        // publish task update event
         rabbitMQMessageProducer.publish(
             internalExchange,
             taskEventRoutingKey,
@@ -54,9 +58,9 @@ public class TaskService {
 
         // DTO to entity
         var tasks = new ArrayList<Task>();
-        taskList.forEach(
+        taskDtoList.forEach(
             taskDTO -> {
-                var task = Task.toTask(taskDTO);
+                var task = Task.updateTaskDtoToTask(taskDTO, 1, "user");
                 setTaskFroWatcherAndAssignee(task);
                 tasks.add(task);
             }

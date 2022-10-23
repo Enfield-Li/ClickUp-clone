@@ -4,6 +4,7 @@ import { toPlainObject } from "../../utils/proxyToObject";
 import { Task, TaskList, UpdateTasksPositionDTO } from "./taskTypes";
 
 export async function createTask(task: Task) {
+  console.log({ task });
   try {
     const res = await axiosInstance.post<Task>(API_ENDPOINT.TASK, task);
 

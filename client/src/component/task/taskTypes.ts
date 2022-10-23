@@ -61,6 +61,7 @@ export type ColumnOptions = {
   dueDate: DueDateColumns;
 };
 
+// task
 type PreviousTask = {
   statusId?: number;
   dueDateId?: number;
@@ -95,16 +96,16 @@ interface BaseEvent {
   id?: number;
   field: Field;
   taskId: number;
-  userId: number;
-  username: string;
+  userId?: number;
+  username?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 type Reaction = {
   id?: number;
-  userId: number;
-  username: string;
+  userId?: number;
+  username?: string;
   reaction: string;
 };
 
@@ -129,16 +130,17 @@ export interface CommentEvent extends BaseEvent {
 
 export type Task = {
   id?: number;
-  date?: Date;
   title: string;
-  status?: number;
+  status?: number; // track client column
   dueDate?: number;
   priority?: number;
   createdAt?: Date;
   updatedAt?: Date;
-  creatorId: number;
-  creatorName: string;
+  creatorId?: number;
+  creatorName?: string;
   description?: string;
+  expectedDueDate?: Date; // server due date data
+
   watchers: UserInfo[];
   assignees: UserInfo[];
   // Determine the task order
@@ -187,39 +189,37 @@ export type TargetColumn = {
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
 
 // DTO
-export type TaskDTO = {
-  id: number;
-  title: string;
-  dueDate?: Date;
-  status?: number;
-  priority?: number;
-  creatorId: number;
-  creatorName: string;
-  description?: string;
-  watchers: UserInfo[];
-  assignees: UserInfo[];
-  // Determine the task order
-  previousTask: PreviousTask;
-  taskEvents: UpdateEventDTO[];
-  // Keep previousTask record when set to finish
-  previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
-};
-
-export type UpdateEventDTO = {
-  field: Field;
-  taskId: number;
-  userId: number;
-  username: string;
-
-  // Comment event
-  comment?: string;
-  // Update event
-  afterUpdate?: string;
-  beforeUpdate?: string;
-  // Assignment event
-  assignedUser?: UserInfo;
-  assignmentAction?: AssignmentAction;
-};
+// export type TaskDTO = {
+//   id: number;
+//   title: string;
+//   dueDate?: Date;
+//   status?: number;
+//   priority?: number;
+//   creatorId: number;
+//   creatorName: string;
+//   description?: string;
+//   watchers: UserInfo[];
+//   assignees: UserInfo[];
+//   // Determine the task order
+//   previousTask: PreviousTask;
+//   updateEventDTO: UpdateEventDTO[];
+//   // Keep previousTask record when set to finish
+//   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
+// };
+// export type UpdateEventDTO = {
+//   field: Field;
+//   taskId: number;
+//   userId: number;
+//   username: string;
+//   // Comment event
+//   comment?: string;
+//   // Update event
+//   afterUpdate?: string;
+//   beforeUpdate?: string;
+//   // Assignment event
+//   assignedUser?: UserInfo;
+//   assignmentAction?: AssignmentAction;
+// };
 
 export type UpdateTasksPositionDTO = {
   sourceTaskId: number;

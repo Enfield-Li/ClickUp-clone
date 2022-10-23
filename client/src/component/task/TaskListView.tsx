@@ -1,33 +1,27 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { useEffect } from "react";
-import { User } from "../../context/auth/AuthContextTypes";
-import useAuthContext from "../../context/auth/useAuthContext";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
+import { updateTasksPosition } from "./TaskActions";
 import {
-  Columns,
+  processLookUpDueDateId,
+  updateTaskStatsInColumn,
+} from "./TaskDataProcessing";
+import {
   DUE_DATE,
   LookUpDueDateId,
   lookUpPreviousTaskId,
-  TargetColumn,
   SetState,
   SortBy,
   State,
   STATUS,
+  TargetColumn,
   TaskList,
   UpdateTasksPositionDTO,
 } from "./taskTypes";
-import { updateTasksPosition } from "./TaskActions";
-import {
-  collectAllTasks,
-  processLookUpDueDateId,
-  groupTaskListOnSortBy,
-  updateTaskStatsInColumn,
-} from "./TaskDataProcessing";
 
 type Props = {
   sortBy: SortBy;
@@ -35,11 +29,10 @@ type Props = {
 
 export default function TaskListView({ sortBy }: Props) {
   const { state, setState, loading } = useLocalTasks(sortBy);
-  const { authState } = useAuthContext();
-  //   const { state, loading, error, setState } = useFetchTasks(
-  //     API_ENDPOINT.TASK_ALL_TASKS,
-  //     sortBy
-  //   );
+  // const { state, loading, error, setState } = useFetchTasks(
+  //   API_ENDPOINT.TASK_ALL_TASKS,
+  //   sortBy
+  // );
   console.log(state);
 
   if (!state || loading) return <div>Loading</div>;
@@ -49,9 +42,7 @@ export default function TaskListView({ sortBy }: Props) {
   return (
     <Box px={3} overflowY={"auto"}>
       <DragDropContext
-        onDragEnd={(result) =>
-          handleDragEnd(result, state, setState, sortBy, authState.user)
-        }
+        onDragEnd={(result) => handleDragEnd(result, state, setState, sortBy)}
       >
         <Flex>
           {/* Columns and tasks */}
@@ -92,8 +83,7 @@ async function handleDragEnd(
   result: DropResult,
   state: State,
   setState: SetState,
-  sortBy: SortBy,
-  user?: User
+  sortBy: SortBy
 ) {
   const { destination, source } = result;
   const currentColumns = state.columnOptions[sortBy];
@@ -339,16 +329,11 @@ async function handleDragEnd(
         updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
       }
 
-      const userId = user!.id;
-      const username = user!.username;
-
       // Override all previous update events
       // So as to keep the event consistent when submitting to server
       sourceTask.taskEvents = [
         {
           taskId: sourceTask.id!,
-          userId: userId,
-          username: username,
           field: sortBy,
           afterUpdate: String(sourceColumnId),
           beforeUpdate: String(destinationColumnId),

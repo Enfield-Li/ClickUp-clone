@@ -22,10 +22,10 @@ export default function TaskCreatorInfo({}: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user!.id === task!.creatorId ? (
+          {authState.user?.id === task?.creatorId ? (
             <Box color="purple.400">You</Box>
           ) : (
-            <Box>{task!.creatorName}</Box>
+            <Box>{task?.creatorName}</Box>
           )}
         </Box>
 
@@ -33,7 +33,7 @@ export default function TaskCreatorInfo({}: Props) {
         <Box>&nbsp;created this task</Box>
       </Flex>
 
-      <Box>{calculateTime(task!.createdAt!)}</Box>
+      <Box>{calculateTime(task?.createdAt!)}</Box>
     </Flex>
   );
 }

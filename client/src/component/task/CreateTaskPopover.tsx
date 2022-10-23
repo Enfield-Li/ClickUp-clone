@@ -43,6 +43,7 @@ import {
   getTodayYMDString,
 } from "../../utils/getWeekDays";
 import { getRandomNumber } from "../../utils/getRandomNumber";
+import { toPlainObject } from "../../utils/proxyToObject";
 
 export type NewTask = {
   title: string;
@@ -113,7 +114,6 @@ export const CreateTaskPopover = ({
                 sortBy,
                 setState,
                 isTaskDone,
-                authState.user
               )
             }
           >
@@ -238,30 +238,23 @@ async function submit(
   column: ColumnType,
   sortBy: SortBy,
   setState: SetState,
-  isTaskDone: boolean,
-  user?: User
+  isTaskDone: boolean
 ) {
   // Prepare newTask
   const { title, description, dueDate, priority, status } = formValues;
-  console.log({ dueDate });
-  const userId = user!.id;
-  const username = user!.username;
 
   const newTask: Task = {
     id: getRandomNumber(10, 100000),
-    creatorId: userId,
-    creatorName: username,
     title,
     description,
     previousTask: {},
     taskEvents: [],
-    watchers: [{ userId, username }],
+    watchers: [],
     assignees: [],
-    date: new Date(),
+    expectedDueDate: new Date(),
   };
 
   const targetColumn = { dueDate, priority, status };
-  console.log(dueDate);
   // Use date picker
   if (dueDate && dueDate.length > 1) {
     const dueDateColumnId = getDueDateColumnFromDateString(
@@ -300,7 +293,7 @@ async function submit(
   // Update state
   setState((previousState) => {
     // Deep copy
-    const copiedState = JSON.parse(JSON.stringify(previousState)) as State;
+    const copiedState = toPlainObject(previousState) as State;
 
     // Push newTask to current column array
     const taskArr = copiedState.orderedTasks.find(

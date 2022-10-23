@@ -6,11 +6,13 @@ import static com.example.task.Constants.*;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
+import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,9 +48,11 @@ class TaskController {
     }
 
     @PostMapping
-    ResponseEntity<Task> createTask(@RequestBody Task task) {
-        var allTasks = taskService.createTask(task);
-        return ResponseEntity.ok(allTasks);
+    ResponseEntity<Task> createTask(
+        @Valid @RequestBody CreateTaskDTO createTaskDTO
+    ) {
+        var task = taskService.createTask(createTaskDTO);
+        return ResponseEntity.ok(task);
     }
 
     @PutMapping

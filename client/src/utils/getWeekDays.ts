@@ -22,8 +22,8 @@ export function getNextWeekDay() {
 
 // From: Mon Oct 10 2022 09:02:24 GMT+0800 (China Standard Time)
 // To: MONDAY
-function getUppercaseWeekDayString(date: Date) {
-  return date
+function getUppercaseWeekDayString(date: Date | string) {
+  return new Date(date)
     .toLocaleTimeString("en-us", { weekday: "long" })
     .split(" ")[0]
     .toUpperCase();
@@ -46,8 +46,8 @@ export function getTodayYMDString() {
   return toYYYYMMDDString(new Date());
 }
 
-function toYYYYMMDDString(date: Date) {
-  return date
+export function toYYYYMMDDString(date: Date | string) {
+  return new Date(date)
     .toLocaleTimeString("en-CA", {
       year: "numeric",
       month: "2-digit",

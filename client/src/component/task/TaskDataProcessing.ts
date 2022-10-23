@@ -3,6 +3,7 @@ import {
   getTodayYMDString,
   getOneWholeWeekLocalDateString,
   getWeekDays,
+  toYYYYMMDDString,
 } from "../../utils/getWeekDays";
 import { NewTask } from "./CreateTaskPopover";
 import {
@@ -240,6 +241,25 @@ export function getDueDateColumnFromDateString(
   if (inputDate > oneWeekLater) return 10; // Future
 
   return 1; // Default No due date
+}
+
+// convert expectedDueDate to dueDate
+export function convertToDueDate(
+  dueDateColumn: DueDateColumns,
+  taskList: TaskList
+) {
+  taskList.forEach((task) => {
+    const taskExpectedDueDateString = task.expectedDueDate
+      ? toYYYYMMDDString(task.expectedDueDate)
+      : "";
+
+    task.dueDate = getDueDateColumnFromDateString(
+      dueDateColumn,
+      taskExpectedDueDateString
+    );
+  });
+
+  return taskList;
 }
 
 // Push task to the other sortBy id === 1 column

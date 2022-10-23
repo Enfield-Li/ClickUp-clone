@@ -8,5 +8,5 @@ import lombok.NonNull;
 
 public record UpdateTasksPositionDTO(
   @NonNull Integer sourceTaskId,
-  List<TaskDTO> taskDtoList
+  List<UpdateTaskDTO> taskDtoList
 ) {}

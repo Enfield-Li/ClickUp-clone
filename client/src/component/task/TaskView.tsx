@@ -2,7 +2,7 @@ import { useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SortBy, STATUS } from "./taskTypes";
 import TaskDetailModal from "./taskDetails/TaskDetailsModal";
-import TaskListView from "./TaskList";
+import TaskListView from "./TaskListView";
 import TaskNavigation from "./TaskNavigation";
 
 type Props = {};

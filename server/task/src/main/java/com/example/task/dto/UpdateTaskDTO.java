@@ -10,19 +10,17 @@ import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.task.model.PreviousTask;
 import com.example.task.model.PreviousTaskBeforeFinish;
 
-public record TaskDTO(
+public record UpdateTaskDTO(
    @NotNull Integer id,
    @NotNull String title,
-   @NotNull Integer creatorId,
-   @NotNull String creatorName,
    
-   Date dueDate,
    Integer status,
    Integer priority,
    String description,
+   Date expectedDueDate,
+   PreviousTask previousTask,
    Set<Participant> watchers,
    Set<Participant> assignees,
-   PreviousTask previousTask,
    Set<UpdateEventDTO> taskEvents,
    PreviousTaskBeforeFinish previousTaskBeforeFinish
 ) {}

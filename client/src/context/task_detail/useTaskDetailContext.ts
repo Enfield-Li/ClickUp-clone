@@ -1,19 +1,18 @@
 import produce from "immer";
-import React, { useContext } from "react";
+import { useContext } from "react";
+import { updateTasksPosition } from "../../component/task/TaskActions";
+import { updateTaskStatsInColumn } from "../../component/task/TaskDataProcessing";
 import {
+  lookUpPreviousTaskId,
+  SetState,
   SortBy,
-  Task,
   STATUS,
   TargetColumn,
-  SetState,
-  lookUpPreviousTaskId,
+  Task,
   TaskList,
   UpdateTasksPositionDTO,
 } from "../../component/task/taskTypes";
-import { updateTasksPosition } from "../../component/task/TaskActions";
-import { updateTaskStatsInColumn } from "../../component/task/TaskDataProcessing";
-import { User } from "../auth/AuthContextTypes";
-import { TaskDetailContext as TaskDetailContext } from "./TaskDetailContext";
+import { TaskDetailContext } from "./TaskDetailContext";
 
 export default function useTaskDetailContext() {
   return useContext(TaskDetailContext);
@@ -23,11 +22,8 @@ export function updateCurrentTaskStatus(
   sortBy: SortBy,
   currentTask: Task,
   setState: SetState,
-  targetStatusColumnId: number,
-  user: User
+  targetStatusColumnId: number
 ) {
-  const { id: userId, username } = user;
-
   setState((previousState) => {
     if (previousState) {
       return produce(previousState, (draftState) => {
@@ -164,8 +160,6 @@ export function updateCurrentTaskStatus(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              userId: userId,
-              username: username,
               field: sortBy,
               afterUpdate: String(currentColumnId),
               beforeUpdate: String(targetStatusColumnId),
@@ -194,11 +188,9 @@ export function updateTaskPriorityOrDueDate(
   currentTask: Task,
   setState: SetState,
   targetColumnKey: SortBy,
-  targetColumnId: number,
-  user: User
+  targetColumnId: number
 ) {
   const taskListForUpdate: TaskList = [];
-  const { id: userId, username } = user;
 
   const targetColumn: TargetColumn =
     targetColumnKey === "dueDate"
@@ -265,8 +257,6 @@ export function updateTaskPriorityOrDueDate(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              userId: userId,
-              username: username,
               field: sortBy,
               afterUpdate: String(currentColumnId),
               beforeUpdate: String(targetColumnId),
@@ -288,3 +278,44 @@ export function updateTaskPriorityOrDueDate(
     }
   });
 }
+
+// export function toTaskDtoList(taskList: TaskList) {
+//   const taskDtoList: TaskDTO[] = [];
+//   taskList.forEach((task) => {
+//     const {
+//       id,
+//       title,
+//       dueDate,
+//       status,
+//       priority,
+//       creatorId,
+//       creatorName,
+//       description,
+//       watchers,
+//       assignees,
+//       previousTask,
+//       taskEvents,
+//       previousTaskBeforeFinish,
+//     } = task;
+
+//     const updateEventDTO: UpdateEventDTO[] = [];
+
+//     taskDtoList.push({
+//       id,
+//       title,
+//       dueDate,
+//       status,
+//       priority,
+//       creatorId,
+//       creatorName,
+//       description,
+//       watchers,
+//       assignees,
+//       previousTask,
+//       taskEvents,
+//       previousTaskBeforeFinish,
+//     });
+//   });
+// }
+
+// function toUpdateEventDTO() {}

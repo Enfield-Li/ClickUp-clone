@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { SortBy, State, TaskList } from "../component/task/taskTypes";
 import {
   collectAllTasks,
+  convertToDueDate,
   groupTaskListOnSortBy,
   initializeDueDataColumns,
 } from "../component/task/TaskDataProcessing";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
-import { columnOptions, initialData } from "../utils/mockData";
+import { mockColumnOptions, mockTaskList } from "../utils/mockData";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
@@ -61,34 +62,35 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
       // Task data
       const response = await axiosInstance.get<TaskList>(url);
-
-      const columnDataFromApi = columnOptions;
-      const tasksListData = response.data;
-
-      const orderedTasks = groupTaskListOnSortBy(
-        tasksListData,
-        columnDataFromApi[sortBy],
-        sortBy
-      );
+      const columnDataFromApi = mockColumnOptions;
 
       const dueDateColumns = initializeDueDataColumns(
         columnDataFromApi.dueDate
       );
 
-      const columnOptionsUpdated = {
+      const columnOptions = {
         ...columnDataFromApi,
         dueDate: dueDateColumns,
       };
 
+      // convert expectedDueDate to dueDate
+      const taskList = convertToDueDate(dueDateColumns, response.data);
+
+      const orderedTasks = groupTaskListOnSortBy(
+        taskList,
+        columnDataFromApi[sortBy],
+        sortBy
+      );
+
       setTaskStateContext({
-        columnOptions: columnOptionsUpdated,
+        columnOptions,
         setState,
         sortBy,
       });
 
       setState({
         orderedTasks,
-        columnOptions: columnOptionsUpdated,
+        columnOptions: columnOptions,
       });
     } catch (error) {
       setError(true);
@@ -146,31 +148,37 @@ export function useLocalTasks(sortBy: SortBy) {
     setLoading(true);
 
     await new Promise<void>((resolve) => {
-      const columnDataFromApi = columnOptions;
-      const dataFromAPI = initialData;
+      const columnDataFromApi = mockColumnOptions;
 
-      const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
-      const columnOptionsUpdated = {
+      const dueDateColumns = initializeDueDataColumns(
+        mockColumnOptions.dueDate
+      );
+      const columnOptions = {
         ...columnDataFromApi,
         dueDate: dueDateColumns,
       };
 
+      // convert expectedDueDate to dueDate
+      const taskList = convertToDueDate(dueDateColumns, mockTaskList);
+
       const orderedTasks = groupTaskListOnSortBy(
-        dataFromAPI,
+        taskList,
         columnDataFromApi[sortBy],
         sortBy
       );
 
       setTaskStateContext({
-        columnOptions: columnOptionsUpdated,
+        columnOptions,
         setState,
         sortBy,
       });
 
       setState({
         orderedTasks,
-        columnOptions: columnOptionsUpdated,
+        columnOptions,
       });
+
+      resolve();
     });
 
     setLoading(false);

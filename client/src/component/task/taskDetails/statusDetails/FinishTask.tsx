@@ -1,14 +1,12 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import { Box, Center, Tooltip } from "@chakra-ui/react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
+import { Center, Tooltip } from "@chakra-ui/react";
 import useTaskDetailContext, {
-  updateCurrentTaskStatus,
+    updateCurrentTaskStatus
 } from "../../../../context/task_detail/useTaskDetailContext";
 
 type Props = {};
 
 export default function FinishTask({}: Props) {
-  const { authState } = useAuthContext();
   const {
     task,
     isModalOpen,
@@ -30,7 +28,7 @@ export default function FinishTask({}: Props) {
         _hover={{ color: "yellow.400", opacity: "100%" }}
         onClick={() => {
           setTask({ ...task!, status: 3 });
-          updateCurrentTaskStatus(sortBy, task!, setState, 3, authState.user!);
+          updateCurrentTaskStatus(sortBy, task!, setState, 3);
         }}
       >
         {/* <i className="bi bi-check-square"></i> */}
