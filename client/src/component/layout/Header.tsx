@@ -11,7 +11,7 @@ import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
 import useGlobalContext from "../../context/global/useGlobalContext";
-import { ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../utils/constant";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 
 type Props = { onToggle: (props?: any) => any; isOpen: boolean };
@@ -63,7 +63,7 @@ export default function Header({ onToggle, isOpen }: Props) {
             color: "black",
             bg: "gray.300",
           }}
-          onClick={() => navigate(ROUTE.ABOUT)}
+          onClick={() => navigate(CLIENT_ROUTE.ABOUT)}
         >
           About
         </Box>
@@ -81,7 +81,7 @@ export default function Header({ onToggle, isOpen }: Props) {
               }}
               onClick={() => {
                 logOutUser(authDispatch, toast);
-                navigate(ROUTE.HOME);
+                navigate(CLIENT_ROUTE.HOME);
               }}
             >
               Log out
@@ -90,7 +90,7 @@ export default function Header({ onToggle, isOpen }: Props) {
         ) : (
           <>
             {/* Login */}
-            {location.pathname === ROUTE.LOGIN ? null : (
+            {location.pathname === CLIENT_ROUTE.LOGIN ? null : (
               <Box
                 p={2}
                 borderRadius={3}
@@ -99,7 +99,7 @@ export default function Header({ onToggle, isOpen }: Props) {
                   color: "black",
                   bg: "gray.300",
                 }}
-                onClick={() => navigate(ROUTE.LOGIN)}
+                onClick={() => navigate(CLIENT_ROUTE.LOGIN)}
               >
                 Log in
               </Box>

@@ -37,17 +37,18 @@ public class AccessTokenFilter extends GenericFilterBean {
         var accessToken = req.getHeader(AUTHORIZATION);
 
         try {
-            var userId = jwtUtilities.getUserIdFromAccessToken(accessToken);
+            var userInfo = jwtUtilities.getUserInfoFromAccessToken(accessToken);
 
-            if (userId != null) {
+            if (userInfo != null) {
                 var authUser = new UsernamePasswordAuthenticationToken(
-                    userId,
+                    userInfo,
                     null,
                     null
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authUser);
             }
+            
             filterChain.doFilter(request, response);
         } catch (InvalidTokenException e) {
             log.warn("User not authorized" + e);

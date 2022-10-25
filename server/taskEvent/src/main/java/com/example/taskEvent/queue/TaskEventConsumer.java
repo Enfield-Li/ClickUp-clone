@@ -19,8 +19,8 @@ public class TaskEventConsumer {
     private final TaskEventService taskEventService;
 
     @RabbitListener(queues = taskEventQueue)
-    public void consumeUpdateEvent(List<UpdateEventDTO> updateEventDTO) {
-        log.info("Consumed {} from queue", updateEventDTO.get(0).toString());
-        taskEventService.addUpdateEvent(updateEventDTO.get(0));
+    public void consumeUpdateEvent(UpdateEventDTO updateEventDTO) {
+        log.info("Consumed {} from queue", updateEventDTO.toString());
+        taskEventService.addUpdateEvent(updateEventDTO);
     }
 }

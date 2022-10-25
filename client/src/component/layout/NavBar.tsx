@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {
   onToggle: (props?: any) => any;
@@ -23,7 +23,7 @@ export default function NavBar({ onToggle }: Props) {
         {/* App icon */}
         <Center py={3}>
           <Heading size="md" px={5}>
-            <Box cursor={"pointer"} onClick={() => navigate(ROUTE.HOME)}>
+            <Box cursor={"pointer"} onClick={() => navigate(CLIENT_ROUTE.HOME)}>
               <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
               Ideas
             </Box>
@@ -56,7 +56,7 @@ export default function NavBar({ onToggle }: Props) {
           color: "black",
           bg: "gray.300",
         }}
-        onClick={() => navigate(ROUTE.HOME)}
+        onClick={() => navigate(CLIENT_ROUTE.HOME)}
       >
         <i className="bi bi-house" style={{ marginRight: 6 }}></i>
         Home
@@ -72,7 +72,7 @@ export default function NavBar({ onToggle }: Props) {
           color: "black",
           bg: "gray.300",
         }}
-        onClick={() => navigate(ROUTE.TASK)}
+        onClick={() => navigate(CLIENT_ROUTE.TASK)}
       >
         <i className="bi bi-hand-index-thumb" style={{ marginRight: 6 }}></i>
         Drag and Drop
@@ -88,7 +88,7 @@ export default function NavBar({ onToggle }: Props) {
           color: "black",
           bg: "gray.300",
         }}
-        onClick={() => navigate(ROUTE.FUNC_TWO)}
+        onClick={() => navigate(CLIENT_ROUTE.FUNC_TWO)}
       >
         <i className="bi bi-question-circle" style={{ marginRight: 6 }}></i>
         Functionality 2

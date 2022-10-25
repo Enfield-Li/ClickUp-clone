@@ -19,7 +19,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
 import useAuthContext, { loginUser } from "../../context/auth/useAuthContext";
 import { register } from "../../serviceWorker";
-import { ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {};
 
@@ -38,13 +38,9 @@ export default function Login({}: Props) {
             password: "",
           }}
           onSubmit={async (credentials) => {
-            const error = await loginUser(
-              credentials,
-              authDispatch,
-              toast
-            );
+            const error = await loginUser(credentials, authDispatch, toast);
 
-            if (error === undefined) navigate(ROUTE.HOME);
+            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors(error);
           }}
         >
@@ -88,7 +84,7 @@ export default function Login({}: Props) {
                   <ChakraLink
                     mt={2}
                     color="teal.400"
-                    onClick={() => navigate(ROUTE.REGISTER)}
+                    onClick={() => navigate(CLIENT_ROUTE.REGISTER)}
                   >
                     Register now
                   </ChakraLink>

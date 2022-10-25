@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 public class TaskCommentService {
 
     // private final RestTemplate restTemplate;
-    private final TaskCommentRepository taskCommentRepository;
-    private final RabbitMqMessageProducer rabbitMQMessageProducer;
+    // private final TaskCommentRepository taskCommentRepository;
+    // private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public void createComment() {
-        rabbitMQMessageProducer.publish(
-            internalExchange,
-            notificationRoutingKey,
-            1
-        );
+        // rabbitMQMessageProducer.publish(
+        //     internalExchange,
+        //     notificationRoutingKey,
+        //     1
+        // );
     }
 }

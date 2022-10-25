@@ -19,6 +19,9 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
         @Param("id") Integer id
     );
 
+    @Query(value = "SELECT title FROM task WHERE id = :id", nativeQuery = true)
+    String getTaskTitle(@Param("id") Integer id);
+
     @Modifying
     @Query(
         value = "UPDATE task SET description = :description WHERE id = :id",

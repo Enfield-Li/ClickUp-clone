@@ -128,6 +128,8 @@ export interface CommentEvent extends BaseEvent {
   reactions: Reaction[];
 }
 
+export type TaskEvents = (UpdateEvent | CommentEvent | AssignmentEvent)[];
+
 export type Task = {
   id?: number;
   title: string;
@@ -144,8 +146,8 @@ export type Task = {
   watchers: UserInfo[];
   assignees: UserInfo[];
   // Determine the task order
+  taskEvents: TaskEvents;
   previousTask: PreviousTask;
-  taskEvents: (UpdateEvent | CommentEvent | AssignmentEvent)[];
   // Keep previousTask record when set to finish
   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
 };
@@ -227,11 +229,11 @@ export type UpdateTasksPositionDTO = {
 };
 
 export type UpdateTaskTitleDTO = {
-  id: number;
+  taskId: number;
   newTitle: string;
 };
 
 export type UpdateTaskDescDTO = {
-  id: number;
+  taskId: number;
   newDesc: string;
 };

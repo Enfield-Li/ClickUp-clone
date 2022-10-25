@@ -1,4 +1,4 @@
-import { API_ENDPOINT, BEARER } from "../../utils/constant";
+import { API_ENDPOINT, BEARER, CLIENT_ROUTE } from "../../utils/constant";
 import axios, { AxiosError } from "axios";
 import React, { useContext } from "react";
 import { AuthContext } from "./AuthContext";
@@ -13,6 +13,7 @@ import {
 import { ACCESS_TOKEN } from "../../utils/constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
+import { NavigateFunction } from "react-router-dom";
 
 export default function useAuthContext() {
   return useContext(AuthContext);
@@ -129,11 +130,10 @@ export async function registerUser(
 
 export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
-  toast: (options?: UseToastOptions | undefined) => ToastId
+  toast: (options?: UseToastOptions | undefined) => ToastId,
+  navigate: NavigateFunction
 ) {
   try {
-    if (!localStorage.getItem(ACCESS_TOKEN)) return;
-
     const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_REFRESH_TOKEN
     );
@@ -156,6 +156,7 @@ export async function refreshUserToken(
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
+    navigate(CLIENT_ROUTE.LOGIN);
     toast({
       title: "Error!",
       description: err.response?.data as string,

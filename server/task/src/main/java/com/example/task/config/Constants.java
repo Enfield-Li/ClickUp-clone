@@ -1,4 +1,4 @@
-package com.example.task;
+package com.example.task.config;
 
 public class Constants {
 

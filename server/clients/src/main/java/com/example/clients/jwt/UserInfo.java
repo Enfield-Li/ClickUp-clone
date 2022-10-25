@@ -1,4 +1,4 @@
-package com.example.clients.taskEvent.assignmentEventDTO;
+package com.example.clients.jwt;
 
 public record UserInfo(
     Integer userId,

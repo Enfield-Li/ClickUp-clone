@@ -27,7 +27,7 @@ import useAuthContext, {
   registerUser,
 } from "../../context/auth/useAuthContext";
 import { register } from "../../serviceWorker";
-import { ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../utils/constant";
 type Props = {};
 
 export default function Register({}: Props) {
@@ -52,7 +52,7 @@ export default function Register({}: Props) {
           }}
           onSubmit={async (credentials) => {
             const error = await registerUser(credentials, authDispatch, toast);
-            if (error === undefined) navigate(ROUTE.HOME);
+            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors(error);
           }}
         >

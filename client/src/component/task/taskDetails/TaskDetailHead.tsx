@@ -67,7 +67,7 @@ export async function updateTaskTitle(
 ) {
   try {
     const updateTaskTitleDTO: UpdateTaskTitleDTO = {
-      id: taskId,
+      taskId: taskId,
       newTitle,
     };
 

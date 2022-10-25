@@ -15,7 +15,6 @@ public class TaskEventService {
 
     public void addUpdateEvent(UpdateEventDTO updateEventDTO) {
         var taskEvent = UpdateEvent.toUpdateEvent(updateEventDTO);
-
         updateEventRepository.save(taskEvent);
     }
 

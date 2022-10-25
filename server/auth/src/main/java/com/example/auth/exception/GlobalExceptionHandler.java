@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         log.error("InvalidateCredentialsException");
         return ResponseEntity
             .status(HttpStatus.UNAUTHORIZED)
-            .body("Failed to login, please try again.");
+            .body("Invalid username or password.");
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

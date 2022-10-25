@@ -4,6 +4,10 @@ import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
 import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
 
 import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.jwt.JwtUtilities;
+import com.example.clients.jwt.UserInfo;
+import com.example.clients.taskEvent.Field;
+import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -13,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,26 +25,39 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TaskService {
 
-    private final EntityManager entityManager;
     private final TaskRepository taskRepository;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
+
+    private UserInfo getCurrentUserInfo() {
+        return (UserInfo) SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getPrincipal();
+    }
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {
-        // TODO: Manage relationship
-        // setTaskForWatcher(task);
-        return taskRepository.save(
-            Task.createTaskDtoToTask(createTaskDTO, 3, "user")
-        );
+        var userInfo = getCurrentUserInfo();
+        var userId = userInfo.userId();
+        var username = userInfo.username();
+
+        var task = Task.createTaskDtoToTask(createTaskDTO, userId, username);
+        setTaskForWatcher(task);
+
+        return taskRepository.save(task);
     }
 
     @Transactional
     public Boolean updateTasksPosition(
         UpdateTasksPositionDTO updateTasksPositionDTO
     ) {
+        var userInfo = getCurrentUserInfo();
+        var userId = userInfo.userId();
+        var username = userInfo.username();
+
         // When updating sourceTask, a new event will be created for it
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
@@ -49,18 +67,22 @@ public class TaskService {
             .filter(task -> task.id() == sourceTaskId)
             .findAny();
 
+        var updateEventDTO = sourceTask.get().taskEvents().get(0);
+        updateEventDTO.setUserId(userId);
+        updateEventDTO.setUsername(username);
+
         // publish task update event
         rabbitMQMessageProducer.publish(
             internalExchange,
             taskEventRoutingKey,
-            sourceTask.get().taskEvents()
+            updateEventDTO
         );
 
         // DTO to entity
         var tasks = new ArrayList<Task>();
         taskDtoList.forEach(
             taskDTO -> {
-                var task = Task.updateTaskDtoToTask(taskDTO, 1, "user");
+                var task = Task.updateTaskDtoToTask(taskDTO, userId, username);
                 setTaskFroWatcherAndAssignee(task);
                 tasks.add(task);
             }
@@ -72,10 +94,32 @@ public class TaskService {
 
     @Transactional
     public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
-        var id = updateTaskTitleDTO.id();
-        var newTitle = updateTaskTitleDTO.newTitle();
+        var userInfo = getCurrentUserInfo();
+        var userId = userInfo.userId();
+        var username = userInfo.username();
 
-        return taskRepository.updateTaskTitle(newTitle, id) > 0;
+        var taskId = updateTaskTitleDTO.taskId();
+        var newTitle = updateTaskTitleDTO.newTitle();
+        var oldTitle = taskRepository.getTaskTitle(taskId);
+
+        var updateEventDTO = UpdateEventDTO
+            .builder()
+            .userId(userId)
+            .username(username)
+            .field(Field.title)
+            .beforeUpdate(oldTitle)
+            .afterUpdate(newTitle)
+            .taskId(taskId)
+            .build();
+
+        // publish task update event
+        rabbitMQMessageProducer.publish(
+            internalExchange,
+            taskEventRoutingKey,
+            updateEventDTO
+        );
+
+        return taskRepository.updateTaskTitle(newTitle, taskId) > 0;
     }
 
     @Transactional

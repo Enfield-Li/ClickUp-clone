@@ -18,14 +18,14 @@ public class TaskEventExchangeConfig {
     }
 
     @Bean
-    public Queue notificationQueue() {
+    public Queue taskEventQueue() {
         return new Queue(taskEventQueue);
     }
 
     @Bean
-    public Binding internalToNotificationBinding() {
+    public Binding internalToTaskEventBinding() {
         return BindingBuilder
-            .bind(notificationQueue())
+            .bind(taskEventQueue())
             .to(internalTopicExchange())
             .with(taskEventRoutingKey);
     }

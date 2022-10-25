@@ -1,6 +1,7 @@
 package com.example.task.dto;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,6 @@ public record UpdateTaskDTO(
    PreviousTask previousTask,
    Set<Participant> watchers,
    Set<Participant> assignees,
-   Set<UpdateEventDTO> taskEvents,
+   List<UpdateEventDTO> taskEvents,
    PreviousTaskBeforeFinish previousTaskBeforeFinish
 ) {}

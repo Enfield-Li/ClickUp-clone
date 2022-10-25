@@ -28,12 +28,12 @@ public class UpdateEvent extends BaseEvent {
     public static UpdateEvent toUpdateEvent(UpdateEventDTO updateEventDTO) {
         return UpdateEvent
             .builder()
-            .beforeUpdate(updateEventDTO.beforeUpdate())
-            .afterUpdate(updateEventDTO.afterUpdate())
-            .field(updateEventDTO.field())
-            .taskId(updateEventDTO.taskId())
-            .userId(updateEventDTO.userId())
-            .username(updateEventDTO.username())
+            .beforeUpdate(updateEventDTO.getBeforeUpdate())
+            .afterUpdate(updateEventDTO.getAfterUpdate())
+            .field(updateEventDTO.getField())
+            .taskId(updateEventDTO.getTaskId())
+            .userId(updateEventDTO.getUserId())
+            .username(updateEventDTO.getUsername())
             .build();
     }
 }

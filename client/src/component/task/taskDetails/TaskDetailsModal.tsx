@@ -11,11 +11,12 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import TaskInfo from "./TaskInfo";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
+import { getTaskEvent } from "../TaskActions";
 
 type Props = {};
 
@@ -32,6 +33,12 @@ export default function TaskDetailModal({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
+
+  useEffect(() => {
+    if (task?.id) getTaskEvent(task.id, setTask);
+  }, []);
+
+  if (!task?.taskEvents.length) return <div>loading</div>;
 
   return (
     <Modal

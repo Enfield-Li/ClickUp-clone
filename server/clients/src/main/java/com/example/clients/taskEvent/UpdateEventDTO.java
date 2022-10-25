@@ -1,16 +1,29 @@
 package com.example.clients.taskEvent;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.example.clients.taskEvent.assignmentEventDTO.AssignmentEventAction;
-import com.example.clients.taskEvent.assignmentEventDTO.UserInfo;
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UpdateEventDTO implements Serializable {
 
-public record UpdateEventDTO(
-    @NotNull Field field,
-    @NotNull Integer taskId,
-    @NotNull Integer userId,
-    @NotNull String username,
+    @NotNull
+    private Field field;
 
-    String afterUpdate,
-    String beforeUpdate
-) {}
+    @NotNull
+    private Integer taskId;
+
+    private Integer userId;
+
+    private String username;
+
+    private String afterUpdate;
+    private String beforeUpdate;
+}

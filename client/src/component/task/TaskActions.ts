@@ -1,10 +1,30 @@
+import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
 import { toPlainObject } from "../../utils/proxyToObject";
-import { Task, TaskList, UpdateTasksPositionDTO } from "./taskTypes";
+import {
+  Task,
+  TaskEvents,
+  TaskList,
+  UpdateTasksPositionDTO,
+} from "./taskTypes";
+
+export async function getTaskEvent(taskId: number, setTask: SetTask) {
+  try {
+    const res = await axiosInstance.get<TaskEvents>(
+      API_ENDPOINT.TASK_EVENT + `/${taskId}`
+    );
+
+    setTask((previousTask) => {
+      if (previousTask) return { ...previousTask, taskEvents: res.data };
+      return;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function createTask(task: Task) {
-  console.log({ task });
   try {
     const res = await axiosInstance.post<Task>(API_ENDPOINT.TASK, task);
 
@@ -29,7 +49,6 @@ export async function getAllTasks() {
 export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
-  console.log({ updateTaskPositionDTO: toPlainObject(updateTasksPositionDTO) });
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,

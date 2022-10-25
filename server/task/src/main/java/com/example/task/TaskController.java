@@ -1,7 +1,7 @@
 package com.example.task;
 
 import static com.example.clients.UrlConstants.*;
-import static com.example.task.Constants.*;
+import static com.example.task.config.Constants.*;
 
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
@@ -57,7 +57,7 @@ class TaskController {
 
     @PutMapping
     ResponseEntity<Boolean> updateTasksPosition(
-        @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
+        @Valid @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
     ) {
         var updatedTasks = taskService.updateTasksPosition(
             updateTasksPositionDTO

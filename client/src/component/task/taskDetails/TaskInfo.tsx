@@ -95,7 +95,7 @@ export async function updateTaskDesc(
 ) {
   try {
     const updateTaskDescDTO: UpdateTaskDescDTO = {
-      id: taskId,
+      taskId: taskId,
       newDesc,
     };
 

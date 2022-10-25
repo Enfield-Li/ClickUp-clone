@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
 public interface JwtUtilities {
-    String createAccessToken(Integer userId);
+    String createAccessToken(Integer userId, String username);
 
     String createRefreshToken(Integer userId, Integer tokenVersion);
 
@@ -14,6 +14,6 @@ public interface JwtUtilities {
     RefreshTokenPayload getPayloadFromRefreshToken(String bearerToken)
         throws InvalidTokenException;
 
-    Integer getUserIdFromAccessToken(String bearerToken)
+    UserInfo getUserInfoFromAccessToken(String bearerToken)
         throws InvalidTokenException;
 }

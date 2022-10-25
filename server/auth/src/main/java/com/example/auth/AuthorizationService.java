@@ -104,7 +104,7 @@ public class AuthorizationService {
         var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
         // 2. validate tokens and retrieve payload
-        var userIdInAccessToken = jwtUtils.getUserIdFromAccessToken(
+        var userIdInAccessToken = jwtUtils.getUserInfoFromAccessToken(
             accessToken
         );
 
@@ -116,13 +116,13 @@ public class AuthorizationService {
 
         // 3. check if token version is valid
         var applicationUser = repository
-            .findById(userIdInAccessToken)
+            .findById(userIdInAccessToken.userId())
             .orElseThrow(() -> new InvalidTokenException());
         var username = applicationUser.getUsername();
 
         if (
             tokenVersion != applicationUser.getRefreshTokenVersion() ||
-            userIdInAccessToken != userIdInRefreshToken
+            userIdInAccessToken.userId() != userIdInRefreshToken
         ) {
             log.error("Token version mismatch.");
             session.invalidate();
@@ -132,7 +132,7 @@ public class AuthorizationService {
         // 4. generate refresh token and save to session
         //    generate access token & response
         var userResponse = createSaveTokensToSessionAndResponse(
-            userIdInAccessToken,
+            userIdInAccessToken.userId(),
             username,
             tokenVersion
         );
@@ -157,7 +157,7 @@ public class AuthorizationService {
         var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
         session.setAttribute(REFRESH_TOKEN, refreshToken);
 
-        var accessToken = jwtUtils.createAccessToken(userId);
+        var accessToken = jwtUtils.createAccessToken(userId, username);
 
         return AuthorizationResponse
             .builder()
