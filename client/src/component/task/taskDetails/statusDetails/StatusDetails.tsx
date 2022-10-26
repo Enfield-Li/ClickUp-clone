@@ -26,7 +26,6 @@ export default function StatusDetails({}: Props) {
   const column = columnOptions.status.find(
     (column) => column.id === task!.status
   );
-  const statusButtonColor = column?.color.split(".")[0];
 
   return (
     <Center>
@@ -41,43 +40,55 @@ export default function StatusDetails({}: Props) {
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <Flex
-              width="96px"
-              height="35px"
+              height="33px"
               cursor="pointer"
+              // https://stackoverflow.com/a/16765030/16648127
+              width="fit-content"
               alignContent="center"
               justifyContent="center"
               onMouseOverCapture={() => setOnHover(true)}
               onMouseOutCapture={() => setOnHover(false)}
-              style={{ padding: onHover && !isOpen ? "" : "2px" }}
+              //   px={onHover && !isOpen ? "" : "2px"}
             >
               {/* Choose status */}
               <PopoverTrigger>
                 <Center
-                  width="70px"
+                  px={4}
+                  width="fit-content"
                   onClick={onToggle}
                   alignSelf="center"
                   borderLeftRadius="sm"
+                  borderColor={column?.color}
                   backgroundColor={column?.color}
-                  height={onHover && !isOpen ? "35px" : "33px"}
+                  height={onHover && !isOpen ? "37px" : "33px"}
+                  //   borderLeftWidth={onHover && !isOpen ? "4px" : ""}
                 >
                   {column?.title}
                 </Center>
               </PopoverTrigger>
 
               {/* Next stage */}
-              <Box
+              <Center
+                ml="1px"
                 width="24px"
+                fontSize="9px"
                 alignSelf="center"
                 borderRightRadius="sm"
+                borderColor={column?.color}
                 backgroundColor={column?.color}
-                style={{ marginLeft: "1px" }}
-                height={onHover && !isOpen ? "35px" : "33px"}
-              ></Box>
+                height={onHover && !isOpen ? "37px" : "33px"}
+                // borderRightWidth={onHover && !isOpen ? "4px" : ""}
+                onClick={() => {
+                  console.log(columnOptions.status);
+                }}
+              >
+                <i className="bi bi-caret-right-fill"></i>
+              </Center>
             </Flex>
 
             {/* Status option */}
             <PopoverContent width="200px">
-              <PopoverBody shadow={"2xl"}>
+              <PopoverBody shadow="2xl">
                 <StatusOptions onOptionClose={onOptionClose} />
               </PopoverBody>
             </PopoverContent>

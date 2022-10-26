@@ -10,7 +10,7 @@ export default function TaskCreatorInfo({}: Props) {
   const { task } = useTaskDetailContext();
 
   return (
-    <Flex justifyContent="space-between" fontSize="small" opacity="65%">
+    <Flex justifyContent="space-between" fontSize="small">
       <Flex alignItems="center">
         {/* Someone */}
         <Box
@@ -30,10 +30,10 @@ export default function TaskCreatorInfo({}: Props) {
         </Box>
 
         {/* Created this task */}
-        <Box>&nbsp;created this task</Box>
+        <Box opacity="65%">&nbsp;created this task</Box>
       </Flex>
 
-      <Box>{calculateTime(task?.createdAt!)}</Box>
+      <Box opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Box>
     </Flex>
   );
 }

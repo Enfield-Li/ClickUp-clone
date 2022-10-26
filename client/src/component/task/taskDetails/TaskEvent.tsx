@@ -27,7 +27,9 @@ export default function TaskEvent({}: Props) {
         {/* Created at */}
         <Box fontSize="small" height="35px" mr={2}>
           <Box opacity="50%">CREATED</Box>
-          <Box opacity="65%">{new Date(task?.createdAt!).toLocaleDateString()}</Box>
+          <Box opacity="65%">
+            {new Date(task?.createdAt!).toLocaleDateString()}
+          </Box>
         </Box>
 
         <Center mx={4}>
@@ -44,9 +46,10 @@ export default function TaskEvent({}: Props) {
         px={3}
         height="335px"
         overflow="auto"
-        flexDirection="column-reverse"
+        flexDirection="column"
         // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
       >
+        <TaskCreatorInfo />
         {task?.taskEvents.map((event) => (
           <Box key={event.id}>
             <Box py={1}>
@@ -60,7 +63,6 @@ export default function TaskEvent({}: Props) {
             </Box>
           </Box>
         ))}
-        <TaskCreatorInfo />
       </Flex>
     </Box>
   );

@@ -54,7 +54,7 @@ export default function TaskDetailModal({}: Props) {
         </ModalHeader>
 
         {/* Body */}
-        <ModalBody>
+        <ModalBody pb={6} mb={2}>
           <Flex height="100%" justifyContent="center" alignContent="center">
             {/* Left side */}
             <TaskInfo />
@@ -73,11 +73,11 @@ export default function TaskDetailModal({}: Props) {
         <ModalCloseButton ref={initialRef} />
 
         {/* Footer */}
-        <ModalFooter>
+        {/* <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onModalClose}>
             Close
           </Button>
-        </ModalFooter>
+        </ModalFooter> */}
       </ModalContent>
     </Modal>
   );
