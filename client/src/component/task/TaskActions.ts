@@ -9,6 +9,8 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 
+export async function getTasks() {}
+
 export async function getTaskEvent(taskId: number, setTask: SetTask) {
   try {
     const res = await axiosInstance.get<TaskEvents>(

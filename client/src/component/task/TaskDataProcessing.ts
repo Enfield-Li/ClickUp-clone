@@ -243,12 +243,15 @@ export function getDueDateColumnFromDateString(
   return 1; // Default No due date
 }
 
-// convert expectedDueDate to dueDate
-export function convertToDueDate(
+export function processTaskList(
   dueDateColumn: DueDateColumns,
   taskList: TaskList
 ) {
-  taskList.forEach((task) => {
+  return taskList.map((task) => {
+    // init taskEvents
+    if (!task.taskEvents || task.taskEvents.length) task.taskEvents = [];
+
+    // convert expectedDueDate to dueDate
     const taskExpectedDueDateString = task.expectedDueDate
       ? toYYYYMMDDString(task.expectedDueDate)
       : "";
@@ -257,9 +260,9 @@ export function convertToDueDate(
       dueDateColumn,
       taskExpectedDueDateString
     );
-  });
 
-  return taskList;
+    return task;
+  });
 }
 
 // Push task to the other sortBy id === 1 column

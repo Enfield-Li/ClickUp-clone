@@ -19,6 +19,7 @@
         <module>task</module>
         <module>taskEvent</module>
         <module>taskComment</module>
+        <module>serviceSecurityConfig</module>
     </modules>
 
     <properties>

@@ -9,7 +9,12 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableEurekaClient
 // @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(
-    scanBasePackages = { "com.example.amqp", "com.example.taskComment" }
+    scanBasePackages = {
+        "com.example.amqp",
+        "com.example.clients",
+        "com.example.taskComment",
+        "com.example.serviceSecurityConfig",
+    }
 )
 public class TaskCommentApplication {
 

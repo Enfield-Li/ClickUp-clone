@@ -21,10 +21,9 @@ export default function TaskCard({ task, index }: Props) {
           <Box
             p={4}
             my={3}
-            w={"full"}
+            w="full"
             bg={bgColor}
-            rounded={"md"}
-            boxShadow={"xl"}
+            rounded="md"
             onClick={() => {
               onModalOpen();
               setTask(task);
@@ -32,13 +31,13 @@ export default function TaskCard({ task, index }: Props) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            border={snapshot.isDragging ? "1px" : ""}
+            boxShadow={snapshot.isDragging ? "outline" : "xl"}
           >
             <Stack>
-              <Heading color={headerColor} fontSize={"2xl"} fontFamily={"body"}>
+              <Heading color={headerColor} fontSize="2xl" fontFamily="body">
                 {task.title}
               </Heading>
-              <Text color={"gray.400"}>Lorem ipsum dolor</Text>
+              <Text color="gray.400">Lorem ipsum dolor</Text>
             </Stack>
           </Box>
         )}

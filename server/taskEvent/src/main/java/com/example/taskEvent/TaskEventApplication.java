@@ -6,7 +6,12 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableEurekaClient
 @SpringBootApplication(
-    scanBasePackages = { "com.example.amqp", "com.example.taskEvent" }
+    scanBasePackages = {
+        "com.example.amqp",
+        "com.example.clients",
+        "com.example.taskEvent",
+        "com.example.serviceSecurityConfig",
+    }
 )
 public class TaskEventApplication {
 

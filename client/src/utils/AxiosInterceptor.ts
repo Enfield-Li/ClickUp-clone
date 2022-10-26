@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { ACCESS_TOKEN, AUTH_ENDPOINT, BEARER } from "./constant";
+import { ACCESS_TOKEN, BASE_ENDPOINT, BEARER } from "./constant";
 
 export const axiosInstance = axios.create({
-  baseURL: AUTH_ENDPOINT,
+  baseURL: BASE_ENDPOINT,
 });
 
 axiosInstance.interceptors.request.use((config) => {

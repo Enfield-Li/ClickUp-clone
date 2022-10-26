@@ -7,14 +7,14 @@ const LOGIN = "/login";
 const LOGOUT = "/logout";
 const REGISTER = "/register";
 const REFRESH_TOKEN = "/refresh_token";
-
-export const AUTH_ENDPOINT = "http://localhost:8083";
-const AUTH_API_VERSION = "/authorization/v1/user";
-
-const TASK_API_VERSION = "/api/v1/task";
-const ALL_TASKS = "/all_tasks";
-const UPDATE_TASK_TITLE = "/update_title";
 const UPDATE_TASK_DESC = "/update_desc";
+
+export const BASE_ENDPOINT = "http://localhost:8083";
+
+const ALL_TASKS = "/all_tasks";
+const TASK_API_VERSION = "/api/v1/task";
+const UPDATE_TASK_TITLE = "/update_title";
+const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 
 export const API_ENDPOINT = {

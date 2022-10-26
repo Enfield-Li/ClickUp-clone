@@ -37,21 +37,22 @@ export default function Column({
   dueDateColumns,
 }: Props) {
   return (
-    <Box width={"280px"}>
+    <Box width="280px">
       {/* Column header */}
       <Flex
         m={2}
-        p={2}
+        p={3}
         borderTop="2px"
-        borderTopRadius={"sm"}
+        boxShadow="base"
+        borderTopRadius="sm"
         borderColor={currentColumn.color}
       >
         {/* Title */}
         <Text
-          textTransform={"uppercase"}
+          fontSize="sm"
           fontWeight={800}
-          fontSize={"sm"}
           letterSpacing={1.1}
+          textTransform="uppercase"
         >
           {currentColumn.title}
         </Text>
@@ -59,7 +60,7 @@ export default function Column({
         <Spacer />
 
         {/* Option */}
-        <Box cursor={"pointer"}>
+        <Box cursor="pointer">
           <i className="bi bi-gear"></i>
         </Box>
       </Flex>
@@ -69,11 +70,12 @@ export default function Column({
         {(provided, snapshot) => (
           <Box
             my={2}
+            px={2}
+            height="500px"
+            overflow="auto"
+            minHeight="100px"
             ref={provided.innerRef}
             {...provided.droppableProps}
-            minHeight={"100px"}
-            height={"500px"}
-            overflow={"auto"}
           >
             {/* Task list */}
             {tasks?.map((task, index) => (

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SortBy, State, TaskList } from "../component/task/taskTypes";
 import {
   collectAllTasks,
-  convertToDueDate,
+  processTaskList,
   groupTaskListOnSortBy,
   initializeDueDataColumns,
 } from "../component/task/TaskDataProcessing";
@@ -73,8 +73,8 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         dueDate: dueDateColumns,
       };
 
-      // convert expectedDueDate to dueDate
-      const taskList = convertToDueDate(dueDateColumns, response.data);
+      // init taskEvents and convert expectedDueDate to dueDate
+      const taskList = processTaskList(dueDateColumns, response.data);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
@@ -158,8 +158,8 @@ export function useLocalTasks(sortBy: SortBy) {
         dueDate: dueDateColumns,
       };
 
-      // convert expectedDueDate to dueDate
-      const taskList = convertToDueDate(dueDateColumns, mockTaskList);
+      // init taskEvents and convert expectedDueDate to dueDate
+      const taskList = processTaskList(dueDateColumns, mockTaskList);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,

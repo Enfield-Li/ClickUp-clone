@@ -1,4 +1,4 @@
-package com.example.task.security;
+package com.example.serviceSecurityConfig;
 
 import static com.example.clients.UrlConstants.AUTHORIZATION;
 

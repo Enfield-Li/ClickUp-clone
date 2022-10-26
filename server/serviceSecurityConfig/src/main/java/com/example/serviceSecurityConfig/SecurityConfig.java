@@ -1,4 +1,4 @@
-package com.example.task.security;
+package com.example.serviceSecurityConfig;
 
 import com.example.clients.jwt.JwtUtilities;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,7 +7,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableEurekaClient
 @SpringBootApplication(
     scanBasePackages = {
-        "com.example.task", "com.example.clients", "com.example.amqp",
+        "com.example.task",
+        "com.example.amqp",
+        "com.example.clients",
+        "com.example.serviceSecurityConfig",
     }
 )
 public class TaskApplication {
