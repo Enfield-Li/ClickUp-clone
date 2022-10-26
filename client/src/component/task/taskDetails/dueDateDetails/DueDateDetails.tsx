@@ -13,8 +13,8 @@ type Props = {};
 export default function DueDateDetails({}: Props) {
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,

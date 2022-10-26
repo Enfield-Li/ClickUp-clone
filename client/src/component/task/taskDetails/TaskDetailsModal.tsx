@@ -24,8 +24,8 @@ export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,
@@ -37,8 +37,6 @@ export default function TaskDetailModal({}: Props) {
   useEffect(() => {
     if (task?.id) getTaskEvent(task.id, setTask);
   }, []);
-
-  if (!task?.taskEvents.length) return <div>loading</div>;
 
   return (
     <Modal

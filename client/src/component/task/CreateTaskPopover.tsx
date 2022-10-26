@@ -289,6 +289,7 @@ async function submit(
   newTask.previousTask[`${sortBy}Id`] = previousTaskId;
 
   const newTaskData = await createTask(newTask);
+  if(newTaskData) newTaskData.taskEvents = []
 
   // Update state
   setState((previousState) => {

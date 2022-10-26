@@ -1,7 +1,7 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Center, Tooltip } from "@chakra-ui/react";
 import useTaskDetailContext, {
-    updateCurrentTaskStatus
+  updateCurrentTaskStatus,
 } from "../../../../context/task_detail/useTaskDetailContext";
 
 type Props = {};
@@ -9,8 +9,8 @@ type Props = {};
 export default function FinishTask({}: Props) {
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,

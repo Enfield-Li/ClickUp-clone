@@ -16,7 +16,6 @@ export default function TaskView({}: Props) {
       <TaskNavigation sortBy={sortBy} setSortBy={setSortBy} />
       <TaskListView sortBy={sortBy} />
 
-      {/* Task details inside Modal */}
       {isModalOpen && <TaskDetailModal />}
     </>
   );

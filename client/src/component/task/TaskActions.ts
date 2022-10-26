@@ -12,6 +12,7 @@ import {
 export async function getTasks() {}
 
 export async function getTaskEvent(taskId: number, setTask: SetTask) {
+  console.log("getTaskEvent: ", taskId);
   try {
     const res = await axiosInstance.get<TaskEvents>(
       API_ENDPOINT.TASK_EVENT + `/${taskId}`

@@ -19,8 +19,8 @@ export default function TaskDetailHead({}: Props) {
 
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,

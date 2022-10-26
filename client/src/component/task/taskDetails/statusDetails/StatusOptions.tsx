@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext, {
-    updateCurrentTaskStatus
+  updateCurrentTaskStatus,
 } from "../../../../context/task_detail/useTaskDetailContext";
 
 type Props = { onOptionClose: () => void };
@@ -8,8 +8,8 @@ type Props = { onOptionClose: () => void };
 export default function StatusOptions({ onOptionClose }: Props) {
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,

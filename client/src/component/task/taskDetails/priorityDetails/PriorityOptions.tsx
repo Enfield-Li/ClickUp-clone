@@ -8,8 +8,8 @@ type Props = { onOptionClose: () => void };
 export default function PriorityOptions({ onOptionClose }: Props) {
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,

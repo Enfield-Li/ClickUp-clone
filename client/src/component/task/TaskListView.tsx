@@ -1,7 +1,7 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
+import { useFetchTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import AddColumn from "./AddColumn";
 import Column from "./Column";
@@ -28,7 +28,7 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-//   const { state, setState, loading } = useLocalTasks(sortBy);
+  // const { state, setState, loading } = useLocalTasks(sortBy);
   const { state, loading, error, setState } = useFetchTasks(
     API_ENDPOINT.TASK_ALL_TASKS,
     sortBy

@@ -27,7 +27,7 @@ export default function TaskEvent({}: Props) {
         {/* Created at */}
         <Box fontSize="small" height="35px" mr={2}>
           <Box opacity="50%">CREATED</Box>
-          <Box opacity="65%">{task?.createdAt?.toLocaleDateString()}</Box>
+          <Box opacity="65%">{new Date(task?.createdAt!).toLocaleDateString()}</Box>
         </Box>
 
         <Center mx={4}>

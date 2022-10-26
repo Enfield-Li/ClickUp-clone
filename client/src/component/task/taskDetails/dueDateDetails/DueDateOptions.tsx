@@ -19,8 +19,8 @@ export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
 
   const {
     task,
-    isModalOpen,
     setTask,
+    isModalOpen,
     onModalOpen,
     onModalClose,
     taskStateContext,
