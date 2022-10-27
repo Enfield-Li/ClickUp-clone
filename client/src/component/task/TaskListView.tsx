@@ -3,13 +3,12 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
-import ColumnHeader from "./columnDetails/ColumnHeader";
 import Column from "./Column";
 import { updateTasksPosition } from "./TaskActions";
 import {
   processLookUpDueDateId,
   updateTaskStatsInColumn,
-} from "./TaskDataProcessing";
+} from "./dataProcessing/taskProcessing";
 import {
   DUE_DATE,
   LookUpDueDateId,
@@ -22,6 +21,7 @@ import {
   TaskList,
   UpdateTasksPositionDTO,
 } from "./taskTypes";
+import AddStatusColumn from "./columnDetails/AddStatusColumn";
 
 type Props = {
   sortBy: SortBy;
@@ -47,8 +47,11 @@ export default function TaskListView({ sortBy }: Props) {
         <Flex>
           {/* Columns and tasks */}
           {currentColumns.map((currentColumn, index) => {
-            // Task marked as finished is managed in "status", and hidden in other sortBy conditions
+            // Task marked as finished is managed in "status", and hidden from other sortBy conditions
             const columnWithTaskStatusDone = currentColumn.id !== 0;
+            const taskListForCurrentColumn = state.orderedTasks.find(
+              (orderedTask) => orderedTask.id === currentColumn.id
+            )?.taskList;
 
             return (
               columnWithTaskStatusDone && (
@@ -58,13 +61,9 @@ export default function TaskListView({ sortBy }: Props) {
                     sortBy={sortBy}
                     setState={setState}
                     currentColumn={currentColumn}
-                    dueDateColumns={state.columnOptions.dueDate}
                     // Pass down list as per column.id
-                    tasks={
-                      state.orderedTasks.find(
-                        (orderedTask) => orderedTask.id === currentColumn.id
-                      )?.taskList
-                    }
+                    tasks={taskListForCurrentColumn}
+                    dueDateColumns={state.columnOptions.dueDate}
                   />
                 </Box>
               )
@@ -74,12 +73,7 @@ export default function TaskListView({ sortBy }: Props) {
           {/* Add column in status */}
           {sortBy === STATUS && (
             <Box mx={2}>
-              <ColumnHeader
-                sortBy={sortBy}
-                title={"ADD COLUMN"}
-                color={"gray.300"}
-                setState={setState}
-              />
+              <AddStatusColumn setState={setState} />
             </Box>
           )}
         </Flex>

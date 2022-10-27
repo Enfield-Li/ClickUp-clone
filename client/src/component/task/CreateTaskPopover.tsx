@@ -36,7 +36,7 @@ import { createTask } from "./TaskActions";
 import {
   getDueDateColumnFromDateString,
   updateTaskStatsInColumn,
-} from "./TaskDataProcessing";
+} from "./dataProcessing/taskProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
 import {
   getNextNWeekDayString,
@@ -113,7 +113,7 @@ export const CreateTaskPopover = ({
                 currentColumn,
                 sortBy,
                 setState,
-                isTaskDone,
+                isTaskDone
               )
             }
           >
@@ -289,7 +289,7 @@ async function submit(
   newTask.previousTask[`${sortBy}Id`] = previousTaskId;
 
   const newTaskData = await createTask(newTask);
-  if(newTaskData) newTaskData.taskEvents = []
+  if (newTaskData) newTaskData.taskEvents = [];
 
   // Update state
   setState((previousState) => {

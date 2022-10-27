@@ -1,7 +1,7 @@
 import produce from "immer";
 import { useContext } from "react";
 import { updateTasksPosition } from "../../component/task/TaskActions";
-import { updateTaskStatsInColumn } from "../../component/task/TaskDataProcessing";
+import { updateTaskStatsInColumn } from "../../component/task/dataProcessing/taskProcessing";
 import {
   lookUpPreviousTaskId,
   SetState,

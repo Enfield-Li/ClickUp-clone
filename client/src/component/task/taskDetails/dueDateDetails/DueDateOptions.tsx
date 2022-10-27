@@ -4,7 +4,7 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
-import { getDueDateColumnFromDateString } from "../../TaskDataProcessing";
+import { getDueDateColumnFromDateString } from "../../dataProcessing/taskProcessing";
 
 type Props = { onOptionClose: () => void; isOptionOpen: boolean };
 

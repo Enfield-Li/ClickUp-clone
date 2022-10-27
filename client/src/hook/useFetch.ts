@@ -5,13 +5,13 @@ import {
   collectAllTasks,
   processTaskList,
   groupTaskListOnSortBy,
-  initializeDueDataColumns,
   processLocalTaskList,
-} from "../component/task/TaskDataProcessing";
+} from "../component/task/dataProcessing/taskProcessing";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
 import { mockColumnOptions, mockTaskList } from "../utils/mockData";
+import { initializeDueDataColumns } from "../component/task/dataProcessing/columnProcessing";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();

@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Flex,
   Popover,
   PopoverBody,
@@ -18,6 +19,7 @@ type Props = {
   color: string;
   title: string;
   setState: SetState;
+  taskAmount?: number;
   currentColumn?: ColumnType;
 };
 
@@ -26,6 +28,7 @@ export default function ColumnHeader({
   color,
   title,
   setState,
+  taskAmount,
   currentColumn,
 }: Props) {
   const [editTitle, setEditTitle] = useState(false);
@@ -53,14 +56,31 @@ export default function ColumnHeader({
           />
         ) : (
           // Show title
-          <Text
-            fontSize="sm"
-            fontWeight={800}
-            letterSpacing={1.1}
-            textTransform="uppercase"
-          >
-            {title}
-          </Text>
+          <Flex justifyContent="center" alignItems="center">
+            {/* Title */}
+            <Text
+              mr={1}
+              fontSize="sm"
+              fontWeight={800}
+              letterSpacing={1.1}
+              textTransform="uppercase"
+            >
+              {title}
+            </Text>
+
+            {/* Task amount */}
+            <Center
+              px={2}
+              border="1px"
+              opacity="90%"
+              fontSize="2xs"
+              rounded="full"
+              borderStyle="solid"
+              borderColor="gray.400"
+            >
+              {taskAmount}
+            </Center>
+          </Flex>
         )}
 
         <Spacer />

@@ -37,6 +37,7 @@ export default function Column({
         setState={setState}
         title={currentColumn.title}
         color={currentColumn.color}
+        taskAmount={tasks?.length}
         currentColumn={currentColumn}
       />
 
