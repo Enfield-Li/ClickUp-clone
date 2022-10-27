@@ -2,7 +2,14 @@ import {
   getOneWholeWeekLocalDateString,
   getWeekDays,
 } from "../../../utils/getWeekDays";
-import { DueDateColumns, StatusColumns } from "../taskTypes";
+import { ColumnOptions, DueDateColumns, StatusColumns } from "../taskTypes";
+
+export function processColumns(columnOptions: ColumnOptions) {
+  const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
+  const statusColumns = reorderStatusColumns(columnOptions.status);
+
+  return { dueDateColumns, statusColumns };
+}
 
 /* 
     Reorder and rename the dueDate columns. 
@@ -84,14 +91,17 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
   return dueDateColumns;
 }
 
+// Reorder based on statusColumns.previousColumnId
 export function reorderStatusColumns(
   statusColumns: StatusColumns
 ): StatusColumns {
   const result: StatusColumns = [];
 
+  // Find the first column
   const firstColumn = statusColumns.find((column) => !column.previousColumnId);
   if (firstColumn) result.push(firstColumn);
 
+  // Push the nextColumn
   for (const column of result) {
     for (const nextColumn of statusColumns) {
       if (nextColumn.previousColumnId === column.id) {

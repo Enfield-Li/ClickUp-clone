@@ -1,57 +1,68 @@
 import {
-  InputGroup,
-  Input,
-  InputRightElement,
-  Flex,
   Box,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { useState } from "react";
-import { SetState, ColumnType } from "../taskTypes";
+import React, { useState } from "react";
+import { getRandomNumber } from "../../../utils/getRandomNumber";
+import { StatusColumns, SetState, StatusColumn } from "../taskTypes";
 
 type Props = {
   setState: SetState;
-  currentColumn?: ColumnType;
-  setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
+  statusColumns: StatusColumns;
+  setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function EditColumnTitle({
+export default function AddStatusColumnInput({
   setState,
-  currentColumn,
-  setEditTitle,
+  setShowEdit,
+  statusColumns,
 }: Props) {
-  const [titleInput, setTitleInput] = useState(currentColumn?.title);
+  const [titleInput, setTitleInput] = useState("");
 
-  function finishEdit() {
-    // Update column title
+  function createStatusColumn() {
+    const previousColumnId = statusColumns[statusColumns.length - 1].id;
+
+    const newColumn: StatusColumn = {
+      id: 4,
+      color: "",
+      title: titleInput,
+      previousColumnId,
+    };
+
     setState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
-          draftState.columnOptions.status.forEach((column) =>
-            column.id === currentColumn?.id
-              ? titleInput && (column.title = titleInput)
-              : column
-          );
+          draftState.columnOptions.status.push(newColumn);
         });
       }
     });
-    // Close edit
-    setEditTitle(false);
   }
 
   return (
-    <InputGroup width="200px" size="xs">
+    <InputGroup>
       {/* Input */}
       <Input
+        width="200px"
+        size="xs"
+        height="48px"
+        minWidth="280px"
+        cursor="pointer"
+        borderTopRadius="sm"
+        boxShadow="base"
         value={titleInput}
         onChange={(e) => {
           setTitleInput(e.target.value);
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            finishEdit();
+            createStatusColumn();
+            setShowEdit(false);
           } else if (e.key === "Escape") {
-            finishEdit();
+            setShowEdit(false);
           }
         }}
       />
@@ -63,11 +74,10 @@ export default function EditColumnTitle({
           <Flex justifyContent="center" alignItems="center">
             {/* Accept change */}
             <Box
-              mr={1}
-              fontSize="20px"
+              fontSize="40px"
               color="green.500"
               onClick={() => {
-                finishEdit();
+                createStatusColumn();
               }}
             >
               <i className="bi bi-check"></i>
@@ -76,11 +86,11 @@ export default function EditColumnTitle({
             {/* Cancel */}
             <Box
               mr={2}
-              fontSize="20px"
+              fontSize="40px"
               color="red.500"
               onClick={() => {
                 // Do nothing and close edit
-                setEditTitle(false);
+                setShowEdit(false);
               }}
             >
               <i className="bi bi-x"></i>

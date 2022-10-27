@@ -11,7 +11,10 @@ import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
 import { mockColumnOptions, mockTaskList } from "../utils/mockData";
-import { initializeDueDataColumns } from "../component/task/dataProcessing/columnProcessing";
+import {
+  initializeDueDataColumns,
+  processColumns,
+} from "../component/task/dataProcessing/columnProcessing";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
@@ -143,7 +146,7 @@ export function useLocalTasks(sortBy: SortBy) {
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
     updateLocalState();
-  }, [sortBy]);
+  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
 
   async function fetchLocalData() {
     setLoading(true);
@@ -151,12 +154,17 @@ export function useLocalTasks(sortBy: SortBy) {
     await new Promise<void>((resolve) => {
       const columnDataFromApi = mockColumnOptions;
 
-      const dueDateColumns = initializeDueDataColumns(
-        mockColumnOptions.dueDate
-      );
+      //   const dueDateColumns = initializeDueDataColumns(
+      //     mockColumnOptions.dueDate
+      //   );
+
+      const { dueDateColumns, statusColumns } =
+        processColumns(columnDataFromApi);
+
       const columnOptions = {
         ...columnDataFromApi,
         dueDate: dueDateColumns,
+        status: statusColumns,
       };
 
       // init taskEvents and convert expectedDueDate to dueDate

@@ -1,39 +1,42 @@
-import { Box, Text } from "@chakra-ui/react";
-import produce from "immer";
-import React from "react";
-import { reorderStatusColumns } from "../dataProcessing/columnProcessing";
+import { Box } from "@chakra-ui/react";
+import { useState } from "react";
 import { SetState, StatusColumns } from "../taskTypes";
+import AddStatusColumnInput from "./AddStatusColumnInput";
 
 type Props = {
   setState: SetState;
+  statusColumns: StatusColumns;
 };
 
-export default function AddStatusColumn({ setState }: Props) {
+export default function AddStatusColumn({ setState, statusColumns }: Props) {
+  const [showEdit, setShowEdit] = useState(false);
+
   return (
-    <Box minWidth="280px" mb={4}>
-      <Text
-        p={3}
-        height="48px"
-        opacity="70%"
-        borderTop="2px"
-        cursor="pointer"
-        // boxShadow="base"
-        borderTopRadius="sm"
-        textTransform="uppercase"
-        _hover={{ boxShadow: "base" }}
-        onClick={() => {
-          setState((pre) => {
-            if (pre) {
-              produce(pre, (draftState) => {
-                return draftState;
-              });
-            }
-            return pre;
-          });
-        }}
-      >
-        + Add status
-      </Text>
-    </Box>
+    <>
+      {showEdit ? (
+        <AddStatusColumnInput
+          setState={setState}
+          setShowEdit={setShowEdit}
+          statusColumns={statusColumns}
+        />
+      ) : (
+        <Box
+          p={3}
+          height="48px"
+          opacity={showEdit ? "" : "70%"}
+          borderTop="2px"
+          minWidth="280px"
+          cursor="pointer"
+          // boxShadow="base"
+          borderTopRadius="sm"
+          _hover={{ boxShadow: "base" }}
+          onClick={() => {
+            setShowEdit(true);
+          }}
+        >
+          <Box>+ ADD STATUS</Box>
+        </Box>
+      )}
+    </>
   );
 }

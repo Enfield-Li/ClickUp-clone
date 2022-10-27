@@ -3,7 +3,7 @@ import {
   Columns,
   DueDateColumns,
   DUE_DATE,
-  LookUpDueDateId,
+  LookUpColumnId,
   lookUpPreviousTaskId,
   OrderedTasks,
   PRIORITY,
@@ -124,16 +124,21 @@ export function groupTaskListOnSortBy(
 
 // A lookup table that matches the sequence of an reorder and renamed columns
 // after columns been processed by reorderAndRenameColumns() function
-export function processLookUpDueDateId(
+/* 
+    return 
+    {
+        orderedTask.id: column.id
+    }
+ */
+export function processLookColumnId(
   orderedTasks: OrderedTasks,
   columns: Columns,
-  lookUpDueDateId: LookUpDueDateId
+  lookUpColumnId: LookUpColumnId
 ) {
   for (let i = 0; i < orderedTasks.length; i++) {
     const tasks = orderedTasks[i];
-    lookUpDueDateId[tasks.id] = columns[i].id;
+    lookUpColumnId[tasks.id] = columns[i].id;
   }
-  return lookUpDueDateId;
 }
 
 export function getDueDateColumnFromDateString(

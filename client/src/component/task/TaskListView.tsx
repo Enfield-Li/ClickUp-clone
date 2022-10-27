@@ -6,13 +6,14 @@ import { API_ENDPOINT } from "../../utils/constant";
 import Column from "./Column";
 import { updateTasksPosition } from "./TaskActions";
 import {
-  processLookUpDueDateId,
+  processLookColumnId,
   updateTaskStatsInColumn,
 } from "./dataProcessing/taskProcessing";
 import {
   DUE_DATE,
-  LookUpDueDateId,
+  LookUpColumnId,
   lookUpPreviousTaskId,
+  PRIORITY,
   SetState,
   SortBy,
   State,
@@ -22,6 +23,7 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
+import { toPlainObject } from "../../utils/proxyToObject";
 
 type Props = {
   sortBy: SortBy;
@@ -48,7 +50,7 @@ export default function TaskListView({ sortBy }: Props) {
           {/* Columns and tasks */}
           {currentColumns.map((currentColumn, index) => {
             // Task marked as finished is managed in "status", and hidden from other sortBy conditions
-            const columnWithTaskStatusDone = currentColumn.id !== 0;
+            const columnWithTaskStatusDone: boolean = currentColumn.id !== 0;
             const taskListForCurrentColumn = state.orderedTasks.find(
               (orderedTask) => orderedTask.id === currentColumn.id
             )?.taskList;
@@ -73,7 +75,10 @@ export default function TaskListView({ sortBy }: Props) {
           {/* Add column in status */}
           {sortBy === STATUS && (
             <Box mx={2}>
-              <AddStatusColumn setState={setState} />
+              <AddStatusColumn
+                setState={setState}
+                statusColumns={state.columnOptions.status}
+              />
             </Box>
           )}
         </Flex>
@@ -99,19 +104,18 @@ async function handleDragEnd(
     return;
   }
 
-  const lookUpDueDateId: LookUpDueDateId = {};
-  if (sortBy === DUE_DATE) {
-    processLookUpDueDateId(state.orderedTasks, currentColumns, lookUpDueDateId);
+  const lookUpColumnId: LookUpColumnId = {};
+  const isColumnReordered = sortBy !== PRIORITY;
+  if (isColumnReordered) {
+    processLookColumnId(state.orderedTasks, currentColumns, lookUpColumnId);
   }
 
-  const sourceColumnId =
-    sortBy === DUE_DATE
-      ? lookUpDueDateId[Number(source.droppableId)]
-      : Number(source.droppableId);
-  const destinationColumnId =
-    sortBy === DUE_DATE
-      ? lookUpDueDateId[Number(destination.droppableId)]
-      : Number(destination.droppableId);
+  const sourceColumnId = isColumnReordered
+    ? lookUpColumnId[Number(source.droppableId)]
+    : Number(source.droppableId);
+  const destinationColumnId = isColumnReordered
+    ? lookUpColumnId[Number(destination.droppableId)]
+    : Number(destination.droppableId);
 
   const sourceTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === sourceColumnId
@@ -119,6 +123,11 @@ async function handleDragEnd(
   const destinationTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === destinationColumnId
   );
+  console.log({ destinationTaskColumnIndex });
+
+  console.log({
+    destinationTasksArr: state.orderedTasks[destinationTaskColumnIndex],
+  });
 
   setState(
     produce(state, (draftState) => {
