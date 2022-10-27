@@ -1,4 +1,14 @@
-import { Box, Skeleton } from "@chakra-ui/react";
+import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Skeleton,
+  Stack,
+} from "@chakra-ui/react";
 import React from "react";
 
 type Props = {};
@@ -6,13 +16,13 @@ type Props = {};
 export default function FunctionalityTwo({}: Props) {
   return (
     <>
-      {Array(5)
+      {/* {Array(5)
         .fill(null)
         .map((column) => (
           <Box px={3}>
             <Skeleton>abc</Skeleton>
           </Box>
-        ))}
+        ))} */}
     </>
   );
 }

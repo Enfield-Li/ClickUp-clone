@@ -1,15 +1,8 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Spacer,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import React, { useState } from "react";
-import TaskCard from "./TaskCard";
+import ColumnHeader from "./columnDetails/ColumnHeader";
 import { CreateTaskPopover } from "./CreateTaskPopover";
+import TaskCard from "./TaskCard";
 import {
   ColumnType,
   DueDateColumns,
@@ -18,7 +11,6 @@ import {
   State,
   TaskList,
 } from "./taskTypes";
-import ColumnHeader from "./ColumnHeader";
 
 type Props = {
   state: State;
@@ -40,7 +32,13 @@ export default function Column({
   return (
     <Box width="280px" mx={2}>
       {/* Column header */}
-      <ColumnHeader title={currentColumn.title} color={currentColumn.color} />
+      <ColumnHeader
+        sortBy={sortBy}
+        setState={setState}
+        title={currentColumn.title}
+        color={currentColumn.color}
+        currentColumn={currentColumn}
+      />
 
       {/* Column card */}
       <Droppable droppableId={String(currentColumn.id)}>

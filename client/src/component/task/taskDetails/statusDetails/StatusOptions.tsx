@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../../context/task_detail/useTaskDetailContext";
+import SelectOption from "../../select/SelectOption";
 
 type Props = { onOptionClose: () => void };
 
@@ -25,11 +26,7 @@ export default function StatusOptions({ onOptionClose }: Props) {
           task!.status !== column.id && (
             // Hide current column option
             <Box
-              my="1"
-              rounded="sm"
               key={column.id}
-              cursor="pointer"
-              _hover={{ backgroundColor: column.color }}
               onClick={() => {
                 onOptionClose();
                 const targetStatusColumnId = column.id;
@@ -45,19 +42,17 @@ export default function StatusOptions({ onOptionClose }: Props) {
                 );
               }}
             >
-              <Flex alignItems="center">
+              <SelectOption
+                optionName={column.title}
+                backgroundColor={column.color}
+              >
                 <Box
-                  ml="3"
-                  mr="2"
                   rounded="sm"
                   width="10px"
                   height="10px"
                   backgroundColor={column.color}
                 ></Box>
-
-                {/* Title */}
-                <Box>{column.title}</Box>
-              </Flex>
+              </SelectOption>
             </Box>
           )
       )}

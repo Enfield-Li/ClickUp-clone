@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
-import ColumnHeader from "./ColumnHeader";
+import ColumnHeader from "./columnDetails/ColumnHeader";
 import Column from "./Column";
 import { updateTasksPosition } from "./TaskActions";
 import {
@@ -74,7 +74,12 @@ export default function TaskListView({ sortBy }: Props) {
           {/* Add column in status */}
           {sortBy === STATUS && (
             <Box mx={2}>
-              <ColumnHeader title={"ADD COLUMN"} color={"gray.300"} />
+              <ColumnHeader
+                sortBy={sortBy}
+                title={"ADD COLUMN"}
+                color={"gray.300"}
+                setState={setState}
+              />
             </Box>
           )}
         </Flex>
