@@ -265,6 +265,29 @@ export function processTaskList(
   });
 }
 
+// local
+export function processLocalTaskList(
+  dueDateColumn: DueDateColumns,
+  taskList: TaskList
+) {
+  return taskList.map((task) => {
+    // init taskEvents
+    //   if (!task.taskEvents || task.taskEvents.length) task.taskEvents = [];
+
+    // convert expectedDueDate to dueDate
+    const taskExpectedDueDateString = task.expectedDueDate
+      ? toYYYYMMDDString(task.expectedDueDate)
+      : "";
+
+    task.dueDate = getDueDateColumnFromDateString(
+      dueDateColumn,
+      taskExpectedDueDateString
+    );
+
+    return task;
+  });
+}
+
 // Push task to the other sortBy id === 1 column
 export function updateTaskStatsInColumn(
   state: State,

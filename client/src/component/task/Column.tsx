@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import React from "react";
+import React, { useState } from "react";
 import TaskCard from "./TaskCard";
 import { CreateTaskPopover } from "./CreateTaskPopover";
 import {
@@ -18,6 +18,7 @@ import {
   State,
   TaskList,
 } from "./taskTypes";
+import ColumnHeader from "./ColumnHeader";
 
 type Props = {
   state: State;
@@ -37,40 +38,14 @@ export default function Column({
   dueDateColumns,
 }: Props) {
   return (
-    <Box width="280px">
+    <Box width="280px" mx={2}>
       {/* Column header */}
-      <Flex
-        m={2}
-        p={3}
-        borderTop="2px"
-        boxShadow="base"
-        borderTopRadius="sm"
-        borderColor={currentColumn.color}
-      >
-        {/* Title */}
-        <Text
-          fontSize="sm"
-          fontWeight={800}
-          letterSpacing={1.1}
-          textTransform="uppercase"
-        >
-          {currentColumn.title}
-        </Text>
-
-        <Spacer />
-
-        {/* Option */}
-        <Box cursor="pointer">
-          <i className="bi bi-gear"></i>
-        </Box>
-      </Flex>
+      <ColumnHeader title={currentColumn.title} color={currentColumn.color} />
 
       {/* Column card */}
       <Droppable droppableId={String(currentColumn.id)}>
         {(provided, snapshot) => (
           <Box
-            my={2}
-            px={2}
             height="500px"
             overflow="auto"
             minHeight="100px"

@@ -1,9 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { useFetchTasks } from "../../hook/useFetch";
+import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
-import AddColumn from "./AddColumn";
+import ColumnHeader from "./ColumnHeader";
 import Column from "./Column";
 import { updateTasksPosition } from "./TaskActions";
 import {
@@ -28,11 +28,11 @@ type Props = {
 };
 
 export default function TaskListView({ sortBy }: Props) {
-  // const { state, setState, loading } = useLocalTasks(sortBy);
-  const { state, loading, error, setState } = useFetchTasks(
-    API_ENDPOINT.TASK_ALL_TASKS,
-    sortBy
-  );
+  const { state, setState, loading } = useLocalTasks(sortBy);
+  //   const { state, loading, error, setState } = useFetchTasks(
+  //     API_ENDPOINT.TASK_ALL_TASKS,
+  //     sortBy
+  //   );
   console.log(state);
 
   if (!state || loading) return <div>Loading</div>;
@@ -40,7 +40,7 @@ export default function TaskListView({ sortBy }: Props) {
   const currentColumns = state.columnOptions[sortBy];
 
   return (
-    <Box px={3} overflowY={"auto"}>
+    <Box px={3} overflowY={"auto"} mr={3}>
       <DragDropContext
         onDragEnd={(result) => handleDragEnd(result, state, setState, sortBy)}
       >
@@ -52,7 +52,7 @@ export default function TaskListView({ sortBy }: Props) {
 
             return (
               columnWithTaskStatusDone && (
-                <Box mx={2} key={currentColumn.id} borderRadius={4}>
+                <Box key={currentColumn.id} borderRadius={4}>
                   <Column
                     state={state}
                     sortBy={sortBy}
@@ -72,7 +72,11 @@ export default function TaskListView({ sortBy }: Props) {
           })}
 
           {/* Add column in status */}
-          {sortBy === STATUS && <AddColumn />}
+          {sortBy === STATUS && (
+            <Box mx={2}>
+              <ColumnHeader title={"ADD COLUMN"} color={"gray.300"} />
+            </Box>
+          )}
         </Flex>
       </DragDropContext>
     </Box>

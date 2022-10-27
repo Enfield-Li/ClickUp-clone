@@ -15,33 +15,31 @@ export default function TaskCard({ task, index }: Props) {
   const { onModalOpen, setTask, isModalOpen } = useTaskDetailContext();
 
   return (
-    <>
-      <Draggable draggableId={String(task.id)} index={index}>
-        {(provided, snapshot) => (
-          <Box
-            p={4}
-            my={3}
-            w="full"
-            bg={bgColor}
-            rounded="md"
-            onClick={() => {
-              onModalOpen();
-              setTask(task);
-            }}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            boxShadow={snapshot.isDragging ? "outline" : "xl"}
-          >
-            <Stack>
-              <Heading color={headerColor} fontSize="2xl" fontFamily="body">
-                {task.title}
-              </Heading>
-              <Text color="gray.400">Lorem ipsum dolor</Text>
-            </Stack>
-          </Box>
-        )}
-      </Draggable>
-    </>
+    <Draggable draggableId={String(task.id)} index={index}>
+      {(provided, snapshot) => (
+        <Box
+          p={4}
+          my={3}
+          w="full"
+          rounded="md"
+          bg={bgColor}
+          onClick={() => {
+            onModalOpen();
+            setTask(task);
+          }}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          boxShadow={snapshot.isDragging ? "outline" : "lg"}
+        >
+          <Stack>
+            <Heading color={headerColor} fontSize="2xl" fontFamily="body">
+              {task.title}
+            </Heading>
+            <Text color="gray.400">Lorem ipsum dolor</Text>
+          </Stack>
+        </Box>
+      )}
+    </Draggable>
   );
 }

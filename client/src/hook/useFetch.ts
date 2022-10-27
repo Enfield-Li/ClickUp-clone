@@ -6,6 +6,7 @@ import {
   processTaskList,
   groupTaskListOnSortBy,
   initializeDueDataColumns,
+  processLocalTaskList,
 } from "../component/task/TaskDataProcessing";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
@@ -159,7 +160,7 @@ export function useLocalTasks(sortBy: SortBy) {
       };
 
       // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processTaskList(dueDateColumns, mockTaskList);
+      const taskList = processLocalTaskList(dueDateColumns, mockTaskList);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
