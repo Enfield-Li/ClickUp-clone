@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import {
   ColumnOptions,
-  Columns,
+  UndeterminedColumns,
   Field,
   SortBy,
   UpdateEvent,
@@ -36,7 +36,7 @@ export default function BeforeAndAfter({
     const field = updateEvent.field;
     if (isStatusField(field)) {
       const field = updateEvent.field as SortBy;
-      return (columnOptions[field] as Columns).find(
+      return (columnOptions[field] as UndeterminedColumns).find(
         (column) => column.id === Number(columnId)
       );
     }

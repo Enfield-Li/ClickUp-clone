@@ -19,7 +19,7 @@ export type Priority =
   | "DONE"
   | "FINISHED";
 
-export type DueDate =
+export type SelectableDueDate =
   | "OVER DUE"
   | "TODAY"
   | "TOMORROW"
@@ -32,8 +32,9 @@ export type DueDate =
   | "DONE"
   | "NO DUE DATE"
   | "THURSDAY"
-  | "FRIDAY"
-  | "FINISHED";
+  | "FRIDAY";
+
+export type DueDate = SelectableDueDate | "FINISHED";
 
 interface Column<T> {
   id: number;
@@ -41,7 +42,7 @@ interface Column<T> {
   color: string;
 }
 export interface DueDateColumn extends Column<DueDate> {
-  localDateStr?: string;
+  localDateStr?: string; // Format: 10/10/2022
 }
 export type PriorityColumn = Column<Priority>;
 export type StatusColumn = {
@@ -153,9 +154,9 @@ export type Task = {
 };
 
 export type TaskList = Task[];
-export type ColumnType = Column<string>;
-export type Columns = ColumnType[];
 export type InitialData = { tasks: TaskList };
+export type UndeterminedColumn = Column<string>;
+export type UndeterminedColumns = UndeterminedColumn[];
 
 // States
 export type OrderedTasks = { id: number; taskList: TaskList }[];
@@ -182,6 +183,10 @@ export type LookUpColumnId = {
   [index: number]: number;
 };
 
+export type LookUpDueDate = {
+  [index in SelectableDueDate]: Date | undefined;
+};
+
 // Task creation types
 export type TargetColumn = {
   status?: string | undefined;
@@ -189,39 +194,6 @@ export type TargetColumn = {
   dueDate?: string | undefined;
 };
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
-
-// DTO
-// export type TaskDTO = {
-//   id: number;
-//   title: string;
-//   dueDate?: Date;
-//   status?: number;
-//   priority?: number;
-//   creatorId: number;
-//   creatorName: string;
-//   description?: string;
-//   watchers: UserInfo[];
-//   assignees: UserInfo[];
-//   // Determine the task order
-//   previousTask: PreviousTask;
-//   updateEventDTO: UpdateEventDTO[];
-//   // Keep previousTask record when set to finish
-//   previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
-// };
-// export type UpdateEventDTO = {
-//   field: Field;
-//   taskId: number;
-//   userId: number;
-//   username: string;
-//   // Comment event
-//   comment?: string;
-//   // Update event
-//   afterUpdate?: string;
-//   beforeUpdate?: string;
-//   // Assignment event
-//   assignedUser?: UserInfo;
-//   assignmentAction?: AssignmentAction;
-// };
 
 export type UpdateTasksPositionDTO = {
   sourceTaskId: number;

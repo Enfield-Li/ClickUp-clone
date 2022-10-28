@@ -17,13 +17,11 @@ export default function DueDateDetails({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
-  console.log({ expectedDueDate: task?.expectedDueDate });
+  const hasExpectedDueDate = task?.expectedDueDate;
 
   return (
     <Box>
-      <Box>
-        {task?.expectedDueDate ? <ExpectedDueDate /> : <DueDatePicker />}
-      </Box>
+      <Box>{hasExpectedDueDate ? <ExpectedDueDate /> : <DueDatePicker />}</Box>
     </Box>
   );
 }

@@ -188,14 +188,15 @@ export function updateTaskPriorityOrDueDate(
   currentTask: Task,
   setState: SetState,
   targetColumnKey: SortBy,
-  targetColumnId: number
+  targetColumnId: number,
+  expectedDueDate?: Date
 ) {
   const taskListForUpdate: TaskList = [];
+  const isDueDate = targetColumnKey === "dueDate";
 
-  const targetColumn: TargetColumn =
-    targetColumnKey === "dueDate"
-      ? { dueDate: String(targetColumnId) }
-      : { priority: String(targetColumnId) };
+  const targetColumn: TargetColumn = isDueDate
+    ? { dueDate: String(targetColumnId) }
+    : { priority: String(targetColumnId) };
 
   setState((previousState) => {
     if (previousState) {
@@ -205,6 +206,7 @@ export function updateTaskPriorityOrDueDate(
           taskList.taskList.forEach((task) => {
             const isSourceTask = task.id === currentTask.id;
             if (isSourceTask) {
+              if (isDueDate) task.expectedDueDate = expectedDueDate;
               updateTaskStatsInColumn(draftState, targetColumn, task);
             }
 

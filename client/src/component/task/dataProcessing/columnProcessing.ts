@@ -1,8 +1,16 @@
 import {
+  getNextNWeekDay,
   getOneWholeWeekLocalDateString,
+  getUppercaseWeekDayString,
   getWeekDays,
 } from "../../../utils/getWeekDays";
-import { ColumnOptions, DueDateColumns, StatusColumns } from "../taskTypes";
+import {
+  ColumnOptions,
+  DueDateColumns,
+  SelectableDueDate,
+  LookUpDueDate,
+  StatusColumns,
+} from "../taskTypes";
 
 export function processColumns(columnOptions: ColumnOptions) {
   const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
@@ -89,6 +97,93 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
   });
 
   return dueDateColumns;
+}
+
+/* 
+    return:
+    {
+        "lookUpDueDate": {
+            "OVER DUE": "2022-10-27T12:41:44.971Z",
+            "TODAY": "2022-10-28T12:41:44.971Z",
+            "TOMORROW": "2022-10-29T12:41:44.971Z",
+            "SUNDAY": "2022-10-30T12:41:44.971Z",
+            "MONDAY": "2022-10-31T12:41:44.972Z",
+            "TUESDAY": "2022-11-01T12:41:44.972Z",
+            "WEDNESDAY": "2022-11-02T12:41:44.972Z",
+            "FUTURE": "2022-11-04T12:41:44.972Z",
+            "THURSDAY": "2022-11-03T12:41:44.972Z"
+        },
+        "arrOfThisWeekDay": [
+            "NO DUE DATE",
+            "OVER DUE",
+            "TODAY",
+            "TOMORROW",
+            "SUNDAY",
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FUTURE"
+        ]
+    }
+
+*/
+export function getDueDateInfo() {
+  const arrOfThisWeekDay: SelectableDueDate[] = [];
+  const lookUpDueDate: LookUpDueDate = {
+    "OVER DUE": undefined,
+    TODAY: undefined,
+    TOMORROW: undefined,
+    SATURDAY: undefined,
+    SUNDAY: undefined,
+    MONDAY: undefined,
+    TUESDAY: undefined,
+    WEDNESDAY: undefined,
+    FUTURE: undefined,
+    DONE: undefined,
+    "NO DUE DATE": undefined,
+    THURSDAY: undefined,
+    FRIDAY: undefined,
+  };
+
+  // No due date
+  //   arrOfThisWeekDay.push("NO DUE DATE");
+  //   lookUpDueDate["NO DUE DATE"] = undefined;
+
+  // OverDue (ie. yesterday)
+  arrOfThisWeekDay.push("OVER DUE");
+  lookUpDueDate["OVER DUE"] = getNextNWeekDay(-1);
+
+  // Monday to Sunday
+  for (let i = 0; i < 7; i++) {
+    const day = getNextNWeekDay(i);
+
+    // today
+    if (i === 0) {
+      lookUpDueDate["TODAY"] = day;
+      arrOfThisWeekDay.push("TODAY");
+    }
+    // tomorrow
+    else if (i === 1) {
+      lookUpDueDate["TOMORROW"] = day;
+      arrOfThisWeekDay.push("TOMORROW");
+    }
+    // rest of the week
+    else {
+      const uppercaseWeekDayStr = getUppercaseWeekDayString(
+        day
+      ) as SelectableDueDate;
+
+      arrOfThisWeekDay.push(uppercaseWeekDayStr);
+      lookUpDueDate[uppercaseWeekDayStr] = day;
+    }
+  }
+
+  // future (ie. one week later)
+  arrOfThisWeekDay.push("FUTURE");
+  lookUpDueDate["FUTURE"] = getNextNWeekDay(7);
+
+  return { lookUpDueDate, arrOfThisWeekDay };
 }
 
 // Reorder based on statusColumns.previousColumnId

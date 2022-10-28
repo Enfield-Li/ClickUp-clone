@@ -60,10 +60,7 @@ export default function DueDatePicker({}: Props) {
           {/* DueDate option */}
           <PopoverContent width="200px">
             <PopoverBody shadow={"2xl"} p={0}>
-              <DueDateOptions
-                onOptionClose={onOptionClose}
-                isOptionOpen={isOptionOpen}
-              />
+              <DueDateOptions isOptionOpen={isOptionOpen} />
             </PopoverBody>
           </PopoverContent>
         </>

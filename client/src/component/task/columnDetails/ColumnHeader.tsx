@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { ColumnType, SetState, SortBy, STATUS } from "../taskTypes";
+import { UndeterminedColumn, SetState, SortBy, STATUS } from "../taskTypes";
 import EditColumnTitle from "./EditColumnTitle";
 import RenameStatus from "./RenameStatus";
 
@@ -20,7 +20,7 @@ type Props = {
   title: string;
   setState: SetState;
   taskAmount?: number;
-  currentColumn?: ColumnType;
+  currentColumn?: UndeterminedColumn;
 };
 
 export default function ColumnHeader({
@@ -77,7 +77,7 @@ export default function ColumnHeader({
             <Center
               px={2}
               border="1px"
-              opacity="90%"
+              opacity="80%"
               fontSize="2xs"
               rounded="full"
               borderStyle="solid"

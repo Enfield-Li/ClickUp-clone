@@ -7,11 +7,11 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
-import { SetState, ColumnType } from "../taskTypes";
+import { SetState, UndeterminedColumn } from "../taskTypes";
 
 type Props = {
   setState: SetState;
-  currentColumn?: ColumnType;
+  currentColumn?: UndeterminedColumn;
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

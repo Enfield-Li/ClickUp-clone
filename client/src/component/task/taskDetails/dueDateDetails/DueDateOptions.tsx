@@ -4,13 +4,16 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
+import { getDueDateInfo } from "../../dataProcessing/columnProcessing";
 import { getDueDateColumnFromDateString } from "../../dataProcessing/taskProcessing";
+import { SelectableDueDate } from "../../taskTypes";
 
-type Props = { onOptionClose: () => void; isOptionOpen: boolean };
+type Props = { isOptionOpen: boolean };
 
-export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
+export default function DueDateOptions({ isOptionOpen }: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [dueDate, setDueDate] = useState<string>();
+  const [dueDateInput, setDueDateInput] = useState<string>();
+  const { arrOfThisWeekDay, lookUpDueDate } = getDueDateInfo();
 
   useEffect(() => {
     // Reset to hide date picker
@@ -28,6 +31,52 @@ export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
+
+  function handleDatePicker() {
+    if (dueDateInput) {
+      const targetDueDateColumnId = getDueDateColumnFromDateString(
+        columnOptions.dueDate,
+        dueDateInput
+      );
+
+      const expectedDueDate = new Date(dueDateInput);
+
+      // Update list state
+      updateTaskPriorityOrDueDate(
+        sortBy,
+        task!,
+        setState,
+        "dueDate",
+        targetDueDateColumnId,
+        expectedDueDate
+      );
+
+      // Update modal task state
+      setTask({ ...task!, expectedDueDate });
+    }
+  }
+
+  function handleSelect(weekString: string) {
+    console.log({ weekString });
+    const expectedDueDate = lookUpDueDate[weekString as SelectableDueDate];
+
+    const targetDueDateColumn = columnOptions.dueDate.find(
+      (column) => column.title === weekString
+    );
+
+    // Update list state
+    updateTaskPriorityOrDueDate(
+      sortBy,
+      task!,
+      setState,
+      "dueDate",
+      targetDueDateColumn!.id,
+      expectedDueDate
+    );
+
+    // Update modal task state
+    setTask({ ...task!, expectedDueDate });
+  }
 
   return (
     <Box>
@@ -48,74 +97,30 @@ export default function DueDateOptions({ onOptionClose, isOptionOpen }: Props) {
             my={2}
             type="date"
             onChange={(e) => {
-              setDueDate(e.target.value);
+              setDueDateInput(e.target.value);
             }}
           />
           <Center mb={2}>
-            <Button
-              pl={4}
-              onClick={() => {
-                onOptionClose();
-                setShowDatePicker(false);
-
-                if (dueDate) {
-                  const targetDueDateColumnId = getDueDateColumnFromDateString(
-                    columnOptions.dueDate,
-                    dueDate
-                  );
-
-                  // Update list state
-                  updateTaskPriorityOrDueDate(
-                    sortBy,
-                    task!,
-                    setState,
-                    "dueDate",
-                    targetDueDateColumnId
-                  );
-
-                  // Update modal task state
-                  setTask({ ...task!, dueDate: targetDueDateColumnId });
-                }
-              }}
-            >
+            <Button pl={4} onClick={() => handleDatePicker()}>
               Confirm
             </Button>
           </Center>
         </>
       ) : (
         // dueDate columns
-        columnOptions.dueDate.map(
-          (dueDate) =>
-            dueDate.id !== 0 &&
-            dueDate.id !== task?.dueDate && (
-              <Box
-                p={2}
-                pl={4}
-                key={dueDate.id}
-                cursor="pointer"
-                onClick={() => {
-                  onOptionClose();
-                  setShowDatePicker(false);
-
-                  const targetDueDateColumnId = dueDate.id;
-
-                  // Update list state
-                  updateTaskPriorityOrDueDate(
-                    sortBy,
-                    task!,
-                    setState,
-                    "dueDate",
-                    targetDueDateColumnId
-                  );
-                  // Update modal task state
-                  setTask({ ...task!, dueDate: targetDueDateColumnId });
-                }}
-                _hover={{ backgroundColor: "blue.600" }}
-              >
-                {capitalizeFirstLetter(dueDate.title.toLowerCase())}
-              </Box>
-            )
-        )
+        arrOfThisWeekDay.map((weekString, index) => (
+          // weekString !== "NO DUE DATE" &&
+          <Box
+            p={2}
+            pl={4}
+            key={index}
+            cursor="pointer"
+            _hover={{ backgroundColor: "blue.600" }}
+            onClick={() => handleSelect(weekString)}
+          >
+            {capitalizeFirstLetter(weekString.toString().toLowerCase())}
+          </Box>
+        ))
       )}
     </Box>
   );

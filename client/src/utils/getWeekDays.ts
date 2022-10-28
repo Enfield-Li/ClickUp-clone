@@ -22,7 +22,7 @@ export function getNextWeekDay() {
 
 // From: Mon Oct 10 2022 09:02:24 GMT+0800 (China Standard Time)
 // To: MONDAY
-function getUppercaseWeekDayString(date: Date | string) {
+export function getUppercaseWeekDayString(date: Date | string) {
   return new Date(date)
     .toLocaleTimeString("en-us", { weekday: "long" })
     .split(" ")[0]

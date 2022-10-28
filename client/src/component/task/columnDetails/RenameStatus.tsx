@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import SelectOption from "../select/SelectOption";
-import { SetState, ColumnType } from "../taskTypes";
+import { SetState, UndeterminedColumn } from "../taskTypes";
 
 type Props = {
   onClose: () => void;

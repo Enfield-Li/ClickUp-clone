@@ -4,7 +4,7 @@ import ColumnHeader from "./columnDetails/ColumnHeader";
 import { CreateTaskPopover } from "./CreateTaskPopover";
 import TaskCard from "./TaskCard";
 import {
-  ColumnType,
+  UndeterminedColumn,
   DueDateColumns,
   SetState,
   SortBy,
@@ -16,7 +16,7 @@ type Props = {
   state: State;
   sortBy: SortBy;
   setState: SetState;
-  currentColumn: ColumnType;
+  currentColumn: UndeterminedColumn;
   dueDateColumns: DueDateColumns;
   tasks?: TaskList;
 };

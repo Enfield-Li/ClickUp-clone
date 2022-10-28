@@ -23,6 +23,8 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
+import { getDueDateInfo } from "./dataProcessing/columnProcessing";
+import { toPlainObject } from "../../utils/proxyToObject";
 
 type Props = {
   sortBy: SortBy;
@@ -108,8 +110,12 @@ async function handleDragEnd(
     return;
   }
 
+  const { arrOfThisWeekDay, lookUpDueDate } = getDueDateInfo();
+
+  const isDueDate = sortBy === "dueDate";
   const lookUpColumnId: LookUpColumnId = {};
   const isColumnReordered = sortBy !== PRIORITY;
+
   if (isColumnReordered) {
     processLookColumnId(state.orderedTasks, currentColumns, lookUpColumnId);
   }
@@ -127,11 +133,10 @@ async function handleDragEnd(
   const destinationTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === destinationColumnId
   );
-  console.log({ destinationTaskColumnIndex });
 
-  console.log({
-    destinationTasksArr: state.orderedTasks[destinationTaskColumnIndex],
-  });
+  if (isDueDate) {
+    // state.columnOptions.dueDate
+  }
 
   setState(
     produce(state, (draftState) => {
@@ -311,12 +316,15 @@ async function handleDragEnd(
         if (!sourceTask.previousTaskBeforeFinish) {
           sourceTask.previousTaskBeforeFinish = {};
         }
-        sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
-        sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
-        sourceTask.priority = 0;
         sourceTask.dueDate = 0;
+        sourceTask.priority = 0;
+        sourceTask.expectedDueDate = undefined;
+
         sourceTask.previousTask.dueDateId = 0;
         sourceTask.previousTask.priorityId = 0;
+
+        sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
+        sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
       }
 
       // Move finished task to unfinished, and update other sortBy's info

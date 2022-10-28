@@ -1,6 +1,6 @@
 import { getNextNWeekDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
 import {
-  Columns,
+  UndeterminedColumns,
   DueDateColumns,
   DUE_DATE,
   LookUpColumnId,
@@ -77,7 +77,7 @@ import {
 */
 export function groupTaskListOnSortBy(
   allTasks: TaskList,
-  columns: Columns,
+  columns: UndeterminedColumns,
   sortBy: SortBy
 ): OrderedTasks {
   const orderedTasks: OrderedTasks = [];
@@ -132,7 +132,7 @@ export function groupTaskListOnSortBy(
  */
 export function processLookColumnId(
   orderedTasks: OrderedTasks,
-  columns: Columns,
+  columns: UndeterminedColumns,
   lookUpColumnId: LookUpColumnId
 ) {
   for (let i = 0; i < orderedTasks.length; i++) {

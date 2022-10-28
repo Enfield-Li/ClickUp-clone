@@ -22,7 +22,7 @@ import FocusLock from "react-focus-lock";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import {
-  ColumnType,
+  UndeterminedColumn,
   DueDateColumns,
   DUE_DATE,
   lookUpIsLastItem,
@@ -56,7 +56,7 @@ export type NewTask = {
 type Props = {
   state: State;
   sortBy: SortBy;
-  currentColumn: ColumnType;
+  currentColumn: UndeterminedColumn;
   setState: SetState;
   dueDateColumns: DueDateColumns;
 };
@@ -235,7 +235,7 @@ async function submit(
   formValues: NewTask,
   formikHelpers: FormikHelpers<NewTask>,
   state: State,
-  column: ColumnType,
+  column: UndeterminedColumn,
   sortBy: SortBy,
   setState: SetState,
   isTaskDone: boolean
