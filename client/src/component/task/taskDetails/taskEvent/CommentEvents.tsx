@@ -36,7 +36,7 @@ export default function CommentEvents({ commentEvent }: Props) {
 
           {/* Update date ago */}
           <Box opacity="65%" fontSize="small">
-            {calculateTime(commentEvent.updatedAt!)}
+            {calculateTime(commentEvent.createdAt!)}
           </Box>
         </Flex>
 

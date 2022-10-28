@@ -65,6 +65,7 @@ export async function updateTaskTitle(
   newTitle: string,
   setState: SetState
 ) {
+  console.log("called");
   try {
     const updateTaskTitleDTO: UpdateTaskTitleDTO = {
       taskId: taskId,
@@ -77,17 +78,18 @@ export async function updateTaskTitle(
     );
 
     if (response.data) {
-      setState((previousState) =>
-        produce(previousState, (draftState) => {
-          if (draftState)
-            draftState.orderedTasks.forEach((tasks) =>
-              tasks.taskList.forEach((task) =>
-                task.id === taskId ? (task.title = newTitle) : task
-              )
-            );
-        })
-      );
     }
+
+    setState((previousState) =>
+      produce(previousState, (draftState) => {
+        if (draftState)
+          draftState.orderedTasks.forEach((tasks) =>
+            tasks.taskList.forEach((task) =>
+              task.id === taskId ? (task.title = newTitle) : task
+            )
+          );
+      })
+    );
   } catch (error) {
     console.log(error);
   }

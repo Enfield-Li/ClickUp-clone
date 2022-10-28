@@ -7,10 +7,13 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext, {
+  updateCurrentTaskStatus,
+} from "../../../../context/task_detail/useTaskDetailContext";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -20,12 +23,21 @@ export default function StatusDetails({}: Props) {
   const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();
 
-  const { task, taskStateContext } = useTaskDetailContext();
+  const { task, setTask, taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
+  console.log({ columnOptions });
 
   const column = columnOptions.status.find(
     (column) => column.id === task!.status
   );
+  const columnIndex = columnOptions.status.findIndex(
+    (column) => column.id === task!.status
+  );
+
+  const isLastStatus = columnIndex + 1 === columnOptions.status.length;
+  const nextStatus = isLastStatus
+    ? columnOptions.status[0]
+    : columnOptions.status[columnIndex + 1];
 
   return (
     <Center>
@@ -50,51 +62,67 @@ export default function StatusDetails({}: Props) {
               onMouseOutCapture={() => setOnHover(false)}
               //   px={onHover && !isOpen ? "" : "2px"}
             >
-              {/* Choose status */}
-              <PopoverTrigger>
-                <Center
-                  px={4}
-                  width="fit-content"
-                  onClick={onToggle}
-                  alignSelf="center"
-                  borderLeftRadius="sm"
-                  borderColor={column?.color}
-                  backgroundColor={column?.color}
-                  height={onHover && !isOpen ? "37px" : "33px"}
-                  //   borderLeftWidth={onHover && !isOpen ? "4px" : ""}
-                >
-                  {column?.title}
-                </Center>
-              </PopoverTrigger>
-
-              {/* Next stage */}
               <Center
-                ml="1px"
-                width="24px"
-                fontSize="9px"
+                px={4}
+                onClick={onToggle}
                 alignSelf="center"
-                borderRightRadius="sm"
+                width="fit-content"
+                borderLeftRadius="sm"
                 borderColor={column?.color}
                 backgroundColor={column?.color}
                 height={onHover && !isOpen ? "37px" : "33px"}
-                // borderRightWidth={onHover && !isOpen ? "4px" : ""}
-                onClick={() => {
-                  console.log(columnOptions.status);
-                }}
               >
-                <i className="bi bi-caret-right-fill"></i>
+                {/* Choose status */}
+                <PopoverTrigger>
+                  <Box>{column?.title}</Box>
+                </PopoverTrigger>
+
+                {/* Status option */}
+                <PopoverContent width="200px">
+                  <PopoverBody shadow="2xl">
+                    <StatusOptions onOptionClose={onOptionClose} />
+                  </PopoverBody>
+                </PopoverContent>
               </Center>
+
+              {/* Next stage */}
+              <Tooltip
+                hasArrow
+                placement="top"
+                fontWeight={600}
+                label={`Next status [${nextStatus.title.toUpperCase()}]`}
+              >
+                <Center
+                  ml="1px"
+                  width="24px"
+                  fontSize="9px"
+                  alignSelf="center"
+                  borderRightRadius="sm"
+                  borderColor={column?.color}
+                  backgroundColor={column?.color}
+                  height={onHover && !isOpen ? "37px" : "33px"}
+                  // borderRightWidth={onHover && !isOpen ? "4px" : ""}
+                  onClick={() => {
+                    setTask({ ...task!, status: nextStatus.id });
+                    updateCurrentTaskStatus(
+                      sortBy,
+                      task!,
+                      setState,
+                      nextStatus.id
+                    );
+                  }}
+                >
+                  <i className="bi bi-caret-right-fill"></i>
+                </Center>
+              </Tooltip>
             </Flex>
 
-            {/* Status option */}
-            <PopoverContent width="200px">
-              <PopoverBody shadow="2xl">
-                <StatusOptions onOptionClose={onOptionClose} />
-              </PopoverBody>
-            </PopoverContent>
-
             {/* Set to finish */}
-            <Box mx={2}>{task!.status !== 3 && <FinishTask />}</Box>
+            {task!.status !== 3 && (
+              <Box mx={2}>
+                <FinishTask />
+              </Box>
+            )}
           </>
         )}
       </Popover>

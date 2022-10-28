@@ -9,11 +9,19 @@ import DueDateDetails from "./dueDateDetails/DueDateDetails";
 import UpdateEvents from "./taskEvent/updateEvents";
 import TaskCreatorInfo from "./taskEvent/CreateTaskInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";
+import { useRef, useEffect } from "react";
 
 type Props = {};
 
 export default function TaskEvent({}: Props) {
   const { task } = useTaskDetailContext();
+
+  // https://stackoverflow.com/a/52266212/16648127
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, []);
 
   return (
     <Box flexBasis={"50%"}>
@@ -32,6 +40,7 @@ export default function TaskEvent({}: Props) {
           </Box>
         </Box>
 
+        {/* Divider */}
         <Center mx={4}>
           <Divider orientation="vertical" borderColor="gray.500" />
         </Center>
@@ -42,6 +51,7 @@ export default function TaskEvent({}: Props) {
         </Box>
       </Flex>
 
+      {/* Events */}
       <Flex
         px={3}
         height="335px"
@@ -63,6 +73,8 @@ export default function TaskEvent({}: Props) {
             </Box>
           </Box>
         ))}
+
+        <div ref={bottomRef} />
       </Flex>
     </Box>
   );

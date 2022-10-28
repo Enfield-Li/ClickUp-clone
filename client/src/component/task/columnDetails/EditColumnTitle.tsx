@@ -22,13 +22,14 @@ export default function EditColumnTitle({
 }: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
-  function finishEdit() {
+  function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {
     // Update column title
     setState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
           draftState.columnOptions.status.forEach((column) =>
-            column.id === currentColumn?.id
+            column.id === currentColumn?.id &&
+            e?.currentTarget.value !== column.title
               ? titleInput && (column.title = titleInput)
               : column
           );
@@ -43,15 +44,16 @@ export default function EditColumnTitle({
     <InputGroup width="200px" size="xs">
       {/* Input */}
       <Input
+        autoFocus
         value={titleInput}
         onChange={(e) => {
           setTitleInput(e.target.value);
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            finishEdit();
+            finishEdit(e);
           } else if (e.key === "Escape") {
-            finishEdit();
+            setEditTitle(false);
           }
         }}
       />

@@ -46,13 +46,14 @@ export default function AddStatusColumnInput({
     <InputGroup>
       {/* Input */}
       <Input
-        width="200px"
+        autoFocus
         size="xs"
+        width="200px"
         height="48px"
+        boxShadow="base"
         minWidth="280px"
         cursor="pointer"
         borderTopRadius="sm"
-        boxShadow="base"
         value={titleInput}
         onChange={(e) => {
           setTitleInput(e.target.value);

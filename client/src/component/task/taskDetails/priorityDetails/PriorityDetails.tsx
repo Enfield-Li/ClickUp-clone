@@ -35,7 +35,12 @@ export default function PriorityDetails({}: Props) {
     <Popover>
       {({ onClose: onOptionClose }) => (
         <>
-          <Tooltip hasArrow placement="top" label="Set priority">
+          <Tooltip
+            hasArrow
+            placement="top"
+            fontWeight={600}
+            label="Set priority"
+          >
             <Box display="inline-block">
               <PopoverTrigger>
                 <Center

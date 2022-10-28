@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
@@ -23,7 +23,6 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
-import { toPlainObject } from "../../utils/proxyToObject";
 
 type Props = {
   sortBy: SortBy;
@@ -37,7 +36,12 @@ export default function TaskListView({ sortBy }: Props) {
   //   );
   console.log(state);
 
-  if (!state || loading) return <div>Loading</div>;
+  if (!state || loading)
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
 
   const currentColumns = state.columnOptions[sortBy];
 

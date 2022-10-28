@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { useState } from "react";
 import { SetState, StatusColumns } from "../taskTypes";
 import AddStatusColumnInput from "./AddStatusColumnInput";
@@ -20,22 +20,21 @@ export default function AddStatusColumn({ setState, statusColumns }: Props) {
           statusColumns={statusColumns}
         />
       ) : (
-        <Box
+        <Center
           p={3}
           height="48px"
-          opacity={showEdit ? "" : "70%"}
           borderTop="2px"
           minWidth="280px"
           cursor="pointer"
-          // boxShadow="base"
           borderTopRadius="sm"
           _hover={{ boxShadow: "base" }}
+          opacity={showEdit ? "" : "70%"}
           onClick={() => {
             setShowEdit(true);
           }}
         >
           <Box>+ ADD STATUS</Box>
-        </Box>
+        </Center>
       )}
     </>
   );

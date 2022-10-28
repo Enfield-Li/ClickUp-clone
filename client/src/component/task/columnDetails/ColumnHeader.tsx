@@ -9,7 +9,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ColumnType, SetState, SortBy, STATUS } from "../taskTypes";
 import EditColumnTitle from "./EditColumnTitle";
 import RenameStatus from "./RenameStatus";
@@ -34,6 +34,10 @@ export default function ColumnHeader({
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
 
+  useEffect(() => {
+    setEditTitle(false);
+  }, [sortBy]);
+
   return (
     <Box minWidth="280px" mb={4}>
       <Flex
@@ -50,6 +54,7 @@ export default function ColumnHeader({
         {editTitle ? (
           // Edit title
           <EditColumnTitle
+            // sortBy={sortBy}
             setState={setState}
             setEditTitle={setEditTitle}
             currentColumn={currentColumn}

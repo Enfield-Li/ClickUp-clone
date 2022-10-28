@@ -4,8 +4,8 @@ import { getDaysBefore, getNextNWeekDay } from "./getWeekDays";
 export const mockColumnOptions: ColumnOptions = {
   status: [
     { id: 1, title: "TO DO", color: "blue.300" },
-    { id: 2, title: "DONE", color: "green.400", previousColumnId: 3 },
-    { id: 3, title: "IN PROGRESS", color: "purple.400", previousColumnId: 1 },
+    { id: 3, title: "DONE", color: "green.400", previousColumnId: 2 },
+    { id: 2, title: "IN PROGRESS", color: "purple.400", previousColumnId: 1 },
   ],
   priority: [
     { id: 1, title: "NO PRIORITY", color: "gray.400" },
@@ -136,7 +136,7 @@ export const mockTaskList: TaskList = [
         taskId: 111,
         userId: 3,
         username: "user",
-        createdAt: getDaysBefore(9),
+        createdAt: getDaysBefore(3),
         updatedAt: getDaysBefore(1),
         assignmentAction: "removed",
         assignedUser: { userId: 4, username: "abc" },
