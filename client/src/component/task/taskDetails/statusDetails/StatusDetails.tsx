@@ -87,10 +87,17 @@ export default function StatusDetails({}: Props) {
 
               {/* Next stage */}
               <Tooltip
+                my={2}
                 hasArrow
                 placement="top"
-                fontWeight={600}
-                label={`Next status [${nextStatus.title.toUpperCase()}]`}
+                label={
+                  <Flex>
+                    <Box fontWeight="semibold">Next:&nbsp;</Box>
+                    <Box fontWeight="bold">
+                      {nextStatus.title.toUpperCase()}
+                    </Box>
+                  </Flex>
+                }
               >
                 <Center
                   ml="1px"

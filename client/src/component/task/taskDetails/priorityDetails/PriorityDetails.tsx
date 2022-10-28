@@ -36,9 +36,10 @@ export default function PriorityDetails({}: Props) {
       {({ onClose: onOptionClose }) => (
         <>
           <Tooltip
+            my={2}
             hasArrow
             placement="top"
-            fontWeight={600}
+            fontWeight="semibold"
             label="Set priority"
           >
             <Box display="inline-block">

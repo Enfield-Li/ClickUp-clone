@@ -20,7 +20,13 @@ export default function FinishTask({}: Props) {
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
   return (
-    <Tooltip fontWeight={600} hasArrow placement="top" label="Set to complete">
+    <Tooltip
+      my={2}
+      hasArrow
+      placement="top"
+      fontWeight="semibold"
+      label="Set to complete"
+    >
       <Center
         opacity="65%"
         fontSize={"33px"}

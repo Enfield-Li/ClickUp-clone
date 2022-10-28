@@ -1,4 +1,4 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, Center } from "@chakra-ui/react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import { calculateTime } from "../../../../utils/calculateTime";
@@ -33,7 +33,7 @@ export default function TaskCreatorInfo({}: Props) {
         <Box opacity="65%">&nbsp;created this task</Box>
       </Flex>
 
-      <Box opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Box>
+      <Center opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Center>
     </Flex>
   );
 }

@@ -33,7 +33,7 @@ export default function TaskEvent({}: Props) {
         borderBottomColor="gray.500"
       >
         {/* Created at */}
-        <Box fontSize="small" height="35px" mr={2}>
+        <Box fontSize="small" height="35px" mr={4}>
           <Box opacity="50%">CREATED</Box>
           <Box opacity="65%">
             {new Date(task?.createdAt!).toLocaleDateString()}

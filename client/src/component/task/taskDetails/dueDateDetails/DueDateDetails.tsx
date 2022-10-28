@@ -1,9 +1,11 @@
 import {
+  Box,
   Center,
   Popover,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
 } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import DueDateOptions from "./DueDateOptions";
@@ -26,37 +28,49 @@ export default function DueDateDetails({}: Props) {
 
   return (
     <>
-      <Popover>
-        {({ onClose: onOptionClose, isOpen: isOptionOpen }) => (
-          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
-          <>
-            <PopoverTrigger>
-              <Center
-                width="35px"
-                height="35px"
-                opacity="55%"
-                fontSize={"17px"}
-                cursor={"pointer"}
-                border="1px dashed"
-                borderRadius={"50%"}
-                _hover={{ color: "purple.400", opacity: "100%" }}
-              >
-                <i className="bi bi-calendar2-check"></i>
-              </Center>
-            </PopoverTrigger>
+      {task?.expectedDueDate ? (
+        <Box>expectedDueDate</Box>
+      ) : (
+        <Popover>
+          {({ onClose: onOptionClose, isOpen: isOptionOpen }) => (
+            // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
+            <>
+              <PopoverTrigger>
+                {/* <Tooltip
+                  my={2}
+                  hasArrow
+                  placement="top"
+                  fontWeight="semibold"
+                  label={"Due date"}
+                > */}
+                <Center
+                  width="35px"
+                  height="35px"
+                  opacity="55%"
+                  fontSize={"17px"}
+                  cursor={"pointer"}
+                  border="1px dashed"
+                  borderRadius={"50%"}
+                  _hover={{ color: "purple.400", opacity: "100%" }}
+                >
+                  <i className="bi bi-calendar2-check"></i>
+                </Center>
+                {/* </Tooltip> */}
+              </PopoverTrigger>
 
-            {/* DueDate option */}
-            <PopoverContent width="200px">
-              <PopoverBody shadow={"2xl"} p={0}>
-                <DueDateOptions
-                  onOptionClose={onOptionClose}
-                  isOptionOpen={isOptionOpen}
-                />
-              </PopoverBody>
-            </PopoverContent>
-          </>
-        )}
-      </Popover>
+              {/* DueDate option */}
+              <PopoverContent width="200px">
+                <PopoverBody shadow={"2xl"} p={0}>
+                  <DueDateOptions
+                    onOptionClose={onOptionClose}
+                    isOptionOpen={isOptionOpen}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </>
+          )}
+        </Popover>
+      )}
     </>
   );
 }
