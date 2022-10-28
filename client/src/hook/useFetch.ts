@@ -201,6 +201,7 @@ export function useLocalTasks(sortBy: SortBy) {
         setTaskStateContext({
           ...taskStateContext,
           sortBy,
+          columnOptions: state.columnOptions,
         });
 
         setState({

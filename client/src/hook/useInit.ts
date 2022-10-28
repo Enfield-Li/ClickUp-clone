@@ -16,7 +16,6 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    console.log(getDueDateInfo());
     authDispatch({ type: "LOGIN_USER", payload: { id: 3, username: "user" } });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);

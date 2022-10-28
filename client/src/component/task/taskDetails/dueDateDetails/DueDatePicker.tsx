@@ -36,8 +36,8 @@ export default function DueDatePicker({}: Props) {
             my={2}
             hasArrow
             placement="top"
-            fontWeight="semibold"
             label={"Due date"}
+            fontWeight="semibold"
           >
             <Box display="inline-block">
               <PopoverTrigger>
