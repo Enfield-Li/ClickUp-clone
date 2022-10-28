@@ -11,12 +11,14 @@ import { getRandomNumber } from "../../../utils/getRandomNumber";
 import { StatusColumns, SetState, StatusColumn } from "../taskTypes";
 
 type Props = {
+  color: string;
   setState: SetState;
   statusColumns: StatusColumns;
   setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function AddStatusColumnInput({
+  color,
   setState,
   setShowEdit,
   statusColumns,
@@ -28,7 +30,7 @@ export default function AddStatusColumnInput({
 
     const newColumn: StatusColumn = {
       id: 4,
-      color: "",
+      color,
       title: titleInput,
       previousColumnId,
     };

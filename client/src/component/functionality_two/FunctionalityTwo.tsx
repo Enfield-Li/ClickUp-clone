@@ -10,11 +10,24 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
+import { HexColorPicker, RgbaColorPicker } from "react-colorful";
 
 type Props = {};
 
 export default function FunctionalityTwo({}: Props) {
+  const [color, setColor] = useState("#aabbcc");
+  const [color2, setColor2] = useState({ r: 200, g: 150, b: 35, a: 0.5 });
+
+  console.log({ color });
+  console.log({ color2 });
+  return (
+    <>
+      <HexColorPicker color={color} onChange={setColor} />
+      <RgbaColorPicker color={color2} onChange={setColor2} />
+    </>
+  );
+
   return (
     <>
       {/* {Array(5)
