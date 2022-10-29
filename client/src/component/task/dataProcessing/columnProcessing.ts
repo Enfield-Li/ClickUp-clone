@@ -77,7 +77,7 @@ export function initializeDueDataColumns(
   const thisWeekLocalDateString = getOneWholeWeekLocalDateString();
   for (let i = 0; i < weekDayColumnsFinal.length; i++) {
     const weekDay = weekDayColumnsFinal[i];
-    weekDay.localDateStr = thisWeekLocalDateString[i];
+    weekDay.localDateStr = thisWeekLocalDateString[i]; // BUG?
   }
 
   return [...front, ...weekDayColumnsFinal, ...end] as DueDateColumns;
@@ -103,15 +103,15 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
     return:
     {
         "lookUpDueDate": {
-            "OVER DUE": "2022-10-27T12:41:44.971Z",
-            "TODAY": "2022-10-28T12:41:44.971Z",
-            "TOMORROW": "2022-10-29T12:41:44.971Z",
-            "SUNDAY": "2022-10-30T12:41:44.971Z",
-            "MONDAY": "2022-10-31T12:41:44.972Z",
-            "TUESDAY": "2022-11-01T12:41:44.972Z",
+            "OVER DUE":  "2022-10-27T12:41:44.971Z",
+            "TODAY":     "2022-10-28T12:41:44.971Z",
+            "TOMORROW":  "2022-10-29T12:41:44.971Z",
+            "SUNDAY":    "2022-10-30T12:41:44.971Z",
+            "MONDAY":    "2022-10-31T12:41:44.972Z",
+            "TUESDAY":   "2022-11-01T12:41:44.972Z",
             "WEDNESDAY": "2022-11-02T12:41:44.972Z",
-            "FUTURE": "2022-11-04T12:41:44.972Z",
-            "THURSDAY": "2022-11-03T12:41:44.972Z"
+            "FUTURE":    "2022-11-04T12:41:44.972Z",
+            "THURSDAY":  "2022-11-03T12:41:44.972Z"
         },
         "arrOfThisWeekDay": [
             "NO DUE DATE",
@@ -131,6 +131,7 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
 export function getDueDateInfo() {
   const arrOfThisWeekDay: SelectableDueDate[] = [];
   const lookUpDueDate: LookUpDueDate = {
+    "NO DUE DATE": undefined,
     "OVER DUE": undefined,
     TODAY: undefined,
     TOMORROW: undefined,
@@ -141,7 +142,6 @@ export function getDueDateInfo() {
     WEDNESDAY: undefined,
     FUTURE: undefined,
     DONE: undefined,
-    "NO DUE DATE": undefined,
     THURSDAY: undefined,
     FRIDAY: undefined,
   };
