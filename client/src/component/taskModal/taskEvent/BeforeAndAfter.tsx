@@ -1,5 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import {
   ColumnOptions,
   UndeterminedColumns,
@@ -7,7 +7,7 @@ import {
   SortBy,
   UpdateEvent,
   BeforeOrAfterUpdate,
-} from "../../taskTypes";
+} from "../../task/taskTypes";
 
 type Props = {
   updateEvent: UpdateEvent;

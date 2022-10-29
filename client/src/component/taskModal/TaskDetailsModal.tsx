@@ -12,11 +12,11 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import TaskInfo from "./TaskInfo";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
-import { getTaskEvent } from "../TaskActions";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { getTaskEvent } from "../task/actions/TaskActions";
 
 type Props = {};
 

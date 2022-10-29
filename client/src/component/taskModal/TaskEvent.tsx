@@ -1,16 +1,13 @@
 import { Box, Center, Divider, Flex } from "@chakra-ui/react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import {
-  isAssignmentEvent,
-  isCommentEvent,
-} from "../../../utils/determinEvent";
-import CommentEvents from "./taskEvent/CommentEvents";
-import DueDateDetails from "./dueDateDetails/DueDateDetails";
-import UpdateEvents from "./taskEvent/updateEvents";
-import TaskCreatorInfo from "./taskEvent/CreateTaskInfo";
-import AssignmentEvents from "./taskEvent/AssignmentEvents";
 import { useRef, useEffect } from "react";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { isCommentEvent, isAssignmentEvent } from "../../utils/determinEvent";
+import DueDateDetails from "./dueDateDetails/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
+import AssignmentEvents from "./taskEvent/AssignmentEvents";
+import CommentEvents from "./taskEvent/CommentEvents";
+import TaskCreatorInfo from "./taskEvent/CreateTaskInfo";
+import UpdateEvents from "./taskEvent/updateEvents";
 
 type Props = {};
 

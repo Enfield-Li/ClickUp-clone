@@ -1,7 +1,7 @@
 import { Flex, Box, Center } from "@chakra-ui/react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { calculateTime } from "../../../../utils/calculateTime";
+import useAuthContext from "../../../context/auth/useAuthContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = {};
 

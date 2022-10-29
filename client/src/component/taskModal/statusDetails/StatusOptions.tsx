@@ -1,8 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
-} from "../../../../context/task_detail/useTaskDetailContext";
-import SelectOption from "../../select/SelectOption";
+} from "../../../context/task_detail/useTaskDetailContext";
+import SelectOption from "../../task/select/SelectOption";
 
 type Props = { onOptionClose: () => void };
 

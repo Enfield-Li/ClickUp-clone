@@ -13,7 +13,7 @@ import {
 import { useState } from "react";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
-} from "../../../../context/task_detail/useTaskDetailContext";
+} from "../../../context/task_detail/useTaskDetailContext";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 

@@ -2,7 +2,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { Center, Tooltip } from "@chakra-ui/react";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
-} from "../../../../context/task_detail/useTaskDetailContext";
+} from "../../../context/task_detail/useTaskDetailContext";
 
 type Props = {};
 

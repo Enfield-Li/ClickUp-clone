@@ -46,8 +46,9 @@ export default function Column({
         {(provided, snapshot) => (
           <Box
             height="500px"
-            overflow="auto"
+            overflow="hidden"
             minHeight="100px"
+            _hover={{ overflow: "auto" }}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >

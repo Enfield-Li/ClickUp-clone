@@ -4,11 +4,11 @@ import produce from "immer";
 import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import Column from "./Column";
-import { updateTasksPosition } from "./TaskActions";
+import { updateTasksPosition } from "./actions/TaskActions";
 import {
   processLookColumnId,
   updateTaskStatsInColumn,
-} from "./dataProcessing/taskProcessing";
+} from "./actions/taskProcessing";
 import {
   DUE_DATE,
   LookUpColumnId,
@@ -23,14 +23,14 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
-import { getDueDateInfo } from "./dataProcessing/columnProcessing";
+import { getDueDateInfo } from "./actions/columnProcessing";
 import { toPlainObject } from "../../utils/proxyToObject";
 
 type Props = {
   sortBy: SortBy;
 };
 
-export default function TaskListView({ sortBy }: Props) {
+export default function TaskBoardView({ sortBy }: Props) {
   const { state, setState, loading } = useLocalTasks(sortBy);
   //   const { state, loading, error, setState } = useFetchTasks(
   //     API_ENDPOINT.TASK_ALL_TASKS,

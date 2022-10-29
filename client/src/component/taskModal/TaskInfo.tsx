@@ -8,13 +8,13 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import produce from "immer";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../../utils/constant";
-import { SetState, UpdateTaskDescDTO } from "../taskTypes";
-import TaskOptions from "./taskOptions/DeleteTask";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { axiosInstance } from "../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../utils/constant";
+import { SetState, UpdateTaskDescDTO } from "../task/taskTypes";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";
+import TaskOptions from "./taskOptions/DeleteTask";
 
 type Props = {};
 

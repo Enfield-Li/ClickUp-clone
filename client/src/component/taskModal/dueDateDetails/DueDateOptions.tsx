@@ -2,11 +2,11 @@ import { Box, Button, Center, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
-} from "../../../../context/task_detail/useTaskDetailContext";
-import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
-import { getDueDateInfo } from "../../dataProcessing/columnProcessing";
-import { getDueDateColumnFromDateString } from "../../dataProcessing/taskProcessing";
-import { SelectableDueDate } from "../../taskTypes";
+} from "../../../context/task_detail/useTaskDetailContext";
+import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { getDueDateInfo } from "../../task/actions/columnProcessing";
+import { getDueDateColumnFromDateString } from "../../task/actions/taskProcessing";
+import { SelectableDueDate } from "../../task/taskTypes";
 
 type Props = { isOptionOpen: boolean };
 

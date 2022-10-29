@@ -6,7 +6,7 @@ import useAuthContext, {
   refreshUserToken,
 } from "../context/auth/useAuthContext";
 import { useNavigate } from "react-router-dom";
-import { getDueDateInfo } from "../component/task/dataProcessing/columnProcessing";
+import { getDueDateInfo } from "../component/task/actions/columnProcessing";
 
 export default function useInit() {
   const navigate = useNavigate();

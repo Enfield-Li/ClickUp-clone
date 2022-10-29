@@ -32,11 +32,11 @@ import {
   State,
   Task,
 } from "./taskTypes";
-import { createTask } from "./TaskActions";
+import { createTask } from "./actions/TaskActions";
 import {
   getDueDateColumnFromDateString,
   updateTaskStatsInColumn,
-} from "./dataProcessing/taskProcessing";
+} from "./actions/taskProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
 import {
   getNextNWeekDayString,

@@ -1,6 +1,6 @@
 import { Box, Tooltip } from "@chakra-ui/react";
 import React from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 
 type Props = {};
 

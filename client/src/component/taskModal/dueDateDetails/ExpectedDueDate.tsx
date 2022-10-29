@@ -12,7 +12,7 @@ import produce from "immer";
 import { useState } from "react";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
-} from "../../../../context/task_detail/useTaskDetailContext";
+} from "../../../context/task_detail/useTaskDetailContext";
 import DueDateOptions from "./DueDateOptions";
 
 type Props = {};

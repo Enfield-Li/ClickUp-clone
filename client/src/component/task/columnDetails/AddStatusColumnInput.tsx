@@ -38,7 +38,13 @@ export default function AddStatusColumnInput({
     setState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
-          draftState.columnOptions.status.push(newColumn);
+          const indexBeforeTheEnd = draftState.columnOptions.status.length - 1;
+          // Create new column before the last one "Done"
+          draftState.columnOptions.status.splice(
+            indexBeforeTheEnd,
+            0,
+            newColumn
+          );
         });
       }
     });

@@ -6,7 +6,7 @@ import {
   processTaskList,
   groupTaskListOnSortBy,
   processLocalTaskList,
-} from "../component/task/dataProcessing/taskProcessing";
+} from "../component/task/actions/taskProcessing";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
@@ -14,7 +14,7 @@ import { mockColumnOptions, mockTaskList } from "../utils/mockData";
 import {
   initializeDueDataColumns,
   processColumns,
-} from "../component/task/dataProcessing/columnProcessing";
+} from "../component/task/actions/columnProcessing";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();

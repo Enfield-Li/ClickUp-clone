@@ -1,7 +1,7 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
-} from "../../../../context/task_detail/useTaskDetailContext";
+} from "../../../context/task_detail/useTaskDetailContext";
 
 type Props = { onOptionClose: () => void };
 

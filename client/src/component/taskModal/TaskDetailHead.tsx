@@ -7,10 +7,10 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../../utils/constant";
-import { SetState, UpdateTaskTitleDTO } from "../taskTypes";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { axiosInstance } from "../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../utils/constant";
+import { SetState, UpdateTaskTitleDTO } from "../task/taskTypes";
 
 type Props = {};
 

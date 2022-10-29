@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import DueDateOptions from "./DueDateOptions";
 
 type Props = {};

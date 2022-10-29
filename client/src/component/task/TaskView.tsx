@@ -1,10 +1,10 @@
 import { useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SortBy, STATUS } from "./taskTypes";
-import TaskDetailModal from "./taskDetails/TaskDetailsModal";
-import TaskListView from "./TaskListView";
+import TaskBoardView from "./TaskBoardView";
 import TaskNavigation from "./TaskNavigation";
 import { Box } from "@chakra-ui/react";
+import TaskDetailModal from "../taskModal/TaskDetailsModal";
 
 type Props = {};
 
@@ -15,7 +15,7 @@ export default function TaskView({}: Props) {
   return (
     <Box>
       <TaskNavigation sortBy={sortBy} setSortBy={setSortBy} />
-      <TaskListView sortBy={sortBy} />
+      <TaskBoardView sortBy={sortBy} />
 
       {/* 
         Put modal outside list view, 

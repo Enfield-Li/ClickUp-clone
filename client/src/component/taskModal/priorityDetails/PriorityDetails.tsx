@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import PriorityOptions from "./PriorityOptions";
 
 type Props = {};

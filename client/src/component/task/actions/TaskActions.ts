@@ -1,13 +1,13 @@
-import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
-import { axiosInstance } from "../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../utils/constant";
-import { toPlainObject } from "../../utils/proxyToObject";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
+import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { API_ENDPOINT } from "../../../utils/constant";
+import { toPlainObject } from "../../../utils/proxyToObject";
 import {
   Task,
   TaskEvents,
   TaskList,
   UpdateTasksPositionDTO,
-} from "./taskTypes";
+} from "../taskTypes";
 
 export async function getTasks() {}
 
