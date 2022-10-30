@@ -15,6 +15,7 @@ import {
   initializeDueDataColumns,
   processColumns,
 } from "../component/task/actions/columnProcessing";
+import { sleep } from "../utils/sleep";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
@@ -72,10 +73,7 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         columnDataFromApi.dueDate
       );
 
-      const columnOptions = {
-        ...columnDataFromApi,
-        dueDate: dueDateColumns,
-      };
+      const columnOptions = { ...columnDataFromApi, dueDate: dueDateColumns };
 
       // init taskEvents and convert expectedDueDate to dueDate
       const taskList = processTaskList(dueDateColumns, response.data);
@@ -86,16 +84,8 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         sortBy
       );
 
-      setTaskStateContext({
-        columnOptions,
-        setState,
-        sortBy,
-      });
-
-      setState({
-        orderedTasks,
-        columnOptions: columnOptions,
-      });
+      setTaskStateContext({ columnOptions, setState, sortBy });
+      setState({ orderedTasks, columnOptions: columnOptions });
     } catch (error) {
       setError(true);
       const err = error as AxiosError;
@@ -109,23 +99,22 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
     setLoading(true);
 
     if (state && taskStateContext) {
-      await new Promise<void>((resolve) => {
-        setTaskStateContext({
-          ...taskStateContext,
-          sortBy,
-        });
-
-        setState({
-          ...state,
-          orderedTasks: groupTaskListOnSortBy(
-            collectAllTasks(state.orderedTasks),
-            state.columnOptions[sortBy],
-            sortBy
-          ),
-        });
-
-        resolve();
+      setTaskStateContext({
+        ...taskStateContext,
+        sortBy,
+        columnOptions: state.columnOptions,
       });
+
+      setState({
+        ...state,
+        orderedTasks: groupTaskListOnSortBy(
+          collectAllTasks(state.orderedTasks),
+          state.columnOptions[sortBy],
+          sortBy
+        ),
+      });
+
+      await sleep(0);
     }
 
     setLoading(false);
@@ -133,96 +122,3 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
 
   return { state, setState, loading, error };
 }
-
-export function useLocalTasks(sortBy: SortBy) {
-  const [state, setState] = useState<State>();
-  const [loading, setLoading] = useState(false);
-  const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
-
-  useEffect(() => {
-    fetchLocalData();
-  }, []);
-
-  // Sync up orderedTasks with columns under sortBy
-  useEffect(() => {
-    updateLocalState();
-  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
-
-  async function fetchLocalData() {
-    setLoading(true);
-
-    await new Promise<void>((resolve) => {
-      const columnDataFromApi = mockColumnOptions;
-
-      //   const dueDateColumns = initializeDueDataColumns(
-      //     mockColumnOptions.dueDate
-      //   );
-
-      const { dueDateColumns, statusColumns } =
-        processColumns(columnDataFromApi);
-
-      const columnOptions = {
-        ...columnDataFromApi,
-        dueDate: dueDateColumns,
-        status: statusColumns,
-      };
-
-      // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processLocalTaskList(dueDateColumns, mockTaskList);
-
-      const orderedTasks = groupTaskListOnSortBy(
-        taskList,
-        columnDataFromApi[sortBy],
-        sortBy
-      );
-
-      setTaskStateContext({
-        columnOptions,
-        setState,
-        sortBy,
-      });
-
-      setState({
-        orderedTasks,
-        columnOptions,
-      });
-
-      resolve();
-    });
-
-    setLoading(false);
-  }
-
-  async function updateLocalState() {
-    setLoading(true);
-
-    if (state && taskStateContext) {
-      await new Promise<void>((resolve) => {
-        setTaskStateContext({
-          ...taskStateContext,
-          sortBy,
-          columnOptions: state.columnOptions,
-        });
-
-        setState({
-          ...state,
-          orderedTasks: groupTaskListOnSortBy(
-            collectAllTasks(state.orderedTasks),
-            state.columnOptions[sortBy],
-            sortBy
-          ),
-        });
-
-        resolve();
-      });
-    }
-
-    setLoading(false);
-  }
-
-  return { state, setState, loading };
-}
-
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};

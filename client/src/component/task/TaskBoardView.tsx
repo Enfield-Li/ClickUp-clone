@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { useFetchTasks, useLocalTasks } from "../../hook/useFetch";
+import { useFetchTasks } from "../../hook/useFetch";
 import { API_ENDPOINT } from "../../utils/constant";
 import Column from "./Column";
 import { updateTasksPosition } from "./actions/TaskActions";
@@ -25,6 +25,7 @@ import {
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
 import { getDueDateInfo } from "./actions/columnProcessing";
 import { toPlainObject } from "../../utils/proxyToObject";
+import { useLocalTasks } from "../../hook/useLocal";
 
 type Props = {
   sortBy: SortBy;
@@ -38,12 +39,14 @@ export default function TaskBoardView({ sortBy }: Props) {
   //   );
   console.log(state);
 
-  if (!state || loading)
+  if (loading)
     return (
       <Center>
         <Spinner />
       </Center>
     );
+
+  if (!state) return <div>no data</div>;
 
   const currentColumns = state.columnOptions[sortBy];
 

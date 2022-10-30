@@ -23,6 +23,7 @@ export default function FunctionalityTwo({}: Props) {
   console.log({ color2 });
   return (
     <>
+      {/* Alternative: react-input-color */}
       <HexColorPicker color={color} onChange={setColor} />
       <RgbaColorPicker color={color2} onChange={setColor2} />
     </>
