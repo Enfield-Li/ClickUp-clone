@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
+import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
@@ -38,13 +39,23 @@ export default function TaskDetailHead({}: Props) {
           onFocus={() => setShowEditIcon(false)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.currentTarget.value !== task!.title) {
-              updateTaskTitle(task!.id!, e.currentTarget.value, setState);
+              updateTaskTitle(
+                task!.id!,
+                e.currentTarget.value,
+                setState,
+                setTask
+              );
             }
           }}
           onBlur={(e) => {
             setShowEditIcon(true);
             if (e.target.value !== task!.title) {
-              updateTaskTitle(task!.id!, e.currentTarget.value, setState);
+              updateTaskTitle(
+                task!.id!,
+                e.currentTarget.value,
+                setState,
+                setTask
+              );
             }
           }}
         />
@@ -63,9 +74,30 @@ export default function TaskDetailHead({}: Props) {
 export async function updateTaskTitle(
   taskId: number,
   newTitle: string,
-  setState: SetState
+  setState: SetState,
+  setTask: SetTask
 ) {
-  console.log("called");
+  setState((previousState) => {
+    if (previousState)
+      return produce(previousState, (draftState) => {
+        if (draftState)
+          draftState.orderedTasks.forEach((tasks) =>
+            tasks.taskList.forEach((task) => {
+              if (task.id === taskId) {
+                task.title = newTitle;
+                task.updatedAt = new Date();
+              }
+            })
+          );
+      });
+  });
+
+  setTask((prev) => {
+    if (prev) {
+      return { ...prev, title: newTitle };
+    }
+  });
+
   try {
     const updateTaskTitleDTO: UpdateTaskTitleDTO = {
       taskId: taskId,
@@ -79,17 +111,6 @@ export async function updateTaskTitle(
 
     if (response.data) {
     }
-
-    setState((previousState) =>
-      produce(previousState, (draftState) => {
-        if (draftState)
-          draftState.orderedTasks.forEach((tasks) =>
-            tasks.taskList.forEach((task) =>
-              task.id === taskId ? (task.title = newTitle) : task
-            )
-          );
-      })
-    );
   } catch (error) {
     console.log(error);
   }

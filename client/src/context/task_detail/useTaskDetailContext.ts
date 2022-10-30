@@ -177,6 +177,7 @@ export function updateCurrentTaskStatus(
 
           // Clear events from state task
           sourceTask.taskEvents = [];
+          sourceTask.updatedAt = new Date();
         }
       });
     }
@@ -275,6 +276,7 @@ export function updateTaskPriorityOrDueDate(
 
           // Clear events from state task
           sourceTask.taskEvents = [];
+          sourceTask.updatedAt = new Date();
         }
       });
     }

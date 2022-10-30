@@ -8,6 +8,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import produce from "immer";
+import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../utils/constant";
@@ -78,7 +79,12 @@ export default function TaskInfo({}: Props) {
           <EditableTextarea
             onBlur={(e) => {
               if (e.target.value !== task!.title) {
-                updateTaskDesc(task!.id!, e.currentTarget.value, setState);
+                updateTaskDesc(
+                  task!.id!,
+                  e.currentTarget.value,
+                  setState,
+                  setTask
+                );
               }
             }}
           />
@@ -91,8 +97,29 @@ export default function TaskInfo({}: Props) {
 export async function updateTaskDesc(
   taskId: number,
   newDesc: string,
-  setState: SetState
+  setState: SetState,
+  setTask: SetTask
 ) {
+  setState((previousState) =>
+    produce(previousState, (draftState) => {
+      if (draftState)
+        draftState.orderedTasks.forEach((tasks) =>
+          tasks.taskList.forEach((task) => {
+            if (task.id === taskId) {
+              task.description = newDesc;
+              task.updatedAt = new Date();
+            }
+          })
+        );
+    })
+  );
+
+  setTask((prev) => {
+    if (prev) {
+      return { ...prev, desc: newDesc };
+    }
+  });
+
   try {
     const updateTaskDescDTO: UpdateTaskDescDTO = {
       taskId: taskId,
@@ -105,16 +132,6 @@ export async function updateTaskDesc(
     );
 
     if (response.data) {
-      setState((previousState) =>
-        produce(previousState, (draftState) => {
-          if (draftState)
-            draftState.orderedTasks.forEach((tasks) =>
-              tasks.taskList.forEach((task) =>
-                task.id === taskId ? (task.description = newDesc) : task
-              )
-            );
-        })
-      );
     }
   } catch (error) {
     console.log(error);

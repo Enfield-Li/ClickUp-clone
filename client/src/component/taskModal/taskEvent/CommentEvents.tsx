@@ -9,7 +9,7 @@ export default function CommentEvents({ commentEvent }: Props) {
   const { authState } = useAuthContext();
 
   return (
-    <Flex>
+    <Flex my={1}>
       {/* User profile picture */}
       <Center
         ml={1}
@@ -21,27 +21,38 @@ export default function CommentEvents({ commentEvent }: Props) {
       >
         {commentEvent.username?.[0]}
       </Center>
-      <Box backgroundColor={"blackAlpha.300"} p={4} rounded="md" width="100%">
+
+      {/* Content */}
+      <Box backgroundColor={"blackAlpha.300"} p={3} rounded="md" width="100%">
         <Flex fontSize="small" justifyContent="space-between">
           <Flex>
             {/* Someone */}
-            <Box fontWeight="bold">
+            <Center
+              p={1}
+              rounded="sm"
+              cursor="pointer"
+              fontWeight="bold"
+              _hover={{
+                backgroundSize: "120% 120%",
+                backgroundColor: "blackAlpha.300",
+              }}
+            >
               {authState.user!.id === commentEvent.userId
                 ? "You"
                 : commentEvent.username}
-            </Box>
+            </Center>
             {/* Commented */}
-            <Box opacity="65%">&nbsp;commented</Box>
+            <Center opacity="65%">&nbsp;commented</Center>
           </Flex>
 
           {/* Update date ago */}
-          <Box opacity="65%" fontSize="small">
+          <Center opacity="65%" fontSize="small">
             {calculateTime(commentEvent.createdAt!)}
-          </Box>
+          </Center>
         </Flex>
 
         {/* Comment content */}
-        <Box mt={3} ml={2} overflowWrap="break-word" wordBreak="break-all">
+        <Box ml={3} mt={1} overflowWrap="break-word" wordBreak="break-all">
           {commentEvent.comment}
         </Box>
       </Box>

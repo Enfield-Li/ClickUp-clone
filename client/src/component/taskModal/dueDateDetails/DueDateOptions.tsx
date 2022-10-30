@@ -1,9 +1,10 @@
-import { Box, Button, Center, Input } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Button, Center, Flex, Input } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { useFocus } from "../../../utils/useFocus";
 import { getDueDateInfo } from "../../task/actions/columnProcessing";
 import { getDueDateColumnFromDateString } from "../../task/actions/taskProcessing";
 import { SelectableDueDate } from "../../task/taskTypes";
@@ -84,7 +85,9 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
         p={2}
         pl={4}
         cursor="pointer"
-        onClick={() => setShowDatePicker(!showDatePicker)}
+        onClick={() => {
+          setShowDatePicker(!showDatePicker);
+        }}
         _hover={{ backgroundColor: "blue.600" }}
       >
         {showDatePicker ? "Hide " : "Show "} date picker
@@ -95,10 +98,12 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
         <>
           <Input
             my={2}
-            type="date"
+            type="datetime-local"
             onChange={(e) => {
               setDueDateInput(e.target.value);
             }}
+            // onFocus={(e) => e.target.showPicker()}
+            // ref={(input) => input !== null && input.focus()}
           />
           <Center mb={2}>
             <Button pl={4} onClick={() => handleDatePicker()}>
@@ -124,4 +129,41 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
       )}
     </Box>
   );
+}
+
+{
+  /* <Flex>
+<Flex flexDirection="column">
+  {arrOfThisWeekDay.map((weekString, index) => (
+    // weekString !== "NO DUE DATE" &&
+    <Box
+      p={2}
+      pl={4}
+      key={index}
+      cursor="pointer"
+      _hover={{ backgroundColor: "blue.600" }}
+      onClick={() => handleSelect(weekString)}
+    >
+      {capitalizeFirstLetter(weekString.toString().toLowerCase())}
+    </Box>
+  ))}
+</Flex>
+
+<Box>
+  <Center mb={2}>
+    <Button pl={4} onClick={() => handleDatePicker()}>
+      Confirm
+    </Button>
+  </Center>
+  <Input
+    my={2}
+    type="datetime-local"
+    onChange={(e) => {
+      setDueDateInput(e.target.value);
+    }}
+    //   onFocus={(e) => e.target.showPicker()}
+    //   ref={(input) => input !== null && input.focus()}
+  />
+</Box>
+</Flex> */
 }

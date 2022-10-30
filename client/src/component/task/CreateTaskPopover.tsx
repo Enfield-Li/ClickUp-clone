@@ -173,7 +173,11 @@ export const CreateTaskPopover = ({
                         <Flex justifyContent={"space-between"}>
                           {showDatePicker ? (
                             // Date picker
-                            <Input {...field} type="date" width="60%" />
+                            <Input
+                              {...field}
+                              width="60%"
+                              type="datetime-local"
+                            />
                           ) : (
                             // Days select
                             <Select {...field} width="60%">
