@@ -10,14 +10,18 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
-import DueDateOptions from "./DueDateOptions";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { UpdateEvent } from "../../task/taskTypes";
+import DueDateSwitch from "./DueDateSwitch";
 
 type Props = {};
 
-export default function ExpectedDueDate({}: Props) {
+export default function ExpectedDueDateDisplay({}: Props) {
+  const { authState } = useAuthContext();
   const {
     task,
     setTask,
@@ -31,6 +35,35 @@ export default function ExpectedDueDate({}: Props) {
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
   const [showDeleteButton, setShowDeleteButton] = useState(false);
+
+  function clearDueDate() {
+    // Update list state
+    updateTaskPriorityOrDueDate(
+      sortBy,
+      task!,
+      setState,
+      "dueDate",
+      1, // No due date
+      undefined
+    );
+
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: "dueDate",
+      beforeUpdate: String(task?.dueDate),
+      afterUpdate: "1",
+      createdAt: new Date(),
+    };
+
+    // Update modal task state
+    setTask({
+      ...task!,
+      expectedDueDate: undefined,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
+  }
 
   return (
     <Box fontSize="small" height="35px">
@@ -69,7 +102,7 @@ export default function ExpectedDueDate({}: Props) {
               {/* DueDate option */}
               <PopoverContent width="200px">
                 <PopoverBody shadow={"2xl"} p={0}>
-                  <DueDateOptions isOptionOpen={isOptionOpen} />
+                  <DueDateSwitch isOptionOpen={isOptionOpen} />
                 </PopoverBody>
               </PopoverContent>
             </>
@@ -83,19 +116,7 @@ export default function ExpectedDueDate({}: Props) {
             color="red"
             opacity="65%"
             fontSize="8px"
-            onClick={() => {
-              setTask({ ...task!, expectedDueDate: undefined });
-
-              // Update list state
-              updateTaskPriorityOrDueDate(
-                sortBy,
-                task!,
-                setState,
-                "dueDate",
-                1, // No due date
-                undefined
-              );
-            }}
+            onClick={() => clearDueDate()}
           >
             <i className="bi bi-x-circle-fill"></i>
           </Center>

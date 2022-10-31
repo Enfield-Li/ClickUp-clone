@@ -22,7 +22,7 @@ import StatusOptions from "./StatusOptions";
 
 type Props = {};
 
-export default function StatusDetails({}: Props) {
+export default function SelectStatusIcons({}: Props) {
   const { authState } = useAuthContext();
   const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();

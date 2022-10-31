@@ -104,7 +104,7 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
     {
         "lookUpDueDate": {
             "OVER DUE":  "2022-10-27T12:41:44.971Z",
-            "TODAY":     "2022-10-28T12:41:44.971Z",
+            "TODAY":     "2022-10-28T12:41:44.971Z", // <- today
             "TOMORROW":  "2022-10-29T12:41:44.971Z",
             "SUNDAY":    "2022-10-30T12:41:44.971Z",
             "MONDAY":    "2022-10-31T12:41:44.972Z",
@@ -112,25 +112,11 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
             "WEDNESDAY": "2022-11-02T12:41:44.972Z",
             "FUTURE":    "2022-11-04T12:41:44.972Z",
             "THURSDAY":  "2022-11-03T12:41:44.972Z"
-        },
-        "arrOfThisWeekDay": [
-            "NO DUE DATE",
-            "OVER DUE",
-            "TODAY",
-            "TOMORROW",
-            "SUNDAY",
-            "MONDAY",
-            "TUESDAY",
-            "WEDNESDAY",
-            "THURSDAY",
-            "FUTURE"
-        ]
+        }
     }
-
 */
-export function getDueDateInfo() {
-  const arrOfThisWeekDay: SelectableDueDate[] = [];
-  const lookUpDueDate: LookUpDueDate = {
+export function getLookUpDueDateTable() {
+  const lookUpExpectedDueDate: LookUpDueDate = {
     "NO DUE DATE": undefined,
     "OVER DUE": undefined,
     TODAY: undefined,
@@ -151,8 +137,7 @@ export function getDueDateInfo() {
   //   lookUpDueDate["NO DUE DATE"] = undefined;
 
   // OverDue (ie. yesterday)
-  arrOfThisWeekDay.push("OVER DUE");
-  lookUpDueDate["OVER DUE"] = getNextNWeekDay(-1);
+  lookUpExpectedDueDate["OVER DUE"] = getNextNWeekDay(-1);
 
   // Monday to Sunday
   for (let i = 0; i < 7; i++) {
@@ -160,13 +145,11 @@ export function getDueDateInfo() {
 
     // today
     if (i === 0) {
-      lookUpDueDate["TODAY"] = day;
-      arrOfThisWeekDay.push("TODAY");
+      lookUpExpectedDueDate["TODAY"] = day;
     }
     // tomorrow
     else if (i === 1) {
-      lookUpDueDate["TOMORROW"] = day;
-      arrOfThisWeekDay.push("TOMORROW");
+      lookUpExpectedDueDate["TOMORROW"] = day;
     }
     // rest of the week
     else {
@@ -174,16 +157,14 @@ export function getDueDateInfo() {
         day
       ) as SelectableDueDate;
 
-      arrOfThisWeekDay.push(uppercaseWeekDayStr);
-      lookUpDueDate[uppercaseWeekDayStr] = day;
+      lookUpExpectedDueDate[uppercaseWeekDayStr] = day;
     }
   }
 
   // future (ie. one week later)
-  arrOfThisWeekDay.push("FUTURE");
-  lookUpDueDate["FUTURE"] = getNextNWeekDay(7);
+  lookUpExpectedDueDate["FUTURE"] = getNextNWeekDay(7);
 
-  return { lookUpDueDate, arrOfThisWeekDay };
+  return lookUpExpectedDueDate;
 }
 
 // Reorder based on statusColumns.previousColumnId

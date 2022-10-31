@@ -17,8 +17,8 @@ import {
   UpdateEvent,
   UpdateTaskDescDTO,
 } from "../task/taskTypes";
-import PriorityDetails from "./priorityDetails/PriorityDetails";
-import StatusDetails from "./statusDetails/StatusDetails";
+import SelectPriorityIcon from "./priorityDetails/SelectPriorityIcon";
+import SelectStatusIcons from "./statusDetails/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";
 
 type Props = {};
@@ -47,7 +47,7 @@ export default function TaskInfo({}: Props) {
         <Flex>
           {/* Status */}
           <Box mr={4}>
-            <StatusDetails />
+            <SelectStatusIcons />
           </Box>
 
           {/* Divider */}
@@ -57,7 +57,7 @@ export default function TaskInfo({}: Props) {
 
           {/* Priority */}
           <Box mx={4}>
-            <PriorityDetails />
+            <SelectPriorityIcon />
           </Box>
         </Flex>
 

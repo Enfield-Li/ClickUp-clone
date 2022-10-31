@@ -4,7 +4,7 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { UpdateEvent } from "../../task/taskTypes";
+import { PriorityColumn, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
@@ -22,6 +22,38 @@ export default function PriorityOptions({ onOptionClose }: Props) {
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
+  function selectPriority(priority: PriorityColumn) {
+    onOptionClose();
+
+    const targetPriorityColumnId = priority.id;
+
+    // Update list state
+    updateTaskPriorityOrDueDate(
+      sortBy,
+      task!,
+      setState,
+      "priority",
+      targetPriorityColumnId
+    );
+
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: "priority",
+      beforeUpdate: String(task?.priority),
+      afterUpdate: String(targetPriorityColumnId),
+      createdAt: new Date(),
+    };
+
+    // Update modal task state
+    setTask({
+      ...task!,
+      priority: targetPriorityColumnId,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
+  }
+
   return (
     <>
       {columnOptions.priority.map(
@@ -34,37 +66,7 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                 p={3}
                 rounded="sm"
                 cursor="pointer"
-                onClick={() => {
-                  onOptionClose();
-
-                  const targetPriorityColumnId = priority.id;
-
-                  // Update list state
-                  updateTaskPriorityOrDueDate(
-                    sortBy,
-                    task!,
-                    setState,
-                    "priority",
-                    targetPriorityColumnId
-                  );
-
-                  const newEvent: UpdateEvent = {
-                    id: getRandomNumberNoLimit(),
-                    userId: authState.user?.id,
-                    taskId: task!.id!,
-                    field: "priority",
-                    beforeUpdate: String(task?.priority),
-                    afterUpdate: String(targetPriorityColumnId),
-                    createdAt: new Date(),
-                  };
-
-                  // Update modal task state
-                  setTask({
-                    ...task!,
-                    priority: targetPriorityColumnId,
-                    taskEvents: [...task!.taskEvents, newEvent],
-                  });
-                }}
+                onClick={() => selectPriority(priority)}
                 _hover={{ backgroundColor: "blue.600" }}
               >
                 <Box color={priority.color} mr={4}>

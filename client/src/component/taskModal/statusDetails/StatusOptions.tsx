@@ -5,7 +5,7 @@ import useTaskDetailContext, {
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import SelectOption from "../../task/select/SelectOption";
-import { UpdateEvent } from "../../task/taskTypes";
+import { StatusColumn, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
@@ -23,44 +23,38 @@ export default function StatusOptions({ onOptionClose }: Props) {
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
+  function selectStatus(column: StatusColumn) {
+    onOptionClose();
+    const targetStatusColumnId = column.id;
+
+    // Update task in state
+    updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
+
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: "status",
+      beforeUpdate: String(task?.status),
+      afterUpdate: String(targetStatusColumnId),
+      createdAt: new Date(),
+    };
+
+    // Update modal task state
+    setTask({
+      ...task!,
+      status: targetStatusColumnId,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
+  }
+
   return (
     <>
       {columnOptions.status.map(
         (column) =>
           task!.status !== column.id && (
             // Hide current column option
-            <Box
-              key={column.id}
-              onClick={() => {
-                onOptionClose();
-                const targetStatusColumnId = column.id;
-
-                // Update task in state
-                updateCurrentTaskStatus(
-                  sortBy,
-                  task!,
-                  setState,
-                  targetStatusColumnId
-                );
-
-                const newEvent: UpdateEvent = {
-                  id: getRandomNumberNoLimit(),
-                  userId: authState.user?.id,
-                  taskId: task!.id!,
-                  field: "status",
-                  beforeUpdate: String(task?.status),
-                  afterUpdate: String(targetStatusColumnId),
-                  createdAt: new Date(),
-                };
-
-                // Update modal task state
-                setTask({
-                  ...task!,
-                  status: targetStatusColumnId,
-                  taskEvents: [...task!.taskEvents, newEvent],
-                });
-              }}
-            >
+            <Box key={column.id} onClick={() => selectStatus(column)}>
               <SelectOption
                 optionName={column.title}
                 backgroundColor={column.color}

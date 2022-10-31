@@ -1,19 +1,19 @@
-import {
-  Box,
-  Center,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-} from "@chakra-ui/react";
-import React from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import DueDateOptions from "./DueDateOptions";
+import { Input, Center, Button } from "@chakra-ui/react";
+import React, { useState } from "react";
+import useAuthContext from "../../../context/auth/useAuthContext";
+import useTaskDetailContext, {
+  updateTaskPriorityOrDueDate,
+} from "../../../context/task_detail/useTaskDetailContext";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
+import { UpdateEvent } from "../../task/taskTypes";
 
 type Props = {};
 
-export default function DueDatePicker({}: Props) {
+export default function DueDateOptions({}: Props) {
+  const { authState } = useAuthContext();
+  const [dueDateInput, setDueDateInput] = useState<string>();
+
   const {
     task,
     setTask,
@@ -25,46 +25,60 @@ export default function DueDatePicker({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
-  const isTaskFinished = task?.dueDate === 0 || task?.dueDate === 1;
+
+  function handleDatePicker() {
+    if (dueDateInput) {
+      const targetDueDateColumnId = getDueDateFromExpectedDueDateString(
+        columnOptions.dueDate,
+        dueDateInput
+      );
+
+      const expectedDueDate = new Date(dueDateInput);
+
+      // Update list state
+      updateTaskPriorityOrDueDate(
+        sortBy,
+        task!,
+        setState,
+        "dueDate",
+        targetDueDateColumnId,
+        expectedDueDate
+      );
+
+      const newEvent: UpdateEvent = {
+        id: getRandomNumberNoLimit(),
+        userId: authState.user?.id,
+        taskId: task!.id!,
+        field: "dueDate",
+        beforeUpdate: String(task?.dueDate),
+        afterUpdate: String(targetDueDateColumnId),
+        createdAt: new Date(),
+      };
+
+      // Update modal task state
+      setTask({
+        ...task!,
+        expectedDueDate,
+        taskEvents: [...task!.taskEvents, newEvent],
+      });
+    }
+  }
 
   return (
-    <Popover>
-      {({ onClose: onOptionClose, isOpen: isOptionOpen }) => (
-        // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
-        <>
-          <Tooltip
-            my={2}
-            hasArrow
-            placement="top"
-            label={"Due date"}
-            fontWeight="semibold"
-          >
-            <Box display="inline-block">
-              <PopoverTrigger>
-                <Center
-                  width="35px"
-                  height="35px"
-                  opacity="55%"
-                  fontSize={"17px"}
-                  cursor={"pointer"}
-                  border="1px dashed"
-                  borderRadius={"50%"}
-                  _hover={{ color: "purple.400", opacity: "100%" }}
-                >
-                  <i className="bi bi-calendar2-check"></i>
-                </Center>
-              </PopoverTrigger>
-            </Box>
-          </Tooltip>
+    <>
+      <Input
+        my={2}
+        type="date"
+        onChange={(e) => {
+          setDueDateInput(e.target.value);
+        }}
+      />
 
-          {/* DueDate option */}
-          <PopoverContent width="200px">
-            <PopoverBody shadow={"2xl"} p={0}>
-              <DueDateOptions isOptionOpen={isOptionOpen} />
-            </PopoverBody>
-          </PopoverContent>
-        </>
-      )}
-    </Popover>
+      <Center mb={2}>
+        <Button pl={4} onClick={() => handleDatePicker()}>
+          Confirm
+        </Button>
+      </Center>
+    </>
   );
 }

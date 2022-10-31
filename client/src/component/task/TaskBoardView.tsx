@@ -23,7 +23,7 @@ import {
   UpdateTasksPositionDTO,
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
-import { getDueDateInfo } from "./actions/columnProcessing";
+import { getLookUpDueDateTable } from "./actions/columnProcessing";
 import { deepCopy } from "../../utils/deepCopy";
 
 type Props = {
