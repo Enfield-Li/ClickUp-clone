@@ -7,15 +7,16 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
+import useAuthContext from "../../context/auth/useAuthContext";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { axiosInstance } from "../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../utils/constant";
-import { SetState, UpdateTaskTitleDTO } from "../task/taskTypes";
+import { updateTaskTitle } from "../task/actions/TaskActions";
+import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../task/taskTypes";
 
 type Props = {};
 
 export default function TaskDetailHead({}: Props) {
+  const { authState } = useAuthContext();
   const [showEditIcon, setShowEditIcon] = useState(true);
 
   const {
@@ -37,20 +38,12 @@ export default function TaskDetailHead({}: Props) {
         <EditablePreview />
         <EditableInput
           onFocus={() => setShowEditIcon(false)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && e.currentTarget.value !== task!.title) {
-              updateTaskTitle(
-                task!.id!,
-                e.currentTarget.value,
-                setState,
-                setTask
-              );
-            }
-          }}
           onBlur={(e) => {
             setShowEditIcon(true);
+
             if (e.target.value !== task!.title) {
-              updateTaskTitle(
+              updateTitle(
+                authState.user!.id,
                 task!.id!,
                 e.currentTarget.value,
                 setState,
@@ -71,46 +64,46 @@ export default function TaskDetailHead({}: Props) {
   );
 }
 
-export async function updateTaskTitle(
+export async function updateTitle(
+  userId: number,
   taskId: number,
   newTitle: string,
   setState: SetState,
   setTask: SetTask
 ) {
-  try {
-    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
-      taskId: taskId,
-      newTitle,
-    };
+  const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
 
-    const response = await axiosInstance.put<boolean>(
-      API_ENDPOINT.TASK_UPDATE_TITLE,
-      updateTaskTitleDTO
-    );
+  const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
 
-    if (response.data) {
-      setState((previousState) => {
-        if (previousState)
-          return produce(previousState, (draftState) => {
-            if (draftState)
-              draftState.orderedTasks.forEach((tasks) =>
-                tasks.taskList.forEach((task) => {
-                  if (task.id === taskId) {
-                    task.title = newTitle;
-                    task.updatedAt = new Date();
-                  }
-                })
-              );
-          });
-      });
+  if (updateSuccess) {
+    setState((previousState) => {
+      if (previousState)
+        return produce(previousState, (draftState) => {
+          draftState.orderedTasks.forEach((tasks) =>
+            tasks.taskList.forEach(
+              (task) => task.id === taskId && (task.title = newTitle)
+            )
+          );
+        });
+    });
 
-      setTask((prev) => {
-        if (prev) {
-          return { ...prev, title: newTitle };
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
+    setTask((prev) => {
+      if (prev) {
+        const newEvent: UpdateEvent = {
+          userId,
+          field: "title",
+          taskId,
+          beforeUpdate: prev.title,
+          afterUpdate: newTitle,
+          createdAt: new Date(),
+        };
+
+        return {
+          ...prev,
+          title: newTitle,
+          taskEvents: [...prev.taskEvents, newEvent],
+        };
+      }
+    });
   }
 }

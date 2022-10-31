@@ -18,8 +18,9 @@ export default function TaskEvent({}: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "auto" });
-  }, []);
+    if (task?.taskEvents.length)
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [task?.taskEvents.length]);
 
   return (
     <Box flexBasis={"50%"}>

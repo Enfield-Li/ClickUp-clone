@@ -11,15 +11,19 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { UpdateEvent } from "../../task/taskTypes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
 type Props = {};
 
 export default function StatusDetails({}: Props) {
+  const { authState } = useAuthContext();
   const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();
 
@@ -109,13 +113,30 @@ export default function StatusDetails({}: Props) {
                   height={onHover && !isOpen ? "37px" : "33px"}
                   // borderRightWidth={onHover && !isOpen ? "4px" : ""}
                   onClick={() => {
-                    setTask({ ...task!, status: nextStatus.id });
+                    const targetStatusColumnId = nextStatus.id;
                     updateCurrentTaskStatus(
                       sortBy,
                       task!,
                       setState,
-                      nextStatus.id
+                      targetStatusColumnId
                     );
+
+                    const newEvent: UpdateEvent = {
+                      id: getRandomNumberNoLimit(),
+                      userId: authState.user?.id,
+                      taskId: task!.id!,
+                      field: "status",
+                      beforeUpdate: String(task?.status),
+                      afterUpdate: String(nextStatus.id),
+                      createdAt: new Date(),
+                    };
+
+                    // Update modal task state
+                    setTask({
+                      ...task!,
+                      status: targetStatusColumnId,
+                      taskEvents: [...task!.taskEvents, newEvent],
+                    });
                   }}
                 >
                   <i className="bi bi-caret-right-fill"></i>

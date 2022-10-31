@@ -160,9 +160,9 @@ export function updateCurrentTaskStatus(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              field: sortBy,
-              afterUpdate: String(currentColumnId),
-              beforeUpdate: String(targetStatusColumnId),
+              field: "status",
+              afterUpdate: String(targetStatusColumnId),
+              beforeUpdate: String(currentColumnId),
             },
           ];
 
@@ -259,12 +259,13 @@ export function updateTaskPriorityOrDueDate(
             }
           }
 
+          // Init taskEvents
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              field: sortBy,
-              afterUpdate: String(currentColumnId),
-              beforeUpdate: String(targetColumnId),
+              field: targetColumnKey,
+              beforeUpdate: String(currentTask[targetColumnKey]),
+              afterUpdate: String(targetColumnId),
             },
           ];
           taskListForUpdate.push(sourceTask);

@@ -8,7 +8,9 @@ import {
   Task,
   TaskEvents,
   TaskList,
+  UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
+  UpdateTaskTitleDTO,
 } from "../taskTypes";
 
 export async function getTasks() {}
@@ -61,9 +63,39 @@ export async function updateTasksPosition(
       API_ENDPOINT.TASK,
       deepCopy(updateTasksPositionDTO)
     );
+
+    // return response.data;
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);
+  }
+}
+
+export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {
+  try {
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_TITLE,
+      updateTaskTitleDTO
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function updateTaskDescription(
+  updateTaskDescDTO: UpdateTaskDescDTO
+) {
+  try {
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK_UPDATE_DESC,
+      updateTaskDescDTO
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 }
 

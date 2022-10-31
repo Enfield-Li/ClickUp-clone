@@ -10,9 +10,13 @@ import {
 import produce from "immer";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { axiosInstance } from "../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../utils/constant";
-import { SetState, UpdateTaskDescDTO } from "../task/taskTypes";
+import { updateTaskDescription } from "../task/actions/TaskActions";
+import {
+  SetState,
+  TaskEvents,
+  UpdateEvent,
+  UpdateTaskDescDTO,
+} from "../task/taskTypes";
 import PriorityDetails from "./priorityDetails/PriorityDetails";
 import StatusDetails from "./statusDetails/StatusDetails";
 import TaskOptions from "./taskOptions/DeleteTask";
@@ -79,7 +83,7 @@ export default function TaskInfo({}: Props) {
           <EditableTextarea
             onBlur={(e) => {
               if (e.target.value !== task!.title) {
-                updateTaskDesc(
+                updateDescription(
                   task!.id!,
                   e.currentTarget.value,
                   setState,
@@ -94,45 +98,28 @@ export default function TaskInfo({}: Props) {
   );
 }
 
-export async function updateTaskDesc(
+export async function updateDescription(
   taskId: number,
   newDesc: string,
   setState: SetState,
   setTask: SetTask
 ) {
-  try {
-    const updateTaskDescDTO: UpdateTaskDescDTO = {
-      taskId: taskId,
-      newDesc,
-    };
+  const updateTaskDescDTO: UpdateTaskDescDTO = { taskId, newDesc };
 
-    const response = await axiosInstance.put<boolean>(
-      API_ENDPOINT.TASK_UPDATE_DESC,
-      updateTaskDescDTO
-    );
+  const updateSuccess = await updateTaskDescription(updateTaskDescDTO);
 
-    if (response.data) {
-      setState((previousState) =>
-        produce(previousState, (draftState) => {
-          if (draftState)
-            draftState.orderedTasks.forEach((tasks) =>
-              tasks.taskList.forEach((task) => {
-                if (task.id === taskId) {
-                  task.description = newDesc;
-                  task.updatedAt = new Date();
-                }
-              })
-            );
-        })
-      );
+  if (updateSuccess) {
+    setState((previousState) => {
+      if (previousState)
+        return produce(previousState, (draftState) => {
+          draftState.orderedTasks.forEach((tasks) =>
+            tasks.taskList.forEach(
+              (task) => task.id === taskId && (task.description = newDesc)
+            )
+          );
+        });
+    });
 
-      setTask((prev) => {
-        if (prev) {
-          return { ...prev, desc: newDesc };
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
+    setTask((prev) => prev && { ...prev, description: newDesc });
   }
 }

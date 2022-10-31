@@ -1,11 +1,15 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
 export default function PriorityOptions({ onOptionClose }: Props) {
+  const { authState } = useAuthContext();
   const {
     task,
     setTask,
@@ -43,8 +47,23 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                     "priority",
                     targetPriorityColumnId
                   );
+
+                  const newEvent: UpdateEvent = {
+                    id: getRandomNumberNoLimit(),
+                    userId: authState.user?.id,
+                    taskId: task!.id!,
+                    field: "priority",
+                    beforeUpdate: String(task?.priority),
+                    afterUpdate: String(targetPriorityColumnId),
+                    createdAt: new Date(),
+                  };
+
                   // Update modal task state
-                  setTask({ ...task!, priority: targetPriorityColumnId });
+                  setTask({
+                    ...task!,
+                    priority: targetPriorityColumnId,
+                    taskEvents: [...task!.taskEvents, newEvent],
+                  });
                 }}
                 _hover={{ backgroundColor: "blue.600" }}
               >

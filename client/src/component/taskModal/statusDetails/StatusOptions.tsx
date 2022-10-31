@@ -1,12 +1,16 @@
 import { Box, Flex } from "@chakra-ui/react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import SelectOption from "../../task/select/SelectOption";
+import { UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
 export default function StatusOptions({ onOptionClose }: Props) {
+  const { authState } = useAuthContext();
   const {
     task,
     setTask,
@@ -31,8 +35,6 @@ export default function StatusOptions({ onOptionClose }: Props) {
                 onOptionClose();
                 const targetStatusColumnId = column.id;
 
-                // Update task state in taskDetail
-                setTask({ ...task!, status: targetStatusColumnId });
                 // Update task in state
                 updateCurrentTaskStatus(
                   sortBy,
@@ -40,6 +42,23 @@ export default function StatusOptions({ onOptionClose }: Props) {
                   setState,
                   targetStatusColumnId
                 );
+
+                const newEvent: UpdateEvent = {
+                  id: getRandomNumberNoLimit(),
+                  userId: authState.user?.id,
+                  taskId: task!.id!,
+                  field: "status",
+                  beforeUpdate: String(task?.status),
+                  afterUpdate: String(targetStatusColumnId),
+                  createdAt: new Date(),
+                };
+
+                // Update modal task state
+                setTask({
+                  ...task!,
+                  status: targetStatusColumnId,
+                  taskEvents: [...task!.taskEvents, newEvent],
+                });
               }}
             >
               <SelectOption

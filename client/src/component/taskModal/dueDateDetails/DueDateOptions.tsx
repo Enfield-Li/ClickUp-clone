@@ -1,17 +1,20 @@
 import { Box, Button, Center, Flex, Input } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { useFocus } from "../../../utils/useFocus";
 import { getDueDateInfo } from "../../task/actions/columnProcessing";
 import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
-import { SelectableDueDate } from "../../task/taskTypes";
+import { SelectableDueDate, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { isOptionOpen: boolean };
 
 export default function DueDateOptions({ isOptionOpen }: Props) {
+  const { authState } = useAuthContext();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dueDateInput, setDueDateInput] = useState<string>();
   const { arrOfThisWeekDay, lookUpDueDate } = getDueDateInfo();
@@ -52,8 +55,22 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
         expectedDueDate
       );
 
+      const newEvent: UpdateEvent = {
+        id: getRandomNumberNoLimit(),
+        userId: authState.user?.id,
+        taskId: task!.id!,
+        field: "dueDate",
+        beforeUpdate: String(task?.dueDate),
+        afterUpdate: String(targetDueDateColumnId),
+        createdAt: new Date(),
+      };
+
       // Update modal task state
-      setTask({ ...task!, expectedDueDate });
+      setTask({
+        ...task!,
+        expectedDueDate,
+        taskEvents: [...task!.taskEvents, newEvent],
+      });
     }
   }
 
@@ -74,8 +91,22 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
       expectedDueDate
     );
 
-    // Update modal task state
-    setTask({ ...task!, expectedDueDate });
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: "dueDate",
+      beforeUpdate: String(task?.dueDate),
+      afterUpdate: String(targetDueDateColumn!.id),
+      createdAt: new Date(),
+    };
+
+    // Update task state
+    setTask({
+      ...task!,
+      expectedDueDate,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
   }
 
   return (

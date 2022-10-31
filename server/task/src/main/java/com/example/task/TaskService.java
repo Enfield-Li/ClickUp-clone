@@ -125,7 +125,7 @@ public class TaskService {
 
     @Transactional
     public Boolean updateTaskDesc(UpdateTaskDescDTO updateTaskDescDTO) {
-        var id = updateTaskDescDTO.id();
+        var id = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
         return taskRepository.updateTaskDesc(newDesc, id) > 0;

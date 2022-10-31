@@ -1,6 +1,7 @@
 import { Box, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { toYYYYMMDDString } from "../../utils/getWeekDays";
 
 type Props = {};
 
@@ -15,8 +16,8 @@ export default function TaskCreationInfo({}: Props) {
       fontWeight="semibold"
       label={
         <Box>
-          <Box>{`Created at: ${task?.createdAt}`}</Box>
-          <Box>{`Updated at: ${task?.updatedAt}`}</Box>
+          <Box>{`Created at: ${toYYYYMMDDString(task!.createdAt!)}`}</Box>
+          <Box>{`Updated at: ${toYYYYMMDDString(task!.updatedAt!)}`}</Box>
         </Box>
       }
     >
