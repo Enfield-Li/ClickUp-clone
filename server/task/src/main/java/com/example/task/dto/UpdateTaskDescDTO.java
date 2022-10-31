@@ -1,7 +1,9 @@
 package com.example.task.dto;
 
+import javax.validation.constraints.NotNull;
+
 public record UpdateTaskDescDTO(
-    Integer id,
-    String newDesc
+    @NotNull Integer id,
+    @NotNull String newDesc
 ) {}
 

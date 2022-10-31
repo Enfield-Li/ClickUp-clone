@@ -10,6 +10,7 @@ import {
   SortBy,
   State,
   TaskList,
+  STATUS,
 } from "./taskTypes";
 
 type Props = {
@@ -29,6 +30,8 @@ export default function Column({
   sortBy,
   dueDateColumns,
 }: Props) {
+  const finishedColumnInStatus = sortBy === STATUS && currentColumn.id === 3;
+
   return (
     <Box width="280px" mx={2}>
       {/* Column header */}

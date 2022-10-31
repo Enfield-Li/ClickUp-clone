@@ -25,14 +25,12 @@ import {
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
 import { getDueDateInfo } from "./actions/columnProcessing";
 import { deepCopy } from "../../utils/deepCopy";
-import { useLocalTasks } from "../../hook/useLocal";
 
 type Props = {
   sortBy: SortBy;
 };
 
 export default function TaskBoardView({ sortBy }: Props) {
-  //   const { state, setState, loading } = useLocalTasks(sortBy);
   const { state, loading, error, setState } = useFetchTasks(sortBy);
   console.log(state);
 
@@ -107,8 +105,6 @@ async function handleDragEnd(
   ) {
     return;
   }
-
-  const { arrOfThisWeekDay, lookUpDueDate } = getDueDateInfo();
 
   const isDueDate = sortBy === "dueDate";
   const lookUpColumnId: LookUpColumnId = {};
@@ -247,6 +243,17 @@ async function handleDragEnd(
          * Drop in a different column
          */
       } else {
+        // Override all previous update events
+        // So as to keep the event consistent when submitting to server
+        sourceTask.taskEvents = [
+          {
+            taskId: sourceTask.id!,
+            field: sortBy,
+            afterUpdate: String(sourceColumnId),
+            beforeUpdate: String(destinationColumnId),
+          },
+        ];
+
         // Change column
         sourceTask[sortBy] = destinationColumnId;
 
@@ -317,10 +324,6 @@ async function handleDragEnd(
         }
 
         // get previousTaskBeforeFinish first
-        console.log({
-          dueDate: sourceTask.dueDate,
-          priority: sourceTask.priority,
-        });
         sourceTask.previousTaskIdsBeforeFinish.inDueDate = sourceTask.dueDate;
         sourceTask.previousTaskIdsBeforeFinish.inPriority = sourceTask.priority;
 
@@ -356,18 +359,10 @@ async function handleDragEnd(
         };
 
         updatePreviousIdsInColumn(draftState, targetColumn, sourceTask);
-      }
 
-      // Override all previous update events
-      // So as to keep the event consistent when submitting to server
-      sourceTask.taskEvents = [
-        {
-          taskId: sourceTask.id!,
-          field: sortBy,
-          afterUpdate: String(sourceColumnId),
-          beforeUpdate: String(destinationColumnId),
-        },
-      ];
+        // Clear previousTaskIdsBeforeFinish
+        sourceTask.previousTaskIdsBeforeFinish = {};
+      }
 
       if (destinationTask) taskListForUpdate.push(destinationTask);
       taskListForUpdate.push(sourceTask);

@@ -142,7 +142,7 @@ export function processLookColumnId(
   }
 }
 
-export function getDueDateColumnFromDateString(
+export function getDueDateFromExpectedDueDateString(
   dueDateColumn: DueDateColumns,
   inputDateString: string
 ) {
@@ -173,52 +173,20 @@ export function processTaskList(
 
     if (!task.taskEvents || task.taskEvents.length) taskCopy.taskEvents = [];
 
-    // convert expectedDueDate to dueDate
-    const taskExpectedDueDateString = task.expectedDueDate
-      ? toYYYYMMDDString(task.expectedDueDate)
-      : "";
+    // if dueDate is undefined, then override it with expectedDueDate
+    if (taskCopy.dueDate === undefined) {
+      // convert expectedDueDate to dueDate
+      const taskExpectedDueDateString = task.expectedDueDate
+        ? toYYYYMMDDString(task.expectedDueDate)
+        : "";
 
-    taskCopy.dueDate = getDueDateColumnFromDateString(
-      dueDateColumn,
-      taskExpectedDueDateString
-    );
+      taskCopy.dueDate = getDueDateFromExpectedDueDateString(
+        dueDateColumn,
+        taskExpectedDueDateString
+      );
+    }
 
     return taskCopy;
-  });
-}
-
-export function convertExpectedDueDateToDueDate(
-  dueDateColumn: DueDateColumns,
-  task: Task
-) {
-  // convert expectedDueDate to dueDate
-  const taskExpectedDueDateString = task.expectedDueDate
-    ? toYYYYMMDDString(task.expectedDueDate)
-    : "";
-
-  task.dueDate = getDueDateColumnFromDateString(
-    dueDateColumn,
-    taskExpectedDueDateString
-  );
-}
-
-// Convert expectedDueDate to dueDate
-export function processLocalTaskList(
-  dueDateColumn: DueDateColumns,
-  taskList: TaskList
-) {
-  return taskList.map((task) => {
-    // convert expectedDueDate to dueDate
-    const taskExpectedDueDateString = task.expectedDueDate
-      ? toYYYYMMDDString(task.expectedDueDate)
-      : "";
-
-    task.dueDate = getDueDateColumnFromDateString(
-      dueDateColumn,
-      taskExpectedDueDateString
-    );
-
-    return task;
   });
 }
 
@@ -232,7 +200,6 @@ export function updatePreviousIdsInColumn(
 
   // Updates for newTask's previousItem for other sortBy
   const previousTaskValues = collectPreviousTaskValues(targetColumn);
-  console.log({ previousTaskValues });
 
   updateTask(previousTaskValues, allTasks, sourceTask);
 }
@@ -308,11 +275,17 @@ export function updateTask(
     const updateSortBy = previousTaskValue.updateSortBy;
     const updateSortById = previousTaskValue.columnId;
 
-    const idResult = findLastTaskId(allTasks, updateSortBy, updateSortById);
+    const lastTaskIdInColumn = findLastTaskId(
+      allTasks,
+      updateSortBy,
+      updateSortById
+    );
 
     // Update new task
     sourceTask[updateSortBy] = updateSortById;
-    sourceTask.previousTaskIds[lookUpPreviousTaskId[updateSortBy]] = idResult;
+    // 👇 potential bug
+    sourceTask.previousTaskIds[lookUpPreviousTaskId[updateSortBy]] =
+      lastTaskIdInColumn;
   }
 }
 

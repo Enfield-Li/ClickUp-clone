@@ -6,7 +6,7 @@ import useTaskDetailContext, {
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { useFocus } from "../../../utils/useFocus";
 import { getDueDateInfo } from "../../task/actions/columnProcessing";
-import { getDueDateColumnFromDateString } from "../../task/actions/taskProcessing";
+import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
 import { SelectableDueDate } from "../../task/taskTypes";
 
 type Props = { isOptionOpen: boolean };
@@ -35,7 +35,7 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
 
   function handleDatePicker() {
     if (dueDateInput) {
-      const targetDueDateColumnId = getDueDateColumnFromDateString(
+      const targetDueDateColumnId = getDueDateFromExpectedDueDateString(
         columnOptions.dueDate,
         dueDateInput
       );
@@ -58,7 +58,6 @@ export default function DueDateOptions({ isOptionOpen }: Props) {
   }
 
   function handleSelect(weekString: string) {
-    console.log({ weekString });
     const expectedDueDate = lookUpDueDate[weekString as SelectableDueDate];
 
     const targetDueDateColumn = columnOptions.dueDate.find(

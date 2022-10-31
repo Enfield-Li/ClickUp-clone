@@ -67,7 +67,7 @@ class TaskController {
 
     @PutMapping("/update_title")
     ResponseEntity<Boolean> updateTaskTitle(
-        @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
+        @Valid @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
     ) {
         var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
         return ResponseEntity.ok(updated);
@@ -75,7 +75,7 @@ class TaskController {
 
     @PutMapping("/update_desc")
     ResponseEntity<Boolean> updateTasksDesc(
-        @RequestBody UpdateTaskDescDTO updateTaskDescDTO
+        @Valid @RequestBody UpdateTaskDescDTO updateTaskDescDTO
     ) {
         var updated = taskService.updateTaskDesc(updateTaskDescDTO);
         return ResponseEntity.ok(updated);

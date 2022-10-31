@@ -14,6 +14,7 @@ public record UpdateTaskDTO(
     @NotNull String title,
 
     Integer status,
+    Integer dueDate,
     Integer priority,
     String description,
     Date expectedDueDate,

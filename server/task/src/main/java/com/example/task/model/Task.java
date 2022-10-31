@@ -45,6 +45,9 @@ public class Task {
     @NotNull
     private Integer status;
 
+    @NotNull
+    private Integer dueDate;
+
     private Date expectedDueDate;
 
     @NotNull
@@ -119,6 +122,7 @@ public class Task {
             .id(taskDTO.id())
             .title(taskDTO.title())
             .status(taskDTO.status())
+            .dueDate(taskDTO.dueDate())
             .priority(taskDTO.priority())
             .watchers(taskDTO.watchers())
             .assignees(taskDTO.assignees())
@@ -140,6 +144,7 @@ public class Task {
             .creatorName(creatorName)
             .title(createTaskDTO.title())
             .status(createTaskDTO.status())
+            .dueDate(createTaskDTO.dueDate())
             .priority(createTaskDTO.priority())
             .description(createTaskDTO.description())
             .previousTaskIds(createTaskDTO.previousTaskIds())

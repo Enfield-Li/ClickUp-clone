@@ -35,7 +35,7 @@ import {
 } from "./taskTypes";
 import { createTask } from "./actions/TaskActions";
 import {
-  getDueDateColumnFromDateString,
+  getDueDateFromExpectedDueDateString,
   updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
@@ -260,7 +260,9 @@ async function submit(
   const targetColumn = { dueDate, priority, status };
   // Use date picker
   if (dueDate && dueDate.length > 1) {
-    const dueDateColumnId = getDueDateColumnFromDateString(
+    newTask.expectedDueDate = new Date(dueDate);
+
+    const dueDateColumnId = getDueDateFromExpectedDueDateString(
       state.columnOptions.dueDate,
       dueDate
     );

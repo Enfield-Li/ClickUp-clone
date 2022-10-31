@@ -25,7 +25,6 @@ export default function StatusDetails({}: Props) {
 
   const { task, setTask, taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
-  console.log({ columnOptions });
 
   const column = columnOptions.status.find(
     (column) => column.id === task!.status

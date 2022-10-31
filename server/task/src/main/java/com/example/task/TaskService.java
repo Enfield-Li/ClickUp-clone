@@ -67,26 +67,27 @@ public class TaskService {
             .filter(task -> task.id() == sourceTaskId)
             .findAny();
 
-        var updateEventDTO = sourceTask.get().taskEvents().get(0);
-        updateEventDTO.setUserId(userId);
-        updateEventDTO.setUsername(username);
+        var taskEvents = sourceTask.get().taskEvents();
+        if (!taskEvents.isEmpty()) {
+            var updateEventDTO = taskEvents.get(0);
+            updateEventDTO.setUserId(userId);
+            updateEventDTO.setUsername(username);
 
-        // publish task update event
-        rabbitMQMessageProducer.publish(
-            internalExchange,
-            taskEventRoutingKey,
-            updateEventDTO
-        );
+            // publish task update event
+            rabbitMQMessageProducer.publish(
+                internalExchange,
+                taskEventRoutingKey,
+                updateEventDTO
+            );
+        }
 
         // DTO to entity
         var tasks = new ArrayList<Task>();
-        taskDtoList.forEach(
-            taskDTO -> {
-                var task = Task.updateTaskDtoToTask(taskDTO, userId, username);
-                setTaskFroWatcherAndAssignee(task);
-                tasks.add(task);
-            }
-        );
+        taskDtoList.forEach(taskDTO -> {
+            var task = Task.updateTaskDtoToTask(taskDTO, userId, username);
+            setTaskFroWatcherAndAssignee(task);
+            tasks.add(task);
+        });
 
         taskRepository.saveAll(tasks);
         return true;

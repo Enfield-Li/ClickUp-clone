@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 public record CreateTaskDTO(
     @NotNull String title,
     @NotNull Integer status,
+    @NotNull Integer dueDate,
     @NotNull Integer priority,
 
     String description,
