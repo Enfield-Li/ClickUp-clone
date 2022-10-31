@@ -16,13 +16,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class PreviousTask {
+public class PreviousTaskIds {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer statusId;
-    private Integer dueDateId;
-    private Integer priorityId;
+    private Integer inStatus;
+    private Integer inDueDate;
+    private Integer inPriority;
 }

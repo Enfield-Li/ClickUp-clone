@@ -1,7 +1,7 @@
 import produce from "immer";
 import { useContext } from "react";
 import { updateTasksPosition } from "../../component/task/actions/TaskActions";
-import { updateTaskStatsInColumn } from "../../component/task/actions/taskProcessing";
+import { updatePreviousIdsInColumn } from "../../component/task/actions/taskProcessing";
 import {
   lookUpPreviousTaskId,
   SetState,
@@ -63,11 +63,11 @@ export function updateCurrentTaskStatus(
 
             // Update sourceTaskAfter
             const sourceTaskAfter = sourceColumn?.taskList.find(
-              (task) => task.previousTask.statusId === sourceTask.id
+              (task) => task.previousTaskIds.inStatus === sourceTask.id
             );
             if (sourceTaskAfter) {
-              sourceTaskAfter.previousTask.statusId =
-                sourceTask.previousTask.statusId;
+              sourceTaskAfter.previousTaskIds.inStatus =
+                sourceTask.previousTaskIds.inStatus;
 
               taskListForUpdate.push(sourceTaskAfter);
             }
@@ -78,19 +78,19 @@ export function updateCurrentTaskStatus(
               draftState.orderedTasks.forEach((tasks) =>
                 tasks.taskList.forEach((taskAfter) => {
                   const sourceTaskAfterInPriority =
-                    taskAfter.previousTask.priorityId === sourceTask.id;
+                    taskAfter.previousTaskIds.inPriority === sourceTask.id;
                   if (sourceTaskAfterInPriority) {
-                    taskAfter.previousTask.priorityId =
-                      sourceTask.previousTask.priorityId;
+                    taskAfter.previousTaskIds.inPriority =
+                      sourceTask.previousTaskIds.inPriority;
 
                     taskListForUpdate.push(taskAfter);
                   }
 
                   const sourceTaskAfterInDueDate =
-                    taskAfter.previousTask.dueDateId === sourceTask.id;
+                    taskAfter.previousTaskIds.inDueDate === sourceTask.id;
                   if (sourceTaskAfterInDueDate) {
-                    taskAfter.previousTask.dueDateId =
-                      sourceTask.previousTask.dueDateId;
+                    taskAfter.previousTaskIds.inDueDate =
+                      sourceTask.previousTaskIds.inDueDate;
 
                     taskListForUpdate.push(taskAfter);
                   }
@@ -98,17 +98,17 @@ export function updateCurrentTaskStatus(
               );
 
               // Update sourceTask by cleaning up other sortBy's info
-              if (!sourceTask.previousTaskBeforeFinish) {
-                sourceTask.previousTaskBeforeFinish = {};
+              if (!sourceTask.previousTaskIdsBeforeFinish) {
+                sourceTask.previousTaskIdsBeforeFinish = {};
               }
-              sourceTask.previousTaskBeforeFinish.dueDateId =
+              sourceTask.previousTaskIdsBeforeFinish.inDueDate =
                 sourceTask.dueDate;
-              sourceTask.previousTaskBeforeFinish.priorityId =
+              sourceTask.previousTaskIdsBeforeFinish.inPriority =
                 sourceTask.priority;
               sourceTask.priority = 0;
               sourceTask.dueDate = 0;
-              sourceTask.previousTask.dueDateId = 0;
-              sourceTask.previousTask.priorityId = 0;
+              sourceTask.previousTaskIds.inDueDate = 0;
+              sourceTask.previousTaskIds.inPriority = 0;
 
               // Remove sourceTask from current column and push finished column
               if (sortBy !== STATUS) {
@@ -126,9 +126,9 @@ export function updateCurrentTaskStatus(
           const isSetToUnfinished = currentColumnId === 3;
           if (isSetToUnfinished) {
             const previousDueDateIdBeforeFinish =
-              sourceTask.previousTaskBeforeFinish?.dueDateId;
+              sourceTask.previousTaskIdsBeforeFinish?.inDueDate;
             const previousPriorityIdBeforeFinish =
-              sourceTask.previousTaskBeforeFinish?.priorityId;
+              sourceTask.previousTaskIdsBeforeFinish?.inPriority;
 
             const targetColumn: TargetColumn = {
               dueDate: previousDueDateIdBeforeFinish
@@ -139,11 +139,11 @@ export function updateCurrentTaskStatus(
                 : "1",
             };
 
-            updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
+            updatePreviousIdsInColumn(draftState, targetColumn, sourceTask);
           }
 
           // update sourceTask with value in the new column
-          updateTaskStatsInColumn(
+          updatePreviousIdsInColumn(
             draftState,
             { status: String(targetStatusColumnId) },
             sourceTask
@@ -208,16 +208,18 @@ export function updateTaskPriorityOrDueDate(
             const isSourceTask = task.id === currentTask.id;
             if (isSourceTask) {
               if (isDueDate) task.expectedDueDate = expectedDueDate;
-              updateTaskStatsInColumn(draftState, targetColumn, task);
+              updatePreviousIdsInColumn(draftState, targetColumn, task);
             }
 
             // Update sourceTaskAfter's stats
             const isSourceTaskAfter =
-              task.previousTask[lookUpPreviousTaskId[targetColumnKey]] ===
+              task.previousTaskIds[lookUpPreviousTaskId[targetColumnKey]] ===
               currentTask.id;
             if (isSourceTaskAfter) {
-              task.previousTask[lookUpPreviousTaskId[targetColumnKey]] =
-                currentTask.previousTask[lookUpPreviousTaskId[targetColumnKey]];
+              task.previousTaskIds[lookUpPreviousTaskId[targetColumnKey]] =
+                currentTask.previousTaskIds[
+                  lookUpPreviousTaskId[targetColumnKey]
+                ];
 
               taskListForUpdate.push(task);
             }

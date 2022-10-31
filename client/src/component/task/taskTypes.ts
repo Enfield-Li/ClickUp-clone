@@ -63,15 +63,15 @@ export type ColumnOptions = {
 };
 
 // task
-type PreviousTask = {
-  statusId?: number;
-  dueDateId?: number;
-  priorityId?: number;
+type PreviousTaskIds = {
+  inStatus?: number;
+  inDueDate?: number;
+  inPriority?: number;
 };
 
-type PreviousTaskBeforeFinish = {
-  dueDateId?: number;
-  priorityId?: number;
+type PreviousTaskIdsBeforeFinish = {
+  inDueDate?: number;
+  inPriority?: number;
 };
 
 export const TITLE = "title";
@@ -148,9 +148,9 @@ export type Task = {
   assignees: UserInfo[];
   // Determine the task order
   taskEvents: TaskEvents;
-  previousTask: PreviousTask;
+  previousTaskIds: PreviousTaskIds;
   // Keep previousTask record when set to finish
-  previousTaskBeforeFinish?: PreviousTaskBeforeFinish;
+  previousTaskIdsBeforeFinish?: PreviousTaskIdsBeforeFinish;
 };
 
 export type TaskList = Task[];
@@ -174,9 +174,9 @@ export const lookUpIsLastItem = {
 } as const;
 
 export const lookUpPreviousTaskId = {
-  status: "statusId",
-  priority: "priorityId",
-  dueDate: "dueDateId",
+  status: "inStatus",
+  priority: "inPriority",
+  dueDate: "inDueDate",
 } as const;
 
 export type LookUpColumnId = {

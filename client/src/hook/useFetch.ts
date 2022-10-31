@@ -1,20 +1,17 @@
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { SortBy, State, TaskList } from "../component/task/taskTypes";
+import { processColumns } from "../component/task/actions/columnProcessing";
+import { getAllTasks } from "../component/task/actions/TaskActions";
 import {
   collectAllTasks,
-  processTaskList,
   groupTaskListOnSortBy,
-  processLocalTaskList,
+  processTaskList,
 } from "../component/task/actions/taskProcessing";
+import { SortBy, State } from "../component/task/taskTypes";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
-import { mockColumnOptions, mockTaskList } from "../utils/mockData";
-import {
-  initializeDueDataColumns,
-  processColumns,
-} from "../component/task/actions/columnProcessing";
+import { mockColumnOptions } from "../utils/mockData";
 import { sleep } from "../utils/sleep";
 
 export function useFetch<T>(url: string) {
@@ -46,7 +43,7 @@ export function useFetch<T>(url: string) {
   return { data, loading, error };
 }
 
-export function useFetchTasks(url: string, sortBy: SortBy) {
+export function useFetchTasks(sortBy: SortBy) {
   const [state, setState] = useState<State>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -59,24 +56,28 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
     updateLocalState();
-  }, [sortBy]);
+  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
 
   async function fetchData() {
-    try {
-      setLoading(true);
+    setLoading(true);
 
-      // Task data
-      const response = await axiosInstance.get<TaskList>(url);
+    // Task data
+    const tasksData = await getAllTasks();
+
+    if (tasksData) {
       const columnDataFromApi = mockColumnOptions;
 
-      const dueDateColumns = initializeDueDataColumns(
-        columnDataFromApi.dueDate
-      );
+      const { dueDateColumns, statusColumns } =
+        processColumns(columnDataFromApi);
 
-      const columnOptions = { ...columnDataFromApi, dueDate: dueDateColumns };
+      const columnOptions = {
+        ...columnDataFromApi,
+        dueDate: dueDateColumns,
+        status: statusColumns,
+      };
 
-      // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processTaskList(dueDateColumns, response.data);
+      // init taskEvents and convert expectedDueDate to dueDate columns
+      const taskList = processTaskList(dueDateColumns, tasksData);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
@@ -85,12 +86,8 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
       );
 
       setTaskStateContext({ columnOptions, setState, sortBy });
-      setState({ orderedTasks, columnOptions: columnOptions });
-    } catch (error) {
-      setError(true);
-      const err = error as AxiosError;
-      console.log(err);
-    } finally {
+      setState({ orderedTasks, columnOptions });
+
       setLoading(false);
     }
   }
@@ -105,10 +102,16 @@ export function useFetchTasks(url: string, sortBy: SortBy) {
         columnOptions: state.columnOptions,
       });
 
+      // init taskEvents and convert expectedDueDate to dueDate columns
+      const taskList = processTaskList(
+        state.columnOptions.dueDate,
+        collectAllTasks(state.orderedTasks)
+      );
+
       setState({
         ...state,
         orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
+          taskList,
           state.columnOptions[sortBy],
           sortBy
         ),

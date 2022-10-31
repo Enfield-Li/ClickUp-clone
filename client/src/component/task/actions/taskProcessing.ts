@@ -1,4 +1,5 @@
 import { getNextNWeekDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
+import { deepCopy } from "../../../utils/deepCopy";
 import {
   UndeterminedColumns,
   DueDateColumns,
@@ -92,7 +93,7 @@ export function groupTaskListOnSortBy(
     const firstTask = allTasks.find(
       (task) =>
         task[sortBy] === columnId &&
-        !task.previousTask[lookUpPreviousTaskId[sortBy]]
+        !task.previousTaskIds[lookUpPreviousTaskId[sortBy]]
     );
     if (firstTask) orderedTasks[i].taskList[0] = firstTask;
 
@@ -102,7 +103,7 @@ export function groupTaskListOnSortBy(
 
       const entailingTask = allTasks.find(
         (task) =>
-          task.previousTask[lookUpPreviousTaskId[sortBy]] === currentTask.id
+          task.previousTaskIds[lookUpPreviousTaskId[sortBy]] === currentTask.id
       );
 
       if (entailingTask) orderedTasks[i].taskList.push(entailingTask);
@@ -167,20 +168,38 @@ export function processTaskList(
 ) {
   return taskList.map((task) => {
     // init taskEvents
-    if (!task.taskEvents || task.taskEvents.length) task.taskEvents = [];
+    // workaround: create and update the copy to prevent type error "dueDate" is read only
+    const taskCopy = deepCopy(task) as Task;
+
+    if (!task.taskEvents || task.taskEvents.length) taskCopy.taskEvents = [];
 
     // convert expectedDueDate to dueDate
     const taskExpectedDueDateString = task.expectedDueDate
       ? toYYYYMMDDString(task.expectedDueDate)
       : "";
 
-    task.dueDate = getDueDateColumnFromDateString(
+    taskCopy.dueDate = getDueDateColumnFromDateString(
       dueDateColumn,
       taskExpectedDueDateString
     );
 
-    return task;
+    return taskCopy;
   });
+}
+
+export function convertExpectedDueDateToDueDate(
+  dueDateColumn: DueDateColumns,
+  task: Task
+) {
+  // convert expectedDueDate to dueDate
+  const taskExpectedDueDateString = task.expectedDueDate
+    ? toYYYYMMDDString(task.expectedDueDate)
+    : "";
+
+  task.dueDate = getDueDateColumnFromDateString(
+    dueDateColumn,
+    taskExpectedDueDateString
+  );
 }
 
 // Convert expectedDueDate to dueDate
@@ -204,7 +223,7 @@ export function processLocalTaskList(
 }
 
 // Push task to the other sortBy id === 1 column
-export function updateTaskStatsInColumn(
+export function updatePreviousIdsInColumn(
   state: State,
   targetColumn: TargetColumn,
   sourceTask: Task
@@ -213,6 +232,7 @@ export function updateTaskStatsInColumn(
 
   // Updates for newTask's previousItem for other sortBy
   const previousTaskValues = collectPreviousTaskValues(targetColumn);
+  console.log({ previousTaskValues });
 
   updateTask(previousTaskValues, allTasks, sourceTask);
 }
@@ -292,7 +312,7 @@ export function updateTask(
 
     // Update new task
     sourceTask[updateSortBy] = updateSortById;
-    sourceTask.previousTask[`${updateSortBy}Id`] = idResult;
+    sourceTask.previousTaskIds[lookUpPreviousTaskId[updateSortBy]] = idResult;
   }
 }
 
@@ -317,7 +337,7 @@ export function findLastTaskId(
   const orderedTaskListBasedOnSortBy: TaskList = [];
 
   const firstTask = taskListBasedOnSortBy.find(
-    (task) => !task.previousTask[`${sortBy}Id`]
+    (task) => !task.previousTaskIds[lookUpPreviousTaskId[sortBy]]
   );
   if (firstTask) orderedTaskListBasedOnSortBy[0] = firstTask;
 
@@ -325,7 +345,8 @@ export function findLastTaskId(
   for (let i = 0; i < orderedTaskListBasedOnSortBy.length; i++) {
     const currentTask = orderedTaskListBasedOnSortBy[i];
     const entailingTask = taskListBasedOnSortBy.find(
-      (task) => task.previousTask[`${sortBy}Id`] === currentTask.id
+      (task) =>
+        task.previousTaskIds[lookUpPreviousTaskId[sortBy]] === currentTask.id
     );
 
     if (entailingTask) orderedTaskListBasedOnSortBy.push(entailingTask);

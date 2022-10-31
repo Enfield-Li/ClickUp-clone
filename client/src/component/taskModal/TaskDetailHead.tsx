@@ -77,27 +77,6 @@ export async function updateTaskTitle(
   setState: SetState,
   setTask: SetTask
 ) {
-  setState((previousState) => {
-    if (previousState)
-      return produce(previousState, (draftState) => {
-        if (draftState)
-          draftState.orderedTasks.forEach((tasks) =>
-            tasks.taskList.forEach((task) => {
-              if (task.id === taskId) {
-                task.title = newTitle;
-                task.updatedAt = new Date();
-              }
-            })
-          );
-      });
-  });
-
-  setTask((prev) => {
-    if (prev) {
-      return { ...prev, title: newTitle };
-    }
-  });
-
   try {
     const updateTaskTitleDTO: UpdateTaskTitleDTO = {
       taskId: taskId,
@@ -110,6 +89,26 @@ export async function updateTaskTitle(
     );
 
     if (response.data) {
+      setState((previousState) => {
+        if (previousState)
+          return produce(previousState, (draftState) => {
+            if (draftState)
+              draftState.orderedTasks.forEach((tasks) =>
+                tasks.taskList.forEach((task) => {
+                  if (task.id === taskId) {
+                    task.title = newTitle;
+                    task.updatedAt = new Date();
+                  }
+                })
+              );
+          });
+      });
+
+      setTask((prev) => {
+        if (prev) {
+          return { ...prev, title: newTitle };
+        }
+      });
     }
   } catch (error) {
     console.log(error);

@@ -87,7 +87,7 @@ public class Task {
 
     @JoinColumn(name = "previousTaskId")
     @OneToOne(cascade = { PERSIST, DETACH, MERGE })
-    private PreviousTask previousTask;
+    private PreviousTaskIds previousTaskIds;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
@@ -95,7 +95,7 @@ public class Task {
 
     @JoinColumn(name = "previousTaskBeforeFinishId")
     @OneToOne(cascade = { PERSIST, DETACH, MERGE })
-    private PreviousTaskBeforeFinish previousTaskBeforeFinish;
+    private PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish;
 
     public void addWatcher(Participant userInfo) {
         watchers.add(userInfo);
@@ -123,9 +123,9 @@ public class Task {
             .watchers(taskDTO.watchers())
             .assignees(taskDTO.assignees())
             .description(taskDTO.description())
-            .previousTask(taskDTO.previousTask())
+            .previousTaskIds(taskDTO.previousTaskIds())
             .expectedDueDate(taskDTO.expectedDueDate())
-            .previousTaskBeforeFinish(taskDTO.previousTaskBeforeFinish())
+            .previousTaskIdsBeforeFinish(taskDTO.previousTaskIdsBeforeFinish())
             .build();
     }
 
@@ -142,7 +142,7 @@ public class Task {
             .status(createTaskDTO.status())
             .priority(createTaskDTO.priority())
             .description(createTaskDTO.description())
-            .previousTask(createTaskDTO.previousTask())
+            .previousTaskIds(createTaskDTO.previousTaskIds())
             .expectedDueDate(createTaskDTO.expectedDueDate())
             .build();
     }

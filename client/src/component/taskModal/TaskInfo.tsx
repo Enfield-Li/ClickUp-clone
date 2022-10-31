@@ -100,26 +100,6 @@ export async function updateTaskDesc(
   setState: SetState,
   setTask: SetTask
 ) {
-  setState((previousState) =>
-    produce(previousState, (draftState) => {
-      if (draftState)
-        draftState.orderedTasks.forEach((tasks) =>
-          tasks.taskList.forEach((task) => {
-            if (task.id === taskId) {
-              task.description = newDesc;
-              task.updatedAt = new Date();
-            }
-          })
-        );
-    })
-  );
-
-  setTask((prev) => {
-    if (prev) {
-      return { ...prev, desc: newDesc };
-    }
-  });
-
   try {
     const updateTaskDescDTO: UpdateTaskDescDTO = {
       taskId: taskId,
@@ -132,6 +112,25 @@ export async function updateTaskDesc(
     );
 
     if (response.data) {
+      setState((previousState) =>
+        produce(previousState, (draftState) => {
+          if (draftState)
+            draftState.orderedTasks.forEach((tasks) =>
+              tasks.taskList.forEach((task) => {
+                if (task.id === taskId) {
+                  task.description = newDesc;
+                  task.updatedAt = new Date();
+                }
+              })
+            );
+        })
+      );
+
+      setTask((prev) => {
+        if (prev) {
+          return { ...prev, desc: newDesc };
+        }
+      });
     }
   } catch (error) {
     console.log(error);

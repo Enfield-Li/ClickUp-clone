@@ -7,7 +7,7 @@ import Column from "./Column";
 import { updateTasksPosition } from "./actions/TaskActions";
 import {
   processLookColumnId,
-  updateTaskStatsInColumn,
+  updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import {
   DUE_DATE,
@@ -24,7 +24,7 @@ import {
 } from "./taskTypes";
 import AddStatusColumn from "./columnDetails/AddStatusColumn";
 import { getDueDateInfo } from "./actions/columnProcessing";
-import { toPlainObject } from "../../utils/proxyToObject";
+import { deepCopy } from "../../utils/deepCopy";
 import { useLocalTasks } from "../../hook/useLocal";
 
 type Props = {
@@ -32,21 +32,16 @@ type Props = {
 };
 
 export default function TaskBoardView({ sortBy }: Props) {
-  const { state, setState, loading } = useLocalTasks(sortBy);
-  //   const { state, loading, error, setState } = useFetchTasks(
-  //     API_ENDPOINT.TASK_ALL_TASKS,
-  //     sortBy
-  //   );
+  //   const { state, setState, loading } = useLocalTasks(sortBy);
+  const { state, loading, error, setState } = useFetchTasks(sortBy);
   console.log(state);
 
-  if (loading)
+  if (!state || loading)
     return (
       <Center>
         <Spinner />
       </Center>
     );
-
-  if (!state) return <div>no data</div>;
 
   const currentColumns = state.columnOptions[sortBy];
 
@@ -182,12 +177,12 @@ async function handleDragEnd(
 
         // move up one row
         if (moveUpOneRow) {
-          sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             destinationTaskBefore ? destinationTaskBefore.id : undefined;
-          destinationTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             sourceTask.id;
           if (sourceTaskAfter) {
-            sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
+            sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               destinationTask.id;
 
             taskListForUpdate.push(sourceTaskAfter);
@@ -196,12 +191,12 @@ async function handleDragEnd(
 
         // move down one row
         else if (moveDownOneRow) {
-          destinationTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             sourceTaskBefore ? sourceTaskBefore.id : undefined;
-          sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             destinationTask.id;
           if (destinationTaskAfter) {
-            destinationTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
+            destinationTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               sourceTask.id;
 
             taskListForUpdate.push(destinationTaskAfter);
@@ -217,13 +212,14 @@ async function handleDragEnd(
           // move down
           const isMoveDown = sourceTaskIndex < destinationTaskIndex;
           if (isMoveDown) {
-            sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
+            sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               sourceTaskBefore ? sourceTaskBefore.id : undefined;
-            sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+            sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               destinationTask.id;
             if (destinationTaskAfter) {
-              destinationTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
-                sourceTask.id;
+              destinationTaskAfter.previousTaskIds[
+                lookUpPreviousTaskId[sortBy]
+              ] = sourceTask.id;
 
               taskListForUpdate.push(destinationTaskAfter);
             }
@@ -231,12 +227,12 @@ async function handleDragEnd(
 
           // move up
           else {
-            sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+            sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               destinationTaskBefore ? destinationTaskBefore.id : undefined;
-            destinationTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+            destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               sourceTask.id;
             if (sourceTaskAfter) {
-              sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
+              sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
                 sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
               taskListForUpdate.push(sourceTaskAfter);
@@ -255,7 +251,7 @@ async function handleDragEnd(
         sourceTask[sortBy] = destinationColumnId;
 
         if (sourceTaskAfter) {
-          sourceTaskAfter.previousTask[lookUpPreviousTaskId[sortBy]] =
+          sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             sourceTaskBefore ? sourceTaskBefore.id : undefined;
 
           taskListForUpdate.push(sourceTaskAfter);
@@ -263,7 +259,7 @@ async function handleDragEnd(
 
         // move to an empty column or to the last position
         if (!destinationTask) {
-          sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             lastTaskInDestinationTasksArr
               ? lastTaskInDestinationTasksArr.id
               : undefined;
@@ -271,9 +267,9 @@ async function handleDragEnd(
 
         // move to the middle or top of the column
         else {
-          destinationTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             sourceTask.id;
-          sourceTask.previousTask[lookUpPreviousTaskId[sortBy]] =
+          sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
             destinationTaskBefore ? destinationTaskBefore.id : undefined;
         }
 
@@ -293,22 +289,22 @@ async function handleDragEnd(
           tasks.taskList.forEach((taskAfter) => {
             // Update priority
             const sourceTaskAfterInPriority =
-              taskAfter.previousTask.priorityId === sourceTask.id;
+              taskAfter.previousTaskIds.inPriority === sourceTask.id;
 
             if (sourceTaskAfterInPriority) {
-              taskAfter.previousTask.priorityId =
-                sourceTask.previousTask.priorityId;
+              taskAfter.previousTaskIds.inPriority =
+                sourceTask.previousTaskIds.inPriority;
 
               taskListForUpdate.push(taskAfter);
             }
 
             // Update dueDate
             const sourceTaskAfterInDueDate =
-              taskAfter.previousTask.dueDateId === sourceTask.id;
+              taskAfter.previousTaskIds.inDueDate === sourceTask.id;
 
             if (sourceTaskAfterInDueDate) {
-              taskAfter.previousTask.dueDateId =
-                sourceTask.previousTask.dueDateId;
+              taskAfter.previousTaskIds.inDueDate =
+                sourceTask.previousTaskIds.inDueDate;
 
               taskListForUpdate.push(taskAfter);
             }
@@ -316,18 +312,24 @@ async function handleDragEnd(
         );
 
         // Update sourceTask by cleaning up other sortBy's info
-        if (!sourceTask.previousTaskBeforeFinish) {
-          sourceTask.previousTaskBeforeFinish = {};
+        if (!sourceTask.previousTaskIdsBeforeFinish) {
+          sourceTask.previousTaskIdsBeforeFinish = {};
         }
-        sourceTask.dueDate = 0;
+
+        // get previousTaskBeforeFinish first
+        console.log({
+          dueDate: sourceTask.dueDate,
+          priority: sourceTask.priority,
+        });
+        sourceTask.previousTaskIdsBeforeFinish.inDueDate = sourceTask.dueDate;
+        sourceTask.previousTaskIdsBeforeFinish.inPriority = sourceTask.priority;
+
+        // then update other sortBy column
         sourceTask.priority = 0;
+        sourceTask.dueDate = 0;
+        sourceTask.previousTaskIds.inDueDate = 0;
+        sourceTask.previousTaskIds.inPriority = 0;
         sourceTask.expectedDueDate = undefined;
-
-        sourceTask.previousTask.dueDateId = 0;
-        sourceTask.previousTask.priorityId = 0;
-
-        sourceTask.previousTaskBeforeFinish.dueDateId = sourceTask.dueDate;
-        sourceTask.previousTaskBeforeFinish.priorityId = sourceTask.priority;
       }
 
       // Move finished task to unfinished, and update other sortBy's info
@@ -339,10 +341,10 @@ async function handleDragEnd(
 
       if (isSetToUnfinished) {
         const previousDueDateIdBeforeFinish =
-          sourceTask.previousTaskBeforeFinish?.dueDateId;
+          sourceTask.previousTaskIdsBeforeFinish?.inDueDate;
 
         const previousPriorityIdBeforeFinish =
-          sourceTask.previousTaskBeforeFinish?.priorityId;
+          sourceTask.previousTaskIdsBeforeFinish?.inPriority;
 
         const targetColumn: TargetColumn = {
           dueDate: previousDueDateIdBeforeFinish
@@ -353,7 +355,7 @@ async function handleDragEnd(
             : "1", // Fall back to default column
         };
 
-        updateTaskStatsInColumn(draftState, targetColumn, sourceTask);
+        updatePreviousIdsInColumn(draftState, targetColumn, sourceTask);
       }
 
       // Override all previous update events

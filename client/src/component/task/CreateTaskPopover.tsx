@@ -31,11 +31,12 @@ import {
   SortBy,
   State,
   Task,
+  lookUpPreviousTaskId,
 } from "./taskTypes";
 import { createTask } from "./actions/TaskActions";
 import {
   getDueDateColumnFromDateString,
-  updateTaskStatsInColumn,
+  updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import { User } from "../../context/auth/AuthContextTypes";
 import {
@@ -43,7 +44,7 @@ import {
   getTodayYMDString,
 } from "../../utils/getWeekDays";
 import { getRandomNumber } from "../../utils/getRandomNumber";
-import { toPlainObject } from "../../utils/proxyToObject";
+import { deepCopy } from "../../utils/deepCopy";
 
 export type NewTask = {
   title: string;
@@ -248,14 +249,12 @@ async function submit(
   const { title, description, dueDate, priority, status } = formValues;
 
   const newTask: Task = {
-    // id: getRandomNumber(10, 100000),
     title,
     description,
-    previousTask: {},
+    previousTaskIds: {},
     taskEvents: [],
     watchers: [],
     assignees: [],
-    expectedDueDate: new Date(),
   };
 
   const targetColumn = { dueDate, priority, status };
@@ -274,7 +273,7 @@ async function submit(
     newTask.priority = 0;
     newTask.dueDate = 0;
   } else {
-    updateTaskStatsInColumn(state, targetColumn, newTask);
+    updatePreviousIdsInColumn(state, targetColumn, newTask);
   }
 
   // Updates for newTask's previousItem for current sortBy
@@ -290,21 +289,23 @@ async function submit(
     : undefined;
 
   newTask[sortBy] = column.id;
-  newTask.previousTask[`${sortBy}Id`] = previousTaskId;
+  newTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] = previousTaskId;
 
   const newTaskData = await createTask(newTask);
-  if (newTaskData) newTaskData.taskEvents = [];
 
   // Update state
   setState((previousState) => {
     // Deep copy
-    const copiedState = toPlainObject(previousState) as State;
+    const copiedState = deepCopy(previousState) as State;
 
     // Push newTask to current column array
     const taskArr = copiedState.orderedTasks.find(
       (task) => task.id === column.id
     );
-    if (newTaskData) taskArr?.taskList.push(newTaskData);
+    if (newTaskData) {
+      newTaskData.taskEvents = [];
+      taskArr?.taskList.push(newTaskData);
+    }
     // taskArr?.taskList.push(newTask);
 
     return copiedState;

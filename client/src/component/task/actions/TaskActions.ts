@@ -1,7 +1,9 @@
+import { AxiosError } from "axios";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import { toPlainObject } from "../../../utils/proxyToObject";
+import { getRandomNumber } from "../../../utils/getRandomNumber";
+import { deepCopy } from "../../../utils/deepCopy";
 import {
   Task,
   TaskEvents,
@@ -22,7 +24,8 @@ export async function getTaskEvent(taskId: number, setTask: SetTask) {
       return;
     });
   } catch (error) {
-    console.log(error);
+    const err = error as AxiosError;
+    console.log(err);
   }
 }
 
@@ -32,7 +35,8 @@ export async function createTask(task: Task) {
 
     return res.data;
   } catch (error) {
-    console.log(error);
+    const err = error as AxiosError;
+    console.log(err);
   }
 }
 
@@ -44,7 +48,8 @@ export async function getAllTasks() {
 
     return response.data;
   } catch (error) {
-    console.log(error);
+    const err = error as AxiosError;
+    console.log(err);
   }
 }
 
@@ -54,10 +59,11 @@ export async function updateTasksPosition(
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,
-      toPlainObject(updateTasksPositionDTO)
+      deepCopy(updateTasksPositionDTO)
     );
   } catch (error) {
-    console.log(error);
+    const err = error as AxiosError;
+    console.log(err);
   }
 }
 
