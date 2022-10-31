@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import DueDateOptions from "./DueDateOptions";
 import DueDatePicker from "./DueDatePicker";
 
-type Props = { isOptionOpen: boolean };
+type Props = { isOptionOpen: boolean; onClose: () => void };
 
-export default function DueDateSwitch({ isOptionOpen }: Props) {
+export default function DueDateSwitch({ isOptionOpen, onClose }: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    // Reset to hide date picker
-    if (!isOptionOpen) setShowDatePicker(false);
+    // Reset to use DueDateOptions
+    setShowDatePicker(false);
   }, [isOptionOpen]);
 
   return (
@@ -27,7 +27,11 @@ export default function DueDateSwitch({ isOptionOpen }: Props) {
         {showDatePicker ? "Hide " : "Show "} date picker
       </Box>
 
-      {showDatePicker ? <DueDatePicker /> : <DueDateOptions />}
+      {showDatePicker ? (
+        <DueDatePicker onClose={onClose} />
+      ) : (
+        <DueDateOptions onClose={onClose} />
+      )}
     </Box>
   );
 }

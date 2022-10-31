@@ -75,7 +75,7 @@ export default function ExpectedDueDateDisplay({}: Props) {
         onMouseOutCapture={() => setShowDeleteButton(false)}
       >
         <Popover>
-          {({ onClose: onOptionClose, isOpen: isOptionOpen }) => (
+          {({ onClose, isOpen: isOptionOpen }) => (
             // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
             <>
               <Tooltip
@@ -102,7 +102,10 @@ export default function ExpectedDueDateDisplay({}: Props) {
               {/* DueDate option */}
               <PopoverContent width="200px">
                 <PopoverBody shadow={"2xl"} p={0}>
-                  <DueDateSwitch isOptionOpen={isOptionOpen} />
+                  <DueDateSwitch
+                    onClose={onClose}
+                    isOptionOpen={isOptionOpen}
+                  />
                 </PopoverBody>
               </PopoverContent>
             </>

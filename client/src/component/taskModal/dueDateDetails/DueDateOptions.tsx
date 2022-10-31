@@ -12,9 +12,9 @@ import {
   UpdateEvent,
 } from "../../task/taskTypes";
 
-type Props = {};
+type Props = { onClose: () => void };
 
-export default function DueDateOptions({}: Props) {
+export default function DueDateOptions({ onClose }: Props) {
   const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
 
@@ -61,6 +61,8 @@ export default function DueDateOptions({}: Props) {
       dueDate: targetColumn.id,
       taskEvents: [...task!.taskEvents, newEvent],
     });
+
+    onClose();
   }
 
   return (

@@ -8,9 +8,9 @@ import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
 import { UpdateEvent } from "../../task/taskTypes";
 
-type Props = {};
+type Props = { onClose: () => void };
 
-export default function DueDateOptions({}: Props) {
+export default function DueDateOptions({ onClose }: Props) {
   const { authState } = useAuthContext();
   const [dueDateInput, setDueDateInput] = useState<string>();
 
@@ -32,6 +32,13 @@ export default function DueDateOptions({}: Props) {
         columnOptions.dueDate,
         dueDateInput
       );
+
+      // Do nothing when it comes to selecting the same day
+      const isSameDay = targetDueDateColumnId === task?.dueDate;
+      if (isSameDay) {
+        onClose();
+        return;
+      }
 
       const expectedDueDate = new Date(dueDateInput);
 
@@ -61,6 +68,8 @@ export default function DueDateOptions({}: Props) {
         expectedDueDate,
         taskEvents: [...task!.taskEvents, newEvent],
       });
+
+      onClose();
     }
   }
 
