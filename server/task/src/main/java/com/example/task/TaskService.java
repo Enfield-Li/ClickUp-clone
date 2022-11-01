@@ -4,7 +4,6 @@ import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
 import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.jwt.JwtUtilities;
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
@@ -13,6 +12,7 @@ import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Task;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -65,7 +65,7 @@ public class TaskService {
         var sourceTask = taskDtoList
             .stream()
             .filter(task -> task.id() == sourceTaskId)
-            .findAny();
+            .findFirst();
 
         var taskEvents = sourceTask.get().taskEvents();
         if (!taskEvents.isEmpty()) {
@@ -120,15 +120,30 @@ public class TaskService {
             updateEventDTO
         );
 
-        return taskRepository.updateTaskTitle(newTitle, taskId) > 0;
+        return (
+            taskRepository.updateTaskTitle(newTitle, taskId) > 0 &&
+            taskRepository.renewTaskUpdatedAt(LocalDateTime.now(), taskId) > 0
+        );
+    }
+
+    public Boolean deleteTask(Integer taskId) {
+        try {
+            taskRepository.deleteById(taskId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Transactional
     public Boolean updateTaskDesc(UpdateTaskDescDTO updateTaskDescDTO) {
-        var id = updateTaskDescDTO.taskId();
+        var taskId = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
-        return taskRepository.updateTaskDesc(newDesc, id) > 0;
+        return (
+            taskRepository.updateTaskDesc(newDesc, taskId) > 0 &&
+            taskRepository.renewTaskUpdatedAt(LocalDateTime.now(), taskId) > 0
+        );
     }
 
     private Task setTaskFroWatcherAndAssignee(Task task) {

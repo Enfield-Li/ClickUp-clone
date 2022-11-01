@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -62,6 +63,8 @@ public class Task {
     private String creatorName;
 
     @CreationTimestamp
+    @Column(updatable = false)
+    // ^ IDK why is this broken, createdAt will be updated to null, if this wasn't included
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -71,7 +74,7 @@ public class Task {
     @OneToMany(
         mappedBy = "taskWatcher",
         fetch = EAGER,
-        cascade = { PERSIST, DETACH, MERGE }
+        cascade = CascadeType.ALL
     )
     @Builder.Default
     private Set<Participant> watchers = new HashSet<>();
@@ -79,7 +82,7 @@ public class Task {
     @OneToMany(
         mappedBy = "taskAssignee",
         fetch = EAGER,
-        cascade = { PERSIST, DETACH, MERGE }
+        cascade = CascadeType.ALL
     )
     @Builder.Default
     private Set<Participant> assignees = new HashSet<>();
@@ -89,7 +92,7 @@ public class Task {
     private Integer previousTaskId;
 
     @JoinColumn(name = "previousTaskId")
-    @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+    @OneToOne(cascade = CascadeType.ALL)
     private PreviousTaskIds previousTaskIds;
 
     @JsonIgnore
@@ -97,7 +100,7 @@ public class Task {
     private Integer previousTaskBeforeFinishId;
 
     @JoinColumn(name = "previousTaskBeforeFinishId")
-    @OneToOne(cascade = { PERSIST, DETACH, MERGE })
+    @OneToOne(cascade = CascadeType.ALL)
     private PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish;
 
     public void addWatcher(Participant userInfo) {

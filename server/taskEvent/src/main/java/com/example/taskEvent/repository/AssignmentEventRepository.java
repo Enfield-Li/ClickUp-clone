@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssignmentEventRepository
-    extends JpaRepository<AssignmentEvent, Integer> {}
+    extends JpaRepository<AssignmentEvent, Integer> {
+    void deleteByTaskId(Integer taskId);
+}

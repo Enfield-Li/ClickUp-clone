@@ -1,8 +1,6 @@
 import { AxiosError } from "axios";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT } from "../../../utils/constant";
-import { getRandomNumber } from "../../../utils/getRandomNumber";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
   Task,
@@ -15,16 +13,25 @@ import {
 
 export async function getTasks() {}
 
-export async function getTaskEvent(taskId: number, setTask: SetTask) {
+export async function deleteTask(taskId: number, taskListForUpdate: TaskList) {
   try {
-    const res = await axiosInstance.get<TaskEvents>(
+    const response = await axiosInstance.put<boolean>(
+      API_ENDPOINT.TASK + `/${taskId}`,
+      deepCopy(taskListForUpdate)
+    );
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError;
+    console.log(err);
+  }
+}
+
+export async function fetchTaskEvents(taskId: number) {
+  try {
+    const response = await axiosInstance.get<TaskEvents>(
       API_ENDPOINT.TASK_EVENT + `/${taskId}`
     );
-
-    setTask((previousTask) => {
-      if (previousTask) return { ...previousTask, taskEvents: res.data };
-      return;
-    });
+    return response.data;
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);
@@ -42,7 +49,7 @@ export async function createTask(task: Task) {
   }
 }
 
-export async function getAllTasks() {
+export async function fetchAllTasks() {
   try {
     const response = await axiosInstance.get<TaskList>(
       API_ENDPOINT.TASK_ALL_TASKS

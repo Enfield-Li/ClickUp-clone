@@ -1,7 +1,8 @@
-import { Box, Center, Divider, Flex } from "@chakra-ui/react";
-import { useRef, useEffect } from "react";
+import { Box, Center, Divider, Flex, Spinner } from "@chakra-ui/react";
+import { useRef, useEffect, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
+import { fetchTaskEvents } from "../task/actions/TaskActions";
 import DueDateDetails from "./dueDateDetails/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";
@@ -12,14 +13,28 @@ import UpdateEvents from "./taskEvent/updateEvents";
 type Props = {};
 
 export default function TaskEvent({}: Props) {
-  const { task } = useTaskDetailContext();
+  const { task, setTask } = useTaskDetailContext();
+  const [loadingTaskEvents, setLoadingTaskEvents] = useState<boolean>();
+
+  useEffect(() => {
+    getTaskEvents();
+
+    async function getTaskEvents() {
+      if (task?.id) {
+        setLoadingTaskEvents(true);
+        const events = await fetchTaskEvents(task.id);
+        if (events) setTask({ ...task, taskEvents: events });
+        setLoadingTaskEvents(false);
+      }
+    }
+  }, []);
 
   // https://stackoverflow.com/a/52266212/16648127
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const bottomDivRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (task?.taskEvents.length)
-      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+      bottomDivRef.current?.scrollIntoView({ behavior: "auto" });
   }, [task?.taskEvents.length]);
 
   return (
@@ -53,22 +68,30 @@ export default function TaskEvent({}: Props) {
         flexDirection="column"
         // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
       >
-        <TaskCreatorInfo />
-        {task?.taskEvents.map((event) => (
-          <Box key={event.id}>
-            <Box py={1}>
-              {isCommentEvent(event) ? (
-                <CommentEvents commentEvent={event} />
-              ) : isAssignmentEvent(event) ? (
-                <AssignmentEvents assignmentEvent={event} />
-              ) : (
-                <UpdateEvents updateEvent={event} />
-              )}
-            </Box>
-          </Box>
-        ))}
+        {loadingTaskEvents ? (
+          <Center mt={3} opacity="80%">
+            <Spinner />
+          </Center>
+        ) : (
+          <>
+            <TaskCreatorInfo />
+            {task?.taskEvents.map((event) => (
+              <Box key={event.id}>
+                <Box py={1}>
+                  {isCommentEvent(event) ? (
+                    <CommentEvents commentEvent={event} />
+                  ) : isAssignmentEvent(event) ? (
+                    <AssignmentEvents assignmentEvent={event} />
+                  ) : (
+                    <UpdateEvents updateEvent={event} />
+                  )}
+                </Box>
+              </Box>
+            ))}
+          </>
+        )}
 
-        <div ref={bottomRef} />
+        <div ref={bottomDivRef} />
       </Flex>
     </Box>
   );

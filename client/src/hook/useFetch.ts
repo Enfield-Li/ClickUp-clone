@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { processColumns } from "../component/task/actions/columnProcessing";
-import { getAllTasks } from "../component/task/actions/TaskActions";
+import { fetchAllTasks } from "../component/task/actions/TaskActions";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
@@ -62,7 +62,7 @@ export function useFetchTasks(sortBy: SortBy) {
     setLoading(true);
 
     // Task data
-    const tasksData = await getAllTasks();
+    const tasksData = await fetchAllTasks();
 
     if (tasksData) {
       const columnDataFromApi = mockColumnOptions;

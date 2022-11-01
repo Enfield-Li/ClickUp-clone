@@ -42,6 +42,28 @@ export default function SelectStatusIcons({}: Props) {
     ? columnOptions.status[0]
     : columnOptions.status[columnIndex + 1];
 
+  function handleNextStage() {
+    const targetStatusColumnId = nextStatus.id;
+    updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
+
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: "status",
+      beforeUpdate: String(task?.status),
+      afterUpdate: String(nextStatus.id),
+      createdAt: new Date(),
+    };
+
+    // Update modal task state
+    setTask({
+      ...task!,
+      status: targetStatusColumnId,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
+  }
+
   return (
     <Center>
       <Popover
@@ -112,32 +134,7 @@ export default function SelectStatusIcons({}: Props) {
                   backgroundColor={column?.color}
                   height={onHover && !isOpen ? "37px" : "33px"}
                   // borderRightWidth={onHover && !isOpen ? "4px" : ""}
-                  onClick={() => {
-                    const targetStatusColumnId = nextStatus.id;
-                    updateCurrentTaskStatus(
-                      sortBy,
-                      task!,
-                      setState,
-                      targetStatusColumnId
-                    );
-
-                    const newEvent: UpdateEvent = {
-                      id: getRandomNumberNoLimit(),
-                      userId: authState.user?.id,
-                      taskId: task!.id!,
-                      field: "status",
-                      beforeUpdate: String(task?.status),
-                      afterUpdate: String(nextStatus.id),
-                      createdAt: new Date(),
-                    };
-
-                    // Update modal task state
-                    setTask({
-                      ...task!,
-                      status: targetStatusColumnId,
-                      taskEvents: [...task!.taskEvents, newEvent],
-                    });
-                  }}
+                  onClick={() => handleNextStage()}
                 >
                   <i className="bi bi-caret-right-fill"></i>
                 </Center>

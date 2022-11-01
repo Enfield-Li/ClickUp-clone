@@ -35,8 +35,8 @@ export default function TaskInfo({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
-
   return (
+
     <Box flexBasis={"50%"}>
       <Flex
         py={4}

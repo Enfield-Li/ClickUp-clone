@@ -16,7 +16,7 @@ import TaskInfo from "./TaskInfo";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { getTaskEvent } from "../task/actions/TaskActions";
+import { fetchTaskEvents } from "../task/actions/TaskActions";
 
 type Props = {};
 
@@ -33,10 +33,6 @@ export default function TaskDetailModal({}: Props) {
   } = useTaskDetailContext();
 
   const { setState, sortBy, columnOptions } = taskStateContext!;
-
-  useEffect(() => {
-    if (task?.id) getTaskEvent(task.id, setTask);
-  }, []);
 
   return (
     <Modal

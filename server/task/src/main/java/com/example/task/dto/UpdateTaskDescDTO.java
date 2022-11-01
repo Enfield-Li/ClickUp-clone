@@ -6,4 +6,3 @@ public record UpdateTaskDescDTO(
     @NotNull Integer taskId,
     @NotNull String newDesc
 ) {}
-

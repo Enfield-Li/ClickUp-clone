@@ -142,7 +142,7 @@ export function updateCurrentTaskStatus(
             updatePreviousIdsInColumn(draftState, targetColumn, sourceTask);
           }
 
-          // update sourceTask with value in the new column
+          // update sourceTask with value in the new status column
           updatePreviousIdsInColumn(
             draftState,
             { status: String(targetStatusColumnId) },

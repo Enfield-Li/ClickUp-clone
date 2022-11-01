@@ -47,7 +47,6 @@ export default function SelectPriorityIcon({}: Props) {
                 <Center
                   width="35px"
                   height="35px"
-                  opacity="65%"
                   cursor={"pointer"}
                   fontSize={"17px"}
                   border="1px dashed"

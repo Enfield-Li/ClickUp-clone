@@ -63,7 +63,7 @@ export type ColumnOptions = {
 };
 
 // task
-type PreviousTaskIds = {
+export type PreviousTaskIds = {
   inStatus?: number;
   inDueDate?: number;
   inPriority?: number;

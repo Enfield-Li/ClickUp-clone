@@ -3,6 +3,7 @@ package com.example.task;
 import static com.example.clients.UrlConstants.*;
 import static com.example.task.config.Constants.*;
 
+import com.example.task.dto.UpdateTaskDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -63,6 +64,15 @@ class TaskController {
             updateTasksPositionDTO
         );
         return ResponseEntity.ok(updatedTasks);
+    }
+
+    @PutMapping("/{taskId}")
+    ResponseEntity<Boolean> deleteTask(
+        @PathVariable Integer taskId,
+        @RequestBody List<UpdateTaskDTO> tasksForUpdate
+    ) {
+        var isTaskDeleted = taskService.deleteTask(taskId);
+        return ResponseEntity.ok(isTaskDeleted);
     }
 
     @PutMapping("/update_title")
