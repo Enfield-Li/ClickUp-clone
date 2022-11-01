@@ -7,6 +7,7 @@ import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
+import com.example.task.dto.UpdateTaskDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -44,8 +45,11 @@ public class TaskService {
         var userId = userInfo.userId();
         var username = userInfo.username();
 
-        var task = Task.createTaskDtoToTask(createTaskDTO, userId, username);
-        setTaskForWatcher(task);
+        var task = Task.convertFromCreateTaskDto(
+            createTaskDTO,
+            userId,
+            username
+        );
 
         return taskRepository.save(task);
     }
@@ -62,18 +66,19 @@ public class TaskService {
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
 
+        // Find sourceTask
         var sourceTask = taskDtoList
             .stream()
             .filter(task -> task.id() == sourceTaskId)
             .findFirst();
 
+        // publish task update event
         var taskEvents = sourceTask.get().taskEvents();
         if (!taskEvents.isEmpty()) {
             var updateEventDTO = taskEvents.get(0);
             updateEventDTO.setUserId(userId);
             updateEventDTO.setUsername(username);
 
-            // publish task update event
             rabbitMQMessageProducer.publish(
                 internalExchange,
                 taskEventRoutingKey,
@@ -84,13 +89,24 @@ public class TaskService {
         // DTO to entity
         var tasks = new ArrayList<Task>();
         taskDtoList.forEach(taskDTO -> {
-            var task = Task.updateTaskDtoToTask(taskDTO, userId, username);
-            setTaskFroWatcherAndAssignee(task);
+            var task = Task.convertFromUpdateTaskDto(taskDTO);
             tasks.add(task);
         });
 
         taskRepository.saveAll(tasks);
         return true;
+    }
+
+    public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {
+        try {
+            // Update other tasks position
+            taskRepository.saveAll(Task.setTaskForWatcher(tasksForUpdate));
+            // Delete the task in question
+            taskRepository.deleteById(taskId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Transactional
@@ -113,7 +129,7 @@ public class TaskService {
             .taskId(taskId)
             .build();
 
-        // publish task update event
+        // publish task update title event
         rabbitMQMessageProducer.publish(
             internalExchange,
             taskEventRoutingKey,
@@ -126,15 +142,6 @@ public class TaskService {
         );
     }
 
-    public Boolean deleteTask(Integer taskId) {
-        try {
-            taskRepository.deleteById(taskId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     @Transactional
     public Boolean updateTaskDesc(UpdateTaskDescDTO updateTaskDescDTO) {
         var taskId = updateTaskDescDTO.taskId();
@@ -144,19 +151,5 @@ public class TaskService {
             taskRepository.updateTaskDesc(newDesc, taskId) > 0 &&
             taskRepository.renewTaskUpdatedAt(LocalDateTime.now(), taskId) > 0
         );
-    }
-
-    private Task setTaskFroWatcherAndAssignee(Task task) {
-        return setTaskForAssignee(setTaskForWatcher(task));
-    }
-
-    private Task setTaskForAssignee(Task task) {
-        task.getAssignees().forEach(assignee -> assignee.setTaskAssignee(task));
-        return task;
-    }
-
-    private Task setTaskForWatcher(Task task) {
-        task.getWatchers().forEach(watcher -> watcher.setTaskWatcher(task));
-        return task;
     }
 }

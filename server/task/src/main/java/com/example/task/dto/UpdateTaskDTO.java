@@ -7,20 +7,25 @@ import com.example.task.model.PreviousTaskIdsBeforeFinish;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public record UpdateTaskDTO(
     @NotNull Integer id,
     @NotNull String title,
+    @NotNull Integer creatorId,
+    @NotNull String creatorName,
 
-    Integer status,
-    Integer dueDate,
-    Integer priority,
+    @NotNull Integer status,
+    @NotNull Integer dueDate,
+    @NotNull Integer priority,
+    @NotEmpty Set<Participant> watchers,
+
     String description,
     Date expectedDueDate,
-    Set<Participant> watchers,
     Set<Participant> assignees,
     PreviousTaskIds previousTaskIds,
-    List<UpdateEventDTO> taskEvents,
-    PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish
+    PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish,
+
+    List<UpdateEventDTO> taskEvents // Messaging event dto
 ) {}

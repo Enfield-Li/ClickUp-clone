@@ -69,9 +69,9 @@ class TaskController {
     @PutMapping("/{taskId}")
     ResponseEntity<Boolean> deleteTask(
         @PathVariable Integer taskId,
-        @RequestBody List<UpdateTaskDTO> tasksForUpdate
+        @RequestBody List<Task> tasksForUpdate
     ) {
-        var isTaskDeleted = taskService.deleteTask(taskId);
+        var isTaskDeleted = taskService.deleteTask(taskId, tasksForUpdate);
         return ResponseEntity.ok(isTaskDeleted);
     }
 

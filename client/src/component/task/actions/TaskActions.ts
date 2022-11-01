@@ -65,6 +65,7 @@ export async function fetchAllTasks() {
 export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
+  console.log(deepCopy(updateTasksPositionDTO));
   try {
     const response = await axiosInstance.put<boolean>(
       API_ENDPOINT.TASK,

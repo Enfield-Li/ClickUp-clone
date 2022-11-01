@@ -93,8 +93,7 @@ export default function TaskOptions({}: Props) {
         })
     );
 
-    console.log(taskListForUpdate);
-    // deleteTask(task!.id!, taskListForUpdate);
+    deleteTask(task!.id!, taskListForUpdate);
   }
 
   return (

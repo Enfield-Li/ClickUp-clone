@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -103,55 +104,92 @@ public class Task {
     @OneToOne(cascade = CascadeType.ALL)
     private PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish;
 
-    public void addWatcher(Participant userInfo) {
-        watchers.add(userInfo);
-        userInfo.setTaskWatcher(this);
-    }
+    // public void addWatcher(Participant userInfo) {
+    //     watchers.add(userInfo);
+    //     userInfo.setTaskWatcher(this);
+    // }
 
-    public void removeWatcher(Participant userInfo) {
-        watchers.remove(userInfo);
-        userInfo.setTaskWatcher(null);
-    }
+    // public void removeWatcher(Participant userInfo) {
+    //     watchers.remove(userInfo);
+    //     userInfo.setTaskWatcher(null);
+    // }
 
-    public static Task updateTaskDtoToTask(
-        UpdateTaskDTO taskDTO,
-        Integer creatorId,
-        String creatorName
-    ) {
-        return Task
+    public static Task convertFromUpdateTaskDto(UpdateTaskDTO updateTaskDTO) {
+        var task = Task
             .builder()
-            .creatorId(creatorId)
-            .creatorName(creatorName)
-            .id(taskDTO.id())
-            .title(taskDTO.title())
-            .status(taskDTO.status())
-            .dueDate(taskDTO.dueDate())
-            .priority(taskDTO.priority())
-            .watchers(taskDTO.watchers())
-            .assignees(taskDTO.assignees())
-            .description(taskDTO.description())
-            .previousTaskIds(taskDTO.previousTaskIds())
-            .expectedDueDate(taskDTO.expectedDueDate())
-            .previousTaskIdsBeforeFinish(taskDTO.previousTaskIdsBeforeFinish())
+            .id(updateTaskDTO.id())
+            .creatorId(updateTaskDTO.creatorId())
+            .creatorName(updateTaskDTO.creatorName())
+            //
+            .title(updateTaskDTO.title())
+            .status(updateTaskDTO.status())
+            .dueDate(updateTaskDTO.dueDate())
+            .priority(updateTaskDTO.priority())
+            .description(updateTaskDTO.description())
+            .expectedDueDate(updateTaskDTO.expectedDueDate())
+            //
+            .watchers(updateTaskDTO.watchers())
+            .assignees(updateTaskDTO.assignees())
+            .previousTaskIds(updateTaskDTO.previousTaskIds())
+            .previousTaskIdsBeforeFinish(
+                updateTaskDTO.previousTaskIdsBeforeFinish()
+            )
             .build();
+
+        setTaskForWatcher(task); // Manage relationship
+        return task;
     }
 
-    public static Task createTaskDtoToTask(
+    public static Task convertFromCreateTaskDto(
         CreateTaskDTO createTaskDTO,
         Integer creatorId,
         String creatorName
     ) {
-        return Task
+        // Initialize creator as watcher (*default)
+        var creatorAsWatcher = Set.of(
+            Participant
+                .builder()
+                .userId(creatorId)
+                .username(creatorName)
+                .build()
+        );
+
+        var task = Task
             .builder()
             .creatorId(creatorId)
             .creatorName(creatorName)
+            //
             .title(createTaskDTO.title())
             .status(createTaskDTO.status())
             .dueDate(createTaskDTO.dueDate())
             .priority(createTaskDTO.priority())
             .description(createTaskDTO.description())
+            //
+            .watchers(creatorAsWatcher)
             .previousTaskIds(createTaskDTO.previousTaskIds())
             .expectedDueDate(createTaskDTO.expectedDueDate())
             .build();
+
+        setTaskForWatcher(task); // Manage relationship
+        return task;
+    }
+
+    // Manage task/watcher relationship in task
+    private static Task setTaskForWatcher(Task task) {
+        task
+            .getWatchers()
+            .forEach(watcher -> {
+                if (task.getId() != null) {
+                    watcher.setTaskWatcherId(task.getId());
+                }
+                watcher.setTaskWatcher(task);
+            });
+        return task;
+    }
+
+    // Manage task/watcher relationship in taskList
+    public static List<Task> setTaskForWatcher(List<Task> taskList) {
+        taskList.forEach(task -> setTaskForWatcher(task));
+        return taskList;
     }
 }
