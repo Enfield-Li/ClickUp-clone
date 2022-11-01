@@ -212,6 +212,9 @@ async function handleDragEnd(
               sourceTaskBefore ? sourceTaskBefore.id : undefined;
             sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
               destinationTask.id;
+
+            taskListForUpdate.push(sourceTaskAfter);
+
             if (destinationTaskAfter) {
               destinationTaskAfter.previousTaskIds[
                 lookUpPreviousTaskId[sortBy]

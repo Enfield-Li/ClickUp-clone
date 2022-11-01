@@ -52,29 +52,27 @@ export default function TaskOptions({}: Props) {
           for (const column of columns) {
             draftState.orderedTasks.forEach((tasks) => {
               tasks.taskList.forEach((currentTask, index, currentArray) => {
-                console.log("sortBy: ", column);
-
+                const sourceTaskAfter = currentTask;
                 const isSourceTaskAfter =
-                  currentTask.previousTaskIds[column] === task.id;
+                  sourceTaskAfter.previousTaskIds[column] === task.id;
 
+                // assign new previousTaskIds for sourceTaskAfter
                 if (isSourceTaskAfter) {
-                  console.log("sourceTaskAfter: ", deepCopy(currentTask));
-                  // assign new previousTaskIds
-                  currentTask.previousTaskIds[column] =
+                  sourceTaskAfter.previousTaskIds[column] =
                     task.previousTaskIds[column];
 
                   // push to the taskListForUpdate
                   const sourceTaskAfterExist = taskListForUpdate.find(
-                    (task) => task.id === currentTask.id
+                    (task) => task.id === sourceTaskAfter.id
                   );
 
                   if (!sourceTaskAfterExist) {
-                    taskListForUpdate.push(deepCopy(currentTask));
+                    taskListForUpdate.push(deepCopy(sourceTaskAfter));
                   } else if (sourceTaskAfterExist) {
                     taskListForUpdate = deepCopy(
                       taskListForUpdate.map((taskForUpdate) =>
-                        taskForUpdate.id === currentTask.id
-                          ? currentTask
+                        taskForUpdate.id === sourceTaskAfter.id
+                          ? sourceTaskAfter
                           : taskForUpdate
                       )
                     );
@@ -95,6 +93,7 @@ export default function TaskOptions({}: Props) {
         })
     );
 
+    console.log(taskListForUpdate);
     // deleteTask(task!.id!, taskListForUpdate);
   }
 
