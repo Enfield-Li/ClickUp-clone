@@ -136,10 +136,13 @@ public class TaskService {
             updateEventDTO
         );
 
-        return (
-            taskRepository.updateTaskTitle(newTitle, taskId) > 0 &&
-            taskRepository.renewTaskUpdatedAt(LocalDateTime.now(), taskId) > 0
+        var rowsAffected = taskRepository.updateTaskTitle(
+            taskId,
+            newTitle,
+            LocalDateTime.now()
         );
+
+        return rowsAffected > 0;
     }
 
     @Transactional
@@ -147,9 +150,12 @@ public class TaskService {
         var taskId = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
-        return (
-            taskRepository.updateTaskDesc(newDesc, taskId) > 0 &&
-            taskRepository.renewTaskUpdatedAt(LocalDateTime.now(), taskId) > 0
+        var rowsAffected = taskRepository.updateTaskDesc(
+            taskId,
+            newDesc,
+            LocalDateTime.now()
         );
+
+        return rowsAffected > 0;
     }
 }

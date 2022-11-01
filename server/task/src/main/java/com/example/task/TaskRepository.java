@@ -10,36 +10,34 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    @Modifying
-    @Query(
-        value = "UPDATE task SET title = :title WHERE id = :taskId",
-        nativeQuery = true
-    )
-    Integer updateTaskTitle(
-        @Param("title") String title,
-        @Param("taskId") Integer taskId
-    );
-
-    @Modifying
-    @Query(
-        value = "UPDATE task SET updated_at = :updatedAt WHERE id = :taskId",
-        nativeQuery = true
-    )
-    Integer renewTaskUpdatedAt(
-        @Param("updatedAt") LocalDateTime updatedAt,
-        @Param("taskId") Integer taskId
-    );
-
     @Query(value = "SELECT title FROM task WHERE id = :id", nativeQuery = true)
     String getTaskTitle(@Param("id") Integer id);
 
     @Modifying
     @Query(
-        value = "UPDATE task SET description = :description WHERE id = :id",
+        value = "UPDATE task" +
+        " SET title = :title" +
+        ", updated_at = :updatedAt" +
+        " WHERE id = :taskId",
+        nativeQuery = true
+    )
+    Integer updateTaskTitle(
+        @Param("taskId") Integer taskId,
+        @Param("title") String title,
+        @Param("updatedAt") LocalDateTime updatedAt
+    );
+
+    @Modifying
+    @Query(
+        value = "UPDATE task" +
+        " SET description = :description" +
+        ", updated_at = :updatedAt" +
+        " WHERE id = :taskId",
         nativeQuery = true
     )
     Integer updateTaskDesc(
+        @Param("taskId") Integer taskId,
         @Param("description") String description,
-        @Param("id") Integer id
+        @Param("updatedAt") LocalDateTime updatedAt
     );
 }
