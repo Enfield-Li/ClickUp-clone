@@ -24,7 +24,7 @@ export default function ToggleNavBar({
       initial={false}
       onAnimationStart={() => setHidden(false)}
       onAnimationComplete={() => setHidden(!isOpen)}
-      animate={{ width: isOpen ? 220 : 0 }}
+      animate={{ width: isOpen ? 200 : 0 }}
       style={{
         overflow: "hidden",
         whiteSpace: "nowrap",

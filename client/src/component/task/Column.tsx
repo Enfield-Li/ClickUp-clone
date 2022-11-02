@@ -2,7 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import ColumnHeader from "./customeStatusColumn/ColumnHeader";
 import { CreateTaskPopover } from "./CreateTaskPopover";
-import TaskCard from "./TaskCard";
+import TaskCard from "./taskCard/TaskCard";
 import {
   UndeterminedColumn,
   DueDateColumns,
@@ -48,12 +48,12 @@ export default function Column({
       <Droppable droppableId={String(currentColumn.id)}>
         {(provided, snapshot) => (
           <Box
-            height="500px"
+            height="510px"
             overflow="hidden"
             minHeight="100px"
-            _hover={{ overflow: "auto" }}
             ref={provided.innerRef}
             {...provided.droppableProps}
+            _hover={{ overflow: "auto" }}
           >
             {/* Task list */}
             {tasks?.map((task, index) => (

@@ -54,7 +54,7 @@ export default function SelectPriorityIcon({}: Props) {
                   color={priorityFlagColor}
                   _hover={{ color: "purple.400", opacity: "100%" }}
                 >
-                  <i className="bi bi-flag"></i>
+                  <i className="bi bi-flag-fill"></i>
                 </Center>
               </PopoverTrigger>
             </Box>

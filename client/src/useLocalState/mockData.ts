@@ -43,6 +43,7 @@ export const mockTaskList: TaskList = [
     priority: 2,
     creatorId: 1,
     // dueDate: 1,
+    description: "desc here",
     title: "11111",
     previousTaskIds: {},
     creatorName: "abc",

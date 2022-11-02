@@ -13,11 +13,14 @@ export default function App() {
   return (
     <Flex height="100vh">
       {/* NavBar */}
-      <ToggleNavBar
-        isOpen={isOpen}
-        onToggle={onToggle}
-        getDisclosureProps={getDisclosureProps}
-      />
+      <Flex>
+        <Box width="45px">abc</Box>
+        <ToggleNavBar
+          isOpen={isOpen}
+          onToggle={onToggle}
+          getDisclosureProps={getDisclosureProps}
+        />
+      </Flex>
 
       {/* Header & Main */}
       <Box

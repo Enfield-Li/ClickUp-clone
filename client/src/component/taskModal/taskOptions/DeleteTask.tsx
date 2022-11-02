@@ -10,7 +10,9 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { CLIENT_ROUTE } from "../../../utils/constant";
 import { deepCopy } from "../../../utils/deepCopy";
 import { deleteTask } from "../../task/actions/TaskActions";
 import {
@@ -23,6 +25,7 @@ import {
 type Props = {};
 
 export default function TaskOptions({}: Props) {
+  const navigate = useNavigate();
   const {
     task,
     setTask,
@@ -94,6 +97,10 @@ export default function TaskOptions({}: Props) {
     );
 
     deleteTask(task!.id!, taskListForUpdate);
+
+    // Close modal and navigate back
+    onModalClose();
+    navigate(CLIENT_ROUTE.TASK);
   }
 
   return (
