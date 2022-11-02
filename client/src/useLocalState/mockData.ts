@@ -5,7 +5,7 @@ import {
   STATUS,
   TaskList,
 } from "../component/task/taskTypes";
-import { getDaysBefore, getNextNWeekDay } from "./getWeekDays";
+import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
 export const mockColumnOptions: ColumnOptions = {
   status: [

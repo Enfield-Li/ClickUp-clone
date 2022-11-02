@@ -78,6 +78,7 @@ export default function AddStatusColumnInput({
 
       <InputRightElement
         mr={4}
+        mt="3px"
         cursor="pointer"
         children={
           <Flex justifyContent="center" alignItems="center">

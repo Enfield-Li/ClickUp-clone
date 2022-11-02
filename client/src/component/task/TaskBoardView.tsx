@@ -22,16 +22,18 @@ import {
   TaskList,
   UpdateTasksPositionDTO,
 } from "./taskTypes";
-import AddStatusColumn from "./columnDetails/AddStatusColumn";
+import AddStatusColumn from "./customeStatusColumn/AddStatusColumn";
 import { getLookUpDueDateTable } from "./actions/columnProcessing";
 import { deepCopy } from "../../utils/deepCopy";
+import { useLocalTasks } from "../../useLocalState/useLocalState";
 
 type Props = {
   sortBy: SortBy;
 };
 
 export default function TaskBoardView({ sortBy }: Props) {
-  const { state, loading, error, setState } = useFetchTasks(sortBy);
+  //   const { state, loading, error, setState } = useFetchTasks(sortBy);
+  const { state, loading, setState } = useLocalTasks(sortBy);
   console.log(state);
 
   if (!state || loading)

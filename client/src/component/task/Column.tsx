@@ -1,6 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import ColumnHeader from "./columnDetails/ColumnHeader";
+import ColumnHeader from "./customeStatusColumn/ColumnHeader";
 import { CreateTaskPopover } from "./CreateTaskPopover";
 import TaskCard from "./TaskCard";
 import {

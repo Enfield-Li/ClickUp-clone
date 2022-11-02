@@ -34,6 +34,7 @@ export default function ColumnHeader({
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
 
+  // Close edit when switching sortBy
   useEffect(() => {
     setEditTitle(false);
   }, [sortBy]);

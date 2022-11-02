@@ -2,8 +2,10 @@ package com.example.statusColumn;
 
 import static com.example.clients.UrlConstants.*;
 
+import com.example.statusColumn.model.StatusColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +27,10 @@ class ColumnController {
     }
 
     @PostMapping
-    void createStatusColumn() {
-        statusColumnService.createStatusColumn();
+    ResponseEntity<Boolean> createStatusColumn(
+        @RequestBody StatusColumn statusColumn
+    ) {
+        var created = statusColumnService.createStatusColumn(statusColumn);
+        return ResponseEntity.ok(created);
     }
 }

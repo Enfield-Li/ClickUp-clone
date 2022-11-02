@@ -11,7 +11,7 @@ import { SortBy, State } from "../component/task/taskTypes";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
-import { mockColumnOptions } from "../utils/mockData";
+import { mockColumnOptions } from "../useLocalState/mockData";
 import { sleep } from "../utils/sleep";
 
 export function useFetch<T>(url: string) {
