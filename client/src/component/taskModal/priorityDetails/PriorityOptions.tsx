@@ -4,7 +4,7 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { PriorityColumn, UpdateEvent } from "../../task/taskTypes";
+import { PRIORITY, PriorityColumn, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
@@ -32,7 +32,7 @@ export default function PriorityOptions({ onOptionClose }: Props) {
       sortBy,
       task!,
       setState,
-      "priority",
+      PRIORITY,
       targetPriorityColumnId
     );
 
@@ -40,7 +40,7 @@ export default function PriorityOptions({ onOptionClose }: Props) {
       id: getRandomNumberNoLimit(),
       userId: authState.user?.id,
       taskId: task!.id!,
-      field: "priority",
+      field: PRIORITY,
       beforeUpdate: String(task?.priority),
       afterUpdate: String(targetPriorityColumnId),
       createdAt: new Date(),

@@ -8,6 +8,7 @@ import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getLookUpDueDateTable } from "../../task/actions/columnProcessing";
 import {
   DueDateColumn,
+  DUE_DATE,
   SelectableDueDate,
   UpdateEvent,
 } from "../../task/taskTypes";
@@ -39,7 +40,7 @@ export default function DueDateOptions({ onClose }: Props) {
       sortBy,
       task!,
       setState,
-      "dueDate",
+      DUE_DATE,
       targetColumn.id,
       expectedDueDate
     );
@@ -48,7 +49,7 @@ export default function DueDateOptions({ onClose }: Props) {
       id: getRandomNumberNoLimit(),
       userId: authState.user?.id,
       taskId: task!.id!,
-      field: "dueDate",
+      field: DUE_DATE,
       beforeUpdate: String(task?.dueDate),
       afterUpdate: String(targetColumn.id),
       createdAt: new Date(),

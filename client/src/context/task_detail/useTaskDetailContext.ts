@@ -3,14 +3,15 @@ import { useContext } from "react";
 import { updateTasksPosition } from "../../component/task/actions/TaskActions";
 import { updatePreviousIdsInColumn } from "../../component/task/actions/taskProcessing";
 import {
-  lookUpPreviousTaskId,
-  SetState,
-  SortBy,
-  STATUS,
-  TargetColumn,
-  Task,
-  TaskList,
-  UpdateTasksPositionDTO,
+    DUE_DATE,
+    lookUpPreviousTaskId,
+    SetState,
+    SortBy,
+    STATUS,
+    TargetColumn,
+    Task,
+    TaskList,
+    UpdateTasksPositionDTO
 } from "../../component/task/taskTypes";
 import { TaskDetailContext } from "./TaskDetailContext";
 
@@ -160,7 +161,7 @@ export function updateCurrentTaskStatus(
           sourceTask.taskEvents = [
             {
               taskId: sourceTask.id!,
-              field: "status",
+              field: STATUS,
               afterUpdate: String(targetStatusColumnId),
               beforeUpdate: String(currentColumnId),
             },
@@ -193,7 +194,7 @@ export function updateTaskPriorityOrDueDate(
   expectedDueDate?: Date
 ) {
   const taskListForUpdate: TaskList = [];
-  const isDueDate = targetColumnKey === "dueDate";
+  const isDueDate = targetColumnKey === DUE_DATE;
 
   const targetColumn: TargetColumn = isDueDate
     ? { dueDate: String(targetColumnId) }

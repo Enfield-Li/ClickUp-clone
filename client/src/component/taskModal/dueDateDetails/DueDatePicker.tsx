@@ -1,12 +1,12 @@
-import { Input, Center, Button } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Button, Center, Input } from "@chakra-ui/react";
+import { useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
-import { UpdateEvent } from "../../task/taskTypes";
+import { DUE_DATE, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onClose: () => void };
 
@@ -47,7 +47,7 @@ export default function DueDateOptions({ onClose }: Props) {
         sortBy,
         task!,
         setState,
-        "dueDate",
+        DUE_DATE,
         targetDueDateColumnId,
         expectedDueDate
       );
@@ -56,7 +56,7 @@ export default function DueDateOptions({ onClose }: Props) {
         id: getRandomNumberNoLimit(),
         userId: authState.user?.id,
         taskId: task!.id!,
-        field: "dueDate",
+        field: DUE_DATE,
         beforeUpdate: String(task?.dueDate),
         afterUpdate: String(targetDueDateColumnId),
         createdAt: new Date(),

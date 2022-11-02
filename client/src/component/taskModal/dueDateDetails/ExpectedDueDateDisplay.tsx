@@ -8,14 +8,13 @@ import {
   PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
-import produce from "immer";
 import { useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { UpdateEvent } from "../../task/taskTypes";
+import { DUE_DATE, UpdateEvent } from "../../task/taskTypes";
 import DueDateSwitch from "./DueDateSwitch";
 
 type Props = {};
@@ -42,7 +41,7 @@ export default function ExpectedDueDateDisplay({}: Props) {
       sortBy,
       task!,
       setState,
-      "dueDate",
+      DUE_DATE,
       1, // No due date
       undefined
     );
@@ -51,7 +50,7 @@ export default function ExpectedDueDateDisplay({}: Props) {
       id: getRandomNumberNoLimit(),
       userId: authState.user?.id,
       taskId: task!.id!,
-      field: "dueDate",
+      field: DUE_DATE,
       beforeUpdate: String(task?.dueDate),
       afterUpdate: "1",
       createdAt: new Date(),

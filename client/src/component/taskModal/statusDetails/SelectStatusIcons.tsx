@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
   Popover,
@@ -16,7 +15,7 @@ import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { UpdateEvent } from "../../task/taskTypes";
+import { STATUS, UpdateEvent } from "../../task/taskTypes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -50,7 +49,7 @@ export default function SelectStatusIcons({}: Props) {
       id: getRandomNumberNoLimit(),
       userId: authState.user?.id,
       taskId: task!.id!,
-      field: "status",
+      field: STATUS,
       beforeUpdate: String(task?.status),
       afterUpdate: String(nextStatus.id),
       createdAt: new Date(),

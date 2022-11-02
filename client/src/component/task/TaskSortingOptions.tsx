@@ -7,7 +7,7 @@ type Props = {
   setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
 };
 
-export default function TaskNavigation({ sortBy, setSortBy }: Props) {
+export default function TaskSortingOptions({ sortBy, setSortBy }: Props) {
   return (
     <Flex p={2} mx={3}>
       <Box>Task navigation</Box>

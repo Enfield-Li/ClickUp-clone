@@ -1,4 +1,10 @@
-import { ColumnOptions, TaskList } from "../component/task/taskTypes";
+import {
+  ColumnOptions,
+  DUE_DATE,
+  PRIORITY,
+  STATUS,
+  TaskList,
+} from "../component/task/taskTypes";
 import { getDaysBefore, getNextNWeekDay } from "./getWeekDays";
 
 export const mockColumnOptions: ColumnOptions = {
@@ -83,7 +89,7 @@ export const mockTaskList: TaskList = [
       },
       {
         id: 4,
-        field: "status",
+        field: STATUS,
         beforeUpdate: "1",
         afterUpdate: "2",
         taskId: 111,
@@ -94,7 +100,7 @@ export const mockTaskList: TaskList = [
       },
       {
         id: 3,
-        field: "status",
+        field: STATUS,
         afterUpdate: "1",
         taskId: 111,
         userId: 3,
@@ -104,7 +110,7 @@ export const mockTaskList: TaskList = [
       },
       {
         id: 5,
-        field: "priority",
+        field: PRIORITY,
         beforeUpdate: "2",
         afterUpdate: "3",
         taskId: 111,
@@ -115,7 +121,7 @@ export const mockTaskList: TaskList = [
       },
       {
         id: 6,
-        field: "dueDate",
+        field: DUE_DATE,
         beforeUpdate: "3",
         afterUpdate: "2",
         taskId: 111,

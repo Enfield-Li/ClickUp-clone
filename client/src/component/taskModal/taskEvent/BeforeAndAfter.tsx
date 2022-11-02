@@ -1,12 +1,15 @@
 import { Box, Flex } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import {
-  ColumnOptions,
-  UndeterminedColumns,
-  Field,
-  SortBy,
-  UpdateEvent,
   BeforeOrAfterUpdate,
+  ColumnOptions,
+  DUE_DATE,
+  Field,
+  PRIORITY,
+  SortBy,
+  STATUS,
+  UndeterminedColumns,
+  UpdateEvent,
 } from "../../task/taskTypes";
 
 type Props = {
@@ -25,7 +28,7 @@ export default function BeforeAndAfter({
   let element: JSX.Element;
 
   function isStatusField(field: Field): field is SortBy {
-    return field === "dueDate" || field === "status" || field === "priority";
+    return field === DUE_DATE || field === STATUS || field === PRIORITY;
   }
 
   function getColumn(
@@ -50,7 +53,7 @@ export default function BeforeAndAfter({
     );
 
     // status square icon
-    if (updateEvent.field === "status") {
+    if (updateEvent.field === STATUS) {
       icon = (
         <Box
           width="10px"
@@ -61,7 +64,7 @@ export default function BeforeAndAfter({
       );
     }
     // priority flag icon
-    else if (updateEvent.field === "priority") {
+    else if (updateEvent.field === PRIORITY) {
       icon = (
         <Box color={column?.color}>
           <i className="bi bi-flag-fill"></i>

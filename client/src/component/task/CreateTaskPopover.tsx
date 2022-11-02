@@ -21,30 +21,24 @@ import { useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import {
-  UndeterminedColumn,
-  DueDateColumns,
-  DUE_DATE,
-  lookUpIsLastItem,
-  PRIORITY,
-  SetState,
-  SortBy,
-  State,
-  Task,
-  lookUpPreviousTaskId,
-} from "./taskTypes";
+import { deepCopy } from "../../utils/deepCopy";
 import { createTask } from "./actions/TaskActions";
 import {
   getDueDateFromExpectedDueDateString,
   updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
-import { User } from "../../context/auth/AuthContextTypes";
 import {
-  getNextNWeekDayString,
-  getTodayYMDString,
-} from "../../utils/getWeekDays";
-import { getRandomNumber } from "../../utils/getRandomNumber";
-import { deepCopy } from "../../utils/deepCopy";
+  DueDateColumns,
+  DUE_DATE,
+  lookUpPreviousTaskId,
+  PRIORITY,
+  SetState,
+  SortBy,
+  State,
+  STATUS,
+  Task,
+  UndeterminedColumn,
+} from "./taskTypes";
 
 export type NewTask = {
   title: string;
@@ -73,7 +67,7 @@ export const CreateTaskPopover = ({
   const { authState } = useAuthContext();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const isTaskDone = sortBy === "status" && currentColumn.id === 3;
+  const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
 
   return (
     <Popover

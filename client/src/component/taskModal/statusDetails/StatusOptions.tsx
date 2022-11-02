@@ -1,11 +1,11 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import SelectOption from "../../task/select/SelectOption";
-import { StatusColumn, UpdateEvent } from "../../task/taskTypes";
+import { STATUS, StatusColumn, UpdateEvent } from "../../task/taskTypes";
 
 type Props = { onOptionClose: () => void };
 
@@ -34,7 +34,7 @@ export default function StatusOptions({ onOptionClose }: Props) {
       id: getRandomNumberNoLimit(),
       userId: authState.user?.id,
       taskId: task!.id!,
-      field: "status",
+      field: STATUS,
       beforeUpdate: String(task?.status),
       afterUpdate: String(targetStatusColumnId),
       createdAt: new Date(),

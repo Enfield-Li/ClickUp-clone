@@ -1,7 +1,9 @@
 import { Box, Heading, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { CLIENT_ROUTE } from "../../utils/constant";
 import { SetState, State, Task } from "./taskTypes";
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
 };
 
 export default function TaskCard({ task, index }: Props) {
+  const navigate = useNavigate();
   const bgColor = useColorModeValue("white", "white.300");
   const headerColor = useColorModeValue("gray.700", "white");
   const { onModalOpen, setTask, isModalOpen } = useTaskDetailContext();
@@ -24,8 +27,11 @@ export default function TaskCard({ task, index }: Props) {
           rounded="md"
           bg={bgColor}
           onClick={() => {
-            onModalOpen();
-            setTask(task);
+            if (task?.id) {
+              onModalOpen();
+              setTask(task);
+              navigate(CLIENT_ROUTE.TASK + "/" + task.id);
+            }
           }}
           ref={provided.innerRef}
           {...provided.draggableProps}
