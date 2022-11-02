@@ -11,27 +11,39 @@ import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {
+  isOpen: boolean;
   onToggle: (props?: any) => any;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function NavBar({ onToggle }: Props) {
+export default function NavBar({ onToggle, isOpen, setIsExpanded }: Props) {
   const navigate = useNavigate();
 
   return (
-    <Box height={"full"} borderRight={"1px"} borderColor={"teal.400"}>
+    <Box height="100vh" borderRight="1px" borderColor="teal.400">
       <Flex my={1}>
         {/* App icon */}
         <Center py={3}>
           <Heading size="md" px={5}>
             <Box cursor={"pointer"} onClick={() => navigate(CLIENT_ROUTE.HOME)}>
-              <i className="bi bi-lightbulb" style={{ marginRight: 6 }}></i>
+              <i
+                className="bi bi-lightbulb-fill"
+                style={{ marginRight: 6 }}
+              ></i>
               Ideas
             </Box>
           </Heading>
         </Center>
 
         {/* Close menu icon */}
-        <Center cursor={"pointer"} onClick={() => onToggle()} ml={6}>
+        <Center
+          cursor="pointer"
+          onClick={() => {
+            onToggle();
+            setIsExpanded(false);
+          }}
+          ml={6}
+        >
           <Box
             py={1}
             px={2}
@@ -51,7 +63,7 @@ export default function NavBar({ onToggle }: Props) {
         py={1}
         px={5}
         borderRadius={3}
-        cursor={"pointer"}
+        cursor="pointer"
         _hover={{
           color: "black",
           bg: "gray.300",
@@ -67,7 +79,7 @@ export default function NavBar({ onToggle }: Props) {
         py={1}
         px={5}
         borderRadius={3}
-        cursor={"pointer"}
+        cursor="pointer"
         _hover={{
           color: "black",
           bg: "gray.300",
@@ -83,7 +95,7 @@ export default function NavBar({ onToggle }: Props) {
         py={1}
         px={5}
         borderRadius={3}
-        cursor={"pointer"}
+        cursor="pointer"
         _hover={{
           color: "black",
           bg: "gray.300",

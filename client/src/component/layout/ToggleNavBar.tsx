@@ -6,11 +6,13 @@ type Props = {
   isOpen: boolean;
   onToggle: () => void;
   getDisclosureProps: (props?: any) => any;
+  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ToggleNavBar({
   isOpen,
   onToggle,
+  setIsExpanded,
   getDisclosureProps,
 }: Props) {
   const [hidden, setHidden] = useState(!isOpen);
@@ -30,7 +32,11 @@ export default function ToggleNavBar({
         whiteSpace: "nowrap",
       }}
     >
-      <NavBar onToggle={onToggle} />
+      <NavBar
+        onToggle={onToggle}
+        isOpen={isOpen}
+        setIsExpanded={setIsExpanded}
+      />
     </motion.div>
   );
 }

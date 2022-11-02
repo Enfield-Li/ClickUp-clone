@@ -30,7 +30,7 @@ export default function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const bgColor = useColorModeValue("white", "white.300");
+  const bgColor = useColorModeValue("white", "rgb(26, 32, 44)");
   const headerColor = useColorModeValue("gray.700", "white");
   const { onModalOpen, setTask, isModalOpen, taskStateContext } =
     useTaskDetailContext();
