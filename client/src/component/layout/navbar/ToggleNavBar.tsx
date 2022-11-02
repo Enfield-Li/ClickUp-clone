@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import NavBar from "./NavBar";
+import CollapsibleNavBar from "./CollapsibleNavBar";
 
 type Props = {
   isOpen: boolean;
@@ -32,7 +32,7 @@ export default function ToggleNavBar({
         whiteSpace: "nowrap",
       }}
     >
-      <NavBar
+      <CollapsibleNavBar
         onToggle={onToggle}
         isOpen={isOpen}
         setIsExpanded={setIsExpanded}

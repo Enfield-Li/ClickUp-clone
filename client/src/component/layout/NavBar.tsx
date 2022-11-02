@@ -1,110 +1,45 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  Spacer,
-  useMediaQuery,
-} from "@chakra-ui/react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../utils/constant";
+import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
+import React, { useState } from "react";
+import FixedNavBar from "./navbar/FixedNavBar";
+import ToggleNavBar from "./navbar/ToggleNavBar";
 
-type Props = {
-  isOpen: boolean;
-  onToggle: (props?: any) => any;
-  setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-};
+type Props = {};
 
-export default function NavBar({ onToggle, isOpen, setIsExpanded }: Props) {
-  const navigate = useNavigate();
+export default function NavBar({}: Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
+  const { getDisclosureProps, isOpen, onToggle, onClose, onOpen } =
+    useDisclosure({
+      defaultIsOpen: false,
+    });
 
   return (
-    <Box height="100vh" borderRight="1px" borderColor="teal.400">
-      <Flex my={1}>
-        {/* App icon */}
-        <Center py={3}>
-          <Heading size="md" px={5}>
-            <Box cursor={"pointer"} onClick={() => navigate(CLIENT_ROUTE.HOME)}>
-              <i
-                className="bi bi-lightbulb-fill"
-                style={{ marginRight: 6 }}
-              ></i>
-              Ideas
-            </Box>
-          </Heading>
-        </Center>
+    <Flex
+      onMouseOverCapture={onOpen}
+      onMouseOutCapture={!isExpanded ? onClose : undefined}
+    >
+      {/* Fixed navbar */}
+      <FixedNavBar
+        onOpen={onOpen}
+        isExpanded={isExpanded}
+        setIsExpanded={setIsExpanded}
+      />
 
-        {/* Close menu icon */}
-        <Center
-          cursor="pointer"
-          onClick={() => {
-            onToggle();
-            setIsExpanded(false);
-          }}
-          ml={6}
-        >
-          <Box
-            py={1}
-            px={2}
-            _hover={{
-              color: "black",
-              bg: "gray.300",
-            }}
-            borderRadius={"md"}
-          >
-            <i className="bi bi-chevron-bar-left"></i>
-          </Box>
-        </Center>
-      </Flex>
-
-      {/* Home */}
+      {/* Collapsible navbar */}
       <Box
-        py={1}
-        px={5}
-        borderRadius={3}
-        cursor="pointer"
-        _hover={{
-          color: "black",
-          bg: "gray.300",
-        }}
-        onClick={() => navigate(CLIENT_ROUTE.HOME)}
+        zIndex="2"
+        opacity="100%"
+        backgroundColor={collapsibleBG}
+        ml={!isExpanded ? "45px" : undefined}
+        position={!isExpanded ? "absolute" : undefined}
       >
-        <i className="bi bi-house" style={{ marginRight: 6 }}></i>
-        Home
+        <ToggleNavBar
+          isOpen={isOpen}
+          onToggle={onToggle}
+          setIsExpanded={setIsExpanded}
+          getDisclosureProps={getDisclosureProps}
+        />
       </Box>
-
-      {/* Functionality ONE */}
-      <Box
-        py={1}
-        px={5}
-        borderRadius={3}
-        cursor="pointer"
-        _hover={{
-          color: "black",
-          bg: "gray.300",
-        }}
-        onClick={() => navigate(CLIENT_ROUTE.TASK)}
-      >
-        <i className="bi bi-hand-index-thumb" style={{ marginRight: 6 }}></i>
-        Drag and Drop
-      </Box>
-
-      {/* Functionality TWO */}
-      <Box
-        py={1}
-        px={5}
-        borderRadius={3}
-        cursor="pointer"
-        _hover={{
-          color: "black",
-          bg: "gray.300",
-        }}
-        onClick={() => navigate(CLIENT_ROUTE.FUNC_TWO)}
-      >
-        <i className="bi bi-question-circle" style={{ marginRight: 6 }}></i>
-        Functionality 2
-      </Box>
-    </Box>
+    </Flex>
   );
 }
