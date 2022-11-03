@@ -5,6 +5,7 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -19,6 +20,7 @@ type Props = {
 export default function NavIcon({ url, name, children }: Props) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const popoverBG = useColorModeValue("rgb(57, 65, 72)", "rgb(79, 87, 98)");
 
   return (
     <Popover
@@ -46,8 +48,15 @@ export default function NavIcon({ url, name, children }: Props) {
         </Center>
       </PopoverTrigger>
 
-      <PopoverContent width="70px" rounded="sm" ml={-1}>
-        <PopoverArrow />
+      <PopoverContent
+        ml={-1}
+        border={0}
+        rounded="sm"
+        width="70px"
+        backgroundColor={popoverBG}
+      >
+        <PopoverArrow backgroundColor={popoverBG} />
+
         <PopoverBody
           p={0}
           my="1px"

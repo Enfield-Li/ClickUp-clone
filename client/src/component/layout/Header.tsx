@@ -5,6 +5,7 @@ import {
   Progress,
   Spacer,
   Text,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
@@ -23,9 +24,11 @@ export default function Header({}: Props) {
   const { authState, authDispatch } = useAuthContext();
   const { globalState } = useGlobalContext();
 
+  const headerBG = useColorModeValue("white", "rgb(43, 52, 59)");
+
   return (
-    <Box borderBottom={"1px"} borderColor={"teal.300"}>
-      <Flex minWidth="max-content" alignItems="center" gap="2" m={2}>
+    <Box backgroundColor={headerBG}>
+      <Flex minWidth="max-content" alignItems="center" gap="2" p={2}>
         <Box>
           {location.pathname === "/" ? (
             <Text>Home</Text>

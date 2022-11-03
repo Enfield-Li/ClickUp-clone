@@ -16,7 +16,7 @@ export default function NavBar({}: Props) {
   const fixedNavbarWidth = "50px";
 
   return (
-    <Flex onMouseOutCapture={isExpanded ? undefined : onClose}>
+    <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>
       {/* Fixed navbar */}
       <FixedNavBar
         onOpen={onOpen}

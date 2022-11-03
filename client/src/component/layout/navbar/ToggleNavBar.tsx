@@ -1,4 +1,10 @@
-import { Box, Center, Flex, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +31,10 @@ export default function ToggleNavBar({
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(!isOpen);
 
+  const collapseIcon = useColorModeValue("white", "rgb(43, 52, 59)");
+  const subNavBGColor = useColorModeValue("rgb(32, 38, 43)", "rgb(43, 52, 59)");
+  const collapseIconBorder = useColorModeValue("gray.300", "rgb(30, 39, 46)");
+
   function handleCloseSubNavbar() {
     onToggle();
     setIsExpanded(false);
@@ -37,32 +47,39 @@ export default function ToggleNavBar({
   return (
     // https://chakra-ui.com/community/recipes/horizontal-collapse
     <motion.div
-      transition={"none"}
       {...getDisclosureProps()}
       hidden={hidden}
       initial={false}
+      transition={"none"}
+      animate={{ width: isOpen ? 200 : 0 }}
       onAnimationStart={() => setHidden(false)}
       onAnimationComplete={() => setHidden(!isOpen)}
-      animate={{ width: isOpen ? 200 : 0 }}
       style={{
         overflow: "hidden",
         whiteSpace: "nowrap",
       }}
     >
-      <Box height="100vh" borderRight="1px" borderColor="teal.400">
+      <Box
+        height="100vh"
+        borderRightWidth="1px"
+        borderColor="rgb(32, 38, 43)"
+        backgroundColor={subNavBGColor}
+      >
         {isExpanded && (
           <Center cursor="pointer" onClick={handleCloseSubNavbar}>
             <Center
               zIndex="3"
               mt="128px"
               ml="200px"
+              border="1px"
               width="20px"
               height="20px"
               rounded="full"
               fontSize="10px"
               color="gray.400"
               position="absolute"
-              backgroundColor="rgb(43, 52, 59)"
+              backgroundColor={collapseIcon}
+              borderColor={collapseIconBorder}
             >
               <i className="bi bi-chevron-left"></i>
             </Center>

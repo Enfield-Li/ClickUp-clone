@@ -7,6 +7,7 @@ import AuthStateProvider from "./context/auth/AuthContext";
 import GlobalStateProvider from "./context/global/GlobalContext";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 import TaskDetailProvider from "./context/task_detail/TaskDetailContext";
+import { globalTheme } from "./GlobalTheme";
 // import reportWebVitals from "./reportWebVitals"
 // import * as serviceWorker from "./serviceWorker"
 
@@ -21,7 +22,7 @@ root.render(
         <TaskDetailProvider>
           <GlobalStateProvider>
             <ColorModeScript />
-            <ChakraProvider theme={theme}>
+            <ChakraProvider theme={globalTheme}>
               <App />
             </ChakraProvider>
           </GlobalStateProvider>

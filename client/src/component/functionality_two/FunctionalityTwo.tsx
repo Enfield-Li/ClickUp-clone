@@ -23,7 +23,9 @@ export default function FunctionalityTwo({}: Props) {
   console.log({ color2 });
   return (
     <>
-      <Box></Box>
+      <Box>
+        <Box bg="brand.100">Welcome</Box>
+      </Box>
     </>
   );
 

@@ -25,10 +25,10 @@ export default function FixedNavBar({
 
   return (
     <Box
-      borderRight={"1px"}
-      borderColor={"teal.300"}
+      borderRightWidth="1px"
       width={fixedNavbarWidth}
       onMouseOverCapture={onOpen}
+      borderRightColor="rgb(32, 38, 43)"
     >
       {/* Expand icon -- absolute position */}
       {!isExpanded && (
@@ -43,7 +43,8 @@ export default function FixedNavBar({
             fontSize="10px"
             position="absolute"
             ml={fixedNavbarWidth}
-            backgroundColor="rgb(91, 67, 234)"
+            backgroundColor="rgb(123, 104, 238)" //rgb(123, 104, 238)
+            _hover={{ backgroundColor: "rgb(91, 67, 234)" }}
           >
             <i className="bi bi-chevron-right"></i>
           </Center>
