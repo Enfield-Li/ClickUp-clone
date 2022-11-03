@@ -7,35 +7,38 @@ type Props = {};
 
 export default function NavBar({}: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [subNavOpenable, setSubNavOpenable] = useState(true);
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
   const { getDisclosureProps, isOpen, onToggle, onClose, onOpen } =
     useDisclosure({
       defaultIsOpen: false,
     });
+  const fixedNavbarWidth = "50px";
 
   return (
-    <Flex
-      onMouseOverCapture={onOpen}
-      onMouseOutCapture={!isExpanded ? onClose : undefined}
-    >
+    <Flex onMouseOutCapture={isExpanded ? undefined : onClose}>
       {/* Fixed navbar */}
       <FixedNavBar
         onOpen={onOpen}
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
+        fixedNavbarWidth={fixedNavbarWidth}
       />
 
-      {/* Collapsible navbar */}
+      {/* Sub navbar */}
       <Box
         zIndex="2"
         opacity="100%"
         backgroundColor={collapsibleBG}
-        ml={!isExpanded ? "45px" : undefined}
-        position={!isExpanded ? "absolute" : undefined}
+        ml={isExpanded ? undefined : fixedNavbarWidth}
+        position={isExpanded ? undefined : "absolute"}
+        onMouseOverCapture={subNavOpenable ? onOpen : undefined}
       >
         <ToggleNavBar
           isOpen={isOpen}
           onToggle={onToggle}
+          isExpanded={isExpanded}
+          setSelectable={setSubNavOpenable}
           setIsExpanded={setIsExpanded}
           getDisclosureProps={getDisclosureProps}
         />
