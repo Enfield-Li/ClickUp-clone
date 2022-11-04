@@ -28,7 +28,7 @@ export default function FixedNavBar({
       borderRightWidth="1px"
       width={fixedNavbarWidth}
       onMouseOverCapture={onOpen}
-      borderRightColor="rgb(32, 38, 43)"
+      borderRightColor="darkMain.400"
     >
       {/* Expand icon -- absolute position */}
       {!isExpanded && (

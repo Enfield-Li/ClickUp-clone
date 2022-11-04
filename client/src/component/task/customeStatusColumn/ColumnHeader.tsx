@@ -8,6 +8,7 @@ import {
   PopoverTrigger,
   Spacer,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { UndeterminedColumn, SetState, SortBy, STATUS } from "../taskTypes";
@@ -16,23 +17,24 @@ import RenameStatus from "./RenameStatus";
 
 type Props = {
   sortBy: SortBy;
-  color: string;
   title: string;
   setState: SetState;
   taskAmount?: number;
+  borderTopColor: string;
   currentColumn?: UndeterminedColumn;
 };
 
 export default function ColumnHeader({
   sortBy,
-  color,
   title,
   setState,
   taskAmount,
   currentColumn,
+  borderTopColor,
 }: Props) {
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
+  const bgColor = useColorModeValue("white", "darkMain.200");
 
   // Close edit when switching sortBy
   useEffect(() => {
@@ -46,8 +48,9 @@ export default function ColumnHeader({
         height="48px"
         borderTop="2px"
         boxShadow="base"
+        bgColor={bgColor}
         borderTopRadius="sm"
-        borderColor={color}
+        borderTopColor={borderTopColor}
         onMouseOverCapture={() => setShowColumnOption(true)}
         onMouseOutCapture={() => setShowColumnOption(false)}
       >

@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
   Tooltip,
+  useColorMode,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -30,7 +31,8 @@ export default function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const bgColor = useColorModeValue("white", "rgb(26, 32, 44)");
+  const { colorMode } = useColorMode();
+  const bgColor = useColorModeValue("white", "darkMain.200");
   const headerColor = useColorModeValue("gray.700", "white");
   const { onModalOpen, setTask, isModalOpen, taskStateContext } =
     useTaskDetailContext();
@@ -56,16 +58,19 @@ export default function TaskCard({ task, index }: Props) {
         <Box
           p={4}
           my={3}
-          w="full"
+          width="full"
           rounded="md"
-          border="1px "
           bg={bgColor}
+          boxShadow="md"
           height="150px"
           ref={provided.innerRef}
-          onClick={handleOpenTaskModal}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          boxShadow={snapshot.isDragging ? "outline" : "lg"}
+          onClick={handleOpenTaskModal}
+          border={colorMode === "dark" ? "1px solid darkMain.300" : undefined}
+          _hover={{
+            backgroundColor: colorMode === "dark" ? "darkMain.100" : undefined,
+          }}
         >
           <Stack>
             {/* Task title */}

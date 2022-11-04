@@ -146,9 +146,10 @@ export type Task = {
 
   watchers: UserInfo[];
   assignees: UserInfo[];
-  // Determine the task order
-  taskEvents: TaskEvents;
+
+  taskEvents: TaskEvents; // Determine the task order
   previousTaskIds: PreviousTaskIds;
+
   // Keep previousTask record when set to finish
   previousTaskIdsBeforeFinish?: PreviousTaskIdsBeforeFinish;
 };

@@ -31,9 +31,10 @@ export default function ToggleNavBar({
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(!isOpen);
 
-  const collapseIcon = useColorModeValue("white", "rgb(43, 52, 59)");
-  const subNavBGColor = useColorModeValue("rgb(32, 38, 43)", "rgb(43, 52, 59)");
-  const collapseIconBorder = useColorModeValue("gray.300", "rgb(30, 39, 46)");
+  const collapseIcon = useColorModeValue("white", "darkMain.200");
+  const subNavBGColor = useColorModeValue("darkMain.400", "darkMain.200");
+  const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
+  const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
   function handleCloseSubNavbar() {
     onToggle();
@@ -62,7 +63,7 @@ export default function ToggleNavBar({
       <Box
         height="100vh"
         borderRightWidth="1px"
-        borderColor="rgb(32, 38, 43)"
+        borderColor="darkMain.400"
         backgroundColor={subNavBGColor}
       >
         {isExpanded && (
@@ -76,8 +77,8 @@ export default function ToggleNavBar({
               height="20px"
               rounded="full"
               fontSize="10px"
-              color="gray.400"
               position="absolute"
+              color={collapseIconArrow}
               backgroundColor={collapseIcon}
               borderColor={collapseIconBorder}
             >

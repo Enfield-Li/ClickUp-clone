@@ -39,7 +39,7 @@ export default function Column({
         sortBy={sortBy}
         setState={setState}
         title={currentColumn.title}
-        color={currentColumn.color}
+        borderTopColor={currentColumn.color}
         taskAmount={tasks?.length}
         currentColumn={currentColumn}
       />

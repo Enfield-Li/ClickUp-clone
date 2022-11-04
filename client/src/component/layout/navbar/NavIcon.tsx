@@ -41,7 +41,7 @@ export default function NavIcon({ url, name, children }: Props) {
             onMouseOverCapture={onOpen}
             onMouseOutCapture={onClose}
             onClick={() => navigate(url)}
-            _hover={{ backgroundColor: "rgb(30, 39, 46)" }} // rgb(123, 104, 238)
+            _hover={{ backgroundColor: "darkMain.300" }} // rgb(123, 104, 238)
           >
             {children}
           </Center>

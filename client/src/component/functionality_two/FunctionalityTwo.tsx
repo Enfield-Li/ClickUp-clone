@@ -1,6 +1,7 @@
 import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Center,
   Flex,
   Input,
   InputGroup,
@@ -22,11 +23,11 @@ export default function FunctionalityTwo({}: Props) {
   console.log({ color });
   console.log({ color2 });
   return (
-    <>
+    <Center height="100vh" backgroundColor="lightMain.100">
       <Box>
         <Box bg="brand.100">Welcome</Box>
       </Box>
-    </>
+    </Center>
   );
 
   return (

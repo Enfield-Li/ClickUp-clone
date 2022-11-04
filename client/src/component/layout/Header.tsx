@@ -24,7 +24,7 @@ export default function Header({}: Props) {
   const { authState, authDispatch } = useAuthContext();
   const { globalState } = useGlobalContext();
 
-  const headerBG = useColorModeValue("white", "rgb(43, 52, 59)");
+  const headerBG = useColorModeValue("white", "darkMain.200");
 
   return (
     <Box backgroundColor={headerBG}>

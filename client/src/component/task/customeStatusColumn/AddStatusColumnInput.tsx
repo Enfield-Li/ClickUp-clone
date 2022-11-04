@@ -58,14 +58,15 @@ export default function AddStatusColumnInput({
         size="xs"
         width="200px"
         height="48px"
+        borderTop="2px"
         boxShadow="base"
         minWidth="280px"
         cursor="pointer"
-        borderTopRadius="sm"
         value={titleInput}
-        onChange={(e) => {
-          setTitleInput(e.target.value);
-        }}
+        borderTopRadius="sm"
+        borderTopColor={color}
+        textTransform="uppercase"
+        onChange={(e) => setTitleInput(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             createStatusColumn();

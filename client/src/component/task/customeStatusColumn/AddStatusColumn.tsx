@@ -1,4 +1,4 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Box, Center, Flex } from "@chakra-ui/react";
 import { useState } from "react";
 import { SetState, StatusColumns } from "../taskTypes";
 import AddStatusColumnInput from "./AddStatusColumnInput";
@@ -27,9 +27,10 @@ export default function AddStatusColumn({ setState, statusColumns }: Props) {
           </Box>
 
           {showEdit && (
-            <Center mt={3} flexDirection="column">
-              {/* <Box>Pick a color for new column:</Box> */}
-              <HexColorPicker color={color} onChange={setColor} />
+            <Center mt={3}>
+              <Box shadow="2xl" width="fit-content">
+                <HexColorPicker color={color} onChange={setColor} />
+              </Box>
             </Center>
           )}
         </>
