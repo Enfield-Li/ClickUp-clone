@@ -1,19 +1,8 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Spacer,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { UndeterminedColumn, SetState, SortBy, STATUS } from "../taskTypes";
+import { SetState, SortBy, UndeterminedColumn } from "../taskTypes";
+import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
-import RenameStatus from "./RenameStatus";
 
 type Props = {
   sortBy: SortBy;
@@ -32,11 +21,12 @@ export default function ColumnHeader({
   currentColumn,
   borderTopColor,
 }: Props) {
-  const [editTitle, setEditTitle] = useState(false);
-  const [showColumnOption, setShowColumnOption] = useState(false);
   const bgColor = useColorModeValue("white", "darkMain.200");
   const textColor = useColorModeValue("darkMain.500", "lightMain.300");
   const amountTextColor = useColorModeValue("black", "white");
+
+  const [editTitle, setEditTitle] = useState(false);
+  const [showColumnOption, setShowColumnOption] = useState(false);
 
   // Close edit when switching sortBy
   useEffect(() => {
@@ -94,30 +84,11 @@ export default function ColumnHeader({
         <Spacer />
 
         {/* Column options */}
-        <Popover>
-          {({ isOpen, onClose }) => (
-            <>
-              {showColumnOption && (
-                <PopoverTrigger>
-                  <Box cursor="pointer">
-                    <i className="bi bi-gear"></i>
-                  </Box>
-                </PopoverTrigger>
-              )}
-
-              <PopoverContent width="200px">
-                <PopoverBody shadow="2xl">
-                  {sortBy === STATUS && (
-                    <RenameStatus
-                      onClose={onClose}
-                      setEditTitle={setEditTitle}
-                    />
-                  )}
-                </PopoverBody>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>
+        <ColumnOptions
+          sortBy={sortBy}
+          setEditTitle={setEditTitle}
+          showColumnOption={showColumnOption}
+        />
       </Flex>
     </Box>
   );

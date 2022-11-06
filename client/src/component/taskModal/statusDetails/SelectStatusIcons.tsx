@@ -23,6 +23,8 @@ import StatusOptions from "./StatusOptions";
 type Props = {};
 
 export default function SelectStatusIcons({}: Props) {
+  const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
+
   const { authState } = useAuthContext();
   const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();
@@ -88,13 +90,14 @@ export default function SelectStatusIcons({}: Props) {
             >
               <Center
                 px={4}
+                height="33px"
                 onClick={onToggle}
                 alignSelf="center"
                 width="fit-content"
                 borderLeftRadius="sm"
                 borderColor={column?.color}
                 backgroundColor={column?.color}
-                height={onHover && !isOpen ? "37px" : "33px"}
+                // height={onHover && !isOpen ? "37px" : "33px"}
               >
                 {/* Choose status */}
                 <PopoverTrigger>
@@ -102,7 +105,11 @@ export default function SelectStatusIcons({}: Props) {
                 </PopoverTrigger>
 
                 {/* Status option */}
-                <PopoverContent width="200px">
+                <PopoverContent
+                  shadow="lg"
+                  width="200px"
+                  bgColor={popoverContentBgColor}
+                >
                   <PopoverBody shadow="2xl">
                     <StatusOptions onOptionClose={onOptionClose} />
                   </PopoverBody>
@@ -126,6 +133,7 @@ export default function SelectStatusIcons({}: Props) {
                 <Center
                   ml="1px"
                   width="24px"
+                  height="33px"
                   fontSize="9px"
                   alignSelf="center"
                   color="darkMain.200"
@@ -133,7 +141,7 @@ export default function SelectStatusIcons({}: Props) {
                   borderColor={column?.color}
                   backgroundColor={column?.color}
                   onClick={() => handleNextStage()}
-                  height={onHover && !isOpen ? "37px" : "33px"}
+                  //   height={onHover && !isOpen ? "37px" : "33px"}
                 >
                   <i className="bi bi-caret-right-fill"></i>
                 </Center>

@@ -1,4 +1,9 @@
-import { cssVar, extendTheme, StyleFunctionProps } from "@chakra-ui/react";
+import {
+  ComponentStyleConfig,
+  cssVar,
+  extendTheme,
+  StyleFunctionProps,
+} from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
 const darkMainBG = "rgb(30, 39, 46)"; // darkMain.300
@@ -45,6 +50,13 @@ export const globalTheme = extendTheme({
         [$arrowBg.variable]: "colors.darkMain.50",
       },
     },
+
+    // doesn't work
+    // Popover: {
+    //   baseStyle: {
+    //     bgColor: "darkMain.50",
+    //   },
+    // },
   },
 
   // colors

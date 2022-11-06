@@ -1,4 +1,4 @@
-import { Box, Center, Flex } from "@chakra-ui/react";
+import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { SetState, StatusColumns } from "../taskTypes";
 import AddStatusColumnInput from "./AddStatusColumnInput";
@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function AddStatusColumn({ setState, statusColumns }: Props) {
+  const hoverBgColor = useColorModeValue("white", "darkMain.200");
+
   const [showEdit, setShowEdit] = useState(false);
   const [color, setColor] = useState("#aabbcc");
 
@@ -40,13 +42,13 @@ export default function AddStatusColumn({ setState, statusColumns }: Props) {
             p={3}
             height="48px"
             borderTop="2px"
-            minWidth="250px"
             fontSize="13px"
+            minWidth="250px"
             cursor="pointer"
             borderTopRadius="sm"
-            opacity={showEdit ? "" : "70%"}
+            opacity={showEdit ? undefined : "70%"}
             onClick={() => setShowEdit(true)}
-            _hover={{ boxShadow: "base", bgColor: "darkMain.200" }}
+            _hover={{ boxShadow: "base", bgColor: hoverBgColor }}
           >
             <Box>+ ADD STATUS</Box>
           </Center>

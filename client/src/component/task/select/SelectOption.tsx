@@ -2,25 +2,39 @@ import { Flex, Box } from "@chakra-ui/react";
 
 type Props = {
   optionName: string;
-  backgroundColor: string;
+  onClose: () => void;
+  hoverBgColor: string;
   children: React.ReactNode;
+  setEditTitle?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function SelectOption({
+  onClose,
   optionName,
+  setEditTitle,
+  hoverBgColor,
   children: icon,
-  backgroundColor,
 }: Props) {
   return (
-    <Box my="1" rounded="sm" cursor="pointer" _hover={{ backgroundColor }}>
+    <Box
+      py={1}
+      my={1}
+      rounded="md"
+      cursor="pointer"
+      _hover={{ bgColor: hoverBgColor }}
+      onClick={() => {
+        onClose();
+        if (setEditTitle) setEditTitle(true);
+      }}
+    >
       <Flex alignItems="center">
         {/* Icon */}
-        <Box ml="2" mr="3">
+        <Box ml="2" mr="3" fontSize="12px">
           {icon}
         </Box>
 
         {/* Option name */}
-        <Box>{optionName}</Box>
+        <Box fontSize="smaller">{optionName}</Box>
       </Flex>
     </Box>
   );

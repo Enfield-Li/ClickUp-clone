@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
@@ -14,6 +15,8 @@ import DueDateSwitch from "./DueDateSwitch";
 type Props = {};
 
 export default function SelectDueDateIcon({}: Props) {
+  const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
+
   const {
     task,
     setTask,
@@ -58,7 +61,7 @@ export default function SelectDueDateIcon({}: Props) {
           </Tooltip>
 
           {/* DueDate option */}
-          <PopoverContent width="200px">
+          <PopoverContent width="200px" bgColor={popoverContentBgColor}>
             <PopoverBody shadow={"2xl"} p={0}>
               <DueDateSwitch onClose={onClose} isOptionOpen={isOptionOpen} />
             </PopoverBody>

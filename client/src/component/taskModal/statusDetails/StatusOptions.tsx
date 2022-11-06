@@ -56,8 +56,9 @@ export default function StatusOptions({ onOptionClose }: Props) {
             // Hide current column option
             <Box key={column.id} onClick={() => selectStatus(column)}>
               <SelectOption
+                onClose={onOptionClose}
                 optionName={column.title}
-                backgroundColor={column.color}
+                hoverBgColor={column.color}
               >
                 <Box
                   rounded="sm"

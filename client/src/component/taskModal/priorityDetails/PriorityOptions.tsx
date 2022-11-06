@@ -1,4 +1,4 @@
-import { Box, Divider, Flex } from "@chakra-ui/react";
+import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
@@ -9,6 +9,11 @@ import { PRIORITY, PriorityColumn, UpdateEvent } from "../../task/taskTypes";
 type Props = { onOptionClose: () => void };
 
 export default function PriorityOptions({ onOptionClose }: Props) {
+  const popoverContentHoverBgColor = useColorModeValue(
+    "lightMain.100",
+    "darkMain.200"
+  );
+
   const { authState } = useAuthContext();
   const {
     task,
@@ -61,13 +66,15 @@ export default function PriorityOptions({ onOptionClose }: Props) {
           // Hide finished column and current priority stage
           priority.id !== 0 &&
           task!.priority !== priority.id && (
-            <Box key={priority.id}>
+            <Box
+              key={priority.id}
+              _hover={{ backgroundColor: popoverContentHoverBgColor }}
+            >
               <Flex
                 p={3}
                 rounded="sm"
                 cursor="pointer"
                 onClick={() => selectPriority(priority)}
-                _hover={{ backgroundColor: "blue.600" }}
               >
                 <Box color={priority.color} mr={4}>
                   <i className="bi bi-flag-fill"></i>

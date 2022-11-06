@@ -14,6 +14,9 @@ import PriorityOptions from "./PriorityOptions";
 type Props = {};
 
 export default function SelectPriorityIcon({}: Props) {
+  const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
+
+
   const {
     task,
     isModalOpen,
@@ -61,7 +64,7 @@ export default function SelectPriorityIcon({}: Props) {
             </Box>
           </Tooltip>
 
-          <PopoverContent width="200px">
+          <PopoverContent width="200px" bgColor={popoverContentBgColor}>
             <PopoverBody shadow={"2xl"} m={0} p={0}>
               <PriorityOptions onOptionClose={onOptionClose} />
             </PopoverBody>

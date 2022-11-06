@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
@@ -16,6 +16,11 @@ import {
 type Props = { onClose: () => void };
 
 export default function DueDateOptions({ onClose }: Props) {
+  const popoverContentHoverBgColor = useColorModeValue(
+    "lightMain.100",
+    "darkMain.200"
+  );
+
   const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
 
@@ -77,8 +82,8 @@ export default function DueDateOptions({ onClose }: Props) {
               pl={4}
               key={index}
               cursor="pointer"
-              _hover={{ backgroundColor: "blue.600" }}
               onClick={() => handleSelect(column)}
+              _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
               {capitalizeFirstLetter(column.title.toString().toLowerCase())}
             </Box>
