@@ -3,13 +3,7 @@ import {
   Center,
   Flex,
   Heading,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Stack,
-  Text,
-  Tooltip,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -17,9 +11,8 @@ import {
 import { Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import DueDateSwitch from "../../taskModal/dueDateDetails/DueDateSwitch";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import { ColumnOptions, Task } from "../taskTypes";
+import { Task } from "../taskTypes";
 import PreviewDescription from "./PreviewDescription";
 
 type Props = {
@@ -59,10 +52,10 @@ export default function TaskCard({ task, index }: Props) {
           p={4}
           my={3}
           width="full"
-          rounded="md"
+          rounded="sm"
           bg={bgColor}
           boxShadow="md"
-          height="150px"
+          height="110px"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -92,21 +85,27 @@ export default function TaskCard({ task, index }: Props) {
               )}
             </Flex>
 
-            <Flex
-              fontSize="small"
-              opacity="75%"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Flex fontSize="small" opacity="75%">
               {/* Subtask */}
-              <Box mr={1}>Sub</Box>
+              <Box mr={1} onClick={(e) => e.stopPropagation()}>
+                Sub
+              </Box>
 
               {/* Priority */}
-              <Box mr={1} color={priorityFlagColor}>
+              <Box
+                mr={1}
+                color={priorityFlagColor}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <i className="bi bi-flag-fill"></i>
               </Box>
 
               {/* DueDate */}
-              {task.expectedDueDate && <ExpectedDueDateDisplay />}
+              {task.expectedDueDate && (
+                <Box onClick={(e) => e.stopPropagation()}>
+                  <ExpectedDueDateDisplay />
+                </Box>
+              )}
             </Flex>
           </Stack>
         </Box>

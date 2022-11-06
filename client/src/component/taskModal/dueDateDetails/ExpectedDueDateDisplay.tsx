@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
@@ -21,6 +22,10 @@ type Props = {};
 
 export default function ExpectedDueDateDisplay({}: Props) {
   const { authState } = useAuthContext();
+
+  const toolTipColor = "lightMain.100";
+  const toolTipBG = "darkMain.50";
+
   const {
     task,
     setTask,
@@ -81,6 +86,8 @@ export default function ExpectedDueDateDisplay({}: Props) {
                 my={2}
                 hasArrow
                 placement="top"
+                bgColor={toolTipBG}
+                color={toolTipColor}
                 label={
                   <Box>
                     Time:&nbsp;

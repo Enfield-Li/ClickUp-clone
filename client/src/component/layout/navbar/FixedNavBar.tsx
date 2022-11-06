@@ -1,20 +1,25 @@
 import { Center, Box } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../utils/constant";
+import { Section } from "../NavBar";
 import NavIcon from "./NavIcon";
 
 type Props = {
   onOpen: () => void;
   isExpanded: boolean;
+  currentSection: Section;
   fixedNavbarWidth: string;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
 export default function FixedNavBar({
   onOpen,
   isExpanded,
   setIsExpanded,
+  currentSection,
   fixedNavbarWidth,
+  setCurrentSection,
 }: Props) {
   const navigate = useNavigate();
 
@@ -31,20 +36,20 @@ export default function FixedNavBar({
       borderRightColor="darkMain.400"
     >
       {/* Expand icon -- absolute position */}
-      {!isExpanded && (
+      {!isExpanded && currentSection === "tasks" && (
         <Center cursor="pointer" onClick={handleOpenSubNavbar}>
           <Center
             mt="76px"
-            width="20px"
-            height="20px"
+            width="18px"
+            height="18px"
             color="white"
             zIndex="3"
             rounded="full"
             fontSize="10px"
             position="absolute"
             ml={fixedNavbarWidth}
-            backgroundColor="rgb(123, 104, 238)" //rgb(123, 104, 238)
-            _hover={{ backgroundColor: "rgb(91, 67, 234)" }}
+            backgroundColor="customBlue.200"
+            _hover={{ backgroundColor: "customBlue.100" }}
           >
             <i className="bi bi-chevron-right"></i>
           </Center>
@@ -55,19 +60,34 @@ export default function FixedNavBar({
         mt={4}
         fontSize="lg"
         cursor="pointer"
-        onClick={() => navigate(CLIENT_ROUTE.HOME)}
+        onClick={() => {
+          setCurrentSection("home");
+          navigate(CLIENT_ROUTE.HOME);
+        }}
       >
         <i className="bi bi-lightbulb-fill"></i>
       </Center>
 
       <Box mt={6}>
-        <NavIcon url={CLIENT_ROUTE.TASK} name="Task">
-          <i className="bi bi-check-square-fill"></i>
-        </NavIcon>
+        <Box onClick={() => setCurrentSection("tasks")}>
+          <NavIcon
+            url={CLIENT_ROUTE.TASK}
+            name="Task"
+            isSelected={currentSection === "tasks"}
+          >
+            <i className="bi bi-check-square-fill"></i>
+          </NavIcon>
+        </Box>
 
-        <NavIcon url={CLIENT_ROUTE.FUNC_TWO} name="test">
-          <i className="bi bi-question-circle"></i>
-        </NavIcon>
+        <Box onClick={() => setCurrentSection("dev")}>
+          <NavIcon
+            url={CLIENT_ROUTE.TEST_DEV}
+            name="test"
+            isSelected={currentSection === "dev"}
+          >
+            <i className="bi bi-question-circle"></i>
+          </NavIcon>
+        </Box>
       </Box>
     </Box>
   );

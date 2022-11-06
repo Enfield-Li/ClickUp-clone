@@ -37,5 +37,5 @@ export const CLIENT_ROUTE = {
   ABOUT: "/about",
   LOGIN: "/login",
   REGISTER: "/register",
-  FUNC_TWO: "/functionality_two",
+  TEST_DEV: "/test_dev",
 };

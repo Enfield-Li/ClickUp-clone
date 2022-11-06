@@ -4,7 +4,7 @@ import About from "../component/layout/About";
 import Home from "../component/layout/Home";
 import Login from "../component/auth/Login";
 import TaskView from "../component/task/TaskView";
-import FunctionalityTwo from "../component/functionality_two/FunctionalityTwo";
+import FunctionalityTwo from "../component/test-dev/TestDev";
 import { CLIENT_ROUTE } from "../utils/constant";
 import Register from "../component/auth/Register";
 import TaskDetailModal from "../component/taskModal/TaskDetailsModal";
@@ -21,7 +21,7 @@ export default function PageRoute({}: Props) {
         <Route path=":id" element={<TaskDetailModal />} />
       </Route>
       <Route path={CLIENT_ROUTE.REGISTER} element={<Register />} />
-      <Route path={CLIENT_ROUTE.FUNC_TWO} element={<FunctionalityTwo />} />
+      <Route path={CLIENT_ROUTE.TEST_DEV} element={<FunctionalityTwo />} />
     </Routes>
   );
 }

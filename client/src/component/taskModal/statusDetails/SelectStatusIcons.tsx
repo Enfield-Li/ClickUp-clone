@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Tooltip,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -84,7 +85,6 @@ export default function SelectStatusIcons({}: Props) {
               justifyContent="center"
               onMouseOverCapture={() => setOnHover(true)}
               onMouseOutCapture={() => setOnHover(false)}
-              //   px={onHover && !isOpen ? "" : "2px"}
             >
               <Center
                 px={4}
@@ -98,7 +98,7 @@ export default function SelectStatusIcons({}: Props) {
               >
                 {/* Choose status */}
                 <PopoverTrigger>
-                  <Box>{column?.title}</Box>
+                  <Box color="darkMain.200">{column?.title}</Box>
                 </PopoverTrigger>
 
                 {/* Status option */}
@@ -128,12 +128,12 @@ export default function SelectStatusIcons({}: Props) {
                   width="24px"
                   fontSize="9px"
                   alignSelf="center"
+                  color="darkMain.200"
                   borderRightRadius="sm"
                   borderColor={column?.color}
                   backgroundColor={column?.color}
-                  height={onHover && !isOpen ? "37px" : "33px"}
-                  // borderRightWidth={onHover && !isOpen ? "4px" : ""}
                   onClick={() => handleNextStage()}
+                  height={onHover && !isOpen ? "37px" : "33px"}
                 >
                   <i className="bi bi-caret-right-fill"></i>
                 </Center>

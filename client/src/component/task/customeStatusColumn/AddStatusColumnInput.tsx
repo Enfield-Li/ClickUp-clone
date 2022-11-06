@@ -60,7 +60,7 @@ export default function AddStatusColumnInput({
         height="48px"
         borderTop="2px"
         boxShadow="base"
-        minWidth="280px"
+        minWidth="250px"
         cursor="pointer"
         value={titleInput}
         borderTopRadius="sm"

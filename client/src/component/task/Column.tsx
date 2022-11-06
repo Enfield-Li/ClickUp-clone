@@ -33,7 +33,7 @@ export default function Column({
   const finishedColumnInStatus = sortBy === STATUS && currentColumn.id === 3;
 
   return (
-    <Box width="280px" mx={2}>
+    <Box width="250px" mx={3}>
       {/* Column header */}
       <ColumnHeader
         sortBy={sortBy}

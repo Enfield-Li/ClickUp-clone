@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import TaskInfo from "./TaskInfo";
@@ -22,6 +23,8 @@ type Props = {};
 
 export default function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
+  const bgColor = useColorModeValue("white", "darkMain.100");
+
   const {
     task,
     setTask,
@@ -43,7 +46,7 @@ export default function TaskDetailModal({}: Props) {
     >
       <ModalOverlay />
 
-      <ModalContent height="540px">
+      <ModalContent height="540px" bgColor={bgColor}>
         {/* Header */}
         <ModalHeader mb={"-4"}>
           <TaskDetailHead />

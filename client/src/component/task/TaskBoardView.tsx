@@ -46,7 +46,7 @@ export default function TaskBoardView({ sortBy }: Props) {
   const currentColumns = state.columnOptions[sortBy];
 
   return (
-    <Box px={3} overflowY={"auto"} mr={3}>
+    <Box px={6} overflowY={"auto"} mr={3}>
       <DragDropContext
         onDragEnd={(result) => handleDragEnd(result, state, setState, sortBy)}
       >

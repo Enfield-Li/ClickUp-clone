@@ -40,14 +40,13 @@ export default function AddStatusColumn({ setState, statusColumns }: Props) {
             p={3}
             height="48px"
             borderTop="2px"
-            minWidth="280px"
+            minWidth="250px"
+            fontSize="13px"
             cursor="pointer"
             borderTopRadius="sm"
-            _hover={{ boxShadow: "base" }}
             opacity={showEdit ? "" : "70%"}
-            onClick={() => {
-              setShowEdit(true);
-            }}
+            onClick={() => setShowEdit(true)}
+            _hover={{ boxShadow: "base", bgColor: "darkMain.200" }}
           >
             <Box>+ ADD STATUS</Box>
           </Center>

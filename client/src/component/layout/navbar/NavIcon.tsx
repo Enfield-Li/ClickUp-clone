@@ -5,6 +5,7 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Tooltip,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,59 +15,42 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   url: string;
   name: string;
+  isSelected: boolean;
   children: React.ReactNode;
 };
 
-export default function NavIcon({ url, name, children }: Props) {
+export default function NavIcon({ url, name, isSelected, children }: Props) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const popoverBG = useColorModeValue("rgb(57, 65, 72)", "rgb(79, 87, 98)");
 
   return (
-    <Popover
-      isOpen={isOpen}
+    <Tooltip
+      ml={0}
+      px={4}
+      py={1}
+      hasArrow
+      label={name}
+      arrowSize={7}
       placement="right"
-      onClose={onClose}
-      closeOnBlur={false}
-      returnFocusOnClose={false}
     >
-      <PopoverTrigger>
-        <Center mt={3}>
-          <Center
-            rounded="sm"
-            width="35px"
-            height="35px"
-            fontSize="19px"
-            cursor="pointer"
-            onMouseOverCapture={onOpen}
-            onMouseOutCapture={onClose}
-            onClick={() => navigate(url)}
-            _hover={{ backgroundColor: "darkMain.300" }} // rgb(123, 104, 238)
-          >
-            {children}
-          </Center>
-        </Center>
-      </PopoverTrigger>
-
-      <PopoverContent
-        ml={-1}
-        border={0}
-        rounded="sm"
-        width="70px"
-        backgroundColor={popoverBG}
-      >
-        <PopoverArrow backgroundColor={popoverBG} />
-
-        <PopoverBody
-          p={0}
-          my="1px"
-          mb="3.3px"
-          fontSize="15px"
-          fontWeight="bold"
+      <Center mt={2}>
+        <Center
+          rounded="sm"
+          width="38px"
+          height="38px"
+          fontSize="19px"
+          cursor="pointer"
+          onMouseOverCapture={onOpen}
+          onMouseOutCapture={onClose}
+          onClick={() => navigate(url)}
+          bgColor={isSelected ? "customBlue.200" : undefined}
+          _hover={{
+            backgroundColor: isSelected ? undefined : "darkMain.300",
+          }}
         >
-          <Center>{name}</Center>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+          {children}
+        </Center>
+      </Center>
+    </Tooltip>
   );
 }

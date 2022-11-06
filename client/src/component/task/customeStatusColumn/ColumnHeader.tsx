@@ -35,6 +35,8 @@ export default function ColumnHeader({
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
   const bgColor = useColorModeValue("white", "darkMain.200");
+  const textColor = useColorModeValue("darkMain.500", "lightMain.300");
+  const amountTextColor = useColorModeValue("black", "white");
 
   // Close edit when switching sortBy
   useEffect(() => {
@@ -42,35 +44,32 @@ export default function ColumnHeader({
   }, [sortBy]);
 
   return (
-    <Box minWidth="280px" mb={4}>
+    <Box minWidth="250px" mb={4}>
       <Flex
         p={3}
+        rounded="3px"
         height="48px"
         borderTop="2px"
         boxShadow="base"
+        color={textColor}
         bgColor={bgColor}
-        borderTopRadius="sm"
         borderTopColor={borderTopColor}
         onMouseOverCapture={() => setShowColumnOption(true)}
         onMouseOutCapture={() => setShowColumnOption(false)}
       >
         {/* Title */}
         {editTitle ? (
-          // Edit title
           <EditColumnTitle
-            // sortBy={sortBy}
             setState={setState}
             setEditTitle={setEditTitle}
             currentColumn={currentColumn}
           />
         ) : (
-          // Show title
           <Flex justifyContent="center" alignItems="center">
-            {/* Title */}
             <Text
               mr={1}
-              fontSize="sm"
-              fontWeight={800}
+              fontSize="13px"
+              fontWeight={600}
               letterSpacing={1.1}
               textTransform="uppercase"
             >
@@ -78,17 +77,17 @@ export default function ColumnHeader({
             </Text>
 
             {/* Task amount */}
-            <Center
+            <Text
               px={2}
               border="1px"
-              opacity="80%"
               fontSize="2xs"
               rounded="full"
               borderStyle="solid"
               borderColor="gray.400"
+              color={amountTextColor}
             >
               {taskAmount}
-            </Center>
+            </Text>
           </Flex>
         )}
 

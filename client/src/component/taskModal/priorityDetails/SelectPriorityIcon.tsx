@@ -6,6 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import PriorityOptions from "./PriorityOptions";
@@ -39,8 +40,8 @@ export default function SelectPriorityIcon({}: Props) {
             my={2}
             hasArrow
             placement="top"
-            fontWeight="semibold"
             label="Set priority"
+            fontWeight="semibold"
           >
             <Box display="inline-block">
               <PopoverTrigger>
