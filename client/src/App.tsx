@@ -14,7 +14,8 @@ export default function App() {
       {/* Header && Main */}
       <Box
         width={"100%"}
-        overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
+        overflow="hidden"
+        // https://stackoverflow.com/a/1767270/16648127
       >
         <Header />
 

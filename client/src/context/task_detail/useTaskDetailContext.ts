@@ -3,15 +3,15 @@ import { useContext } from "react";
 import { updateTasksPosition } from "../../component/task/actions/TaskActions";
 import { updatePreviousIdsInColumn } from "../../component/task/actions/taskProcessing";
 import {
-    DUE_DATE,
-    lookUpPreviousTaskId,
-    SetState,
-    SortBy,
-    STATUS,
-    TargetColumn,
-    Task,
-    TaskList,
-    UpdateTasksPositionDTO
+  DUE_DATE,
+  lookUpPreviousTaskId,
+  SetState,
+  SortBy,
+  STATUS,
+  TargetColumn,
+  Task,
+  TaskList,
+  UpdateTasksPositionDTO,
 } from "../../component/task/taskTypes";
 import { TaskDetailContext } from "./TaskDetailContext";
 

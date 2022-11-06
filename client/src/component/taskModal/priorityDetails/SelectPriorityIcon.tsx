@@ -16,7 +16,6 @@ type Props = {};
 export default function SelectPriorityIcon({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
-
   const {
     task,
     isModalOpen,
