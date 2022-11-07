@@ -1,75 +1,66 @@
-import {
-  Box,
-  Center,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import PriorityOptions from "./PriorityOptions";
+import { Task } from "../../task/taskTypes";
+import SelectPriorityPopover from "./SelectPriorityPopover";
 
-type Props = {};
+type Props = { task: Task; setTask?: SetTask };
 
-export default function SelectPriorityIcon({}: Props) {
-  const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
-
-  const {
-    task,
-    isModalOpen,
-    onModalClose: onClose,
-    setTask,
-    taskStateContext,
-    onModalOpen: onOpen,
-    setTaskStateContext,
-  } = useTaskDetailContext();
-
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+export default function SelectPriorityIcon({ task, setTask }: Props) {
+  const [showDeleteBtn, setShowDeleteBtn] = useState(false);
+  const { taskStateContext } = useTaskDetailContext();
+  const { columnOptions } = taskStateContext!;
 
   const currentTaskPriority = columnOptions.priority.find(
     (priority) => priority.id === task!.priority
   );
   const priorityFlagColor = currentTaskPriority?.color;
+  const noPriorityOrTaskFinished = task?.priority === 1 || task?.priority === 0;
 
   return (
-    // https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805
-    <Popover>
-      {({ onClose: onOptionClose }) => (
-        <>
-          <Tooltip
-            my={2}
-            hasArrow
-            placement="top"
-            label="Set priority"
-            fontWeight="semibold"
-          >
-            <Box display="inline-block">
-              <PopoverTrigger>
-                <Center
-                  width="35px"
-                  height="35px"
-                  cursor={"pointer"}
-                  fontSize={"17px"}
-                  border="1px dashed"
-                  borderRadius={"50%"}
-                  color={priorityFlagColor}
-                  _hover={{ color: "purple.400", opacity: "100%" }}
-                >
-                  <i className="bi bi-flag-fill"></i>
-                </Center>
-              </PopoverTrigger>
-            </Box>
-          </Tooltip>
+    <SelectPriorityPopover
+      task={task}
+      setTask={setTask}
+      currentTaskPriority={currentTaskPriority}
+    >
+      <Center
+        border="1px"
+        width="35px"
+        height="35px"
+        fontSize="17px"
+        cursor="pointer"
+        borderRadius="50%"
+        position="relative"
+        color={priorityFlagColor}
+        onMouseMoveCapture={() => setShowDeleteBtn(true)}
+        onMouseOutCapture={() => setShowDeleteBtn(false)}
+        _hover={{
+          opacity: "100%",
+          border: "1px dashed",
+          color: noPriorityOrTaskFinished ? "purple.400" : undefined,
+        }}
+      >
+        <i className="bi bi-flag-fill"></i>
 
-          <PopoverContent width="200px" bgColor={popoverContentBgColor}>
-            <PopoverBody shadow={"2xl"} m={0} p={0}>
-              <PriorityOptions onOptionClose={onOptionClose} />
-            </PopoverBody>
-          </PopoverContent>
-        </>
-      )}
-    </Popover>
+        {showDeleteBtn && !noPriorityOrTaskFinished && (
+          <Center
+            top="-6px"
+            right="-6px"
+            width="15px"
+            height="15px"
+            rounded="full"
+            position="absolute"
+            color="lightMain.100"
+            fontWeight="extrabold"
+            bgColor="rgb(151, 151, 151)"
+            _hover={{ bgColor: "customBlue.200" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <i className="bi bi-x"></i>
+          </Center>
+        )}
+      </Center>
+    </SelectPriorityPopover>
   );
 }

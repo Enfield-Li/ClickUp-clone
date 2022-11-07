@@ -56,7 +56,7 @@ export default function TaskInfo({}: Props) {
 
           {/* Priority */}
           <Box mx={4}>
-            <SelectPriorityIcon />
+            <SelectPriorityIcon task={task!} setTask={setTask} />
           </Box>
         </Flex>
 

@@ -57,7 +57,13 @@ export default function Column({
           >
             {/* Task list */}
             {tasks?.map((task, index) => (
-              <TaskCard task={task} key={task.id} index={index} />
+              <TaskCard
+                task={task}
+                key={task.id}
+                index={index}
+                sortBy={sortBy}
+                setState={setState}
+              />
             ))}
             {provided.placeholder}
 

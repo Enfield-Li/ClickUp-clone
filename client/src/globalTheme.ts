@@ -52,7 +52,7 @@ export const globalTheme = extendTheme({
     },
 
     // doesn't work
-    // Popover: {
+    // PopoverContent: {
     //   baseStyle: {
     //     bgColor: "darkMain.50",
     //   },

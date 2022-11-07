@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import SelectDueDateIcon from "./SelectDueDateIcon";
 import ExpectedDueDateDisplay from "./ExpectedDueDateDisplay";
+import SelectDueDateIcon from "./SelectDueDateIcon";
 
 type Props = {};
 
@@ -21,13 +21,14 @@ export default function DueDateDetails({}: Props) {
 
   return (
     <Box>
-      <Box>
-        {hasExpectedDueDate ? (
-          <ExpectedDueDateDisplay />
-        ) : (
-          <SelectDueDateIcon />
-        )}
-      </Box>
+      {hasExpectedDueDate ? (
+        <Box fontSize="small" height="35px">
+          <Box opacity="50%">DUE DATE</Box>
+          <ExpectedDueDateDisplay task={task} setTask={setTask} />
+        </Box>
+      ) : (
+        <SelectDueDateIcon />
+      )}
     </Box>
   );
 }

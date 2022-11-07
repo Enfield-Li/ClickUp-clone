@@ -1,12 +1,27 @@
 import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { SetState, SortBy, Task } from "../../task/taskTypes";
 import DueDateOptions from "./DueDateOptions";
 import DueDatePicker from "./DueDatePicker";
 
-type Props = { isOptionOpen: boolean; onClose: () => void };
+type Props = {
+  task: Task;
+  setTask?: SetTask;
+  onClose: () => void;
+  isOptionOpen: boolean;
+};
 
-export default function DueDateSwitch({ isOptionOpen, onClose }: Props) {
+export default function DueDateSwitch({
+  task,
+  setTask,
+  onClose,
+  isOptionOpen,
+}: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const { taskStateContext } = useTaskDetailContext();
+  const { setState, sortBy } = taskStateContext!;
 
   useEffect(() => {
     // Reset to use DueDateOptions
@@ -19,10 +34,9 @@ export default function DueDateSwitch({ isOptionOpen, onClose }: Props) {
         p={2}
         pl={4}
         cursor="pointer"
-        onClick={() => {
-          setShowDatePicker(!showDatePicker);
-        }}
-        _hover={{ backgroundColor: "blue.600" }}
+        borderTopRadius="md"
+        bgColor="darkMain.200"
+        onClick={() => setShowDatePicker(!showDatePicker)}
       >
         {showDatePicker ? "Hide " : "Show "} date picker
       </Box>
@@ -30,7 +44,13 @@ export default function DueDateSwitch({ isOptionOpen, onClose }: Props) {
       {showDatePicker ? (
         <DueDatePicker onClose={onClose} />
       ) : (
-        <DueDateOptions onClose={onClose} />
+        <DueDateOptions
+          task={task}
+          sortBy={sortBy}
+          onClose={onClose}
+          setTask={setTask}
+          setState={setState}
+        />
       )}
     </Box>
   );

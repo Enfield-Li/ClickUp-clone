@@ -63,7 +63,11 @@ export default function SelectDueDateIcon({}: Props) {
           {/* DueDate option */}
           <PopoverContent width="200px" bgColor={popoverContentBgColor}>
             <PopoverBody shadow={"2xl"} p={0}>
-              <DueDateSwitch onClose={onClose} isOptionOpen={isOptionOpen} />
+              <DueDateSwitch
+                task={task!}
+                onClose={onClose}
+                isOptionOpen={isOptionOpen}
+              />
             </PopoverBody>
           </PopoverContent>
         </>

@@ -1,5 +1,6 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
@@ -10,12 +11,27 @@ import {
   DueDateColumn,
   DUE_DATE,
   SelectableDueDate,
+  SetState,
+  SortBy,
+  Task,
   UpdateEvent,
 } from "../../task/taskTypes";
 
-type Props = { onClose: () => void };
+type Props = {
+  task: Task;
+  sortBy: SortBy;
+  setTask?: SetTask;
+  setState: SetState;
+  onClose: () => void;
+};
 
-export default function DueDateOptions({ onClose }: Props) {
+export default function DueDateOptions({
+  task,
+  sortBy,
+  setTask,
+  setState,
+  onClose,
+}: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
@@ -24,17 +40,8 @@ export default function DueDateOptions({ onClose }: Props) {
   const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
 
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
-
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { taskStateContext } = useTaskDetailContext();
+  const { columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;
@@ -61,12 +68,14 @@ export default function DueDateOptions({ onClose }: Props) {
     };
 
     // Update task state
-    setTask({
-      ...task!,
-      expectedDueDate,
-      dueDate: targetColumn.id,
-      taskEvents: [...task!.taskEvents, newEvent],
-    });
+    if (setTask) {
+      setTask({
+        ...task!,
+        expectedDueDate,
+        dueDate: targetColumn.id,
+        taskEvents: [...task!.taskEvents, newEvent],
+      });
+    }
 
     onClose();
   }
@@ -85,7 +94,7 @@ export default function DueDateOptions({ onClose }: Props) {
               onClick={() => handleSelect(column)}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
-              {capitalizeFirstLetter(column.title.toString().toLowerCase())}
+              {capitalizeFirstLetter(column.title.toString())}
             </Box>
           )
       )}

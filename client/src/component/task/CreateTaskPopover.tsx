@@ -147,9 +147,7 @@ export const CreateTaskPopover = ({
                           <Select {...field}>
                             {state.columnOptions.priority.map((priority) => (
                               <option value={priority.id} key={priority.id}>
-                                {capitalizeFirstLetter(
-                                  priority.title.toLowerCase()
-                                )}
+                                {capitalizeFirstLetter(priority.title)}
                               </option>
                             ))}
                           </Select>
@@ -178,9 +176,7 @@ export const CreateTaskPopover = ({
                             <Select {...field} width="60%">
                               {dueDateColumns.map((dueDate) => (
                                 <option value={dueDate.id} key={dueDate.id}>
-                                  {capitalizeFirstLetter(
-                                    dueDate.title.toLowerCase()
-                                  )}
+                                  {capitalizeFirstLetter(dueDate.title)}
                                 </option>
                               ))}
                             </Select>

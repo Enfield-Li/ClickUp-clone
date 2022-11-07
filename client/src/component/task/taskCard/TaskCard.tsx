@@ -12,15 +12,18 @@ import { Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import { Task } from "../taskTypes";
+import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
+import { SetState, SortBy, Task } from "../taskTypes";
 import PreviewDescription from "./PreviewDescription";
 
 type Props = {
   task: Task;
   index: number;
+  sortBy: SortBy;
+  setState: SetState;
 };
 
-export default function TaskCard({ task, index }: Props) {
+export default function TaskCard({ task, index, sortBy, setState }: Props) {
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -85,7 +88,7 @@ export default function TaskCard({ task, index }: Props) {
               )}
             </Flex>
 
-            <Flex fontSize="small" opacity="75%">
+            <Flex fontSize="small">
               {/* Subtask */}
               <Box mr={1} onClick={(e) => e.stopPropagation()}>
                 Sub
@@ -97,13 +100,18 @@ export default function TaskCard({ task, index }: Props) {
                 color={priorityFlagColor}
                 onClick={(e) => e.stopPropagation()}
               >
-                <i className="bi bi-flag-fill"></i>
+                <SelectPriorityPopover
+                  task={task}
+                  currentTaskPriority={currentTaskPriority}
+                >
+                  <i className="bi bi-flag-fill"></i>
+                </SelectPriorityPopover>
               </Box>
 
               {/* DueDate */}
               {task.expectedDueDate && (
                 <Box onClick={(e) => e.stopPropagation()}>
-                  <ExpectedDueDateDisplay />
+                  <ExpectedDueDateDisplay task={task} />
                 </Box>
               )}
             </Flex>

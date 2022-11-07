@@ -1,30 +1,44 @@
-import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { PRIORITY, PriorityColumn, UpdateEvent } from "../../task/taskTypes";
+import {
+  PRIORITY,
+  PriorityColumn,
+  Task,
+  UpdateEvent,
+} from "../../task/taskTypes";
 
-type Props = { onOptionClose: () => void };
+type Props = {
+  task: Task;
+  setTask?: SetTask;
+  onOptionClose: () => void;
+  //   flagIcon: React.ReactNode;
+};
 
-export default function PriorityOptions({ onOptionClose }: Props) {
+export default function PriorityOptions({
+  task,
+  setTask,
+  //   flagIcon,
+  onOptionClose,
+}: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
   );
 
   const { authState } = useAuthContext();
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
-
+  const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
   function selectPriority(priority: PriorityColumn) {
@@ -52,11 +66,13 @@ export default function PriorityOptions({ onOptionClose }: Props) {
     };
 
     // Update modal task state
-    setTask({
-      ...task!,
-      priority: targetPriorityColumnId,
-      taskEvents: [...task!.taskEvents, newEvent],
-    });
+    if (setTask) {
+      setTask({
+        ...task!,
+        priority: targetPriorityColumnId,
+        taskEvents: [...task!.taskEvents, newEvent],
+      });
+    }
   }
 
   return (
@@ -74,15 +90,27 @@ export default function PriorityOptions({ onOptionClose }: Props) {
                 p={3}
                 rounded="sm"
                 cursor="pointer"
+                alignItems="center"
                 onClick={() => selectPriority(priority)}
               >
-                <Box color={priority.color} mr={4}>
-                  <i className="bi bi-flag-fill"></i>
-                </Box>
-                {priority.title}
+                {priority.id !== 1 ? (
+                  <>
+                    <Box color={priority.color} mr={4}>
+                      <i className="bi bi-flag-fill"></i>
+                    </Box>
+                    <Box>{priority.title}</Box>
+                  </>
+                ) : (
+                  <>
+                    <Box mr={4} color="red.300">
+                      <i className="bi bi-x-lg"></i>
+                    </Box>
+                    <Box>Clear</Box>
+                  </>
+                )}
               </Flex>
 
-              {/* Last row */}
+              {/* Last row hide Divider */}
               {priority.id !== 5 && <Divider />}
             </Box>
           )
