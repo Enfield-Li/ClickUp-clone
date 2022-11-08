@@ -8,7 +8,8 @@ export default function App() {
   useInit();
 
   return (
-    <Flex height="100vh" position="relative" bottom="5px">
+    // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
+    <Flex height="100vh" position="relative" bottom="5px" overflow="hidden">
       <NavBar />
 
       {/* Header && Main */}

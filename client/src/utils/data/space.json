@@ -1,0 +1,49 @@
+{
+    "projects": [
+      {
+        "id": "66073864",
+        "access": true,
+        "name": "Space",
+        "private": false,
+        "categories": [
+          {
+            "id": "132173113",
+            "access": true,
+            "hidden": true,
+            "name": "hidden",
+            "orderindex": 0,
+            "subcategories": [
+              {
+                "id": "228102293",
+                "orderindex": 1,
+                "name": "List",
+                "permission_level": 5,
+                "status": {
+                  "color": "#2ecd6f"
+                }
+              }
+            ]
+          },
+          {
+            "id": "138092468",
+            "access": true,
+            "hidden": true,
+            "name": "hidden",
+            "orderindex": 1,
+            "subcategories": [
+              {
+                "id": "234172693",
+                "orderindex": 0,
+                "name": "list2",
+                "permission_level": 5,
+                "status": {
+                  "color": "#f9d900"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

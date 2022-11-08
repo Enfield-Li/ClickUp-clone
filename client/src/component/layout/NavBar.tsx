@@ -1,5 +1,6 @@
 import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import FixedNavBar from "./navbar/FixedNavBar";
 import ToggleNavBar from "./navbar/ToggleNavBar";
 
@@ -7,6 +8,7 @@ type Props = {};
 export type Section = "home" | "tasks" | "dev";
 
 export default function NavBar({}: Props) {
+  const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
   const [currentSection, setCurrentSection] = useState<Section>("home");
@@ -16,6 +18,15 @@ export default function NavBar({}: Props) {
       defaultIsOpen: false,
     });
   const fixedNavbarWidth = "55px";
+
+  // Sync up url with currentSection state after user refresh page
+  useEffect(() => {
+    if (location.pathname.includes("task")) {
+      setCurrentSection("tasks");
+    } else if (location.pathname.includes("test_dev")) {
+      setCurrentSection("dev");
+    }
+  }, []);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>

@@ -23,15 +23,14 @@ type Props = {
   task: Task;
   setTask?: SetTask;
   onOptionClose: () => void;
-  //   flagIcon: React.ReactNode;
 };
 
 export default function PriorityOptions({
   task,
   setTask,
-  //   flagIcon,
   onOptionClose,
 }: Props) {
+  const fontColor = useColorModeValue("black", "lightMain.200");
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
@@ -77,11 +76,15 @@ export default function PriorityOptions({
 
   return (
     <>
-      {columnOptions.priority.map(
-        (priority) =>
+      {columnOptions.priority.map((priority) => {
+        const noPriority = priority.id !== 1;
+        const taskFinished = priority.id !== 0;
+        const hideCurrentPriority = task!.priority !== priority.id;
+
+        return (
           // Hide finished column and current priority stage
-          priority.id !== 0 &&
-          task!.priority !== priority.id && (
+          taskFinished &&
+          hideCurrentPriority && (
             <Box
               key={priority.id}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
@@ -93,20 +96,22 @@ export default function PriorityOptions({
                 alignItems="center"
                 onClick={() => selectPriority(priority)}
               >
-                {priority.id !== 1 ? (
-                  <>
+                {noPriority ? (
+                  // Select priority
+                  <Flex>
                     <Box color={priority.color} mr={4}>
                       <i className="bi bi-flag-fill"></i>
                     </Box>
-                    <Box>{priority.title}</Box>
-                  </>
+                    <Box color={fontColor}>{priority.title}</Box>
+                  </Flex>
                 ) : (
-                  <>
-                    <Box mr={4} color="red.300">
+                  // Clear priority
+                  <Flex color="red.300">
+                    <Box mr={4}>
                       <i className="bi bi-x-lg"></i>
                     </Box>
                     <Box>Clear</Box>
-                  </>
+                  </Flex>
                 )}
               </Flex>
 
@@ -114,7 +119,8 @@ export default function PriorityOptions({
               {priority.id !== 5 && <Divider />}
             </Box>
           )
-      )}
+        );
+      })}
     </>
   );
 }

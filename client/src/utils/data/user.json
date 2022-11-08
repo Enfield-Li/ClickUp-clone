@@ -1,0 +1,376 @@
+{
+  "email_validated": true,
+  "phone_validated": false,
+  "user": {
+    "id": 60014485,
+    "username": "Enfield Li",
+    "email": "enfield1076462153@outlook.com",
+    "hmac": "4fc335daefac84d7885e3c22dbc435c93081b071253d45ac9f264907d4b7c10e",
+    "phone": null,
+    "description": null,
+    "color": "#cddc39",
+    "initials": "EL",
+    "date_joined": "1663304345133",
+    "engagement_score": 65,
+    "profilePicture": null,
+    "profileInfo": {
+      "verified_consultant": null,
+      "top_tier_user": null,
+      "verified_ambassador": null,
+      "viewed_verified_consultant": null,
+      "viewed_top_tier_user": null,
+      "viewed_verified_ambassador": null,
+      "display_profile": true
+    },
+    "gh_authed": false,
+    "demo_data_done": false,
+    "tour_cards_done": false,
+    "tour_cards_data": {
+      "popover": {
+        "a": {
+          "count": 1,
+          "lastShown": 1664436932092
+        },
+        "d": {
+          "count": 1,
+          "lastShown": 1664623590163
+        },
+        "p": {
+          "count": 1,
+          "lastShown": 1664441953436
+        },
+        "s": {
+          "count": 1,
+          "lastShown": 1664397289003
+        }
+      }
+    },
+    "onboarding_step": "completed",
+    "android_onboarding_done": false,
+    "default_team": "42029009",
+    "default_project": null,
+    "default_category": null,
+    "default_subcategory": null,
+    "twenty_four_hr_setting": null,
+    "week_start_day": null,
+    "show_coverimages": true,
+    "date_format": null,
+    "post_with_cmd": null,
+    "reverse_statuses": null,
+    "theme_color": "#202020",
+    "density": 1,
+    "hotkeys": false,
+    "dont_add_harvest_task_ids": null,
+    "scratchpad": true,
+    "onboarding_data": {
+      "teamId": "42029009",
+      "imports": [],
+      "integrations": [],
+      "onboard_type": "new_team"
+    },
+    "segmentation_questions": {},
+    "markdown_shortcuts": true,
+    "dropbox_enabled": true,
+    "drive_enabled": true,
+    "one_drive_enabled": true,
+    "box_enabled": true,
+    "pop_up_preference": 1,
+    "onboarding_incentive_accepted": true,
+    "seen_time_estimate_warning": false,
+    "onboarding_video_steps": null,
+    "onboarding_opt_out": false,
+    "show_celebrations": true,
+    "has_seen_mobile_onboarding": false,
+    "rtl_mode": false,
+    "dashboard_size": 2,
+    "bouncing": false,
+    "dark_theme": true,
+    "contrast": 1,
+    "block_tz_change_modal": null,
+    "hide_breadcrumbs_when_sorting": null,
+    "inbox_breadcrumbs": null,
+    "tour_cards": {
+      "create_task_tour_completed": false,
+      "multitask_tour_completed": false,
+      "notifications_tour_completed": false,
+      "view_task_tour_completed": false,
+      "category_tour_completed": null,
+      "list_select_tour_completed": null,
+      "comment_tour_completed": null,
+      "minimize_tour_completed": null,
+      "used_slash_commands": null
+    },
+    "timezone_offset": "-480",
+    "timezone": "Asia/Shanghai",
+    "sso": {
+      "sso_requirement_violated": false,
+      "policies": []
+    },
+    "features": {
+      "harvest": null,
+      "toggl_check": true
+    },
+    "country_iso_code": "JP",
+    "user_data": null,
+    "imports_in_progress": [],
+    "global_font_support": false,
+    "skipCaptcha": false,
+    "last_2fa_prompt": null,
+    "twofa_enabled": "0",
+    "twofa_required": false,
+    "twofa_options": {
+      "text_enabled": false,
+      "totp_enabled": false
+    },
+    "require_2fa_count": 0,
+    "extended_logging": false,
+    "fp_auth_token": null,
+    "v2_beta": true,
+    "dashboard": 5,
+    "sidebar_theme": 1,
+    "bl": false,
+    "created_from_v2": true,
+    "onboarding_bonus_claimed": false,
+    "user_settings": [
+      {
+        "name": "pinned_rec",
+        "value": null
+      },
+      {
+        "name": "pinned_time_tracking",
+        "value": null
+      },
+      {
+        "name": "pinned_reminder",
+        "value": null
+      },
+      {
+        "name": "pinned_note",
+        "value": null
+      },
+      {
+        "name": "pinned_doc",
+        "value": null
+      },
+      {
+        "name": "pinned_tray",
+        "value": false
+      },
+      {
+        "name": "country_holidays",
+        "value": []
+      },
+      {
+        "name": "pinned_calendar",
+        "value": null
+      },
+      {
+        "name": "show_stats_while_typing",
+        "value": null
+      },
+      {
+        "name": "stats_target",
+        "value": null
+      },
+      {
+        "name": "focus_mode",
+        "value": null
+      },
+      {
+        "name": "start_date_only_tasks",
+        "value": true
+      },
+      {
+        "name": "calendar_settings",
+        "value": {}
+      },
+      {
+        "name": "search_name",
+        "value": true
+      },
+      {
+        "name": "search_custom_fields",
+        "value": true
+      },
+      {
+        "name": "search_description",
+        "value": true
+      },
+      {
+        "name": "show_stats_details",
+        "value": null
+      },
+      {
+        "name": "stats_active_detail",
+        "value": null
+      },
+      {
+        "name": "show_quotes",
+        "value": null
+      },
+      {
+        "name": "docs_focus_mode",
+        "value": null
+      },
+      {
+        "name": "plain_urls",
+        "value": null
+      },
+      {
+        "name": "task_view_v3",
+        "value": null
+      },
+      {
+        "name": "custom_fields_manager",
+        "value": null
+      }
+    ],
+    "gh_auth_team_ids": []
+  },
+  "teams": [
+    {
+      "id": "42029009",
+      "color": "#40BC86",
+      "trial_count": null,
+      "using_github": false,
+      "using_gitlab": false,
+      "setup_step": "project",
+      "color_theme": null,
+      "personal_team": false,
+      "should_encrypt": null,
+      "gantt_trial_end": null,
+      "require_2fa": false,
+      "hours_per_day": null,
+      "plan_id": "1",
+      "time_tracking_display_hours": true,
+      "time_estimate_display_hours": true,
+      "disable_public_sharing": null,
+      "disable_never_expire_pub_links": false,
+      "pub_links_max_year": false,
+      "estimates_per_assignee": null,
+      "points_per_assignee": null,
+      "zoom": null,
+      "nested_subtasks": null,
+      "nested_subtasks_level": null,
+      "time_in_status": null,
+      "quick_create_statuses": true,
+      "universal_search": false,
+      "microsoft_365_preview": true,
+      "extra_comment_reactions": true,
+      "trial_plan_id": null,
+      "allow_skip_2fa": true,
+      "lineup": true,
+      "threaded_comments": true,
+      "admin_public_share_override": true,
+      "enable_recorder": true,
+      "docs_home": true,
+      "hipaa_compliant": false,
+      "live_view": 2,
+      "automation_enabled": true,
+      "user_presence": true,
+      "task_relationships": true,
+      "can_add_guests": null,
+      "can_remove_guests": null,
+      "wip_limit": false,
+      "hide_everything_calendar": false,
+      "hide_everything_board": false,
+      "emails_as_replies": false,
+      "custom_sprint_duration": false,
+      "time_tracking_rollup": false,
+      "disable_template_pub_sharing": false,
+      "time_estimate_rollup": false,
+      "enable_codox": true,
+      "dashboards_enabled": true,
+      "unstarted_status_group": null,
+      "tasks_in_multiple_lists": true,
+      "subtasks_in_multiple_lists": false,
+      "points_estimate_rollup": false,
+      "giphy": true,
+      "points_scale": [1, 2, 3, 5, 8],
+      "custom_fields_legacy_ordering": false,
+      "default_project": "66073864",
+      "role": 1,
+      "date_joined": "1663304447366",
+      "date_invited": "1663304447366",
+      "invite": false,
+      "receive_notifs_gh_commit": true,
+      "owner": {
+        "id": 60014485,
+        "username": "Enfield Li",
+        "email": "enfield1076462153@outlook.com",
+        "color": "#cddc39",
+        "initials": "EL",
+        "profilePicture": null
+      },
+      "name": "Enfield Li's Workspace",
+      "next_bill_date": "1694840447366",
+      "date_created": "1663304447366",
+      "service_status": 1,
+      "billingexceptionpopupdismissed": null,
+      "was_trial": false,
+      "stored_promo_code": null,
+      "address": null,
+      "dashboard_data_date": null,
+      "v2_beta": true,
+      "orderindex": "1",
+      "avatar": null,
+      "initials": "E",
+      "notification_settings": {
+        "receive_emails": true,
+        "new_task_notifs": 0,
+        "fields": {
+          "gh_commit": true
+        }
+      },
+      "automation": {
+        "internal": {
+          "count": 0,
+          "limit": 100,
+          "limit_reached": false
+        }
+      },
+      "v2_beta_ms_since": 4533715517,
+      "storage_used": {
+        "bytes": 0,
+        "docs_bytes": 0,
+        "tasks_bytes": 0,
+        "comments_bytes": 0,
+        "projects": {
+          "66073864": {
+            "id": "66073864",
+            "team_name": "Enfield Li's Workspace",
+            "tasks_bytes": 0,
+            "docs_bytes": 0,
+            "bytes": 0
+          },
+          "66162432": {
+            "id": "66162432",
+            "team_name": "Enfield Li's Workspace",
+            "tasks_bytes": 0,
+            "docs_bytes": 0,
+            "bytes": 0
+          }
+        }
+      },
+      "member_count": "2",
+      "member_count_wo_invites": "2",
+      "listViewSettings": {
+        "visible": {
+          "due_date": true,
+          "start_date": false,
+          "date_created": false,
+          "date_updated": true,
+          "priority": true,
+          "assignees": true,
+          "task_id": false,
+          "time_spent": false
+        },
+        "sorting": []
+      },
+      "storage": 0.13,
+      "storage_per_user": 0,
+      "repos": [],
+      "available_storage": 139586437.12
+    }
+  ]
+}

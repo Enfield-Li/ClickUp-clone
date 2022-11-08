@@ -4,9 +4,9 @@ import {
   Flex,
   Heading,
   Stack,
+  Tooltip,
   useColorMode,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,6 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
 import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
 import { SetState, SortBy, Task } from "../taskTypes";
-import PreviewDescription from "./PreviewDescription";
 
 type Props = {
   task: Task;
@@ -25,7 +24,6 @@ type Props = {
 
 export default function TaskCard({ task, index, sortBy, setState }: Props) {
   const navigate = useNavigate();
-  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const { colorMode } = useColorMode();
   const bgColor = useColorModeValue("white", "darkMain.200");
@@ -75,19 +73,23 @@ export default function TaskCard({ task, index, sortBy, setState }: Props) {
                 {task.title}
               </Heading>
 
-              {/* Description */}
+              {/* Preview description */}
               {task.description && (
                 <Center ml={2} onClick={(e) => e.stopPropagation()}>
-                  <PreviewDescription
-                    task={task}
-                    isOpen={isOpen}
-                    onOpen={onOpen}
-                    onClose={onClose}
-                  />
+                  <Tooltip
+                    p={3}
+                    width="300px"
+                    height="250px"
+                    placement="right"
+                    label={task.description}
+                  >
+                    <i className="bi bi-justify-left"></i>
+                  </Tooltip>
                 </Center>
               )}
             </Flex>
 
+            {/* Other info */}
             <Flex fontSize="small">
               {/* Subtask */}
               <Box mr={1} onClick={(e) => e.stopPropagation()}>
