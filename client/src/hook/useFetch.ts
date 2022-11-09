@@ -7,7 +7,7 @@ import {
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, State } from "../component/task/taskTypes";
+import { SortBy, State } from "../types";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";

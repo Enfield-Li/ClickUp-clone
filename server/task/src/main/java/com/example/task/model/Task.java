@@ -52,6 +52,8 @@ public class Task {
 
     private Date expectedDueDate;
 
+    private Boolean archived;
+
     @NotNull
     private Integer priority;
 

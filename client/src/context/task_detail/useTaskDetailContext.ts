@@ -12,7 +12,7 @@ import {
   Task,
   TaskList,
   UpdateTasksPositionDTO,
-} from "../../component/task/taskTypes";
+} from "../../types";
 import { TaskDetailContext } from "./TaskDetailContext";
 
 export default function useTaskDetailContext() {

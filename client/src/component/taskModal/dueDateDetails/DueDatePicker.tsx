@@ -6,7 +6,7 @@ import useTaskDetailContext, {
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getDueDateFromExpectedDueDateString } from "../../task/actions/taskProcessing";
-import { DUE_DATE, UpdateEvent } from "../../task/taskTypes";
+import { DUE_DATE, UpdateEvent } from "../../../types";
 
 type Props = { onClose: () => void };
 

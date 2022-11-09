@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, SortBy, Task } from "../../task/taskTypes";
+import { SetState, SortBy, Task } from "../../../types";
 import DueDateOptions from "./DueDateOptions";
 import DueDatePicker from "./DueDatePicker";
 

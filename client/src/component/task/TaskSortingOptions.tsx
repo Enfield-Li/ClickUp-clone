@@ -1,6 +1,6 @@
 import { Box, Flex, Select, Spacer } from "@chakra-ui/react";
 import React from "react";
-import { DUE_DATE, PRIORITY, SortBy, STATUS } from "./taskTypes";
+import { DUE_DATE, PRIORITY, SortBy, STATUS } from "../../types";
 
 type Props = {
   sortBy: SortBy;

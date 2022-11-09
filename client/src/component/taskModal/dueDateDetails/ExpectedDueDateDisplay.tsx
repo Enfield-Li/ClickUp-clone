@@ -16,13 +16,8 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import {
-  DUE_DATE,
-  SetState,
-  SortBy,
-  Task,
-  UpdateEvent,
-} from "../../task/taskTypes";
+import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
+import { DUE_DATE, SetState, SortBy, Task, UpdateEvent } from "../../../types";
 import DueDateSwitch from "./DueDateSwitch";
 
 type Props = {
@@ -93,14 +88,14 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
               label={
                 <Box>
                   Time:&nbsp;
-                  {new Date(task?.expectedDueDate!).toLocaleTimeString()}
+                  {toYYYYMMDDString(new Date(task?.expectedDueDate!))}
                 </Box>
               }
             >
               <Box display="inline-block">
                 <PopoverTrigger>
                   <Center opacity="65%">
-                    {new Date(task?.expectedDueDate!).toLocaleDateString()}
+                    {getMonthAndDay(new Date(task?.expectedDueDate!))}
                   </Center>
                 </PopoverTrigger>
               </Box>

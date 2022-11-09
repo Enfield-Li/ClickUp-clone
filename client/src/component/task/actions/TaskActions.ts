@@ -9,7 +9,7 @@ import {
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
-} from "../taskTypes";
+} from "../../../types";
 
 export async function getTasks() {}
 

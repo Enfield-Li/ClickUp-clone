@@ -21,7 +21,7 @@ import {
   TargetColumn,
   TaskList,
   UpdateTasksPositionDTO,
-} from "./taskTypes";
+} from "../../types";
 import AddStatusColumn from "./customeStatusColumn/AddStatusColumn";
 import { getLookUpDueDateTable } from "./actions/columnProcessing";
 import { deepCopy } from "../../utils/deepCopy";

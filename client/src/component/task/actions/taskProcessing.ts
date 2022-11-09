@@ -15,7 +15,7 @@ import {
   TargetTasksInColumn,
   Task,
   TaskList,
-} from "../taskTypes";
+} from "../../../types";
 
 /* 
   Group all tasks into ordered tasks based on sortBy 

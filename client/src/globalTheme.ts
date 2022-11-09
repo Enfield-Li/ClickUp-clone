@@ -50,6 +50,11 @@ export const globalTheme = extendTheme({
         [$arrowBg.variable]: "colors.darkMain.50",
       },
     },
+    PopoverContent: {
+      baseStyle: {
+        bgColor: "yellow",
+      },
+    },
   },
 
   // colors

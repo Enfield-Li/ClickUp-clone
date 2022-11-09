@@ -5,7 +5,7 @@ import {
   collectAllTasks,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, State } from "../component/task/taskTypes";
+import { SortBy, State } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { mockColumnOptions, mockTaskList } from "./mockData";
 import { sleep } from "../utils/sleep";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SortBy, STATUS } from "./taskTypes";
+import { SortBy, STATUS } from "../../types";
 import TaskBoardView from "./TaskBoardView";
 import TaskSortingOptions from "./TaskSortingOptions";
 import { Box } from "@chakra-ui/react";

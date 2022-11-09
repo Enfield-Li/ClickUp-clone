@@ -11,7 +11,7 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { updateTaskTitle } from "../task/actions/TaskActions";
-import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../task/taskTypes";
+import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../../types";
 
 type Props = {};
 

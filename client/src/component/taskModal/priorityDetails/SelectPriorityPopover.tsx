@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import { PriorityColumn, Task } from "../../task/taskTypes";
+import { PriorityColumn, Task } from "../../../types";
 import PriorityOptions from "./PriorityOptions";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 
@@ -41,8 +41,7 @@ export default function SelectPriorityPopover({
             label={
               noPriority && isTaskFinished
                 ? "Set priority"
-                : capitalizeFirstLetter(currentTaskPriority!.title) +
-                  " priority"
+                : capitalizeFirstLetter(currentTaskPriority!.title)
             }
             fontWeight="semibold"
           >
@@ -51,11 +50,7 @@ export default function SelectPriorityPopover({
             </Box>
           </Tooltip>
 
-          <PopoverContent
-            width="200px"
-            bgColor={popoverContentBgColor}
-            // rootProps={{ style: { bottom: 0 } }}
-          >
+          <PopoverContent width="200px" bgColor={popoverContentBgColor}>
             <PopoverBody shadow={"2xl"} m={0} p={0}>
               <PriorityOptions
                 task={task!}

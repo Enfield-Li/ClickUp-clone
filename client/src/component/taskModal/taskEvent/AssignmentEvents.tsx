@@ -1,7 +1,7 @@
 import { Flex, Box } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../utils/calculateTime";
-import { AssignmentEvent } from "../../task/taskTypes";
+import { AssignmentEvent } from "../../../types";
 
 type Props = { assignmentEvent: AssignmentEvent };
 

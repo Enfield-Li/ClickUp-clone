@@ -12,12 +12,7 @@ import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import {
-  PRIORITY,
-  PriorityColumn,
-  Task,
-  UpdateEvent,
-} from "../../task/taskTypes";
+import { PRIORITY, PriorityColumn, Task, UpdateEvent } from "../../../types";
 
 type Props = {
   task: Task;
@@ -40,10 +35,10 @@ export default function PriorityOptions({
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
-  function selectPriority(priority: PriorityColumn) {
+  function selectPriority(priorityColumn: PriorityColumn) {
     onOptionClose();
 
-    const targetPriorityColumnId = priority.id;
+    const targetPriorityColumnId = priorityColumn.id;
 
     // Update list state
     updateTaskPriorityOrDueDate(
@@ -77,7 +72,7 @@ export default function PriorityOptions({
   return (
     <>
       {columnOptions.priority.map((priority) => {
-        const noPriority = priority.id !== 1;
+        const noPriority = priority.id === 1;
         const taskFinished = priority.id !== 0;
         const hideCurrentPriority = task!.priority !== priority.id;
 
@@ -85,6 +80,7 @@ export default function PriorityOptions({
           // Hide finished column and current priority stage
           taskFinished &&
           hideCurrentPriority && (
+            // Hide finished column and current priority stage
             <Box
               key={priority.id}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
@@ -98,19 +94,19 @@ export default function PriorityOptions({
               >
                 {noPriority ? (
                   // Select priority
-                  <Flex>
-                    <Box color={priority.color} mr={4}>
-                      <i className="bi bi-flag-fill"></i>
-                    </Box>
-                    <Box color={fontColor}>{priority.title}</Box>
-                  </Flex>
-                ) : (
-                  // Clear priority
                   <Flex color="red.300">
                     <Box mr={4}>
                       <i className="bi bi-x-lg"></i>
                     </Box>
                     <Box>Clear</Box>
+                  </Flex>
+                ) : (
+                  // Clear priority
+                  <Flex>
+                    <Box color={priority.color} mr={4}>
+                      <i className="bi bi-flag-fill"></i>
+                    </Box>
+                    <Box color={fontColor}>{priority.title}</Box>
                   </Flex>
                 )}
               </Flex>

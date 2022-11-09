@@ -20,7 +20,7 @@ import {
   PreviousTaskIds,
   SortBy,
   TaskList,
-} from "../../task/taskTypes";
+} from "../../../types";
 
 type Props = {};
 

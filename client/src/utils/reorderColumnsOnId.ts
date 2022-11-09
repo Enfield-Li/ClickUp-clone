@@ -1,4 +1,4 @@
-import { UndeterminedColumns } from "../component/task/taskTypes";
+import { UndeterminedColumns } from "../types";
 
 // reorder column based on id
 export function reorderColumnsOnId(columns: UndeterminedColumns) {

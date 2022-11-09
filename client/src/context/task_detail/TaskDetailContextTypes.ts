@@ -1,9 +1,4 @@
-import {
-  ColumnOptions,
-  SetState,
-  SortBy,
-  Task,
-} from "../../component/task/taskTypes";
+import { ColumnOptions, SetState, SortBy, Task } from "../../types";
 
 export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
 

@@ -8,7 +8,7 @@ import {
 import produce from "immer";
 import React, { useState } from "react";
 import { getRandomNumber } from "../../../utils/getRandomNumber";
-import { StatusColumns, SetState, StatusColumn } from "../taskTypes";
+import { StatusColumns, SetState, StatusColumn } from "../../../types";
 
 type Props = {
   color: string;
@@ -85,7 +85,7 @@ export default function AddStatusColumnInput({
           <Flex justifyContent="center" alignItems="center">
             {/* Accept change */}
             <Box
-              fontSize="40px"
+              fontSize="33px"
               color="green.500"
               onClick={() => {
                 createStatusColumn();
@@ -97,7 +97,7 @@ export default function AddStatusColumnInput({
             {/* Cancel */}
             <Box
               mr={2}
-              fontSize="40px"
+              fontSize="33px"
               color="red.500"
               onClick={() => {
                 // Do nothing and close edit

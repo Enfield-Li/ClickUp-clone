@@ -5,7 +5,7 @@ import {
   CommentEvent,
   UpdateEvent,
   WATCHER,
-} from "../component/task/taskTypes";
+} from "../types";
 
 // https://stackoverflow.com/q/69936190/16648127
 export function isCommentEvent(

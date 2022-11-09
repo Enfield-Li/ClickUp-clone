@@ -10,7 +10,7 @@ import {
   SelectableDueDate,
   LookUpDueDate,
   StatusColumns,
-} from "../taskTypes";
+} from "../../../types";
 
 export function processColumns(columnOptions: ColumnOptions) {
   const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);

@@ -5,7 +5,7 @@ import useTaskDetailContext, {
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import SelectOption from "../../task/select/SelectOption";
-import { STATUS, StatusColumn, UpdateEvent } from "../../task/taskTypes";
+import { STATUS, StatusColumn, UpdateEvent } from "../../../types";
 
 type Props = { onOptionClose: () => void };
 

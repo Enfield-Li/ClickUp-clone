@@ -16,7 +16,7 @@ import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { STATUS, UpdateEvent } from "../../task/taskTypes";
+import { STATUS, UpdateEvent } from "../../../types";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 

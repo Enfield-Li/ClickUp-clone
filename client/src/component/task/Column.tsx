@@ -11,7 +11,7 @@ import {
   State,
   TaskList,
   STATUS,
-} from "./taskTypes";
+} from "../../types";
 
 type Props = {
   state: State;

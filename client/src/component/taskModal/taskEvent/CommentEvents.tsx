@@ -1,7 +1,7 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../utils/calculateTime";
-import { CommentEvent } from "../../task/taskTypes";
+import { CommentEvent } from "../../../types";
 
 type Props = { commentEvent: CommentEvent };
 

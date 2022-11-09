@@ -1,5 +1,8 @@
 // https://stackoverflow.com/a/50293232/16648127
 // Get today and tomorrow week days:
+
+import { capitalizeFirstLetter } from "./capitalizeFirstLetter";
+
 //     { todayWeekDay: "TUESDAY", tomorrowWeekDay: "THURSDAY" }
 export function getWeekDays() {
   const todayWeekDay = getUppercaseWeekDayString(new Date());
@@ -46,6 +49,7 @@ export function getTodayYMDString() {
   return toYYYYMMDDString(new Date());
 }
 
+// return yyyy-mm-dd
 export function toYYYYMMDDString(date: Date | string) {
   return new Date(date)
     .toLocaleTimeString("en-CA", {
@@ -54,6 +58,18 @@ export function toYYYYMMDDString(date: Date | string) {
       day: "2-digit",
     })
     .split(",")[0];
+}
+
+// return Nov 9
+export function getMonthAndDay(date: Date | string) {
+  let month = new Intl.DateTimeFormat("fr", { month: "short" }).format(
+    new Date(date)
+  );
+  month = capitalizeFirstLetter(month.slice(0, month.length - 1));
+
+  const day = new Date(date).getDate();
+
+  return month + " " + day;
 }
 
 /* 

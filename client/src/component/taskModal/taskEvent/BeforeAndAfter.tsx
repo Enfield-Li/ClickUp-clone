@@ -10,7 +10,7 @@ import {
   STATUS,
   UndeterminedColumns,
   UpdateEvent,
-} from "../../task/taskTypes";
+} from "../../../types";
 
 type Props = {
   updateEvent: UpdateEvent;

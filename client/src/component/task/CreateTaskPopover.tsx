@@ -38,7 +38,7 @@ import {
   STATUS,
   Task,
   UndeterminedColumn,
-} from "./taskTypes";
+} from "../../types";
 
 export type NewTask = {
   title: string;

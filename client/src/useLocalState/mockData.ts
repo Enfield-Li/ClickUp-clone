@@ -1,10 +1,4 @@
-import {
-  ColumnOptions,
-  DUE_DATE,
-  PRIORITY,
-  STATUS,
-  TaskList,
-} from "../component/task/taskTypes";
+import { ColumnOptions, DUE_DATE, PRIORITY, STATUS, TaskList } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
 export const mockColumnOptions: ColumnOptions = {

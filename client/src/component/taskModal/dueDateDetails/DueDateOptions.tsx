@@ -15,7 +15,7 @@ import {
   SortBy,
   Task,
   UpdateEvent,
-} from "../../task/taskTypes";
+} from "../../../types";
 
 type Props = {
   task: Task;

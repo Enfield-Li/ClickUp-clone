@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import SelectOption from "../select/SelectOption";
-import { SortBy, STATUS } from "../taskTypes";
+import { SortBy, STATUS } from "../../../types";
 
 type Props = {
   sortBy: SortBy;

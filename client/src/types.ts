@@ -1,4 +1,4 @@
-import { getDaysBefore } from "../../utils/getWeekDays";
+import { getDaysBefore } from "./utils/getWeekDays";
 
 // Sorting options
 export const STATUS = "status";
@@ -143,6 +143,7 @@ export type Task = {
   creatorName?: string;
   description?: string;
   expectedDueDate?: Date; // server due date data
+  archived?: boolean;
 
   watchers: UserInfo[];
   assignees: UserInfo[];

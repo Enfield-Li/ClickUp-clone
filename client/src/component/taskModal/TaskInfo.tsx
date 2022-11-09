@@ -16,7 +16,7 @@ import {
   TaskEvents,
   UpdateEvent,
   UpdateTaskDescDTO,
-} from "../task/taskTypes";
+} from "../../types";
 import SelectPriorityIcon from "./priorityDetails/SelectPriorityIcon";
 import SelectStatusIcons from "./statusDetails/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";

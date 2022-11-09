@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
-import { SetState, UndeterminedColumn } from "../taskTypes";
+import { SetState, UndeterminedColumn } from "../../../types";
 
 type Props = {
   setState: SetState;

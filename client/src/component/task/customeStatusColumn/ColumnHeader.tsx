@@ -1,6 +1,6 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { SetState, SortBy, UndeterminedColumn } from "../taskTypes";
+import { SetState, SortBy, UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
 

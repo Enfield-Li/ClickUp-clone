@@ -2,7 +2,7 @@ import { Center } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { Task } from "../../task/taskTypes";
+import { Task } from "../../../types";
 import SelectPriorityPopover from "./SelectPriorityPopover";
 
 type Props = { task: Task; setTask?: SetTask };
