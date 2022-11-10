@@ -19,6 +19,7 @@ import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { STATUS, UpdateEvent } from "../../../types";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
+import { CheckIcon } from "@chakra-ui/icons";
 
 type Props = {};
 
@@ -151,7 +152,22 @@ export default function SelectStatusIcons({}: Props) {
             {/* Set to finish */}
             {task!.status !== 3 && (
               <Box mx={2}>
-                <FinishTask />
+                <FinishTask>
+                  <Center
+                    opacity="65%"
+                    fontSize={"33px"}
+                    cursor={"pointer"}
+                    _hover={{ color: "yellow.400", opacity: "100%" }}
+                    onClick={() => {
+                      setTask({ ...task!, status: 3 });
+                      updateCurrentTaskStatus(sortBy, task!, setState, 3);
+                    }}
+                  >
+                    <Center border="1.1px solid" rounded="sm" p={2}>
+                      <CheckIcon fontSize="md" alignSelf="center" />
+                    </Center>
+                  </Center>
+                </FinishTask>
               </Box>
             )}
           </>

@@ -153,6 +153,9 @@ export type Task = {
 
   // Keep previousTask record when set to finish
   previousTaskIdsBeforeFinish?: PreviousTaskIdsBeforeFinish;
+
+  parentTask?: Task;
+  subTasks: Task[];
 };
 
 export type TaskList = Task[];

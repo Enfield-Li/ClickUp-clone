@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import ExpectedDueDateDisplay from "./ExpectedDueDateDisplay";
 import SelectDueDateIcon from "./SelectDueDateIcon";
@@ -27,7 +27,19 @@ export default function DueDateDetails({}: Props) {
           <ExpectedDueDateDisplay task={task} setTask={setTask} />
         </Box>
       ) : (
-        <SelectDueDateIcon />
+        <SelectDueDateIcon task={task!}>
+          <Center
+            width="35px"
+            height="35px"
+            opacity="55%"
+            fontSize={"17px"}
+            cursor={"pointer"}
+            border="1px dashed"
+            borderRadius={"50%"}
+          >
+            <i className="bi bi-calendar2-check"></i>
+          </Center>
+        </SelectDueDateIcon>
       )}
     </Box>
   );

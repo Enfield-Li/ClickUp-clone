@@ -10,15 +10,15 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { Task } from "../../../types";
 import DueDateSwitch from "./DueDateSwitch";
 
-type Props = {};
+type Props = { children: React.ReactNode; task: Task };
 
-export default function SelectDueDateIcon({}: Props) {
+export default function SelectDueDateIcon({ children, task }: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const {
-    task,
     setTask,
     isModalOpen,
     onModalOpen,
@@ -27,11 +27,8 @@ export default function SelectDueDateIcon({}: Props) {
     setTaskStateContext,
   } = useTaskDetailContext();
 
-  const { setState, sortBy, columnOptions } = taskStateContext!;
-  const isTaskFinished = task?.dueDate === 0 || task?.dueDate === 1;
-
   return (
-    <Popover>
+    <Popover placement="right">
       {({ onClose, isOpen: isOptionOpen }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
@@ -44,18 +41,9 @@ export default function SelectDueDateIcon({}: Props) {
           >
             <Box display="inline-block">
               <PopoverTrigger>
-                <Center
-                  width="35px"
-                  height="35px"
-                  opacity="55%"
-                  fontSize={"17px"}
-                  cursor={"pointer"}
-                  border="1px dashed"
-                  borderRadius={"50%"}
-                  _hover={{ color: "purple.400", opacity: "100%" }}
-                >
-                  <i className="bi bi-calendar2-check"></i>
-                </Center>
+                <Box _hover={{ color: "purple.400", opacity: "100%" }}>
+                  {children}
+                </Box>
               </PopoverTrigger>
             </Box>
           </Tooltip>

@@ -1,39 +1,37 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  Stack,
-  Tooltip,
-  useColorMode,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
-import { SetState, SortBy, Task } from "../../../types";
+import { SetState, Task } from "../../../types";
+import AddSubTask from "./AddSubTask";
 import RightClickPopover from "./RightClickPopover";
+import SetTaskAttribute from "./SetTaskAttribute";
+import SubTaskList from "./SubTaskList";
+import TaskCardAdditionalInfo from "./TaskCardAdditionalInfo";
+import TaskCardMainInfo from "./TaskCardMainInfo";
 
 type Props = {
   task: Task;
   index: number;
-  sortBy: SortBy;
   setState: SetState;
 };
 
-export default function TaskCard({ task, index, sortBy, setState }: Props) {
+export default function TaskCard({ task, index, setState }: Props) {
   const navigate = useNavigate();
+  const [showAddSubTask, setShowAddSubTask] = useState(true);
+  const [showSubTask, setShowSubTask] = useState(true);
 
   const { colorMode } = useColorMode();
-  const bgColor = useColorModeValue("white", "darkMain.200");
-  const headerColor = useColorModeValue("gray.700", "white");
-  const { onModalOpen, setTask, isModalOpen, taskStateContext } =
-    useTaskDetailContext();
+  const { onModalOpen, setTask } = useTaskDetailContext();
+  const cardBgColor = useColorModeValue("white", "darkMain.200");
 
-  const { columnOptions } = taskStateContext!;
+  const noPriority = task.priority === 1;
+  const taskFinished = task.priority === 0;
+  const hasPriority = !noPriority && !taskFinished;
+  const hasSubTask = task.subTasks.length > 0;
+  const hasDueDate = task.expectedDueDate;
+  const expandCardHeight = hasPriority || hasSubTask || hasDueDate;
 
   function handleOpenTaskModal() {
     if (task?.id) {
@@ -43,95 +41,77 @@ export default function TaskCard({ task, index, sortBy, setState }: Props) {
     }
   }
 
-  const noPriority = task.priority === 1;
-  const taskFinished = task.priority === 0;
-  const currentTaskPriority = columnOptions.priority.find(
-    (priority) => priority.id === task!.priority
-  );
-  const priorityFlagColor = currentTaskPriority?.color;
-
   return (
     <Draggable draggableId={String(task.id)} index={index}>
       {(provided, snapshot) => (
         <RightClickPopover>
-          <Box
-            p={4}
-            my={3}
+          <Flex
             width="full"
-            rounded="sm"
-            bg={bgColor}
             boxShadow="md"
-            height="110px"
+            flexDir="column"
+            bgColor={cardBgColor}
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            onClick={handleOpenTaskModal} // left click
+            onClick={handleOpenTaskModal}
+            justifyContent="space-between"
+            mt={3}
+            borderTopRadius="sm"
+            mb={showSubTask ? 0 : 3}
+            height={expandCardHeight ? "110px" : "80px"}
+            borderBottomRadius={showSubTask ? undefined : "sm"}
             border={colorMode === "dark" ? "1px solid darkMain.300" : undefined}
             _hover={{
-              backgroundColor:
-                colorMode === "dark" ? "darkMain.100" : undefined,
+              bgColor:
+                colorMode === "dark" && !showAddSubTask
+                  ? "darkMain.100"
+                  : undefined,
             }}
           >
-            <Stack>
-              {/* Task Info */}
-              <Flex>
-                {/* Task title */}
-                <Heading color={headerColor} fontSize="xl" fontFamily="heading">
-                  {task.title}
-                </Heading>
+            <Flex
+              p={3}
+              pb="6px"
+              flexDir="column"
+              justifyContent="space-between"
+              height={expandCardHeight ? "110px" : "80px"}
+              onMouseOutCapture={() => setShowAddSubTask(true)}
+              onMouseOverCapture={() => setShowAddSubTask(false)}
+            >
+              {/* Task info */}
+              <Box>
+                <TaskCardMainInfo task={task} />
+                <TaskCardAdditionalInfo
+                  task={task}
+                  hasDueDate={hasDueDate}
+                  hasSubTask={hasSubTask}
+                  hasPriority={hasPriority}
+                  setShowSubTask={setShowSubTask}
+                />
+              </Box>
 
-                {/* Preview description */}
-                {task.description && (
-                  <Center
-                    ml={2}
-                    opacity="70%"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Tooltip
-                      p={3}
-                      width="300px"
-                      height="250px"
-                      placement="right"
-                      label={task.description}
-                    >
-                      <i className="bi bi-justify-left"></i>
-                    </Tooltip>
-                  </Center>
-                )}
-              </Flex>
+              {/* Set task attribute */}
+              {!showAddSubTask && (
+                <SetTaskAttribute
+                  task={task}
+                  hasDueDate={hasDueDate}
+                  hasPriority={hasPriority}
+                />
+              )}
+            </Flex>
 
-              {/* Other info */}
-              <Flex fontSize="small">
-                {/* Subtask */}
-                <Box mr={1} onClick={(e) => e.stopPropagation()}>
-                  Sub
-                </Box>
+            {/* Add subtask */}
+            {showAddSubTask && (
+              <Box onClick={(e) => e.stopPropagation()}>
+                <AddSubTask task={task} cardBgColor={cardBgColor} />
+              </Box>
+            )}
+          </Flex>
 
-                {/* Priority */}
-                {!noPriority && !taskFinished && (
-                  <Box
-                    mr={1}
-                    color={priorityFlagColor}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <SelectPriorityPopover
-                      task={task}
-                      currentTaskPriority={currentTaskPriority}
-                    >
-                      <i className="bi bi-flag-fill"></i>
-                    </SelectPriorityPopover>
-                  </Box>
-                )}
-
-                {/* DueDate */}
-                {task.expectedDueDate && (
-                  <Box onClick={(e) => e.stopPropagation()}>
-                    <ExpectedDueDateDisplay task={task} />
-                  </Box>
-                )}
-              </Flex>
-            </Stack>
-          </Box>
+          {showSubTask && (
+            <Box width="full" borderBottomRadius="sm">
+              <SubTaskList task={task} />
+            </Box>
+          )}
         </RightClickPopover>
       )}
     </Draggable>

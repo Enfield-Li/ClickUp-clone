@@ -22,6 +22,7 @@ const customHoverBlue = "rgb(91, 67, 234)";
 
 // https://github.com/chakra-ui/chakra-ui/issues/4695#issuecomment-991023319
 const $arrowBg = cssVar("popper-arrow-bg");
+// const $popperContentBg = cssVar("popper-content-bg");
 
 export const globalTheme = extendTheme({
   // Global style
@@ -50,11 +51,16 @@ export const globalTheme = extendTheme({
         [$arrowBg.variable]: "colors.darkMain.50",
       },
     },
-    PopoverContent: {
-      baseStyle: {
-        bgColor: "yellow",
-      },
-    },
+    // Popover: {
+    //   baseStyle: {
+    //     [$popperContentBg.variable]: "colors.darkMain.50",
+    //   },
+    // },
+    // PopoverContent: {
+    //   baseStyle: {
+    //     bgColor: "yellow",
+    //   },
+    // },
   },
 
   // colors

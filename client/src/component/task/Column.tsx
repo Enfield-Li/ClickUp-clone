@@ -16,18 +16,18 @@ import {
 type Props = {
   state: State;
   sortBy: SortBy;
+  tasks?: TaskList;
   setState: SetState;
   currentColumn: UndeterminedColumn;
   dueDateColumns: DueDateColumns;
-  tasks?: TaskList;
 };
 
 export default function Column({
   state,
-  setState,
-  currentColumn,
   tasks,
   sortBy,
+  setState,
+  currentColumn,
   dueDateColumns,
 }: Props) {
   const finishedColumnInStatus = sortBy === STATUS && currentColumn.id === 3;
@@ -53,7 +53,7 @@ export default function Column({
             minHeight="100px"
             ref={provided.innerRef}
             {...provided.droppableProps}
-            _hover={{ overflow: "auto" }}
+            _hover={{ overflowY: "auto", overflowX: "hidden" }}
           >
             {/* Task list */}
             {tasks?.map((task, index) => (
@@ -61,7 +61,6 @@ export default function Column({
                 task={task}
                 key={task.id}
                 index={index}
-                sortBy={sortBy}
                 setState={setState}
               />
             ))}

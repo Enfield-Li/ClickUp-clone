@@ -25,13 +25,14 @@ export default function SelectPriorityPopover({
   children: flagIcon,
   currentTaskPriority,
 }: Props) {
-  const noPriority = task?.priority === 1;
-  const isTaskFinished = task?.priority === 0;
+  const noPriority = task.priority === 1;
+  const taskFinished = task.priority === 0;
+  const hasPriority = !noPriority && !taskFinished;
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
     // https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805
-    <Popover>
+    <Popover placement="right">
       {({ onClose: onOptionClose }) => (
         <>
           <Tooltip
@@ -39,9 +40,10 @@ export default function SelectPriorityPopover({
             hasArrow
             placement="top"
             label={
-              noPriority && isTaskFinished
+              !hasPriority
                 ? "Set priority"
-                : capitalizeFirstLetter(currentTaskPriority!.title)
+                : currentTaskPriority &&
+                  capitalizeFirstLetter(currentTaskPriority.title)
             }
             fontWeight="semibold"
           >
