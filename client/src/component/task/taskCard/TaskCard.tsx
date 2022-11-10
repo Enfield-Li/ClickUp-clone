@@ -3,7 +3,7 @@ import { Draggable } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, Task } from "../../../types";
+import { SetState, STATUS, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
 import RightClickPopover from "./RightClickPopover";
 import SetTaskAttribute from "./SetTaskAttribute";
@@ -20,11 +20,16 @@ type Props = {
 export default function TaskCard({ task, index, setState }: Props) {
   const navigate = useNavigate();
   const [showAddSubTask, setShowAddSubTask] = useState(true);
-  const [showSubTask, setShowSubTask] = useState(true);
+  const [showSubTask, setShowSubTask] = useState(false);
 
   const { colorMode } = useColorMode();
-  const { onModalOpen, setTask } = useTaskDetailContext();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
+
+  const { onModalOpen, setTask, taskStateContext } = useTaskDetailContext();
+  const { columnOptions, sortBy } = taskStateContext!;
+  const currentStatus = columnOptions.status.find(
+    (statusColumn) => statusColumn.id === task.status
+  );
 
   const noPriority = task.priority === 1;
   const taskFinished = task.priority === 0;
@@ -46,26 +51,26 @@ export default function TaskCard({ task, index, setState }: Props) {
       {(provided, snapshot) => (
         <RightClickPopover>
           <Flex
+            mt={3}
             width="full"
             boxShadow="md"
             flexDir="column"
+            borderTopRadius="sm"
             bgColor={cardBgColor}
             ref={provided.innerRef}
+            mb={showSubTask ? 0 : 3}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             onClick={handleOpenTaskModal}
             justifyContent="space-between"
-            mt={3}
-            borderTopRadius="sm"
-            mb={showSubTask ? 0 : 3}
+            borderLeftColor={currentStatus?.color}
             height={expandCardHeight ? "110px" : "80px"}
-            borderBottomRadius={showSubTask ? undefined : "sm"}
-            border={colorMode === "dark" ? "1px solid darkMain.300" : undefined}
+            borderLeftWidth={sortBy !== STATUS ? "3px" : ""}
+            borderBottomRadius={showSubTask ? "" : "sm"}
+            border={colorMode === "dark" ? "1px solid darkMain.300" : ""}
             _hover={{
               bgColor:
-                colorMode === "dark" && !showAddSubTask
-                  ? "darkMain.100"
-                  : undefined,
+                colorMode === "dark" && !showAddSubTask ? "darkMain.100" : "",
             }}
           >
             <Flex
@@ -107,7 +112,8 @@ export default function TaskCard({ task, index, setState }: Props) {
             )}
           </Flex>
 
-          {showSubTask && (
+          {/* Subtask list */}
+          {showSubTask && !snapshot.isDragging && (
             <Box width="full" borderBottomRadius="sm">
               <SubTaskList task={task} />
             </Box>

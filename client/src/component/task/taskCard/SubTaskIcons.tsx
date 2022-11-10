@@ -1,4 +1,4 @@
-import { Center, Tooltip } from "@chakra-ui/react";
+import { Box, Center, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, StatusColumn, Task } from "../../../types";
@@ -44,22 +44,30 @@ export default function SubTaskIcons({ task, setShowSubTask }: Props) {
 
   return (
     <Center>
-      {statusTaskList.map((statusTask) => (
-        <Tooltip px={2} placement="top" label={statusTask.name}>
-          <Center
-            mr={1}
-            mt="2px"
-            width="16px"
-            rounded="sm"
-            height="16px"
-            color="black"
-            fontStyle="bold"
-            bgColor={statusTask.color}
-            onClick={(e) => setShowSubTask((prev) => !prev)}
+      {statusTaskList.map((statusTask, index) => (
+        <Box key={index}>
+          <Tooltip
+            px={2}
+            placement="top"
+            fontWeight="bold"
+            label={statusTask.name}
           >
-            {statusTask.amount}
-          </Center>
-        </Tooltip>
+            <Center
+              mr={1}
+              mt="2px"
+              pb="1.5px"
+              width="16px"
+              rounded="sm"
+              height="16px"
+              color="white"
+              fontWeight="bold"
+              bgColor={statusTask.color}
+              onClick={(e) => setShowSubTask((prev) => !prev)}
+            >
+              {statusTask.amount}
+            </Center>
+          </Tooltip>
+        </Box>
       ))}
     </Center>
   );

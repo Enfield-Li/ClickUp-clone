@@ -26,6 +26,10 @@ export default function SubTaskList({ task }: Props) {
         const hasPriority = !noPriority && !taskFinished;
         const hasDueDate = subTask.expectedDueDate;
 
+        const currentTaskStatus = columnOptions.status.find(
+          (statusColumn) => statusColumn.id === subTask.status
+        );
+
         const currentTaskPriority = columnOptions.priority.find(
           (priority) => priority.id === subTask.priority
         );
@@ -33,16 +37,20 @@ export default function SubTaskList({ task }: Props) {
 
         return (
           <Box
-            pt={1}
+            pt={2}
             px={3}
             height="65px"
             cursor="pointer"
             key={subTask.id}
+            borderLeft="2px solid"
+            borderLeftColor={currentTaskStatus?.color}
             borderTop="1px solid rgb(128, 128, 128, 0.55)"
           >
             <Flex height="100%" flexDir="column" justifyContent="space-between">
               <Flex alignItems="center">
-                <Box mr={1}>{subTask.title}</Box>
+                <Box mr={1} fontSize="sm" fontStyle="bold">
+                  {subTask.title}
+                </Box>
 
                 <Tooltip
                   p={3}
@@ -54,7 +62,7 @@ export default function SubTaskList({ task }: Props) {
                   <Center
                     width="16px"
                     height="16px"
-                    fontSize="15px"
+                    fontSize="13px"
                     opacity="70%"
                     _hover={{
                       bgColor: "darkMain.300",
@@ -65,7 +73,7 @@ export default function SubTaskList({ task }: Props) {
                 </Tooltip>
               </Flex>
 
-              <Flex fontSize="small" mb={2}>
+              <Flex fontSize="12px" mb={2}>
                 {/* Priority */}
                 {hasPriority && sortBy !== "priority" && (
                   <Box
@@ -77,7 +85,7 @@ export default function SubTaskList({ task }: Props) {
                       task={subTask}
                       currentTaskPriority={currentTaskPriority}
                     >
-                      <Box fontSize="13px">
+                      <Box>
                         <i className="bi bi-flag-fill"></i>
                       </Box>
                     </SelectPriorityPopover>
@@ -95,7 +103,7 @@ export default function SubTaskList({ task }: Props) {
                       <Box onClick={(e) => e.stopPropagation()}>
                         <SelectDueDateIcon task={subTask}>
                           <Center opacity="55%" _hover={{ opacity: "100%" }}>
-                            <Center fontSize="13px">
+                            <Center>
                               <i className="bi bi-calendar2-check"></i>
                             </Center>
                           </Center>

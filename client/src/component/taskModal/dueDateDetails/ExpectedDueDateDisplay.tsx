@@ -15,9 +15,9 @@ import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext, {
   updateTaskPriorityOrDueDate,
 } from "../../../context/task_detail/useTaskDetailContext";
+import { DUE_DATE, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
-import { DUE_DATE, SetState, SortBy, Task, UpdateEvent } from "../../../types";
 import DueDateSwitch from "./DueDateSwitch";
 
 type Props = {
@@ -72,6 +72,8 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
   return (
     <Flex
       cursor="pointer"
+      alignItems="center"
+      justifyContent="center"
       _hover={{ textDecoration: "underline" }}
       onMouseOverCapture={() => setShowDeleteButton(true)}
       onMouseOutCapture={() => setShowDeleteButton(false)}
@@ -123,13 +125,16 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
       {/* Delete button */}
       {showDeleteButton && (
         <Center
-          p={1}
-          color="red"
-          opacity="65%"
-          fontSize="8px"
+          ml={1}
+          width="12px"
+          height="12px"
+          rounded="full"
+          bgColor="customBlue.200"
           onClick={() => clearDueDate()}
         >
-          <i className="bi bi-x-circle-fill"></i>
+          <Center fontWeight="extrabold" color="white">
+            <i className="bi bi-x"></i>
+          </Center>
         </Center>
       )}
     </Flex>

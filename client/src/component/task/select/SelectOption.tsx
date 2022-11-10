@@ -34,7 +34,9 @@ export default function SelectOption({
         </Box>
 
         {/* Option name */}
-        <Box fontSize="smaller">{optionName}</Box>
+        <Box fontSize="smaller" fontWeight="bold">
+          {optionName}
+        </Box>
       </Flex>
     </Box>
   );

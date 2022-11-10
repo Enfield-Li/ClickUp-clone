@@ -102,7 +102,9 @@ export default function SelectStatusIcons({}: Props) {
               >
                 {/* Choose status */}
                 <PopoverTrigger>
-                  <Box color="darkMain.200">{column?.title}</Box>
+                  <Box color="white" fontWeight="bold">
+                    {column?.title}
+                  </Box>
                 </PopoverTrigger>
 
                 {/* Status option */}
