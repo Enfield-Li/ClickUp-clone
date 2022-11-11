@@ -13,6 +13,7 @@ import {
   TaskList,
   UpdateTasksPositionDTO,
 } from "../../types";
+import { getNewEventDTO } from "../../utils/createNewEvent";
 import { TaskDetailContext } from "./TaskDetailContext";
 
 export default function useTaskDetailContext() {
@@ -158,14 +159,12 @@ export function updateCurrentTaskStatus(
             destinationColumn?.taskList.push(sourceTask);
           }
 
-          sourceTask.taskEvents = [
-            {
-              taskId: sourceTask.id!,
-              field: STATUS,
-              afterUpdate: String(targetStatusColumnId),
-              beforeUpdate: String(currentColumnId),
-            },
-          ];
+          sourceTask.taskEvents = getNewEventDTO(
+            sourceTask.id!,
+            STATUS,
+            targetStatusColumnId,
+            currentColumnId
+          );
 
           taskListForUpdate.push(sourceTask);
 
@@ -261,14 +260,13 @@ export function updateTaskPriorityOrDueDate(
           }
 
           // Init taskEvents
-          sourceTask.taskEvents = [
-            {
-              taskId: sourceTask.id!,
-              field: targetColumnKey,
-              beforeUpdate: String(currentTask[targetColumnKey]),
-              afterUpdate: String(targetColumnId),
-            },
-          ];
+          sourceTask.taskEvents = getNewEventDTO(
+            sourceTask.id!,
+            targetColumnKey,
+            currentTask[targetColumnKey],
+            targetColumnId
+          );
+
           taskListForUpdate.push(sourceTask);
 
           const updateTaskListDTO: UpdateTasksPositionDTO = {

@@ -129,7 +129,8 @@ export interface CommentEvent extends BaseEvent {
   reactions: Reaction[];
 }
 
-export type TaskEvents = (UpdateEvent | CommentEvent | AssignmentEvent)[];
+export type TaskEvent = UpdateEvent | CommentEvent | AssignmentEvent;
+export type TaskEvents = TaskEvent[];
 
 export type Task = {
   id?: number;

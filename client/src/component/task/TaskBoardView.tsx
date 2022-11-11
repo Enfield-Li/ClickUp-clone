@@ -1,14 +1,6 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { useFetchTasks } from "../../hook/useFetch";
-import { API_ENDPOINT } from "../../utils/constant";
-import Column from "./Column";
-import { updateTasksPosition } from "./actions/TaskActions";
-import {
-  processLookColumnId,
-  updatePreviousIdsInColumn,
-} from "./actions/taskProcessing";
 import {
   DUE_DATE,
   LookUpColumnId,
@@ -22,10 +14,15 @@ import {
   TaskList,
   UpdateTasksPositionDTO,
 } from "../../types";
-import AddStatusColumn from "./customeStatusColumn/AddStatusColumn";
-import { getLookUpDueDateTable } from "./actions/columnProcessing";
-import { deepCopy } from "../../utils/deepCopy";
 import { useLocalTasks } from "../../useLocalState/useLocalState";
+import { getNewEventDTO } from "../../utils/createNewEvent";
+import { updateTasksPosition } from "./actions/TaskActions";
+import {
+  processLookColumnId,
+  updatePreviousIdsInColumn,
+} from "./actions/taskProcessing";
+import Column from "./Column";
+import AddStatusColumn from "./customeStatusColumn/AddStatusColumn";
 
 type Props = {
   sortBy: SortBy;
@@ -250,14 +247,12 @@ async function handleDragEnd(
       } else {
         // Override all previous update events
         // So as to keep the event consistent when submitting to server
-        sourceTask.taskEvents = [
-          {
-            taskId: sourceTask.id!,
-            field: sortBy,
-            afterUpdate: String(sourceColumnId),
-            beforeUpdate: String(destinationColumnId),
-          },
-        ];
+        sourceTask.taskEvents = getNewEventDTO(
+          sourceTask.id!,
+          sortBy,
+          sourceColumnId,
+          destinationColumnId
+        );
 
         // Change column
         sourceTask[sortBy] = destinationColumnId;

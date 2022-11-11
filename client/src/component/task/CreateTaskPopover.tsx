@@ -245,6 +245,7 @@ async function submit(
     taskEvents: [],
     watchers: [],
     assignees: [],
+    subTasks: [],
   };
 
   const targetColumn = { dueDate, priority, status };

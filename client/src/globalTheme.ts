@@ -20,9 +20,7 @@ const lightMainBG = "rgb(238, 238, 238)"; // lightMain.100
 const customBlue = "rgb(123, 104, 238)";
 const customHoverBlue = "rgb(91, 67, 234)";
 
-// https://github.com/chakra-ui/chakra-ui/issues/4695#issuecomment-991023319
 const $arrowBg = cssVar("popper-arrow-bg");
-// const $popperContentBg = cssVar("popper-content-bg");
 
 export const globalTheme = extendTheme({
   // Global style
@@ -49,18 +47,17 @@ export const globalTheme = extendTheme({
         bgColor: "darkMain.50",
         color: "lightMain.100",
         [$arrowBg.variable]: "colors.darkMain.50",
+        // https://github.com/chakra-ui/chakra-ui/issues/4695#issuecomment-991023319
       },
     },
-    // Popover: {
-    //   baseStyle: {
-    //     [$popperContentBg.variable]: "colors.darkMain.50",
-    //   },
-    // },
-    // PopoverContent: {
-    //   baseStyle: {
-    //     bgColor: "yellow",
-    //   },
-    // },
+    // https://stackoverflow.com/a/74395392/16648127
+    Popover: {
+      baseStyle: (props: StyleFunctionProps) => ({
+        content: {
+          bgColor: mode("white", "darkMain.100")(props),
+        },
+      }),
+    },
   },
 
   // colors
