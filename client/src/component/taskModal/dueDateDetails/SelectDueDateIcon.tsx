@@ -49,12 +49,15 @@ export default function SelectDueDateIcon({ children, task }: Props) {
           </Tooltip>
 
           {/* DueDate option */}
-          <PopoverContent width="200px" bgColor={popoverContentBgColor}>
+          <PopoverContent
+            width="383px"
+            borderRadius="0px"
+            bgColor={popoverContentBgColor}
+          >
             <PopoverBody shadow={"2xl"} p={0}>
               <DueDateSwitch
                 task={task!}
                 onClose={onClose}
-                isOptionOpen={isOptionOpen}
               />
             </PopoverBody>
           </PopoverContent>

@@ -73,6 +73,7 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
     <Flex
       cursor="pointer"
       alignItems="center"
+      width="fit-content"
       justifyContent="center"
       _hover={{ textDecoration: "underline" }}
       onMouseOverCapture={() => setShowDeleteButton(true)}
@@ -105,7 +106,8 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
 
             {/* DueDate option */}
             <PopoverContent
-              width="200px"
+              width="383px"
+              borderRadius="0px"
               bgColor={popoverContentBg}
               color={popoverContentColor}
             >
@@ -114,7 +116,6 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
                   task={task}
                   setTask={setTask}
                   onClose={onClose}
-                  isOptionOpen={isOptionOpen}
                 />
               </PopoverBody>
             </PopoverContent>

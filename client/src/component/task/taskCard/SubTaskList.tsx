@@ -52,25 +52,27 @@ export default function SubTaskList({ task }: Props) {
                   {subTask.title}
                 </Box>
 
-                <Tooltip
-                  p={3}
-                  width="300px"
-                  height="250px"
-                  placement="right"
-                  label={subTask.description}
-                >
-                  <Center
-                    width="16px"
-                    height="16px"
-                    fontSize="13px"
-                    opacity="70%"
-                    _hover={{
-                      bgColor: "darkMain.300",
-                    }}
+                {subTask.description && (
+                  <Tooltip
+                    p={3}
+                    width="300px"
+                    height="250px"
+                    placement="right"
+                    label={subTask.description}
                   >
-                    <i className="bi bi-justify-left"></i>
-                  </Center>
-                </Tooltip>
+                    <Center
+                      width="16px"
+                      height="16px"
+                      fontSize="13px"
+                      opacity="70%"
+                      _hover={{
+                        bgColor: "darkMain.300",
+                      }}
+                    >
+                      <i className="bi bi-justify-left"></i>
+                    </Center>
+                  </Tooltip>
+                )}
               </Flex>
 
               <Flex fontSize="12px" mb={2}>

@@ -1,4 +1,4 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext, {
@@ -34,8 +34,9 @@ export default function DueDateOptions({
 }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
-    "darkMain.200"
+    "darkMain.300"
   );
+  const bgColor = useColorModeValue("white", "darkMain.200");
 
   const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
@@ -82,22 +83,32 @@ export default function DueDateOptions({
 
   return (
     <>
-      {columnOptions.dueDate.map(
-        (column, index) =>
-          column.title !== "NO DUE DATE" &&
-          column.title !== "FINISHED" && (
-            <Box
-              p={2}
-              pl={4}
+      {columnOptions.dueDate.map((column, index) => {
+        return (
+          column.title !== "FUTURE" &&
+          column.title !== "OVER DUE" &&
+          column.title !== "FINISHED" &&
+          column.title !== "NO DUE DATE" && (
+            <Flex
+              py={2}
+              px={3}
               key={index}
+              width="130px"
+              fontSize="13px"
               cursor="pointer"
+              bgColor={bgColor}
+              justifyContent="space-between"
               onClick={() => handleSelect(column)}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
-              {capitalizeFirstLetter(column.title.toString())}
-            </Box>
+              <Box>{capitalizeFirstLetter(column.title.toString())}</Box>
+              <Box opacity="60%" fontWeight="semibold">
+                txt
+              </Box>
+            </Flex>
           )
-      )}
+        );
+      })}
     </>
   );
 }

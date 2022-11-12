@@ -144,21 +144,26 @@ export function processLookColumnId(
 
 export function getDueDateFromExpectedDueDateString(
   dueDateColumn: DueDateColumns,
-  inputDateString: string
-) {
-  const targetColumn = dueDateColumn.find(
-    (column) => column.localDateStr === inputDateString
-  );
-  if (targetColumn) return targetColumn?.id;
+  dateInput?: Date
+): number {
+  if (dateInput) {
+    // Due date within this week
+    const targetColumn = dueDateColumn.find(
+      (column) => column.localDateStr === toYYYYMMDDString(dateInput)
+    );
+    if (targetColumn) return targetColumn.id;
 
-  const todayDate = new Date();
-  const oneWeekLater = getNextNWeekDay(6);
-  const inputDate = new Date(inputDateString);
+    // overdue or future
+    const todayDate = new Date();
+    const oneWeekLater = getNextNWeekDay(6);
+    const inputDate = new Date(dateInput);
 
-  if (todayDate > inputDate) return 2; // Overdue
-  if (inputDate > oneWeekLater) return 10; // Future
+    if (todayDate > inputDate) return 2; // Overdue
+    if (inputDate > oneWeekLater) return 10; // Future
+  }
 
-  return 1; // Default No due date
+  // no due date
+  return 1;
 }
 
 // Init taskEvents and convert expectedDueDate to dueDate
@@ -176,13 +181,9 @@ export function processTaskList(
     // if dueDate is undefined, then override it with expectedDueDate
     if (taskCopy.dueDate === undefined) {
       // convert expectedDueDate to dueDate
-      const taskExpectedDueDateString = task.expectedDueDate
-        ? toYYYYMMDDString(task.expectedDueDate)
-        : "";
-
       taskCopy.dueDate = getDueDateFromExpectedDueDateString(
         dueDateColumn,
-        taskExpectedDueDateString
+        task.expectedDueDate
       );
     }
 

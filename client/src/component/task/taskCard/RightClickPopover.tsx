@@ -23,22 +23,20 @@ export default function RightClickPopover({ children }: Props) {
   }
 
   return (
-    <>
-      {/* https://stackoverflow.com/a/31113000/16648127 */}
-      <Popover
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        returnFocusOnClose={false}
-      >
-        <PopoverTrigger>
-          <Box onContextMenu={handleRightClick}>{children}</Box>
-        </PopoverTrigger>
+    <Popover
+      isOpen={isOpen}
+      onClose={onClose}
+      placement="right-start"
+      returnFocusOnClose={false}
+    >
+      <PopoverTrigger>
+        {/* https://stackoverflow.com/a/31113000/16648127 */}
+        <Box onContextMenu={handleRightClick}>{children}</Box>
+      </PopoverTrigger>
 
-        <PopoverContent ml={-6}>
-          <PopoverBody>content body</PopoverBody>
-        </PopoverContent>
-      </Popover>
-    </>
+      <PopoverContent ml={-6}>
+        <PopoverBody>content body</PopoverBody>
+      </PopoverContent>
+    </Popover>
   );
 }

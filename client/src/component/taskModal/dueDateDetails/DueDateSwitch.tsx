@@ -1,57 +1,71 @@
-import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, SortBy, Task } from "../../../types";
+import { Task } from "../../../types";
+import { getMonthAndDay } from "../../../utils/getWeekDays";
+import DatePicker from "./DatePicker";
 import DueDateOptions from "./DueDateOptions";
-import DueDatePicker from "./DueDatePicker";
 
 type Props = {
   task: Task;
   setTask?: SetTask;
   onClose: () => void;
-  isOptionOpen: boolean;
 };
 
-export default function DueDateSwitch({
-  task,
-  setTask,
-  onClose,
-  isOptionOpen,
-}: Props) {
-  const [showDatePicker, setShowDatePicker] = useState(false);
+export default function DueDateSwitch({ task, setTask, onClose }: Props) {
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy } = taskStateContext!;
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
+    task.expectedDueDate
+  );
 
-  useEffect(() => {
-    // Reset to use DueDateOptions
-    setShowDatePicker(false);
-  }, [isOptionOpen]);
+  const borderColor = useColorModeValue("lightMain.200", "darkMain.300");
+  const bgColor = useColorModeValue("white", "darkMain.200");
 
   return (
     <Box>
-      <Box
-        p={2}
-        pl={4}
-        cursor="pointer"
-        borderTopRadius="md"
-        bgColor="darkMain.200"
-        onClick={() => setShowDatePicker(!showDatePicker)}
-      >
-        {showDatePicker ? "Hide " : "Show "} date picker
+      <Box p={2} bgColor={bgColor}>
+        Expected due date: <span> </span>
+        {task.expectedDueDate ? (
+          <>
+            <span style={{ textDecoration: "underline" }}>
+              {getMonthAndDay(task.expectedDueDate)}
+            </span>
+          </>
+        ) : (
+          <span> ____</span>
+        )}
       </Box>
 
-      {showDatePicker ? (
-        <DueDatePicker onClose={onClose} />
-      ) : (
-        <DueDateOptions
-          task={task}
-          sortBy={sortBy}
-          onClose={onClose}
-          setTask={setTask}
-          setState={setState}
-        />
-      )}
+      <Flex>
+        <Box
+          bgColor={bgColor}
+          borderTopWidth="1px"
+          borderRightWidth="1px"
+          borderColor={borderColor}
+        >
+          <DueDateOptions
+            task={task}
+            sortBy={sortBy}
+            onClose={onClose}
+            setTask={setTask}
+            setState={setState}
+          />
+        </Box>
+
+        <Box borderTopWidth="1px" borderColor={borderColor}>
+          <DatePicker
+            task={task}
+            sortBy={sortBy}
+            onClose={onClose}
+            setState={setState}
+            columnOptions={columnOptions}
+            expectedDueDate={expectedDueDate}
+            setExpectedDueDate={setExpectedDueDate}
+          />
+        </Box>
+      </Flex>
     </Box>
   );
 }

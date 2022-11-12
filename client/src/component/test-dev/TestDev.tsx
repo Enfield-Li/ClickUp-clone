@@ -1,55 +1,27 @@
-import { PhoneIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Skeleton,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
-import { HexColorPicker, RgbaColorPicker } from "react-colorful";
+import TextField from "@mui/material/TextField";
+import * as React from "react";
 
-type Props = {};
+import dayjs, { Dayjs } from "dayjs";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import MaterialTheme from "./MaterialTheme";
+import { Box, Flex } from "@chakra-ui/react";
 
-export default function TestDev({}: Props) {
-  function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    e.preventDefault();
-    if (e.nativeEvent.button === 0) {
-      console.log("Left click");
-    } else if (e.nativeEvent.button === 2) {
-      console.log("Right click");
-    }
-  }
+export default function BasicDatePicker() {
+  const [value, setValue] = React.useState<Dayjs | null>(dayjs());
+  console.log(value?.toDate());
 
   return (
-    // https://stackoverflow.com/a/31113000/16648127
-    <Center height="100vh">
-      <Box>
-        <Box
-          //   onClick={(e) => handleRightClick(e)}
-          onContextMenu={(e) => handleRightClick(e)}
-        >
-          Welcome
-        </Box>
-      </Box>
-    </Center>
-  );
+    <Flex bgColor="gray">
+      <Box>abc</Box>
 
-  return (
-    <>
-      {/* {Array(5)
-        .fill(null)
-        .map((column) => (
-          <Box px={3}>
-            <Skeleton>abc</Skeleton>
-          </Box>
-        ))} */}
-    </>
+      <MaterialTheme>
+        <StaticDatePicker
+          value={value}
+          displayStaticWrapperAs="desktop"
+          onChange={(newValue) => setValue(newValue)}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </MaterialTheme>
+    </Flex>
   );
 }
