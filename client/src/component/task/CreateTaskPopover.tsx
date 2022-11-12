@@ -14,6 +14,7 @@ import {
   Select,
   Stack,
   Text,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikHelpers } from "formik";
@@ -69,6 +70,8 @@ export const CreateTaskPopover = ({
   const [showDatePicker, setShowDatePicker] = useState(false);
   const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
 
+  const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
+
   return (
     <Popover
       isOpen={isOpen}
@@ -80,7 +83,13 @@ export const CreateTaskPopover = ({
     >
       {/* Trigger */}
       <PopoverTrigger>
-        <Text color="gray.500" cursor={"pointer"}>
+        <Text
+          px={2}
+          rounded="md"
+          color="gray.500"
+          cursor={"pointer"}
+          _hover={{ bgColor: hoverBgColor }}
+        >
           + NEW TASK
         </Text>
       </PopoverTrigger>
@@ -100,17 +109,7 @@ export const CreateTaskPopover = ({
               priority: "1",
               dueDate: "1",
             }}
-            onSubmit={(values, helpers) =>
-              submit(
-                values,
-                helpers,
-                state,
-                currentColumn,
-                sortBy,
-                setState,
-                isTaskDone
-              )
-            }
+            onSubmit={(values, helpers) => {}}
           >
             {(props) => (
               <Form>
@@ -226,83 +225,83 @@ function validateName(value: string) {
   return error;
 }
 
-async function submit(
-  formValues: NewTask,
-  formikHelpers: FormikHelpers<NewTask>,
-  state: State,
-  column: UndeterminedColumn,
-  sortBy: SortBy,
-  setState: SetState,
-  isTaskDone: boolean
-) {
-  // Prepare newTask
-  const { title, description, dueDate, priority, status } = formValues;
+// async function submit(
+//   formValues: NewTask,
+//   formikHelpers: FormikHelpers<NewTask>,
+//   state: State,
+//   column: UndeterminedColumn,
+//   sortBy: SortBy,
+//   setState: SetState,
+//   isTaskDone: boolean
+// ) {
+//   // Prepare newTask
+//   const { title, description, dueDate, priority, status } = formValues;
 
-  const newTask: Task = {
-    title,
-    description,
-    previousTaskIds: {},
-    taskEvents: [],
-    watchers: [],
-    assignees: [],
-    subTasks: [],
-  };
+//   const newTask: Task = {
+//     title,
+//     description,
+//     previousTaskIds: {},
+//     taskEvents: [],
+//     watchers: [],
+//     assignees: [],
+//     subTasks: [],
+//   };
 
-  const targetColumn = { dueDate, priority, status };
-  // Use date picker
-  if (dueDate && dueDate.length > 1) {
-    newTask.expectedDueDate = new Date(dueDate);
+//   const targetColumn = { dueDate, priority, status };
+//   // Use date picker
+//   if (dueDate && dueDate.length > 1) {
+//     newTask.expectedDueDate = new Date(dueDate);
 
-    const dueDateColumnId = getDueDateFromExpectedDueDateString(
-      state.columnOptions.dueDate,
-      dueDate
-    );
+//     const dueDateColumnId = getDueDateFromExpectedDueDateString(
+//       state.columnOptions.dueDate,
+//       dueDate
+//     );
 
-    targetColumn.dueDate = String(dueDateColumnId);
-  }
+//     targetColumn.dueDate = String(dueDateColumnId);
+//   }
 
-  // Task is finished, hide from other column options
-  if (isTaskDone) {
-    newTask.priority = 0;
-    newTask.dueDate = 0;
-  } else {
-    updatePreviousIdsInColumn(state, targetColumn, newTask);
-  }
+//   // Task is finished, hide from other column options
+//   if (isTaskDone) {
+//     newTask.priority = 0;
+//     newTask.dueDate = 0;
+//   } else {
+//     updatePreviousIdsInColumn(state, targetColumn, newTask);
+//   }
 
-  // Updates for newTask's previousItem for current sortBy
-  const currentOrderedTasks = state.orderedTasks.find(
-    (task) => task.id === column.id
-  );
+//   // Updates for newTask's previousItem for current sortBy
+//   const currentOrderedTasks = state.orderedTasks.find(
+//     (task) => task.id === column.id
+//   );
 
-  const currentTaskList = currentOrderedTasks?.taskList;
-  const currentTaskArrLength = currentTaskList?.length;
+//   const currentTaskList = currentOrderedTasks?.taskList;
+//   const currentTaskArrLength = currentTaskList?.length;
 
-  const previousTaskId = currentTaskArrLength
-    ? currentTaskList?.[currentTaskArrLength - 1].id
-    : undefined;
+//   const previousTaskId = currentTaskArrLength
+//     ? currentTaskList?.[currentTaskArrLength - 1].id
+//     : undefined;
 
-  newTask[sortBy] = column.id;
-  newTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] = previousTaskId;
+//   newTask[sortBy] = column.id;
+//   newTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] = previousTaskId;
 
-  const newTaskData = await createTask(newTask);
+//   const newTaskData = await createTask(newTask);
 
-  // Update state
-  setState((previousState) => {
-    // Deep copy
-    const copiedState = deepCopy(previousState) as State;
+//   // Update state
+//   setState((previousState) => {
+//     // Deep copy
+//     const copiedState = deepCopy(previousState) as State;
 
-    // Push newTask to current column array
-    const taskArr = copiedState.orderedTasks.find(
-      (task) => task.id === column.id
-    );
-    if (newTaskData) {
-      newTaskData.taskEvents = [];
-      taskArr?.taskList.push(newTaskData);
-    }
-    // taskArr?.taskList.push(newTask);
+//     // Push newTask to current column array
+//     const taskArr = copiedState.orderedTasks.find(
+//       (task) => task.id === column.id
+//     );
+//     if (newTaskData) {
+//       newTaskData.taskEvents = [];
+//       taskArr?.taskList.push(newTaskData);
+//     }
+//     // taskArr?.taskList.push(newTask);
 
-    return copiedState;
-  });
+//     return copiedState;
+//   });
 
-  formikHelpers.resetForm();
-}
+//   formikHelpers.resetForm();
+// }

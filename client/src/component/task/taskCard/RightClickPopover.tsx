@@ -14,7 +14,7 @@ import React from "react";
 
 type Props = { children: React.ReactNode };
 
-export default function RightClickPopover({ children }: Props) {
+export default function RightClickShowCardOptions({ children }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -30,7 +30,7 @@ export default function RightClickPopover({ children }: Props) {
       returnFocusOnClose={false}
     >
       <PopoverTrigger>
-        {/* https://stackoverflow.com/a/31113000/16648127 */}
+        {/* Right click: https://stackoverflow.com/a/31113000/16648127 */}
         <Box onContextMenu={handleRightClick}>{children}</Box>
       </PopoverTrigger>
 

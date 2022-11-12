@@ -17,11 +17,13 @@ type Props = {
   setTask?: SetTask;
   children: React.ReactNode;
   currentTaskPriority?: PriorityColumn;
+  setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function SelectPriorityPopover({
   task,
   setTask,
+  setIsPopoverOpen,
   children: flagIcon,
   currentTaskPriority,
 }: Props) {
@@ -32,7 +34,11 @@ export default function SelectPriorityPopover({
 
   return (
     // https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805
-    <Popover placement="right">
+    <Popover
+      placement="bottom"
+      onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
+      onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
+    >
       {({ onClose: onOptionClose }) => (
         <>
           <Tooltip

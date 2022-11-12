@@ -1,11 +1,11 @@
 import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SetState, STATUS, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
-import RightClickPopover from "./RightClickPopover";
+import RightClickShowCardOptions from "./RightClickPopover";
 import SetTaskAttribute from "./SetTaskAttribute";
 import SubTaskList from "./SubTaskList";
 import TaskCardAdditionalInfo from "./TaskCardAdditionalInfo";
@@ -19,8 +19,14 @@ type Props = {
 
 export default function TaskCard({ task, index, setState }: Props) {
   const navigate = useNavigate();
-  const [showAddSubTask, setShowAddSubTask] = useState(true);
   const [showSubTask, setShowSubTask] = useState(false);
+  const [showAddSubTask, setShowAddSubTask] = useState(true);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  // Force to show addSubTask when isPopoverOpen is set to
+  useEffect(() => {
+    if (!isPopoverOpen) setShowAddSubTask(true);
+  }, [isPopoverOpen]);
 
   const { colorMode } = useColorMode();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
@@ -49,7 +55,7 @@ export default function TaskCard({ task, index, setState }: Props) {
   return (
     <Draggable draggableId={String(task.id)} index={index}>
       {(provided, snapshot) => (
-        <RightClickPopover>
+        <RightClickShowCardOptions>
           <Flex
             mt={3}
             width="full"
@@ -75,11 +81,13 @@ export default function TaskCard({ task, index, setState }: Props) {
           >
             <Flex
               p={3}
-              pb="6px"
+              pb="2px"
               flexDir="column"
               justifyContent="space-between"
               height={expandCardHeight ? "110px" : "80px"}
-              onMouseOutCapture={() => setShowAddSubTask(true)}
+              onMouseOutCapture={() =>
+                setShowAddSubTask(isPopoverOpen ? false : true)
+              }
               onMouseOverCapture={() => setShowAddSubTask(false)}
             >
               {/* Task info */}
@@ -100,12 +108,13 @@ export default function TaskCard({ task, index, setState }: Props) {
                   task={task}
                   hasDueDate={hasDueDate}
                   hasPriority={hasPriority}
+                  setIsPopoverOpen={setIsPopoverOpen}
                 />
               )}
             </Flex>
 
             {/* Add subtask */}
-            {showAddSubTask && (
+            {showAddSubTask && !isPopoverOpen && (
               <Box onClick={(e) => e.stopPropagation()}>
                 <AddSubTask task={task} cardBgColor={cardBgColor} />
               </Box>
@@ -118,7 +127,7 @@ export default function TaskCard({ task, index, setState }: Props) {
               <SubTaskList task={task} />
             </Box>
           )}
-        </RightClickPopover>
+        </RightClickShowCardOptions>
       )}
     </Draggable>
   );

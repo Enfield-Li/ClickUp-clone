@@ -13,9 +13,17 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { Task } from "../../../types";
 import DueDateSwitch from "./DueDateSwitch";
 
-type Props = { children: React.ReactNode; task: Task };
+type Props = {
+  task: Task;
+  children: React.ReactNode;
+  setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export default function SelectDueDateIcon({ children, task }: Props) {
+export default function SelectDueDateIcon({
+  task,
+  children,
+  setIsPopoverOpen,
+}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const {
@@ -28,7 +36,11 @@ export default function SelectDueDateIcon({ children, task }: Props) {
   } = useTaskDetailContext();
 
   return (
-    <Popover placement="right">
+    <Popover
+      placement="bottom"
+      onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
+      onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
+    >
       {({ onClose, isOpen: isOptionOpen }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
@@ -55,10 +67,7 @@ export default function SelectDueDateIcon({ children, task }: Props) {
             bgColor={popoverContentBgColor}
           >
             <PopoverBody shadow={"2xl"} p={0}>
-              <DueDateSwitch
-                task={task!}
-                onClose={onClose}
-              />
+              <DueDateSwitch task={task!} onClose={onClose} />
             </PopoverBody>
           </PopoverContent>
         </>

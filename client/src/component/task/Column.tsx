@@ -1,6 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import ColumnHeader from "./customeStatusColumn/ColumnHeader";
+import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import { CreateTaskPopover } from "./CreateTaskPopover";
 import TaskCard from "./taskCard/TaskCard";
 import {
@@ -12,6 +12,7 @@ import {
   TaskList,
   STATUS,
 } from "../../types";
+import { useState } from "react";
 
 type Props = {
   state: State;
@@ -30,7 +31,7 @@ export default function Column({
   currentColumn,
   dueDateColumns,
 }: Props) {
-  const finishedColumnInStatus = sortBy === STATUS && currentColumn.id === 3;
+  const [showCreateTask, setShowCreateTask] = useState(false);
 
   return (
     <Box width="250px" mx={3}>

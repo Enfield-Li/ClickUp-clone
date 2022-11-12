@@ -22,7 +22,7 @@ import {
   updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import Column from "./Column";
-import AddStatusColumn from "./customeStatusColumn/AddStatusColumn";
+import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
 
 type Props = {
   sortBy: SortBy;
