@@ -1,5 +1,5 @@
 import { Flex, Box, Center } from "@chakra-ui/react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
@@ -24,9 +24,11 @@ function TaskCardAdditionalInfo({
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions, sortBy } = taskStateContext!;
 
-  const currentTaskPriority = columnOptions.priority.find(
-    (priority) => priority.id === task!.priority
-  );
+  const currentTaskPriority = useMemo(() => {
+    return columnOptions.priority.find(
+      (priority) => priority.id === task!.priority
+    );
+  }, [columnOptions.priority, task!.priority]);
   const priorityFlagColor = currentTaskPriority?.color;
 
   return (
@@ -39,11 +41,12 @@ function TaskCardAdditionalInfo({
       )}
 
       {/* Priority */}
-      {hasPriority && sortBy !== "priority" && (
+      {hasPriority && (
         <Box
           mr={1}
           color={priorityFlagColor}
           onClick={(e) => e.stopPropagation()}
+          display={sortBy !== "priority" ? "block" : "none"}
         >
           <SelectPriorityPopover
             task={task}
@@ -55,8 +58,11 @@ function TaskCardAdditionalInfo({
       )}
 
       {/* DueDate */}
-      {hasDueDate && sortBy !== "dueDate" && (
-        <Box onClick={(e) => e.stopPropagation()}>
+      {hasDueDate && (
+        <Box
+          onClick={(e) => e.stopPropagation()}
+          display={sortBy !== "dueDate" ? "block" : "none"}
+        >
           <ExpectedDueDateDisplay task={task} />
         </Box>
       )}

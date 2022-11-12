@@ -54,7 +54,7 @@ export const globalTheme = extendTheme({
       baseStyle: (props: StyleFunctionProps) => ({
         content: {
           border: "",
-          shadow: "2xl",
+          shadow: "xl",
           bgColor: mode("white", "darkMain.100")(props),
         },
       }),

@@ -105,14 +105,15 @@ function TaskCard({ task, index, setState }: Props) {
               </Box>
 
               {/* Set task attribute */}
-              {!showAddSubTask && (
+              {/* Hide component and toggle visibility: https://stackoverflow.com/a/69015230/16648127 */}
+              <Box display={showAddSubTask ? "none" : ""}>
                 <SetTaskAttribute
                   task={task}
                   hasDueDate={hasDueDate}
                   hasPriority={hasPriority}
                   setIsPopoverOpen={setIsPopoverOpen}
                 />
-              )}
+              </Box>
             </Flex>
 
             {/* Add subtask */}

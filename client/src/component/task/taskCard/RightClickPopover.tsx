@@ -34,7 +34,7 @@ function RightClickShowCardOptions({ children }: Props) {
         <Box onContextMenu={handleRightClick}>{children}</Box>
       </PopoverTrigger>
 
-      <PopoverContent ml={-6}>
+      <PopoverContent>
         <PopoverBody>content body</PopoverBody>
       </PopoverContent>
     </Popover>
