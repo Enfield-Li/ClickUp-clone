@@ -8,7 +8,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import DueDateSwitch from "./DueDateSwitch";
@@ -19,11 +19,7 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function SelectDueDateIcon({
-  task,
-  children,
-  setIsPopoverOpen,
-}: Props) {
+function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const {
@@ -75,3 +71,4 @@ export default function SelectDueDateIcon({
     </Popover>
   );
 }
+export default memo(SelectDueDateIcon);

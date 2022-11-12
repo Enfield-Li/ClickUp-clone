@@ -9,7 +9,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext, {
@@ -25,7 +25,7 @@ type Props = {
   setTask?: SetTask;
 };
 
-export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
+function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
@@ -141,3 +141,4 @@ export default function ExpectedDueDateDisplay({ task, setTask }: Props) {
     </Flex>
   );
 }
+export default memo(ExpectedDueDateDisplay);

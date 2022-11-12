@@ -17,63 +17,64 @@ export function useLocalTasks(sortBy: SortBy) {
 
   useEffect(() => {
     initLocalState();
+
+    function initLocalState() {
+      setLoading(true);
+      const columnDataFromApi = mockColumnOptions;
+
+      const { dueDateColumns, statusColumns } =
+        processColumns(columnDataFromApi);
+
+      const columnOptions = {
+        ...columnDataFromApi,
+        dueDate: dueDateColumns,
+        status: statusColumns,
+      };
+
+      // init taskEvents and convert expectedDueDate to dueDate
+      const taskList = processTaskList(dueDateColumns, mockTaskList);
+
+      const orderedTasks = groupTaskListOnSortBy(
+        taskList,
+        columnDataFromApi[sortBy],
+        sortBy
+      );
+
+      setTaskStateContext({ columnOptions, setState, sortBy });
+      setState({ orderedTasks, columnOptions });
+
+      setLoading(false);
+    }
   }, []);
 
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
     updateLocalState();
-  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
 
-  function initLocalState() {
-    setLoading(true);
-    const columnDataFromApi = mockColumnOptions;
+    async function updateLocalState() {
+      setLoading(true);
 
-    const { dueDateColumns, statusColumns } = processColumns(columnDataFromApi);
+      if (state && taskStateContext) {
+        setTaskStateContext({
+          ...taskStateContext,
+          sortBy,
+          columnOptions: state.columnOptions,
+        });
 
-    const columnOptions = {
-      ...columnDataFromApi,
-      dueDate: dueDateColumns,
-      status: statusColumns,
-    };
+        setState({
+          ...state,
+          orderedTasks: groupTaskListOnSortBy(
+            collectAllTasks(state.orderedTasks),
+            state.columnOptions[sortBy],
+            sortBy
+          ),
+        });
 
-    // init taskEvents and convert expectedDueDate to dueDate
-    const taskList = processTaskList(dueDateColumns, mockTaskList);
-
-    const orderedTasks = groupTaskListOnSortBy(
-      taskList,
-      columnDataFromApi[sortBy],
-      sortBy
-    );
-
-    setTaskStateContext({ columnOptions, setState, sortBy });
-    setState({ orderedTasks, columnOptions });
-
-    setLoading(false);
-  }
-
-  async function updateLocalState() {
-    setLoading(true);
-
-    if (state && taskStateContext) {
-      setTaskStateContext({
-        ...taskStateContext,
-        sortBy,
-        columnOptions: state.columnOptions,
-      });
-
-      setState({
-        ...state,
-        orderedTasks: groupTaskListOnSortBy(
-          collectAllTasks(state.orderedTasks),
-          state.columnOptions[sortBy],
-          sortBy
-        ),
-      });
-
-      await sleep(0);
-      setLoading(false);
+        await sleep(0);
+        setLoading(false);
+      }
     }
-  }
+  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
 
   return { state, setState, loading };
 }

@@ -1,5 +1,5 @@
 import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { SetState, StatusColumns } from "../../../types";
 import AddStatusColumnInput from "./AddStatusColumnInput";
 import { HexColorPicker } from "react-colorful";
@@ -9,7 +9,7 @@ type Props = {
   statusColumns: StatusColumns;
 };
 
-export default function AddStatusColumn({ setState, statusColumns }: Props) {
+function AddStatusColumn({ setState, statusColumns }: Props) {
   const hoverBgColor = useColorModeValue("white", "darkMain.200");
 
   const [showEdit, setShowEdit] = useState(false);
@@ -57,3 +57,4 @@ export default function AddStatusColumn({ setState, statusColumns }: Props) {
     </>
   );
 }
+export default memo(AddStatusColumn);

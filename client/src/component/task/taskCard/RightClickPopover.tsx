@@ -10,11 +10,11 @@ import {
   Box,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 
 type Props = { children: React.ReactNode };
 
-export default function RightClickShowCardOptions({ children }: Props) {
+function RightClickShowCardOptions({ children }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -40,3 +40,4 @@ export default function RightClickShowCardOptions({ children }: Props) {
     </Popover>
   );
 }
+export default memo(RightClickShowCardOptions);

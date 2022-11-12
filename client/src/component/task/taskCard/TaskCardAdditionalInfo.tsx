@@ -1,4 +1,5 @@
 import { Flex, Box, Center } from "@chakra-ui/react";
+import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
@@ -13,7 +14,7 @@ type Props = {
   setShowSubTask: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function TaskCardAdditionalInfo({
+function TaskCardAdditionalInfo({
   task,
   hasDueDate,
   hasSubTask,
@@ -62,3 +63,4 @@ export default function TaskCardAdditionalInfo({
     </Flex>
   );
 }
+export default memo(TaskCardAdditionalInfo);

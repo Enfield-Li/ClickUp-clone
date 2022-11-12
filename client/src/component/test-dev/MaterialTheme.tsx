@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -14,7 +14,7 @@ import {
 
 type Props = { children: React.ReactNode };
 
-export default function MaterialTheme({ children }: Props) {
+function MaterialTheme({ children }: Props) {
   const { colorMode } = useColorMode();
 
   const theme = createTheme({
@@ -142,3 +142,5 @@ export default function MaterialTheme({ children }: Props) {
     </ThemeProvider>
   );
 }
+
+export default memo(MaterialTheme);

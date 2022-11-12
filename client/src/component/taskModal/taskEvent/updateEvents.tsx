@@ -3,10 +3,11 @@ import useAuthContext from "../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../utils/calculateTime";
 import { UpdateEvent } from "../../../types";
 import BeforeAndAfter from "./BeforeAndAfter";
+import { memo } from "react";
 
 type Props = { updateEvent: UpdateEvent };
 
-export default function UpdateEvents({ updateEvent }: Props) {
+function UpdateEvents({ updateEvent }: Props) {
   const { authState } = useAuthContext();
 
   return (
@@ -56,3 +57,4 @@ export default function UpdateEvents({ updateEvent }: Props) {
     </Flex>
   );
 }
+export default memo(UpdateEvents);

@@ -1,4 +1,5 @@
 import { Flex, Box } from "@chakra-ui/react";
+import { memo } from "react";
 
 type Props = {
   optionName: string;
@@ -8,7 +9,7 @@ type Props = {
   setEditTitle?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function SelectOption({
+function SelectOption({
   onClose,
   optionName,
   setEditTitle,
@@ -41,3 +42,4 @@ export default function SelectOption({
     </Box>
   );
 }
+export default memo(SelectOption);

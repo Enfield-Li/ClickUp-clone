@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SortBy, STATUS } from "../../types";
 import TaskBoardView from "./TaskBoardView";
@@ -10,7 +10,7 @@ import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {};
 
-export default function TaskView({}: Props) {
+function TaskView({}: Props) {
   const navigate = useNavigate();
   const { isModalOpen } = useTaskDetailContext();
   const [sortBy, setSortBy] = useState<SortBy>(STATUS);
@@ -36,3 +36,5 @@ export default function TaskView({}: Props) {
     </Box>
   );
 }
+
+export default memo(TaskView);

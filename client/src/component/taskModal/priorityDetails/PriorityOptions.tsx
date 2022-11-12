@@ -13,6 +13,7 @@ import useTaskDetailContext, {
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { PRIORITY, PriorityColumn, Task, UpdateEvent } from "../../../types";
+import { memo } from "react";
 
 type Props = {
   task: Task;
@@ -20,7 +21,7 @@ type Props = {
   onOptionClose: () => void;
 };
 
-export default function PriorityOptions({
+function PriorityOptions({
   task,
   setTask,
   onOptionClose,
@@ -120,3 +121,4 @@ export default function PriorityOptions({
     </>
   );
 }
+export default memo(PriorityOptions);

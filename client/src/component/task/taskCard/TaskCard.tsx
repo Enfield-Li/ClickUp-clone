@@ -1,6 +1,6 @@
 import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SetState, STATUS, Task } from "../../../types";
@@ -17,7 +17,7 @@ type Props = {
   setState: SetState;
 };
 
-export default function TaskCard({ task, index, setState }: Props) {
+function TaskCard({ task, index, setState }: Props) {
   const navigate = useNavigate();
   const [showSubTask, setShowSubTask] = useState(false);
   const [showAddSubTask, setShowAddSubTask] = useState(true);
@@ -33,9 +33,11 @@ export default function TaskCard({ task, index, setState }: Props) {
 
   const { onModalOpen, setTask, taskStateContext } = useTaskDetailContext();
   const { columnOptions, sortBy } = taskStateContext!;
-  const currentStatus = columnOptions.status.find(
-    (statusColumn) => statusColumn.id === task.status
-  );
+  const currentStatus = useMemo(() => {
+    return columnOptions.status.find(
+      (statusColumn) => statusColumn.id === task.status
+    );
+  }, [columnOptions.status, task.status]);
 
   const noPriority = task.priority === 1;
   const taskFinished = task.priority === 0;
@@ -132,3 +134,4 @@ export default function TaskCard({ task, index, setState }: Props) {
     </Draggable>
   );
 }
+export default memo(TaskCard);

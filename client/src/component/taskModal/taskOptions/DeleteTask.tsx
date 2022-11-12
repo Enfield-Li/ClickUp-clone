@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React from "react";
+import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { CLIENT_ROUTE } from "../../../utils/constant";
@@ -24,7 +24,7 @@ import {
 
 type Props = {};
 
-export default function TaskOptions({}: Props) {
+function TaskOptions({}: Props) {
   const navigate = useNavigate();
   const {
     task,
@@ -136,3 +136,4 @@ export default function TaskOptions({}: Props) {
     </>
   );
 }
+export default memo(TaskOptions);

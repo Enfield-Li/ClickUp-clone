@@ -9,8 +9,9 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
+import FixedNavBar from "./FixedNavBar";
 
 type Props = {
   url: string;
@@ -19,7 +20,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function NavIcon({ url, name, isSelected, children }: Props) {
+function NavIcon({ url, name, isSelected, children }: Props) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -54,3 +55,5 @@ export default function NavIcon({ url, name, isSelected, children }: Props) {
     </Tooltip>
   );
 }
+
+export default memo(NavIcon);

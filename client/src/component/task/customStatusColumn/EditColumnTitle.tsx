@@ -6,7 +6,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { SetState, UndeterminedColumn } from "../../../types";
 
 type Props = {
@@ -15,11 +15,7 @@ type Props = {
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function EditColumnTitle({
-  setState,
-  currentColumn,
-  setEditTitle,
-}: Props) {
+function EditColumnTitle({ setState, currentColumn, setEditTitle }: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
   function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {
@@ -93,3 +89,4 @@ export default function EditColumnTitle({
     </InputGroup>
   );
 }
+export default memo(EditColumnTitle);

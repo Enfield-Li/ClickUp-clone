@@ -6,10 +6,11 @@ import useTaskDetailContext, {
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import SelectOption from "../../task/select/SelectOption";
 import { STATUS, StatusColumn, UpdateEvent } from "../../../types";
+import { memo } from "react";
 
 type Props = { onOptionClose: () => void };
 
-export default function StatusOptions({ onOptionClose }: Props) {
+function StatusOptions({ onOptionClose }: Props) {
   const { authState } = useAuthContext();
   const {
     task,
@@ -73,3 +74,4 @@ export default function StatusOptions({ onOptionClose }: Props) {
     </>
   );
 }
+export default memo(StatusOptions);

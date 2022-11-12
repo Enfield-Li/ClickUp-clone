@@ -1,11 +1,12 @@
 import { Box, Center } from "@chakra-ui/react";
+import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import ExpectedDueDateDisplay from "./ExpectedDueDateDisplay";
 import SelectDueDateIcon from "./SelectDueDateIcon";
 
 type Props = {};
 
-export default function DueDateDetails({}: Props) {
+function DueDateDetails({}: Props) {
   const {
     task,
     setTask,
@@ -44,3 +45,4 @@ export default function DueDateDetails({}: Props) {
     </Box>
   );
 }
+export default memo(DueDateDetails);

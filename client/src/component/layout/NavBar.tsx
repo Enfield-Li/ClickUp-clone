@@ -1,5 +1,5 @@
 import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import FixedNavBar from "./navbar/FixedNavBar";
 import ToggleNavBar from "./navbar/ToggleNavBar";
@@ -7,7 +7,7 @@ import ToggleNavBar from "./navbar/ToggleNavBar";
 type Props = {};
 export type Section = "home" | "tasks" | "dev";
 
-export default function NavBar({}: Props) {
+function NavBar({}: Props) {
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
@@ -63,3 +63,5 @@ export default function NavBar({}: Props) {
     </Flex>
   );
 }
+
+export default memo(NavBar);

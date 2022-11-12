@@ -1,5 +1,6 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Flex, Center, Box, Tooltip } from "@chakra-ui/react";
+import { memo } from "react";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
@@ -16,7 +17,7 @@ type Props = {
   setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function SetTaskAttribute({
+function SetTaskAttribute({
   task,
   hasDueDate,
   hasPriority,
@@ -89,3 +90,4 @@ export default function SetTaskAttribute({
     </Flex>
   );
 }
+export default memo(SetTaskAttribute);

@@ -16,6 +16,7 @@ import {
   Task,
   UpdateEvent,
 } from "../../../types";
+import { memo } from "react";
 
 type Props = {
   task: Task;
@@ -25,13 +26,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function DueDateOptions({
-  task,
-  sortBy,
-  setTask,
-  setState,
-  onClose,
-}: Props) {
+function DueDateOptions({ task, sortBy, setTask, setState, onClose }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
@@ -112,3 +107,5 @@ export default function DueDateOptions({
     </>
   );
 }
+
+export default memo(DueDateOptions);

@@ -14,16 +14,15 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
 import useAuthContext, { loginUser } from "../../context/auth/useAuthContext";
-import { register } from "../../serviceWorker";
 import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {};
 
-export default function Login({}: Props) {
+function Login({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
   const [errors, setErrors] = useState<FieldErrors>();
@@ -105,3 +104,5 @@ export default function Login({}: Props) {
     </Center>
   );
 }
+
+export default memo(Login);

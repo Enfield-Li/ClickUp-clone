@@ -2,10 +2,11 @@ import { Flex, Box } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../utils/calculateTime";
 import { AssignmentEvent } from "../../../types";
+import { memo } from "react";
 
 type Props = { assignmentEvent: AssignmentEvent };
 
-export default function AssignmentEvents({ assignmentEvent }: Props) {
+function AssignmentEvents({ assignmentEvent }: Props) {
   const { authState } = useAuthContext();
   return (
     <Flex justifyContent="space-between" fontSize="small">
@@ -52,3 +53,4 @@ export default function AssignmentEvents({ assignmentEvent }: Props) {
     </Flex>
   );
 }
+export default memo(AssignmentEvents);

@@ -1,8 +1,9 @@
 import { Tooltip } from "@chakra-ui/react";
+import { memo } from "react";
 
 type Props = { children: React.ReactNode };
 
-export default function FinishTask({ children }: Props) {
+function FinishTask({ children }: Props) {
   return (
     <Tooltip
       my={2}
@@ -15,3 +16,4 @@ export default function FinishTask({ children }: Props) {
     </Tooltip>
   );
 }
+export default memo(FinishTask);

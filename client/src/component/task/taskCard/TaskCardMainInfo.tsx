@@ -6,12 +6,12 @@ import {
   useColorModeValue,
   Box,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { Task } from "../../../types";
 
 type Props = { task: Task };
 
-export default function TaskCardMainInfo({ task }: Props) {
+function TaskCardMainInfo({ task }: Props) {
   const headerColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -46,3 +46,4 @@ export default function TaskCardMainInfo({ task }: Props) {
     </Flex>
   );
 }
+export default memo(TaskCardMainInfo);

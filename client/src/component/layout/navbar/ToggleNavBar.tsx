@@ -6,7 +6,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../utils/constant";
 import SubNavbar from "./SubNavbar";
@@ -20,7 +20,7 @@ type Props = {
   setSelectable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function ToggleNavBar({
+function ToggleNavBar({
   isOpen,
   onToggle,
   isExpanded,
@@ -107,3 +107,5 @@ export default function ToggleNavBar({
     </motion.div>
   );
 }
+
+export default memo(ToggleNavBar);

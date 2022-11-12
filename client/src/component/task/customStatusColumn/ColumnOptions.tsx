@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import SelectOption from "../select/SelectOption";
 import { SortBy, STATUS } from "../../../types";
 
@@ -16,11 +16,7 @@ type Props = {
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function ColumnOptions({
-  sortBy,
-  setEditTitle,
-  showColumnOption,
-}: Props) {
+function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const iconHoverBg = useColorModeValue("lightMain.100", "darkMain.300");
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.200");
@@ -47,7 +43,7 @@ export default function ColumnOptions({
                     }}
                   >
                     <Center>
-                      <i className="bi bi-gear"></i>
+                      <i className="bi bi-three-dots"></i>
                     </Center>
                   </Center>
                 </PopoverTrigger>
@@ -78,3 +74,4 @@ export default function ColumnOptions({
     </>
   );
 }
+export default memo(ColumnOptions);

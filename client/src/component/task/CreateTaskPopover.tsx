@@ -18,7 +18,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikHelpers } from "formik";
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
@@ -57,13 +57,13 @@ type Props = {
   dueDateColumns: DueDateColumns;
 };
 
-export const CreateTaskPopover = ({
+function CreateTaskPopover({
   state,
   setState,
   currentColumn,
   sortBy,
   dueDateColumns,
-}: Props) => {
+}: Props) {
   const focusRef = useRef(null);
   const { authState } = useAuthContext();
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -215,7 +215,9 @@ export const CreateTaskPopover = ({
       </PopoverContent>
     </Popover>
   );
-};
+}
+
+export default memo(CreateTaskPopover);
 
 function validateName(value: string) {
   let error;

@@ -15,7 +15,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Credentials,
@@ -26,11 +26,11 @@ import useAuthContext, {
   loginUser,
   registerUser,
 } from "../../context/auth/useAuthContext";
-import { register } from "../../serviceWorker";
 import { CLIENT_ROUTE } from "../../utils/constant";
+
 type Props = {};
 
-export default function Register({}: Props) {
+function Register({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
   const [errors, setErrors] = useState<FieldErrors>();
@@ -111,3 +111,5 @@ export default function Register({}: Props) {
     </Center>
   );
 }
+
+export default memo(Register);

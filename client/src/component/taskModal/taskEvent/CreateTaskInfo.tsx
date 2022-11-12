@@ -1,11 +1,12 @@
 import { Flex, Box, Center } from "@chakra-ui/react";
+import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = {};
 
-export default function TaskCreatorInfo({}: Props) {
+function TaskCreatorInfo({}: Props) {
   const { authState } = useAuthContext();
   const { task } = useTaskDetailContext();
 
@@ -37,3 +38,4 @@ export default function TaskCreatorInfo({}: Props) {
     </Flex>
   );
 }
+export default memo(TaskCreatorInfo);

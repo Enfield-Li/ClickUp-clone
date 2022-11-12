@@ -7,13 +7,13 @@ import {
   PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 
 type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
+function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
   return (
     <Popover
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
@@ -43,3 +43,5 @@ export default function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
     </Popover>
   );
 }
+
+export default memo(ThreeDotShowOptions);

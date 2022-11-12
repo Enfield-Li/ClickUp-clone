@@ -8,6 +8,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import { memo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
@@ -17,7 +18,7 @@ import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {};
 
-export default function Header({}: Props) {
+function Header({}: Props) {
   const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
   const navigate = useNavigate();
@@ -97,3 +98,4 @@ export default function Header({}: Props) {
     </Box>
   );
 }
+export default memo(Header);

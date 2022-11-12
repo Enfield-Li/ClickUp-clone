@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers";
+import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { updateTaskPriorityOrDueDate } from "../../../context/task_detail/useTaskDetailContext";
@@ -26,7 +27,7 @@ type Props = {
   setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-export default function DatePicker({
+function DatePicker({
   task,
   sortBy,
   setState,
@@ -64,6 +65,8 @@ export default function DatePicker({
     </Box>
   );
 }
+
+export default memo(DatePicker);
 
 function handleDatePicker(
   task: Task,

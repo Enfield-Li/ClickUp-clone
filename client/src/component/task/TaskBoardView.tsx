@@ -1,6 +1,7 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
+import { memo, useCallback } from "react";
 import {
   DUE_DATE,
   LookUpColumnId,
@@ -28,10 +29,17 @@ type Props = {
   sortBy: SortBy;
 };
 
-export default function TaskBoardView({ sortBy }: Props) {
+function TaskBoardView({ sortBy }: Props) {
   //   const { state, loading, error, setState } = useFetchTasks(sortBy);
   const { state, loading, setState } = useLocalTasks(sortBy);
   console.log(state);
+
+  const memHandleDragEnd = useCallback(
+    (result: DropResult, state: State) => {
+      handleDragEnd(result, state, setState, sortBy);
+    },
+    [state, sortBy]
+  );
 
   if (!state || loading)
     return (
@@ -44,9 +52,7 @@ export default function TaskBoardView({ sortBy }: Props) {
 
   return (
     <Box px={6} overflowY={"auto"} mr={3}>
-      <DragDropContext
-        onDragEnd={(result) => handleDragEnd(result, state, setState, sortBy)}
-      >
+      <DragDropContext onDragEnd={(result) => memHandleDragEnd(result, state)}>
         <Flex>
           {/* Columns and tasks */}
           {currentColumns.map((currentColumn, index) => {
@@ -87,6 +93,8 @@ export default function TaskBoardView({ sortBy }: Props) {
     </Box>
   );
 }
+
+export default memo(TaskBoardView);
 
 async function handleDragEnd(
   result: DropResult,

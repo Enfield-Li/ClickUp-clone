@@ -1,4 +1,5 @@
 import { Center, Box } from "@chakra-ui/react";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../utils/constant";
 import { Section } from "../NavBar";
@@ -13,7 +14,7 @@ type Props = {
   setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
-export default function FixedNavBar({
+function FixedNavBar({
   onOpen,
   isExpanded,
   setIsExpanded,
@@ -92,3 +93,5 @@ export default function FixedNavBar({
     </Box>
   );
 }
+
+export default memo(FixedNavBar);

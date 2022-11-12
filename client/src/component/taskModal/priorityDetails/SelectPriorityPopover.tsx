@@ -11,6 +11,7 @@ import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { PriorityColumn, Task } from "../../../types";
 import PriorityOptions from "./PriorityOptions";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
+import { memo } from "react";
 
 type Props = {
   task: Task;
@@ -20,7 +21,7 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function SelectPriorityPopover({
+function SelectPriorityPopover({
   task,
   setTask,
   setIsPopoverOpen,
@@ -72,3 +73,4 @@ export default function SelectPriorityPopover({
     </Popover>
   );
 }
+export default memo(SelectPriorityPopover);

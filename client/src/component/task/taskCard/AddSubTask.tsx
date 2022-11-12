@@ -1,10 +1,10 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { Task } from "../../../types";
 
 type Props = { task: Task; cardBgColor: "white" | "darkMain.200" };
 
-export default function AddSubTask({ task, cardBgColor }: Props) {
+function AddSubTask({ task, cardBgColor }: Props) {
   const addSubTaskBgColor = useColorModeValue("lightMain.100", "darkMain.500");
 
   return (
@@ -29,3 +29,5 @@ export default function AddSubTask({ task, cardBgColor }: Props) {
     </Box>
   );
 }
+
+export default memo(AddSubTask);

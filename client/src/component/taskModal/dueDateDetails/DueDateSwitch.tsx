@@ -1,5 +1,5 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
@@ -13,7 +13,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function DueDateSwitch({ task, setTask, onClose }: Props) {
+function DueDateSwitch({ task, setTask, onClose }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
   const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
@@ -69,3 +69,5 @@ export default function DueDateSwitch({ task, setTask, onClose }: Props) {
     </Box>
   );
 }
+
+export default memo(DueDateSwitch);

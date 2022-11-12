@@ -10,7 +10,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext, {
   updateCurrentTaskStatus,
@@ -23,7 +23,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 
 type Props = {};
 
-export default function SelectStatusIcons({}: Props) {
+function SelectStatusIcons({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const { authState } = useAuthContext();
@@ -178,3 +178,4 @@ export default function SelectStatusIcons({}: Props) {
     </Center>
   );
 }
+export default memo(SelectStatusIcons);

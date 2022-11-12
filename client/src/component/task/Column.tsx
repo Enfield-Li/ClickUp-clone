@@ -1,7 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import ColumnHeader from "./customStatusColumn/ColumnHeader";
-import { CreateTaskPopover } from "./CreateTaskPopover";
 import TaskCard from "./taskCard/TaskCard";
 import {
   UndeterminedColumn,
@@ -12,7 +11,8 @@ import {
   TaskList,
   STATUS,
 } from "../../types";
-import { useState } from "react";
+import { memo, useState } from "react";
+import CreateTaskPopover from "./CreateTaskPopover";
 
 type Props = {
   state: State;
@@ -23,7 +23,7 @@ type Props = {
   dueDateColumns: DueDateColumns;
 };
 
-export default function Column({
+function Column({
   state,
   tasks,
   sortBy,
@@ -83,3 +83,5 @@ export default function Column({
     </Box>
   );
 }
+
+export default memo(Column);

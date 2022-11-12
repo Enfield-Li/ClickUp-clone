@@ -5,6 +5,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
@@ -13,7 +14,7 @@ import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorit
 
 type Props = { task: Task };
 
-export default function SubTaskList({ task }: Props) {
+function SubTaskList({ task }: Props) {
   const cardBgColor = useColorModeValue("white", "darkMain.200");
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions, sortBy } = taskStateContext!;
@@ -122,3 +123,4 @@ export default function SubTaskList({ task }: Props) {
     </Box>
   );
 }
+export default memo(SubTaskList);

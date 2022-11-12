@@ -1,5 +1,5 @@
 import { Box, Center, Tooltip } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, StatusColumn, Task } from "../../../types";
 
@@ -9,7 +9,7 @@ type Props = {
 };
 type StatusTask = { id: number; color: string; amount: number; name: string };
 
-export default function SubTaskIcons({ task, setShowSubTask }: Props) {
+function SubTaskIcons({ task, setShowSubTask }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
@@ -72,3 +72,4 @@ export default function SubTaskIcons({ task, setShowSubTask }: Props) {
     </Center>
   );
 }
+export default memo(SubTaskIcons);

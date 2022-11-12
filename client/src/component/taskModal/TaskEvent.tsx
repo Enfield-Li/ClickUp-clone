@@ -1,5 +1,5 @@
 import { Box, Center, Divider, Flex, Spinner } from "@chakra-ui/react";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
 import { fetchTaskEvents } from "../task/actions/TaskActions";
@@ -12,7 +12,7 @@ import UpdateEvents from "./taskEvent/updateEvents";
 
 type Props = {};
 
-export default function TaskEvent({}: Props) {
+function TaskEvent({}: Props) {
   const { task, setTask } = useTaskDetailContext();
   const [loadingTaskEvents, setLoadingTaskEvents] = useState<boolean>();
 
@@ -96,3 +96,4 @@ export default function TaskEvent({}: Props) {
     </Box>
   );
 }
+export default memo(TaskEvent);

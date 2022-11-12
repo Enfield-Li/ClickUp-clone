@@ -1,11 +1,11 @@
 import { Box, Tooltip } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { toYYYYMMDDString } from "../../utils/getWeekDays";
 
 type Props = {};
 
-export default function TaskCreationInfo({}: Props) {
+function TaskCreationInfo({}: Props) {
   const { task } = useTaskDetailContext();
 
   return (
@@ -30,3 +30,4 @@ export default function TaskCreationInfo({}: Props) {
     </Tooltip>
   );
 }
+export default memo(TaskCreationInfo);

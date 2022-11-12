@@ -6,7 +6,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { getRandomNumber } from "../../../utils/getRandomNumber";
 import { StatusColumns, SetState, StatusColumn } from "../../../types";
 
@@ -17,7 +17,7 @@ type Props = {
   setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function AddStatusColumnInput({
+function AddStatusColumnInput({
   color,
   setState,
   setShowEdit,
@@ -112,3 +112,4 @@ export default function AddStatusColumnInput({
     </InputGroup>
   );
 }
+export default memo(AddStatusColumnInput);

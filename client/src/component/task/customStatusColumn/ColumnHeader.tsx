@@ -1,5 +1,5 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { SetState, SortBy, UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
@@ -13,7 +13,7 @@ type Props = {
   currentColumn?: UndeterminedColumn;
 };
 
-export default function ColumnHeader({
+function ColumnHeader({
   sortBy,
   title,
   setState,
@@ -93,3 +93,4 @@ export default function ColumnHeader({
     </Box>
   );
 }
+export default memo(ColumnHeader);

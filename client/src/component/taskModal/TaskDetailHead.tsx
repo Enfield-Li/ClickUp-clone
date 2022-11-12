@@ -6,7 +6,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { useState } from "react";
+import { memo, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
@@ -15,7 +15,7 @@ import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../../types";
 
 type Props = {};
 
-export default function TaskDetailHead({}: Props) {
+function TaskDetailHead({}: Props) {
   const { authState } = useAuthContext();
   const [showEditIcon, setShowEditIcon] = useState(true);
 
@@ -64,7 +64,7 @@ export default function TaskDetailHead({}: Props) {
   );
 }
 
-export async function updateTitle(
+async function updateTitle(
   userId: number,
   taskId: number,
   newTitle: string,
@@ -107,3 +107,4 @@ export async function updateTitle(
     });
   }
 }
+export default memo(TaskDetailHead);

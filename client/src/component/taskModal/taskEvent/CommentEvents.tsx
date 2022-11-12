@@ -2,10 +2,11 @@ import { Box, Center, Flex } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { calculateTime } from "../../../utils/calculateTime";
 import { CommentEvent } from "../../../types";
+import { memo } from "react";
 
 type Props = { commentEvent: CommentEvent };
 
-export default function CommentEvents({ commentEvent }: Props) {
+function CommentEvents({ commentEvent }: Props) {
   const { authState } = useAuthContext();
 
   return (
@@ -59,3 +60,4 @@ export default function CommentEvents({ commentEvent }: Props) {
     </Flex>
   );
 }
+export default memo(CommentEvents);

@@ -20,10 +20,11 @@ import {
 import SelectPriorityIcon from "./priorityDetails/SelectPriorityIcon";
 import SelectStatusIcons from "./statusDetails/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";
+import { memo } from "react";
 
 type Props = {};
 
-export default function TaskInfo({}: Props) {
+function TaskInfo({}: Props) {
   const {
     task,
     setTask,
@@ -96,6 +97,7 @@ export default function TaskInfo({}: Props) {
     </Box>
   );
 }
+export default memo(TaskInfo);
 
 export async function updateDescription(
   taskId: number,
