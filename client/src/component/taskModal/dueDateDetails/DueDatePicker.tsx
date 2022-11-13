@@ -4,7 +4,9 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import { updateTaskPriorityOrDueDate } from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext, {
+  updateTaskPriorityOrDueDate,
+} from "../../../context/task_detail/useTaskDetailContext";
 import {
   ColumnOptions,
   DUE_DATE,
@@ -19,54 +21,51 @@ import MaterialTheme from "../../test-dev/MaterialTheme";
 
 type Props = {
   task: Task;
-  sortBy: SortBy;
-  setState: SetState;
+  setTask?: SetTask;
   onClose: () => void;
   expectedDueDate?: Date;
-  columnOptions: ColumnOptions;
   setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-function DatePicker({
+function DueDatePicker({
   task,
-  sortBy,
-  setState,
+  setTask,
   onClose,
-  columnOptions,
   expectedDueDate,
   setExpectedDueDate,
 }: Props) {
   const { authState } = useAuthContext();
+  const { taskStateContext } = useTaskDetailContext();
+  const { setState, sortBy, columnOptions } = taskStateContext!;
 
   return (
-    <Box>
-      <MaterialTheme>
-        <StaticDatePicker
-          value={expectedDueDate}
-          displayStaticWrapperAs="desktop"
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(newValue) => {
-            if (newValue) {
-              setExpectedDueDate(newValue);
+    <MaterialTheme>
+      <StaticDatePicker
+        value={expectedDueDate}
+        displayStaticWrapperAs="desktop"
+        renderInput={(params) => <TextField {...params} />}
+        onChange={(newValue) => {
+          if (newValue) {
+            setExpectedDueDate(newValue);
 
-              handleDatePicker(
-                task,
-                authState.user!.id,
-                sortBy,
-                setState,
-                onClose,
-                columnOptions,
-                newValue
-              );
-            }
-          }}
-        />
-      </MaterialTheme>
-    </Box>
+            handleDatePicker(
+              task,
+              authState.user!.id,
+              sortBy,
+              setState,
+              onClose,
+              columnOptions,
+              newValue,
+              setTask
+            );
+          }
+        }}
+      />
+    </MaterialTheme>
   );
 }
 
-export default memo(DatePicker);
+export default memo(DueDatePicker);
 
 function handleDatePicker(
   task: Task,
@@ -75,17 +74,17 @@ function handleDatePicker(
   setState: SetState,
   onClose: () => void,
   columnOptions: ColumnOptions,
-  expectedDueDate: Date,
+  expectedDueDateInput: Date,
   setTask?: SetTask
 ) {
-  if (expectedDueDate) {
+  if (expectedDueDateInput) {
     const targetDueDateColumnId = getDueDateFromExpectedDueDateString(
       columnOptions.dueDate,
-      expectedDueDate
+      expectedDueDateInput
     );
 
     // Do nothing when it comes to selecting the same day
-    const isSameDay = targetDueDateColumnId === task?.dueDate;
+    const isSameDay = targetDueDateColumnId === task.dueDate;
     if (isSameDay) {
       onClose();
       return;
@@ -98,7 +97,7 @@ function handleDatePicker(
       setState,
       DUE_DATE,
       targetDueDateColumnId,
-      expectedDueDate
+      expectedDueDateInput
     );
 
     const newEvent: UpdateEvent = {
@@ -115,7 +114,7 @@ function handleDatePicker(
     if (setTask) {
       setTask({
         ...task!,
-        expectedDueDate,
+        expectedDueDate: expectedDueDateInput,
         taskEvents: [...task!.taskEvents, newEvent],
       });
     }

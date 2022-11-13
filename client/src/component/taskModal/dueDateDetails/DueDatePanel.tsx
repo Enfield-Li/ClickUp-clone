@@ -4,7 +4,7 @@ import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import { getMonthAndDay } from "../../../utils/getWeekDays";
-import DatePicker from "./DatePicker";
+import DueDatePicker from "./DueDatePicker";
 import DueDateOptions from "./DueDateOptions";
 
 type Props = {
@@ -13,9 +13,7 @@ type Props = {
   onClose: () => void;
 };
 
-function DueDateSwitch({ task, setTask, onClose }: Props) {
-  const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+function DueDatePanel({ task, setTask, onClose }: Props) {
   const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
     task.expectedDueDate
   );
@@ -45,22 +43,14 @@ function DueDateSwitch({ task, setTask, onClose }: Props) {
           borderRightWidth="1px"
           borderColor={borderColor}
         >
-          <DueDateOptions
-            task={task}
-            sortBy={sortBy}
-            onClose={onClose}
-            setTask={setTask}
-            setState={setState}
-          />
+          <DueDateOptions task={task} onClose={onClose} setTask={setTask} />
         </Box>
 
         <Box borderTopWidth="1px" borderColor={borderColor}>
-          <DatePicker
+          <DueDatePicker
             task={task}
-            sortBy={sortBy}
+            setTask={setTask}
             onClose={onClose}
-            setState={setState}
-            columnOptions={columnOptions}
             expectedDueDate={expectedDueDate}
             setExpectedDueDate={setExpectedDueDate}
           />
@@ -70,4 +60,4 @@ function DueDateSwitch({ task, setTask, onClose }: Props) {
   );
 }
 
-export default memo(DueDateSwitch);
+export default memo(DueDatePanel);

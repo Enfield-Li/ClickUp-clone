@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -9,27 +8,24 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { Task } from "../../../types";
-import DueDateSwitch from "./DueDateSwitch";
+import DueDatePanel from "./DueDatePanel";
 
 type Props = {
   task: Task;
+  setTask?: SetTask;
   children: React.ReactNode;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
+function SelectDueDatePopover({
+  task,
+  setTask,
+  children,
+  setIsPopoverOpen,
+}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
-
-  const {
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
 
   return (
     <Popover
@@ -37,7 +33,7 @@ function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
     >
-      {({ onClose, isOpen: isOptionOpen }) => (
+      {({ onClose }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
           <Tooltip
@@ -63,7 +59,7 @@ function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
             bgColor={popoverContentBgColor}
           >
             <PopoverBody shadow={"2xl"} p={0}>
-              <DueDateSwitch task={task!} onClose={onClose} />
+              <DueDatePanel task={task!} setTask={setTask} onClose={onClose} />
             </PopoverBody>
           </PopoverContent>
         </>
@@ -71,4 +67,4 @@ function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
     </Popover>
   );
 }
-export default memo(SelectDueDateIcon);
+export default memo(SelectDueDatePopover);

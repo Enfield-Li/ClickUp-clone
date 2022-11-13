@@ -20,24 +20,21 @@ import { memo } from "react";
 
 type Props = {
   task: Task;
-  sortBy: SortBy;
   setTask?: SetTask;
-  setState: SetState;
   onClose: () => void;
 };
 
-function DueDateOptions({ task, sortBy, setTask, setState, onClose }: Props) {
+function DueDateOptions({ task, setTask, onClose }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
   );
-  const bgColor = useColorModeValue("white", "darkMain.200");
+  const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
-
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions } = taskStateContext!;
+  const { setState, sortBy, columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;

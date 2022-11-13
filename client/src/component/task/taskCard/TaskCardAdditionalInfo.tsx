@@ -29,7 +29,6 @@ function TaskCardAdditionalInfo({
       (priority) => priority.id === task!.priority
     );
   }, [columnOptions.priority, task!.priority]);
-  const priorityFlagColor = currentTaskPriority?.color;
 
   return (
     <Flex fontSize="small">
@@ -44,7 +43,7 @@ function TaskCardAdditionalInfo({
       {hasPriority && (
         <Box
           mr={1}
-          color={priorityFlagColor}
+          color={currentTaskPriority?.color}
           onClick={(e) => e.stopPropagation()}
           display={sortBy !== "priority" ? "block" : "none"}
         >

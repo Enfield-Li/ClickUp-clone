@@ -18,7 +18,7 @@ import useTaskDetailContext, {
 import { DUE_DATE, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
-import DueDateSwitch from "./DueDateSwitch";
+import DueDatePanel from "./DueDatePanel";
 
 type Props = {
   task: Task;
@@ -112,11 +112,7 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
               color={popoverContentColor}
             >
               <PopoverBody shadow={"2xl"} p={0}>
-                <DueDateSwitch
-                  task={task}
-                  setTask={setTask}
-                  onClose={onClose}
-                />
+                <DueDatePanel task={task} setTask={setTask} onClose={onClose} />
               </PopoverBody>
             </PopoverContent>
           </>

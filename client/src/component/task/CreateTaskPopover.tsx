@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Center,
   Flex,
@@ -6,28 +7,14 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
-  Popover,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverTrigger,
   Select,
   Stack,
   Text,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikHelpers } from "formik";
-import { memo, useRef, useState } from "react";
-import FocusLock from "react-focus-lock";
+import { memo, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { deepCopy } from "../../utils/deepCopy";
-import { createTask } from "./actions/TaskActions";
-import {
-  getDueDateFromExpectedDueDateString,
-  updatePreviousIdsInColumn,
-} from "./actions/taskProcessing";
 import {
   DueDateColumns,
   DUE_DATE,
@@ -40,11 +27,17 @@ import {
   Task,
   UndeterminedColumn,
 } from "../../types";
+import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
+import { deepCopy } from "../../utils/deepCopy";
+import { createTask } from "./actions/TaskActions";
+import {
+  getDueDateFromExpectedDueDateString,
+  updatePreviousIdsInColumn,
+} from "./actions/taskProcessing";
 
 export type NewTask = {
   title: string;
   status?: string;
-  description?: string;
   priority?: string;
   dueDate?: string;
 };
@@ -64,156 +57,109 @@ function CreateTaskPopover({
   sortBy,
   dueDateColumns,
 }: Props) {
-  const focusRef = useRef(null);
   const { authState } = useAuthContext();
-  const { onOpen, onClose, isOpen } = useDisclosure();
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
+  const [taskName, setTaskName] = useState("");
+  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
 
+  const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
 
   return (
-    <Popover
-      isOpen={isOpen}
-      initialFocusRef={focusRef}
-      onOpen={onOpen}
-      onClose={onClose}
-      placement="bottom"
-      closeOnBlur={true}
-    >
-      {/* Trigger */}
-      <PopoverTrigger>
+    <>
+      {!showCreateTaskForm ? (
         <Text
           px={2}
           rounded="md"
           color="gray.500"
-          cursor={"pointer"}
+          cursor="pointer"
           _hover={{ bgColor: hoverBgColor }}
+          onClick={() => setShowCreateTaskForm(true)}
         >
           + NEW TASK
         </Text>
-      </PopoverTrigger>
+      ) : (
+        <Box border="1px solid white" rounded="sm" width="250px" p={1} pb={3}>
+          <Flex alignItems="center" mb={4}>
+            <Flex>
+              {/* Close */}
+              <Center opacity="70%" cursor="pointer" p={1}>
+                <i className="bi bi-x"></i>
+              </Center>
 
-      {/* Content */}
-      <PopoverContent p={3}>
-        <FocusLock returnFocus persistentFocus={false}>
-          <PopoverArrow />
-          <PopoverCloseButton />
+              {/* Task name input */}
+              <Center>
+                <Input
+                  mr={2}
+                  height="23px"
+                  value={taskName}
+                  variant="unstyled"
+                  placeholder="Task name"
+                  onChange={(e) => setTaskName(e.target.value)}
+                />
+              </Center>
+            </Flex>
 
-          {/* Form */}
-          <Formik<NewTask>
-            initialValues={{
-              title: "",
-              description: "",
-              status: "1",
-              priority: "1",
-              dueDate: "1",
-            }}
-            onSubmit={(values, helpers) => {}}
-          >
-            {(props) => (
-              <Form>
-                {/* Task title */}
-                <Field id="title" name="title" Required validate={validateName}>
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <FormControl
-                      my={3}
-                      isInvalid={form.errors.title && form.touched.title}
-                    >
-                      <FormLabel>Title:</FormLabel>
-                      <Input {...field} />
-                      <FormErrorMessage>{form.errors.title}</FormErrorMessage>
-                    </FormControl>
-                  )}
-                </Field>
+            {/* Assignee */}
+            <Center
+              mr={2}
+              width="23px"
+              height="23px"
+              opacity="75%"
+              rounded="full"
+              cursor="pointer"
+              border="1px solid white"
+            >
+              <i className="bi bi-person"></i>
+            </Center>
+          </Flex>
 
-                {/* Task description */}
-                <Field id="description" name="description">
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <FormControl my={3}>
-                      <FormLabel>Description:</FormLabel>
-                      <Input {...field} />
-                    </FormControl>
-                  )}
-                </Field>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex alignItems="center">
+              {/* Priority */}
+              <Center
+                ml={4}
+                mr={6}
+                width="10px"
+                height="10px"
+                opacity="75%"
+                fontSize="14px"
+                cursor="pointer"
+                borderRadius="50%"
+              >
+                <i className="bi bi-calendar2-check"></i>
+              </Center>
 
-                {/* Task priority */}
-                {sortBy !== PRIORITY && !isTaskDone && (
-                  <Field id={PRIORITY} name={PRIORITY} as="select">
-                    {({ field, form }: FieldAttributes<any>) => (
-                      <FormControl my={3}>
-                        <Stack spacing={3}>
-                          <Select {...field}>
-                            {state.columnOptions.priority.map((priority) => (
-                              <option value={priority.id} key={priority.id}>
-                                {capitalizeFirstLetter(priority.title)}
-                              </option>
-                            ))}
-                          </Select>
-                        </Stack>
-                      </FormControl>
-                    )}
-                  </Field>
-                )}
+              {/* DueDate */}
+              <Center
+                width="10px"
+                height="10px"
+                opacity="75%"
+                fontSize="14px"
+                cursor="pointer"
+                borderRadius="50%"
+              >
+                <i className="bi bi-flag"></i>
+              </Center>
+            </Flex>
 
-                {/* Task dueDate */}
-                {sortBy !== DUE_DATE && !isTaskDone && (
-                  <Field id={DUE_DATE} name={DUE_DATE} as="select">
-                    {({ field, form }: FieldAttributes<any>) => (
-                      <FormControl my={3}>
-                        {/* Pick dueDate */}
-                        <Flex justifyContent={"space-between"}>
-                          {showDatePicker ? (
-                            // Date picker
-                            <Input
-                              {...field}
-                              width="60%"
-                              type="datetime-local"
-                            />
-                          ) : (
-                            // Days select
-                            <Select {...field} width="60%">
-                              {dueDateColumns.map((dueDate) => (
-                                <option value={dueDate.id} key={dueDate.id}>
-                                  {capitalizeFirstLetter(dueDate.title)}
-                                </option>
-                              ))}
-                            </Select>
-                          )}
-
-                          {/* Toggle show pick day/date */}
-                          <Center>
-                            <Text
-                              fontSize="xs"
-                              color="blue.300"
-                              cursor="pointer"
-                              onClick={() => setShowDatePicker(!showDatePicker)}
-                            >
-                              {showDatePicker ? "Hide" : "Show"} date picker
-                            </Text>
-                          </Center>
-                        </Flex>
-                      </FormControl>
-                    )}
-                  </Field>
-                )}
-
-                <Button
-                  width={"100%"}
-                  mt={3}
-                  colorScheme="teal"
-                  isLoading={props.isSubmitting}
-                  type="submit"
-                  onClick={onClose}
-                >
-                  Create task
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </FocusLock>
-      </PopoverContent>
-    </Popover>
+            <Center
+              p={2}
+              mr={2}
+              pb="10px"
+              rounded="sm"
+              width="45px"
+              height="15px"
+              fontSize="12px"
+              cursor="pointer"
+              fontWeight="semibold"
+              bgColor="customBlue.50"
+            >
+              SAVE
+            </Center>
+          </Flex>
+        </Box>
+      )}
+    </>
   );
 }
 
@@ -237,11 +183,10 @@ function validateName(value: string) {
 //   isTaskDone: boolean
 // ) {
 //   // Prepare newTask
-//   const { title, description, dueDate, priority, status } = formValues;
+//   const { title, dueDate, priority, status } = formValues;
 
 //   const newTask: Task = {
 //     title,
-//     description,
 //     previousTaskIds: {},
 //     taskEvents: [],
 //     watchers: [],

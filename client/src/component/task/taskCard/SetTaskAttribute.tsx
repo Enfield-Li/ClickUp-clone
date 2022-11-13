@@ -5,7 +5,7 @@ import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
-import SelectDueDateIcon from "../../taskModal/dueDateDetails/SelectDueDateIcon";
+import SelectDueDatePopover from "../../taskModal/dueDateDetails/SelectDueDatePopover";
 import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
 import FinishTask from "../../taskModal/statusDetails/FinishTask";
 import ThreeDotShowOptions from "./ThreeDotShowOptions";
@@ -49,11 +49,14 @@ function SetTaskAttribute({
         {/* Due date */}
         {!hasDueDate && (
           <Box mr={2} onClick={(e) => e.stopPropagation()}>
-            <SelectDueDateIcon task={task} setIsPopoverOpen={setIsPopoverOpen}>
+            <SelectDueDatePopover
+              task={task}
+              setIsPopoverOpen={setIsPopoverOpen}
+            >
               <Box opacity="55%" _hover={{ opacity: "100%" }}>
                 <i className="bi bi-calendar2-check"></i>
               </Box>
-            </SelectDueDateIcon>
+            </SelectDueDatePopover>
           </Box>
         )}
       </Flex>

@@ -12,12 +12,12 @@ function NavBar({}: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
   const [currentSection, setCurrentSection] = useState<Section>("home");
-  const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
-  const { getDisclosureProps, isOpen, onToggle, onClose, onOpen } =
-    useDisclosure({
-      defaultIsOpen: false,
-    });
+
   const fixedNavbarWidth = "55px";
+  const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
+  const { getDisclosureProps, isOpen, onClose, onOpen } = useDisclosure({
+    defaultIsOpen: false,
+  });
 
   // Sync up url with currentSection state after user refresh page
   useEffect(() => {
@@ -52,7 +52,7 @@ function NavBar({}: Props) {
         >
           <ToggleNavBar
             isOpen={isOpen}
-            onToggle={onToggle}
+            onClose={onClose}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
             setSelectable={setSubNavOpenable}

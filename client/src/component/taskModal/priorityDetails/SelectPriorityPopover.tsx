@@ -24,8 +24,8 @@ type Props = {
 function SelectPriorityPopover({
   task,
   setTask,
+  children,
   setIsPopoverOpen,
-  children: flagIcon,
   currentTaskPriority,
 }: Props) {
   const noPriority = task.priority === 1;
@@ -46,16 +46,16 @@ function SelectPriorityPopover({
             my={2}
             hasArrow
             placement="top"
+            fontWeight="semibold"
             label={
               !hasPriority
                 ? "Set priority"
                 : currentTaskPriority &&
                   capitalizeFirstLetter(currentTaskPriority.title)
             }
-            fontWeight="semibold"
           >
             <Box display="inline-block">
-              <PopoverTrigger>{flagIcon}</PopoverTrigger>
+              <PopoverTrigger>{children}</PopoverTrigger>
             </Box>
           </Tooltip>
 

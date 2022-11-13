@@ -1,5 +1,5 @@
 import { Center } from "@chakra-ui/react";
-import React, { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
@@ -12,9 +12,11 @@ function SelectPriorityIcon({ task, setTask }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
-  const currentTaskPriority = columnOptions.priority.find(
-    (priority) => priority.id === task!.priority
-  );
+  const currentTaskPriority = useMemo(() => {
+    return columnOptions.priority.find(
+      (priority) => priority.id === task!.priority
+    );
+  }, [columnOptions.priority, task!.priority]);
   const priorityFlagColor = currentTaskPriority?.color;
   const noPriorityOrTaskFinished = task?.priority === 1 || task?.priority === 0;
 

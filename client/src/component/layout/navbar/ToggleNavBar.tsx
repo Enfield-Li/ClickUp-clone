@@ -14,7 +14,7 @@ import SubNavbar from "./SubNavbar";
 type Props = {
   isOpen: boolean;
   isExpanded: boolean;
-  onToggle: () => void;
+  onClose: () => void;
   getDisclosureProps: (props?: any) => any;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectable: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +22,7 @@ type Props = {
 
 function ToggleNavBar({
   isOpen,
-  onToggle,
+  onClose,
   isExpanded,
   setIsExpanded,
   setSelectable,
@@ -37,7 +37,7 @@ function ToggleNavBar({
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
   function handleCloseSubNavbar() {
-    onToggle();
+    onClose();
     setIsExpanded(false);
     setSelectable(false);
 

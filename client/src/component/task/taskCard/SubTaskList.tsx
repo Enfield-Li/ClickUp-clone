@@ -3,18 +3,20 @@ import {
   Center,
   Flex,
   Tooltip,
+  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import SelectDueDateIcon from "../../taskModal/dueDateDetails/SelectDueDateIcon";
+import SelectDueDatePopover from "../../taskModal/dueDateDetails/SelectDueDatePopover";
 import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
 
 type Props = { task: Task };
 
 function SubTaskList({ task }: Props) {
+  const { colorMode } = useColorMode();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions, sortBy } = taskStateContext!;
@@ -46,6 +48,9 @@ function SubTaskList({ task }: Props) {
             borderLeft="2px solid"
             borderLeftColor={currentTaskStatus?.color}
             borderTop="1px solid rgb(128, 128, 128, 0.55)"
+            _hover={{
+              bgColor: colorMode === "dark" ? "darkMain.100" : "",
+            }}
           >
             <Flex height="100%" flexDir="column" justifyContent="space-between">
               <Flex alignItems="center">
@@ -104,13 +109,13 @@ function SubTaskList({ task }: Props) {
                       </Box>
                     ) : (
                       <Box onClick={(e) => e.stopPropagation()}>
-                        <SelectDueDateIcon task={subTask}>
+                        <SelectDueDatePopover task={subTask}>
                           <Center opacity="55%" _hover={{ opacity: "100%" }}>
                             <Center>
                               <i className="bi bi-calendar2-check"></i>
                             </Center>
                           </Center>
-                        </SelectDueDateIcon>
+                        </SelectDueDatePopover>
                       </Box>
                     )}
                   </Box>

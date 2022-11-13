@@ -41,10 +41,10 @@ function FixedNavBar({
         <Center cursor="pointer" onClick={handleOpenSubNavbar}>
           <Center
             mt="76px"
+            zIndex="3"
             width="18px"
             height="18px"
             color="white"
-            zIndex="3"
             rounded="full"
             fontSize="10px"
             position="absolute"
