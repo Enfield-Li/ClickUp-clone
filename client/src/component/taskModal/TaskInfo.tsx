@@ -17,8 +17,8 @@ import {
   UpdateEvent,
   UpdateTaskDescDTO,
 } from "../../types";
-import SelectPriorityIcon from "./priorityDetails/SelectPriorityIcon";
-import SelectStatusIcons from "./statusDetails/SelectStatusIcons";
+import SelectPriorityIcon from "./priority/SelectPriorityIcon";
+import SelectStatusIcons from "./status/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";
 import { memo } from "react";
 

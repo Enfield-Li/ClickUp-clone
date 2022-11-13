@@ -5,9 +5,9 @@ import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
-import SelectDueDatePopover from "../../taskModal/dueDateDetails/SelectDueDatePopover";
-import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
-import FinishTask from "../../taskModal/statusDetails/FinishTask";
+import SelectDueDatePopover from "../../taskModal/dueDate/SelectDueDatePopover";
+import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
+import FinishTask from "../../taskModal/status/FinishTask";
 import ThreeDotShowOptions from "./ThreeDotShowOptions";
 
 type Props = {

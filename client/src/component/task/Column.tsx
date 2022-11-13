@@ -12,7 +12,7 @@ import {
   STATUS,
 } from "../../types";
 import { memo, useState } from "react";
-import CreateTaskPopover from "./CreateTaskPopover";
+import CreateTask from "./createTask/CreateTask";
 
 type Props = {
   state: State;
@@ -69,7 +69,7 @@ function Column({
 
             {/* Create task popover */}
             <Center>
-              <CreateTaskPopover
+              <CreateTask
                 dueDateColumns={dueDateColumns}
                 state={state}
                 setState={setState}

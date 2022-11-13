@@ -2,8 +2,8 @@ import { Flex, Box, Center } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
-import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
+import ExpectedDueDateDisplay from "../../taskModal/dueDate/ExpectedDueDateDisplay";
+import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 import SubTaskIcons from "./SubTaskIcons";
 
 type Props = {

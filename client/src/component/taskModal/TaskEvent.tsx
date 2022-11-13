@@ -3,7 +3,7 @@ import { useRef, useEffect, useState, memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
 import { fetchTaskEvents } from "../task/actions/TaskActions";
-import DueDateDetails from "./dueDateDetails/DueDateDetails";
+import DueDateDetails from "./dueDate/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";
 import CommentEvents from "./taskEvent/CommentEvents";

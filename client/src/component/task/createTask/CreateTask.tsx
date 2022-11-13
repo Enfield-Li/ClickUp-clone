@@ -1,39 +1,23 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Input,
-  Select,
-  Stack,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { Field, FieldAttributes, Form, Formik, FormikHelpers } from "formik";
 import { memo, useState } from "react";
-import useAuthContext from "../../context/auth/useAuthContext";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import {
   DueDateColumns,
-  DUE_DATE,
-  lookUpPreviousTaskId,
-  PRIORITY,
   SetState,
   SortBy,
   State,
   STATUS,
-  Task,
   UndeterminedColumn,
-} from "../../types";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { deepCopy } from "../../utils/deepCopy";
-import { createTask } from "./actions/TaskActions";
-import {
-  getDueDateFromExpectedDueDateString,
-  updatePreviousIdsInColumn,
-} from "./actions/taskProcessing";
+} from "../../../types";
+import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
+import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 
 export type NewTask = {
   title: string;
@@ -50,7 +34,7 @@ type Props = {
   dueDateColumns: DueDateColumns;
 };
 
-function CreateTaskPopover({
+function CreateTask({
   state,
   setState,
   currentColumn,
@@ -60,6 +44,8 @@ function CreateTaskPopover({
   const { authState } = useAuthContext();
   const [taskName, setTaskName] = useState("");
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(null);
+  const [priority, setPriority] = useState<number | null>(null);
 
   const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
@@ -116,7 +102,11 @@ function CreateTaskPopover({
           <Flex justifyContent="space-between" alignItems="center">
             <Flex alignItems="center">
               {/* Priority */}
-              <Center
+              <CreateSelectPriorityIcon
+                priority={priority}
+                setPriority={setPriority}
+              />
+              {/* <Center
                 ml={4}
                 mr={6}
                 width="10px"
@@ -127,10 +117,14 @@ function CreateTaskPopover({
                 borderRadius="50%"
               >
                 <i className="bi bi-calendar2-check"></i>
-              </Center>
+              </Center> */}
 
               {/* DueDate */}
-              <Center
+              <CreateDueDateDetails
+                expectedDueDate={expectedDueDate}
+                setExpectedDueDate={setExpectedDueDate}
+              />
+              {/* <Center
                 width="10px"
                 height="10px"
                 opacity="75%"
@@ -139,7 +133,7 @@ function CreateTaskPopover({
                 borderRadius="50%"
               >
                 <i className="bi bi-flag"></i>
-              </Center>
+              </Center> */}
             </Flex>
 
             <Center
@@ -163,7 +157,7 @@ function CreateTaskPopover({
   );
 }
 
-export default memo(CreateTaskPopover);
+export default memo(CreateTask);
 
 function validateName(value: string) {
   let error;

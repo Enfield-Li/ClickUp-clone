@@ -9,9 +9,9 @@ import {
 import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
-import ExpectedDueDateDisplay from "../../taskModal/dueDateDetails/ExpectedDueDateDisplay";
-import SelectDueDatePopover from "../../taskModal/dueDateDetails/SelectDueDatePopover";
-import SelectPriorityPopover from "../../taskModal/priorityDetails/SelectPriorityPopover";
+import ExpectedDueDateDisplay from "../../taskModal/dueDate/ExpectedDueDateDisplay";
+import SelectDueDatePopover from "../../taskModal/dueDate/SelectDueDatePopover";
+import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 
 type Props = { task: Task };
 

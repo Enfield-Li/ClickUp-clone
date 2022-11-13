@@ -4,7 +4,7 @@ import useTaskDetailContext, {
   updateCurrentTaskStatus,
 } from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import SelectOption from "../../task/select/SelectOption";
+import OptionWrapper from "../../task/optionWrapper/SelectOption";
 import { STATUS, StatusColumn, UpdateEvent } from "../../../types";
 import { memo } from "react";
 
@@ -56,7 +56,7 @@ function StatusOptions({ onOptionClose }: Props) {
           task!.status !== column.id && (
             // Hide current column option
             <Box key={column.id} onClick={() => selectStatus(column)}>
-              <SelectOption
+              <OptionWrapper
                 onClose={onOptionClose}
                 optionName={column.title}
                 hoverBgColor={column.color}
@@ -67,7 +67,7 @@ function StatusOptions({ onOptionClose }: Props) {
                   height="10px"
                   backgroundColor={column.color}
                 ></Box>
-              </SelectOption>
+              </OptionWrapper>
             </Box>
           )
       )}

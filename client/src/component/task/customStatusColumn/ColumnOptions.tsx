@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
-import SelectOption from "../select/SelectOption";
+import OptionWrapper from "../optionWrapper/SelectOption";
 import { SortBy, STATUS } from "../../../types";
 
 type Props = {
@@ -56,14 +56,14 @@ function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
               >
                 <PopoverBody shadow="2xl">
                   {sortBy === STATUS && (
-                    <SelectOption
+                    <OptionWrapper
                       onClose={onClose}
                       optionName="Rename status"
                       hoverBgColor={hoverBgColor}
                       setEditTitle={setEditTitle}
                     >
                       <i className="bi bi-pencil"></i>
-                    </SelectOption>
+                    </OptionWrapper>
                   )}
                 </PopoverBody>
               </PopoverContent>

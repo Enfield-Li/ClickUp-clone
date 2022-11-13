@@ -9,7 +9,7 @@ type Props = {
   setEditTitle?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SelectOption({
+function OptionWrapper({
   onClose,
   optionName,
   setEditTitle,
@@ -42,4 +42,4 @@ function SelectOption({
     </Box>
   );
 }
-export default memo(SelectOption);
+export default memo(OptionWrapper);
