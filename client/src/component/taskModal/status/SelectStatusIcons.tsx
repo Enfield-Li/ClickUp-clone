@@ -12,14 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import useTaskDetailContext, {
-  updateCurrentTaskStatus,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { STATUS, UpdateEvent } from "../../../types";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 import { CheckIcon } from "@chakra-ui/icons";
+import { updateCurrentTaskStatus } from "../../task/actions/updateCurrentTaskStatus";
 
 type Props = {};
 

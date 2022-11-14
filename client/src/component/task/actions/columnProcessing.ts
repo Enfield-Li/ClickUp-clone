@@ -77,7 +77,7 @@ export function initializeDueDataColumns(
   const thisWeekLocalDateString = getOneWholeWeekLocalDateString();
   for (let i = 0; i < weekDayColumnsFinal.length; i++) {
     const weekDay = weekDayColumnsFinal[i];
-    weekDay.localDateStr = thisWeekLocalDateString[i]; // BUG?
+    weekDay.localDateStr = thisWeekLocalDateString[i];
   }
 
   return [...front, ...weekDayColumnsFinal, ...end] as DueDateColumns;
@@ -87,7 +87,7 @@ export function initializeDueDataColumns(
 function renameDueDateColumns(dueDateColumns: DueDateColumns) {
   const { todayWeekDay, tomorrowWeekDay } = getWeekDays();
 
-  dueDateColumns.map((column) => {
+  return dueDateColumns.map((column) => {
     if (column.title === todayWeekDay) {
       column.title = "TODAY";
     } else if (column.title === tomorrowWeekDay) {
@@ -95,8 +95,6 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
     }
     return column;
   });
-
-  return dueDateColumns;
 }
 
 /* 

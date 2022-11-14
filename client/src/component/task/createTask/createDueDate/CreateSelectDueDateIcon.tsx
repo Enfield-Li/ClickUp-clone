@@ -12,25 +12,19 @@ import CreateDueDatePanel from "./CreateDueDatePanel";
 
 type Props = {
   children: React.ReactNode;
-  expectedDueDate: Date | null;
-  setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  expectedDueDate: Date | undefined;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-function CreateSelectDueDatePopover({
+function CreateSelectDueDateIcon({
   children,
   expectedDueDate,
-  setIsPopoverOpen,
   setExpectedDueDate,
 }: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
-    <Popover
-      placement="bottom"
-      onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
-      onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
-    >
+    <Popover placement="bottom">
       {({ onClose }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
@@ -69,4 +63,4 @@ function CreateSelectDueDatePopover({
     </Popover>
   );
 }
-export default memo(CreateSelectDueDatePopover);
+export default memo(CreateSelectDueDateIcon);

@@ -10,7 +10,7 @@ import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDate/ExpectedDueDateDisplay";
-import SelectDueDatePopover from "../../taskModal/dueDate/SelectDueDatePopover";
+import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 
 type Props = { task: Task };
@@ -109,13 +109,13 @@ function SubTaskList({ task }: Props) {
                       </Box>
                     ) : (
                       <Box onClick={(e) => e.stopPropagation()}>
-                        <SelectDueDatePopover task={subTask}>
+                        <SelectDueDateIcon task={subTask}>
                           <Center opacity="55%" _hover={{ opacity: "100%" }}>
                             <Center>
                               <i className="bi bi-calendar2-check"></i>
                             </Center>
                           </Center>
-                        </SelectDueDatePopover>
+                        </SelectDueDateIcon>
                       </Box>
                     )}
                   </Box>

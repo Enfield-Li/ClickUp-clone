@@ -1,13 +1,12 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Flex, Center, Box, Tooltip } from "@chakra-ui/react";
 import { memo } from "react";
-import useTaskDetailContext, {
-  updateCurrentTaskStatus,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
-import SelectDueDatePopover from "../../taskModal/dueDate/SelectDueDatePopover";
+import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 import FinishTask from "../../taskModal/status/FinishTask";
+import { updateCurrentTaskStatus } from "../actions/updateCurrentTaskStatus";
 import ThreeDotShowOptions from "./ThreeDotShowOptions";
 
 type Props = {
@@ -49,14 +48,11 @@ function SetTaskAttribute({
         {/* Due date */}
         {!hasDueDate && (
           <Box mr={2} onClick={(e) => e.stopPropagation()}>
-            <SelectDueDatePopover
-              task={task}
-              setIsPopoverOpen={setIsPopoverOpen}
-            >
+            <SelectDueDateIcon task={task} setIsPopoverOpen={setIsPopoverOpen}>
               <Box opacity="55%" _hover={{ opacity: "100%" }}>
                 <i className="bi bi-calendar2-check"></i>
               </Box>
-            </SelectDueDatePopover>
+            </SelectDueDateIcon>
           </Box>
         )}
       </Flex>

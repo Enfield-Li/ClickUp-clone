@@ -15,7 +15,7 @@ import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 type Props = {
   priority: number | null;
   children: React.ReactNode;
-  currentPriority?: PriorityColumn;
+  currentPriorityColumn?: PriorityColumn;
   setPriority: React.Dispatch<React.SetStateAction<number | null>>;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -25,11 +25,8 @@ function CreateSelectPriorityPopover({
   children,
   setPriority,
   setIsPopoverOpen,
-  currentPriority,
+  currentPriorityColumn,
 }: Props) {
-  //   const noPriority = task.priority === 1;
-  //   const taskFinished = task.priority === 0;
-  //   const hasPriority = !noPriority && !taskFinished;
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
@@ -47,11 +44,10 @@ function CreateSelectPriorityPopover({
             placement="top"
             fontWeight="semibold"
             label={
-              "Set priority"
-              //   !hasPriority
-              //     ? "Set priority"
-              //     : currentPriority &&
-              //       capitalizeFirstLetter(currentPriority.title)
+              !priority
+                ? "Set priority"
+                : currentPriorityColumn &&
+                  capitalizeFirstLetter(currentPriorityColumn.title)
             }
           >
             <Box display="inline-block">

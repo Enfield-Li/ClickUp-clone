@@ -8,16 +8,11 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import {
-  DueDateColumns,
-  SetState,
-  SortBy,
-  State,
-  STATUS,
-  UndeterminedColumn,
-} from "../../../types";
+import { State, UndeterminedColumn } from "../../../types";
+import { useFocus } from "../../../utils/useFocus";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
+import SaveButton from "./SaveButton";
 
 export type NewTask = {
   title: string;
@@ -28,47 +23,70 @@ export type NewTask = {
 
 type Props = {
   state: State;
-  sortBy: SortBy;
   currentColumn: UndeterminedColumn;
-  setState: SetState;
-  dueDateColumns: DueDateColumns;
 };
 
-function CreateTask({
-  state,
-  setState,
-  currentColumn,
-  sortBy,
-  dueDateColumns,
-}: Props) {
+function CreateTask({ state, currentColumn }: Props) {
   const { authState } = useAuthContext();
+  
+  
   const [taskName, setTaskName] = useState("");
-  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
-  const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(null);
   const [priority, setPriority] = useState<number | null>(null);
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>();
+  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
 
-  const isTaskDone = sortBy === STATUS && currentColumn.id === 3;
+  const [htmlElRef, setFocus] = useFocus<HTMLInputElement>();
+
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
 
   return (
-    <>
+    <Box mt={3}>
       {!showCreateTaskForm ? (
-        <Text
+        <Box
           px={2}
           rounded="md"
           color="gray.500"
           cursor="pointer"
           _hover={{ bgColor: hoverBgColor }}
-          onClick={() => setShowCreateTaskForm(true)}
+          onClick={() => {
+            setFocus();
+            setShowCreateTaskForm(true);
+          }}
         >
           + NEW TASK
-        </Text>
+        </Box>
       ) : (
-        <Box border="1px solid white" rounded="sm" width="250px" p={1} pb={3}>
+        <Box
+          p={1}
+          pb={3}
+          border="1px"
+          rounded="sm"
+          tabIndex={0}
+          width="250px"
+          ref={htmlElRef}
+          borderColor="rgb(123, 104, 238)"
+          onBlur={(e) => {
+            // Prevent firing the blur event on children:
+            //        https://stackoverflow.com/a/60094794/16648127
+            // blur event.relatedTarget returns null:
+            //        https://stackoverflow.com/a/42764495/16648127
+            if (!taskName && !e.currentTarget.contains(e.relatedTarget)) {
+              setPriority(null);
+              setExpectedDueDate(undefined);
+              setShowCreateTaskForm(false);
+            }
+          }}
+        >
           <Flex alignItems="center" mb={4}>
             <Flex>
               {/* Close */}
-              <Center opacity="70%" cursor="pointer" p={1}>
+              <Center
+                p={1}
+                opacity="70%"
+                cursor="pointer"
+                _hover={{ color: "purple.300" }}
+                onClick={() => setShowCreateTaskForm(false)}
+              >
                 <i className="bi bi-x"></i>
               </Center>
 
@@ -76,6 +94,7 @@ function CreateTask({
               <Center>
                 <Input
                   mr={2}
+                  autoFocus
                   height="23px"
                   value={taskName}
                   variant="unstyled"
@@ -86,15 +105,7 @@ function CreateTask({
             </Flex>
 
             {/* Assignee */}
-            <Center
-              mr={2}
-              width="23px"
-              height="23px"
-              opacity="75%"
-              rounded="full"
-              cursor="pointer"
-              border="1px solid white"
-            >
+            <Center mr={2} opacity="75%" rounded="full" cursor="pointer">
               <i className="bi bi-person"></i>
             </Center>
           </Flex>
@@ -102,58 +113,28 @@ function CreateTask({
           <Flex justifyContent="space-between" alignItems="center">
             <Flex alignItems="center">
               {/* Priority */}
-              <CreateSelectPriorityIcon
-                priority={priority}
-                setPriority={setPriority}
-              />
-              {/* <Center
-                ml={4}
-                mr={6}
-                width="10px"
-                height="10px"
-                opacity="75%"
-                fontSize="14px"
-                cursor="pointer"
-                borderRadius="50%"
-              >
-                <i className="bi bi-calendar2-check"></i>
-              </Center> */}
+              <Center ml={4} mr={6}>
+                <CreateSelectPriorityIcon
+                  priority={priority}
+                  setPriority={setPriority}
+                />
+              </Center>
 
               {/* DueDate */}
-              <CreateDueDateDetails
-                expectedDueDate={expectedDueDate}
-                setExpectedDueDate={setExpectedDueDate}
-              />
-              {/* <Center
-                width="10px"
-                height="10px"
-                opacity="75%"
-                fontSize="14px"
-                cursor="pointer"
-                borderRadius="50%"
-              >
-                <i className="bi bi-flag"></i>
-              </Center> */}
+              <Center>
+                <CreateDueDateDetails
+                  expectedDueDate={expectedDueDate}
+                  setExpectedDueDate={setExpectedDueDate}
+                />
+              </Center>
             </Flex>
 
-            <Center
-              p={2}
-              mr={2}
-              pb="10px"
-              rounded="sm"
-              width="45px"
-              height="15px"
-              fontSize="12px"
-              cursor="pointer"
-              fontWeight="semibold"
-              bgColor="customBlue.50"
-            >
-              SAVE
-            </Center>
+            {/* Save */}
+            <SaveButton taskName={taskName} />
           </Flex>
         </Box>
       )}
-    </>
+    </Box>
   );
 }
 

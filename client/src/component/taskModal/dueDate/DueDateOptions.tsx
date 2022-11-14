@@ -1,9 +1,8 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext, {
-  updateTaskPriorityOrDueDate,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getLookUpDueDateTable } from "../../task/actions/columnProcessing";

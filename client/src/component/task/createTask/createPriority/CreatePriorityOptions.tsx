@@ -27,8 +27,7 @@ function CreatePriorityOptions({
 
   function selectPriority(priorityColumn: PriorityColumn) {
     onOptionClose();
-
-    const targetPriorityColumnId = priorityColumn.id;
+    setPriority(priorityColumn.id);
   }
 
   return (

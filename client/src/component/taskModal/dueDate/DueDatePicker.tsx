@@ -4,9 +4,8 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext, {
-  updateTaskPriorityOrDueDate,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import {
   ColumnOptions,
   DUE_DATE,

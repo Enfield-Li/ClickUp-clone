@@ -2,9 +2,8 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../utils/constant";
 import useGlobalContext from "../context/global/useGlobalContext";
-import useAuthContext, {
-  refreshUserToken,
-} from "../context/auth/useAuthContext";
+import useAuthContext from "../context/auth/useAuthContext";
+import { refreshUserToken } from "../context/auth/refreshUserToken";
 import { useNavigate } from "react-router-dom";
 import { getLookUpDueDateTable } from "../component/task/actions/columnProcessing";
 import { getMonthAndDay } from "../utils/getWeekDays";

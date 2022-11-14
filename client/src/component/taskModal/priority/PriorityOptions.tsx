@@ -8,11 +8,17 @@ import {
 } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext, {
-  updateTaskPriorityOrDueDate,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { PRIORITY, PriorityColumn, Task, UpdateEvent } from "../../../types";
+import {
+  PRIORITY,
+  PriorityColumn,
+  SetState,
+  SortBy,
+  Task,
+  UpdateEvent,
+} from "../../../types";
 import { memo } from "react";
 
 type Props = {
@@ -21,11 +27,7 @@ type Props = {
   onOptionClose: () => void;
 };
 
-function PriorityOptions({
-  task,
-  setTask,
-  onOptionClose,
-}: Props) {
+function PriorityOptions({ task, setTask, onOptionClose }: Props) {
   const fontColor = useColorModeValue("black", "lightMain.200");
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
@@ -36,46 +38,12 @@ function PriorityOptions({
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
-  function selectPriority(priorityColumn: PriorityColumn) {
-    onOptionClose();
-
-    const targetPriorityColumnId = priorityColumn.id;
-
-    // Update list state
-    updateTaskPriorityOrDueDate(
-      sortBy,
-      task!,
-      setState,
-      PRIORITY,
-      targetPriorityColumnId
-    );
-
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: PRIORITY,
-      beforeUpdate: String(task?.priority),
-      afterUpdate: String(targetPriorityColumnId),
-      createdAt: new Date(),
-    };
-
-    // Update modal task state
-    if (setTask) {
-      setTask({
-        ...task!,
-        priority: targetPriorityColumnId,
-        taskEvents: [...task!.taskEvents, newEvent],
-      });
-    }
-  }
-
   return (
     <>
-      {columnOptions.priority.map((priority) => {
-        const noPriority = priority.id === 1;
-        const taskFinished = priority.id !== 0;
-        const hideCurrentPriority = task!.priority !== priority.id;
+      {columnOptions.priority.map((priorityColumn) => {
+        const noPriority = priorityColumn.id === 1;
+        const taskFinished = priorityColumn.id !== 0;
+        const hideCurrentPriority = task!.priority !== priorityColumn.id;
 
         return (
           // Hide finished column and current priority stage
@@ -83,7 +51,7 @@ function PriorityOptions({
           hideCurrentPriority && (
             // Hide finished column and current priority stage
             <Box
-              key={priority.id}
+              key={priorityColumn.id}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
               <Flex
@@ -91,7 +59,17 @@ function PriorityOptions({
                 rounded="sm"
                 cursor="pointer"
                 alignItems="center"
-                onClick={() => selectPriority(priority)}
+                onClick={() =>
+                  selectPriority(
+                    task,
+                    authState.user!.id!,
+                    sortBy,
+                    setState,
+                    priorityColumn.id,
+                    setTask,
+                    onOptionClose
+                  )
+                }
               >
                 {noPriority ? (
                   // Select priority
@@ -104,16 +82,16 @@ function PriorityOptions({
                 ) : (
                   // Clear priority
                   <Flex>
-                    <Box color={priority.color} mr={4}>
+                    <Box color={priorityColumn.color} mr={4}>
                       <i className="bi bi-flag-fill"></i>
                     </Box>
-                    <Box color={fontColor}>{priority.title}</Box>
+                    <Box color={fontColor}>{priorityColumn.title}</Box>
                   </Flex>
                 )}
               </Flex>
 
               {/* Last row hide Divider */}
-              {priority.id !== 5 && <Divider />}
+              {priorityColumn.id !== 5 && <Divider />}
             </Box>
           )
         );
@@ -121,4 +99,45 @@ function PriorityOptions({
     </>
   );
 }
+
 export default memo(PriorityOptions);
+
+export function selectPriority(
+  task: Task,
+  userId: number,
+  sortBy: SortBy,
+  setState: SetState,
+  targetPriorityColumnId: number,
+  setTask?: SetTask,
+  onOptionClose?: () => void
+) {
+  if (onOptionClose) onOptionClose();
+
+  // Update list state
+  updateTaskPriorityOrDueDate(
+    sortBy,
+    task!,
+    setState,
+    PRIORITY,
+    targetPriorityColumnId
+  );
+
+  const newEvent: UpdateEvent = {
+    id: getRandomNumberNoLimit(),
+    userId,
+    taskId: task!.id!,
+    field: PRIORITY,
+    beforeUpdate: String(task?.priority),
+    afterUpdate: String(targetPriorityColumnId),
+    createdAt: new Date(),
+  };
+
+  // Update modal task state
+  if (setTask) {
+    setTask({
+      ...task!,
+      priority: targetPriorityColumnId,
+      taskEvents: [...task!.taskEvents, newEvent],
+    });
+  }
+}

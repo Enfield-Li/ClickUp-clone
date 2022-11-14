@@ -12,9 +12,8 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext, {
-  updateTaskPriorityOrDueDate,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import { DUE_DATE, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";

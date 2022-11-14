@@ -19,7 +19,7 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SelectDueDatePopover({
+function SelectDueDateIcon({
   task,
   setTask,
   children,
@@ -67,4 +67,4 @@ function SelectDueDatePopover({
     </Popover>
   );
 }
-export default memo(SelectDueDatePopover);
+export default memo(SelectDueDateIcon);

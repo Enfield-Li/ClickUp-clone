@@ -1,9 +1,8 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
-import useTaskDetailContext, {
-  updateTaskPriorityOrDueDate,
-} from "../../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { updateTaskPriorityOrDueDate } from "../../actions/updateTaskPriorityOrDueDate";
 import {
   DueDateColumn,
   SelectableDueDate,
@@ -16,30 +15,24 @@ import { getLookUpDueDateTable } from "../../actions/columnProcessing";
 
 type Props = {
   onClose: () => void;
-  expectedDueDate: Date | null;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-function CreateDueDateOptions({
-  onClose,
-  expectedDueDate,
-  setExpectedDueDate,
-}: Props) {
+function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
   );
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
-  const { authState } = useAuthContext();
   const lookUpDueDate = getLookUpDueDateTable();
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;
     const expectedDueDate = lookUpDueDate[weekString as SelectableDueDate];
-
+    setExpectedDueDate(expectedDueDate);
     onClose();
   }
 

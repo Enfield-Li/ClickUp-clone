@@ -1,16 +1,19 @@
 import { Center } from "@chakra-ui/react";
 import { memo, useMemo, useState } from "react";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
+import { selectPriority } from "./PriorityOptions";
 import SelectPriorityPopover from "./SelectPriorityPopover";
 
 type Props = { task: Task; setTask?: SetTask };
 
 function SelectPriorityIcon({ task, setTask }: Props) {
+  const { authState } = useAuthContext();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions } = taskStateContext!;
+  const { columnOptions, setState, sortBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priority.find(
@@ -57,7 +60,17 @@ function SelectPriorityIcon({ task, setTask }: Props) {
             fontWeight="extrabold"
             bgColor="rgb(151, 151, 151)"
             _hover={{ bgColor: "customBlue.200" }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              selectPriority(
+                task,
+                authState.user!.id!,
+                sortBy,
+                setState,
+                1, // no priority
+                setTask
+              );
+            }}
           >
             <i className="bi bi-x"></i>
           </Center>

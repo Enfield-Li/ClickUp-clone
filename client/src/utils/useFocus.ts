@@ -1,10 +1,9 @@
 import { useRef } from "react";
 
-export function useFocus() {
-  const htmlElRef = useRef<HTMLElement>();
+export function useFocus<T extends HTMLElement>() {
+  const htmlElRef = useRef<T | null>(null);
 
   const setFocus = () => {
-    console.log("setFocus");
     const currentEl = htmlElRef.current;
     currentEl && currentEl.focus();
   };

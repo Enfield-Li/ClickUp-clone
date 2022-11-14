@@ -10,8 +10,8 @@ import { getDueDateFromExpectedDueDateString } from "../../actions/taskProcessin
 
 type Props = {
   onClose: () => void;
-  expectedDueDate: Date | null;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  expectedDueDate: Date | undefined;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
 function CreateDueDatePicker({
@@ -19,9 +19,12 @@ function CreateDueDatePicker({
   expectedDueDate,
   setExpectedDueDate,
 }: Props) {
-  const { authState } = useAuthContext();
-  const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  function handleOnChange(newValue: Date) {
+    onClose();
+    if (newValue) {
+      setExpectedDueDate(newValue);
+    }
+  }
 
   return (
     <MaterialTheme>
@@ -29,39 +32,10 @@ function CreateDueDatePicker({
         value={expectedDueDate}
         displayStaticWrapperAs="desktop"
         renderInput={(params) => <TextField {...params} />}
-        onChange={(newValue) => {
-          if (newValue) {
-            setExpectedDueDate(newValue);
-
-            handleDatePicker(
-              authState.user!.id,
-              sortBy,
-              onClose,
-              columnOptions,
-              newValue
-            );
-          }
-        }}
+        onChange={(newValue) => newValue && handleOnChange(newValue)}
       />
     </MaterialTheme>
   );
 }
 
 export default memo(CreateDueDatePicker);
-
-function handleDatePicker(
-  userId: number,
-  sortBy: SortBy,
-  onClose: () => void,
-  columnOptions: ColumnOptions,
-  expectedDueDateInput: Date
-) {
-  if (expectedDueDateInput) {
-    const targetDueDateColumnId = getDueDateFromExpectedDueDateString(
-      columnOptions.dueDate,
-      expectedDueDateInput
-    );
-
-    onClose();
-  }
-}

@@ -6,8 +6,8 @@ import CreateDueDatePicker from "./CreateDueDatePicker";
 
 type Props = {
   onClose: () => void;
-  expectedDueDate: Date | null;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  expectedDueDate: Date | undefined;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
 function CreateDueDatePanel({
@@ -42,7 +42,6 @@ function CreateDueDatePanel({
         >
           <CreateDueDateOptions
             onClose={onClose}
-            expectedDueDate={expectedDueDate}
             setExpectedDueDate={setExpectedDueDate}
           />
         </Box>

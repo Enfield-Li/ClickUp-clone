@@ -1,12 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import useTaskDetailContext, {
-  updateCurrentTaskStatus,
-} from "../../../context/task_detail/useTaskDetailContext";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import OptionWrapper from "../../task/optionWrapper/SelectOption";
 import { STATUS, StatusColumn, UpdateEvent } from "../../../types";
 import { memo } from "react";
+import { updateCurrentTaskStatus } from "../../task/actions/updateCurrentTaskStatus";
 
 type Props = { onOptionClose: () => void };
 

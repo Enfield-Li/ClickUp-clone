@@ -22,11 +22,10 @@ import {
   FieldError,
   FieldErrors,
 } from "../../context/auth/AuthContextTypes";
-import useAuthContext, {
-  loginUser,
-  registerUser,
-} from "../../context/auth/useAuthContext";
+import useAuthContext from "../../context/auth/useAuthContext";
+import { loginUser } from "./actions/loginUser";
 import { CLIENT_ROUTE } from "../../utils/constant";
+import { registerUser } from "./actions/registerUser";
 
 type Props = {};
 

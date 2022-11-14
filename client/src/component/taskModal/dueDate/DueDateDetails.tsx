@@ -2,7 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import ExpectedDueDateDisplay from "./ExpectedDueDateDisplay";
-import SelectDueDatePopover from "./SelectDueDatePopover";
+import SelectDueDateIcon from "./SelectDueDateIcon";
 
 type Props = {};
 
@@ -21,7 +21,7 @@ function DueDateDetails({}: Props) {
         </Box>
       ) : (
         // Icon
-        <SelectDueDatePopover task={task!} setTask={setTask}>
+        <SelectDueDateIcon task={task!} setTask={setTask}>
           <Center
             width="35px"
             height="35px"
@@ -33,7 +33,7 @@ function DueDateDetails({}: Props) {
           >
             <i className="bi bi-calendar2-check"></i>
           </Center>
-        </SelectDueDatePopover>
+        </SelectDueDateIcon>
       )}
     </Box>
   );

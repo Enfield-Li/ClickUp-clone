@@ -1,5 +1,4 @@
-import { Box, Center } from "@chakra-ui/react";
-import { Droppable } from "@hello-pangea/dnd";
+import { Box, Center } from "@chakra-ui/react"; import { Droppable } from "@hello-pangea/dnd";
 import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";
 import {
@@ -70,11 +69,8 @@ function Column({
             {/* Create task popover */}
             <Center>
               <CreateTask
-                dueDateColumns={dueDateColumns}
                 state={state}
-                setState={setState}
                 currentColumn={currentColumn}
-                sortBy={sortBy}
               />
             </Center>
           </Box>

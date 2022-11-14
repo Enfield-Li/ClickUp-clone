@@ -19,27 +19,21 @@ import {
 import CreateDueDatePanel from "./CreateDueDatePanel";
 
 type Props = {
-  expectedDueDate: Date | null;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  expectedDueDate: Date | undefined;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
 function CreateExpectedDueDateDisplay({
   expectedDueDate,
   setExpectedDueDate,
 }: Props) {
-  const { authState } = useAuthContext();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-
-  const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
     "darkMain.400",
     "lightMain.200"
   );
-
-  function clearDueDate() {}
 
   return (
     <Flex
@@ -69,7 +63,7 @@ function CreateExpectedDueDateDisplay({
             >
               <Box display="inline-block">
                 <PopoverTrigger>
-                  <Center opacity="65%">
+                  <Center opacity="65%" fontSize="14px">
                     {getMonthAndDay(new Date(expectedDueDate!))}
                   </Center>
                 </PopoverTrigger>
@@ -103,7 +97,7 @@ function CreateExpectedDueDateDisplay({
           height="12px"
           rounded="full"
           bgColor="customBlue.200"
-          onClick={() => clearDueDate()}
+          onClick={() => setExpectedDueDate(undefined)}
         >
           <Center fontWeight="extrabold" color="white">
             <i className="bi bi-x"></i>
