@@ -14,10 +14,9 @@ import TaskCardMainInfo from "./TaskCardMainInfo";
 type Props = {
   task: Task;
   index: number;
-  setState: SetState;
 };
 
-function TaskCard({ task, index, setState }: Props) {
+function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
   const [showSubTask, setShowSubTask] = useState(false);
   const [showAddSubTask, setShowAddSubTask] = useState(true);

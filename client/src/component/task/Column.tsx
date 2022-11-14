@@ -1,34 +1,30 @@
-import { Box, Center } from "@chakra-ui/react"; import { Droppable } from "@hello-pangea/dnd";
-import ColumnHeader from "./customStatusColumn/ColumnHeader";
-import TaskCard from "./taskCard/TaskCard";
+import { Box, Center } from "@chakra-ui/react";
+import { Droppable } from "@hello-pangea/dnd";
+import { memo, useState } from "react";
 import {
-  UndeterminedColumn,
   DueDateColumns,
-  SetState,
-  SortBy,
   State,
   TaskList,
-  STATUS,
+  UndeterminedColumn,
 } from "../../types";
-import { memo, useState } from "react";
 import CreateTask from "./createTask/CreateTask";
+import ColumnHeader from "./customStatusColumn/ColumnHeader";
+import TaskCard from "./taskCard/TaskCard";
 
 type Props = {
   state: State;
-  sortBy: SortBy;
   tasks?: TaskList;
-  setState: SetState;
+  isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
-  dueDateColumns: DueDateColumns;
+  setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function Column({
   state,
   tasks,
-  sortBy,
-  setState,
   currentColumn,
-  dueDateColumns,
+  isCreateTaskOpen,
+  setIsCreateTaskOpen,
 }: Props) {
   const [showCreateTask, setShowCreateTask] = useState(false);
 
@@ -36,12 +32,10 @@ function Column({
     <Box width="250px" mx={3}>
       {/* Column header */}
       <ColumnHeader
-        sortBy={sortBy}
-        setState={setState}
-        title={currentColumn.title}
-        borderTopColor={currentColumn.color}
         taskAmount={tasks?.length}
+        title={currentColumn.title}
         currentColumn={currentColumn}
+        borderTopColor={currentColumn.color}
       />
 
       {/* Column card */}
@@ -57,12 +51,7 @@ function Column({
           >
             {/* Task list */}
             {tasks?.map((task, index) => (
-              <TaskCard
-                task={task}
-                key={task.id}
-                index={index}
-                setState={setState}
-              />
+              <TaskCard task={task} key={task.id} index={index} />
             ))}
             {provided.placeholder}
 
@@ -71,6 +60,8 @@ function Column({
               <CreateTask
                 state={state}
                 currentColumn={currentColumn}
+                isCreateTaskOpen={isCreateTaskOpen}
+                setIsCreateTaskOpen={setIsCreateTaskOpen}
               />
             </Center>
           </Box>

@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import {
   DUE_DATE,
   LookUpColumnId,
@@ -32,6 +32,7 @@ type Props = {
 function TaskBoardView({ sortBy }: Props) {
   //   const { state, loading, error, setState } = useFetchTasks(sortBy);
   const { state, loading, setState } = useLocalTasks(sortBy);
+  const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   console.log(state);
 
   const memHandleDragEnd = useCallback(
@@ -67,12 +68,11 @@ function TaskBoardView({ sortBy }: Props) {
                 <Box key={currentColumn.id} borderRadius={4}>
                   <Column
                     state={state}
-                    sortBy={sortBy}
-                    setState={setState}
                     currentColumn={currentColumn}
                     // Pass down list as per column.id
                     tasks={taskListForCurrentColumn}
-                    dueDateColumns={state.columnOptions.dueDate}
+                    isCreateTaskOpen={isCreateTaskOpen}
+                    setIsCreateTaskOpen={setIsCreateTaskOpen}
                   />
                 </Box>
               )

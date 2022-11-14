@@ -1,22 +1,19 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SetState, SortBy, UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
 
 type Props = {
-  sortBy: SortBy;
   title: string;
-  setState: SetState;
   taskAmount?: number;
   borderTopColor: string;
   currentColumn?: UndeterminedColumn;
 };
 
 function ColumnHeader({
-  sortBy,
   title,
-  setState,
   taskAmount,
   currentColumn,
   borderTopColor,
@@ -27,6 +24,9 @@ function ColumnHeader({
 
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
+
+  const { taskStateContext } = useTaskDetailContext();
+  const { sortBy } = taskStateContext!;
 
   // Close edit when switching sortBy
   useEffect(() => {
@@ -50,7 +50,6 @@ function ColumnHeader({
         {/* Title */}
         {editTitle ? (
           <EditColumnTitle
-            setState={setState}
             setEditTitle={setEditTitle}
             currentColumn={currentColumn}
           />

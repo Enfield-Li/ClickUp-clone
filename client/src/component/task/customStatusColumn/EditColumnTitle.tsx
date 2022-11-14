@@ -7,16 +7,19 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SetState, UndeterminedColumn } from "../../../types";
 
 type Props = {
-  setState: SetState;
   currentColumn?: UndeterminedColumn;
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function EditColumnTitle({ setState, currentColumn, setEditTitle }: Props) {
+function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
+
+  const { taskStateContext } = useTaskDetailContext();
+  const { setState } = taskStateContext!;
 
   function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {
     // Update column title
