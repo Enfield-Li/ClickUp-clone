@@ -11,7 +11,10 @@ import {
 } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 import { getRandomNumberNoLimit } from "../../../../utils/getRandomNumber";
-import { getLookUpDueDateTable } from "../../actions/columnProcessing";
+import {
+  getExpectedDueDateFromWeekString,
+  getLookUpDueDateTable,
+} from "../../actions/columnProcessing";
 
 type Props = {
   onClose: () => void;
@@ -25,13 +28,14 @@ function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
   );
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
-  const lookUpDueDate = getLookUpDueDateTable();
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;
-    const expectedDueDate = lookUpDueDate[weekString as SelectableDueDate];
+    const expectedDueDate = getExpectedDueDateFromWeekString(
+      weekString as SelectableDueDate
+    );
     setExpectedDueDate(expectedDueDate);
     onClose();
   }

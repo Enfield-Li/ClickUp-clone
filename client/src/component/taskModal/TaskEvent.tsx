@@ -2,7 +2,7 @@ import { Box, Center, Divider, Flex, Spinner } from "@chakra-ui/react";
 import { useRef, useEffect, useState, memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
-import { fetchTaskEvents } from "../task/actions/TaskActions";
+import { fetchTaskEvents } from "../task/actions/networkActions";
 import DueDateDetails from "./dueDate/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";

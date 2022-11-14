@@ -10,7 +10,7 @@ import { memo, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { updateTaskTitle } from "../task/actions/TaskActions";
+import { updateTaskTitle } from "../task/actions/networkActions";
 import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../../types";
 
 type Props = {};

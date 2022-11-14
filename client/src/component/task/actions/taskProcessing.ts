@@ -16,6 +16,7 @@ import {
   Task,
   TaskList,
 } from "../../../types";
+import { calculateDueDateInThisWeek } from "./columnProcessing";
 
 /* 
   Group all tasks into ordered tasks based on sortBy 
@@ -142,15 +143,14 @@ export function processLookColumnId(
   }
 }
 
-export function getDueDateFromExpectedDueDateString(
+export function getDueDateFromExpectedDueDate(
   dueDateColumn: DueDateColumns,
   dateInput?: Date
 ): number {
   if (dateInput) {
     // Due date within this week
-    const targetColumn = dueDateColumn.find(
-      (column) => column.localDateStr === toYYYYMMDDString(dateInput)
-    );
+    const targetColumn = calculateDueDateInThisWeek(dateInput, dueDateColumn);
+
     if (targetColumn) return targetColumn.id;
 
     // overdue or future
@@ -181,7 +181,7 @@ export function processTaskList(
     // if dueDate is undefined, then override it with expectedDueDate
     if (taskCopy.dueDate === undefined) {
       // convert expectedDueDate to dueDate
-      taskCopy.dueDate = getDueDateFromExpectedDueDateString(
+      taskCopy.dueDate = getDueDateFromExpectedDueDate(
         dueDateColumn,
         task.expectedDueDate
       );

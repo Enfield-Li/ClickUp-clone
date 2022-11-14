@@ -17,7 +17,7 @@ import {
 } from "../../types";
 import { useLocalTasks } from "../../useLocalState/useLocalState";
 import { getNewEventDTO } from "../../utils/createNewEvent";
-import { updateTasksPosition } from "./actions/TaskActions";
+import { updateTasksPosition } from "./actions/networkActions";
 import {
   processLookColumnId,
   updatePreviousIdsInColumn,

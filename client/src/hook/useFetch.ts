@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { processColumns } from "../component/task/actions/columnProcessing";
-import { fetchAllTasks } from "../component/task/actions/TaskActions";
+import { fetchAllTasks } from "../component/task/actions/networkActions";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,

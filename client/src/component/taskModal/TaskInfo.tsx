@@ -10,7 +10,7 @@ import {
 import produce from "immer";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { updateTaskDescription } from "../task/actions/TaskActions";
+import { updateTaskDescription } from "../task/actions/networkActions";
 import {
   SetState,
   TaskEvents,

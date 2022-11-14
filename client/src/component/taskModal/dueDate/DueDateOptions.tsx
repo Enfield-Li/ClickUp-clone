@@ -5,7 +5,10 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { getLookUpDueDateTable } from "../../task/actions/columnProcessing";
+import {
+  getExpectedDueDateFromWeekString,
+  getLookUpDueDateTable,
+} from "../../task/actions/columnProcessing";
 import {
   DueDateColumn,
   DUE_DATE,
@@ -31,13 +34,15 @@ function DueDateOptions({ task, setTask, onClose }: Props) {
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   const { authState } = useAuthContext();
-  const lookUpDueDate = getLookUpDueDateTable();
+
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;
-    const expectedDueDate = lookUpDueDate[weekString as SelectableDueDate];
+    const expectedDueDate = getExpectedDueDateFromWeekString(
+      weekString as SelectableDueDate
+    );
 
     // Update list state
     updateTaskPriorityOrDueDate(

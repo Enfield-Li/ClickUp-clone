@@ -1,12 +1,7 @@
 import { TextField } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers";
-import { SetState } from "immer/dist/internal";
 import { memo } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { ColumnOptions, SortBy } from "../../../../types";
 import MaterialTheme from "../../../test-dev/MaterialTheme";
-import { getDueDateFromExpectedDueDateString } from "../../actions/taskProcessing";
 
 type Props = {
   onClose: () => void;

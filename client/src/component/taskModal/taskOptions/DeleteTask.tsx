@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { CLIENT_ROUTE } from "../../../utils/constant";
 import { deepCopy } from "../../../utils/deepCopy";
-import { deleteTask } from "../../task/actions/TaskActions";
+import { deleteTask } from "../../task/actions/networkActions";
 import {
   lookUpPreviousTaskId,
   PreviousTaskIds,

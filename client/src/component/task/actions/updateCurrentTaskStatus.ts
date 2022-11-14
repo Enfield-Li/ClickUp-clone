@@ -9,7 +9,7 @@ import {
   SetState,
 } from "../../../types";
 import { getNewEventDTO } from "../../../utils/createNewEvent";
-import { updateTasksPosition } from "./TaskActions";
+import { updateTasksPosition } from "./networkActions";
 import { updatePreviousIdsInColumn } from "./taskProcessing";
 
 export function updateCurrentTaskStatus(

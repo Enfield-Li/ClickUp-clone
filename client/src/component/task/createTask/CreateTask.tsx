@@ -8,8 +8,10 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { State, UndeterminedColumn } from "../../../types";
+import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { SelectableDueDate, State, UndeterminedColumn } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
+import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 import SaveButton from "./SaveButton";
@@ -28,16 +30,39 @@ type Props = {
 
 function CreateTask({ state, currentColumn }: Props) {
   const { authState } = useAuthContext();
-  
-  
+
+  const { taskStateContext } = useTaskDetailContext();
+  const { sortBy } = taskStateContext!;
+
+  const initialPriority = sortBy === "priority" ? currentColumn.id : null;
+
+  const weekString = currentColumn.title;
+  const initialDueDate =
+    sortBy === "dueDate"
+      ? getExpectedDueDateFromWeekString(weekString as SelectableDueDate)
+      : undefined;
+
   const [taskName, setTaskName] = useState("");
-  const [priority, setPriority] = useState<number | null>(null);
-  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>();
+  const [priority, setPriority] = useState<number | null>(initialPriority);
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
+    initialDueDate
+  );
+  // initialDueDate
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
+  const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
 
   const [htmlElRef, setFocus] = useFocus<HTMLInputElement>();
-
-  const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
+  function handleOnBlur(e: React.FocusEvent<HTMLDivElement, Element>) {
+    // Prevent firing the blur event on children:
+    //        https://stackoverflow.com/a/60094794/16648127
+    // blur event.relatedTarget returns null:
+    //        https://stackoverflow.com/a/42764495/16648127
+    if (!taskName && !e.currentTarget.contains(e.relatedTarget)) {
+      setShowCreateTaskForm(false);
+      setPriority(initialPriority);
+      setExpectedDueDate(initialDueDate);
+    }
+  }
 
   return (
     <Box mt={3}>
@@ -64,18 +89,8 @@ function CreateTask({ state, currentColumn }: Props) {
           tabIndex={0}
           width="250px"
           ref={htmlElRef}
+          onBlur={handleOnBlur}
           borderColor="rgb(123, 104, 238)"
-          onBlur={(e) => {
-            // Prevent firing the blur event on children:
-            //        https://stackoverflow.com/a/60094794/16648127
-            // blur event.relatedTarget returns null:
-            //        https://stackoverflow.com/a/42764495/16648127
-            if (!taskName && !e.currentTarget.contains(e.relatedTarget)) {
-              setPriority(null);
-              setExpectedDueDate(undefined);
-              setShowCreateTaskForm(false);
-            }
-          }}
         >
           <Flex alignItems="center" mb={4}>
             <Flex>

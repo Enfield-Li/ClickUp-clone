@@ -189,7 +189,7 @@ export type LookUpColumnId = {
   [index: number]: number;
 };
 
-export type LookUpDueDate = {
+export type LookUpExpectedDueDate = {
   [index in SelectableDueDate]: Date | undefined;
 };
 

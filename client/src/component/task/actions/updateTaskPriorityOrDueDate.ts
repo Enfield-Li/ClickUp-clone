@@ -1,5 +1,5 @@
 import produce from "immer";
-import { updateTasksPosition } from "./TaskActions";
+import { updateTasksPosition } from "./networkActions";
 import { updatePreviousIdsInColumn } from "./taskProcessing";
 import {
   DUE_DATE,

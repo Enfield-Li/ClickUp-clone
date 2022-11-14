@@ -77,6 +77,7 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
       );
     }
 
+    // Return element
     element = (
       <Flex alignItems="center">
         {icon}

@@ -1,15 +1,18 @@
 import {
+  getMonthAndDay,
   getNextNWeekDay,
   getOneWholeWeekLocalDateString,
   getUppercaseWeekDayString,
   getWeekDays,
+  toYYYYMMDDString,
 } from "../../../utils/getWeekDays";
 import {
   ColumnOptions,
   DueDateColumns,
   SelectableDueDate,
-  LookUpDueDate,
+  LookUpExpectedDueDate,
   StatusColumns,
+  DueDate,
 } from "../../../types";
 
 export function processColumns(columnOptions: ColumnOptions) {
@@ -97,10 +100,34 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
   });
 }
 
+export function calculateDueDateInThisWeek(
+  expectedDueDate: Date,
+  dueDateColumns: DueDateColumns
+) {
+  return dueDateColumns.find(
+    (column) => column.localDateStr === toYYYYMMDDString(expectedDueDate)
+  );
+}
+
+export function getDueDateString(
+  expectedDueDate: Date,
+  dueDateColumns: DueDateColumns
+): DueDate | undefined | string {
+  const dueDate = calculateDueDateInThisWeek(expectedDueDate, dueDateColumns);
+  return dueDate ? dueDate.title : getMonthAndDay(expectedDueDate);
+}
+
+export function getExpectedDueDateFromWeekString(
+  weekString: SelectableDueDate
+) {
+  const lookUpDueDate = getLookUpDueDateTable();
+  return lookUpDueDate[weekString];
+}
+
 /* 
     return:
     {
-        "lookUpDueDate": {
+        "lookUpExpectedDueDate": {
             "OVER DUE":  "2022-10-27T12:41:44.971Z",
             "TODAY":     "2022-10-28T12:41:44.971Z", // <- today
             "TOMORROW":  "2022-10-29T12:41:44.971Z",
@@ -114,7 +141,7 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
     }
 */
 export function getLookUpDueDateTable() {
-  const lookUpExpectedDueDate: LookUpDueDate = {
+  const lookUpExpectedDueDate: LookUpExpectedDueDate = {
     "NO DUE DATE": undefined,
     "OVER DUE": undefined,
     TODAY: undefined,

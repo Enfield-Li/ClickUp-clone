@@ -18,6 +18,7 @@ import { DUE_DATE, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
 import DueDatePanel from "./DueDatePanel";
+import { getDueDateString } from "../../task/actions/columnProcessing";
 
 type Props = {
   task: Task;
@@ -29,7 +30,12 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy } = taskStateContext!;
+  const { setState, sortBy, columnOptions } = taskStateContext!;
+
+  console.log(
+    "res: ",
+    getDueDateString(new Date(task?.expectedDueDate!), columnOptions.dueDate)
+  );
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -97,7 +103,10 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
               <Box display="inline-block">
                 <PopoverTrigger>
                   <Center opacity="65%">
-                    {getMonthAndDay(new Date(task?.expectedDueDate!))}
+                    {getDueDateString(
+                      new Date(task?.expectedDueDate!),
+                      columnOptions.dueDate
+                    )}
                   </Center>
                 </PopoverTrigger>
               </Box>
