@@ -81,7 +81,8 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
     element = (
       <Flex alignItems="center">
         {icon}
-        &nbsp;{column?.title}
+        <span> </span>
+        {column?.title}
       </Flex>
     );
   } else {

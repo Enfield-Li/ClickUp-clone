@@ -31,7 +31,9 @@ function UpdateEvents({ updateEvent }: Props) {
         </Box>
 
         {/* changed something from */}
-        <Box opacity="65%">&nbsp;changed {updateEvent.field} from&nbsp;</Box>
+        <Box opacity="65%">
+          <span> </span>changed {updateEvent.field} from<span> </span>
+        </Box>
 
         {/* Before */}
         {updateEvent.beforeUpdate ? (
@@ -44,7 +46,9 @@ function UpdateEvents({ updateEvent }: Props) {
         )}
 
         {/* to */}
-        <Box opacity="65%">&nbsp;to&nbsp;</Box>
+        <Box opacity="65%">
+          <span> </span>to<span> </span>
+        </Box>
 
         {/* After */}
         <BeforeAndAfter

@@ -43,7 +43,9 @@ function CommentEvents({ commentEvent }: Props) {
                 : commentEvent.username}
             </Center>
             {/* Commented */}
-            <Center opacity="65%">&nbsp;commented</Center>
+            <Center opacity="65%">
+              <span> </span>commented
+            </Center>
           </Flex>
 
           {/* Update date ago */}

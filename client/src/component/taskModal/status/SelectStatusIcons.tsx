@@ -125,7 +125,9 @@ function SelectStatusIcons({}: Props) {
                 placement="top"
                 label={
                   <Flex>
-                    <Box fontWeight="semibold">Next:&nbsp;</Box>
+                    <Box fontWeight="semibold">
+                      Next:<span> </span>
+                    </Box>
                     <Box fontWeight="bold">
                       {nextStatus.title.toUpperCase()}
                     </Box>

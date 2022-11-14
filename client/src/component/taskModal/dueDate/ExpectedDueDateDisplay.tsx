@@ -95,7 +95,7 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
               fontWeight="semibold"
               label={
                 <Box>
-                  Time:&nbsp;
+                  Time:<span> </span>
                   {toYYYYMMDDString(new Date(task?.expectedDueDate!))}
                 </Box>
               }

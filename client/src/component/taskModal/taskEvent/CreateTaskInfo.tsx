@@ -31,7 +31,9 @@ function TaskCreatorInfo({}: Props) {
         </Box>
 
         {/* Created this task */}
-        <Box opacity="65%">&nbsp;created this task</Box>
+        <Box opacity="65%">
+          <span> </span>created this task
+        </Box>
       </Flex>
 
       <Center opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Center>

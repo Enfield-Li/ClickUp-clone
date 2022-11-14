@@ -29,7 +29,9 @@ function AssignmentEvents({ assignmentEvent }: Props) {
         </Box>
 
         <Box opacity="65%">
-          {assignmentEvent.assignmentAction}&nbsp;{assignmentEvent.field}:&nbsp;
+          {assignmentEvent.assignmentAction}
+          <span> </span>
+          {assignmentEvent.field}:<span> </span>
         </Box>
 
         <Box
