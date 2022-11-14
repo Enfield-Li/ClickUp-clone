@@ -6,22 +6,31 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { FormikHelpers } from "formik";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SelectableDueDate, State, UndeterminedColumn } from "../../../types";
+import {
+  lookUpPreviousTaskId,
+  SelectableDueDate,
+  SetState,
+  SortBy,
+  State,
+  TargetColumn,
+  Task,
+  UndeterminedColumn,
+} from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
+import { createTask } from "../actions/networkActions";
+import {
+  getDueDateFromExpectedDueDate,
+  updatePreviousIdsInColumn,
+} from "../actions/taskProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 import SaveButton from "./SaveButton";
-
-export type NewTask = {
-  title: string;
-  status?: string;
-  priority?: string;
-  dueDate?: string;
-};
 
 type Props = {
   state: State;
@@ -32,7 +41,7 @@ function CreateTask({ state, currentColumn }: Props) {
   const { authState } = useAuthContext();
 
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy } = taskStateContext!;
+  const { sortBy, setState } = taskStateContext!;
 
   const initialPriority = sortBy === "priority" ? currentColumn.id : null;
 
@@ -86,8 +95,8 @@ function CreateTask({ state, currentColumn }: Props) {
           pb={3}
           border="1px"
           rounded="sm"
+          width="100%"
           tabIndex={0}
-          width="250px"
           ref={htmlElRef}
           onBlur={handleOnBlur}
           borderColor="rgb(123, 104, 238)"
@@ -145,7 +154,20 @@ function CreateTask({ state, currentColumn }: Props) {
             </Flex>
 
             {/* Save */}
-            <SaveButton taskName={taskName} />
+            <Box
+              onClick={() =>
+                taskName &&
+                createNewTask(
+                  { title: taskName, expectedDueDate, priority },
+                  state,
+                  currentColumn,
+                  sortBy,
+                  setState
+                )
+              }
+            >
+              <SaveButton taskName={taskName} />
+            </Box>
           </Flex>
         </Box>
       )}
@@ -155,90 +177,81 @@ function CreateTask({ state, currentColumn }: Props) {
 
 export default memo(CreateTask);
 
-function validateName(value: string) {
-  let error;
-  if (!value) {
-    error = "Title is required";
+export type NewTask = {
+  title: string;
+  expectedDueDate?: Date;
+  priority: number | null;
+};
+
+async function createNewTask(
+  newTaskInput: NewTask,
+  state: State,
+  column: UndeterminedColumn,
+  sortBy: SortBy,
+  setState: SetState
+) {
+  // Prepare newTask
+  const { title, expectedDueDate, priority } = newTaskInput;
+
+  const newTask: Task = {
+    id: Math.random(),
+    title,
+    expectedDueDate,
+    previousTaskIds: {},
+    taskEvents: [],
+    watchers: [],
+    assignees: [],
+    subTasks: [],
+  };
+
+  const targetColumn: TargetColumn = {};
+
+  if (priority) targetColumn.priority = String(priority);
+  if (expectedDueDate) {
+    newTask.expectedDueDate = new Date(expectedDueDate);
+
+    const dueDateColumnId = getDueDateFromExpectedDueDate(
+      state.columnOptions.dueDate,
+      expectedDueDate
+    );
+
+    targetColumn.dueDate = String(dueDateColumnId);
   }
-  return error;
+
+  updatePreviousIdsInColumn(state, targetColumn, newTask);
+
+  // Updates for newTask's previousItem for current sortBy
+  const currentOrderedTasks = state.orderedTasks.find(
+    (task) => task.id === column.id
+  );
+
+  const currentTaskList = currentOrderedTasks?.taskList;
+  const currentTaskArrLength = currentTaskList?.length;
+
+  const previousTaskId = currentTaskArrLength
+    ? currentTaskList?.[currentTaskArrLength - 1].id
+    : undefined;
+
+  newTask[sortBy] = column.id;
+  newTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] = previousTaskId;
+
+  //   const newTaskData = await createTask(newTask);
+
+  // Update state
+  setState((previousState) => {
+    // Deep copy
+    const copiedState = deepCopy(previousState) as State;
+
+    // Push newTask to current column array
+    const taskArr = copiedState.orderedTasks.find(
+      (task) => task.id === column.id
+    );
+    // if (newTaskData) {
+    //   newTaskData.taskEvents = [];
+    //   taskArr?.taskList.push(newTaskData);
+    // }
+    taskArr?.taskList.push(newTask);
+
+    return copiedState;
+  });
 }
-
-// async function submit(
-//   formValues: NewTask,
-//   formikHelpers: FormikHelpers<NewTask>,
-//   state: State,
-//   column: UndeterminedColumn,
-//   sortBy: SortBy,
-//   setState: SetState,
-//   isTaskDone: boolean
-// ) {
-//   // Prepare newTask
-//   const { title, dueDate, priority, status } = formValues;
-
-//   const newTask: Task = {
-//     title,
-//     previousTaskIds: {},
-//     taskEvents: [],
-//     watchers: [],
-//     assignees: [],
-//     subTasks: [],
-//   };
-
-//   const targetColumn = { dueDate, priority, status };
-//   // Use date picker
-//   if (dueDate && dueDate.length > 1) {
-//     newTask.expectedDueDate = new Date(dueDate);
-
-//     const dueDateColumnId = getDueDateFromExpectedDueDateString(
-//       state.columnOptions.dueDate,
-//       dueDate
-//     );
-
-//     targetColumn.dueDate = String(dueDateColumnId);
-//   }
-
-//   // Task is finished, hide from other column options
-//   if (isTaskDone) {
-//     newTask.priority = 0;
-//     newTask.dueDate = 0;
-//   } else {
-//     updatePreviousIdsInColumn(state, targetColumn, newTask);
-//   }
-
-//   // Updates for newTask's previousItem for current sortBy
-//   const currentOrderedTasks = state.orderedTasks.find(
-//     (task) => task.id === column.id
-//   );
-
-//   const currentTaskList = currentOrderedTasks?.taskList;
-//   const currentTaskArrLength = currentTaskList?.length;
-
-//   const previousTaskId = currentTaskArrLength
-//     ? currentTaskList?.[currentTaskArrLength - 1].id
-//     : undefined;
-
-//   newTask[sortBy] = column.id;
-//   newTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] = previousTaskId;
-
-//   const newTaskData = await createTask(newTask);
-
-//   // Update state
-//   setState((previousState) => {
-//     // Deep copy
-//     const copiedState = deepCopy(previousState) as State;
-
-//     // Push newTask to current column array
-//     const taskArr = copiedState.orderedTasks.find(
-//       (task) => task.id === column.id
-//     );
-//     if (newTaskData) {
-//       newTaskData.taskEvents = [];
-//       taskArr?.taskList.push(newTaskData);
-//     }
-//     // taskArr?.taskList.push(newTask);
-
-//     return copiedState;
-//   });
-
-//   formikHelpers.resetForm();
-// }

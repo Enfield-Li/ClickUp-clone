@@ -24,9 +24,10 @@ type Props = {
   task: Task;
   setTask?: SetTask;
   onClose: () => void;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-function DueDateOptions({ task, setTask, onClose }: Props) {
+function DueDateOptions({ task, setTask, onClose, setExpectedDueDate }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
@@ -34,7 +35,6 @@ function DueDateOptions({ task, setTask, onClose }: Props) {
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   const { authState } = useAuthContext();
-
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
@@ -43,6 +43,7 @@ function DueDateOptions({ task, setTask, onClose }: Props) {
     const expectedDueDate = getExpectedDueDateFromWeekString(
       weekString as SelectableDueDate
     );
+    setExpectedDueDate(expectedDueDate);
 
     // Update list state
     updateTaskPriorityOrDueDate(

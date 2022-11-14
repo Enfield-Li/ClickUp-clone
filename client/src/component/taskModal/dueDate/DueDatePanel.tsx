@@ -24,7 +24,7 @@ function DueDatePanel({ task, setTask, onClose }: Props) {
   return (
     <Box>
       <Box p={2} bgColor={bgColor}>
-        Expected due date: <span> </span>
+        Expected due date: <span>&nbsp;</span>
         {task.expectedDueDate ? (
           <>
             <span style={{ textDecoration: "underline" }}>
@@ -43,7 +43,12 @@ function DueDatePanel({ task, setTask, onClose }: Props) {
           borderRightWidth="1px"
           borderColor={borderColor}
         >
-          <DueDateOptions task={task} onClose={onClose} setTask={setTask} />
+          <DueDateOptions
+            task={task}
+            onClose={onClose}
+            setTask={setTask}
+            setExpectedDueDate={setExpectedDueDate}
+          />
         </Box>
 
         <Box borderTopWidth="1px" borderColor={borderColor}>

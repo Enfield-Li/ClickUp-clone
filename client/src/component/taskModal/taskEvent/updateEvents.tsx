@@ -32,7 +32,7 @@ function UpdateEvents({ updateEvent }: Props) {
 
         {/* changed something from */}
         <Box opacity="65%">
-          <span> </span>changed {updateEvent.field} from<span> </span>
+          <span>&nbsp;</span>changed {updateEvent.field} from<span>&nbsp;</span>
         </Box>
 
         {/* Before */}
@@ -47,7 +47,7 @@ function UpdateEvents({ updateEvent }: Props) {
 
         {/* to */}
         <Box opacity="65%">
-          <span> </span>to<span> </span>
+          <span>&nbsp;</span>to<span>&nbsp;</span>
         </Box>
 
         {/* After */}

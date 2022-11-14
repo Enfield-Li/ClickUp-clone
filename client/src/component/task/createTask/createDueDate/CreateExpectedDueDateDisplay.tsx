@@ -56,7 +56,7 @@ function CreateExpectedDueDateDisplay({
               fontWeight="semibold"
               label={
                 <Box>
-                  Time:<span> </span>
+                  Time:<span>&nbsp;</span>
                   {toYYYYMMDDString(new Date(expectedDueDate!))}
                 </Box>
               }

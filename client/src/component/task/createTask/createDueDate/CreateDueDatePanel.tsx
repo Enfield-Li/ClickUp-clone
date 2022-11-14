@@ -21,7 +21,7 @@ function CreateDueDatePanel({
   return (
     <Box>
       <Box p={2} bgColor={bgColor}>
-        Expected due date: <span> </span>
+        Expected due date: <span>&nbsp;</span>
         {expectedDueDate ? (
           <>
             <span style={{ textDecoration: "underline" }}>

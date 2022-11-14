@@ -14,12 +14,15 @@ import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import {
   PRIORITY,
   PriorityColumn,
+  PriorityColumns,
   SetState,
   SortBy,
   Task,
   UpdateEvent,
 } from "../../../types";
 import { memo } from "react";
+import { deepCopy } from "../../../utils/deepCopy";
+import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
 
 type Props = {
   task: Task;
@@ -40,7 +43,7 @@ function PriorityOptions({ task, setTask, onOptionClose }: Props) {
 
   return (
     <>
-      {columnOptions.priority.map((priorityColumn) => {
+      {reorderPriorityColumn(columnOptions.priority).map((priorityColumn) => {
         const noPriority = priorityColumn.id === 1;
         const taskFinished = priorityColumn.id !== 0;
         const hideCurrentPriority = task!.priority !== priorityColumn.id;
@@ -91,7 +94,7 @@ function PriorityOptions({ task, setTask, onOptionClose }: Props) {
               </Flex>
 
               {/* Last row hide Divider */}
-              {priorityColumn.id !== 5 && <Divider />}
+              {priorityColumn.id !== 1 && <Divider />}
             </Box>
           )
         );

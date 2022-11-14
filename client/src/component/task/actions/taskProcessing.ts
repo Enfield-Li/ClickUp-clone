@@ -15,6 +15,7 @@ import {
   TargetTasksInColumn,
   Task,
   TaskList,
+  PriorityColumns,
 } from "../../../types";
 import { calculateDueDateInThisWeek } from "./columnProcessing";
 
@@ -331,4 +332,11 @@ export function findLastTaskId(
     orderedTaskListBasedOnSortBy[orderedTaskListBasedOnSortBy.length - 1];
 
   if (lastTask) return lastTask.id;
+}
+
+export function reorderPriorityColumn(priorityColumns: PriorityColumns) {
+  const copiedColumns = deepCopy(priorityColumns) as PriorityColumns;
+  const noPriorityColumn = copiedColumns.splice(0, 1);
+  copiedColumns.push(noPriorityColumn[0]);
+  return copiedColumns;
 }

@@ -32,7 +32,7 @@ function TaskCreatorInfo({}: Props) {
 
         {/* Created this task */}
         <Box opacity="65%">
-          <span> </span>created this task
+          <span>&nbsp;</span>created this task
         </Box>
       </Flex>
 

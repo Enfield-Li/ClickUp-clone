@@ -82,13 +82,6 @@ function handleDatePicker(
       expectedDueDateInput
     );
 
-    // Do nothing when it comes to selecting the same day
-    const isSameDay = targetDueDateColumnId === task.dueDate;
-    if (isSameDay) {
-      onClose();
-      return;
-    }
-
     // Update list state
     updateTaskPriorityOrDueDate(
       sortBy,

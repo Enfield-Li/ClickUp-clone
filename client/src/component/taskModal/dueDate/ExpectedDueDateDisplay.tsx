@@ -32,11 +32,6 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
-  console.log(
-    "res: ",
-    getDueDateString(new Date(task?.expectedDueDate!), columnOptions.dueDate)
-  );
-
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
     "darkMain.400",
@@ -95,7 +90,7 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
               fontWeight="semibold"
               label={
                 <Box>
-                  Time:<span> </span>
+                  Time:<span>&nbsp;</span>
                   {toYYYYMMDDString(new Date(task?.expectedDueDate!))}
                 </Box>
               }

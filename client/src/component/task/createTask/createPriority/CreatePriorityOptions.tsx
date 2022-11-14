@@ -3,6 +3,7 @@ import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import { PriorityColumn } from "../../../../types";
+import { reorderPriorityColumn } from "../../actions/taskProcessing";
 
 type Props = {
   priority: number | null;
@@ -32,16 +33,16 @@ function CreatePriorityOptions({
 
   return (
     <>
-      {columnOptions.priority.map((priority) => {
-        const noPriority = priority.id === 1;
-        const taskFinished = priority.id !== 0;
+      {reorderPriorityColumn(columnOptions.priority).map((priorityColumn) => {
+        const noPriority = priorityColumn.id === 1;
+        const taskFinished = priorityColumn.id !== 0;
 
         return (
           // Hide finished column and current priority stage
           taskFinished && (
             // Hide finished column and current priority stage
             <Box
-              key={priority.id}
+              key={priorityColumn.id}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
               <Flex
@@ -49,7 +50,7 @@ function CreatePriorityOptions({
                 rounded="sm"
                 cursor="pointer"
                 alignItems="center"
-                onClick={() => selectPriority(priority)}
+                onClick={() => selectPriority(priorityColumn)}
               >
                 {noPriority ? (
                   // Select priority
@@ -60,18 +61,17 @@ function CreatePriorityOptions({
                     <Box>Clear</Box>
                   </Flex>
                 ) : (
-                  // Clear priority
                   <Flex>
-                    <Box color={priority.color} mr={4}>
+                    <Box color={priorityColumn.color} mr={4}>
                       <i className="bi bi-flag-fill"></i>
                     </Box>
-                    <Box color={fontColor}>{priority.title}</Box>
+                    <Box color={fontColor}>{priorityColumn.title}</Box>
                   </Flex>
                 )}
               </Flex>
 
               {/* Last row hide Divider */}
-              {priority.id !== 5 && <Divider />}
+              {priorityColumn.id !== 1 && <Divider />}
             </Box>
           )
         );

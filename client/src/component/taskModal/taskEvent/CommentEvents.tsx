@@ -44,7 +44,7 @@ function CommentEvents({ commentEvent }: Props) {
             </Center>
             {/* Commented */}
             <Center opacity="65%">
-              <span> </span>commented
+              <span>&nbsp;</span>commented
             </Center>
           </Flex>
 
