@@ -26,3 +26,20 @@ export default function App() {
     </Flex>
   );
 }
+
+// import { useState } from "react";
+
+// function App() {
+//   const [count, setCount] = useState(0);
+//   return (
+//     <div className="App">
+//       <p>count is:</p>
+//       {count}
+//       <button type="button" onClick={() => setCount((count) => count + 1)}>
+//         Increase
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default App;
