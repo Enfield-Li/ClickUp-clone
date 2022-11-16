@@ -185,7 +185,7 @@ export const lookUpPreviousTaskId = {
   dueDate: "inDueDate",
 } as const;
 
-export type LookUpColumnId = {
+export type LookUpReorderedColumn = {
   [index: number]: number;
 };
 

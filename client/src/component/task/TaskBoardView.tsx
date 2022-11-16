@@ -4,7 +4,7 @@ import produce from "immer";
 import { memo, useCallback, useState } from "react";
 import {
   DUE_DATE,
-  LookUpColumnId,
+  LookUpReorderedColumn,
   lookUpPreviousTaskId,
   PRIORITY,
   SetState,
@@ -19,7 +19,7 @@ import { useLocalTasks } from "../../useLocalState/useLocalState";
 import { getNewEventDTO } from "../../utils/createNewEvent";
 import { updateTasksPosition } from "./actions/networkActions";
 import {
-  processLookColumnId,
+  getLookUpReorderedColumnTable,
   updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import Column from "./Column";
@@ -105,20 +105,24 @@ async function handleDragEnd(
   const { destination, source } = result;
   const currentColumns = state.columnOptions[sortBy];
 
-  if (!destination) return;
   if (
-    destination.droppableId === source.droppableId &&
-    destination.index === source.index
+    !destination ||
+    (destination.droppableId === source.droppableId &&
+      destination.index === source.index)
   ) {
     return;
   }
 
   const isDueDate = sortBy === DUE_DATE;
-  const lookUpColumnId: LookUpColumnId = {};
+  const lookUpColumnId: LookUpReorderedColumn = {};
   const isColumnReordered = sortBy !== PRIORITY;
 
   if (isColumnReordered) {
-    processLookColumnId(state.orderedTasks, currentColumns, lookUpColumnId);
+    getLookUpReorderedColumnTable(
+      state.orderedTasks,
+      currentColumns,
+      lookUpColumnId
+    );
   }
 
   const sourceColumnId = isColumnReordered
@@ -134,10 +138,6 @@ async function handleDragEnd(
   const destinationTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === destinationColumnId
   );
-
-  if (isDueDate) {
-    // state.columnOptions.dueDate
-  }
 
   setState(
     produce(state, (draftState) => {

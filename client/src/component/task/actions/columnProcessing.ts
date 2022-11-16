@@ -14,6 +14,7 @@ import {
   StatusColumns,
   DueDate,
 } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 
 export function processColumns(columnOptions: ColumnOptions) {
   const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
@@ -74,7 +75,8 @@ export function initializeDueDataColumns(
     todayIndex,
     weekDayColumns.length + 1
   );
-  const weekDayColumnsFinal = [...weekDayFront, ...weekDayEnd];
+  //   const weekDayColumnsFinal = [...weekDayFront, ...weekDayEnd];
+  const weekDayColumnsFinal = deepCopy([...weekDayFront, ...weekDayEnd]); // hack fix
 
   // Adding date string identifier
   const thisWeekLocalDateString = getOneWholeWeekLocalDateString();

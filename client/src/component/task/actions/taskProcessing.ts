@@ -4,7 +4,7 @@ import {
   UndeterminedColumns,
   DueDateColumns,
   DUE_DATE,
-  LookUpColumnId,
+  LookUpReorderedColumn,
   lookUpPreviousTaskId,
   OrderedTasks,
   PRIORITY,
@@ -125,22 +125,21 @@ export function groupTaskListOnSortBy(
   return orderedTasks;
 }
 
-// A lookup table that matches the sequence of an reorder and renamed columns
-// after columns been processed by reorderAndRenameColumns() function
+// A lookup table stores current column id as key and target column id as value
+// after status/dueDate columns been reorganized
 /* 
-    return 
     {
         orderedTask.id: column.id
     }
  */
-export function processLookColumnId(
+export function getLookUpReorderedColumnTable(
   orderedTasks: OrderedTasks,
   columns: UndeterminedColumns,
-  lookUpColumnId: LookUpColumnId
+  lookUpColumnId: LookUpReorderedColumn
 ) {
   for (let i = 0; i < orderedTasks.length; i++) {
-    const tasks = orderedTasks[i];
-    lookUpColumnId[tasks.id] = columns[i].id;
+    const orderedTask = orderedTasks[i];
+    lookUpColumnId[orderedTask.id] = columns[i].id;
   }
 }
 
@@ -150,9 +149,11 @@ export function getDueDateFromExpectedDueDate(
 ): number {
   if (dateInput) {
     // Due date within this week
-    const targetColumn = calculateDueDateInThisWeek(dateInput, dueDateColumn);
-
-    if (targetColumn) return targetColumn.id;
+    const targetDueDateColumn = calculateDueDateInThisWeek(
+      dateInput,
+      dueDateColumn
+    );
+    if (targetDueDateColumn) return targetDueDateColumn.id;
 
     // overdue or future
     const todayDate = new Date();
