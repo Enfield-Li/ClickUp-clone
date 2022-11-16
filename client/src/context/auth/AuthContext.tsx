@@ -2,7 +2,7 @@ import { createContext, useReducer } from "react";
 import { authInitialState, AuthContextType } from "./AuthContextTypes";
 import authReducer from "./AuthReducer";
 
-export const AuthContext = createContext({} as AuthContextType);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 type ProviderType = {
   children: React.ReactNode;

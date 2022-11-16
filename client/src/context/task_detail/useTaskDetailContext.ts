@@ -1,6 +1,12 @@
 import { useContext } from "react";
-import { TaskDetailContext } from "./TaskDetailContext";
+import { taskDetailContext } from "./TaskDetailContext";
 
 export default function useTaskDetailContext() {
-  return useContext(TaskDetailContext);
+  const context = useContext(taskDetailContext);
+  if (!context) {
+    throw new Error(
+      "useTaskDetailContext must be used within a taskDetailContextProvider"
+    );
+  }
+  return context;
 }

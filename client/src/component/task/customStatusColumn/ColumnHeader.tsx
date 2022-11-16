@@ -21,6 +21,7 @@ function ColumnHeader({
   const bgColor = useColorModeValue("white", "darkMain.200");
   const textColor = useColorModeValue("darkMain.500", "lightMain.300");
   const amountTextColor = useColorModeValue("black", "white");
+  const amountBorderColor = useColorModeValue("lightMain.100", "darkMain.300");
 
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
@@ -72,8 +73,8 @@ function ColumnHeader({
               fontSize="2xs"
               rounded="full"
               borderStyle="solid"
-              borderColor="gray.400"
               color={amountTextColor}
+              borderColor={amountBorderColor}
             >
               {taskAmount}
             </Text>

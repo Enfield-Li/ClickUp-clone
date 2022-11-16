@@ -8,7 +8,11 @@ import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../utils/AxiosInterceptor";
 
 export default function useAuthContext() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuthContext must be used within a authContextProvider");
+  }
+  return context;
 }
 
 export function logOutUser(
