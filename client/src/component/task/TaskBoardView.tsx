@@ -113,7 +113,6 @@ async function handleDragEnd(
     return;
   }
 
-  const isDueDate = sortBy === DUE_DATE;
   const lookUpColumnId: LookUpReorderedColumn = {};
   const isColumnReordered = sortBy !== PRIORITY;
 

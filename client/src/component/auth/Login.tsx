@@ -4,22 +4,19 @@ import {
   Center,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
-  Heading,
   Input,
+  Link as ChakraLink,
   Text,
   useToast,
-  VStack,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { Formik, FormikHelpers, Form, Field, FieldAttributes } from "formik";
-import React, { memo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Field, FieldAttributes, Form, Formik } from "formik";
+import { memo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { loginUser } from "./actions/loginUser";
 import { CLIENT_ROUTE } from "../../utils/constant";
+import { loginUser } from "./actions/loginUser";
 
 type Props = {};
 
