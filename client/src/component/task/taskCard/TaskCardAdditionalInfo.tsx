@@ -25,10 +25,10 @@ function TaskCardAdditionalInfo({
   const { columnOptions, sortBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
-    return columnOptions.priority.find(
+    return columnOptions.priorityColumns.find(
       (priority) => priority.id === task!.priority
     );
-  }, [columnOptions.priority, task!.priority]);
+  }, [columnOptions.priorityColumns, task!.priority]);
 
   return (
     <Flex fontSize="small">

@@ -1,7 +1,7 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, SortBy, UndeterminedColumn } from "../../../types";
+import { SetTaskState, SortBy, UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
 
@@ -12,7 +12,7 @@ type Props = {
   currentColumn?: UndeterminedColumn;
 };
 
-function ColumnHeader({
+export default memo(function ColumnHeader({
   title,
   taskAmount,
   currentColumn,
@@ -92,5 +92,4 @@ function ColumnHeader({
       </Flex>
     </Box>
   );
-}
-export default memo(ColumnHeader);
+});

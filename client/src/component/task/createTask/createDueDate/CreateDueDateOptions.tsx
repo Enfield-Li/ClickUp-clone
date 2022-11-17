@@ -42,7 +42,7 @@ function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
 
   return (
     <>
-      {columnOptions.dueDate.map((column, index) => {
+      {columnOptions.dueDateColumns.map((column, index) => {
         return (
           column.title !== "FUTURE" &&
           column.title !== "OVER DUE" &&

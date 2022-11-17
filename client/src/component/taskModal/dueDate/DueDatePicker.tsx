@@ -8,8 +8,7 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import {
   ColumnOptions,
-  DUE_DATE,
-  SetState,
+  SetTaskState,
   SortBy,
   Task,
   UpdateEvent,
@@ -70,7 +69,7 @@ function handleDatePicker(
   task: Task,
   userId: number,
   sortBy: SortBy,
-  setState: SetState,
+  setState: SetTaskState,
   onClose: () => void,
   columnOptions: ColumnOptions,
   expectedDueDateInput: Date,
@@ -78,7 +77,7 @@ function handleDatePicker(
 ) {
   if (expectedDueDateInput) {
     const targetDueDateColumnId = getDueDateFromExpectedDueDate(
-      columnOptions.dueDate,
+      columnOptions.dueDateColumns,
       expectedDueDateInput
     );
 
@@ -87,7 +86,7 @@ function handleDatePicker(
       sortBy,
       task!,
       setState,
-      DUE_DATE,
+      SortBy.DUE_DATE,
       targetDueDateColumnId,
       expectedDueDateInput
     );
@@ -96,7 +95,7 @@ function handleDatePicker(
       id: getRandomNumberNoLimit(),
       userId,
       taskId: task!.id!,
-      field: DUE_DATE,
+      field: SortBy.DUE_DATE,
       beforeUpdate: String(task?.dueDate),
       afterUpdate: String(targetDueDateColumnId),
       createdAt: new Date(),

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SortBy, STATUS } from "../../types";
+import { SortBy } from "../../types";
 import TaskBoardView from "./TaskBoardView";
 import TaskSortingOptions from "./TaskSortingOptions";
 import { Box } from "@chakra-ui/react";
@@ -13,7 +13,7 @@ type Props = {};
 function TaskView({}: Props) {
   const navigate = useNavigate();
   const { isModalOpen } = useTaskDetailContext();
-  const [sortBy, setSortBy] = useState<SortBy>(STATUS);
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.STATUS);
 
   // Reset to base url when modal closed
   useEffect(() => {

@@ -12,7 +12,7 @@ import UpdateEvents from "./taskEvent/updateEvents";
 
 type Props = {};
 
-function TaskEvent({}: Props) {
+export default memo(function TaskEvent({}: Props) {
   const { task, setTask } = useTaskDetailContext();
   const [loadingTaskEvents, setLoadingTaskEvents] = useState<boolean>();
 
@@ -95,5 +95,4 @@ function TaskEvent({}: Props) {
       </Flex>
     </Box>
   );
-}
-export default memo(TaskEvent);
+});

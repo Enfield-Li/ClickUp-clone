@@ -8,11 +8,11 @@ import {
 import produce from "immer";
 import React, { memo, useState } from "react";
 import { getRandomNumber } from "../../../utils/getRandomNumber";
-import { StatusColumns, SetState, StatusColumn } from "../../../types";
+import { StatusColumns, SetTaskState, StatusColumn } from "../../../types";
 
 type Props = {
   color: string;
-  setState: SetState;
+  setState: SetTaskState;
   statusColumns: StatusColumns;
   setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -38,9 +38,10 @@ function AddStatusColumnInput({
     setState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
-          const indexBeforeTheEnd = draftState.columnOptions.status.length - 1;
+          const indexBeforeTheEnd =
+            draftState.columnOptions.statusColumns.length - 1;
           // Create new column before the last one "Done"
-          draftState.columnOptions.status.splice(
+          draftState.columnOptions.statusColumns.splice(
             indexBeforeTheEnd,
             0,
             newColumn

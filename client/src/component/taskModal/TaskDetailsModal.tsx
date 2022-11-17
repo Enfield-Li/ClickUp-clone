@@ -21,7 +21,7 @@ import { fetchTaskEvents } from "../task/actions/networkActions";
 
 type Props = {};
 
-function TaskDetailModal({}: Props) {
+export default memo(function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const bgColor = useColorModeValue("white", "darkMain.100");
 
@@ -80,5 +80,4 @@ function TaskDetailModal({}: Props) {
       </ModalContent>
     </Modal>
   );
-}
-export default memo(TaskDetailModal);
+});

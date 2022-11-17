@@ -1,3 +1,4 @@
+import { CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
   Center,
@@ -13,16 +14,12 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { STATUS, UpdateEvent } from "../../../types";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
-import { CheckIcon } from "@chakra-ui/icons";
-import { updateCurrentTaskStatus } from "../../task/actions/updateCurrentTaskStatus";
 
 type Props = {};
 
-function SelectStatusIcons({}: Props) {
+export default memo(function SelectStatusIcons({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const { authState } = useAuthContext();
@@ -32,38 +29,36 @@ function SelectStatusIcons({}: Props) {
   const { task, setTask, taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
-  const column = columnOptions.status.find(
-    (column) => column.id === task!.status
+  const column = columnOptions.statusColumns.find(
+    (column) => column.id === task!.status.columnId
   );
-  const columnIndex = columnOptions.status.findIndex(
-    (column) => column.id === task!.status
+  const columnIndex = columnOptions.statusColumns.findIndex(
+    (column) => column.id === task!.status.columnId
   );
 
-  const isLastStatus = columnIndex + 1 === columnOptions.status.length;
+  const isLastStatus = columnIndex + 1 === columnOptions.statusColumns.length;
   const nextStatus = isLastStatus
-    ? columnOptions.status[0]
-    : columnOptions.status[columnIndex + 1];
+    ? columnOptions.statusColumns[0]
+    : columnOptions.statusColumns[columnIndex + 1];
 
   function handleNextStage() {
-    const targetStatusColumnId = nextStatus.id;
-    updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
-
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: STATUS,
-      beforeUpdate: String(task?.status),
-      afterUpdate: String(nextStatus.id),
-      createdAt: new Date(),
-    };
-
-    // Update modal task state
-    setTask({
-      ...task!,
-      status: targetStatusColumnId,
-      taskEvents: [...task!.taskEvents, newEvent],
-    });
+    // const targetStatusColumnId = nextStatus.id;
+    // updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
+    // const newEvent: UpdateEvent = {
+    //   id: getRandomNumberNoLimit(),
+    //   userId: authState.user?.id,
+    //   taskId: task!.id!,
+    //   field: STATUS,
+    //   beforeUpdate: String(task?.status),
+    //   afterUpdate: String(nextStatus.id),
+    //   createdAt: new Date(),
+    // };
+    // // Update modal task state
+    // setTask({
+    //   ...task!,
+    //   status: targetStatusColumnId,
+    //   taskEvents: [...task!.taskEvents, newEvent],
+    // });
   }
 
   return (
@@ -75,7 +70,7 @@ function SelectStatusIcons({}: Props) {
         closeOnBlur={true}
         // https://chakra-ui.com/docs/components/popover/usage#controlled-usage
       >
-        {({ onClose: onOptionClose }) => (
+        {({ onClose: onOptionClose }: { onClose: () => void }) => (
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <Flex
@@ -153,7 +148,7 @@ function SelectStatusIcons({}: Props) {
             </Flex>
 
             {/* Set to finish */}
-            {task!.status !== 3 && (
+            {task!.status.columnId !== 3 && (
               <Box mx={2}>
                 <FinishTask>
                   <Center
@@ -162,8 +157,8 @@ function SelectStatusIcons({}: Props) {
                     cursor={"pointer"}
                     _hover={{ color: "yellow.400", opacity: "100%" }}
                     onClick={() => {
-                      setTask({ ...task!, status: 3 });
-                      updateCurrentTaskStatus(sortBy, task!, setState, 3);
+                      //   setTask({ ...task!, status: 3 });
+                      //   updateCurrentTaskStatus(sortBy, task!, setState, 3);
                     }}
                   >
                     <Center border="1.1px solid" rounded="sm" p={2}>
@@ -178,5 +173,4 @@ function SelectStatusIcons({}: Props) {
       </Popover>
     </Center>
   );
-}
-export default memo(SelectStatusIcons);
+});

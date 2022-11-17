@@ -5,7 +5,7 @@ import { toYYYYMMDDString } from "../../utils/getWeekDays";
 
 type Props = {};
 
-function TaskCreationInfo({}: Props) {
+export default memo(function TaskCreationInfo({}: Props) {
   const { task } = useTaskDetailContext();
 
   return (
@@ -29,5 +29,4 @@ function TaskCreationInfo({}: Props) {
       </Box>
     </Tooltip>
   );
-}
-export default memo(TaskCreationInfo);
+});

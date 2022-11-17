@@ -1,97 +1,82 @@
-import { getDaysBefore } from "./utils/getWeekDays";
-
 // Sorting options
-export const STATUS = "status";
-export const PRIORITY = "priority";
-export const DUE_DATE = "dueDate";
-
-export type SortBy = typeof STATUS | typeof PRIORITY | typeof DUE_DATE;
+export enum SortBy {
+  STATUS = "status",
+  PRIORITY = "priority",
+  DUE_DATE = "dueDate",
+}
+type ColumnField = SortBy;
 
 // Columns
-export type Status = "TO DO" | "IN PROGRESS" | "DONE";
+export enum DefaultStatus {
+  TO_DO = "TO DO",
+  DONE = "Done",
+}
+export type Status = string | DefaultStatus;
 
-export type Priority =
-  | "LOW"
-  | "NORMAL"
-  | "HIGH"
-  | "URGENT"
-  | "NO PRIORITY"
-  | "DONE"
-  | "FINISHED";
+export enum Priority {
+  LOW = "LOW",
+  NORMAL = "NORMAL",
+  HIGH = "HIGH",
+  URGENT = "URGENT",
+  NO_PRIORITY = "NO PRIORITY",
+}
 
-export type SelectableDueDate =
-  | "OVER DUE"
-  | "TODAY"
-  | "TOMORROW"
-  | "SATURDAY"
-  | "SUNDAY"
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "FUTURE"
-  | "DONE"
-  | "NO DUE DATE"
-  | "THURSDAY"
-  | "FRIDAY";
+export enum CurrentWeek {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY",
+}
+export enum DueDateRange {
+  OVER_DUE = "OVER DUE",
+  TODAY = "TODAY",
+  TOMORROW = "TOMORROW",
+  FUTURE = "FUTURE",
+  NO_DUE_DATE = "NO DUE DATE",
+}
+export type DueDate = CurrentWeek | DueDateRange;
 
-export type DueDate = SelectableDueDate | "FINISHED";
+export enum Columns {
+  STATUS = "status",
+  PRIORITY = "priority",
+  DUE_DATE = "dueDate",
+}
 
 interface Column<T> {
   id: number;
   title: T;
   color: string;
 }
+export type PriorityColumn = Column<Priority>;
+export interface StatusColumn extends Column<Status> {
+  orderIndex: number;
+}
 export interface DueDateColumn extends Column<DueDate> {
   localDateStr?: string; // Format: 10/10/2022
 }
-export type PriorityColumn = Column<Priority>;
-export type StatusColumn = {
-  id: number;
-  title: string;
-  color: string;
-  previousColumnId?: number;
-};
 
 export type StatusColumns = StatusColumn[];
 export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
 
-export type ColumnOptions = {
-  status: StatusColumns;
-  priority: PriorityColumns;
-  dueDate: DueDateColumns;
-};
+export interface ColumnOptions {
+  statusColumns: StatusColumns;
+  priorityColumns: PriorityColumns;
+  dueDateColumns: DueDateColumns;
+}
 
 // task
-export type PreviousTaskIds = {
-  inStatus?: number;
-  inDueDate?: number;
-  inPriority?: number;
-};
+export enum ActionField {
+  TITLE = "title",
+  COMMENT = "comment",
+  WATCHER = "watcher",
+  ASSIGNEE = "assignee",
+}
 
-type PreviousTaskIdsBeforeFinish = {
-  inDueDate?: number;
-  inPriority?: number;
-};
-
-export const TITLE = "title";
-export const COMMENT = "comment";
-export const WATCHER = "watcher";
-export const ASSIGNEE = "assignee";
-
-export type Field =
-  | typeof STATUS
-  | typeof PRIORITY
-  | typeof DUE_DATE
-  | typeof TITLE
-  | typeof ASSIGNEE
-  | typeof WATCHER
-  | typeof COMMENT;
-
-type UserInfo = {
-  userId: number;
-  username: string;
-};
+export type Field = ColumnField | ActionField;
 
 interface BaseEvent {
   id?: number;
@@ -103,61 +88,82 @@ interface BaseEvent {
   updatedAt?: Date;
 }
 
-type Reaction = {
+interface UserInfo {
+  userId: number;
+  username: string;
+}
+interface Reaction {
   id?: number;
   userId?: number;
   username?: string;
   reaction: string;
-};
+}
+enum AssignmentAction {
+  ADDED = "added",
+  REMOVED = "removed",
+}
+export interface BeforeOrAfterUpdate {
+  afterUpdate: string;
+  beforeUpdate?: string;
+}
 
-type AssignmentAction = "added" | "removed";
-
+export type UpdateEvent = BaseEvent & BeforeOrAfterUpdate;
+export interface CommentEvent extends BaseEvent {
+  comment: string;
+  reactions: Reaction[];
+}
 export interface AssignmentEvent extends BaseEvent {
   assignmentAction: AssignmentAction;
   assignedUser: UserInfo;
 }
 
-export type BeforeOrAfterUpdate = {
-  afterUpdate: string;
-  beforeUpdate?: string;
-};
-
-export type UpdateEvent = BaseEvent & BeforeOrAfterUpdate;
-
-export interface CommentEvent extends BaseEvent {
-  comment: string;
-  reactions: Reaction[];
-}
-
 export type TaskEvent = UpdateEvent | CommentEvent | AssignmentEvent;
 export type TaskEvents = TaskEvent[];
 
-export type Task = {
+export interface Position<T> {
+  name: T;
+  columnId: number;
+  orderIndex: number;
+}
+
+export type TaskStatusPosition = Position<string>;
+export type TaskDueDatePosition = Position<DueDate>;
+export type TaskPriorityPosition = Position<Priority>;
+export type UndeterminedPosition =
+  | TaskStatusPosition
+  | TaskDueDatePosition
+  | TaskPriorityPosition;
+
+interface TaskPositions {
+  status: TaskStatusPosition;
+  dueDate: TaskDueDatePosition;
+  priority: TaskPriorityPosition;
+}
+
+export interface Task {
   id?: number;
   title: string;
-  status?: number; // track client column
-  dueDate?: number;
-  priority?: number;
   createdAt?: Date;
   updatedAt?: Date;
-  creatorId?: number;
-  creatorName?: string;
-  description?: string;
-  expectedDueDate?: Date; // server due date data
   archived?: boolean;
+  description?: string;
+  expectedDueDate?: Date;
 
+  subTasks: Task[];
+  creator?: UserInfo;
+  parentTask?: Task;
   watchers: UserInfo[];
   assignees: UserInfo[];
+  taskEvents: TaskEvent[];
 
-  taskEvents: TaskEvents; // Determine the task order
-  previousTaskIds: PreviousTaskIds;
+  status: TaskStatusPosition;
+  dueDate: TaskDueDatePosition;
+  priority: TaskPriorityPosition;
 
   // Keep previousTask record when set to finish
-  previousTaskIdsBeforeFinish?: PreviousTaskIdsBeforeFinish;
-
-  parentTask?: Task;
-  subTasks: Task[];
-};
+  taskStateInMain?: TaskPositions;
+  taskStateInListView?: TaskPositions;
+}
 
 export type TaskList = Task[];
 export type InitialData = { tasks: TaskList };
@@ -165,39 +171,32 @@ export type UndeterminedColumn = Column<string>;
 export type UndeterminedColumns = UndeterminedColumn[];
 
 // States
-export type OrderedTasks = { id: number; taskList: TaskList }[];
-export type State = {
+export type OrderedTasks = {
+  columnId: number;
+  taskList: TaskList;
+}[];
+export interface TaskState {
   orderedTasks: OrderedTasks;
   columnOptions: ColumnOptions;
-};
-export type SetState = React.Dispatch<React.SetStateAction<State | undefined>>;
+}
+export type SetTaskState = React.Dispatch<
+  React.SetStateAction<TaskState | undefined>
+>;
 
 // Look up tables
-export const lookUpIsLastItem = {
-  status: "inStatus",
-  priority: "inPriority",
-  dueDate: "inDueDate",
-} as const;
-
-export const lookUpPreviousTaskId = {
-  status: "inStatus",
-  priority: "inPriority",
-  dueDate: "inDueDate",
-} as const;
-
 export type LookUpReorderedColumn = {
   [index: number]: number;
 };
 
 export type LookUpExpectedDueDate = {
-  [index in SelectableDueDate]: Date | undefined;
+  [index in DueDate]: Date | undefined;
 };
 
 // Task creation types
-export type TargetColumn = {
-  status?: string | undefined;
-  priority?: string | undefined;
-  dueDate?: string | undefined;
+export type TargetColumnAndId = {
+  status?: number;
+  priority?: number;
+  dueDate?: number;
 };
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
 
@@ -206,12 +205,12 @@ export type UpdateTasksPositionDTO = {
   taskDtoList: TaskList;
 };
 
-export type UpdateTaskTitleDTO = {
+export interface UpdateTaskTitleDTO {
   taskId: number;
   newTitle: string;
-};
+}
 
-export type UpdateTaskDescDTO = {
+export interface UpdateTaskDescDTO {
   taskId: number;
   newDesc: string;
-};
+}

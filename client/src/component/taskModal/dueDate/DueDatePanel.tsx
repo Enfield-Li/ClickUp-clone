@@ -1,11 +1,10 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Task } from "../../../types";
 import { getMonthAndDay } from "../../../utils/getWeekDays";
-import DueDatePicker from "./DueDatePicker";
 import DueDateOptions from "./DueDateOptions";
+import DueDatePicker from "./DueDatePicker";
 
 type Props = {
   task: Task;
@@ -13,7 +12,7 @@ type Props = {
   onClose: () => void;
 };
 
-function DueDatePanel({ task, setTask, onClose }: Props) {
+export default memo(function DueDatePanel({ task, setTask, onClose }: Props) {
   const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
     task.expectedDueDate
   );
@@ -63,6 +62,4 @@ function DueDatePanel({ task, setTask, onClose }: Props) {
       </Flex>
     </Box>
   );
-}
-
-export default memo(DueDatePanel);
+});

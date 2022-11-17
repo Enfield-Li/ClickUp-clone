@@ -7,7 +7,7 @@ import { memo } from "react";
 
 type Props = { updateEvent: UpdateEvent };
 
-function UpdateEvents({ updateEvent }: Props) {
+export default memo(function UpdateEvents({ updateEvent }: Props) {
   const { authState } = useAuthContext();
 
   return (
@@ -32,7 +32,8 @@ function UpdateEvents({ updateEvent }: Props) {
 
         {/* changed something from */}
         <Box opacity="65%">
-          <span>&nbsp;</span>changed {updateEvent.field} from<span>&nbsp;</span>
+          <span>&nbsp;</span>changed {updateEvent.field} from
+          <span>&nbsp;</span>
         </Box>
 
         {/* Before */}
@@ -60,5 +61,4 @@ function UpdateEvents({ updateEvent }: Props) {
       <Box opacity="65%">{calculateTime(updateEvent.createdAt!)}</Box>
     </Flex>
   );
-}
-export default memo(UpdateEvents);
+});

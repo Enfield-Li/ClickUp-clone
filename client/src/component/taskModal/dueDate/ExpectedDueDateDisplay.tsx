@@ -14,7 +14,7 @@ import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
-import { DUE_DATE, Task, UpdateEvent } from "../../../types";
+import { SortBy, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
 import DueDatePanel from "./DueDatePanel";
@@ -25,7 +25,7 @@ type Props = {
   setTask?: SetTask;
 };
 
-function ExpectedDueDateDisplay({ task, setTask }: Props) {
+export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
@@ -39,34 +39,32 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
   );
 
   function clearDueDate() {
-    // Update list state
-    updateTaskPriorityOrDueDate(
-      sortBy,
-      task!,
-      setState,
-      DUE_DATE,
-      1, // No due date
-      undefined
-    );
-
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: DUE_DATE,
-      beforeUpdate: String(task?.dueDate),
-      afterUpdate: "1",
-      createdAt: new Date(),
-    };
-
-    // Update modal task state
-    if (setTask) {
-      setTask({
-        ...task!,
-        expectedDueDate: undefined,
-        taskEvents: [...task!.taskEvents, newEvent],
-      });
-    }
+    // // Update list state
+    // updateTaskPriorityOrDueDate(
+    //   sortBy,
+    //   task!,
+    //   setState,
+    //   SortBy.DUE_DATE,
+    //   1, // No due date
+    //   undefined
+    // );
+    // const newEvent: UpdateEvent = {
+    //   id: getRandomNumberNoLimit(),
+    //   userId: authState.user?.id,
+    //   taskId: task!.id!,
+    //   field: SortBy.DUE_DATE,
+    //   beforeUpdate: String(task?.dueDate),
+    //   afterUpdate: "1",
+    //   createdAt: new Date(),
+    // };
+    // // Update modal task state
+    // if (setTask) {
+    //   setTask({
+    //     ...task!,
+    //     expectedDueDate: undefined,
+    //     taskEvents: [...task!.taskEvents, newEvent],
+    //   });
+    // }
   }
 
   return (
@@ -80,7 +78,13 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
       onMouseOutCapture={() => setShowDeleteButton(false)}
     >
       <Popover>
-        {({ onClose, isOpen: isOptionOpen }) => (
+        {({
+          onClose,
+          isOpen: isOptionOpen,
+        }: {
+          onClose: () => void;
+          isOpen: boolean;
+        }) => (
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <Tooltip
@@ -100,7 +104,7 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
                   <Center opacity="65%">
                     {getDueDateString(
                       new Date(task?.expectedDueDate!),
-                      columnOptions.dueDate
+                      columnOptions.dueDateColumns
                     )}
                   </Center>
                 </PopoverTrigger>
@@ -139,5 +143,4 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
       )}
     </Flex>
   );
-}
-export default memo(ExpectedDueDateDisplay);
+});

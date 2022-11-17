@@ -1,24 +1,11 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
+import { DueDateRange, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import {
-  getExpectedDueDateFromWeekString,
-  getLookUpDueDateTable,
-} from "../../task/actions/columnProcessing";
-import {
-  DueDateColumn,
-  DUE_DATE,
-  SelectableDueDate,
-  SetState,
-  SortBy,
-  Task,
-  UpdateEvent,
-} from "../../../types";
-import { memo } from "react";
+import { handleSelectDueDateOptions } from "../../task/actions/handleSelectDueDateOptions";
 
 type Props = {
   task: Task;
@@ -27,7 +14,12 @@ type Props = {
   setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 };
 
-function DueDateOptions({ task, setTask, onClose, setExpectedDueDate }: Props) {
+export default memo(function DueDateOptions({
+  task,
+  setTask,
+  onClose,
+  setExpectedDueDate,
+}: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
@@ -38,54 +30,13 @@ function DueDateOptions({ task, setTask, onClose, setExpectedDueDate }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
-  function handleSelect(targetColumn: DueDateColumn) {
-    const weekString = targetColumn.title;
-    const expectedDueDate = getExpectedDueDateFromWeekString(
-      weekString as SelectableDueDate
-    );
-    setExpectedDueDate(expectedDueDate);
-
-    // Update list state
-    updateTaskPriorityOrDueDate(
-      sortBy,
-      task!,
-      setState,
-      DUE_DATE,
-      targetColumn.id,
-      expectedDueDate
-    );
-
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: DUE_DATE,
-      beforeUpdate: String(task?.dueDate),
-      afterUpdate: String(targetColumn.id),
-      createdAt: new Date(),
-    };
-
-    // Update task state
-    if (setTask) {
-      setTask({
-        ...task!,
-        expectedDueDate,
-        dueDate: targetColumn.id,
-        taskEvents: [...task!.taskEvents, newEvent],
-      });
-    }
-
-    onClose();
-  }
-
   return (
     <>
-      {columnOptions.dueDate.map((column, index) => {
+      {columnOptions.dueDateColumns.map((column, index) => {
         return (
-          column.title !== "FUTURE" &&
-          column.title !== "OVER DUE" &&
-          column.title !== "FINISHED" &&
-          column.title !== "NO DUE DATE" && (
+          column.title !== DueDateRange.FUTURE &&
+          column.title !== DueDateRange.OVER_DUE &&
+          column.title !== DueDateRange.NO_DUE_DATE && (
             <Flex
               py={2}
               px={3}
@@ -95,7 +46,7 @@ function DueDateOptions({ task, setTask, onClose, setExpectedDueDate }: Props) {
               cursor="pointer"
               bgColor={bgColor}
               justifyContent="space-between"
-              onClick={() => handleSelect(column)}
+              onClick={() => handleSelectDueDateOptions(column)}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
               <Box>{capitalizeFirstLetter(column.title.toString())}</Box>
@@ -108,6 +59,4 @@ function DueDateOptions({ task, setTask, onClose, setExpectedDueDate }: Props) {
       })}
     </>
   );
-}
-
-export default memo(DueDateOptions);
+});

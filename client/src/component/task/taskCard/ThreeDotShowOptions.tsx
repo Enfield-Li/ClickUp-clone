@@ -13,7 +13,7 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
+export default memo(function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
   return (
     <Popover
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
@@ -42,6 +42,4 @@ function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
       </PopoverContent>
     </Popover>
   );
-}
-
-export default memo(ThreeDotShowOptions);
+});

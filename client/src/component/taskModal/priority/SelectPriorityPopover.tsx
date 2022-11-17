@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
-import { PriorityColumn, Task } from "../../../types";
+import { Priority, PriorityColumn, Task } from "../../../types";
 import PriorityOptions from "./PriorityOptions";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { memo } from "react";
@@ -21,16 +21,14 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SelectPriorityPopover({
+export default memo(function SelectPriorityPopover({
   task,
   setTask,
   children,
   setIsPopoverOpen,
   currentTaskPriority,
 }: Props) {
-  const noPriority = task.priority === 1;
-  const taskFinished = task.priority === 0;
-  const hasPriority = !noPriority && !taskFinished;
+  const noPriority = task.priority.name === Priority.NO_PRIORITY;
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
@@ -40,7 +38,7 @@ function SelectPriorityPopover({
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
     >
-      {({ onClose: onOptionClose }) => (
+      {({ onClose: onOptionClose }: { onClose: () => void }) => (
         <>
           <Tooltip
             my={2}
@@ -48,7 +46,7 @@ function SelectPriorityPopover({
             placement="top"
             fontWeight="semibold"
             label={
-              !hasPriority
+              noPriority
                 ? "Set priority"
                 : currentTaskPriority &&
                   capitalizeFirstLetter(currentTaskPriority.title)
@@ -72,5 +70,4 @@ function SelectPriorityPopover({
       )}
     </Popover>
   );
-}
-export default memo(SelectPriorityPopover);
+});

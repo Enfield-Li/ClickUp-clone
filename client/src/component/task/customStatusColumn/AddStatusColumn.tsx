@@ -1,11 +1,11 @@
 import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import { SetState, StatusColumns } from "../../../types";
+import { SetTaskState, StatusColumns } from "../../../types";
 import AddStatusColumnInput from "./AddStatusColumnInput";
 import { HexColorPicker } from "react-colorful";
 
 type Props = {
-  setState: SetState;
+  setState: SetTaskState;
   statusColumns: StatusColumns;
 };
 

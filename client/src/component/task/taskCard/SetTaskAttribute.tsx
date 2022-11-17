@@ -16,7 +16,7 @@ type Props = {
   setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SetTaskAttribute({
+export default memo(function SetTaskAttribute({
   task,
   hasDueDate,
   hasPriority,
@@ -88,5 +88,4 @@ function SetTaskAttribute({
       </Flex>
     </Flex>
   );
-}
-export default memo(SetTaskAttribute);
+});

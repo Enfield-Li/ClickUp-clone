@@ -4,9 +4,9 @@ import { updatePreviousIdsInColumn } from "./taskProcessing";
 import {
   DUE_DATE,
   lookUpPreviousTaskId,
-  SetState,
+  SetTaskState,
   SortBy,
-  TargetColumn,
+  TargetColumnAndId,
   Task,
   TaskList,
   UpdateTasksPositionDTO,
@@ -16,7 +16,7 @@ import { getNewEventDTO } from "../../../utils/createNewEvent";
 export function updateTaskPriorityOrDueDate(
   sortBy: SortBy,
   currentTask: Task,
-  setState: SetState,
+  setState: SetTaskState,
   targetColumnKey: SortBy,
   targetColumnId: number,
   expectedDueDate?: Date
@@ -24,7 +24,7 @@ export function updateTaskPriorityOrDueDate(
   const taskListForUpdate: TaskList = [];
   const isDueDate = targetColumnKey === DUE_DATE;
 
-  const targetColumn: TargetColumn = isDueDate
+  const targetColumn: TargetColumnAndId = isDueDate
     ? { dueDate: String(targetColumnId) }
     : { priority: String(targetColumnId) };
 
@@ -58,10 +58,10 @@ export function updateTaskPriorityOrDueDate(
         // Update positions
         const currentColumnId = draftState.orderedTasks.find((tasks) =>
           tasks.taskList.find((task) => task.id === currentTask.id)
-        )?.id;
+        )?.columnId;
 
         const sourceColumn = draftState.orderedTasks.find(
-          (tasks) => tasks.id === currentColumnId
+          (tasks) => tasks.columnId === currentColumnId
         );
 
         const sourceTask = sourceColumn?.taskList.find(
@@ -69,7 +69,7 @@ export function updateTaskPriorityOrDueDate(
         );
 
         const destinationColumn = draftState.orderedTasks.find(
-          (tasks) => tasks.id === targetColumnId
+          (tasks) => tasks.columnId === targetColumnId
         );
 
         const currentTaskIndexInSourceColumn = sourceColumn?.taskList.findIndex(

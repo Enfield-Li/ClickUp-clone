@@ -3,7 +3,7 @@ import { Droppable } from "@hello-pangea/dnd";
 import { memo, useState } from "react";
 import {
   DueDateColumns,
-  State,
+  TaskState,
   TaskList,
   UndeterminedColumn,
 } from "../../types";
@@ -12,14 +12,14 @@ import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";
 
 type Props = {
-  state: State;
+  state: TaskState;
   tasks?: TaskList;
   isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Column({
+export default memo(function Column({
   state,
   tasks,
   currentColumn,
@@ -69,6 +69,4 @@ function Column({
       </Droppable>
     </Box>
   );
-}
-
-export default memo(Column);
+});

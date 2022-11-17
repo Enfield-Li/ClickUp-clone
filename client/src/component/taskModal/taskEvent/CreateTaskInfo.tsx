@@ -6,7 +6,7 @@ import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = {};
 
-function TaskCreatorInfo({}: Props) {
+export default memo(function TaskCreatorInfo({}: Props) {
   const { authState } = useAuthContext();
   const { task } = useTaskDetailContext();
 
@@ -23,10 +23,10 @@ function TaskCreatorInfo({}: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user?.id === task?.creatorId ? (
+          {authState.user?.id === task?.creator.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
-            <Box>{task?.creatorName}</Box>
+            <Box>{task?.creator.username}</Box>
           )}
         </Box>
 
@@ -39,5 +39,4 @@ function TaskCreatorInfo({}: Props) {
       <Center opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Center>
     </Flex>
   );
-}
-export default memo(TaskCreatorInfo);
+});

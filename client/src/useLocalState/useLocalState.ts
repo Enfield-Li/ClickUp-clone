@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
-import { processColumns } from "../component/task/actions/columnProcessing";
+import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   groupTaskListOnSortBy,
   collectAllTasks,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, State } from "../types";
+import { SortBy, TaskState } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { mockColumnOptions, mockTaskList } from "./mockData";
 import { sleep } from "../utils/sleep";
 
 export function useLocalTasks(sortBy: SortBy) {
-  const [state, setState] = useState<State>();
+  const [state, setState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
 
@@ -22,8 +22,7 @@ export function useLocalTasks(sortBy: SortBy) {
       setLoading(true);
       const columnDataFromApi = mockColumnOptions;
 
-      const { dueDateColumns, statusColumns } =
-        processColumns(columnDataFromApi);
+      const { dueDateColumns, statusColumns } = initColumns(columnDataFromApi);
 
       const columnOptions = {
         ...columnDataFromApi,
@@ -36,7 +35,7 @@ export function useLocalTasks(sortBy: SortBy) {
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
-        columnDataFromApi[sortBy],
+        columnDataFromApi[`${sortBy}Columns`],
         sortBy
       );
 
@@ -65,7 +64,7 @@ export function useLocalTasks(sortBy: SortBy) {
           ...state,
           orderedTasks: groupTaskListOnSortBy(
             collectAllTasks(state.orderedTasks),
-            state.columnOptions[sortBy],
+            state.columnOptions[`${sortBy}Columns`],
             sortBy
           ),
         });
@@ -74,7 +73,7 @@ export function useLocalTasks(sortBy: SortBy) {
         setLoading(false);
       }
     }
-  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
+  }, [sortBy, state?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
   return { state, setState, loading };
 }

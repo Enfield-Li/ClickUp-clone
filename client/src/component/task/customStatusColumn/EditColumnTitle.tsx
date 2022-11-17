@@ -8,14 +8,17 @@ import {
 import produce from "immer";
 import { memo, useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, UndeterminedColumn } from "../../../types";
+import { SetTaskState, UndeterminedColumn } from "../../../types";
 
 type Props = {
   currentColumn?: UndeterminedColumn;
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
+export default memo(function EditColumnTitle({
+  currentColumn,
+  setEditTitle,
+}: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
   const { taskStateContext } = useTaskDetailContext();
@@ -26,7 +29,7 @@ function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
     setState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
-          draftState.columnOptions.status.forEach((column) =>
+          draftState.columnOptions.statusColumns.forEach((column) =>
             column.id === currentColumn?.id &&
             e?.currentTarget.value !== column.title
               ? titleInput && (column.title = titleInput)
@@ -91,5 +94,4 @@ function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
       />
     </InputGroup>
   );
-}
-export default memo(EditColumnTitle);
+});

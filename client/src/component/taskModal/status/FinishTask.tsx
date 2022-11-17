@@ -3,7 +3,7 @@ import { memo } from "react";
 
 type Props = { children: React.ReactNode };
 
-function FinishTask({ children }: Props) {
+export default memo(function FinishTask({ children }: Props) {
   return (
     <Tooltip
       my={2}
@@ -15,5 +15,4 @@ function FinishTask({ children }: Props) {
       {children}
     </Tooltip>
   );
-}
-export default memo(FinishTask);
+});

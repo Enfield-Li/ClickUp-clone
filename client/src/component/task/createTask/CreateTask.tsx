@@ -2,7 +2,11 @@ import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SelectableDueDate, State, UndeterminedColumn } from "../../../types";
+import {
+  SelectableDueDate,
+  TaskState,
+  UndeterminedColumn,
+} from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
@@ -11,7 +15,7 @@ import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon"
 import SaveButton from "./SaveButton";
 
 type Props = {
-  state: State;
+  state: TaskState;
   isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;

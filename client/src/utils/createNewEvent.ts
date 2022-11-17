@@ -9,7 +9,7 @@ export function getNewEventDTO(
   return [
     {
       taskId,
-      field,
+      field: field,
       afterUpdate: String(afterUpdate),
       beforeUpdate: String(beforeUpdate),
     },

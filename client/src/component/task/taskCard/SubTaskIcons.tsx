@@ -24,7 +24,7 @@ function SubTaskIcons({ task, setShowSubTask }: Props) {
       if (SubTaskStatus) {
         SubTaskStatus.amount += 1;
       } else {
-        const statusColumn = columnOptions.status.find(
+        const statusColumn = columnOptions.statusColumns.find(
           (statusColumn) => statusColumn.id === subTask.status
         );
         if (statusColumn)

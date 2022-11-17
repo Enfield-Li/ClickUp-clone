@@ -1,20 +1,16 @@
 import {
-  Popover,
-  PopoverTrigger,
-  Button,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
   Box,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 
 type Props = { children: React.ReactNode };
 
-function RightClickShowCardOptions({ children }: Props) {
+export default memo(function RightClickShowCardOptions({ children }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -39,5 +35,4 @@ function RightClickShowCardOptions({ children }: Props) {
       </PopoverContent>
     </Popover>
   );
-}
-export default memo(RightClickShowCardOptions);
+});

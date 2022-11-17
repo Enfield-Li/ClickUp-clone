@@ -18,8 +18,7 @@ type Props = {
   children: React.ReactNode;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-function SelectDueDateIcon({
+export default memo(function SelectDueDateIcon({
   task,
   setTask,
   children,
@@ -33,7 +32,7 @@ function SelectDueDateIcon({
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
     >
-      {({ onClose }) => (
+      {({ onClose }: { onClose: () => void }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
           <Tooltip
@@ -66,5 +65,4 @@ function SelectDueDateIcon({
       )}
     </Popover>
   );
-}
-export default memo(SelectDueDateIcon);
+});

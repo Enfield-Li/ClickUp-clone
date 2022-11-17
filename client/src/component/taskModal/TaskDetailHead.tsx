@@ -11,7 +11,12 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { updateTaskTitle } from "../task/actions/networkActions";
-import { SetState, UpdateEvent, UpdateTaskTitleDTO } from "../../types";
+import {
+  ActionField,
+  SetTaskState,
+  UpdateEvent,
+  UpdateTaskTitleDTO,
+} from "../../types";
 
 type Props = {};
 
@@ -68,7 +73,7 @@ async function updateTitle(
   userId: number,
   taskId: number,
   newTitle: string,
-  setState: SetState,
+  setState: SetTaskState,
   setTask: SetTask
 ) {
   const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
@@ -91,7 +96,7 @@ async function updateTitle(
       if (prev) {
         const newEvent: UpdateEvent = {
           userId,
-          field: "title",
+          field: ActionField.TITLE,
           taskId,
           beforeUpdate: prev.title,
           afterUpdate: newTitle,

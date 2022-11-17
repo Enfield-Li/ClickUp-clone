@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import OptionWrapper from "../optionWrapper/SelectOption";
-import { SortBy, STATUS } from "../../../types";
+import { SortBy } from "../../../types";
 
 type Props = {
   sortBy: SortBy;
@@ -28,7 +28,7 @@ function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
   return (
     <>
       <Popover>
-        {({ isOpen, onClose }) => {
+        {({ onClose }: { onClose: () => void }) => {
           return (
             <>
               {showColumnOption && (
@@ -55,7 +55,7 @@ function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
                 color={popoverContentColor}
               >
                 <PopoverBody shadow="2xl">
-                  {sortBy === STATUS && (
+                  {sortBy === SortBy.STATUS && (
                     <OptionWrapper
                       onClose={onClose}
                       optionName="Rename status"

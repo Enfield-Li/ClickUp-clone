@@ -8,23 +8,18 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import produce from "immer";
+import { memo } from "react";
 import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { SetTaskState, UpdateTaskDescDTO } from "../../types";
 import { updateTaskDescription } from "../task/actions/networkActions";
-import {
-  SetState,
-  TaskEvents,
-  UpdateEvent,
-  UpdateTaskDescDTO,
-} from "../../types";
 import SelectPriorityIcon from "./priority/SelectPriorityIcon";
 import SelectStatusIcons from "./status/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";
-import { memo } from "react";
 
 type Props = {};
 
-function TaskInfo({}: Props) {
+export default memo(function TaskInfo({}: Props) {
   const {
     task,
     setTask,
@@ -96,13 +91,12 @@ function TaskInfo({}: Props) {
       </Box>
     </Box>
   );
-}
-export default memo(TaskInfo);
+});
 
 export async function updateDescription(
   taskId: number,
   newDesc: string,
-  setState: SetState,
+  setState: SetTaskState,
   setTask: SetTask
 ) {
   const updateTaskDescDTO: UpdateTaskDescDTO = { taskId, newDesc };

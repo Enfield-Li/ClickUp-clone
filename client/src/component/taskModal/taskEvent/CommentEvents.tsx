@@ -6,7 +6,7 @@ import { memo } from "react";
 
 type Props = { commentEvent: CommentEvent };
 
-function CommentEvents({ commentEvent }: Props) {
+export default memo(function CommentEvents({ commentEvent }: Props) {
   const { authState } = useAuthContext();
 
   return (
@@ -61,5 +61,4 @@ function CommentEvents({ commentEvent }: Props) {
       </Box>
     </Flex>
   );
-}
-export default memo(CommentEvents);
+});

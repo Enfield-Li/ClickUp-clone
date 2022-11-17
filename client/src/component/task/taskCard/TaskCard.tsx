@@ -3,7 +3,7 @@ import { Draggable } from "@hello-pangea/dnd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetState, STATUS, Task } from "../../../types";
+import { Priority, SetTaskState, SortBy, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
 import RightClickShowCardOptions from "./RightClickPopover";
 import SetTaskAttribute from "./SetTaskAttribute";
@@ -16,7 +16,7 @@ type Props = {
   index: number;
 };
 
-function TaskCard({ task, index }: Props) {
+export default memo(function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
   const [showSubTask, setShowSubTask] = useState(false);
   const [showAddSubTask, setShowAddSubTask] = useState(true);
@@ -33,17 +33,15 @@ function TaskCard({ task, index }: Props) {
   const { onModalOpen, setTask, taskStateContext } = useTaskDetailContext();
   const { columnOptions, sortBy } = taskStateContext!;
   const currentStatus = useMemo(() => {
-    return columnOptions.status.find(
-      (statusColumn) => statusColumn.id === task.status
+    return columnOptions.statusColumns.find(
+      (statusColumn) => statusColumn.id === task.status.columnId
     );
-  }, [columnOptions.status, task.status]);
+  }, [columnOptions.statusColumns, task.status]);
 
-  const noPriority = task.priority === 1;
-  const taskFinished = task.priority === 0;
-  const hasPriority = !noPriority && !taskFinished;
+  const noPriority = task.priority.name === Priority.NO_PRIORITY;
   const hasSubTask = task.subTasks.length > 0;
   const hasDueDate = task.expectedDueDate;
-  const expandCardHeight = hasPriority || hasSubTask || hasDueDate;
+  const expandCardHeight = !noPriority || hasSubTask || hasDueDate;
 
   function handleOpenTaskModal() {
     if (task?.id) {
@@ -72,7 +70,7 @@ function TaskCard({ task, index }: Props) {
             justifyContent="space-between"
             borderLeftColor={currentStatus?.color}
             height={expandCardHeight ? "110px" : "80px"}
-            borderLeftWidth={sortBy !== STATUS ? "3px" : ""}
+            borderLeftWidth={sortBy !== SortBy.STATUS ? "3px" : ""}
             borderBottomRadius={showSubTask ? "" : "sm"}
             border={colorMode === "dark" ? "1px solid darkMain.300" : ""}
             _hover={{
@@ -98,7 +96,7 @@ function TaskCard({ task, index }: Props) {
                   task={task}
                   hasDueDate={hasDueDate}
                   hasSubTask={hasSubTask}
-                  hasPriority={hasPriority}
+                  hasPriority={!noPriority}
                   setShowSubTask={setShowSubTask}
                 />
               </Box>
@@ -109,7 +107,7 @@ function TaskCard({ task, index }: Props) {
                 <SetTaskAttribute
                   task={task}
                   hasDueDate={hasDueDate}
-                  hasPriority={hasPriority}
+                  hasPriority={!noPriority}
                   setIsPopoverOpen={setIsPopoverOpen}
                 />
               </Box>
@@ -133,5 +131,4 @@ function TaskCard({ task, index }: Props) {
       )}
     </Draggable>
   );
-}
-export default memo(TaskCard);
+});

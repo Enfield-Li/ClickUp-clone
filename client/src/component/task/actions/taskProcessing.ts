@@ -1,22 +1,18 @@
-import { getNextNWeekDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
-import { deepCopy } from "../../../utils/deepCopy";
 import {
-  UndeterminedColumns,
   DueDateColumns,
-  DUE_DATE,
   LookUpReorderedColumn,
-  lookUpPreviousTaskId,
   OrderedTasks,
-  PRIORITY,
+  PriorityColumns,
   SortBy,
-  State,
-  STATUS,
-  TargetColumn,
+  TargetColumnAndId,
   TargetTasksInColumn,
   Task,
   TaskList,
-  PriorityColumns,
+  TaskState,
+  UndeterminedColumns,
 } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
+import { getNextNWeekDay } from "../../../utils/getWeekDays";
 import { calculateDueDateInThisWeek } from "./columnProcessing";
 
 /* 
@@ -85,42 +81,42 @@ export function groupTaskListOnSortBy(
 ): OrderedTasks {
   const orderedTasks: OrderedTasks = [];
 
-  for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
-    const columnId = column.id;
+  //   for (let i = 0; i < columns.length; i++) {
+  //     const column = columns[i];
+  //     const columnId = column.id;
 
-    orderedTasks[i] = { id: columnId, taskList: [] };
+  //     orderedTasks[i] = { columnId: columnId, taskList: [] };
 
-    // Find the first element
-    const firstTask = allTasks.find(
-      (task) =>
-        task[sortBy] === columnId &&
-        !task.previousTaskIds[lookUpPreviousTaskId[sortBy]]
-    );
-    if (firstTask) orderedTasks[i].taskList[0] = firstTask;
+  //     // Find the first element
+  //     const firstTask = allTasks.find(
+  //       (task) =>
+  //         task[sortBy] === columnId &&
+  //         !task.previousTaskIds[lookUpPreviousTaskId[sortBy]]
+  //     );
+  //     if (firstTask) orderedTasks[i].taskList[0] = firstTask;
 
-    // Find all the entailing element based on sortBy
-    for (let k = 0; k < orderedTasks[i].taskList.length; k++) {
-      const currentTask = orderedTasks[i].taskList[k];
+  //     // Find all the entailing element based on sortBy
+  //     for (let k = 0; k < orderedTasks[i].taskList.length; k++) {
+  //       const currentTask = orderedTasks[i].taskList[k];
 
-      const entailingTask = allTasks.find(
-        (task) =>
-          task.previousTaskIds[lookUpPreviousTaskId[sortBy]] === currentTask.id
-      );
+  //       const entailingTask = allTasks.find(
+  //         (task) =>
+  //           task.previousTaskIds[lookUpPreviousTaskId[sortBy]] === currentTask.id
+  //       );
 
-      if (entailingTask) orderedTasks[i].taskList.push(entailingTask);
-    }
-  }
+  //       if (entailingTask) orderedTasks[i].taskList.push(entailingTask);
+  //     }
+  //   }
 
-  // Collect all the finished tasks
-  for (let i = 1; i < allTasks.length; i++) {
-    const currentTask = allTasks[i];
+  //   // Collect all the finished tasks
+  //   for (let i = 1; i < allTasks.length; i++) {
+  //     const currentTask = allTasks[i];
 
-    if (currentTask.status === 3) {
-      const doneTasks = orderedTasks.find((tasks) => tasks.id === 0);
-      doneTasks?.taskList.push(currentTask);
-    }
-  }
+  //     if (currentTask.status === 3) {
+  //       const doneTasks = orderedTasks.find((tasks) => tasks.columnId === 0);
+  //       doneTasks?.taskList.push(currentTask);
+  //     }
+  //   }
 
   return orderedTasks;
 }
@@ -139,7 +135,7 @@ export function getLookUpReorderedColumnTable(
 ) {
   for (let i = 0; i < orderedTasks.length; i++) {
     const orderedTask = orderedTasks[i];
-    lookUpColumnId[orderedTask.id] = columns[i].id;
+    lookUpColumnId[orderedTask.columnId] = columns[i].id;
   }
 }
 
@@ -180,14 +176,14 @@ export function processTaskList(
 
     if (!task.taskEvents || task.taskEvents.length) taskCopy.taskEvents = [];
 
-    // if dueDate is undefined, then override it with expectedDueDate
-    if (taskCopy.dueDate === undefined) {
-      // convert expectedDueDate to dueDate
-      taskCopy.dueDate = getDueDateFromExpectedDueDate(
-        dueDateColumn,
-        task.expectedDueDate
-      );
-    }
+    // // if dueDate is undefined, then override it with expectedDueDate
+    // if (taskCopy.dueDate === undefined) {
+    //   // convert expectedDueDate to dueDate
+    //   taskCopy.dueDate = getDueDateFromExpectedDueDate(
+    //     dueDateColumn,
+    //     task.expectedDueDate
+    //   );
+    // }
 
     return taskCopy;
   });
@@ -195,8 +191,8 @@ export function processTaskList(
 
 // Push task to the other sortBy id === 1 column
 export function updatePreviousIdsInColumn(
-  state: State,
-  targetColumn: TargetColumn,
+  state: TaskState,
+  targetColumn: TargetColumnAndId,
   sourceTask: Task
 ) {
   const allTasks = collectAllTasks(state.orderedTasks);
@@ -247,7 +243,7 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
     ]
 */
 export function collectPreviousTaskValues(
-  previousTask: TargetColumn
+  previousTask: TargetColumnAndId
 ): TargetTasksInColumn {
   const taskListForUpdate: TargetTasksInColumn = [];
 

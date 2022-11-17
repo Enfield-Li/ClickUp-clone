@@ -9,16 +9,17 @@ import {
 import {
   ColumnOptions,
   DueDateColumns,
-  SelectableDueDate,
   LookUpExpectedDueDate,
   StatusColumns,
   DueDate,
+  DueDateRange,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
+import { current } from "immer";
 
-export function processColumns(columnOptions: ColumnOptions) {
-  const dueDateColumns = initializeDueDataColumns(columnOptions.dueDate);
-  const statusColumns = reorderStatusColumns(columnOptions.status);
+export function initColumns(columnOptions: ColumnOptions) {
+  const dueDateColumns = initDueDateColumns(columnOptions.dueDateColumns);
+  const statusColumns = reorderStatusColumns(columnOptions.statusColumns);
 
   return { dueDateColumns, statusColumns };
 }
@@ -54,7 +55,7 @@ export function processColumns(columnOptions: ColumnOptions) {
         { "id": 10, "title": "FUTURE" }
       ]
  */
-export function initializeDueDataColumns(
+export function initDueDateColumns(
   originalColumns: DueDateColumns
 ): DueDateColumns {
   // rename columns to Today and Tomorrow
@@ -68,7 +69,7 @@ export function initializeDueDataColumns(
   const weekDayColumns = updatedColumns.slice(2, columnsLength - 2);
 
   const todayIndex = weekDayColumns.findIndex(
-    (column) => column.title === "TODAY"
+    (column) => column.title === DueDateRange.TODAY
   );
   const weekDayEnd = weekDayColumns.slice(0, todayIndex);
   const weekDayFront = weekDayColumns.slice(
@@ -94,9 +95,9 @@ function renameDueDateColumns(dueDateColumns: DueDateColumns) {
 
   return dueDateColumns.map((column) => {
     if (column.title === todayWeekDay) {
-      column.title = "TODAY";
+      column.title = DueDateRange.TODAY;
     } else if (column.title === tomorrowWeekDay) {
-      column.title = "TOMORROW";
+      column.title = DueDateRange.TOMORROW;
     }
     return column;
   });
@@ -119,9 +120,7 @@ export function getDueDateString(
   return dueDate ? dueDate.title : getMonthAndDay(expectedDueDate);
 }
 
-export function getExpectedDueDateFromWeekString(
-  weekString: SelectableDueDate
-) {
+export function getExpectedDueDateFromWeekString(weekString: DueDate) {
   const lookUpDueDate = getLookUpDueDateTable();
   return lookUpDueDate[weekString];
 }
@@ -154,17 +153,12 @@ export function getLookUpDueDateTable() {
     TUESDAY: undefined,
     WEDNESDAY: undefined,
     FUTURE: undefined,
-    DONE: undefined,
     THURSDAY: undefined,
     FRIDAY: undefined,
   };
 
-  // No due date
-  //   arrOfThisWeekDay.push("NO DUE DATE");
-  //   lookUpDueDate["NO DUE DATE"] = undefined;
-
   // OverDue (ie. yesterday)
-  lookUpExpectedDueDate["OVER DUE"] = getNextNWeekDay(-1);
+  lookUpExpectedDueDate[DueDateRange.OVER_DUE] = getNextNWeekDay(-1);
 
   // Monday to Sunday
   for (let i = 0; i < 7; i++) {
@@ -172,24 +166,21 @@ export function getLookUpDueDateTable() {
 
     // today
     if (i === 0) {
-      lookUpExpectedDueDate["TODAY"] = day;
+      lookUpExpectedDueDate[DueDateRange.TODAY] = day;
     }
     // tomorrow
     else if (i === 1) {
-      lookUpExpectedDueDate["TOMORROW"] = day;
+      lookUpExpectedDueDate[DueDateRange.TOMORROW] = day;
     }
     // rest of the week
     else {
-      const uppercaseWeekDayStr = getUppercaseWeekDayString(
-        day
-      ) as SelectableDueDate;
-
+      const uppercaseWeekDayStr = getUppercaseWeekDayString(day) as DueDate;
       lookUpExpectedDueDate[uppercaseWeekDayStr] = day;
     }
   }
 
   // future (ie. one week later)
-  lookUpExpectedDueDate["FUTURE"] = getNextNWeekDay(7);
+  lookUpExpectedDueDate[DueDateRange.FUTURE] = getNextNWeekDay(7);
 
   return lookUpExpectedDueDate;
 }
@@ -198,20 +189,6 @@ export function getLookUpDueDateTable() {
 export function reorderStatusColumns(
   statusColumns: StatusColumns
 ): StatusColumns {
-  const result: StatusColumns = [];
-
-  // Find the first column
-  const firstColumn = statusColumns.find((column) => !column.previousColumnId);
-  if (firstColumn) result.push(firstColumn);
-
-  // Push the nextColumn
-  for (const column of result) {
-    for (const nextColumn of statusColumns) {
-      if (nextColumn.previousColumnId === column.id) {
-        result.push(nextColumn);
-      }
-    }
-  }
-
-  return result;
+  statusColumns.sort((prev, current) => prev.orderIndex - current.orderIndex);
+  return statusColumns;
 }

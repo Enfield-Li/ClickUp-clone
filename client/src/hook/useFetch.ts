@@ -1,13 +1,13 @@
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { processColumns } from "../component/task/actions/columnProcessing";
+import { initColumns } from "../component/task/actions/columnProcessing";
 import { fetchAllTasks } from "../component/task/actions/networkActions";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, State } from "../types";
+import { SortBy, TaskState } from "../types";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
@@ -44,7 +44,7 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(sortBy: SortBy) {
-  const [state, setState] = useState<State>();
+  const [state, setState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
@@ -56,7 +56,7 @@ export function useFetchTasks(sortBy: SortBy) {
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
     updateLocalState();
-  }, [sortBy, state?.columnOptions.status]); // Change of sortBy and adding status column
+  }, [sortBy, state?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
   async function fetchData() {
     setLoading(true);
@@ -67,8 +67,7 @@ export function useFetchTasks(sortBy: SortBy) {
     if (tasksData) {
       const columnDataFromApi = mockColumnOptions;
 
-      const { dueDateColumns, statusColumns } =
-        processColumns(columnDataFromApi);
+      const { dueDateColumns, statusColumns } = initColumns(columnDataFromApi);
 
       const columnOptions = {
         ...columnDataFromApi,
@@ -104,7 +103,7 @@ export function useFetchTasks(sortBy: SortBy) {
 
       // init taskEvents and convert expectedDueDate to dueDate columns
       const taskList = processTaskList(
-        state.columnOptions.dueDate,
+        state.columnOptions.dueDateColumns,
         collectAllTasks(state.orderedTasks)
       );
 

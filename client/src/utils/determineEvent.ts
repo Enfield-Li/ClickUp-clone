@@ -1,11 +1,4 @@
-import {
-  ASSIGNEE,
-  AssignmentEvent,
-  COMMENT,
-  CommentEvent,
-  UpdateEvent,
-  WATCHER,
-} from "../types";
+import { AssignmentEvent, CommentEvent, UpdateEvent } from "../types";
 
 // https://stackoverflow.com/q/69936190/16648127
 export function isCommentEvent(

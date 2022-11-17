@@ -14,10 +14,10 @@ function CreateSelectPriorityIcon({ priority, setPriority }: Props) {
 
   const noPriority = priority === 1;
   const currentPriorityColumn = useMemo(() => {
-    return columnOptions.priority.find(
+    return columnOptions.priorityColumns.find(
       (priorityColumn) => priorityColumn.id === priority
     );
-  }, [columnOptions.priority, priority]);
+  }, [columnOptions.priorityColumns, priority]);
 
   return (
     <CreateSelectPriorityPopover

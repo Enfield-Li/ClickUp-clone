@@ -29,11 +29,11 @@ function SubTaskList({ task }: Props) {
         const hasPriority = !noPriority && !taskFinished;
         const hasDueDate = subTask.expectedDueDate;
 
-        const currentTaskStatus = columnOptions.status.find(
+        const currentTaskStatus = columnOptions.statusColumns.find(
           (statusColumn) => statusColumn.id === subTask.status
         );
 
-        const currentTaskPriority = columnOptions.priority.find(
+        const currentTaskPriority = columnOptions.priorityColumns.find(
           (priority) => priority.id === subTask.priority
         );
         const priorityFlagColor = currentTaskPriority?.color;
