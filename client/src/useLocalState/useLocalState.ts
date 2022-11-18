@@ -5,7 +5,7 @@ import {
   collectAllTasks,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, TaskState } from "../types";
+import { ColumnOptions, SortBy, TaskState } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { mockColumnOptions, mockTaskList } from "./mockData";
 import { sleep } from "../utils/sleep";
@@ -22,16 +22,17 @@ export function useLocalTasks(sortBy: SortBy) {
       setLoading(true);
       const columnDataFromApi = mockColumnOptions;
 
-      const { dueDateColumns, statusColumns } = initColumns(columnDataFromApi);
+      const { reorderedDueDateColumns, reorderedStatusColumns } =
+        initColumns(columnDataFromApi);
 
-      const columnOptions = {
+      const columnOptions: ColumnOptions = {
         ...columnDataFromApi,
-        dueDate: dueDateColumns,
-        status: statusColumns,
+        dueDateColumns: reorderedDueDateColumns,
+        statusColumns: reorderedStatusColumns,
       };
 
       // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processTaskList(dueDateColumns, mockTaskList);
+      const taskList = processTaskList(reorderedDueDateColumns, mockTaskList);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
@@ -57,7 +58,6 @@ export function useLocalTasks(sortBy: SortBy) {
         setTaskStateContext({
           ...taskStateContext,
           sortBy,
-          columnOptions: state.columnOptions,
         });
 
         setState({

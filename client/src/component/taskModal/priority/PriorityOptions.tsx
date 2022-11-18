@@ -112,13 +112,7 @@ export function selectPriority(
   if (onOptionClose) onOptionClose();
 
   // Update list state
-  updateTaskPriorityOrDueDate(
-    sortBy,
-    task!,
-    setState,
-    SortBy.PRIORITY,
-    targetPriorityColumnId
-  );
+  updateTaskPriorityOrDueDate(task!, setState, targetPriorityColumnId);
 
   const newEvent: UpdateEvent = {
     id: getRandomNumberNoLimit(),

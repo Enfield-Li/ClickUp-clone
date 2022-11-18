@@ -2,11 +2,8 @@ import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import { updateTaskPriorityOrDueDate } from "../../actions/updateTaskPriorityOrDueDate";
 import {
   DueDateColumn,
-  SelectableDueDate,
-  DUE_DATE,
   UpdateEvent,
 } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";

@@ -1,15 +1,9 @@
 import {
-  DueDateColumn,
-  DueDateColumns,
   DueDateRange,
   OrderedTasks,
   Priority,
-  PriorityColumn,
-  PriorityColumns,
   SetTaskState,
   SortBy,
-  StatusColumn,
-  StatusColumns,
   TargetColumnAndId,
   Task,
   TaskDueDatePosition,
@@ -20,11 +14,7 @@ import {
   UndeterminedColumn,
   UndeterminedColumns,
 } from "../../../types";
-import { deepCopy } from "../../../utils/deepCopy";
-import {
-  getDueDateFromExpectedDueDate,
-  updatePreviousIdsInColumn,
-} from "./taskProcessing";
+import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export type NewTask = {
   title: string;
@@ -42,57 +32,60 @@ export async function createNewTask(
 ) {
   // Prepare newTask
   const { title, expectedDueDate, priority, status } = newTaskInput;
+  const newTask = newTaskFactory(title, expectedDueDate);
+  const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
+    state.columnOptions.dueDateColumns,
+    expectedDueDate
+  );
 
-  if (isDueDateColumns(currentColumn, sortBy)) {
-  } else {
-    const newTask = newTaskFactory(title, expectedDueDate);
-    const dueDateColumnId = getDueDateFromExpectedDueDate(
-      state.columnOptions.dueDateColumns,
-      expectedDueDate
-    );
+  // Set position under current column/sortBy
+  const currentTaskList = state.orderedTasks.find(
+    (orderedTaskList) => orderedTaskList.columnId === currentColumn.id
+  );
+  const lastTaskInCurrentTaskList =
+    currentTaskList?.taskList[currentTaskList?.taskList.length];
 
-    // Set position under current column/sortBy
-    const currentTaskList = state.orderedTasks.find(
-      (orderedTaskList) => orderedTaskList.columnId === currentColumn.id
-    );
-    const lastTaskInCurrentTaskList =
-      currentTaskList?.taskList[currentTaskList?.taskList.length];
+  newTask[sortBy].columnId = currentColumn.id;
+  newTask[sortBy].name = currentColumn.title;
+  newTask[sortBy].orderIndex = lastTaskInCurrentTaskList
+    ? lastTaskInCurrentTaskList[sortBy].orderIndex + 1
+    : 1;
 
-    newTask[sortBy].columnId = currentColumn.id;
-    newTask[sortBy].name = currentColumn.title;
-    newTask[sortBy].orderIndex = lastTaskInCurrentTaskList
-      ? lastTaskInCurrentTaskList[sortBy].orderIndex + 1
-      : 1;
+  // set position for other sortBys'
+  const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
+    sortBy,
+    dueDateColumnId,
+    priority,
+    status
+  );
+  updateTaskOnTargetColumnAndId(targetColumnAndId, state, newTask);
+}
 
-    // set position for other sortBys'
-    const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
-      sortBy,
-      dueDateColumnId,
-      priority,
-      status
-    );
+export function updateTaskOnTargetColumnAndId(
+  targetColumnAndId: TargetColumnAndId,
+  state: TaskState,
+  task: Task
+) {
+  const numOfKeys = Object.entries(targetColumnAndId).length;
+  for (let i = 0; i < numOfKeys; i++) {
+    const stateColumnPair = Object.entries(targetColumnAndId)[i];
+    const targetedSortBy = stateColumnPair[0] as SortBy;
+    const columnId = stateColumnPair[1];
 
-    for (let i = 0; i < Object.entries(targetColumnAndId).length; i++) {
-      const stateColumnPair = Object.entries(targetColumnAndId)[i];
-      const targetState = stateColumnPair[0] as SortBy;
-      const columnId = stateColumnPair[1];
+    const { orderIndex, columnName }: OrderIndexAndName =
+      findTheLastOrderIndexInColumn(targetedSortBy, columnId, state);
 
-      const { orderIndex, columnName } = findTheLastOrderIndexInColumn(
-        targetState,
-        columnId,
-        state
-      );
-      newTask[targetState].name = columnName;
-      newTask[targetState].orderIndex = orderIndex;
-    }
+    task[targetedSortBy].name = columnName;
+    task[targetedSortBy].columnId = columnId;
+    task[targetedSortBy].orderIndex = orderIndex;
   }
 }
 
-interface OrderIndexAndName {
+export interface OrderIndexAndName {
   orderIndex: number;
   columnName: string;
 }
-function findTheLastOrderIndexInColumn(
+export function findTheLastOrderIndexInColumn(
   sortBy: SortBy,
   columnId: number,
   state: TaskState
@@ -143,25 +136,6 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   return taskList;
 }
 
-function isStatusColumns(
-  currentColumn: UndeterminedColumn,
-  sortBy: SortBy
-): currentColumn is StatusColumn {
-  return sortBy === SortBy.STATUS;
-}
-function isPriorityColumns(
-  currentColumn: UndeterminedColumn,
-  sortBy: SortBy
-): currentColumn is PriorityColumn {
-  return sortBy === SortBy.PRIORITY;
-}
-function isDueDateColumns(
-  currentColumn: UndeterminedColumn,
-  sortBy: SortBy
-): currentColumn is DueDateColumn {
-  return sortBy === SortBy.DUE_DATE;
-}
-
 function newTargetStateColumnId(
   sortBy: SortBy,
   dueDateColumnId: number,
@@ -170,14 +144,14 @@ function newTargetStateColumnId(
 ) {
   const targetColumn: TargetColumnAndId = {};
   if (sortBy === SortBy.STATUS) {
-    targetColumn.dueDate = 1;
-    targetColumn.priority = 1;
+    targetColumn.dueDate = dueDateColumnId;
+    targetColumn.priority = priority ? priority : 1;
   } else if (sortBy === SortBy.PRIORITY) {
-    targetColumn.status = 1;
-    targetColumn.priority = 1;
+    targetColumn.status = status ? status : 1;
+    targetColumn.dueDate = dueDateColumnId;
   } else if (sortBy === SortBy.DUE_DATE) {
-    targetColumn.status = 1;
-    targetColumn.priority = 1;
+    targetColumn.status = status ? status : 1;
+    targetColumn.priority = priority ? priority : 1;
   }
   return targetColumn;
 }

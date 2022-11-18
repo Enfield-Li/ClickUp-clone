@@ -3,7 +3,7 @@ import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { DueDateRange, Task } from "../../../types";
+import { DueDateColumn, DueDateRange, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { handleSelectDueDateOptions } from "../../task/actions/handleSelectDueDateOptions";
 
@@ -30,6 +30,11 @@ export default memo(function DueDateOptions({
   const { taskStateContext } = useTaskDetailContext();
   const { setState, sortBy, columnOptions } = taskStateContext!;
 
+  function handleOnClick(targetColumn: DueDateColumn) {
+    onClose();
+    handleSelectDueDateOptions(task, setState, targetColumn);
+  }
+
   return (
     <>
       {columnOptions.dueDateColumns.map((column, index) => {
@@ -46,7 +51,7 @@ export default memo(function DueDateOptions({
               cursor="pointer"
               bgColor={bgColor}
               justifyContent="space-between"
-              onClick={() => handleSelectDueDateOptions(column)}
+              onClick={() => handleOnClick(column)}
               _hover={{ backgroundColor: popoverContentHoverBgColor }}
             >
               <Box>{capitalizeFirstLetter(column.title.toString())}</Box>

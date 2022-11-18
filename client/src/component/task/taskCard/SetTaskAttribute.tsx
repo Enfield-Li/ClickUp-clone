@@ -69,7 +69,7 @@ export default memo(function SetTaskAttribute({
               _hover={{ opacity: "100%", color: "green.300" }}
               onClick={(e) => {
                 e.stopPropagation();
-                updateCurrentTaskStatus(sortBy, task, setState, 3); // set to complete
+                updateCurrentTaskStatus(task, setState, 3); // set to complete
               }}
             >
               <CheckIcon fontSize="md" alignSelf="center" />

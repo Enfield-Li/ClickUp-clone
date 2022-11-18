@@ -13,15 +13,29 @@ import {
   StatusColumns,
   DueDate,
   DueDateRange,
+  UndeterminedColumns,
+  SortBy,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { current } from "immer";
 
 export function initColumns(columnOptions: ColumnOptions) {
-  const dueDateColumns = initDueDateColumns(columnOptions.dueDateColumns);
-  const statusColumns = reorderStatusColumns(columnOptions.statusColumns);
+  const reorderedDueDateColumns = initDueDateColumns(
+    columnOptions.dueDateColumns
+  );
+  const reorderedStatusColumns = reorderStatusColumns(
+    columnOptions.statusColumns
+  );
 
-  return { dueDateColumns, statusColumns };
+  return { reorderedDueDateColumns, reorderedStatusColumns };
+}
+
+// Reorder based on statusColumns.previousColumnId
+export function reorderStatusColumns(
+  statusColumns: StatusColumns
+): StatusColumns {
+  statusColumns.sort((prev, current) => prev.orderIndex - current.orderIndex);
+  return statusColumns;
 }
 
 /* 
@@ -64,9 +78,9 @@ export function initDueDateColumns(
   // put today to the front
   const columnsLength = updatedColumns.length;
   const front = updatedColumns.slice(0, 2);
-  const end = updatedColumns.slice(columnsLength - 2, columnsLength);
+  const end = updatedColumns.slice(columnsLength - 1, columnsLength);
 
-  const weekDayColumns = updatedColumns.slice(2, columnsLength - 2);
+  const weekDayColumns = updatedColumns.slice(2, columnsLength - 1);
 
   const todayIndex = weekDayColumns.findIndex(
     (column) => column.title === DueDateRange.TODAY
@@ -183,12 +197,4 @@ export function getLookUpDueDateTable() {
   lookUpExpectedDueDate[DueDateRange.FUTURE] = getNextNWeekDay(7);
 
   return lookUpExpectedDueDate;
-}
-
-// Reorder based on statusColumns.previousColumnId
-export function reorderStatusColumns(
-  statusColumns: StatusColumns
-): StatusColumns {
-  statusColumns.sort((prev, current) => prev.orderIndex - current.orderIndex);
-  return statusColumns;
 }

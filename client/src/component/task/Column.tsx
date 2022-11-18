@@ -1,10 +1,12 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import { memo, useState } from "react";
+import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import {
-  DueDateColumns,
-  TaskState,
+  DefaultStatus,
+  SortBy,
   TaskList,
+  TaskState,
   UndeterminedColumn,
 } from "../../types";
 import CreateTask from "./createTask/CreateTask";
@@ -13,7 +15,7 @@ import TaskCard from "./taskCard/TaskCard";
 
 type Props = {
   state: TaskState;
-  tasks?: TaskList;
+  taskList?: TaskList;
   isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,19 +23,21 @@ type Props = {
 
 export default memo(function Column({
   state,
-  tasks,
+  taskList,
   currentColumn,
   isCreateTaskOpen,
   setIsCreateTaskOpen,
 }: Props) {
   const [showCreateTask, setShowCreateTask] = useState(false);
+  const { taskStateContext } = useTaskDetailContext();
+  const { sortBy } = taskStateContext!;
 
   return (
     <Box width="250px" mx={3}>
       {/* Column header */}
       <ColumnHeader
-        taskAmount={tasks?.length}
         title={currentColumn.title}
+        taskAmount={taskList?.length}
         currentColumn={currentColumn}
         borderTopColor={currentColumn.color}
       />
@@ -50,9 +54,16 @@ export default memo(function Column({
             _hover={{ overflowY: "auto", overflowX: "hidden" }}
           >
             {/* Task list */}
-            {tasks?.map((task, index) => (
-              <TaskCard task={task} key={task.id} index={index} />
-            ))}
+            {taskList
+              // hide finished task
+              ?.filter((task) => {
+                const isTaskFinished = task.status.columnId !== 3;
+                // const isTaskFinished = task.status.name !== DefaultStatus.DONE; // doesn't work ??? WTF
+                return sortBy !== SortBy.STATUS ? isTaskFinished : true;
+              })
+              .map((task, index) => (
+                <TaskCard task={task} key={task.id} index={index} />
+              ))}
             {provided.placeholder}
 
             {/* Create task popover */}

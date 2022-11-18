@@ -6,17 +6,17 @@ import {
   LookUpReorderedColumn,
   SetTaskState,
   SortBy,
-  TaskState,
-  TargetColumnAndId,
   TaskList,
+  TaskState,
+  UndeterminedColumns,
   UpdateTasksPositionDTO,
 } from "../../types";
 import { useLocalTasks } from "../../useLocalState/useLocalState";
-import { getNewEventDTO } from "../../utils/createNewEvent";
-import { updateTasksPosition } from "./actions/networkActions";
+import { newEventDTO } from "../../utils/createNewEvent";
+import { isDueDateColumns } from "../../utils/determineColumns";
 import {
+  getExpectedDueDateFromDueDateColumn,
   getLookUpReorderedColumnTable,
-  updatePreviousIdsInColumn,
 } from "./actions/taskProcessing";
 import Column from "./Column";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
@@ -55,25 +55,21 @@ export default memo(function TaskBoardView({ sortBy }: Props) {
         <Flex>
           {/* Columns and tasks */}
           {selectedColumns.map((currentColumn, index) => {
-            // Task marked as finished is managed in "status", and hidden from other sortBy conditions
-            const columnWithTaskStatusDone: boolean = currentColumn.id !== 0;
             const taskListForCurrentColumn = taskState.orderedTasks.find(
               (orderedTask) => orderedTask.columnId === currentColumn.id
             )?.taskList;
 
             return (
-              columnWithTaskStatusDone && (
-                <Box key={currentColumn.id} borderRadius={4}>
-                  <Column
-                    state={taskState}
-                    currentColumn={currentColumn}
-                    // Pass down list as per column.id
-                    tasks={taskListForCurrentColumn}
-                    isCreateTaskOpen={isCreateTaskOpen}
-                    setIsCreateTaskOpen={setIsCreateTaskOpen}
-                  />
-                </Box>
-              )
+              <Box key={currentColumn.id} borderRadius={4}>
+                <Column
+                  state={taskState}
+                  currentColumn={currentColumn}
+                  // Pass down list as per column.id
+                  taskList={taskListForCurrentColumn}
+                  isCreateTaskOpen={isCreateTaskOpen}
+                  setIsCreateTaskOpen={setIsCreateTaskOpen}
+                />
+              </Box>
             );
           })}
 
@@ -98,236 +94,313 @@ async function handleDragEnd(
   setState: SetTaskState,
   sortBy: SortBy
 ) {
-  //   const { destination, source } = result;
-  //   const currentColumns = state.columnOptions[sortBy];
-  //   if (
-  //     !destination ||
-  //     (destination.droppableId === source.droppableId &&
-  //       destination.index === source.index)
-  //   ) {
-  //     return;
-  //   }
-  //   const lookUpColumnId: LookUpReorderedColumn = {};
-  //   const isColumnReordered = sortBy !== PRIORITY;
-  //   if (isColumnReordered) {
-  //     getLookUpReorderedColumnTable(
-  //       state.orderedTasks,
-  //       currentColumns,
-  //       lookUpColumnId
-  //     );
-  //   }
-  //   const sourceColumnId = isColumnReordered
-  //     ? lookUpColumnId[Number(source.droppableId)]
-  //     : Number(source.droppableId);
-  //   const destinationColumnId = isColumnReordered
-  //     ? lookUpColumnId[Number(destination.droppableId)]
-  //     : Number(destination.droppableId);
-  //   const sourceTaskColumnIndex = currentColumns.findIndex(
-  //     (column) => column.id === sourceColumnId
-  //   );
-  //   const destinationTaskColumnIndex = currentColumns.findIndex(
-  //     (column) => column.id === destinationColumnId
-  //   );
-  //   setState(
-  //     produce(state, (draftState) => {
-  //       const taskListForUpdate: TaskList = [];
-  //       const sourceTasksArr = draftState.orderedTasks[sourceTaskColumnIndex];
-  //       const destinationTasksArr =
-  //         draftState.orderedTasks[destinationTaskColumnIndex];
-  //       const destinationTasksArrLength = destinationTasksArr.taskList.length;
-  //       const lastTaskInDestinationTasksArr =
-  //         destinationTasksArr.taskList[destinationTasksArrLength - 1];
-  //       const sourceTask = sourceTasksArr.taskList[source.index];
-  //       const sourceTaskBefore = sourceTasksArr.taskList[source.index - 1];
-  //       const sourceTaskAfter = sourceTasksArr.taskList[source.index + 1];
-  //       const destinationTask = destinationTasksArr.taskList[destination.index];
-  //       const destinationTaskBefore =
-  //         destinationTasksArr.taskList[destination.index - 1];
-  //       const destinationTaskAfter =
-  //         destinationTasksArr.taskList[destination.index + 1];
-  //       const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
-  //         (task) => task.id === sourceTask.id
-  //       );
-  //       /*
-  //        * Drop in the same column
-  //        */
-  //       const isDropInTheSameColumn =
-  //         source.droppableId === destination.droppableId;
-  //       if (isDropInTheSameColumn) {
-  //         const moveUpOneRow =
-  //           sourceTaskBefore === destinationTask &&
-  //           destinationTaskAfter === sourceTask;
-  //         const moveDownOneRow =
-  //           sourceTaskAfter === destinationTask &&
-  //           destinationTaskBefore === sourceTask;
-  //         // move up one row
-  //         if (moveUpOneRow) {
-  //           sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             destinationTaskBefore ? destinationTaskBefore.id : undefined;
-  //           destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             sourceTask.id;
-  //           if (sourceTaskAfter) {
-  //             sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               destinationTask.id;
-  //             taskListForUpdate.push(sourceTaskAfter);
-  //           }
-  //         }
-  //         // move down one row
-  //         else if (moveDownOneRow) {
-  //           destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             sourceTaskBefore ? sourceTaskBefore.id : undefined;
-  //           sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             destinationTask.id;
-  //           if (destinationTaskAfter) {
-  //             destinationTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               sourceTask.id;
-  //             taskListForUpdate.push(destinationTaskAfter);
-  //           }
-  //         }
-  //         // move up or down multiple rows
-  //         else {
-  //           const destinationTaskIndex = sourceTasksArr.taskList.findIndex(
-  //             (task) => task.id === destinationTask.id
-  //           );
-  //           // move down
-  //           const isMoveDown = sourceTaskIndex < destinationTaskIndex;
-  //           if (isMoveDown) {
-  //             sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               sourceTaskBefore ? sourceTaskBefore.id : undefined;
-  //             sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               destinationTask.id;
-  //             taskListForUpdate.push(sourceTaskAfter);
-  //             if (destinationTaskAfter) {
-  //               destinationTaskAfter.previousTaskIds[
-  //                 lookUpPreviousTaskId[sortBy]
-  //               ] = sourceTask.id;
-  //               taskListForUpdate.push(destinationTaskAfter);
-  //             }
-  //           }
-  //           // move up
-  //           else {
-  //             sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               destinationTaskBefore ? destinationTaskBefore.id : undefined;
-  //             destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //               sourceTask.id;
-  //             if (sourceTaskAfter) {
-  //               sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //                 sourceTaskBefore ? sourceTaskBefore.id : undefined;
-  //               taskListForUpdate.push(sourceTaskAfter);
-  //             }
-  //           }
-  //         }
-  //         sourceTasksArr.taskList.splice(source.index, 1); // delete original
-  //         sourceTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
-  //         /*
-  //          * Drop in a different column
-  //          */
-  //       } else {
-  //         // Override all previous update events
-  //         // So as to keep the event consistent when submitting to server
-  //         sourceTask.taskEvents = getNewEventDTO(
-  //           sourceTask.id!,
-  //           sortBy,
-  //           sourceColumnId,
-  //           destinationColumnId
-  //         );
-  //         // Change column
-  //         sourceTask[sortBy] = destinationColumnId;
-  //         if (sourceTaskAfter) {
-  //           sourceTaskAfter.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             sourceTaskBefore ? sourceTaskBefore.id : undefined;
-  //           taskListForUpdate.push(sourceTaskAfter);
-  //         }
-  //         // move to an empty column or to the last position
-  //         if (!destinationTask) {
-  //           sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             lastTaskInDestinationTasksArr
-  //               ? lastTaskInDestinationTasksArr.id
-  //               : undefined;
-  //         }
-  //         // move to the middle or top of the column
-  //         else {
-  //           destinationTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             sourceTask.id;
-  //           sourceTask.previousTaskIds[lookUpPreviousTaskId[sortBy]] =
-  //             destinationTaskBefore ? destinationTaskBefore.id : undefined;
-  //         }
-  //         sourceTasksArr.taskList.splice(source.index, 1); // delete original
-  //         destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
-  //       }
-  //       // Move task from unfinished to finished
-  //       const isSetToFinished =
-  //         sortBy === STATUS &&
-  //         destination.droppableId === "3" && // Hard code column
-  //         source.droppableId !== "3"; // Hard code column
-  //       if (isSetToFinished) {
-  //         // Remove task from other sortBy options, by updating the sourceTaskAfter
-  //         draftState.orderedTasks.forEach((tasks) =>
-  //           tasks.taskList.forEach((taskAfter) => {
-  //             // Update priority
-  //             const sourceTaskAfterInPriority =
-  //               taskAfter.previousTaskIds.inPriority === sourceTask.id;
-  //             if (sourceTaskAfterInPriority) {
-  //               taskAfter.previousTaskIds.inPriority =
-  //                 sourceTask.previousTaskIds.inPriority;
-  //               taskListForUpdate.push(taskAfter);
-  //             }
-  //             // Update dueDate
-  //             const sourceTaskAfterInDueDate =
-  //               taskAfter.previousTaskIds.inDueDate === sourceTask.id;
-  //             if (sourceTaskAfterInDueDate) {
-  //               taskAfter.previousTaskIds.inDueDate =
-  //                 sourceTask.previousTaskIds.inDueDate;
-  //               taskListForUpdate.push(taskAfter);
-  //             }
-  //           })
-  //         );
-  //         // Update sourceTask by cleaning up other sortBy's info
-  //         if (!sourceTask.taskStateBeforeFinish) {
-  //           sourceTask.taskStateBeforeFinish = {};
-  //         }
-  //         // get previousTaskBeforeFinish first
-  //         sourceTask.taskStateBeforeFinish.dueDate = sourceTask.dueDate;
-  //         sourceTask.taskStateBeforeFinish.priority = sourceTask.priority;
-  //         // then update other sortBy column
-  //         sourceTask.priority = 0;
-  //         sourceTask.dueDate = 0;
-  //         sourceTask.previousTaskIds.inDueDate = 0;
-  //         sourceTask.previousTaskIds.inPriority = 0;
-  //         sourceTask.expectedDueDate = undefined;
-  //       }
-  //       // Move finished task to unfinished, and update other sortBy's info
-  //       const isSetToUnfinished =
-  //         sortBy === STATUS &&
-  //         destination.droppableId !==
-  //           String(draftState.columnOptions.statusColumns.length) &&
-  //         source.droppableId === "3"; // Hard code column
-  //       if (isSetToUnfinished) {
-  //         const previousDueDateIdBeforeFinish =
-  //           sourceTask.taskStateBeforeFinish?.dueDate;
-  //         const previousPriorityIdBeforeFinish =
-  //           sourceTask.taskStateBeforeFinish?.priority;
-  //         const targetColumn: TargetColumn = {
-  //           dueDate: previousDueDateIdBeforeFinish
-  //             ? String(previousDueDateIdBeforeFinish)
-  //             : "1", // Fall back to default column
-  //           priority: previousPriorityIdBeforeFinish
-  //             ? String(previousPriorityIdBeforeFinish)
-  //             : "1", // Fall back to default column
-  //         };
-  //         updatePreviousIdsInColumn(draftState, targetColumn, sourceTask);
-  //         // Clear previousTaskIdsBeforeFinish
-  //         sourceTask.taskStateBeforeFinish = {};
-  //       }
-  //       if (destinationTask) taskListForUpdate.push(destinationTask);
-  //       taskListForUpdate.push(sourceTask);
-  //       const updateTaskListDTO: UpdateTasksPositionDTO = {
-  //         sourceTaskId: sourceTask.id!,
-  //         taskDtoList: taskListForUpdate,
-  //       };
-  //       updateTasksPosition(updateTaskListDTO);
-  //       // Clear events from state task
-  //       sourceTask.taskEvents = [];
-  //     })
-  //   );
+  const { destination, source } = result;
+  if (
+    !destination ||
+    (destination.droppableId === source.droppableId &&
+      destination.index === source.index)
+  ) {
+    return;
+  }
+  const isDueDateColumn = sortBy === SortBy.DUE_DATE;
+  const currentColumns = state.columnOptions[
+    `${sortBy}Columns`
+  ] as UndeterminedColumns;
+
+  const lookUpColumnId: LookUpReorderedColumn = {};
+  const isColumnReordered = sortBy !== SortBy.PRIORITY;
+  if (isColumnReordered) {
+    getLookUpReorderedColumnTable(
+      state.orderedTasks,
+      currentColumns,
+      lookUpColumnId
+    );
+  }
+
+  const sourceColumnId = isColumnReordered
+    ? lookUpColumnId[Number(source.droppableId)]
+    : Number(source.droppableId);
+  const destinationColumnId = isColumnReordered
+    ? lookUpColumnId[Number(destination.droppableId)]
+    : Number(destination.droppableId);
+
+  const sourceTaskColumn = currentColumns.find(
+    (column) => column.id === sourceColumnId
+  );
+  const sourceTaskColumnIndex = currentColumns.findIndex(
+    (column) => column.id === sourceColumnId
+  );
+  const destinationTaskColumn = currentColumns.find(
+    (column) => column.id === destinationColumnId
+  );
+  const destinationTaskColumnIndex = currentColumns.findIndex(
+    (column) => column.id === destinationColumnId
+  );
+
+  setState(
+    produce(state, (draftState) => {
+      const taskListForUpdate: TaskList = [];
+      const sourceTasksArr = draftState.orderedTasks[sourceTaskColumnIndex];
+      const destinationTasksArr =
+        draftState.orderedTasks[destinationTaskColumnIndex];
+      const destinationTasksArrLength = destinationTasksArr?.taskList.length;
+      const lastTaskInDestinationTasksArr =
+        destinationTasksArr?.taskList[destinationTasksArrLength - 1];
+
+      const sourceTask = sourceTasksArr.taskList[source.index];
+      const sourceTaskBefore = sourceTasksArr.taskList[source.index - 1];
+      const sourceTaskAfter = sourceTasksArr.taskList[source.index + 1];
+      const sourceTaskIndex = sourceTasksArr.taskList.findIndex(
+        (task) => task.id === sourceTask.id
+      );
+
+      const destinationTask = destinationTasksArr.taskList[destination.index];
+      const destinationTaskBefore =
+        destinationTasksArr.taskList[destination.index - 1];
+      const destinationTaskAfter =
+        destinationTasksArr.taskList[destination.index + 1];
+      const destinationTaskIndex = sourceTasksArr.taskList.findIndex(
+        (task) => task.id === destinationTask?.id
+      );
+
+      /*
+       * Drop in the same column
+       */
+      const isDropInTheSameColumn =
+        source.droppableId === destination.droppableId;
+      if (isDropInTheSameColumn) {
+        const moveUpOneRow =
+          sourceTaskBefore === destinationTask &&
+          destinationTaskAfter === sourceTask;
+        const moveDownOneRow =
+          sourceTaskAfter === destinationTask &&
+          destinationTaskBefore === sourceTask;
+
+        // move up one row
+        if (moveUpOneRow) {
+          // swap orderIndex
+          const sourceTaskBeforeOrderIndex =
+            sourceTaskBefore[sortBy].orderIndex;
+          sourceTaskBefore[sortBy].orderIndex = sourceTask[sortBy].orderIndex;
+          sourceTask[sortBy].orderIndex = sourceTaskBeforeOrderIndex;
+          taskListForUpdate.push(sourceTaskBefore);
+        }
+
+        // move down one row
+        else if (moveDownOneRow) {
+          // swap orderIndex
+          const sourceTaskAfterOrderIndex = sourceTaskAfter[sortBy].orderIndex;
+          sourceTaskAfter[sortBy].orderIndex = sourceTask[sortBy].orderIndex;
+          sourceTask[sortBy].orderIndex = sourceTaskAfterOrderIndex;
+          taskListForUpdate.push(sourceTaskAfter);
+        }
+
+        // move up or down multiple rows
+        else {
+          // move down
+          const isMoveDown = sourceTaskIndex < destinationTaskIndex;
+          if (isMoveDown) {
+            handleMoveDownMultipleRows(
+              sourceTasksArr.taskList,
+              sortBy,
+              sourceTaskIndex,
+              destinationTaskIndex,
+              taskListForUpdate
+            );
+          }
+
+          // move up
+          else {
+            handleMoveUpMultipleRows(
+              sourceTasksArr.taskList,
+              sortBy,
+              sourceTaskIndex,
+              destinationTaskIndex,
+              taskListForUpdate
+            );
+          }
+        }
+
+        sourceTasksArr.taskList.splice(source.index, 1); // delete original
+        sourceTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
+      } else {
+        /*
+         * Drop in a different column
+         */
+        // Override all previous update events
+        // So as to keep the event consistent when submitting to server
+        sourceTask.taskEvents = newEventDTO(
+          sourceTask.id!,
+          sortBy,
+          sourceColumnId,
+          destinationColumnId
+        );
+        // Change column
+        sourceTask[sortBy].columnId = destinationColumnId;
+        sourceTask[sortBy].name = destinationTaskColumn!.title;
+
+        // Modify task.expectedDueDate
+        if (
+          destinationTaskColumn &&
+          isDueDateColumns(destinationTaskColumn, sortBy)
+        ) {
+          sourceTask.expectedDueDate = getExpectedDueDateFromDueDateColumn(
+            destinationTaskColumn
+          );
+        }
+
+        // move to an empty column or to the last position
+        if (!destinationTask) {
+          sourceTask[sortBy].orderIndex = lastTaskInDestinationTasksArr
+            ? lastTaskInDestinationTasksArr[sortBy].orderIndex + 1
+            : 1;
+        }
+
+        // move to the middle or top of the column
+        else {
+          sourceTask[sortBy].orderIndex = destinationTask[sortBy].orderIndex;
+
+          insertTask(
+            destinationTasksArr.taskList,
+            sortBy,
+            destination.index,
+            destinationTasksArrLength,
+            taskListForUpdate
+          );
+        }
+
+        sourceTasksArr.taskList.splice(source.index, 1); // delete original
+        destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
+      }
+
+      taskListForUpdate.push(sourceTask);
+      const updateTaskListDTO: UpdateTasksPositionDTO = {
+        sourceTaskId: sourceTask.id!,
+        taskDtoList: taskListForUpdate,
+      };
+      //   updateTasksPosition(updateTaskListDTO);
+      // Clear events from state task
+      sourceTask.taskEvents = [];
+    })
+  );
 }
+
+function insertTask(
+  taskList: TaskList,
+  sortBy: SortBy,
+  targetIndex: number,
+  targetTasksArrLength: number,
+  taskListForUpdate: TaskList
+) {
+  // increase all tasks orderIndex after targetIndex position
+  for (let i = targetIndex; i < targetTasksArrLength; i++) {
+    const item = taskList[i];
+    item[sortBy].orderIndex = item[sortBy].orderIndex + 1;
+    taskListForUpdate.push(item);
+  }
+
+  return { taskList, taskListForUpdate };
+}
+
+function handleMoveUpMultipleRows(
+  taskList: TaskList,
+  sortBy: SortBy,
+  sourceIndex: number,
+  targetIndex: number,
+  taskListForUpdate: TaskList
+) {
+  const sourceItem = taskList[sourceIndex];
+  const targetItem = taskList[targetIndex];
+  const targetItemPosition = targetItem[sortBy].orderIndex;
+
+  for (let i = targetIndex; i < sourceIndex; i++) {
+    const item = taskList[i];
+    const itemAfter = taskList[i + 1];
+    item[sortBy].orderIndex = itemAfter[sortBy].orderIndex;
+    taskListForUpdate.push(item);
+  }
+  sourceItem[sortBy].orderIndex = targetItemPosition;
+
+  return { taskList, taskListForUpdate };
+}
+
+function handleMoveDownMultipleRows(
+  taskList: TaskList,
+  sortBy: SortBy,
+  sourceIndex: number,
+  targetIndex: number,
+  taskListForUpdate: TaskList
+) {
+  const sourceItem = taskList[sourceIndex];
+  const targetItem = taskList[targetIndex];
+  const targetItemPosition = targetItem[sortBy].orderIndex;
+
+  const positions: number[] = [];
+  for (const item of taskList) {
+    positions.push(item[sortBy].orderIndex);
+  }
+
+  for (let i = sourceIndex; i < targetIndex + 1; i++) {
+    const item = taskList[i];
+    const itemBeforeIndex = positions[i - 1];
+    item[sortBy].orderIndex = itemBeforeIndex;
+    if (item.id !== sourceItem.id) taskListForUpdate.push(item);
+  }
+  sourceItem[sortBy].orderIndex = targetItemPosition;
+
+  return { taskList, taskListForUpdate };
+}
+
+/* 
+    type Item = { id: number; position: number };
+
+    const arr: Item[] = [
+    { id: 11, position: 1 },
+    { id: 22, position: 2 },
+    { id: 33, position: 3 },
+    { id: 44, position: 4 },
+    { id: 55, position: 5 },
+    ];
+
+    function processMoveUpMultipleRows(arr: Item[]) {
+    const sourceIndex = 3;
+    const targetIndex = 1;
+
+    const sourceItem = arr[sourceIndex];
+    const targetItem = arr[targetIndex];
+    const targetItemPosition = targetItem.position;
+
+    for (let i = targetIndex; i < sourceIndex; i++) {
+        const item = arr[i];
+        const itemAfter = arr[i + 1];
+        item.position = itemAfter.position;
+    }
+    sourceItem.position = targetItemPosition;
+
+    }
+    processMoveUpMultipleRows(arr);
+
+    function processMoveDownMultipleRows(arr: Item[]) {
+    const sourceIndex = 0;
+    const targetIndex = 4;
+
+    const sourceItem = arr[sourceIndex];
+    const targetItem = arr[targetIndex];
+    const targetItemPosition = targetItem.position;
+
+    const positions: number[] = [];
+    for (const item of arr) {
+        positions.push(item.position);
+    }
+
+    for (let i = sourceIndex; i < targetIndex + 1; i++) {
+        const item = arr[i];
+        const itemBeforeIndex = positions[i - 1];
+        item.position = itemBeforeIndex;
+    }
+    sourceItem.position = targetItemPosition;
+
+    }
+    processMoveDownMultipleRows(arr);
+
+ */

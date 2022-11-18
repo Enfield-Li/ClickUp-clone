@@ -14,7 +14,7 @@ import {
   UpdateEvent,
 } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { getDueDateFromExpectedDueDate } from "../../task/actions/taskProcessing";
+import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
 import MaterialTheme from "../../test-dev/MaterialTheme";
 
 type Props = {
@@ -76,17 +76,15 @@ function handleDatePicker(
   setTask?: SetTask
 ) {
   if (expectedDueDateInput) {
-    const targetDueDateColumnId = getDueDateFromExpectedDueDate(
+    const targetDueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
       columnOptions.dueDateColumns,
       expectedDueDateInput
     );
 
     // Update list state
     updateTaskPriorityOrDueDate(
-      sortBy,
       task!,
       setState,
-      SortBy.DUE_DATE,
       targetDueDateColumnId,
       expectedDueDateInput
     );

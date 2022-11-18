@@ -14,7 +14,7 @@ type Props = {
   setShowSubTask: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function TaskCardAdditionalInfo({
+export default memo(function TaskCardAdditionalInfo({
   task,
   hasDueDate,
   hasSubTask,
@@ -26,9 +26,9 @@ function TaskCardAdditionalInfo({
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priorityColumns.find(
-      (priority) => priority.id === task!.priority
+      (priority) => priority.id === task.priority.columnId
     );
-  }, [columnOptions.priorityColumns, task!.priority]);
+  }, [columnOptions.priorityColumns, task.priority]);
 
   return (
     <Flex fontSize="small">
@@ -67,5 +67,4 @@ function TaskCardAdditionalInfo({
       )}
     </Flex>
   );
-}
-export default memo(TaskCardAdditionalInfo);
+});

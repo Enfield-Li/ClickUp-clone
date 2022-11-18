@@ -1,6 +1,6 @@
 import { SortBy, TaskEvents } from "../types";
 
-export function getNewEventDTO(
+export function newEventDTO(
   taskId: number,
   field: SortBy,
   afterUpdate: string | number | undefined,
