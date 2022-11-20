@@ -1,4 +1,13 @@
 import {
+  ColumnOptions,
+  DueDate,
+  DueDateColumns,
+  DueDateRange,
+  LookUpExpectedDueDate,
+  StatusColumns,
+} from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
+import {
   getMonthAndDay,
   getNextNWeekDay,
   getOneWholeWeekLocalDateString,
@@ -6,25 +15,13 @@ import {
   getWeekDays,
   toYYYYMMDDString,
 } from "../../../utils/getWeekDays";
-import {
-  ColumnOptions,
-  DueDateColumns,
-  LookUpExpectedDueDate,
-  StatusColumns,
-  DueDate,
-  DueDateRange,
-  UndeterminedColumns,
-  SortBy,
-} from "../../../types";
-import { deepCopy } from "../../../utils/deepCopy";
-import { current } from "immer";
 
 export function initColumns(columnOptions: ColumnOptions) {
   const reorderedDueDateColumns = initDueDateColumns(
     columnOptions.dueDateColumns
   );
   const reorderedStatusColumns = reorderStatusColumns(
-    columnOptions.statusColumns
+    deepCopy(columnOptions.statusColumns)
   );
 
   return { reorderedDueDateColumns, reorderedStatusColumns };
