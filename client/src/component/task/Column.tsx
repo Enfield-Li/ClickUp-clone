@@ -21,7 +21,8 @@ type Props = {
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default memo(function Column({
+export default memo(Column);
+function Column({
   taskState,
   taskList,
   currentColumn,
@@ -80,4 +81,4 @@ export default memo(function Column({
       </Droppable>
     </Box>
   );
-});
+}

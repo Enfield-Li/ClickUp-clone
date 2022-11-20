@@ -6,7 +6,8 @@ import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = {};
 
-export default memo(function TaskCreatorInfo({}: Props) {
+export default memo(TaskCreatorInfo);
+function TaskCreatorInfo({}: Props) {
   const { authState } = useAuthContext();
   const { task } = useTaskDetailContext();
 
@@ -39,4 +40,4 @@ export default memo(function TaskCreatorInfo({}: Props) {
       <Center opacity="65%">{calculateTime(new Date(task?.createdAt!))}</Center>
     </Flex>
   );
-});
+}

@@ -25,7 +25,8 @@ type Props = {
   sortBy: SortBy;
 };
 
-export default memo(function TaskBoardView({ sortBy }: Props) {
+export default memo(TaskBoardView);
+function TaskBoardView({ sortBy }: Props) {
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
   const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
@@ -86,7 +87,7 @@ export default memo(function TaskBoardView({ sortBy }: Props) {
       </DragDropContext>
     </Box>
   );
-});
+}
 
 async function handleDragEnd(
   result: DropResult,

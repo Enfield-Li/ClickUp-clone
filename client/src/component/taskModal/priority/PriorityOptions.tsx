@@ -20,11 +20,8 @@ type Props = {
   onOptionClose: () => void;
 };
 
-export default memo(function PriorityOptions({
-  task,
-  setTask,
-  onOptionClose,
-}: Props) {
+export default memo(PriorityOptions);
+function PriorityOptions({ task, setTask, onOptionClose }: Props) {
   const fontColor = useColorModeValue("black", "lightMain.200");
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
@@ -98,8 +95,7 @@ export default memo(function PriorityOptions({
       )}
     </>
   );
-});
-
+}
 export function selectPriority(
   task: Task,
   userId: number,
@@ -128,13 +124,4 @@ export function selectPriority(
     afterUpdate: String(targetPriorityColumnId),
     createdAt: new Date(),
   };
-
-  //   // Update modal task taskState
-  //   if (setTask) {
-  //     setTask({
-  //       ...task!,
-  //       priority: targetPriorityColumnId,
-  //       taskEvents: [...task!.taskEvents, newEvent],
-  //     });
-  //   }
 }

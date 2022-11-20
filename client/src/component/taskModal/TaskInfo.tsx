@@ -19,7 +19,8 @@ import TaskOptions from "./taskOptions/DeleteTask";
 
 type Props = {};
 
-export default memo(function TaskInfo({}: Props) {
+export default memo(TaskInfo);
+function TaskInfo({}: Props) {
   const {
     task,
     setTask,
@@ -91,30 +92,4 @@ export default memo(function TaskInfo({}: Props) {
       </Box>
     </Box>
   );
-});
-
-export async function updateDescription(
-  taskId: number,
-  newDesc: string,
-  setTaskState: SetTaskState,
-  setTask: SetTask
-) {
-  const updateTaskDescDTO: UpdateTaskDescDTO = { taskId, newDesc };
-
-  const updateSuccess = await updateTaskDescription(updateTaskDescDTO);
-
-  if (updateSuccess) {
-    setTaskState((previousState) => {
-      if (previousState)
-        return produce(previousState, (draftState) => {
-          draftState.orderedTasks.forEach((tasks) =>
-            tasks.taskList.forEach(
-              (task) => task.id === taskId && (task.description = newDesc)
-            )
-          );
-        });
-    });
-
-    setTask((prev) => prev && { ...prev, description: newDesc });
-  }
 }

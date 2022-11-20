@@ -19,7 +19,8 @@ import StatusOptions from "./StatusOptions";
 
 type Props = {};
 
-export default memo(function SelectStatusIcons({}: Props) {
+export default memo(SelectStatusIcons);
+function SelectStatusIcons({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const { authState } = useAuthContext();
@@ -173,4 +174,4 @@ export default memo(function SelectStatusIcons({}: Props) {
       </Popover>
     </Center>
   );
-});
+}

@@ -16,6 +16,7 @@ type ProviderType = {
 
 export default function TaskDetailProvider({ children }: ProviderType) {
   const [task, setTask] = useState<Task>();
+  console.log("task in context: ", task);
   const {
     isOpen: isModalOpen,
     onOpen: onModalOpen,

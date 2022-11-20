@@ -6,7 +6,8 @@ import { memo } from "react";
 
 type Props = { assignmentEvent: AssignmentEvent };
 
-export default memo(function AssignmentEvents({ assignmentEvent }: Props) {
+export default memo(AssignmentEvents);
+function AssignmentEvents({ assignmentEvent }: Props) {
   const { authState } = useAuthContext();
   return (
     <Flex justifyContent="space-between" fontSize="small">
@@ -54,4 +55,4 @@ export default memo(function AssignmentEvents({ assignmentEvent }: Props) {
       <Box opacity="65%">{calculateTime(assignmentEvent.createdAt!)}</Box>
     </Flex>
   );
-});
+}

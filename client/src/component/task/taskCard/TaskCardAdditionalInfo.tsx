@@ -14,7 +14,8 @@ type Props = {
   setShowSubTask: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default memo(function TaskCardAdditionalInfo({
+export default memo(TaskCardAdditionalInfo);
+function TaskCardAdditionalInfo({
   task,
   hasDueDate,
   hasSubTask,
@@ -67,4 +68,4 @@ export default memo(function TaskCardAdditionalInfo({
       )}
     </Flex>
   );
-});
+}

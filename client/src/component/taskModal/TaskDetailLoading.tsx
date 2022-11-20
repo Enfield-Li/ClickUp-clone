@@ -3,7 +3,8 @@ import React, { memo } from "react";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
-export default memo(function TaskDetailLoading({ isOpen, onClose }: Props) {
+export default memo(TaskDetailLoading);
+function TaskDetailLoading({ isOpen, onClose }: Props) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -12,4 +13,4 @@ export default memo(function TaskDetailLoading({ isOpen, onClose }: Props) {
       </ModalContent>
     </Modal>
   );
-});
+}

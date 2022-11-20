@@ -13,10 +13,8 @@ type Props = {
   beforeOrAfterUpdate: keyof BeforeOrAfterUpdate;
 };
 
-export default memo(function BeforeAndAfter({
-  updateEvent,
-  beforeOrAfterUpdate,
-}: Props) {
+export default memo(BeforeAndAfter);
+function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
@@ -90,4 +88,4 @@ export default memo(function BeforeAndAfter({
   //   }
 
   //   return element;
-});
+}

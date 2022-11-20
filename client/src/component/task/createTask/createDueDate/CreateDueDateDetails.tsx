@@ -8,10 +8,8 @@ type Props = {
   setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
-export default memo(function CreateDueDateDetails({
-  expectedDueDate,
-  setExpectedDueDate,
-}: Props) {
+export default memo(CreateDueDateDetails);
+function CreateDueDateDetails({ expectedDueDate, setExpectedDueDate }: Props) {
   return (
     <>
       {expectedDueDate ? (
@@ -41,4 +39,4 @@ export default memo(function CreateDueDateDetails({
       )}
     </>
   );
-});
+}

@@ -16,7 +16,8 @@ type Props = {
   index: number;
 };
 
-export default memo(function TaskCard({ task, index }: Props) {
+export default memo(TaskCard);
+function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
   const [showSubTask, setShowSubTask] = useState(false);
   const [showAddSubTask, setShowAddSubTask] = useState(true);
@@ -131,4 +132,4 @@ export default memo(function TaskCard({ task, index }: Props) {
       )}
     </Draggable>
   );
-});
+}

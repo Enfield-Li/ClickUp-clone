@@ -21,7 +21,8 @@ type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default memo(function SelectPriorityPopover({
+export default memo(SelectPriorityPopover);
+function SelectPriorityPopover({
   task,
   setTask,
   children,
@@ -70,4 +71,4 @@ export default memo(function SelectPriorityPopover({
       )}
     </Popover>
   );
-});
+}

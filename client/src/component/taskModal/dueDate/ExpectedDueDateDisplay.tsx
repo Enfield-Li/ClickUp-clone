@@ -25,7 +25,8 @@ type Props = {
   setTask?: SetTask;
 };
 
-export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
+export default memo(ExpectedDueDateDisplay);
+function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
@@ -57,13 +58,6 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
       createdAt: new Date(),
     };
     // Update modal task taskState
-    if (setTask) {
-      setTask({
-        ...task!,
-        expectedDueDate: null,
-        taskEvents: [...task.taskEvents, newEvent],
-      });
-    }
   }
 
   return (
@@ -142,4 +136,4 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
       )}
     </Flex>
   );
-});
+}

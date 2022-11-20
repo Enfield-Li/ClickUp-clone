@@ -12,7 +12,8 @@ type Props = {
   currentColumn?: UndeterminedColumn;
 };
 
-export default memo(function ColumnHeader({
+export default memo(ColumnHeader);
+function ColumnHeader({
   title,
   taskAmount,
   currentColumn,
@@ -92,4 +93,4 @@ export default memo(function ColumnHeader({
       </Flex>
     </Box>
   );
-});
+}

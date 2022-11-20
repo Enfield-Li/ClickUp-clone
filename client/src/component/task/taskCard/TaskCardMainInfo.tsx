@@ -11,7 +11,9 @@ import { Task } from "../../../types";
 
 type Props = { task: Task };
 
-export default memo(function TaskCardMainInfo({ task }: Props) {
+export default memo(TaskCardMainInfo);
+
+function TaskCardMainInfo({ task }: Props) {
   const headerColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -45,4 +47,4 @@ export default memo(function TaskCardMainInfo({ task }: Props) {
       )}
     </Flex>
   );
-});
+}

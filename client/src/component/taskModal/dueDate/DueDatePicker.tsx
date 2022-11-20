@@ -21,17 +21,10 @@ type Props = {
   task: Task;
   setTask?: SetTask;
   onClose: () => void;
-  expectedDueDate: Date | null;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
-function DueDatePicker({
-  task,
-  setTask,
-  onClose,
-  expectedDueDate,
-  setExpectedDueDate,
-}: Props) {
+export default memo(DueDatePicker);
+function DueDatePicker({ task, setTask, onClose }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
@@ -39,13 +32,11 @@ function DueDatePicker({
   return (
     <MaterialTheme>
       <StaticDatePicker
-        value={expectedDueDate}
+        value={task.expectedDueDate}
         displayStaticWrapperAs="desktop"
         renderInput={(params) => <TextField {...params} />}
         onChange={(newValue) => {
           if (newValue) {
-            setExpectedDueDate(newValue);
-
             handleDatePicker(
               task,
               authState.user!.id,
@@ -62,8 +53,6 @@ function DueDatePicker({
     </MaterialTheme>
   );
 }
-
-export default memo(DueDatePicker);
 
 function handleDatePicker(
   task: Task,
@@ -98,15 +87,6 @@ function handleDatePicker(
       afterUpdate: String(targetDueDateColumnId),
       createdAt: new Date(),
     };
-
-    // Update modal task taskState
-    if (setTask) {
-      setTask({
-        ...task!,
-        expectedDueDate: expectedDueDateInput,
-        taskEvents: [...task!.taskEvents, newEvent],
-      });
-    }
 
     onClose();
   }

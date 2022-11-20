@@ -9,7 +9,8 @@ import SelectPriorityPopover from "./SelectPriorityPopover";
 
 type Props = { task: Task; setTask?: SetTask };
 
-export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
+export default memo(SelectPriorityIcon);
+function SelectPriorityIcon({ task, setTask }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
@@ -30,7 +31,6 @@ export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
       currentTaskPriority={currentTaskPriority}
     >
       <Center
-        border="1px"
         width="35px"
         height="35px"
         fontSize="17px"
@@ -38,6 +38,7 @@ export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
         borderRadius="50%"
         position="relative"
         color={priorityFlagColor}
+        border={noPriority ? "1px dashed" : "1px"}
         onMouseMoveCapture={() => setShowDeleteBtn(true)}
         onMouseOutCapture={() => setShowDeleteBtn(false)}
         _hover={{
@@ -78,4 +79,4 @@ export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
       </Center>
     </SelectPriorityPopover>
   );
-});
+}

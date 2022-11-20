@@ -8,10 +8,8 @@ type Props = {
   setPriority: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
-export default memo(function CreateSelectPriorityIcon({
-  priority,
-  setPriority,
-}: Props) {
+export default memo(CreateSelectPriorityIcon);
+function CreateSelectPriorityIcon({ priority, setPriority }: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
@@ -54,4 +52,4 @@ export default memo(function CreateSelectPriorityIcon({
       )}
     </CreateSelectPriorityPopover>
   );
-});
+}

@@ -21,21 +21,11 @@ import { fetchTaskEvents } from "../task/actions/networkActions";
 
 type Props = {};
 
-export default memo(function TaskDetailModal({}: Props) {
+export default memo(TaskDetailModal);
+function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const bgColor = useColorModeValue("white", "darkMain.100");
-
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
-
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { isModalOpen, onModalClose } = useTaskDetailContext();
 
   return (
     <Modal
@@ -73,11 +63,11 @@ export default memo(function TaskDetailModal({}: Props) {
 
         {/* Footer */}
         {/* <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onModalClose}>
-            Close
-          </Button>
-        </ModalFooter> */}
+            <Button colorScheme="blue" mr={3} onClick={onModalClose}>
+              Close
+            </Button>
+          </ModalFooter> */}
       </ModalContent>
     </Modal>
   );
-});
+}

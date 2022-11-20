@@ -7,7 +7,8 @@ import OptionWrapper from "../../task/optionWrapper/SelectOption";
 
 type Props = { onOptionClose: () => void };
 
-export default memo(function StatusOptions({ onOptionClose }: Props) {
+export default memo(StatusOptions);
+function StatusOptions({ onOptionClose }: Props) {
   const { authState } = useAuthContext();
   const {
     task,
@@ -45,4 +46,4 @@ export default memo(function StatusOptions({ onOptionClose }: Props) {
       )}
     </>
   );
-});
+}

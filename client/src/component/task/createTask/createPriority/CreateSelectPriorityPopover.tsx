@@ -20,7 +20,8 @@ type Props = {
   setPriority: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
-export default memo(function CreateSelectPriorityPopover({
+export default memo(CreateSelectPriorityPopover);
+function CreateSelectPriorityPopover({
   priority,
   children,
   setPriority,
@@ -68,4 +69,4 @@ export default memo(function CreateSelectPriorityPopover({
       )}
     </Popover>
   );
-});
+}

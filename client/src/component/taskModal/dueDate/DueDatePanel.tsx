@@ -12,11 +12,8 @@ type Props = {
   onClose: () => void;
 };
 
-export default memo(function DueDatePanel({ task, setTask, onClose }: Props) {
-  const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(
-    task.expectedDueDate
-  );
-
+export default memo(DueDatePanel);
+function DueDatePanel({ task, setTask, onClose }: Props) {
   const borderColor = useColorModeValue("lightMain.200", "darkMain.300");
   const bgColor = useColorModeValue("white", "darkMain.200");
 
@@ -42,24 +39,13 @@ export default memo(function DueDatePanel({ task, setTask, onClose }: Props) {
           borderRightWidth="1px"
           borderColor={borderColor}
         >
-          <DueDateOptions
-            task={task}
-            onClose={onClose}
-            setTask={setTask}
-            setExpectedDueDate={setExpectedDueDate}
-          />
+          <DueDateOptions task={task} onClose={onClose} />
         </Box>
 
         <Box borderTopWidth="1px" borderColor={borderColor}>
-          <DueDatePicker
-            task={task}
-            setTask={setTask}
-            onClose={onClose}
-            expectedDueDate={expectedDueDate}
-            setExpectedDueDate={setExpectedDueDate}
-          />
+          <DueDatePicker task={task} setTask={setTask} onClose={onClose} />
         </Box>
       </Flex>
     </Box>
   );
-});
+}

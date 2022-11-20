@@ -10,7 +10,8 @@ import React, { memo } from "react";
 
 type Props = { children: React.ReactNode };
 
-export default memo(function RightClickShowCardOptions({ children }: Props) {
+export default memo(RightClickShowCardOptions);
+function RightClickShowCardOptions({ children }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -35,4 +36,4 @@ export default memo(function RightClickShowCardOptions({ children }: Props) {
       </PopoverContent>
     </Popover>
   );
-});
+}

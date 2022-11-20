@@ -6,7 +6,8 @@ import SelectDueDateIcon from "./SelectDueDateIcon";
 
 type Props = {};
 
-export default memo(function DueDateDetails({}: Props) {
+export default memo(DueDateDetails);
+function DueDateDetails({}: Props) {
   const { task, setTask } = useTaskDetailContext();
 
   const hasExpectedDueDate = task?.expectedDueDate;
@@ -37,4 +38,4 @@ export default memo(function DueDateDetails({}: Props) {
       )}
     </Box>
   );
-});
+}

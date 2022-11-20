@@ -15,10 +15,8 @@ type Props = {
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default memo(function EditColumnTitle({
-  currentColumn,
-  setEditTitle,
-}: Props) {
+export default memo(EditColumnTitle);
+function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
   const { taskStateContext } = useTaskDetailContext();
@@ -94,4 +92,4 @@ export default memo(function EditColumnTitle({
       />
     </InputGroup>
   );
-});
+}

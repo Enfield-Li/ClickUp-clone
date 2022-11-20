@@ -9,17 +9,11 @@ import { handleSelectDueDateOptions } from "../../task/actions/handleSelectDueDa
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
   onClose: () => void;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
-export default memo(function DueDateOptions({
-  task,
-  setTask,
-  onClose,
-  setExpectedDueDate,
-}: Props) {
+export default memo(DueDateOptions);
+function DueDateOptions({ task, onClose }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.300"
@@ -32,7 +26,7 @@ export default memo(function DueDateOptions({
 
   function handleOnClick(targetColumn: DueDateColumn) {
     onClose();
-    handleSelectDueDateOptions(task, setTaskState, targetColumn);
+    handleSelectDueDateOptions(task, authState, setTaskState, targetColumn);
   }
 
   return (
@@ -64,4 +58,4 @@ export default memo(function DueDateOptions({
       })}
     </>
   );
-});
+}

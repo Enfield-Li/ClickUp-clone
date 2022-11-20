@@ -1,10 +1,18 @@
-import { DueDateColumn, SetTaskState, Task, UpdateEvent } from "../../../types";
+import { AuthStateType } from "../../../context/auth/AuthContextTypes";
+import {
+  DueDateColumn,
+  SetTaskState,
+  SortBy,
+  Task,
+  UpdateEvent,
+} from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getExpectedDueDateFromWeekString } from "./columnProcessing";
 import { updateTaskPriorityOrDueDate } from "./updateTaskPriorityOrDueDate";
 
 export function handleSelectDueDateOptions(
   task: Task,
+  authState: AuthStateType,
   setTaskState: SetTaskState,
   targetColumn: DueDateColumn
 ) {
@@ -17,23 +25,13 @@ export function handleSelectDueDateOptions(
     targetColumn.id,
     expectedDueDate
   );
-  //   const newEvent: UpdateEvent = {
-  //     id: getRandomNumberNoLimit(),
-  //     userId: authState.user?.id,
-  //     taskId: task!.id!,
-  //     field: DUE_DATE,
-  //     beforeUpdate: String(task?.dueDate),
-  //     afterUpdate: String(targetColumn.id),
-  //     createdAt: new Date(),
-  //   };
-  //   // Update task taskState
-  //   if (setTask) {
-  //     setTask({
-  //       ...task!,
-  //       expectedDueDate,
-  //       dueDate: targetColumn.id,
-  //       taskEvents: [...task!.taskEvents, newEvent],
-  //     });
-  //   }
-  //   onClose();
+  const newEvent: UpdateEvent = {
+    id: getRandomNumberNoLimit(),
+    userId: authState.user?.id,
+    taskId: task!.id!,
+    field: SortBy.DUE_DATE,
+    beforeUpdate: String(task?.dueDate),
+    afterUpdate: String(targetColumn.id),
+    createdAt: new Date(),
+  };
 }

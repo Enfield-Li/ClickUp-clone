@@ -15,7 +15,8 @@ import { handleDeleteTask } from "../../task/actions/deleteTask";
 
 type Props = {};
 
-export default memo(function TaskOptions({}: Props) {
+export default memo(TaskOptions);
+function TaskOptions({}: Props) {
   const navigate = useNavigate();
   const {
     task,
@@ -61,4 +62,4 @@ export default memo(function TaskOptions({}: Props) {
       </Popover>
     </>
   );
-});
+}

@@ -13,7 +13,8 @@ import { sleep } from "../utils/sleep";
 export function useLocalTasks(sortBy: SortBy) {
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
-  const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
+  const { task, setTask, taskStateContext, setTaskStateContext } =
+    useTaskDetailContext();
 
   useEffect(() => {
     initLocalState();
@@ -74,6 +75,17 @@ export function useLocalTasks(sortBy: SortBy) {
       }
     }
   }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
+
+  // sync up with modal task
+  useEffect(() => {
+    if (task && taskState) {
+      const allTasks = collectAllTasks(taskState.orderedTasks);
+      const updatedTask = allTasks.find(
+        (currentTask) => currentTask.id === task.id
+      );
+      setTask(updatedTask);
+    }
+  }, [taskState]);
 
   return { taskState, setTaskState, loading };
 }
