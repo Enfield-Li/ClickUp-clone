@@ -18,14 +18,14 @@ function SubTaskIcons({ task, setShowSubTask }: Props) {
 
     task.subTasks.forEach((subTask) => {
       const SubTaskStatus = statusTaskList.find(
-        (subTaskStatus) => subTaskStatus.id === subTask.status
+        (subTaskStatus) => subTaskStatus.id === subTask.status.columnId
       );
 
       if (SubTaskStatus) {
         SubTaskStatus.amount += 1;
       } else {
         const statusColumn = columnOptions.statusColumns.find(
-          (statusColumn) => statusColumn.id === subTask.status
+          (statusColumn) => statusColumn.id === subTask.status.columnId
         );
         if (statusColumn)
           statusTaskList.push({

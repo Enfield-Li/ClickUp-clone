@@ -19,8 +19,8 @@ import {
 import CreateDueDatePanel from "./CreateDueDatePanel";
 
 type Props = {
-  expectedDueDate: Date | undefined;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  expectedDueDate: Date | null;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function CreateExpectedDueDateDisplay({
@@ -46,7 +46,13 @@ function CreateExpectedDueDateDisplay({
       onMouseOutCapture={() => setShowDeleteButton(false)}
     >
       <Popover>
-        {({ onClose, isOpen: isOptionOpen }) => (
+        {({
+          onClose,
+          isOpen: isOptionOpen,
+        }: {
+          onClose: () => void;
+          isOpen: boolean;
+        }) => (
           // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
           <>
             <Tooltip
@@ -97,7 +103,7 @@ function CreateExpectedDueDateDisplay({
           height="12px"
           rounded="full"
           bgColor="customBlue.200"
-          onClick={() => setExpectedDueDate(undefined)}
+          onClick={() => setExpectedDueDate(null)}
         >
           <Center fontWeight="extrabold" color="white">
             <i className="bi bi-x"></i>

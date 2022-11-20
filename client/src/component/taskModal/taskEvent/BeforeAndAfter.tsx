@@ -4,11 +4,6 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import {
   BeforeOrAfterUpdate,
   ColumnOptions,
-  DUE_DATE,
-  Field,
-  PRIORITY,
-  SortBy,
-  STATUS,
   UndeterminedColumns,
   UpdateEvent,
 } from "../../../types";

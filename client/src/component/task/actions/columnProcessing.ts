@@ -154,18 +154,18 @@ export function getExpectedDueDateFromWeekString(weekString: DueDate) {
 */
 export function getLookUpDueDateTable() {
   const lookUpExpectedDueDate: LookUpExpectedDueDate = {
-    "NO DUE DATE": undefined,
-    "OVER DUE": undefined,
-    TODAY: undefined,
-    TOMORROW: undefined,
-    SATURDAY: undefined,
-    SUNDAY: undefined,
-    MONDAY: undefined,
-    TUESDAY: undefined,
-    WEDNESDAY: undefined,
-    FUTURE: undefined,
-    THURSDAY: undefined,
-    FRIDAY: undefined,
+    "NO DUE DATE": null,
+    "OVER DUE": null,
+    TODAY: null,
+    TOMORROW: null,
+    SATURDAY: null,
+    SUNDAY: null,
+    MONDAY: null,
+    TUESDAY: null,
+    WEDNESDAY: null,
+    FUTURE: null,
+    THURSDAY: null,
+    FRIDAY: null,
   };
 
   // OverDue (ie. yesterday)

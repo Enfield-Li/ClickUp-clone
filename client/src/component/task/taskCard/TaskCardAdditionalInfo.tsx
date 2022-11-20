@@ -10,7 +10,7 @@ type Props = {
   task: Task;
   hasSubTask: boolean;
   hasPriority: boolean;
-  hasDueDate: Date | undefined;
+  hasDueDate: Date | null;
   setShowSubTask: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

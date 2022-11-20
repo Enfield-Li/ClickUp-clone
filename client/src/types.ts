@@ -147,10 +147,10 @@ export interface Task {
   updatedAt?: Date;
   archived?: boolean;
   description?: string;
-  expectedDueDate?: Date;
+  expectedDueDate: Date | null;
 
   subTasks: Task[];
-  creator?: UserInfo;
+  creator: UserInfo;
   parentTask?: Task;
   watchers: UserInfo[];
   assignees: UserInfo[];
@@ -189,7 +189,7 @@ export type LookUpReorderedColumn = {
 };
 
 export type LookUpExpectedDueDate = {
-  [index in DueDate]: Date | undefined;
+  [index in DueDate]: Date | null;
 };
 
 // Task creation types

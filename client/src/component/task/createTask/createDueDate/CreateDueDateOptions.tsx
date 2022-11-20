@@ -3,7 +3,9 @@ import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import {
+  DueDate,
   DueDateColumn,
+  DueDateRange,
   UpdateEvent,
 } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
@@ -15,7 +17,7 @@ import {
 
 type Props = {
   onClose: () => void;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
@@ -31,7 +33,7 @@ function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
   function handleSelect(targetColumn: DueDateColumn) {
     const weekString = targetColumn.title;
     const expectedDueDate = getExpectedDueDateFromWeekString(
-      weekString as SelectableDueDate
+      weekString as DueDate
     );
     setExpectedDueDate(expectedDueDate);
     onClose();
@@ -41,10 +43,9 @@ function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
     <>
       {columnOptions.dueDateColumns.map((column, index) => {
         return (
-          column.title !== "FUTURE" &&
-          column.title !== "OVER DUE" &&
-          column.title !== "FINISHED" &&
-          column.title !== "NO DUE DATE" && (
+          column.title !== DueDateRange.FUTURE &&
+          column.title !== DueDateRange.OVER_DUE &&
+          column.title !== DueDateRange.NO_DUE_DATE && (
             <Flex
               py={2}
               px={3}

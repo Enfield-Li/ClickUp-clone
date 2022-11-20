@@ -19,8 +19,8 @@ import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 export type NewTask = {
   title: string;
   status?: number;
-  priority?: number;
-  expectedDueDate?: Date;
+  priority: number | null;
+  expectedDueDate: Date | null;
 };
 
 export async function createNewTask(
@@ -156,7 +156,7 @@ function newTargetStateColumnId(
   return targetColumn;
 }
 
-function newTaskFactory(title: string, expectedDueDate?: Date): Task {
+function newTaskFactory(title: string, expectedDueDate: Date | null): Task {
   return {
     id: Math.random(),
     title,

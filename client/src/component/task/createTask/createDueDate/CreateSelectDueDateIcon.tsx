@@ -12,8 +12,8 @@ import CreateDueDatePanel from "./CreateDueDatePanel";
 
 type Props = {
   children: React.ReactNode;
-  expectedDueDate: Date | undefined;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  expectedDueDate: Date | null;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function CreateSelectDueDateIcon({
@@ -25,7 +25,7 @@ function CreateSelectDueDateIcon({
 
   return (
     <Popover placement="bottom">
-      {({ onClose }) => (
+      {({ onClose }: { onClose: () => void }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
         <>
           <Tooltip

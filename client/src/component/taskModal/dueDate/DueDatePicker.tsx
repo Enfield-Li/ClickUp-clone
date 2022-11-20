@@ -21,8 +21,8 @@ type Props = {
   task: Task;
   setTask?: SetTask;
   onClose: () => void;
-  expectedDueDate?: Date;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  expectedDueDate: Date | null;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function DueDatePicker({

@@ -7,8 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
-import { getRandomNumber } from "../../../utils/getRandomNumber";
-import { StatusColumns, SetTaskState, StatusColumn } from "../../../types";
+import { SetTaskState, StatusColumn, StatusColumns } from "../../../types";
 
 type Props = {
   color: string;
@@ -26,13 +25,11 @@ function AddStatusColumnInput({
   const [titleInput, setTitleInput] = useState("");
 
   function createStatusColumn() {
-    const previousColumnId = statusColumns[statusColumns.length - 1].id;
-
     const newColumn: StatusColumn = {
       id: 4,
       color,
+      orderIndex: 3,
       title: titleInput,
-      previousColumnId,
     };
 
     setState((pre) => {

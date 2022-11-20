@@ -2,11 +2,7 @@ import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import {
-  SelectableDueDate,
-  TaskState,
-  UndeterminedColumn,
-} from "../../../types";
+import { DueDate, SortBy, TaskState, UndeterminedColumn } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
@@ -33,20 +29,21 @@ function CreateTask({
   const { sortBy, setState } = taskStateContext!;
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
-  const finishedStatusColumn = sortBy === "status" && currentColumn.id === 3;
+  const finishedStatusColumn =
+    sortBy === SortBy.STATUS && currentColumn.id === 3;
 
   // task name state
   const [taskName, setTaskName] = useState("");
   // priority state
-  const initialPriority = sortBy === "priority" ? currentColumn.id : null;
+  const initialPriority = sortBy === SortBy.PRIORITY ? currentColumn.id : null;
   const [priority, setPriority] = useState<number | null>(initialPriority);
   // due date state
   const weekString = currentColumn.title;
   const initialDueDate =
-    sortBy === "dueDate"
-      ? getExpectedDueDateFromWeekString(weekString as SelectableDueDate)
-      : undefined;
-  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
+    sortBy === SortBy.DUE_DATE
+      ? getExpectedDueDateFromWeekString(weekString as DueDate)
+      : null;
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(
     initialDueDate
   );
 

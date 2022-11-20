@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default memo(function DueDatePanel({ task, setTask, onClose }: Props) {
-  const [expectedDueDate, setExpectedDueDate] = useState<Date | undefined>(
+  const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(
     task.expectedDueDate
   );
 

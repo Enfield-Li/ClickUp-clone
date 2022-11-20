@@ -4,11 +4,14 @@ import CreateExpectedDueDateDisplay from "./CreateExpectedDueDateDisplay";
 import CreateSelectDueDateIcon from "./CreateSelectDueDateIcon";
 
 type Props = {
-  expectedDueDate: Date | undefined;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  expectedDueDate: Date | null;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
-function CreateDueDateDetails({ expectedDueDate, setExpectedDueDate }: Props) {
+export default memo(function CreateDueDateDetails({
+  expectedDueDate,
+  setExpectedDueDate,
+}: Props) {
   return (
     <>
       {expectedDueDate ? (
@@ -38,5 +41,4 @@ function CreateDueDateDetails({ expectedDueDate, setExpectedDueDate }: Props) {
       )}
     </>
   );
-}
-export default memo(CreateDueDateDetails);
+});

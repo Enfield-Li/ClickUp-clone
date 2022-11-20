@@ -7,7 +7,7 @@ export function updateTaskPriorityOrDueDate(
   currentTask: Task,
   setState: SetTaskState,
   targetColumnId: number,
-  expectedDueDate?: Date
+  expectedDueDate: Date | null
 ) {
   setState(
     (prev) =>
@@ -16,9 +16,9 @@ export function updateTaskPriorityOrDueDate(
         draftState.orderedTasks.forEach((orderedTask) =>
           orderedTask.taskList.forEach((task) => {
             if (task.id === currentTask.id) {
+              task.expectedDueDate = expectedDueDate;
               // determine if it's update dueDate or priority
               if (expectedDueDate) {
-                task.expectedDueDate = expectedDueDate;
                 targetColumnId = getDueDateColumnIdFromExpectedDueDate(
                   draftState.columnOptions.dueDateColumns,
                   expectedDueDate

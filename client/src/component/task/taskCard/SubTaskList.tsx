@@ -24,17 +24,14 @@ function SubTaskList({ task }: Props) {
   return (
     <Box bgColor={cardBgColor}>
       {task.subTasks.map((subTask) => {
-        const noPriority = subTask.priority === 1;
-        const taskFinished = subTask.priority === 0;
-        const hasPriority = !noPriority && !taskFinished;
         const hasDueDate = subTask.expectedDueDate;
 
         const currentTaskStatus = columnOptions.statusColumns.find(
-          (statusColumn) => statusColumn.id === subTask.status
+          (statusColumn) => statusColumn.id === subTask.status.columnId
         );
 
         const currentTaskPriority = columnOptions.priorityColumns.find(
-          (priority) => priority.id === subTask.priority
+          (priority) => priority.id === subTask.priority.columnId
         );
         const priorityFlagColor = currentTaskPriority?.color;
 
@@ -83,7 +80,7 @@ function SubTaskList({ task }: Props) {
 
               <Flex fontSize="12px" mb={2}>
                 {/* Priority */}
-                {hasPriority && sortBy !== "priority" && (
+                {sortBy !== "priority" && (
                   <Box
                     mr={2}
                     color={priorityFlagColor}

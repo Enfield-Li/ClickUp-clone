@@ -11,7 +11,7 @@ type Props = {
   task: Task;
   setTask?: SetTask;
   onClose: () => void;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 export default memo(function DueDateOptions({

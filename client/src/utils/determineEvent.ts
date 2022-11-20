@@ -1,15 +1,15 @@
-import { AssignmentEvent, CommentEvent, UpdateEvent } from "../types";
+import { AssignmentEvent, CommentEvent, TaskEvent } from "../types";
 
 // https://stackoverflow.com/q/69936190/16648127
 export function isCommentEvent(
-  event: UpdateEvent | CommentEvent | AssignmentEvent
-): event is CommentEvent {
+  taskEvent: TaskEvent
+): taskEvent is CommentEvent {
   //   return "comment" in event;
-  return event.field === COMMENT;
+  return "comment" in taskEvent;
 }
 
 export function isAssignmentEvent(
-  event: UpdateEvent | CommentEvent | AssignmentEvent
-): event is AssignmentEvent {
-  return event.field === ASSIGNEE || event.field === WATCHER;
+  taskEvent: TaskEvent
+): taskEvent is AssignmentEvent {
+  return "assignedUser" in taskEvent || "assignmentAction" in taskEvent;
 }

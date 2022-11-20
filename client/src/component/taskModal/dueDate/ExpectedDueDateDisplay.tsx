@@ -15,9 +15,10 @@ import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { getMonthAndDay, toYYYYMMDDString } from "../../../utils/getWeekDays";
-import DueDatePanel from "./DueDatePanel";
+import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
+import DueDatePanel from "./DueDatePanel";
 
 type Props = {
   task: Task;
@@ -38,32 +39,31 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
   );
 
   function clearDueDate() {
-    // // Update list state
-    // updateTaskPriorityOrDueDate(
-    //   sortBy,
-    //   task!,
-    //   setState,
-    //   SortBy.DUE_DATE,
-    //   1, // No due date
-    //   undefined
-    // );
-    // const newEvent: UpdateEvent = {
-    //   id: getRandomNumberNoLimit(),
-    //   userId: authState.user?.id,
-    //   taskId: task!.id!,
-    //   field: SortBy.DUE_DATE,
-    //   beforeUpdate: String(task?.dueDate),
-    //   afterUpdate: "1",
-    //   createdAt: new Date(),
-    // };
-    // // Update modal task state
-    // if (setTask) {
-    //   setTask({
-    //     ...task!,
-    //     expectedDueDate: undefined,
-    //     taskEvents: [...task!.taskEvents, newEvent],
-    //   });
-    // }
+    // Update list state
+    updateTaskPriorityOrDueDate(
+      task,
+      setState,
+      1, // No due date
+      null
+    );
+
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task.id!,
+      field: SortBy.DUE_DATE,
+      beforeUpdate: String(task.dueDate),
+      afterUpdate: "1",
+      createdAt: new Date(),
+    };
+    // Update modal task state
+    if (setTask) {
+      setTask({
+        ...task!,
+        expectedDueDate: null,
+        taskEvents: [...task.taskEvents, newEvent],
+      });
+    }
   }
 
   return (

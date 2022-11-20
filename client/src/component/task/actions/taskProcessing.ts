@@ -134,7 +134,7 @@ export function getLookUpReorderedColumnTable(
 
 export function getDueDateColumnIdFromExpectedDueDate(
   dueDateColumn: DueDateColumns,
-  dateInput?: Date
+  dateInput: Date | null
 ): number {
   if (dateInput) {
     // Due date within this week
@@ -159,9 +159,9 @@ export function getDueDateColumnIdFromExpectedDueDate(
 
 export function getExpectedDueDateFromDueDateColumn(
   dueDateColumn: DueDateColumn
-): Date | undefined {
+): Date | null {
   if (dueDateColumn.title === DueDateRange.NO_DUE_DATE) {
-    return undefined;
+    return null;
   } else if (dueDateColumn.title === DueDateRange.OVER_DUE) {
     return getDaysBefore(1);
   } else if (dueDateColumn.title === DueDateRange.FUTURE) {

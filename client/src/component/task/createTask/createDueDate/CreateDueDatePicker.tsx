@@ -5,8 +5,8 @@ import MaterialTheme from "../../../test-dev/MaterialTheme";
 
 type Props = {
   onClose: () => void;
-  expectedDueDate: Date | undefined;
-  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  expectedDueDate: Date | null;
+  setExpectedDueDate: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function CreateDueDatePicker({

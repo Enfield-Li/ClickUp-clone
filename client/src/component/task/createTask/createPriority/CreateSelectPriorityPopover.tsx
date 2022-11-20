@@ -36,7 +36,7 @@ function CreateSelectPriorityPopover({
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
     >
-      {({ onClose: onOptionClose }) => (
+      {({ onClose: onOptionClose }: { onClose: () => void }) => (
         <>
           <Tooltip
             my={2}
