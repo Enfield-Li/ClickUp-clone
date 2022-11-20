@@ -18,15 +18,7 @@ type Props = {};
 export default memo(TaskOptions);
 function TaskOptions({}: Props) {
   const navigate = useNavigate();
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetailContext();
 
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 

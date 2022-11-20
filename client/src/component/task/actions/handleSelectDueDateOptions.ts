@@ -18,13 +18,6 @@ export function handleSelectDueDateOptions(
 ) {
   const weekString = targetColumn.title;
   const expectedDueDate = getExpectedDueDateFromWeekString(weekString);
-  // Update list taskState
-  updateTaskPriorityOrDueDate(
-    task!,
-    setTaskState,
-    targetColumn.id,
-    expectedDueDate
-  );
   const newEvent: UpdateEvent = {
     id: getRandomNumberNoLimit(),
     userId: authState.user?.id,
@@ -34,4 +27,13 @@ export function handleSelectDueDateOptions(
     afterUpdate: String(targetColumn.id),
     createdAt: new Date(),
   };
+
+  // Update list taskState
+  updateTaskPriorityOrDueDate(
+    task!,
+    setTaskState,
+    targetColumn.id,
+    expectedDueDate,
+    newEvent
+  );
 }

@@ -15,23 +15,22 @@ type ProviderType = {
 };
 
 export default function TaskDetailProvider({ children }: ProviderType) {
-  const [task, setTask] = useState<Task>();
-  console.log("task in context: ", task);
+  const [task, setTask] = useState<Task | null>(null);
   const {
     isOpen: isModalOpen,
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
-  const [taskStateContext, setTaskStateContext] = useState<TaskStateContext>();
+  const modalState = { isModalOpen, onModalOpen, onModalClose };
+  const [taskStateContext, setTaskStateContext] =
+    useState<TaskStateContext | null>(null);
 
   return (
     <taskDetailContext.Provider
       value={{
         task,
         setTask,
-        isModalOpen,
-        onModalOpen,
-        onModalClose,
+        modalState,
         taskStateContext,
         setTaskStateContext,
       }}

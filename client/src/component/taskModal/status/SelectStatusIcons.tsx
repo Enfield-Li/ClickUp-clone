@@ -27,7 +27,7 @@ function SelectStatusIcons({}: Props) {
   const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();
 
-  const { task, setTask, taskStateContext } = useTaskDetailContext();
+  const { task, taskStateContext } = useTaskDetailContext();
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   const column = columnOptions.statusColumns.find(

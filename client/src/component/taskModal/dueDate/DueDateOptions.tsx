@@ -1,7 +1,6 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { DueDateColumn, DueDateRange, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";

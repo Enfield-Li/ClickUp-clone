@@ -3,7 +3,6 @@ import { TextField } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import {
@@ -19,15 +18,14 @@ import MaterialTheme from "../../test-dev/MaterialTheme";
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
   onClose: () => void;
 };
 
 export default memo(DueDatePicker);
-function DueDatePicker({ task, setTask, onClose }: Props) {
+function DueDatePicker({ task, onClose }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, columnOptions } = taskStateContext!;
 
   return (
     <MaterialTheme>
@@ -40,12 +38,10 @@ function DueDatePicker({ task, setTask, onClose }: Props) {
             handleDatePicker(
               task,
               authState.user!.id,
-              sortBy,
               setTaskState,
               onClose,
               columnOptions,
-              newValue,
-              setTask
+              newValue
             );
           }
         }}
@@ -57,24 +53,14 @@ function DueDatePicker({ task, setTask, onClose }: Props) {
 function handleDatePicker(
   task: Task,
   userId: number,
-  sortBy: SortBy,
   setTaskState: SetTaskState,
   onClose: () => void,
   columnOptions: ColumnOptions,
-  expectedDueDateInput: Date,
-  setTask?: SetTask
+  expectedDueDateInput: Date
 ) {
   if (expectedDueDateInput) {
     const targetDueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
       columnOptions.dueDateColumns,
-      expectedDueDateInput
-    );
-
-    // Update list taskState
-    updateTaskPriorityOrDueDate(
-      task!,
-      setTaskState,
-      targetDueDateColumnId,
       expectedDueDateInput
     );
 
@@ -87,6 +73,15 @@ function handleDatePicker(
       afterUpdate: String(targetDueDateColumnId),
       createdAt: new Date(),
     };
+
+    // Update list taskState
+    updateTaskPriorityOrDueDate(
+      task!,
+      setTaskState,
+      targetDueDateColumnId,
+      expectedDueDateInput,
+      newEvent
+    );
 
     onClose();
   }

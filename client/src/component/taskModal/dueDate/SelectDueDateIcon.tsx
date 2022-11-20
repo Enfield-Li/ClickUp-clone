@@ -8,23 +8,16 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { Task } from "../../../types";
 import DueDatePanel from "./DueDatePanel";
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
   children: React.ReactNode;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export default memo(SelectDueDateIcon);
-function SelectDueDateIcon({
-  task,
-  setTask,
-  children,
-  setIsPopoverOpen,
-}: Props) {
+function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
@@ -59,7 +52,7 @@ function SelectDueDateIcon({
             bgColor={popoverContentBgColor}
           >
             <PopoverBody shadow={"2xl"} p={0}>
-              <DueDatePanel task={task!} setTask={setTask} onClose={onClose} />
+              <DueDatePanel task={task!} onClose={onClose} />
             </PopoverBody>
           </PopoverContent>
         </>

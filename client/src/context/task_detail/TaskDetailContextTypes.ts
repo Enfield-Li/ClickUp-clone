@@ -1,17 +1,19 @@
 import { ColumnOptions, SetTaskState, SortBy, Task } from "../../types";
 
-export type SetTask = React.Dispatch<React.SetStateAction<Task | undefined>>;
-
 export type TaskDetailContextType = {
-  task?: Task;
-  setTask: SetTask;
+  task: Task | null;
+  setTask: React.Dispatch<React.SetStateAction<Task | null>>;
+  modalState: ModalState;
+  taskStateContext: TaskStateContext | null;
+  setTaskStateContext: React.Dispatch<
+    React.SetStateAction<TaskStateContext | null>
+  >;
+};
+
+export type ModalState = {
   isModalOpen: boolean;
   onModalOpen: () => void;
   onModalClose: () => void;
-  taskStateContext: TaskStateContext | undefined;
-  setTaskStateContext: React.Dispatch<
-    React.SetStateAction<TaskStateContext | undefined>
-  >;
 };
 
 export type TaskStateContext = {

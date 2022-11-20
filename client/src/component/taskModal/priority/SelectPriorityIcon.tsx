@@ -1,16 +1,15 @@
 import { Center } from "@chakra-ui/react";
 import { memo, useMemo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Priority, Task } from "../../../types";
 import { selectPriority } from "./PriorityOptions";
 import SelectPriorityPopover from "./SelectPriorityPopover";
 
-type Props = { task: Task; setTask?: SetTask };
+type Props = { task: Task };
 
 export default memo(SelectPriorityIcon);
-function SelectPriorityIcon({ task, setTask }: Props) {
+function SelectPriorityIcon({ task }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
@@ -27,7 +26,6 @@ function SelectPriorityIcon({ task, setTask }: Props) {
   return (
     <SelectPriorityPopover
       task={task}
-      setTask={setTask}
       currentTaskPriority={currentTaskPriority}
     >
       <Center
@@ -66,10 +64,8 @@ function SelectPriorityIcon({ task, setTask }: Props) {
               selectPriority(
                 task,
                 authState.user!.id!,
-                sortBy,
                 setTaskState,
-                1, // no priority
-                setTask
+                1 // no priority
               );
             }}
           >

@@ -12,7 +12,9 @@ type Props = {};
 
 function TaskView({}: Props) {
   const navigate = useNavigate();
-  const { isModalOpen } = useTaskDetailContext();
+  const { modalState } = useTaskDetailContext();
+  const { isModalOpen } = modalState;
+
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.STATUS);
 
   // Reset to base url when modal closed

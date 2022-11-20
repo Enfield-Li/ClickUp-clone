@@ -8,7 +8,7 @@ type Props = {};
 
 export default memo(DueDateDetails);
 function DueDateDetails({}: Props) {
-  const { task, setTask } = useTaskDetailContext();
+  const { task } = useTaskDetailContext();
 
   const hasExpectedDueDate = task?.expectedDueDate;
 
@@ -18,11 +18,11 @@ function DueDateDetails({}: Props) {
         // Due date display
         <Box fontSize="small" height="35px">
           <Box opacity="50%">DUE DATE</Box>
-          <ExpectedDueDateDisplay task={task} setTask={setTask} />
+          <ExpectedDueDateDisplay task={task} />
         </Box>
       ) : (
         // Icon
-        <SelectDueDateIcon task={task!} setTask={setTask}>
+        <SelectDueDateIcon task={task!}>
           <Center
             width="35px"
             height="35px"

@@ -10,15 +10,8 @@ type Props = { onOptionClose: () => void };
 export default memo(StatusOptions);
 function StatusOptions({ onOptionClose }: Props) {
   const { authState } = useAuthContext();
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
+  const { task, taskStateContext, setTaskStateContext } =
+    useTaskDetailContext();
 
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 

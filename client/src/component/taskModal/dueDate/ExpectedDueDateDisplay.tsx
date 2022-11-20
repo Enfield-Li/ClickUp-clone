@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task, UpdateEvent } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
@@ -22,11 +21,10 @@ import DueDatePanel from "./DueDatePanel";
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
 };
 
 export default memo(ExpectedDueDateDisplay);
-function ExpectedDueDateDisplay({ task, setTask }: Props) {
+function ExpectedDueDateDisplay({ task }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
@@ -112,7 +110,7 @@ function ExpectedDueDateDisplay({ task, setTask }: Props) {
               color={popoverContentColor}
             >
               <PopoverBody shadow={"2xl"} p={0}>
-                <DueDatePanel task={task} setTask={setTask} onClose={onClose} />
+                <DueDatePanel task={task} onClose={onClose} />
               </PopoverBody>
             </PopoverContent>
           </>

@@ -14,7 +14,7 @@ type Props = {};
 
 export default memo(TaskEvent);
 function TaskEvent({}: Props) {
-  const { task, setTask } = useTaskDetailContext();
+  const { task } = useTaskDetailContext();
   const [loadingTaskEvents, setLoadingTaskEvents] = useState<boolean>();
 
   useEffect(() => {
@@ -24,7 +24,6 @@ function TaskEvent({}: Props) {
       if (task?.id) {
         setLoadingTaskEvents(true);
         const events = await fetchTaskEvents(task.id);
-        if (events) setTask({ ...task, taskEvents: events });
         setLoadingTaskEvents(false);
       }
     }

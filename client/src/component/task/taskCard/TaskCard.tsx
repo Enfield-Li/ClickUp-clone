@@ -31,7 +31,8 @@ function TaskCard({ task, index }: Props) {
   const { colorMode } = useColorMode();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
 
-  const { onModalOpen, setTask, taskStateContext } = useTaskDetailContext();
+  const { setTask, modalState, taskStateContext } = useTaskDetailContext();
+  const { onModalOpen } = modalState;
   const { columnOptions, sortBy } = taskStateContext!;
   const currentStatus = useMemo(() => {
     return columnOptions.statusColumns.find(

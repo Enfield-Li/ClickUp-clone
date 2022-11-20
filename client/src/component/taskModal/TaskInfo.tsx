@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import { SetTask } from "../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SetTaskState, UpdateTaskDescDTO } from "../../types";
 import { updateTaskDescription } from "../task/actions/networkActions";
@@ -21,15 +20,8 @@ type Props = {};
 
 export default memo(TaskInfo);
 function TaskInfo({}: Props) {
-  const {
-    task,
-    setTask,
-    isModalOpen,
-    onModalOpen,
-    onModalClose,
-    taskStateContext,
-    setTaskStateContext,
-  } = useTaskDetailContext();
+  const { task, taskStateContext, setTaskStateContext } =
+    useTaskDetailContext();
 
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
   return (
@@ -53,7 +45,7 @@ function TaskInfo({}: Props) {
 
           {/* Priority */}
           <Box mx={4}>
-            <SelectPriorityIcon task={task!} setTask={setTask} />
+            <SelectPriorityIcon task={task!} />
           </Box>
         </Flex>
 
@@ -79,12 +71,11 @@ function TaskInfo({}: Props) {
           <EditableTextarea
             onBlur={(e) => {
               if (e.target.value !== task!.title) {
-                updateDescription(
-                  task!.id!,
-                  e.currentTarget.value,
-                  setTaskState,
-                  setTask
-                );
+                // updateDescription(
+                //   task!.id!,
+                //   e.currentTarget.value,
+                //   setTaskState,
+                // );
               }
             }}
           />

@@ -7,7 +7,6 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import { Priority, PriorityColumn, Task } from "../../../types";
 import PriorityOptions from "./PriorityOptions";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
@@ -15,7 +14,6 @@ import { memo } from "react";
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
   children: React.ReactNode;
   currentTaskPriority?: PriorityColumn;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,7 +22,6 @@ type Props = {
 export default memo(SelectPriorityPopover);
 function SelectPriorityPopover({
   task,
-  setTask,
   children,
   setIsPopoverOpen,
   currentTaskPriority,
@@ -60,11 +57,7 @@ function SelectPriorityPopover({
 
           <PopoverContent width="200px" bgColor={popoverContentBgColor}>
             <PopoverBody shadow={"2xl"} m={0} p={0}>
-              <PriorityOptions
-                task={task!}
-                setTask={setTask}
-                onOptionClose={onOptionClose}
-              />
+              <PriorityOptions task={task!} onOptionClose={onOptionClose} />
             </PopoverBody>
           </PopoverContent>
         </>

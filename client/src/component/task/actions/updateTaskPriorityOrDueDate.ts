@@ -1,13 +1,18 @@
 import produce from "immer";
-import { SetTaskState, TargetColumnAndId, Task } from "../../../types";
+import {
+  SetTaskState,
+  TargetColumnAndId,
+  Task,
+  TaskEvent,
+} from "../../../types";
 import { updateTaskOnTargetColumnAndId } from "./createNewTask";
-import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export function updateTaskPriorityOrDueDate(
   currentTask: Task,
   setTaskState: SetTaskState,
   targetColumnId: number,
-  expectedDueDate: Date | null
+  expectedDueDate: Date | null,
+  taskEvent?: TaskEvent
 ) {
   setTaskState(
     (prev) =>
@@ -17,13 +22,7 @@ export function updateTaskPriorityOrDueDate(
           orderedTask.taskList.forEach((task) => {
             if (task.id === currentTask.id) {
               task.expectedDueDate = expectedDueDate;
-              // determine if it's update dueDate or priority
-              if (expectedDueDate) {
-                targetColumnId = getDueDateColumnIdFromExpectedDueDate(
-                  draftState.columnOptions.dueDateColumns,
-                  expectedDueDate
-                );
-              }
+              if (taskEvent) task.taskEvents.push(taskEvent);
 
               const targetColumnAndId: TargetColumnAndId = expectedDueDate
                 ? { dueDate: targetColumnId }

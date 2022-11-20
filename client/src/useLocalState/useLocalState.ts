@@ -83,7 +83,7 @@ export function useLocalTasks(sortBy: SortBy) {
       const updatedTask = allTasks.find(
         (currentTask) => currentTask.id === task.id
       );
-      setTask(updatedTask);
+      if (updatedTask) setTask(updatedTask);
     }
   }, [taskState]);
 

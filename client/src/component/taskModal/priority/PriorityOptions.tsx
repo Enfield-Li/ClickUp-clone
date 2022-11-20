@@ -1,7 +1,6 @@
 import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import { SetTask } from "../../../context/task_detail/TaskDetailContextTypes";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import {
   Priority,
@@ -16,12 +15,11 @@ import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriori
 
 type Props = {
   task: Task;
-  setTask?: SetTask;
   onOptionClose: () => void;
 };
 
 export default memo(PriorityOptions);
-function PriorityOptions({ task, setTask, onOptionClose }: Props) {
+function PriorityOptions({ task, onOptionClose }: Props) {
   const fontColor = useColorModeValue("black", "lightMain.200");
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
@@ -59,10 +57,8 @@ function PriorityOptions({ task, setTask, onOptionClose }: Props) {
                     selectPriority(
                       task,
                       authState.user!.id!,
-                      sortBy,
                       setTaskState,
                       priorityColumn.id,
-                      setTask,
                       onOptionClose
                     )
                   }
@@ -99,22 +95,10 @@ function PriorityOptions({ task, setTask, onOptionClose }: Props) {
 export function selectPriority(
   task: Task,
   userId: number,
-  sortBy: SortBy,
   setTaskState: SetTaskState,
   targetPriorityColumnId: number,
-  setTask?: SetTask,
   onOptionClose?: () => void
 ) {
-  if (onOptionClose) onOptionClose();
-
-  // Update list taskState
-  updateTaskPriorityOrDueDate(
-    task!,
-    setTaskState,
-    targetPriorityColumnId,
-    null
-  );
-
   const newEvent: UpdateEvent = {
     id: getRandomNumberNoLimit(),
     userId,
@@ -124,4 +108,15 @@ export function selectPriority(
     afterUpdate: String(targetPriorityColumnId),
     createdAt: new Date(),
   };
+
+  // Update list taskState
+  updateTaskPriorityOrDueDate(
+    task!,
+    setTaskState,
+    targetPriorityColumnId,
+    null,
+    newEvent
+  );
+
+  if (onOptionClose) onOptionClose();
 }
