@@ -44,7 +44,7 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(sortBy: SortBy) {
-  const [state, setState] = useState<TaskState>();
+  const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
@@ -56,7 +56,7 @@ export function useFetchTasks(sortBy: SortBy) {
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
     updateLocalState();
-  }, [sortBy, state?.columnOptions.statusColumns]); // Change of sortBy and adding status column
+  }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
   async function fetchData() {
     setLoading(true);
@@ -84,8 +84,8 @@ export function useFetchTasks(sortBy: SortBy) {
         sortBy
       );
 
-      setTaskStateContext({ columnOptions, setState, sortBy });
-      setState({ orderedTasks, columnOptions });
+      setTaskStateContext({ columnOptions, setTaskState, sortBy });
+      setTaskState({ orderedTasks, columnOptions });
 
       setLoading(false);
     }
@@ -94,24 +94,24 @@ export function useFetchTasks(sortBy: SortBy) {
   async function updateLocalState() {
     setLoading(true);
 
-    if (state && taskStateContext) {
+    if (taskState && taskStateContext) {
       setTaskStateContext({
         ...taskStateContext,
         sortBy,
-        columnOptions: state.columnOptions,
+        columnOptions: taskState.columnOptions,
       });
 
       // init taskEvents and convert expectedDueDate to dueDate columns
       const taskList = processTaskList(
-        state.columnOptions.dueDateColumns,
-        collectAllTasks(state.orderedTasks)
+        taskState.columnOptions.dueDateColumns,
+        collectAllTasks(taskState.orderedTasks)
       );
 
-      setState({
-        ...state,
+      setTaskState({
+        ...taskState,
         orderedTasks: groupTaskListOnSortBy(
           taskList,
-          state.columnOptions[sortBy],
+          taskState.columnOptions[sortBy],
           sortBy
         ),
       });
@@ -122,5 +122,5 @@ export function useFetchTasks(sortBy: SortBy) {
     setLoading(false);
   }
 
-  return { state, setState, loading, error };
+  return { taskState, setTaskState, loading, error };
 }

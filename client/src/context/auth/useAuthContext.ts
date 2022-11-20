@@ -22,7 +22,7 @@ export function logOutUser(
   // invalidate session
   axiosInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
 
-  // clear local auth state and accessToken
+  // clear local auth taskState and accessToken
   localStorage.removeItem(ACCESS_TOKEN);
   dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 

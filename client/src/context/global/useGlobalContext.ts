@@ -14,7 +14,7 @@ export function popUpError(
   return dispatch({ type: GLOBAL_ACTION.NEW_ERROR, payload: error });
 }
 
-// Update global loading state
+// Update global loading taskState
 export function indicateLoading(
   isLoading: boolean,
   dispatch: React.Dispatch<GlobalActionType>

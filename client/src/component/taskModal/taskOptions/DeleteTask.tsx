@@ -27,7 +27,7 @@ export default memo(function TaskOptions({}: Props) {
     setTaskStateContext,
   } = useTaskDetailContext();
 
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <>

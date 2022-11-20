@@ -13,14 +13,14 @@ import { PriorityColumn } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 
 type Props = {
-  priority: number | null;
+  priority?: number;
   children: React.ReactNode;
   currentPriorityColumn?: PriorityColumn;
-  setPriority: React.Dispatch<React.SetStateAction<number | null>>;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setPriority: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
-function CreateSelectPriorityPopover({
+export default memo(function CreateSelectPriorityPopover({
   priority,
   children,
   setPriority,
@@ -68,5 +68,4 @@ function CreateSelectPriorityPopover({
       )}
     </Popover>
   );
-}
-export default memo(CreateSelectPriorityPopover);
+});

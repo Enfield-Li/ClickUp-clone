@@ -34,7 +34,7 @@ function TaskDetailHead({}: Props) {
     setTaskStateContext,
   } = useTaskDetailContext();
 
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <Flex>
@@ -51,7 +51,7 @@ function TaskDetailHead({}: Props) {
                 authState.user!.id,
                 task!.id!,
                 e.currentTarget.value,
-                setState,
+                setTaskState,
                 setTask
               );
             }
@@ -73,7 +73,7 @@ async function updateTitle(
   userId: number,
   taskId: number,
   newTitle: string,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   setTask: SetTask
 ) {
   const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
@@ -81,7 +81,7 @@ async function updateTitle(
   const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
 
   if (updateSuccess) {
-    setState((previousState) => {
+    setTaskState((previousState) => {
       if (previousState)
         return produce(previousState, (draftState) => {
           draftState.orderedTasks.forEach((tasks) =>

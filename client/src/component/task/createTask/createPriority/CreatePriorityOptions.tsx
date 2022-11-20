@@ -6,9 +6,9 @@ import { PriorityColumn } from "../../../../types";
 import { reorderPriorityColumn } from "../../actions/taskProcessing";
 
 type Props = {
-  priority: number | null;
+  priority?: number;
   onOptionClose: () => void;
-  setPriority: React.Dispatch<React.SetStateAction<number | null>>;
+  setPriority: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 function CreatePriorityOptions({
@@ -24,7 +24,7 @@ function CreatePriorityOptions({
 
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   function selectPriority(priorityColumn: PriorityColumn) {
     onOptionClose();

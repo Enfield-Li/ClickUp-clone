@@ -3,8 +3,8 @@ import { StatusColumn } from "../../../types";
 export function handleSelectStatus(column: StatusColumn) {
   //   onOptionClose();
   //   const targetStatusColumnId = column.id;
-  //   // Update task in state
-  //   updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
+  //   // Update task in taskState
+  //   updateCurrentTaskStatus(sortBy, task!, setTaskState, targetStatusColumnId);
   //   const newEvent: UpdateEvent = {
   //     id: getRandomNumberNoLimit(),
   //     userId: authState.user?.id,
@@ -14,7 +14,7 @@ export function handleSelectStatus(column: StatusColumn) {
   //     afterUpdate: String(targetStatusColumnId),
   //     createdAt: new Date(),
   //   };
-  //   // Update modal task state
+  //   // Update modal task taskState
   //   setTask({
   //     ...task!,
   //     status: targetStatusColumnId,

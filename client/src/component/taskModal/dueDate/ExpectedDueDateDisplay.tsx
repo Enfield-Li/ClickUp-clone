@@ -30,7 +30,7 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -39,10 +39,10 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
   );
 
   function clearDueDate() {
-    // Update list state
+    // Update list taskState
     updateTaskPriorityOrDueDate(
       task,
-      setState,
+      setTaskState,
       1, // No due date
       null
     );
@@ -56,7 +56,7 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
       afterUpdate: "1",
       createdAt: new Date(),
     };
-    // Update modal task state
+    // Update modal task taskState
     if (setTask) {
       setTask({
         ...task!,
@@ -84,7 +84,7 @@ export default memo(function ExpectedDueDateDisplay({ task, setTask }: Props) {
           onClose: () => void;
           isOpen: boolean;
         }) => (
-          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
+          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-taskState
           <>
             <Tooltip
               my={2}

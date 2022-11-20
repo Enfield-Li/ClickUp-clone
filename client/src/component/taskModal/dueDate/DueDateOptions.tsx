@@ -28,11 +28,11 @@ export default memo(function DueDateOptions({
 
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   function handleOnClick(targetColumn: DueDateColumn) {
     onClose();
-    handleSelectDueDateOptions(task, setState, targetColumn);
+    handleSelectDueDateOptions(task, setTaskState, targetColumn);
   }
 
   return (

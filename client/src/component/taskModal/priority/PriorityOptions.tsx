@@ -33,7 +33,7 @@ export default memo(function PriorityOptions({
 
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <>
@@ -63,7 +63,7 @@ export default memo(function PriorityOptions({
                       task,
                       authState.user!.id!,
                       sortBy,
-                      setState,
+                      setTaskState,
                       priorityColumn.id,
                       setTask,
                       onOptionClose
@@ -104,15 +104,20 @@ export function selectPriority(
   task: Task,
   userId: number,
   sortBy: SortBy,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   targetPriorityColumnId: number,
   setTask?: SetTask,
   onOptionClose?: () => void
 ) {
   if (onOptionClose) onOptionClose();
 
-  // Update list state
-  updateTaskPriorityOrDueDate(task!, setState, targetPriorityColumnId, null);
+  // Update list taskState
+  updateTaskPriorityOrDueDate(
+    task!,
+    setTaskState,
+    targetPriorityColumnId,
+    null
+  );
 
   const newEvent: UpdateEvent = {
     id: getRandomNumberNoLimit(),
@@ -124,7 +129,7 @@ export function selectPriority(
     createdAt: new Date(),
   };
 
-  //   // Update modal task state
+  //   // Update modal task taskState
   //   if (setTask) {
   //     setTask({
   //       ...task!,

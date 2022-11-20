@@ -1,6 +1,6 @@
 export function handleDeleteTask() {
   //   let taskListForUpdate: TaskList = [];
-  //   setState(
+  //   setTaskState(
   //     (prev) =>
   //       prev &&
   //       task &&
@@ -38,7 +38,7 @@ export function handleDeleteTask() {
   //               }
   //             });
   //           });
-  //           // Delete sourceTask from state
+  //           // Delete sourceTask from taskState
   //           // https://stackoverflow.com/a/24813338/16648127
   //           draftState.orderedTasks.forEach((tasks) => {
   //             tasks.taskList.forEach(

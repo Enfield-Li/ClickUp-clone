@@ -3,23 +3,24 @@ import { SetTaskState, SortBy, Task } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
   findTheLastOrderIndexInColumn,
-  OrderIndexAndName,
+  OrderIndexInColumn,
 } from "./createNewTask";
 
 export function updateCurrentTaskStatus(
   currentTask: Task,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   targetStatusColumnId: number
 ) {
-  setState(
-    (state) =>
-      state &&
-      deepCopy( // <- without it, immer produce won't trigger rerender, WTF ???
-        produce(state, (draftState) =>
+  setTaskState(
+    (taskState) =>
+      taskState &&
+      deepCopy(
+        // <- without it, immer produce won't trigger rerender, WTF ???
+        produce(taskState, (draftState) =>
           draftState.orderedTasks.forEach((orderedTask) => {
             orderedTask.taskList.forEach((task) => {
               if (task.id === currentTask.id) {
-                const { orderIndex, columnName }: OrderIndexAndName =
+                const { orderIndex, columnName }: OrderIndexInColumn =
                   findTheLastOrderIndexInColumn(
                     SortBy.STATUS,
                     targetStatusColumnId,

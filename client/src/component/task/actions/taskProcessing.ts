@@ -201,11 +201,11 @@ export function processTaskList(
 
 // Push task to the other sortBy id === 1 column
 export function updatePreviousIdsInColumn(
-  state: TaskState,
+  taskState: TaskState,
   targetColumn: TargetColumnAndId,
   sourceTask: Task
 ) {
-  const allTasks = collectAllTasks(state.orderedTasks);
+  const allTasks = collectAllTasks(taskState.orderedTasks);
 
   // Updates for newTask's previousItem for other sortBy
   const previousTaskValues = collectPreviousTaskValues(targetColumn);
@@ -297,7 +297,7 @@ export function updateTask(
   throw new Error("not implemented");
 }
 
-// Given sortBy and columnId, find the last task id in all the tasks in the state
+// Given sortBy and columnId, find the last task id in all the tasks in the taskState
 export function findLastTaskId(
   allTasks: TaskList,
   sortBy: SortBy,

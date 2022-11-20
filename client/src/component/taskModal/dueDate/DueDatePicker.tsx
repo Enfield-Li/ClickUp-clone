@@ -34,7 +34,7 @@ function DueDatePicker({
 }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <MaterialTheme>
@@ -50,7 +50,7 @@ function DueDatePicker({
               task,
               authState.user!.id,
               sortBy,
-              setState,
+              setTaskState,
               onClose,
               columnOptions,
               newValue,
@@ -69,7 +69,7 @@ function handleDatePicker(
   task: Task,
   userId: number,
   sortBy: SortBy,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   onClose: () => void,
   columnOptions: ColumnOptions,
   expectedDueDateInput: Date,
@@ -81,10 +81,10 @@ function handleDatePicker(
       expectedDueDateInput
     );
 
-    // Update list state
+    // Update list taskState
     updateTaskPriorityOrDueDate(
       task!,
-      setState,
+      setTaskState,
       targetDueDateColumnId,
       expectedDueDateInput
     );
@@ -99,7 +99,7 @@ function handleDatePicker(
       createdAt: new Date(),
     };
 
-    // Update modal task state
+    // Update modal task taskState
     if (setTask) {
       setTask({
         ...task!,

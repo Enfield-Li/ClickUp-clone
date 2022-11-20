@@ -11,14 +11,14 @@ import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon"
 import SaveButton from "./SaveButton";
 
 type Props = {
-  state: TaskState;
+  taskState: TaskState;
   isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function CreateTask({
-  state,
+  taskState,
   currentColumn,
   isCreateTaskOpen,
   setIsCreateTaskOpen,
@@ -26,18 +26,19 @@ function CreateTask({
   const { authState } = useAuthContext();
 
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setState } = taskStateContext!;
+  const { sortBy, setTaskState } = taskStateContext!;
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
   const finishedStatusColumn =
     sortBy === SortBy.STATUS && currentColumn.id === 3;
 
-  // task name state
+  // task name
   const [taskName, setTaskName] = useState("");
-  // priority state
-  const initialPriority = sortBy === SortBy.PRIORITY ? currentColumn.id : null;
-  const [priority, setPriority] = useState<number | null>(initialPriority);
-  // due date state
+  // priority
+  const initialPriority =
+    sortBy === SortBy.PRIORITY ? currentColumn.id : undefined;
+  const [priority, setPriority] = useState<number | undefined>(initialPriority);
+  // due date
   const weekString = currentColumn.title;
   const initialDueDate =
     sortBy === SortBy.DUE_DATE
@@ -163,13 +164,7 @@ function CreateTask({
                     priority,
                   };
 
-                  createNewTask(
-                    newTask,
-                    state,
-                    currentColumn,
-                    sortBy,
-                    setState
-                  );
+                  createNewTask(sortBy, newTask, setTaskState, currentColumn);
                   handleCancel();
                 }
               }}

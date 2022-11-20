@@ -1,13 +1,13 @@
 import { AuthStateType, AuthActionType, AUTH_ACTION } from "./AuthContextTypes";
 
 export default function authReducer(
-  state: AuthStateType,
+  taskState: AuthStateType,
   action: AuthActionType
 ) {
   switch (action.type) {
     case AUTH_ACTION.LOGIN_USER: {
       return {
-        ...state,
+        ...taskState,
         user: {
           id: action.payload.id,
           username: action.payload.username,
@@ -17,13 +17,13 @@ export default function authReducer(
 
     case AUTH_ACTION.LOGOUT_USER: {
       return {
-        ...state,
+        ...taskState,
         user: undefined,
       };
     }
 
     default: {
-      return state;
+      return taskState;
     }
   }
 }

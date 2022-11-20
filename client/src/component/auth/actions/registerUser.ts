@@ -1,7 +1,13 @@
 import { AxiosError } from "axios";
 import React from "react";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
-import { Credentials, AuthActionType, UserResponse, AUTH_ACTION, LogInError } from "../../../context/auth/AuthContextTypes";
+import {
+  Credentials,
+  AuthActionType,
+  UserResponse,
+  AUTH_ACTION,
+  LogInError,
+} from "../../../context/auth/AuthContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN } from "../../../utils/constant";
 
@@ -20,7 +26,7 @@ export async function registerUser(
 
     const user = { id: response.data.id, username: response.data.username };
 
-    // update auth state
+    // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
       payload: user,
@@ -32,7 +38,7 @@ export async function registerUser(
       status: "success",
     });
   } catch (error) {
-    // clear local auth state and accessToken
+    // clear local auth taskState and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 

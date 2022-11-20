@@ -5,15 +5,15 @@ import { updateTaskPriorityOrDueDate } from "./updateTaskPriorityOrDueDate";
 
 export function handleSelectDueDateOptions(
   task: Task,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   targetColumn: DueDateColumn
 ) {
   const weekString = targetColumn.title;
   const expectedDueDate = getExpectedDueDateFromWeekString(weekString);
-  // Update list state
+  // Update list taskState
   updateTaskPriorityOrDueDate(
     task!,
-    setState,
+    setTaskState,
     targetColumn.id,
     expectedDueDate
   );
@@ -26,7 +26,7 @@ export function handleSelectDueDateOptions(
   //     afterUpdate: String(targetColumn.id),
   //     createdAt: new Date(),
   //   };
-  //   // Update task state
+  //   // Update task taskState
   //   if (setTask) {
   //     setTask({
   //       ...task!,

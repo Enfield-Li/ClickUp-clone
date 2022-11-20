@@ -16,6 +16,6 @@ export type TaskDetailContextType = {
 
 export type TaskStateContext = {
   sortBy: SortBy;
-  setState: SetTaskState;
+  setTaskState: SetTaskState;
   columnOptions: ColumnOptions;
 };

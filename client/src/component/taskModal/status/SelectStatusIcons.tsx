@@ -27,7 +27,7 @@ export default memo(function SelectStatusIcons({}: Props) {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const { task, setTask, taskStateContext } = useTaskDetailContext();
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   const column = columnOptions.statusColumns.find(
     (column) => column.id === task!.status.columnId
@@ -43,7 +43,7 @@ export default memo(function SelectStatusIcons({}: Props) {
 
   function handleNextStage() {
     // const targetStatusColumnId = nextStatus.id;
-    // updateCurrentTaskStatus(sortBy, task!, setState, targetStatusColumnId);
+    // updateCurrentTaskStatus(sortBy, task!, setTaskState, targetStatusColumnId);
     // const newEvent: UpdateEvent = {
     //   id: getRandomNumberNoLimit(),
     //   userId: authState.user?.id,
@@ -53,7 +53,7 @@ export default memo(function SelectStatusIcons({}: Props) {
     //   afterUpdate: String(nextStatus.id),
     //   createdAt: new Date(),
     // };
-    // // Update modal task state
+    // // Update modal task taskState
     // setTask({
     //   ...task!,
     //   status: targetStatusColumnId,
@@ -71,7 +71,7 @@ export default memo(function SelectStatusIcons({}: Props) {
         // https://chakra-ui.com/docs/components/popover/usage#controlled-usage
       >
         {({ onClose: onOptionClose }: { onClose: () => void }) => (
-          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
+          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-taskState
           <>
             <Flex
               height="33px"
@@ -158,7 +158,7 @@ export default memo(function SelectStatusIcons({}: Props) {
                     _hover={{ color: "yellow.400", opacity: "100%" }}
                     onClick={() => {
                       //   setTask({ ...task!, status: 3 });
-                      //   updateCurrentTaskStatus(sortBy, task!, setState, 3);
+                      //   updateCurrentTaskStatus(sortBy, task!, setTaskState, 3);
                     }}
                   >
                     <Center border="1.1px solid" rounded="sm" p={2}>

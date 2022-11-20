@@ -5,11 +5,11 @@ import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export function updateTaskPriorityOrDueDate(
   currentTask: Task,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   targetColumnId: number,
   expectedDueDate: Date | null
 ) {
-  setState(
+  setTaskState(
     (prev) =>
       prev &&
       produce(prev, (draftState) =>

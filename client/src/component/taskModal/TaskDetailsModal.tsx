@@ -35,7 +35,7 @@ export default memo(function TaskDetailModal({}: Props) {
     setTaskStateContext,
   } = useTaskDetailContext();
 
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   return (
     <Modal

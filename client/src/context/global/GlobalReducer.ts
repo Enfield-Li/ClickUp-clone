@@ -5,20 +5,20 @@ import {
 } from "./GlobalContextTypes";
 
 export default function globalReducer(
-  state: GlobalStateType,
+  taskState: GlobalStateType,
   action: GlobalActionType
 ) {
   switch (action.type) {
     case GLOBAL_ACTION.NEW_ERROR: {
-      return { ...state, error: action.payload };
+      return { ...taskState, error: action.payload };
     }
 
     case GLOBAL_ACTION.LOADING_STATE: {
-      return { ...state, loading: action.payload };
+      return { ...taskState, loading: action.payload };
     }
 
     default: {
-      return state;
+      return taskState;
     }
   }
 }

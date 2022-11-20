@@ -53,7 +53,7 @@ function CreateExpectedDueDateDisplay({
           onClose: () => void;
           isOpen: boolean;
         }) => (
-          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-state
+          // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-taskState
           <>
             <Tooltip
               my={2}

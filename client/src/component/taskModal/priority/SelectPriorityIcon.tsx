@@ -13,7 +13,7 @@ export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions, setState, sortBy } = taskStateContext!;
+  const { columnOptions, setTaskState, sortBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priorityColumns.find(
@@ -66,7 +66,7 @@ export default memo(function SelectPriorityIcon({ task, setTask }: Props) {
                 task,
                 authState.user!.id!,
                 sortBy,
-                setState,
+                setTaskState,
                 1, // no priority
                 setTask
               );

@@ -11,14 +11,14 @@ import { SetTaskState, StatusColumn, StatusColumns } from "../../../types";
 
 type Props = {
   color: string;
-  setState: SetTaskState;
+  setTaskState: SetTaskState;
   statusColumns: StatusColumns;
   setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function AddStatusColumnInput({
   color,
-  setState,
+  setTaskState,
   setShowEdit,
   statusColumns,
 }: Props) {
@@ -32,7 +32,7 @@ function AddStatusColumnInput({
       title: titleInput,
     };
 
-    setState((pre) => {
+    setTaskState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
           const indexBeforeTheEnd =

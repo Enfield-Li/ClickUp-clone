@@ -22,11 +22,11 @@ export default memo(function EditColumnTitle({
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { setState } = taskStateContext!;
+  const { setTaskState } = taskStateContext!;
 
   function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {
     // Update column title
-    setState((pre) => {
+    setTaskState((pre) => {
       if (pre) {
         return produce(pre, (draftState) => {
           draftState.columnOptions.statusColumns.forEach((column) =>

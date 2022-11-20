@@ -11,7 +11,7 @@ import { mockColumnOptions, mockTaskList } from "./mockData";
 import { sleep } from "../utils/sleep";
 
 export function useLocalTasks(sortBy: SortBy) {
-  const [state, setState] = useState<TaskState>();
+  const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
 
@@ -40,8 +40,8 @@ export function useLocalTasks(sortBy: SortBy) {
         sortBy
       );
 
-      setTaskStateContext({ columnOptions, setState, sortBy });
-      setState({ orderedTasks, columnOptions });
+      setTaskStateContext({ columnOptions, setTaskState, sortBy });
+      setTaskState({ orderedTasks, columnOptions });
 
       setLoading(false);
     }
@@ -54,17 +54,17 @@ export function useLocalTasks(sortBy: SortBy) {
     async function updateLocalState() {
       setLoading(true);
 
-      if (state && taskStateContext) {
+      if (taskState && taskStateContext) {
         setTaskStateContext({
           ...taskStateContext,
           sortBy,
         });
 
-        setState({
-          ...state,
+        setTaskState({
+          ...taskState,
           orderedTasks: groupTaskListOnSortBy(
-            collectAllTasks(state.orderedTasks),
-            state.columnOptions[`${sortBy}Columns`],
+            collectAllTasks(taskState.orderedTasks),
+            taskState.columnOptions[`${sortBy}Columns`],
             sortBy
           ),
         });
@@ -73,7 +73,7 @@ export function useLocalTasks(sortBy: SortBy) {
         setLoading(false);
       }
     }
-  }, [sortBy, state?.columnOptions.statusColumns]); // Change of sortBy and adding status column
+  }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
-  return { state, setState, loading };
+  return { taskState, setTaskState, loading };
 }

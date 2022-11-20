@@ -27,7 +27,7 @@ export async function loginUser(
 
     const user = { id: response.data.id, username: response.data.username };
 
-    // update auth state
+    // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
       payload: user,
@@ -39,7 +39,7 @@ export async function loginUser(
       status: "success",
     });
   } catch (error) {
-    // clear local auth state and accessToken
+    // clear local auth taskState and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 

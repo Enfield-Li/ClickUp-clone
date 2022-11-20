@@ -19,7 +19,7 @@ function NavBar({}: Props) {
     defaultIsOpen: false,
   });
 
-  // Sync up url with currentSection state after user refresh page
+  // Sync up url with currentSection taskState after user refresh page
   useEffect(() => {
     if (location.pathname.includes("task")) {
       setCurrentSection("tasks");

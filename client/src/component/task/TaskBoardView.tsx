@@ -26,14 +26,14 @@ type Props = {
 };
 
 export default memo(function TaskBoardView({ sortBy }: Props) {
-  //   const { state, loading, error, setState } = useFetchTasks(sortBy);
-  const { state: taskState, loading, setState } = useLocalTasks(sortBy);
+  //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
+  const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   console.log(taskState);
 
   const memHandleDragEnd = useCallback(
-    (result: DropResult, state: TaskState) => {
-      handleDragEnd(result, state, setState, sortBy);
+    (result: DropResult, taskState: TaskState) => {
+      handleDragEnd(result, taskState, setTaskState, sortBy);
     },
     [taskState, sortBy]
   );
@@ -62,7 +62,7 @@ export default memo(function TaskBoardView({ sortBy }: Props) {
             return (
               <Box key={currentColumn.id} borderRadius={4}>
                 <Column
-                  state={taskState}
+                  taskState={taskState}
                   currentColumn={currentColumn}
                   // Pass down list as per column.id
                   taskList={taskListForCurrentColumn}
@@ -77,7 +77,7 @@ export default memo(function TaskBoardView({ sortBy }: Props) {
           {sortBy === SortBy.STATUS && (
             <Box mx={2}>
               <AddStatusColumn
-                setState={setState}
+                setTaskState={setTaskState}
                 statusColumns={taskState.columnOptions.statusColumns}
               />
             </Box>
@@ -90,8 +90,8 @@ export default memo(function TaskBoardView({ sortBy }: Props) {
 
 async function handleDragEnd(
   result: DropResult,
-  state: TaskState,
-  setState: SetTaskState,
+  taskState: TaskState,
+  setTaskState: SetTaskState,
   sortBy: SortBy
 ) {
   const { destination, source } = result;
@@ -103,7 +103,7 @@ async function handleDragEnd(
     return;
   }
   const isDueDateColumn = sortBy === SortBy.DUE_DATE;
-  const currentColumns = state.columnOptions[
+  const currentColumns = taskState.columnOptions[
     `${sortBy}Columns`
   ] as UndeterminedColumns;
 
@@ -111,7 +111,7 @@ async function handleDragEnd(
   const isColumnReordered = sortBy !== SortBy.PRIORITY;
   if (isColumnReordered) {
     getLookUpReorderedColumnTable(
-      state.orderedTasks,
+      taskState.orderedTasks,
       currentColumns,
       lookUpColumnId
     );
@@ -137,8 +137,8 @@ async function handleDragEnd(
     (column) => column.id === destinationColumnId
   );
 
-  setState(
-    produce(state, (draftState) => {
+  setTaskState(
+    produce(taskState, (draftState) => {
       const taskListForUpdate: TaskList = [];
       const sourceTasksArr = draftState.orderedTasks[sourceTaskColumnIndex];
       const destinationTasksArr =
@@ -279,7 +279,7 @@ async function handleDragEnd(
         taskDtoList: taskListForUpdate,
       };
       //   updateTasksPosition(updateTaskListDTO);
-      // Clear events from state task
+      // Clear events from taskState task
       sourceTask.taskEvents = [];
     })
   );

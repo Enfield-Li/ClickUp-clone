@@ -1,3 +1,4 @@
+import produce from "immer";
 import {
   DueDateRange,
   OrderedTasks,
@@ -19,51 +20,71 @@ import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 export type NewTask = {
   title: string;
   status?: number;
-  priority: number | null;
+  priority?: number;
   expectedDueDate: Date | null;
 };
 
 export async function createNewTask(
-  newTaskInput: NewTask,
-  state: TaskState,
-  currentColumn: UndeterminedColumn,
   sortBy: SortBy,
-  setState: SetTaskState
+  newTaskInput: NewTask,
+  setTaskState: SetTaskState,
+  currentColumn: UndeterminedColumn
 ) {
-  // Prepare newTask
-  const { title, expectedDueDate, priority, status } = newTaskInput;
-  const newTask = newTaskFactory(title, expectedDueDate);
-  const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
-    state.columnOptions.dueDateColumns,
-    expectedDueDate
-  );
+  setTaskState(
+    (taskState) =>
+      taskState &&
+      produce(taskState, (draftState) => {
+        // Prepare newTask
+        const { title, expectedDueDate, priority, status } = newTaskInput;
+        const newTask = newTaskFactory(title, expectedDueDate);
+        const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
+          draftState.columnOptions.dueDateColumns,
+          expectedDueDate
+        );
 
-  // Set position under current column/sortBy
-  const currentTaskList = state.orderedTasks.find(
+        // Set position under current column/sortBy
+        setCurrentTaskAttribute(newTask, sortBy, draftState, currentColumn);
+
+        // set position for other sortBys'
+        const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
+          sortBy,
+          dueDateColumnId,
+          priority,
+          status
+        );
+
+        updateTaskOnTargetColumnAndId(targetColumnAndId, draftState, newTask);
+
+        draftState.orderedTasks.forEach((orderedTask) => {
+          const isCurrentColumn = orderedTask.columnId === currentColumn.id;
+          if (isCurrentColumn) orderedTask.taskList.push(newTask);
+        });
+      })
+  );
+}
+
+export function setCurrentTaskAttribute(
+  newTask: Task,
+  sortBy: SortBy,
+  taskState: TaskState,
+  currentColumn: UndeterminedColumn
+) {
+  const currentTaskList = taskState.orderedTasks.find(
     (orderedTaskList) => orderedTaskList.columnId === currentColumn.id
   );
-  const lastTaskInCurrentTaskList =
-    currentTaskList?.taskList[currentTaskList?.taskList.length];
+  const lastTaskInCurrentColumn =
+    currentTaskList?.taskList[currentTaskList?.taskList.length - 1];
 
   newTask[sortBy].columnId = currentColumn.id;
   newTask[sortBy].name = currentColumn.title;
-  newTask[sortBy].orderIndex = lastTaskInCurrentTaskList
-    ? lastTaskInCurrentTaskList[sortBy].orderIndex + 1
+  newTask[sortBy].orderIndex = lastTaskInCurrentColumn
+    ? lastTaskInCurrentColumn[sortBy].orderIndex + 1
     : 1;
-
-  // set position for other sortBys'
-  const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
-    sortBy,
-    dueDateColumnId,
-    priority,
-    status
-  );
-  updateTaskOnTargetColumnAndId(targetColumnAndId, state, newTask);
 }
 
 export function updateTaskOnTargetColumnAndId(
   targetColumnAndId: TargetColumnAndId,
-  state: TaskState,
+  taskState: TaskState,
   task: Task
 ) {
   const numOfKeys = Object.entries(targetColumnAndId).length;
@@ -72,8 +93,8 @@ export function updateTaskOnTargetColumnAndId(
     const targetedSortBy = stateColumnPair[0] as SortBy;
     const columnId = stateColumnPair[1];
 
-    const { orderIndex, columnName }: OrderIndexAndName =
-      findTheLastOrderIndexInColumn(targetedSortBy, columnId, state);
+    const { orderIndex, columnName }: OrderIndexInColumn =
+      findTheLastOrderIndexInColumn(targetedSortBy, columnId, taskState);
 
     task[targetedSortBy].name = columnName;
     task[targetedSortBy].columnId = columnId;
@@ -81,48 +102,51 @@ export function updateTaskOnTargetColumnAndId(
   }
 }
 
-export interface OrderIndexAndName {
+export interface OrderIndexInColumn {
   orderIndex: number;
   columnName: string;
 }
 export function findTheLastOrderIndexInColumn(
   sortBy: SortBy,
   columnId: number,
-  state: TaskState
-): OrderIndexAndName {
-  const allTasks = collectAllTasks(state.orderedTasks);
+  taskState: TaskState
+): OrderIndexInColumn {
+  const allTasks = collectAllTasks(taskState.orderedTasks);
 
   const allOrderIndex: number[] = [];
-  const orderIndexAndName: OrderIndexAndName = {
-    orderIndex: 1,
+  const orderIndexAndName: OrderIndexInColumn = {
+    orderIndex: 1, // default
     columnName: "",
   };
 
+  // collect all tasks' orderIndex
   allTasks.forEach((task) => {
     if (task[sortBy].columnId === columnId) {
-      allOrderIndex.push(task[sortBy].columnId);
+      allOrderIndex.push(task[sortBy].orderIndex);
       orderIndexAndName.columnName = task[sortBy].name;
     }
   });
 
+  // override orderIndex when target column not empty
   if (allOrderIndex.length) {
-    orderIndexAndName.orderIndex = Math.max(...[...allOrderIndex]) + 1;
-  } else {
-    const undeterminedColumns = state.columnOptions[
-      `${sortBy}Columns`
-    ] as UndeterminedColumns;
-
-    const currentColumn = undeterminedColumns.find(
-      (column) => column.id === columnId
-    );
-    if (!currentColumn) {
-      throw new Error(
-        "Failed to find the last orderIndex, failed to find column"
-      );
-    }
-
-    orderIndexAndName.columnName = currentColumn?.title;
+    orderIndexAndName.orderIndex = Math.max(...allOrderIndex) + 1;
   }
+
+  // override column name
+  const undeterminedColumns = taskState.columnOptions[
+    `${sortBy}Columns`
+  ] as UndeterminedColumns;
+
+  const currentColumn = undeterminedColumns.find(
+    (column) => column.id === columnId
+  );
+  if (!currentColumn) {
+    throw new Error(
+      "Failed to find the last orderIndex, failed to find column"
+    );
+  }
+
+  orderIndexAndName.columnName = currentColumn?.title;
 
   return orderIndexAndName;
 }
@@ -165,6 +189,7 @@ function newTaskFactory(title: string, expectedDueDate: Date | null): Task {
     watchers: [],
     assignees: [],
     subTasks: [],
+    creator: { userId: 0, username: "" },
     status: newTaskStatusPosition(),
     dueDate: newTaskDueDatePosition(),
     priority: newTaskPriorityPosition(),

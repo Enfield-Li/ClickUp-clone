@@ -30,7 +30,7 @@ export default memo(function TaskInfo({}: Props) {
     setTaskStateContext,
   } = useTaskDetailContext();
 
-  const { setState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
   return (
     <Box flexBasis={"50%"}>
       <Flex
@@ -81,7 +81,7 @@ export default memo(function TaskInfo({}: Props) {
                 updateDescription(
                   task!.id!,
                   e.currentTarget.value,
-                  setState,
+                  setTaskState,
                   setTask
                 );
               }
@@ -96,7 +96,7 @@ export default memo(function TaskInfo({}: Props) {
 export async function updateDescription(
   taskId: number,
   newDesc: string,
-  setState: SetTaskState,
+  setTaskState: SetTaskState,
   setTask: SetTask
 ) {
   const updateTaskDescDTO: UpdateTaskDescDTO = { taskId, newDesc };
@@ -104,7 +104,7 @@ export async function updateDescription(
   const updateSuccess = await updateTaskDescription(updateTaskDescDTO);
 
   if (updateSuccess) {
-    setState((previousState) => {
+    setTaskState((previousState) => {
       if (previousState)
         return produce(previousState, (draftState) => {
           draftState.orderedTasks.forEach((tasks) =>

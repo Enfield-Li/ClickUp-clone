@@ -4,11 +4,14 @@ import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailC
 import CreateSelectPriorityPopover from "./CreateSelectPriorityPopover";
 
 type Props = {
-  priority: number | null;
-  setPriority: React.Dispatch<React.SetStateAction<number | null>>;
+  priority?: number;
+  setPriority: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
-function CreateSelectPriorityIcon({ priority, setPriority }: Props) {
+export default memo(function CreateSelectPriorityIcon({
+  priority,
+  setPriority,
+}: Props) {
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions } = taskStateContext!;
 
@@ -51,5 +54,4 @@ function CreateSelectPriorityIcon({ priority, setPriority }: Props) {
       )}
     </CreateSelectPriorityPopover>
   );
-}
-export default memo(CreateSelectPriorityIcon);
+});

@@ -5,11 +5,11 @@ import AddStatusColumnInput from "./AddStatusColumnInput";
 import { HexColorPicker } from "react-colorful";
 
 type Props = {
-  setState: SetTaskState;
+  setTaskState: SetTaskState;
   statusColumns: StatusColumns;
 };
 
-function AddStatusColumn({ setState, statusColumns }: Props) {
+function AddStatusColumn({ setTaskState, statusColumns }: Props) {
   const hoverBgColor = useColorModeValue("white", "darkMain.200");
 
   const [showEdit, setShowEdit] = useState(false);
@@ -22,7 +22,7 @@ function AddStatusColumn({ setState, statusColumns }: Props) {
           <Box>
             <AddStatusColumnInput
               color={color}
-              setState={setState}
+              setTaskState={setTaskState}
               setShowEdit={setShowEdit}
               statusColumns={statusColumns}
             />

@@ -14,7 +14,7 @@ import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";
 
 type Props = {
-  state: TaskState;
+  taskState: TaskState;
   taskList?: TaskList;
   isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
@@ -22,7 +22,7 @@ type Props = {
 };
 
 export default memo(function Column({
-  state,
+  taskState,
   taskList,
   currentColumn,
   isCreateTaskOpen,
@@ -69,7 +69,7 @@ export default memo(function Column({
             {/* Create task popover */}
             <Center>
               <CreateTask
-                state={state}
+                taskState={taskState}
                 currentColumn={currentColumn}
                 isCreateTaskOpen={isCreateTaskOpen}
                 setIsCreateTaskOpen={setIsCreateTaskOpen}

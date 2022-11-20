@@ -23,7 +23,7 @@ export default memo(function SetTaskAttribute({
   setIsPopoverOpen,
 }: Props) {
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setState } = taskStateContext!;
+  const { sortBy, setTaskState } = taskStateContext!;
 
   return (
     <Flex fontSize="small" alignItems="center" justifyContent="space-between">
@@ -69,7 +69,7 @@ export default memo(function SetTaskAttribute({
               _hover={{ opacity: "100%", color: "green.300" }}
               onClick={(e) => {
                 e.stopPropagation();
-                updateCurrentTaskStatus(task, setState, 3); // set to complete
+                updateCurrentTaskStatus(task, setTaskState, 3); // set to complete
               }}
             >
               <CheckIcon fontSize="md" alignSelf="center" />
