@@ -57,7 +57,9 @@ export async function createNewTask(
         updateTaskOnTargetColumnAndId(targetColumnAndId, draftState, newTask);
 
         draftState.orderedTasks.forEach((orderedTask) => {
-          const isCurrentColumn = orderedTask.columnId === currentColumn.id;
+          const targetColumnId =
+            sortBy !== SortBy.DUE_DATE ? currentColumn.id : dueDateColumnId;
+          const isCurrentColumn = orderedTask.columnId === targetColumnId;
           if (isCurrentColumn) orderedTask.taskList.push(newTask);
         });
       })
@@ -96,12 +98,10 @@ export function updateTaskOnTargetColumnAndId(
 
     const { orderIndex, columnName }: OrderIndexInColumn =
       findTheLastOrderIndexInColumn(targetSortBy, columnId, taskState);
-    console.log({ orderIndex, columnName });
 
     task[targetSortBy].name = columnName;
     task[targetSortBy].columnId = columnId;
     task[targetSortBy].orderIndex = orderIndex;
-    console.log({ task: deepCopy(task) });
   }
 }
 

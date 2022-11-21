@@ -9,8 +9,8 @@ import SubTaskIcons from "./SubTaskIcons";
 type Props = {
   task: Task;
   hasSubTask: boolean;
+  hasDueDate: boolean;
   hasPriority: boolean;
-  hasDueDate: Date | null;
   setShowSubTask: React.Dispatch<React.SetStateAction<boolean>>;
 };
 

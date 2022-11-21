@@ -17,8 +17,8 @@ type Props = {
   setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export default memo(CreateTask);
 function CreateTask({
-  taskState,
   currentColumn,
   isCreateTaskOpen,
   setIsCreateTaskOpen,
@@ -177,5 +177,3 @@ function CreateTask({
     </Box>
   );
 }
-
-export default memo(CreateTask);

@@ -40,10 +40,20 @@ function TaskCard({ task, index }: Props) {
     );
   }, [columnOptions.statusColumns, task.status]);
 
-  const noPriority = task.priority.name === Priority.NO_PRIORITY;
   const hasSubTask = task.subTasks.length > 0;
-  const hasDueDate = task.expectedDueDate;
-  const expandCardHeight = !noPriority || hasSubTask || hasDueDate;
+  const hasDueDate = task.expectedDueDate !== null;
+  const hasPriority = task.priority.name !== Priority.NO_PRIORITY;
+
+  const expandCardHeightInPriority =
+    sortBy === SortBy.PRIORITY && (hasSubTask || hasDueDate);
+  const expandCardHeightInDueDate =
+    sortBy === SortBy.DUE_DATE && (hasSubTask || hasPriority);
+  const expandCardHeightInStatus =
+    sortBy === SortBy.STATUS && (hasPriority || hasSubTask || hasDueDate);
+  const expandCardHeight =
+    expandCardHeightInStatus ||
+    expandCardHeightInPriority ||
+    expandCardHeightInDueDate;
 
   function handleOpenTaskModal() {
     if (task?.id) {
@@ -98,7 +108,7 @@ function TaskCard({ task, index }: Props) {
                   task={task}
                   hasDueDate={hasDueDate}
                   hasSubTask={hasSubTask}
-                  hasPriority={!noPriority}
+                  hasPriority={hasPriority}
                   setShowSubTask={setShowSubTask}
                 />
               </Box>
@@ -109,7 +119,7 @@ function TaskCard({ task, index }: Props) {
                 <SetTaskAttribute
                   task={task}
                   hasDueDate={hasDueDate}
-                  hasPriority={!noPriority}
+                  hasPriority={hasPriority}
                   setIsPopoverOpen={setIsPopoverOpen}
                 />
               </Box>

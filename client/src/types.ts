@@ -171,10 +171,11 @@ export type UndeterminedColumn = Column<string>;
 export type UndeterminedColumns = UndeterminedColumn[];
 
 // States
-export type OrderedTasks = {
+export interface OrderedTask {
   columnId: number;
   taskList: TaskList;
-}[];
+}
+export type OrderedTasks = OrderedTask[];
 export interface TaskState {
   orderedTasks: OrderedTasks;
   columnOptions: ColumnOptions;

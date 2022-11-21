@@ -15,8 +15,8 @@ import ThreeDotShowOptions from "./ThreeDotShowOptions";
 
 type Props = {
   task: Task;
+  hasDueDate: boolean;
   hasPriority: boolean;
-  hasDueDate: Date | null;
   setIsPopoverOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
