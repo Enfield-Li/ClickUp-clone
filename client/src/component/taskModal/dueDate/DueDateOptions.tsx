@@ -1,10 +1,21 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
+import { AuthStateType } from "../../../context/auth/AuthContextTypes";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { DueDateColumn, DueDateRange, Task } from "../../../types";
+import {
+  DueDateColumn,
+  DueDateRange,
+  SetTaskState,
+  SortBy,
+  Task,
+} from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
-import { handleSelectDueDateOptions } from "../../task/actions/handleSelectDueDateOptions";
+import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
+import {
+  newUpdateEvent,
+  updateTaskPriorityOrDueDate,
+} from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -25,7 +36,25 @@ function DueDateOptions({ task, onClose }: Props) {
 
   function handleOnClick(targetColumn: DueDateColumn) {
     onClose();
-    handleSelectDueDateOptions(task, authState, setTaskState, targetColumn);
+    const weekString = targetColumn.title;
+    const expectedDueDate = getExpectedDueDateFromWeekString(weekString);
+
+    const newEvent = newUpdateEvent(
+      authState.user!.id!,
+      task.id!,
+      SortBy.DUE_DATE,
+      task.dueDate.columnId,
+      targetColumn.id
+    );
+
+    // Update list taskState
+    updateTaskPriorityOrDueDate(
+      task!,
+      setTaskState,
+      targetColumn.id,
+      newEvent,
+      expectedDueDate
+    );
   }
 
   return (

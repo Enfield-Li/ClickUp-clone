@@ -12,11 +12,13 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, Task, UpdateEvent } from "../../../types";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { SortBy, Task } from "../../../types";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
-import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
+import {
+  newUpdateEvent,
+  updateTaskPriorityOrDueDate,
+} from "../../task/actions/updateTaskAttributes";
 import DueDatePanel from "./DueDatePanel";
 
 type Props = {
@@ -29,7 +31,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -38,23 +40,23 @@ function ExpectedDueDateDisplay({ task }: Props) {
   );
 
   function clearDueDate() {
+    const noDueDateColumnId = 1;
+    const newEvent = newUpdateEvent(
+      authState.user!.id!,
+      task.id!,
+      SortBy.DUE_DATE,
+      task.dueDate.columnId,
+      noDueDateColumnId
+    );
+
     // Update list taskState
     updateTaskPriorityOrDueDate(
       task,
       setTaskState,
-      1 // No due date
+      1, // No due date
+      newEvent,
+      null
     );
-
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task.id!,
-      field: SortBy.DUE_DATE,
-      beforeUpdate: String(task.dueDate),
-      afterUpdate: "1",
-      createdAt: new Date(),
-    };
-    // Update modal task taskState
   }
 
   return (

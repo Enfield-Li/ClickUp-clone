@@ -14,9 +14,11 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, UpdateEvent } from "../../../types";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
-import { updateCurrentTaskStatus } from "../../task/actions/updateCurrentTaskStatus";
+import { SortBy } from "../../../types";
+import {
+  newUpdateEvent,
+  updateCurrentTaskStatus,
+} from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -47,15 +49,14 @@ function SelectStatusIcons({}: Props) {
 
   function handleNextStage() {
     const targetStatusColumnId = nextStatus.id;
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: SortBy.STATUS,
-      beforeUpdate: String(task?.status),
-      afterUpdate: String(nextStatus.id),
-      createdAt: new Date(),
-    };
+    const newEvent = newUpdateEvent(
+      authState.user!.id!,
+      task!.id!,
+      SortBy.STATUS,
+      task!.status.columnId,
+      targetStatusColumnId
+    );
+
     updateCurrentTaskStatus(
       task!,
       setTaskState,
@@ -66,15 +67,22 @@ function SelectStatusIcons({}: Props) {
 
   function handleSetToFinish() {
     const finishedColumnId = 3;
-    const newEvent: UpdateEvent = {
-      id: getRandomNumberNoLimit(),
-      userId: authState.user?.id,
-      taskId: task!.id!,
-      field: SortBy.STATUS,
-      beforeUpdate: String(task?.status),
-      afterUpdate: String(finishedColumnId),
-      createdAt: new Date(),
-    };
+    const newEvent = newUpdateEvent(
+      authState.user!.id!,
+      task!.id!,
+      SortBy.STATUS,
+      task!.status.columnId,
+      finishedColumnId
+    );
+    // const newEvent: UpdateEvent = {
+    //   id: getRandomNumberNoLimit(),
+    //   userId: authState.user?.id,
+    //   taskId: task!.id!,
+    //   field: SortBy.STATUS,
+    //   beforeUpdate: String(task?.status.columnId),
+    //   afterUpdate: String(finishedColumnId),
+    //   createdAt: new Date(),
+    // };
     updateCurrentTaskStatus(task!, setTaskState, finishedColumnId, newEvent);
   }
 

@@ -2,16 +2,12 @@ import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import {
-  Priority,
-  SetTaskState,
-  SortBy,
-  Task,
-  UpdateEvent,
-} from "../../../types";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { Priority, SetTaskState, SortBy, Task } from "../../../types";
 import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
-import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
+import {
+  newUpdateEvent,
+  updateTaskPriorityOrDueDate,
+} from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -100,23 +96,21 @@ export function selectPriority(
   targetPriorityColumnId: number,
   onOptionClose?: () => void
 ) {
-  const newEvent: UpdateEvent = {
-    id: getRandomNumberNoLimit(),
+  const newEvent = newUpdateEvent(
     userId,
-    taskId: task!.id!,
-    field: SortBy.PRIORITY,
-    beforeUpdate: String(task?.priority),
-    afterUpdate: String(targetPriorityColumnId),
-    createdAt: new Date(),
-  };
+    task.id!,
+    SortBy.PRIORITY,
+    task.priority.columnId,
+    targetPriorityColumnId
+  );
 
   // Update list taskState
   updateTaskPriorityOrDueDate(
     task!,
     setTaskState,
     targetPriorityColumnId,
-    undefined,
-    newEvent
+    newEvent,
+    undefined
   );
 
   if (onOptionClose) onOptionClose();
