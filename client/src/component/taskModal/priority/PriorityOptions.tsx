@@ -92,6 +92,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
     </>
   );
 }
+
 export function selectPriority(
   task: Task,
   userId: number,
@@ -114,7 +115,7 @@ export function selectPriority(
     task!,
     setTaskState,
     targetPriorityColumnId,
-    null,
+    undefined,
     newEvent
   );
 

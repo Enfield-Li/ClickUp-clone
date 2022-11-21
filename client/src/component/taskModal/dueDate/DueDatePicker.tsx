@@ -1,10 +1,8 @@
-import { Box } from "@chakra-ui/react";
 import { TextField } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import {
   ColumnOptions,
   SetTaskState,
@@ -14,6 +12,7 @@ import {
 } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
+import { updateTaskPriorityOrDueDate } from "../../task/actions/updateTaskPriorityOrDueDate";
 import MaterialTheme from "../../test-dev/MaterialTheme";
 
 type Props = {

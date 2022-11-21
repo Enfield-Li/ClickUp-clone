@@ -104,7 +104,7 @@ enum AssignmentAction {
 }
 export interface BeforeOrAfterUpdate {
   afterUpdate: string;
-  beforeUpdate?: string;
+  beforeUpdate: string | null;
 }
 
 export type UpdateEvent = BaseEvent & BeforeOrAfterUpdate;

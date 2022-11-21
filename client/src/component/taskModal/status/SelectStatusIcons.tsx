@@ -14,6 +14,9 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { SortBy, UpdateEvent } from "../../../types";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { updateCurrentTaskStatus } from "../../task/actions/updateCurrentTaskStatus";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -43,23 +46,36 @@ function SelectStatusIcons({}: Props) {
     : columnOptions.statusColumns[columnIndex + 1];
 
   function handleNextStage() {
-    // const targetStatusColumnId = nextStatus.id;
-    // updateCurrentTaskStatus(sortBy, task!, setTaskState, targetStatusColumnId);
-    // const newEvent: UpdateEvent = {
-    //   id: getRandomNumberNoLimit(),
-    //   userId: authState.user?.id,
-    //   taskId: task!.id!,
-    //   field: STATUS,
-    //   beforeUpdate: String(task?.status),
-    //   afterUpdate: String(nextStatus.id),
-    //   createdAt: new Date(),
-    // };
-    // // Update modal task taskState
-    // setTask({
-    //   ...task!,
-    //   status: targetStatusColumnId,
-    //   taskEvents: [...task!.taskEvents, newEvent],
-    // });
+    const targetStatusColumnId = nextStatus.id;
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: SortBy.STATUS,
+      beforeUpdate: String(task?.status),
+      afterUpdate: String(nextStatus.id),
+      createdAt: new Date(),
+    };
+    updateCurrentTaskStatus(
+      task!,
+      setTaskState,
+      targetStatusColumnId,
+      newEvent
+    );
+  }
+
+  function handleSetToFinish() {
+    const finishedColumnId = 3;
+    const newEvent: UpdateEvent = {
+      id: getRandomNumberNoLimit(),
+      userId: authState.user?.id,
+      taskId: task!.id!,
+      field: SortBy.STATUS,
+      beforeUpdate: String(task?.status),
+      afterUpdate: String(finishedColumnId),
+      createdAt: new Date(),
+    };
+    updateCurrentTaskStatus(task!, setTaskState, finishedColumnId, newEvent);
   }
 
   return (
@@ -157,10 +173,7 @@ function SelectStatusIcons({}: Props) {
                     fontSize={"33px"}
                     cursor={"pointer"}
                     _hover={{ color: "yellow.400", opacity: "100%" }}
-                    onClick={() => {
-                      //   setTask({ ...task!, status: 3 });
-                      //   updateCurrentTaskStatus(sortBy, task!, setTaskState, 3);
-                    }}
+                    onClick={() => handleSetToFinish()}
                   >
                     <Center border="1.1px solid" rounded="sm" p={2}>
                       <CheckIcon fontSize="md" alignSelf="center" />

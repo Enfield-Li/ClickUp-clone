@@ -42,8 +42,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
     updateTaskPriorityOrDueDate(
       task,
       setTaskState,
-      1, // No due date
-      null
+      1 // No due date
     );
 
     const newEvent: UpdateEvent = {

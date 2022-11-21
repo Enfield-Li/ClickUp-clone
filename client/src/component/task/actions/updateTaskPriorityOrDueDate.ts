@@ -11,8 +11,8 @@ export function updateTaskPriorityOrDueDate(
   currentTask: Task,
   setTaskState: SetTaskState,
   targetColumnId: number,
-  expectedDueDate: Date | null,
-  taskEvent?: TaskEvent
+  expectedDueDate?: Date | null,
+  newTaskEvent?: TaskEvent
 ) {
   setTaskState(
     (prev) =>
@@ -21,8 +21,10 @@ export function updateTaskPriorityOrDueDate(
         draftState.orderedTasks.forEach((orderedTask) =>
           orderedTask.taskList.forEach((task) => {
             if (task.id === currentTask.id) {
-              task.expectedDueDate = expectedDueDate;
-              if (taskEvent) task.taskEvents.push(taskEvent);
+              if (expectedDueDate) {
+                task.expectedDueDate = expectedDueDate;
+              }
+              if (newTaskEvent) task.taskEvents.push(newTaskEvent);
 
               const targetColumnAndId: TargetColumnAndId = expectedDueDate
                 ? { dueDate: targetColumnId }

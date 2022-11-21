@@ -40,11 +40,11 @@ function UpdateEvents({ updateEvent }: Props) {
         {/* Before */}
         {updateEvent.beforeUpdate ? (
           <BeforeAndAfter
-            beforeOrAfterUpdate="beforeUpdate"
             updateEvent={updateEvent}
+            beforeOrAfterUpdate="beforeUpdate"
           />
         ) : (
-          "None"
+          <span>None</span>
         )}
 
         {/* to */}
@@ -54,8 +54,8 @@ function UpdateEvents({ updateEvent }: Props) {
 
         {/* After */}
         <BeforeAndAfter
-          beforeOrAfterUpdate="afterUpdate"
           updateEvent={updateEvent}
+          beforeOrAfterUpdate="afterUpdate"
         />
       </Flex>
 

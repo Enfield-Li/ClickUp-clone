@@ -15,6 +15,7 @@ import {
   UndeterminedColumn,
   UndeterminedColumns,
 } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export type NewTask = {
@@ -90,15 +91,17 @@ export function updateTaskOnTargetColumnAndId(
   const numOfKeys = Object.entries(targetColumnAndId).length;
   for (let i = 0; i < numOfKeys; i++) {
     const stateColumnPair = Object.entries(targetColumnAndId)[i];
-    const targetedSortBy = stateColumnPair[0] as SortBy;
+    const targetSortBy = stateColumnPair[0] as SortBy;
     const columnId = stateColumnPair[1];
 
     const { orderIndex, columnName }: OrderIndexInColumn =
-      findTheLastOrderIndexInColumn(targetedSortBy, columnId, taskState);
+      findTheLastOrderIndexInColumn(targetSortBy, columnId, taskState);
+    console.log({ orderIndex, columnName });
 
-    task[targetedSortBy].name = columnName;
-    task[targetedSortBy].columnId = columnId;
-    task[targetedSortBy].orderIndex = orderIndex;
+    task[targetSortBy].name = columnName;
+    task[targetSortBy].columnId = columnId;
+    task[targetSortBy].orderIndex = orderIndex;
+    console.log({ task: deepCopy(task) });
   }
 }
 

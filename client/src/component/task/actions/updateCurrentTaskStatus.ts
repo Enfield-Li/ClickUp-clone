@@ -1,5 +1,5 @@
 import produce from "immer";
-import { SetTaskState, SortBy, Task } from "../../../types";
+import { SetTaskState, SortBy, Task, TaskEvent } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
   findTheLastOrderIndexInColumn,
@@ -9,17 +9,19 @@ import {
 export function updateCurrentTaskStatus(
   currentTask: Task,
   setTaskState: SetTaskState,
-  targetStatusColumnId: number
+  targetStatusColumnId: number,
+  newTaskEvent?: TaskEvent
 ) {
   setTaskState(
     (taskState) =>
       taskState &&
       deepCopy(
-        // <- without it, immer produce won't trigger rerender, WTF ???
+        // ^^ without it, immer produce won't trigger rerender, WTF ???
         produce(taskState, (draftState) =>
           draftState.orderedTasks.forEach((orderedTask) => {
             orderedTask.taskList.forEach((task) => {
               if (task.id === currentTask.id) {
+                if (newTaskEvent) task.taskEvents.push(newTaskEvent);
                 const { orderIndex, columnName }: OrderIndexInColumn =
                   findTheLastOrderIndexInColumn(
                     SortBy.STATUS,
