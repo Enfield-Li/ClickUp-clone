@@ -47,7 +47,8 @@ export function useFetchTasks(sortBy: SortBy) {
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { setTaskStateContext, taskStateContext } = useTaskDetailContext();
+  const { task, setTask, taskStateContext, setTaskStateContext } =
+    useTaskDetailContext();
 
   useEffect(() => {
     fetchData();
@@ -58,6 +59,17 @@ export function useFetchTasks(sortBy: SortBy) {
     updateLocalState();
   }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
+  // sync up with modal task
+  useEffect(() => {
+    if (task && taskState) {
+      const allTasks = collectAllTasks(taskState.orderedTasks);
+      const updatedTask = allTasks.find(
+        (currentTask) => currentTask.id === task.id
+      );
+      if (updatedTask) setTask(updatedTask);
+    }
+  }, [taskState]);
+
   async function fetchData() {
     setLoading(true);
 
@@ -67,20 +79,21 @@ export function useFetchTasks(sortBy: SortBy) {
     if (tasksData) {
       const columnDataFromApi = mockColumnOptions;
 
-      const { dueDateColumns, statusColumns } = initColumns(columnDataFromApi);
+      const { reorderedDueDateColumns, reorderedStatusColumns } =
+        initColumns(columnDataFromApi);
 
       const columnOptions = {
         ...columnDataFromApi,
-        dueDate: dueDateColumns,
-        status: statusColumns,
+        dueDate: reorderedDueDateColumns,
+        status: reorderedStatusColumns,
       };
 
       // init taskEvents and convert expectedDueDate to dueDate columns
-      const taskList = processTaskList(dueDateColumns, tasksData);
+      const taskList = processTaskList(reorderedDueDateColumns, tasksData);
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
-        columnDataFromApi[sortBy],
+        columnDataFromApi[`${sortBy}Columns`],
         sortBy
       );
 
@@ -111,7 +124,7 @@ export function useFetchTasks(sortBy: SortBy) {
         ...taskState,
         orderedTasks: groupTaskListOnSortBy(
           taskList,
-          taskState.columnOptions[sortBy],
+          taskState.columnOptions[`${sortBy}Columns`],
           sortBy
         ),
       });

@@ -20,6 +20,7 @@ type Props = {
   setSelectable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export default memo(ToggleNavBar);
 function ToggleNavBar({
   isOpen,
   onClose,
@@ -51,7 +52,7 @@ function ToggleNavBar({
       {...getDisclosureProps()}
       hidden={hidden}
       initial={false}
-      transition={"none"}
+      transition="none"
       animate={{ width: isOpen ? 200 : 0 }}
       onAnimationStart={() => setHidden(false)}
       onAnimationComplete={() => setHidden(!isOpen)}
@@ -87,14 +88,11 @@ function ToggleNavBar({
           </Center>
         )}
 
-        <Flex my={1}>
+        <Flex>
           {/* App icon */}
           <Center py={3}>
             <Heading size="md" px={5}>
-              <Box
-                cursor={"pointer"}
-                onClick={() => navigate(CLIENT_ROUTE.HOME)}
-              >
+              <Box cursor="pointer" onClick={() => navigate(CLIENT_ROUTE.HOME)}>
                 Ideas
               </Box>
             </Heading>
@@ -107,5 +105,3 @@ function ToggleNavBar({
     </motion.div>
   );
 }
-
-export default memo(ToggleNavBar);

@@ -19,6 +19,7 @@ import {
 
 type Props = {};
 
+export default memo(TaskDetailHead);
 function TaskDetailHead({}: Props) {
   const { authState } = useAuthContext();
   const [showEditIcon, setShowEditIcon] = useState(true);
@@ -27,6 +28,22 @@ function TaskDetailHead({}: Props) {
     useTaskDetailContext();
 
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+
+  async function updateTitle(newTitle: string) {
+    setTaskState((previousState) => {
+      if (previousState)
+        return produce(previousState, (draftState) => {
+          draftState.orderedTasks.forEach((tasks) =>
+            tasks.taskList.forEach(
+              (task) => task.id === task.id && (task.title = newTitle)
+            )
+          );
+        });
+    });
+
+    //   const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
+    //   const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
+  }
 
   return (
     <Flex>
@@ -37,14 +54,8 @@ function TaskDetailHead({}: Props) {
           onFocus={() => setShowEditIcon(false)}
           onBlur={(e) => {
             setShowEditIcon(true);
-
             if (e.target.value !== task!.title) {
-              updateTitle(
-                authState.user!.id,
-                task!.id!,
-                e.currentTarget.value,
-                setTaskState
-              );
+              updateTitle(e.currentTarget.value);
             }
           }}
         />
@@ -59,28 +70,3 @@ function TaskDetailHead({}: Props) {
     </Flex>
   );
 }
-
-async function updateTitle(
-  userId: number,
-  taskId: number,
-  newTitle: string,
-  setTaskState: SetTaskState
-) {
-  const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
-
-  const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
-
-  if (updateSuccess) {
-    setTaskState((previousState) => {
-      if (previousState)
-        return produce(previousState, (draftState) => {
-          draftState.orderedTasks.forEach((tasks) =>
-            tasks.taskList.forEach(
-              (task) => task.id === taskId && (task.title = newTitle)
-            )
-          );
-        });
-    });
-  }
-}
-export default memo(TaskDetailHead);

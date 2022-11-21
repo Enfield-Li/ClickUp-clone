@@ -9,7 +9,7 @@ export default function App() {
 
   return (
     // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
-    <Flex height="100vh" position="relative" bottom="5px" overflow="hidden">
+    <Flex height="100vh" position="relative" overflow="hidden">
       <NavBar />
 
       {/* Header && Main */}

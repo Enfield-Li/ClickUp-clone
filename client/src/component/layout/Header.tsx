@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Heading,
   Progress,
   Spacer,
   Text,
@@ -9,7 +8,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
 import useGlobalContext from "../../context/global/useGlobalContext";
@@ -18,6 +17,7 @@ import { CLIENT_ROUTE } from "../../utils/constant";
 
 type Props = {};
 
+export default memo(Header);
 function Header({}: Props) {
   const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
@@ -42,7 +42,7 @@ function Header({}: Props) {
         <Box
           p={2}
           borderRadius={3}
-          cursor={"pointer"}
+          cursor="pointer"
           _hover={{
             color: "black",
             bg: "gray.300",
@@ -58,7 +58,7 @@ function Header({}: Props) {
             <Box
               p={2}
               borderRadius={3}
-              cursor={"pointer"}
+              cursor="pointer"
               _hover={{
                 color: "black",
                 bg: "gray.300",
@@ -78,7 +78,7 @@ function Header({}: Props) {
               <Box
                 p={2}
                 borderRadius={3}
-                cursor={"pointer"}
+                cursor="pointer"
                 _hover={{
                   color: "black",
                   bg: "gray.300",
@@ -98,4 +98,3 @@ function Header({}: Props) {
     </Box>
   );
 }
-export default memo(Header);

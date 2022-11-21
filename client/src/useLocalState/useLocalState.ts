@@ -49,6 +49,7 @@ export function useLocalTasks(sortBy: SortBy) {
   }, []);
 
   // Sync up orderedTasks with columns under sortBy
+  const statusColumnCount = taskState?.columnOptions.statusColumns.length;
   useEffect(() => {
     updateLocalState();
 
@@ -74,7 +75,7 @@ export function useLocalTasks(sortBy: SortBy) {
         setLoading(false);
       }
     }
-  }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
+  }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
 
   // sync up with modal task
   useEffect(() => {

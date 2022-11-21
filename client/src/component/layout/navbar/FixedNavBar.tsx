@@ -14,6 +14,7 @@ type Props = {
   setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
+export default memo(FixedNavBar);
 function FixedNavBar({
   onOpen,
   isExpanded,
@@ -93,5 +94,3 @@ function FixedNavBar({
     </Box>
   );
 }
-
-export default memo(FixedNavBar);
