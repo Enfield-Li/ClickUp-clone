@@ -25,7 +25,7 @@ import com.example.clients.taskEvent.Field;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-class BaseEvent {
+abstract class BaseEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

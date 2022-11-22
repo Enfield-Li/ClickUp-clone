@@ -71,6 +71,7 @@ function TaskCard({ task, index }: Props) {
             mt={3}
             width="full"
             boxShadow="md"
+            role="listitem"
             flexDir="column"
             borderTopRadius="sm"
             bgColor={cardBgColor}

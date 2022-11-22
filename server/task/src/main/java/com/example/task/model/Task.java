@@ -1,12 +1,12 @@
 package com.example.task.model;
 
-import static javax.persistence.CascadeType.DETACH;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.EAGER;
 
 import com.example.task.dto.UpdateTaskDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
+import com.example.task.model.taskPosition.TaskDueDatePosition;
+import com.example.task.model.taskPosition.TaskPriorityPosition;
+import com.example.task.model.taskPosition.TaskStatusPosition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -29,7 +29,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -47,26 +46,47 @@ public class Task {
     @NotNull
     private String title;
 
-    @NotNull
-    private Integer status;
+    private Boolean archived;
+
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer statusId;
 
     @NotNull
-    private Integer dueDate;
+    @JoinColumn(name = "statusId")
+    @OneToOne(cascade = CascadeType.ALL)
+    private TaskStatusPosition status;
+
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer priorityId;
+
+    @NotNull
+    @JoinColumn(name = "priorityId")
+    @OneToOne(cascade = CascadeType.ALL)
+    private TaskPriorityPosition priority;
+
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer dueDateId;
+
+    @NotNull
+    @JoinColumn(name = "dueDateId")
+    @OneToOne(cascade = CascadeType.ALL)
+    private TaskDueDatePosition dueDate;
 
     private Date expectedDueDate;
 
-    private Boolean archived;
-
-    @NotNull
-    private Integer priority;
-
     private String description;
 
-    @NotNull
-    private Integer creatorId;
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer userInfoId;
 
     @NotNull
-    private String creatorName;
+    @JoinColumn(name = "userInfoId")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Participant creator;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -111,22 +131,6 @@ public class Task {
     @Builder.Default
     private Set<Participant> assignees = new HashSet<>();
 
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer previousTaskId;
-
-    @JoinColumn(name = "previousTaskId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private PreviousTaskIds previousTaskIds;
-
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer previousTaskBeforeFinishId;
-
-    @JoinColumn(name = "previousTaskBeforeFinishId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private PreviousTaskIdsBeforeFinish previousTaskIdsBeforeFinish;
-
     // public void addWatcher(Participant userInfo) {
     //     watchers.add(userInfo);
     //     userInfo.setTaskWatcher(this);
@@ -141,8 +145,7 @@ public class Task {
         var task = Task
             .builder()
             .id(updateTaskDTO.id())
-            .creatorId(updateTaskDTO.creatorId())
-            .creatorName(updateTaskDTO.creatorName())
+            .creator(updateTaskDTO.creator())
             //
             .title(updateTaskDTO.title())
             .status(updateTaskDTO.status())
@@ -153,10 +156,6 @@ public class Task {
             //
             .watchers(updateTaskDTO.watchers())
             .assignees(updateTaskDTO.assignees())
-            .previousTaskIds(updateTaskDTO.previousTaskIds())
-            .previousTaskIdsBeforeFinish(
-                updateTaskDTO.previousTaskIdsBeforeFinish()
-            )
             .build();
 
         setTaskForWatcher(task); // Manage relationship
@@ -179,8 +178,7 @@ public class Task {
 
         var task = Task
             .builder()
-            .creatorId(creatorId)
-            .creatorName(creatorName)
+            .creator(createTaskDTO.creator())
             //
             .title(createTaskDTO.title())
             .status(createTaskDTO.status())
@@ -189,7 +187,6 @@ public class Task {
             .description(createTaskDTO.description())
             //
             .watchers(creatorAsWatcher)
-            .previousTaskIds(createTaskDTO.previousTaskIds())
             .expectedDueDate(createTaskDTO.expectedDueDate())
             .build();
 

@@ -36,13 +36,13 @@ function SetTaskAttribute({
     const finishedColumnId = 3;
     const newEvent = newUpdateEvent(
       authState.user!.id!,
-      task!.id!,
+      task.id!,
       SortBy.STATUS,
-      task!.status.columnId,
+      task.status.columnId,
       finishedColumnId
     );
 
-    updateCurrentTaskStatus(task!, setTaskState, finishedColumnId, newEvent);
+    updateCurrentTaskStatus(task, setTaskState, finishedColumnId, newEvent);
   }
 
   return (

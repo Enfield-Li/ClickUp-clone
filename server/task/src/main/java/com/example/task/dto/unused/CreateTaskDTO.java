@@ -1,16 +1,20 @@
 package com.example.task.dto.unused;
 
-import com.example.task.model.PreviousTaskIds;
+import com.example.task.model.Participant;
+import com.example.task.model.taskPosition.TaskDueDatePosition;
+import com.example.task.model.taskPosition.TaskPriorityPosition;
+import com.example.task.model.taskPosition.TaskStatusPosition;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 public record CreateTaskDTO(
-    @NotNull String title,
-    @NotNull Integer status,
-    @NotNull Integer dueDate,
-    @NotNull Integer priority,
-
     String description,
     Date expectedDueDate,
-    PreviousTaskIds previousTaskIds
+
+    @NotNull String title,
+    @NotNull Participant creator,
+
+    @NotNull TaskStatusPosition status,
+    @NotNull TaskDueDatePosition dueDate,
+    @NotNull TaskPriorityPosition priority
 ) {}

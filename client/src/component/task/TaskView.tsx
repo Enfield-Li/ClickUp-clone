@@ -30,10 +30,7 @@ function TaskView({}: Props) {
       <TaskSortingOptions sortBy={sortBy} setSortBy={setSortBy} />
       <TaskBoardView sortBy={sortBy} />
 
-      {/* 
-        Put modal outside list view, 
-        to prevent list view refresh and close modal 
-      */}
+      {/* Put modal outside list view, to prevent list view refresh and close modal */}
       {isModalOpen && <TaskDetailModal />}
     </Box>
   );
