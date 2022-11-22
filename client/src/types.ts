@@ -88,7 +88,7 @@ interface BaseEvent {
   updatedAt?: Date;
 }
 
-interface UserInfo {
+export interface UserInfo {
   userId: number;
   username: string;
 }

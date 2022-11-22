@@ -14,6 +14,7 @@ import {
   TaskStatusPosition,
   UndeterminedColumn,
   UndeterminedColumns,
+  UserInfo,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
@@ -27,6 +28,7 @@ export type NewTask = {
 
 export async function createNewTask(
   sortBy: SortBy,
+  creator: UserInfo,
   newTaskInput: NewTask,
   setTaskState: SetTaskState,
   currentColumn: UndeterminedColumn
@@ -37,7 +39,7 @@ export async function createNewTask(
       produce(taskState, (draftState) => {
         // Prepare newTask
         const { title, expectedDueDate, priority, status } = newTaskInput;
-        const newTask = newTaskFactory(title, expectedDueDate);
+        const newTask = newTaskFactory(creator, title, expectedDueDate);
         const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
           draftState.columnOptions.dueDateColumns,
           expectedDueDate
@@ -50,15 +52,23 @@ export async function createNewTask(
         const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
           sortBy,
           dueDateColumnId,
-          priority,
-          status
+          status,
+          priority
         );
 
         updateTaskOnTargetColumnAndId(targetColumnAndId, draftState, newTask);
 
+        // network call
+        console.log({ newTask: deepCopy(newTask) });
+
+        // update local state
         draftState.orderedTasks.forEach((orderedTask) => {
           const targetColumnId =
-            sortBy !== SortBy.DUE_DATE ? currentColumn.id : dueDateColumnId;
+            sortBy === SortBy.DUE_DATE
+              ? dueDateColumnId
+              : sortBy === SortBy.PRIORITY
+              ? priority
+              : currentColumn.id;
           const isCurrentColumn = orderedTask.columnId === targetColumnId;
           if (isCurrentColumn) orderedTask.taskList.push(newTask);
         });
@@ -183,20 +193,28 @@ function newTargetStateColumnId(
   return targetColumn;
 }
 
-function newTaskFactory(title: string, expectedDueDate: Date | null): Task {
+function newTaskFactory(
+  creator: UserInfo,
+  title: string,
+  expectedDueDate: Date | null
+): Task {
   return {
     id: Math.random(),
     title,
     expectedDueDate,
     taskEvents: [],
-    watchers: [],
+    watchers: [creator],
     assignees: [],
     subTasks: [],
-    creator: { userId: 0, username: "" },
+    creator,
     status: newTaskStatusPosition(),
     dueDate: newTaskDueDatePosition(),
     priority: newTaskPriorityPosition(),
   };
+}
+
+export function newCreator(userId: number, username: string): UserInfo {
+  return { userId, username };
 }
 
 function newTaskStatusPosition(): TaskStatusPosition {

@@ -192,6 +192,7 @@ export function processTaskList(
     const dueDate = dueDateColumn.find((column) => column.id === columnId);
     if (!dueDate) throw new Error("Failed to init dueDate for tasks.");
 
+    // override existing dueDate data
     taskCopy.dueDate.columnId = columnId;
     taskCopy.dueDate.name = dueDate?.title;
 

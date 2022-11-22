@@ -6,7 +6,7 @@ import { DueDate, SortBy, TaskState, UndeterminedColumn } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
-import { createNewTask, NewTask } from "../actions/createNewTask";
+import { createNewTask, newCreator, NewTask } from "../actions/createNewTask";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 import SaveButton from "./SaveButton";
 
@@ -24,7 +24,6 @@ function CreateTask({
   setIsCreateTaskOpen,
 }: Props) {
   const { authState } = useAuthContext();
-
   const { taskStateContext } = useTaskDetailContext();
   const { sortBy, setTaskState } = taskStateContext!;
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
@@ -58,7 +57,21 @@ function CreateTask({
     }
   }
 
-  function handleCancel() {
+  function handleCreateTask() {
+    if (taskName) {
+      const newTask: NewTask = {
+        title: taskName,
+        expectedDueDate,
+        priority,
+      };
+
+      const creator = newCreator(authState.user!.id!, authState.user!.username);
+      createNewTask(sortBy, creator, newTask, setTaskState, currentColumn);
+      handleReset();
+    }
+  }
+
+  function handleReset() {
     resetAll();
     setTaskName("");
   }
@@ -109,7 +122,7 @@ function CreateTask({
                 p={1}
                 opacity="70%"
                 cursor="pointer"
-                onClick={handleCancel}
+                onClick={handleReset}
                 _hover={{ color: "purple.300" }}
               >
                 <i className="bi bi-x"></i>
@@ -155,20 +168,7 @@ function CreateTask({
             </Flex>
 
             {/* Save */}
-            <Box
-              onClick={() => {
-                if (taskName) {
-                  const newTask: NewTask = {
-                    title: taskName,
-                    expectedDueDate,
-                    priority,
-                  };
-
-                  createNewTask(sortBy, newTask, setTaskState, currentColumn);
-                  handleCancel();
-                }
-              }}
-            >
+            <Box onClick={handleCreateTask}>
               <SaveButton taskName={taskName} />
             </Box>
           </Flex>
