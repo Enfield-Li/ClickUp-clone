@@ -1,16 +1,23 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { createMemoryHistory } from "history";
 import App from "../App";
+import { CLIENT_ROUTE } from "../utils/constant";
+import renderInProvider from "./test-utils";
 
 describe("App", () => {
-  it.skip("should work as expected", () => {
-    render(<App />);
-    const text = screen.getByText("count is:");
-    expect(text).toBeInTheDocument();
-  });
+  test("renders", () => {
+    renderInProvider(<App />);
+    const main = screen.getByRole("main");
+    const header = screen.getByRole("heading");
+    const navBar = screen.getByRole("navigation");
+    expect(main).toBeInTheDocument();
+    expect(header).toBeInTheDocument();
+    expect(navBar).toBeInTheDocument();
 
-  test.skip("something", () => {
-    render(<App />);
-    const text = screen.getByText("count is:");
-    expect(text).toBeInTheDocument();
+    const history = createMemoryHistory();
+    expect(history.location.pathname).toBe(CLIENT_ROUTE.HOME);
+
+    const homeText = screen.getByText("Under construction");
+    expect(homeText).toBeInTheDocument();
   });
 });

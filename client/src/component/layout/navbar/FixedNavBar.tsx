@@ -58,9 +58,12 @@ function FixedNavBar({
         </Center>
       )}
 
+      {/* Logo */}
       <Center
         mt={4}
         fontSize="lg"
+        role="menuitem"
+        aria-label="logo"
         cursor="pointer"
         onClick={() => {
           setCurrentSection("home");
@@ -70,21 +73,23 @@ function FixedNavBar({
         <i className="bi bi-lightbulb-fill"></i>
       </Center>
 
+      {/* Task icon */}
       <Box mt={6}>
         <Box onClick={() => setCurrentSection("tasks")}>
           <NavIcon
-            url={CLIENT_ROUTE.TASK}
             name="Task"
+            url={CLIENT_ROUTE.TASK}
             isSelected={currentSection === "tasks"}
           >
             <i className="bi bi-check-square-fill"></i>
           </NavIcon>
         </Box>
 
+        {/* Dev test */}
         <Box onClick={() => setCurrentSection("dev")}>
           <NavIcon
-            url={CLIENT_ROUTE.TEST_DEV}
             name="test"
+            url={CLIENT_ROUTE.TEST_DEV}
             isSelected={currentSection === "dev"}
           >
             <i className="bi bi-question-circle"></i>

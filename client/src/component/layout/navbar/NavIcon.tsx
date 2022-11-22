@@ -20,6 +20,7 @@ type Props = {
   children: React.ReactNode;
 };
 
+export default memo(NavIcon);
 function NavIcon({ url, name, isSelected, children }: Props) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +33,7 @@ function NavIcon({ url, name, isSelected, children }: Props) {
       hasArrow
       label={name}
       arrowSize={7}
+      role="tooltip"
       placement="right"
     >
       <Center mt={2}>
@@ -41,6 +43,8 @@ function NavIcon({ url, name, isSelected, children }: Props) {
           height="38px"
           fontSize="19px"
           cursor="pointer"
+          role="menuitem"
+          aria-label={name}
           onMouseOverCapture={onOpen}
           onMouseOutCapture={onClose}
           onClick={() => navigate(url)}
@@ -55,5 +59,3 @@ function NavIcon({ url, name, isSelected, children }: Props) {
     </Tooltip>
   );
 }
-
-export default memo(NavIcon);

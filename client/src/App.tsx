@@ -15,31 +15,17 @@ export default function App() {
       {/* Header && Main */}
       <Box
         width={"100%"}
-        overflow="hidden"
-        // https://stackoverflow.com/a/1767270/16648127
+        overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
       >
-        <Header />
+        <Box role="heading">
+          <Header />
+        </Box>
 
         {/* Main content */}
-        <PageRoute />
+        <Box role="main">
+          <PageRoute />
+        </Box>
       </Box>
     </Flex>
   );
 }
-
-// import { useState } from "react";
-
-// function App() {
-//   const [count, setCount] = useState(0);
-//   return (
-//     <div className="App">
-//       <p>count is:</p>
-//       {count}
-//       <button type="button" onClick={() => setCount((count) => count + 1)}>
-//         Increase
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default App;

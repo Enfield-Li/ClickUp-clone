@@ -7,6 +7,7 @@ import ToggleNavBar from "./navbar/ToggleNavBar";
 type Props = {};
 export type Section = "home" | "tasks" | "dev";
 
+export default memo(NavBar);
 function NavBar({}: Props) {
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -63,5 +64,3 @@ function NavBar({}: Props) {
     </Flex>
   );
 }
-
-export default memo(NavBar);
