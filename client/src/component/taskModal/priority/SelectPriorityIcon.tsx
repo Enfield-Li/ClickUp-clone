@@ -62,6 +62,7 @@ function SelectPriorityIcon({ task }: Props) {
             onClick={(e) => {
               e.stopPropagation();
               selectPriority(
+                sortBy,
                 task,
                 authState.user!.id!,
                 setTaskState,

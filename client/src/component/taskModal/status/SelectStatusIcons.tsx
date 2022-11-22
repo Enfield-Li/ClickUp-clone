@@ -17,7 +17,7 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { SortBy } from "../../../types";
 import {
   newUpdateEvent,
-  updateCurrentTaskStatus,
+  updateTaskAttribute,
 } from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
@@ -49,41 +49,28 @@ function SelectStatusIcons({}: Props) {
 
   function handleNextStage() {
     const targetStatusColumnId = nextStatus.id;
-    const newEvent = newUpdateEvent(
-      authState.user!.id!,
-      task!.id!,
-      SortBy.STATUS,
-      task!.status.columnId,
-      targetStatusColumnId
-    );
 
-    updateCurrentTaskStatus(
+    updateTaskAttribute(
+      authState.user!.id!,
+      sortBy,
+      SortBy.STATUS,
       task!,
       setTaskState,
-      targetStatusColumnId,
-      newEvent
+      targetStatusColumnId
     );
   }
 
   function handleSetToFinish() {
     const finishedColumnId = 3;
-    const newEvent = newUpdateEvent(
+
+    updateTaskAttribute(
       authState.user!.id!,
-      task!.id!,
+      sortBy,
       SortBy.STATUS,
-      task!.status.columnId,
+      task!,
+      setTaskState,
       finishedColumnId
     );
-    // const newEvent: UpdateEvent = {
-    //   id: getRandomNumberNoLimit(),
-    //   userId: authState.user?.id,
-    //   taskId: task!.id!,
-    //   field: SortBy.STATUS,
-    //   beforeUpdate: String(task?.status.columnId),
-    //   afterUpdate: String(finishedColumnId),
-    //   createdAt: new Date(),
-    // };
-    updateCurrentTaskStatus(task!, setTaskState, finishedColumnId, newEvent);
   }
 
   return (

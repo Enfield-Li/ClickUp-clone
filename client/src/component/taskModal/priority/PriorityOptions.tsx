@@ -6,7 +6,7 @@ import { Priority, SetTaskState, SortBy, Task } from "../../../types";
 import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
 import {
   newUpdateEvent,
-  updateTaskPriorityOrDueDate,
+  updateTaskAttribute,
 } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
@@ -51,6 +51,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
                   alignItems="center"
                   onClick={() =>
                     selectPriority(
+                      sortBy,
                       task,
                       authState.user!.id!,
                       setTaskState,
@@ -90,27 +91,21 @@ function PriorityOptions({ task, onOptionClose }: Props) {
 }
 
 export function selectPriority(
+  sortBy: SortBy,
   task: Task,
   userId: number,
   setTaskState: SetTaskState,
   targetPriorityColumnId: number,
   onOptionClose?: () => void
 ) {
-  const newEvent = newUpdateEvent(
-    userId,
-    task.id!,
-    SortBy.PRIORITY,
-    task.priority.columnId,
-    targetPriorityColumnId
-  );
-
   // Update list taskState
-  updateTaskPriorityOrDueDate(
+  updateTaskAttribute(
+    userId,
+    sortBy,
+    SortBy.PRIORITY,
     task!,
     setTaskState,
-    targetPriorityColumnId,
-    newEvent,
-    undefined
+    targetPriorityColumnId
   );
 
   if (onOptionClose) onOptionClose();

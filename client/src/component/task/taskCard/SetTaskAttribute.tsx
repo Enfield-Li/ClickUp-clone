@@ -7,10 +7,7 @@ import { SortBy, Task } from "../../../types";
 import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 import FinishTask from "../../taskModal/status/FinishTask";
-import {
-  newUpdateEvent,
-  updateCurrentTaskStatus,
-} from "../actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../actions/updateTaskAttributes";
 import ThreeDotShowOptions from "./ThreeDotShowOptions";
 
 type Props = {
@@ -34,15 +31,15 @@ function SetTaskAttribute({
   function handleSetToFinish(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
     const finishedColumnId = 3;
-    const newEvent = newUpdateEvent(
+
+    updateTaskAttribute(
       authState.user!.id!,
-      task.id!,
+      sortBy,
       SortBy.STATUS,
-      task.status.columnId,
+      task,
+      setTaskState,
       finishedColumnId
     );
-
-    updateCurrentTaskStatus(task, setTaskState, finishedColumnId, newEvent);
   }
 
   return (

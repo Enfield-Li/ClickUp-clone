@@ -14,7 +14,7 @@ import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
 import {
   newUpdateEvent,
-  updateTaskPriorityOrDueDate,
+  updateTaskAttribute,
 } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
@@ -39,20 +39,14 @@ function DueDateOptions({ task, onClose }: Props) {
     const weekString = targetColumn.title;
     const expectedDueDate = getExpectedDueDateFromWeekString(weekString);
 
-    const newEvent = newUpdateEvent(
-      authState.user!.id!,
-      task.id!,
-      SortBy.DUE_DATE,
-      task.dueDate.columnId,
-      targetColumn.id
-    );
-
     // Update list taskState
-    updateTaskPriorityOrDueDate(
+    updateTaskAttribute(
+      authState.user!.id!,
+      sortBy,
+      SortBy.DUE_DATE,
       task!,
       setTaskState,
       targetColumn.id,
-      newEvent,
       expectedDueDate
     );
   }

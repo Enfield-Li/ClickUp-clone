@@ -5,10 +5,7 @@ import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
-import {
-  newUpdateEvent,
-  updateTaskPriorityOrDueDate,
-} from "../../task/actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import MaterialTheme from "../../test-dev/MaterialTheme";
 
 type Props = {
@@ -20,7 +17,7 @@ export default memo(DueDatePicker);
 function DueDatePicker({ task, onClose }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, columnOptions } = taskStateContext!;
+  const { sortBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
     if (expectedDueDateInput) {
@@ -29,20 +26,14 @@ function DueDatePicker({ task, onClose }: Props) {
         expectedDueDateInput
       );
 
-      const newEvent = newUpdateEvent(
-        authState.user!.id!,
-        task.id!,
-        SortBy.DUE_DATE,
-        task.dueDate.columnId,
-        targetDueDateColumnId
-      );
-
       // Update list taskState
-      updateTaskPriorityOrDueDate(
+      updateTaskAttribute(
+        authState.user!.id!,
+        sortBy,
+        SortBy.DUE_DATE,
         task!,
         setTaskState,
         targetDueDateColumnId,
-        newEvent,
         expectedDueDateInput
       );
 

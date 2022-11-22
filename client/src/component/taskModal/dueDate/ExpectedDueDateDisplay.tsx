@@ -15,10 +15,7 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { SortBy, Task } from "../../../types";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
-import {
-  newUpdateEvent,
-  updateTaskPriorityOrDueDate,
-} from "../../task/actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import DueDatePanel from "./DueDatePanel";
 
 type Props = {
@@ -31,7 +28,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, columnOptions } = taskStateContext!;
+  const { sortBy, setTaskState, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -41,20 +38,14 @@ function ExpectedDueDateDisplay({ task }: Props) {
 
   function clearDueDate() {
     const noDueDateColumnId = 1;
-    const newEvent = newUpdateEvent(
-      authState.user!.id!,
-      task.id!,
-      SortBy.DUE_DATE,
-      task.dueDate.columnId,
-      noDueDateColumnId
-    );
 
-    // Update list taskState
-    updateTaskPriorityOrDueDate(
+    updateTaskAttribute(
+      authState.user!.id!,
+      sortBy,
+      SortBy.DUE_DATE,
       task,
       setTaskState,
-      1, // No due date
-      newEvent,
+      noDueDateColumnId, // No due date
       null
     );
   }
