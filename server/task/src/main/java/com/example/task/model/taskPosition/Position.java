@@ -1,9 +1,11 @@
 package com.example.task.model.taskPosition;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +18,19 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(value = { "id" })
 abstract class Position<T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     private T name;
+
+    @NotNull
     private Integer columnId;
+
+    @NotNull
     private Integer orderIndex;
 }

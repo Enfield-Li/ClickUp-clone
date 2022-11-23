@@ -130,6 +130,22 @@ public class Task {
     @Builder.Default
     private Set<Participant> assignees = new HashSet<>();
 
+    public Task(
+        @NotNull String title,
+        @NotNull TaskStatusPosition status,
+        @NotNull TaskPriorityPosition priority,
+        @NotNull TaskDueDatePosition dueDate,
+        @NotNull Participant creator,
+        @NotNull Set<Participant> watchers
+    ) {
+        this.title = title;
+        this.status = status;
+        this.priority = priority;
+        this.dueDate = dueDate;
+        this.watchers = watchers;
+        this.creator = creator;
+    }
+
     // public void addWatcher(Participant userInfo) {
     //     watchers.add(userInfo);
     //     userInfo.setTaskWatcher(this);

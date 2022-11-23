@@ -2,6 +2,8 @@ package com.example.task;
 
 import com.example.task.model.Task;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,10 +12,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
+    Optional<Task> findByTitle(String title);
+    
     @Query(value = "SELECT title FROM task WHERE id = :id", nativeQuery = true)
     String getTaskTitle(@Param("id") Integer id);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE task" +
         " SET title = :title" +
@@ -27,7 +31,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
         @Param("updatedAt") LocalDateTime updatedAt
     );
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(
         value = "UPDATE task" +
         " SET description = :description" +
