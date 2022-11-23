@@ -17,6 +17,7 @@ import {
   UserInfo,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
+import { createTask } from "./networkActions";
 import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export type NewTask = {
@@ -30,37 +31,35 @@ export async function createNewTask(
   sortBy: SortBy,
   creator: UserInfo,
   newTaskInput: NewTask,
+  taskState: TaskState,
   setTaskState: SetTaskState,
   currentColumn: UndeterminedColumn
 ) {
+  // Prepare newTask
+  const { title, expectedDueDate, priority, status } = newTaskInput;
+  const newTask = newTaskFactory(creator, title, expectedDueDate);
+  const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
+    taskState.columnOptions.dueDateColumns,
+    expectedDueDate
+  );
+
+  // Set position under current column/sortBy
+  setCurrentTaskAttribute(newTask, sortBy, taskState, currentColumn);
+
+  // set position for other sortBys'
+  const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
+    sortBy,
+    dueDateColumnId,
+    status,
+    priority
+  );
+
+  updateTaskOnTargetColumnAndId(targetColumnAndId, taskState, newTask);
+
   setTaskState(
     (taskState) =>
       taskState &&
       produce(taskState, (draftState) => {
-        // Prepare newTask
-        const { title, expectedDueDate, priority, status } = newTaskInput;
-        const newTask = newTaskFactory(creator, title, expectedDueDate);
-        const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
-          draftState.columnOptions.dueDateColumns,
-          expectedDueDate
-        );
-
-        // Set position under current column/sortBy
-        setCurrentTaskAttribute(newTask, sortBy, draftState, currentColumn);
-
-        // set position for other sortBys'
-        const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
-          sortBy,
-          dueDateColumnId,
-          status,
-          priority
-        );
-
-        updateTaskOnTargetColumnAndId(targetColumnAndId, draftState, newTask);
-
-        // network call
-        console.log({ newTask: deepCopy(newTask) });
-
         // update local state
         draftState.orderedTasks.forEach((orderedTask) => {
           const targetColumnId =
@@ -74,6 +73,10 @@ export async function createNewTask(
         });
       })
   );
+
+  // network call
+  console.log({ newTask: deepCopy(newTask) });
+  await createTask(newTask);
 }
 
 export function setCurrentTaskAttribute(

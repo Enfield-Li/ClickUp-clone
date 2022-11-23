@@ -18,7 +18,7 @@ export enum Priority {
   NORMAL = "NORMAL",
   HIGH = "HIGH",
   URGENT = "URGENT",
-  NO_PRIORITY = "NO PRIORITY",
+  NO_PRIORITY = "NO_PRIORITY",
 }
 
 export enum CurrentWeek {

@@ -105,7 +105,6 @@ public class Task {
     @JoinColumn(name = "parentTaskId")
     private Task parentTask;
 
-    @JsonIgnore
     @Builder.Default
     @OneToMany(
         mappedBy = "parentTask",

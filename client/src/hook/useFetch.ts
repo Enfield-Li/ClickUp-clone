@@ -7,7 +7,7 @@ import {
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { SortBy, TaskState } from "../types";
+import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
@@ -51,12 +51,12 @@ export function useFetchTasks(sortBy: SortBy) {
     useTaskDetailContext();
 
   useEffect(() => {
-    fetchData();
+    initTaskState();
   }, []);
 
   // Sync up orderedTasks with columns under sortBy
   useEffect(() => {
-    updateLocalState();
+    updateTaskState();
   }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
 
   // sync up with modal task
@@ -70,11 +70,11 @@ export function useFetchTasks(sortBy: SortBy) {
     }
   }, [taskState]);
 
-  async function fetchData() {
+  async function initTaskState() {
     setLoading(true);
 
     // Task data
-    const tasksData = await fetchAllTasks();
+    const tasksData: TaskList | undefined = await fetchAllTasks();
 
     if (tasksData) {
       const columnDataFromApi = mockColumnOptions;
@@ -82,10 +82,10 @@ export function useFetchTasks(sortBy: SortBy) {
       const { reorderedDueDateColumns, reorderedStatusColumns } =
         initColumns(columnDataFromApi);
 
-      const columnOptions = {
+      const columnOptions: ColumnOptions = {
         ...columnDataFromApi,
-        dueDate: reorderedDueDateColumns,
-        status: reorderedStatusColumns,
+        dueDateColumns: reorderedDueDateColumns,
+        statusColumns: reorderedStatusColumns,
       };
 
       // init taskEvents and convert expectedDueDate to dueDate columns
@@ -104,7 +104,7 @@ export function useFetchTasks(sortBy: SortBy) {
     }
   }
 
-  async function updateLocalState() {
+  async function updateTaskState() {
     setLoading(true);
 
     if (taskState && taskStateContext) {

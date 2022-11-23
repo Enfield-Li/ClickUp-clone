@@ -2,6 +2,7 @@ import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
+import { useFetchTasks } from "../../hook/useFetch";
 import {
   LookUpReorderedColumn,
   SetTaskState,
@@ -27,8 +28,8 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
-  //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
-  const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
+  const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
+  //   const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   console.log(taskState);
 

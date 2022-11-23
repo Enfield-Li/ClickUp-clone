@@ -19,6 +19,7 @@ type Props = {
 
 export default memo(CreateTask);
 function CreateTask({
+  taskState,
   currentColumn,
   isCreateTaskOpen,
   setIsCreateTaskOpen,
@@ -66,7 +67,14 @@ function CreateTask({
       };
 
       const creator = newCreator(authState.user!.id!, authState.user!.username);
-      createNewTask(sortBy, creator, newTask, setTaskState, currentColumn);
+      createNewTask(
+        sortBy,
+        creator,
+        newTask,
+        taskState,
+        setTaskState,
+        currentColumn
+      );
       handleReset();
     }
   }
