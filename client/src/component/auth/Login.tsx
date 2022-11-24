@@ -15,7 +15,7 @@ import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { CLIENT_ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../constant";
 import { loginUser } from "./actions/loginUser";
 
 type Props = {};

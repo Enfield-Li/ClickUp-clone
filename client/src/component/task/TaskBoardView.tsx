@@ -15,6 +15,7 @@ import {
 import { useLocalTasks } from "../../useLocalState/useLocalState";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
+import { updateTasksPosition } from "./actions/networkActions";
 import {
   getExpectedDueDateFromDueDateColumn,
   getLookUpReorderedColumnTable,
@@ -280,9 +281,8 @@ async function handleDragEnd(
         sourceTaskId: sourceTask.id!,
         taskDtoList: taskListForUpdate,
       };
-      //   updateTasksPosition(updateTaskListDTO);
+      updateTasksPosition(updateTaskListDTO);
       // Clear events from taskState task
-      sourceTask.taskEvents = [];
     })
   );
 }

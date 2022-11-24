@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
 import * as router from "react-router";
 import NavBar from "../component/layout/NavBar";
-import { CLIENT_ROUTE } from "../utils/constant";
+import { CLIENT_ROUTE } from "../constant";
 import renderInProvider from "./test-utils";
 
 const navigate = jest.fn();

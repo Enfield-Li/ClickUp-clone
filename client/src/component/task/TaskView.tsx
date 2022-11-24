@@ -6,7 +6,7 @@ import TaskSortingOptions from "./TaskSortingOptions";
 import { Box } from "@chakra-ui/react";
 import TaskDetailModal from "../taskModal/TaskDetailsModal";
 import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../constant";
 
 type Props = {};
 

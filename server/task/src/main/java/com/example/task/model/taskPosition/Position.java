@@ -1,6 +1,8 @@
 package com.example.task.model.taskPosition;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,5 +34,6 @@ abstract class Position<T> {
     private Integer columnId;
 
     @NotNull
+    @Column(unique = true)
     private Integer orderIndex;
 }

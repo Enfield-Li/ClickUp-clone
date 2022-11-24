@@ -1,7 +1,7 @@
 import { Center, Box } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../utils/constant";
+import { CLIENT_ROUTE } from "../../../constant";
 import { Section } from "../NavBar";
 import NavIcon from "./NavIcon";
 

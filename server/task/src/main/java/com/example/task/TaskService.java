@@ -12,6 +12,7 @@ import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
+import com.example.task.model.Participant;
 import com.example.task.model.Task;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
-    private UserInfo getCurrentUserInfo() {
+    public UserInfo getCurrentUserInfo() {
         return (UserInfo) SecurityContextHolder
             .getContext()
             .getAuthentication()
@@ -98,15 +99,11 @@ public class TaskService {
     }
 
     public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {
-        try {
-            // Update other tasks position
-            taskRepository.saveAll(Task.setTaskForWatcher(tasksForUpdate));
-            // Delete the task in question
-            taskRepository.deleteById(taskId);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        // Update other tasks position
+        taskRepository.saveAll(Task.setTaskForWatcher(tasksForUpdate));
+        // Delete the task in question
+        taskRepository.deleteById(taskId);
+        return true;
     }
 
     @Transactional

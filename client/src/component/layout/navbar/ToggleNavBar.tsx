@@ -8,7 +8,7 @@ import {
 import { motion } from "framer-motion";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../utils/constant";
+import { CLIENT_ROUTE } from "../../../constant";
 import SubNavbar from "./SubNavbar";
 
 type Props = {

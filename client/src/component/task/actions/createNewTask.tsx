@@ -55,6 +55,8 @@ export async function createNewTask(
   );
 
   updateTaskOnTargetColumnAndId(targetColumnAndId, taskState, newTask);
+  // network call
+  const createdTask = await createTask(newTask);
 
   setTaskState(
     (taskState) =>
@@ -68,15 +70,14 @@ export async function createNewTask(
               : sortBy === SortBy.PRIORITY
               ? priority
               : currentColumn.id;
+
           const isCurrentColumn = orderedTask.columnId === targetColumnId;
-          if (isCurrentColumn) orderedTask.taskList.push(newTask);
+          if (isCurrentColumn && createdTask) {
+            orderedTask.taskList.push(createdTask);
+          }
         });
       })
   );
-
-  // network call
-  console.log({ newTask: deepCopy(newTask) });
-  await createTask(newTask);
 }
 
 export function setCurrentTaskAttribute(

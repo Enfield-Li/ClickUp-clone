@@ -13,7 +13,7 @@ import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
 import useGlobalContext from "../../context/global/useGlobalContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { CLIENT_ROUTE } from "../../utils/constant";
+import { CLIENT_ROUTE } from "../../constant";
 
 type Props = {};
 

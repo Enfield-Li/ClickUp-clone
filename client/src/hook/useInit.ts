@@ -1,6 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { ACCESS_TOKEN, CLIENT_ROUTE } from "../utils/constant";
+import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useAuthContext from "../context/auth/useAuthContext";
 import { useNavigate } from "react-router-dom";

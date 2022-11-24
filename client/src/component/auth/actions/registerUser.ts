@@ -9,7 +9,7 @@ import {
   LogInError,
 } from "../../../context/auth/AuthContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import { API_ENDPOINT, ACCESS_TOKEN } from "../../../utils/constant";
+import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 
 export async function registerUser(
   credentials: Credentials,

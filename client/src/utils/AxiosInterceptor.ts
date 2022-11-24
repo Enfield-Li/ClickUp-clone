@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { ACCESS_TOKEN, BASE_ENDPOINT, BEARER } from "./constant";
+import { ACCESS_TOKEN, BASE_ENDPOINT, BEARER } from "../constant";
 
 export const axiosInstance = axios.create({
   baseURL: BASE_ENDPOINT,

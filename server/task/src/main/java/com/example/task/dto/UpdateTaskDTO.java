@@ -19,11 +19,11 @@ public record UpdateTaskDTO(
     @NotNull TaskStatusPosition status,
     @NotNull TaskDueDatePosition dueDate,
     @NotNull TaskPriorityPosition priority,
-    @NotEmpty Set<Participant> watchers,
 
     String description,
     Date expectedDueDate,
     Set<Participant> assignees,
+    @NotEmpty Set<Participant> watchers,
 
     List<UpdateEventDTO> taskEvents // Messaging event dto
 ) {}

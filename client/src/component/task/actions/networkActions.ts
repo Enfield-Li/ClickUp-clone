@@ -1,6 +1,5 @@
 import { AxiosError } from "axios";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import { API_ENDPOINT } from "../../../utils/constant";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
   Task,
@@ -10,6 +9,7 @@ import {
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
 } from "../../../types";
+import { API_ENDPOINT } from "../../../constant";
 
 export async function getTasks() {}
 
@@ -66,17 +66,17 @@ export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
   console.log(deepCopy(updateTasksPositionDTO));
-  try {
-    const response = await axiosInstance.put<boolean>(
-      API_ENDPOINT.TASK,
-      deepCopy(updateTasksPositionDTO)
-    );
+  //   try {
+  //     const response = await axiosInstance.put<boolean>(
+  //       API_ENDPOINT.TASK,
+  //       deepCopy(updateTasksPositionDTO)
+  //     );
 
-    // return response.data;
-  } catch (error) {
-    const err = error as AxiosError;
-    console.log(err);
-  }
+  //     // return response.data;
+  //   } catch (error) {
+  //     const err = error as AxiosError;
+  //     console.log(err);
+  //   }
 }
 
 export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {

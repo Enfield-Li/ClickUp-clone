@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from "../../../utils/constant";
+import { API_ENDPOINT } from "../../../constant";
 import { AxiosError } from "axios";
 import React from "react";
 import {
@@ -8,7 +8,7 @@ import {
   LogInError,
   UserResponse,
 } from "../../../context/auth/AuthContextTypes";
-import { ACCESS_TOKEN } from "../../../utils/constant";
+import { ACCESS_TOKEN } from "../../../constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 

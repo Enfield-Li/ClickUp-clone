@@ -89,8 +89,6 @@ public class Task {
     private Participant creator;
 
     @CreationTimestamp
-    @Column(updatable = false)
-    // ^ IDK why is this broken, createdAt will be updated to null, if this wasn't included
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
@@ -161,14 +159,12 @@ public class Task {
             .builder()
             .id(updateTaskDTO.id())
             .creator(updateTaskDTO.creator())
-            //
             .title(updateTaskDTO.title())
             .status(updateTaskDTO.status())
             .dueDate(updateTaskDTO.dueDate())
             .priority(updateTaskDTO.priority())
             .description(updateTaskDTO.description())
             .expectedDueDate(updateTaskDTO.expectedDueDate())
-            //
             .watchers(updateTaskDTO.watchers())
             .assignees(updateTaskDTO.assignees())
             .build();
@@ -182,26 +178,22 @@ public class Task {
         Integer creatorId,
         String creatorName
     ) {
-        // Initialize creator as watcher (*default)
-        var creatorAsWatcher = Set.of(
-            Participant
-                .builder()
-                .userId(creatorId)
-                .username(creatorName)
-                .build()
-        );
+        // Initialize creator as watcher
+        var creator = Participant
+            .builder()
+            .userId(creatorId)
+            .username(creatorName)
+            .build();
 
         var task = Task
             .builder()
-            .creator(createTaskDTO.creator())
-            //
+            .creator(creator)
+            .watchers(Set.of(creator))
             .title(createTaskDTO.title())
             .status(createTaskDTO.status())
             .dueDate(createTaskDTO.dueDate())
             .priority(createTaskDTO.priority())
             .description(createTaskDTO.description())
-            //
-            .watchers(creatorAsWatcher)
             .expectedDueDate(createTaskDTO.expectedDueDate())
             .build();
 

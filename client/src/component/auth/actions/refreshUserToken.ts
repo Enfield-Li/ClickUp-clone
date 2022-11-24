@@ -8,11 +8,7 @@ import {
   AUTH_ACTION,
 } from "../../../context/auth/AuthContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import {
-  API_ENDPOINT,
-  ACCESS_TOKEN,
-  CLIENT_ROUTE,
-} from "../../../utils/constant";
+import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
 
 export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
