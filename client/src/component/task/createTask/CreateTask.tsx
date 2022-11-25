@@ -75,8 +75,14 @@ function CreateTask({
         setTaskState,
         currentColumn
       );
-      handleReset();
+      continueCreateTask();
     }
+  }
+
+  function continueCreateTask() {
+    setTaskName("");
+    setPriority(initialPriority);
+    setExpectedDueDate(initialDueDate);
   }
 
   function handleReset() {
@@ -122,6 +128,10 @@ function CreateTask({
           ref={htmlElRef}
           onBlur={handleOnBlur}
           borderColor="rgb(123, 104, 238)"
+          onKeyPress={(e) =>
+            (e.key === "Enter" || e.code === "NumpadEnter") &&
+            handleCreateTask()
+          }
         >
           <Flex alignItems="center" mb={4}>
             <Flex>
