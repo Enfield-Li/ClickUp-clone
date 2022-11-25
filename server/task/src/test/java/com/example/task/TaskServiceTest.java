@@ -5,7 +5,7 @@ import static org.mockito.BDDMockito.*;
 
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.task.dto.unused.CreateTaskDTO;
-import com.example.task.model.Participant;
+import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
 import com.example.task.model.taskPosition.DueDate;
 import com.example.task.model.taskPosition.DueDatePosition;
@@ -51,7 +51,7 @@ public class TaskServiceTest implements WithAssertions {
     @Captor
     ArgumentCaptor<Task> taskArgCaptor;
 
-    Participant creator = Participant.builder().userId(1).username("user1").build();
+    UserInfo creator = UserInfo.builder().userId(1).username("user1").build();
 
     @BeforeEach
     void setUp() {
@@ -82,8 +82,8 @@ public class TaskServiceTest implements WithAssertions {
         assertThat(taskCaptured.getCreator()).isEqualTo(creator);
         assertThat(taskCaptured.getWatchers()).isEqualTo(Set.of(creator));
         assertThat(taskCaptured.getWatchers())
-                .allSatisfy(participant -> {
-                    assertThat(participant.getTaskWatcher()).isEqualTo(taskCaptured);
+                .allSatisfy(userInfo -> {
+                    assertThat(userInfo.getTaskWatcher()).isEqualTo(taskCaptured);
                 });
     }
 

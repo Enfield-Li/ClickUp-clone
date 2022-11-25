@@ -88,7 +88,7 @@ public class Task {
     @NotNull
     @JoinColumn(name = "userInfoId")
     @OneToOne(cascade = CascadeType.ALL)
-    private Participant creator;
+    private UserInfo creator;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -112,19 +112,19 @@ public class Task {
     @NotNull
     @OneToMany(mappedBy = "taskWatcher", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<Participant> watchers = new HashSet<>();
+    private Set<UserInfo> watchers = new HashSet<>();
 
     @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<Participant> assignees = new HashSet<>();
+    private Set<UserInfo> assignees = new HashSet<>();
 
     public Task(
             @NotNull String title,
             @NotNull StatusPosition status,
             @NotNull PriorityPosition priority,
             @NotNull DueDatePosition dueDate,
-            @NotNull Participant creator,
-            @NotNull Set<Participant> watchers) {
+            @NotNull UserInfo creator,
+            @NotNull Set<UserInfo> watchers) {
         this.title = title;
         this.status = status;
         this.priority = priority;
@@ -148,7 +148,7 @@ public class Task {
             Integer creatorId,
             String creatorName) {
         // Initialize creator as watcher
-        var creator = Participant
+        var creator = UserInfo
                 .builder()
                 .userId(creatorId)
                 .username(creatorName)

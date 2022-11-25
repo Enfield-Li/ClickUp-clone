@@ -27,7 +27,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @JsonIgnoreProperties(value = { "id" })
 @EqualsAndHashCode(exclude = { "taskWatcher" })
-public class Participant {
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

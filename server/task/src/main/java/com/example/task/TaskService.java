@@ -4,7 +4,6 @@ import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
 import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.jwt.UserInfo;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.task.dto.TaskPositionDTO;
@@ -12,7 +11,7 @@ import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
-import com.example.task.model.Participant;
+import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,8 +46,8 @@ public class TaskService {
 
     public Task createTask(CreateTaskDTO createTaskDTO) {
         var userInfo = getCurrentUserInfo();
-        var userId = userInfo.userId();
-        var username = userInfo.username();
+        var userId = userInfo.getUserId();
+        var username = userInfo.getUsername();
 
         var task = Task.convertFromCreateTaskDto(
                 createTaskDTO,
@@ -62,8 +61,8 @@ public class TaskService {
     public Boolean updateTasksPosition(
             UpdateTasksPositionDTO updateTasksPositionDTO) {
         var userInfo = getCurrentUserInfo();
-        var userId = userInfo.userId();
-        var username = userInfo.username();
+        var userId = userInfo.getUserId();
+        var username = userInfo.getUsername();
 
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
@@ -126,8 +125,8 @@ public class TaskService {
     @Transactional
     public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
         var userInfo = getCurrentUserInfo();
-        var userId = userInfo.userId();
-        var username = userInfo.username();
+        var userId = userInfo.getUserId();
+        var username = userInfo.getUsername();
 
         var taskId = updateTaskTitleDTO.taskId();
         var newTitle = updateTaskTitleDTO.newTitle();

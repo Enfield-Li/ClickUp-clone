@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.task.model.Participant;
+import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
 import com.example.task.model.taskPosition.DueDate;
 import com.example.task.model.taskPosition.DueDatePosition;
@@ -43,7 +43,7 @@ public class TaskMapperTest implements WithAssertions {
         var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
         var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
         var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
-        var creator = Participant.builder().userId(1).username("user1").build();
+        var creator = UserInfo.builder().userId(1).username("user1").build();
         var task = new Task(taskOneTitle, status, priority, dueDate, creator, Set.of(creator));
 
         taskId = taskRepository.save(task).getId();
