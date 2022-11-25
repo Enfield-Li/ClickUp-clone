@@ -1,6 +1,8 @@
 package com.example.task.model.taskPosition;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,4 +14,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class StatusPosition extends Position<String> {}
+public class StatusPosition extends Position {
+
+    @NotNull
+    private String name;
+}

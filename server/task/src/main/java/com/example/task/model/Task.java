@@ -1,19 +1,12 @@
 package com.example.task.model;
 
-import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 
-import com.example.task.dto.TaskPositionDTO;
-import com.example.task.dto.unused.CreateTaskDTO;
-import com.example.task.model.taskPosition.DueDatePosition;
-import com.example.task.model.taskPosition.PriorityPosition;
-import com.example.task.model.taskPosition.StatusPosition;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,12 +19,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.example.task.dto.unused.CreateTaskDTO;
+import com.example.task.model.taskPosition.DueDatePosition;
+import com.example.task.model.taskPosition.PriorityPosition;
+import com.example.task.model.taskPosition.StatusPosition;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Entity
@@ -76,7 +77,7 @@ public class Task {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DueDatePosition dueDate;
 
-    private Date expectedDueDate;
+    private LocalDateTime expectedDueDate;
 
     private String description;
 
@@ -105,38 +106,25 @@ public class Task {
     private Task parentTask;
 
     @Builder.Default
-    @OneToMany(
-        mappedBy = "parentTask",
-        fetch = FetchType.EAGER,
-        cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "parentTask", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Task> subTasks = new HashSet<>();
 
     @NotNull
-    @OneToMany(
-        mappedBy = "taskWatcher",
-        fetch = EAGER,
-        cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "taskWatcher", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Participant> watchers = new HashSet<>();
 
-    @OneToMany(
-        mappedBy = "taskAssignee",
-        fetch = EAGER,
-        cascade = CascadeType.ALL
-    )
+    @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Participant> assignees = new HashSet<>();
 
     public Task(
-        @NotNull String title,
-        @NotNull StatusPosition status,
-        @NotNull PriorityPosition priority,
-        @NotNull DueDatePosition dueDate,
-        @NotNull Participant creator,
-        @NotNull Set<Participant> watchers
-    ) {
+            @NotNull String title,
+            @NotNull StatusPosition status,
+            @NotNull PriorityPosition priority,
+            @NotNull DueDatePosition dueDate,
+            @NotNull Participant creator,
+            @NotNull Set<Participant> watchers) {
         this.title = title;
         this.status = status;
         this.priority = priority;
@@ -156,28 +144,27 @@ public class Task {
     // }
 
     public static Task convertFromCreateTaskDto(
-        CreateTaskDTO createTaskDTO,
-        Integer creatorId,
-        String creatorName
-    ) {
+            CreateTaskDTO createTaskDTO,
+            Integer creatorId,
+            String creatorName) {
         // Initialize creator as watcher
         var creator = Participant
-            .builder()
-            .userId(creatorId)
-            .username(creatorName)
-            .build();
+                .builder()
+                .userId(creatorId)
+                .username(creatorName)
+                .build();
 
         var task = Task
-            .builder()
-            .creator(creator)
-            .watchers(Set.of(creator))
-            .title(createTaskDTO.title())
-            .status(createTaskDTO.status())
-            .dueDate(createTaskDTO.dueDate())
-            .priority(createTaskDTO.priority())
-            .description(createTaskDTO.description())
-            .expectedDueDate(createTaskDTO.expectedDueDate())
-            .build();
+                .builder()
+                .creator(creator)
+                .watchers(Set.of(creator))
+                .title(createTaskDTO.title())
+                .status(createTaskDTO.status())
+                .dueDate(createTaskDTO.dueDate())
+                .priority(createTaskDTO.priority())
+                .description(createTaskDTO.description())
+                .expectedDueDate(createTaskDTO.expectedDueDate())
+                .build();
 
         setTaskForWatcher(task); // Manage relationship
         return task;
@@ -185,14 +172,12 @@ public class Task {
 
     // Manage task/watcher relationship in task
     private static Task setTaskForWatcher(Task task) {
-        task
-            .getWatchers()
-            .forEach(watcher -> {
-                if (task.getId() != null) {
-                    watcher.setTaskWatcherId(task.getId());
-                }
-                watcher.setTaskWatcher(task);
-            });
+        task.getWatchers().forEach(watcher -> {
+            if (task.getId() != null) {
+                watcher.setTaskWatcherId(task.getId());
+            }
+            watcher.setTaskWatcher(task);
+        });
 
         return task;
     }

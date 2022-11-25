@@ -34,9 +34,9 @@ public class TaskService {
 
     public UserInfo getCurrentUserInfo() {
         return (UserInfo) SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getPrincipal();
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
     }
 
     public List<Task> getAllTasks() {
@@ -49,18 +49,16 @@ public class TaskService {
         var username = userInfo.username();
 
         var task = Task.convertFromCreateTaskDto(
-            createTaskDTO,
-            userId,
-            username
-        );
+                createTaskDTO,
+                userId,
+                username);
 
         return taskRepository.save(task);
     }
 
     @Transactional
     public Boolean updateTasksPosition(
-        UpdateTasksPositionDTO updateTasksPositionDTO
-    ) {
+            UpdateTasksPositionDTO updateTasksPositionDTO) {
         var userInfo = getCurrentUserInfo();
         var userId = userInfo.userId();
         var username = userInfo.username();
@@ -70,9 +68,9 @@ public class TaskService {
 
         // Find sourceTask
         var sourceTask = taskDtoList
-            .stream()
-            .filter(task -> task.taskId() == sourceTaskId)
-            .findFirst();
+                .stream()
+                .filter(task -> task.taskId() == sourceTaskId)
+                .findFirst();
 
         // Task drop into a different column
         // publish task update event
@@ -82,10 +80,9 @@ public class TaskService {
             taskEvents.setUsername(username);
 
             rabbitMQMessageProducer.publish(
-                internalExchange,
-                taskEventRoutingKey,
-                taskEvents
-            );
+                    internalExchange,
+                    taskEventRoutingKey,
+                    taskEvents);
         }
 
         var statusTableName = "status_position";
@@ -94,32 +91,25 @@ public class TaskService {
 
         // update position
         taskDtoList.forEach(taskDTO -> {
-            if (taskDTO.status() != null) {
-                taskMapper.updateTaskPosition(
-                    taskDTO.status().getId(),
-                    statusTableName,
-                    taskDTO.status().getOrderIndex()
-                );
-            } else if (taskDTO.dueDate() != null) {
-                var isSourceTaskExpectedDueDateUpdated =
-                    taskDTO.expectedDueDate() != null &&
-                    taskDTO.taskId() == sourceTaskId;
+            var status = taskDTO.status();
+            var dueDate = taskDTO.dueDate();
+            var priority = taskDTO.priority();
+
+            if (status != null) {
+                taskMapper.updateStatusPosition(status.getId(), status);
+
+            } else if (dueDate != null) {
+                var isSourceTaskExpectedDueDateUpdated = taskDTO
+                        .expectedDueDate() != null &&
+                        taskDTO.taskId() == sourceTaskId;
                 if (isSourceTaskExpectedDueDateUpdated) {
-                    taskMapper.updateTaskExpectedDueDate(
-                        taskDTO.expectedDueDate()
-                    );
+                    taskRepository.updateExpectedDueDate(taskDTO.taskId(), taskDTO.expectedDueDate());
                 }
-                taskMapper.updateTaskPosition(
-                    taskDTO.dueDate().getId(),
-                    dueDateTableName,
-                    taskDTO.dueDate().getOrderIndex()
-                );
-            } else if (taskDTO.priority() != null) {
-                taskMapper.updateTaskPosition(
-                    taskDTO.priority().getId(),
-                    priorityTableName,
-                    taskDTO.priority().getOrderIndex()
-                );
+
+                taskMapper.updateDueDatePosition(dueDate.getId(), dueDate);
+
+            } else if (priority != null) {
+                taskMapper.updateTaskPriorityPosition(priority.getId(), priorityTableName, priority);
             }
         });
 
@@ -127,7 +117,6 @@ public class TaskService {
     }
 
     public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {
-        // Delete the task in question
         taskRepository.deleteById(taskId);
         return true;
     }
@@ -143,27 +132,25 @@ public class TaskService {
         var oldTitle = taskRepository.getTaskTitle(taskId);
 
         var updateEventDTO = UpdateEventDTO
-            .builder()
-            .userId(userId)
-            .username(username)
-            .field(Field.title)
-            .beforeUpdate(oldTitle)
-            .afterUpdate(newTitle)
-            .taskId(taskId)
-            .build();
+                .builder()
+                .userId(userId)
+                .username(username)
+                .field(Field.title)
+                .beforeUpdate(oldTitle)
+                .afterUpdate(newTitle)
+                .taskId(taskId)
+                .build();
 
         // publish task update title event
         rabbitMQMessageProducer.publish(
-            internalExchange,
-            taskEventRoutingKey,
-            updateEventDTO
-        );
+                internalExchange,
+                taskEventRoutingKey,
+                updateEventDTO);
 
-        var rowsAffected = taskRepository.updateTaskTitle(
-            taskId,
-            newTitle,
-            LocalDateTime.now()
-        );
+        var rowsAffected = taskRepository.updateTitle(
+                taskId,
+                newTitle,
+                LocalDateTime.now());
 
         return rowsAffected > 0;
     }
@@ -173,11 +160,10 @@ public class TaskService {
         var taskId = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
-        var rowsAffected = taskRepository.updateTaskDesc(
-            taskId,
-            newDesc,
-            LocalDateTime.now()
-        );
+        var rowsAffected = taskRepository.updateDesc(
+                taskId,
+                newDesc,
+                LocalDateTime.now());
 
         return rowsAffected > 0;
     }

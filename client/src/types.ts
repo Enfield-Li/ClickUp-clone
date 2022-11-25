@@ -31,11 +31,11 @@ export enum CurrentWeek {
   SUNDAY = "SUNDAY",
 }
 export enum DueDateRange {
-  OVER_DUE = "OVER DUE",
+  OVER_DUE = "OVER_DUE",
   TODAY = "TODAY",
   TOMORROW = "TOMORROW",
   FUTURE = "FUTURE",
-  NO_DUE_DATE = "NO DUE DATE",
+  NO_DUE_DATE = "NO_DUE_DATE",
 }
 export type DueDate = CurrentWeek | DueDateRange;
 

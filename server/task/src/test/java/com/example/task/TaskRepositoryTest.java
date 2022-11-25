@@ -2,6 +2,7 @@ package com.example.task;
 
 import com.example.task.model.Participant;
 import com.example.task.model.Task;
+import com.example.task.model.taskPosition.DueDate;
 import com.example.task.model.taskPosition.DueDatePosition;
 import com.example.task.model.taskPosition.Priority;
 import com.example.task.model.taskPosition.PriorityPosition;
@@ -31,44 +32,17 @@ public class TaskRepositoryTest implements WithAssertions {
     @BeforeEach
     void setUp() {
         Boolean hasData = underTest.findAll().size() > 0;
-        if (hasData) return;
+        if (hasData) {
+            return;
+        }
 
-        var status = StatusPosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name("IN_PROGRESS")
-            .build();
-        var priority = PriorityPosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name(Priority.NORMAL)
-            .build();
-        var dueDate = DueDatePosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name("TODAY")
-            .build();
+        var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
+        var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
+        var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
         var creator = Participant.builder().userId(1).username("user1").build();
 
-        var task1 = new Task(
-            taskOneTitle,
-            status,
-            priority,
-            dueDate,
-            creator,
-            Set.of(creator)
-        );
-        var task2 = new Task(
-            taskTwoTitle,
-            status,
-            priority,
-            dueDate,
-            creator,
-            Set.of(creator)
-        );
+        var task1 = new Task(taskOneTitle, status, priority, dueDate, creator, Set.of(creator));
+        var task2 = new Task(taskTwoTitle, status, priority, dueDate, creator, Set.of(creator));
         underTest.saveAll(List.of(task1, task2));
     }
 
@@ -85,21 +59,14 @@ public class TaskRepositoryTest implements WithAssertions {
         var expectedNewDescStr = "newDesc";
         var expectedUpdatedDate = LocalDateTime.now();
 
-        var updateCount = underTest.updateTaskDesc(
-            taskId,
-            expectedNewDescStr,
-            expectedUpdatedDate
-        );
+        var updateCount = underTest.updateDesc(taskId, expectedNewDescStr, expectedUpdatedDate);
         var updatedTask1 = underTest.findById(taskId).orElseThrow();
 
         assertThat(updateCount).isGreaterThan(0);
         assertThat(updatedTask1.getDescription()).isEqualTo(expectedNewDescStr);
         // https://stackoverflow.com/a/38905987/16648127
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-            "uuuu-MM-dd'T'HH:mm:ss.SSSSS"
-        );
-        assertThat(updatedTask1.getUpdatedAt().format(formatter))
-            .isEqualTo(expectedUpdatedDate.format(formatter));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSS");
+        assertThat(updatedTask1.getUpdatedAt().format(formatter)).isEqualTo(expectedUpdatedDate.format(formatter));
     }
 
     @Test
@@ -109,20 +76,13 @@ public class TaskRepositoryTest implements WithAssertions {
         var expectedNewTitleStr = "newTitle";
         var expectedUpdatedDate = LocalDateTime.now();
 
-        var updateCount = underTest.updateTaskTitle(
-            taskId,
-            expectedNewTitleStr,
-            expectedUpdatedDate
-        );
+        var updateCount = underTest.updateTitle(taskId, expectedNewTitleStr, expectedUpdatedDate);
         var updatedTask2 = underTest.findById(taskId).orElseThrow();
 
         assertThat(updateCount).isGreaterThan(0);
         assertThat(updatedTask2.getTitle()).isEqualTo(expectedNewTitleStr);
         // https://stackoverflow.com/a/38905987/16648127
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-            "uuuu-MM-dd'T'HH:mm:ss.SSSSS"
-        );
-        assertThat(updatedTask2.getUpdatedAt().format(formatter))
-            .isEqualTo(expectedUpdatedDate.format(formatter));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSS");
+        assertThat(updatedTask2.getUpdatedAt().format(formatter)).isEqualTo(expectedUpdatedDate.format(formatter));
     }
 }

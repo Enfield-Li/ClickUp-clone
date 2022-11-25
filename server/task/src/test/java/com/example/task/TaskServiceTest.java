@@ -7,10 +7,13 @@ import com.example.amqp.RabbitMqMessageProducer;
 import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Participant;
 import com.example.task.model.Task;
+import com.example.task.model.taskPosition.DueDate;
 import com.example.task.model.taskPosition.DueDatePosition;
 import com.example.task.model.taskPosition.Priority;
 import com.example.task.model.taskPosition.PriorityPosition;
 import com.example.task.model.taskPosition.StatusPosition;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 import org.assertj.core.api.WithAssertions;
@@ -31,6 +34,9 @@ public class TaskServiceTest implements WithAssertions {
     TaskService underTest;
 
     @Mock
+    TaskMapper taskMapper;
+
+    @Mock
     TaskRepository taskRepository;
 
     @Mock
@@ -45,56 +51,23 @@ public class TaskServiceTest implements WithAssertions {
     @Captor
     ArgumentCaptor<Task> taskArgCaptor;
 
-    Participant creator = Participant
-        .builder()
-        .userId(1)
-        .username("user1")
-        .build();
+    Participant creator = Participant.builder().userId(1).username("user1").build();
 
     @BeforeEach
     void setUp() {
-        underTest = new TaskService(taskRepository, rabbitMQMessageProducer);
+        underTest = new TaskService(taskMapper, taskRepository, rabbitMQMessageProducer);
         SecurityContextHolder.setContext(securityContext);
-        given(SecurityContextHolder.getContext().getAuthentication())
-            .willReturn(authentication);
-        given(
-            SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal()
-        )
-            .willReturn(creator);
+        given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
+        given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
     }
 
     @Test
     void create_Task_should_pass() {
         // given
-        var status = StatusPosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name("IN_PROGRESS")
-            .build();
-        var priority = PriorityPosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name(Priority.NORMAL)
-            .build();
-        var dueDate = DueDatePosition
-            .builder()
-            .columnId(1)
-            .orderIndex(1)
-            .name("TODAY")
-            .build();
-        var createTaskDto = new CreateTaskDTO(
-            "desc",
-            new Date(),
-            "title",
-            status,
-            dueDate,
-            priority
-        );
+        var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
+        var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
+        var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
+        var createTaskDto = new CreateTaskDTO("desc", LocalDateTime.now(), "title", status, dueDate, priority);
 
         given(taskRepository.save(any())).willReturn(new Task());
 
@@ -109,10 +82,9 @@ public class TaskServiceTest implements WithAssertions {
         assertThat(taskCaptured.getCreator()).isEqualTo(creator);
         assertThat(taskCaptured.getWatchers()).isEqualTo(Set.of(creator));
         assertThat(taskCaptured.getWatchers())
-            .allSatisfy(participant -> {
-                assertThat(participant.getTaskWatcher())
-                    .isEqualTo(taskCaptured);
-            });
+                .allSatisfy(participant -> {
+                    assertThat(participant.getTaskWatcher()).isEqualTo(taskCaptured);
+                });
     }
 
     @Test
@@ -130,7 +102,8 @@ public class TaskServiceTest implements WithAssertions {
     }
 
     @Test
-    void testUpdateTaskDesc() {}
+    void testUpdateTaskDesc() {
+    }
 
     @Test
     void testUpdateTaskTitle() {

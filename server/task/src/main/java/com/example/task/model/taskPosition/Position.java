@@ -2,6 +2,8 @@ package com.example.task.model.taskPosition;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,19 +23,11 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "columnId", "orderIndex" }),
-    }
-)
-abstract class Position<T> {
+public abstract class Position {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @NotNull
-    private T name;
 
     @NotNull
     private Integer columnId;

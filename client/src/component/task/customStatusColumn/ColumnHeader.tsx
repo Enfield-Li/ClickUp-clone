@@ -64,7 +64,7 @@ function ColumnHeader({
               letterSpacing={1.1}
               textTransform="uppercase"
             >
-              {title}
+              {title.replaceAll("_", " ")}
             </Text>
 
             {/* Task amount */}
