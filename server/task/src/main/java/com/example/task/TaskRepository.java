@@ -32,15 +32,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     @Query(nativeQuery = true, value = "" +
             "UPDATE task" +
-            " SET expected_due_date = :expectedDueDate" +
-            " WHERE id = :taskId")
-    @Modifying(clearAutomatically = true)
-    Integer updateExpectedDueDate(
-            @Param("taskId") Integer taskId,
-            @Param("expectedDueDate") LocalDateTime expectedDueDate);
-
-    @Query(nativeQuery = true, value = "" +
-            "UPDATE task" +
             " SET description = :description" +
             ", updated_at = :updatedAt" +
             " WHERE id = :taskId")

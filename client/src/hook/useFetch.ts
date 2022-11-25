@@ -13,6 +13,7 @@ import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
 import { mockColumnOptions } from "../useLocalState/mockData";
 import { sleep } from "../utils/sleep";
+import { useToast } from "@chakra-ui/react";
 
 export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
@@ -44,6 +45,7 @@ export function useFetch<T>(url: string) {
 }
 
 export function useFetchTasks(sortBy: SortBy) {
+  const toast = useToast();
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -74,7 +76,12 @@ export function useFetchTasks(sortBy: SortBy) {
     setLoading(true);
 
     // Task data
-    const tasksData: TaskList | undefined = await fetchAllTasks();
+    const tasksData: TaskList | undefined = await fetchAllTasks(() =>
+      toast({
+        colorScheme: "red",
+        description: "Service unavailable, please retry...",
+      })
+    );
 
     if (tasksData) {
       const columnDataFromApi = mockColumnOptions;

@@ -49,7 +49,7 @@ function CreateTask({
   );
 
   // focus element
-  const [htmlElRef, setFocus] = useFocus<HTMLDivElement>();
+  const [htmlElRef, setFocus] = useFocus<HTMLInputElement>();
   function handleOnBlur(e: React.FocusEvent<HTMLDivElement, Element>) {
     // Prevent firing the blur event on children: https://stackoverflow.com/a/60094794/16648127
     // blur event.relatedTarget returns null: https://stackoverflow.com/a/42764495/16648127
@@ -80,6 +80,7 @@ function CreateTask({
   }
 
   function continueCreateTask() {
+    setFocus();
     setTaskName("");
     setPriority(initialPriority);
     setExpectedDueDate(initialDueDate);
@@ -125,7 +126,6 @@ function CreateTask({
           rounded="sm"
           width="100%"
           tabIndex={0}
-          ref={htmlElRef}
           onBlur={handleOnBlur}
           borderColor="rgb(123, 104, 238)"
           onKeyPress={(e) =>
@@ -152,6 +152,7 @@ function CreateTask({
                   mr={2}
                   autoFocus
                   height="23px"
+                  ref={htmlElRef}
                   value={taskName}
                   variant="unstyled"
                   placeholder="Task name"

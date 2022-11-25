@@ -8,7 +8,7 @@ type ColumnField = SortBy;
 
 // Columns
 export enum DefaultStatus {
-  TO_DO = "TO DO",
+  TO_DO = "TO_DO",
   DONE = "Done",
 }
 export type Status = string | DefaultStatus;

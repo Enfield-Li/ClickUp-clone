@@ -28,6 +28,8 @@ import org.springframework.util.CollectionUtils;
 @RequiredArgsConstructor
 public class TaskService {
 
+    Integer updateCount;
+
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
@@ -96,24 +98,24 @@ public class TaskService {
             var priority = taskDTO.priority();
 
             if (status != null) {
-                taskMapper.updateStatusPosition(status.getId(), status);
+                updateCount = taskMapper.updateTaskPosition(status.getId(), statusTableName, status);
 
             } else if (dueDate != null) {
                 var isSourceTaskExpectedDueDateUpdated = taskDTO
                         .expectedDueDate() != null &&
                         taskDTO.taskId() == sourceTaskId;
                 if (isSourceTaskExpectedDueDateUpdated) {
-                    taskRepository.updateExpectedDueDate(taskDTO.taskId(), taskDTO.expectedDueDate());
+                    taskMapper.updateExpectedDueDate(taskDTO.taskId(), taskDTO.expectedDueDate());
                 }
 
-                taskMapper.updateDueDatePosition(dueDate.getId(), dueDate);
+                updateCount = taskMapper.updateTaskPosition(dueDate.getId(), dueDateTableName, dueDate);
 
             } else if (priority != null) {
-                taskMapper.updateTaskPriorityPosition(priority.getId(), priorityTableName, priority);
+                updateCount = taskMapper.updateTaskPosition(priority.getId(), priorityTableName, priority);
             }
         });
 
-        return true;
+        return updateCount > 0;
     }
 
     public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {
@@ -147,12 +149,12 @@ public class TaskService {
                 taskEventRoutingKey,
                 updateEventDTO);
 
-        var rowsAffected = taskRepository.updateTitle(
+        var updateCount = taskRepository.updateTitle(
                 taskId,
                 newTitle,
                 LocalDateTime.now());
 
-        return rowsAffected > 0;
+        return updateCount > 0;
     }
 
     @Transactional
@@ -160,11 +162,11 @@ public class TaskService {
         var taskId = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
-        var rowsAffected = taskRepository.updateDesc(
+        var updateCount = taskRepository.updateDesc(
                 taskId,
                 newDesc,
                 LocalDateTime.now());
 
-        return rowsAffected > 0;
+        return updateCount > 0;
     }
 }

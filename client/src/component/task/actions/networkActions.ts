@@ -49,7 +49,7 @@ export async function createTask(task: Task) {
   }
 }
 
-export async function fetchAllTasks() {
+export async function fetchAllTasks(errorHandler: () => void) {
   try {
     const response = await axiosInstance.get<TaskList>(
       API_ENDPOINT.TASK_ALL_TASKS
@@ -59,6 +59,7 @@ export async function fetchAllTasks() {
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);
+    errorHandler();
   }
 }
 
