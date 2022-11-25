@@ -16,5 +16,5 @@ public record TaskPositionDTO(
     DueDatePosition dueDate,
     PriorityPosition priority,
 
-    List<UpdateEventDTO> taskEvents // Messaging event dto
+    UpdateEventDTO taskEvents // Messaging event dto
 ) {}

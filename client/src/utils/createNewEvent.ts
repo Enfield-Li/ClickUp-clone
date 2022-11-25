@@ -1,17 +1,15 @@
-import { SortBy, TaskEvents } from "../types";
+import { Field, TaskEvent } from "../types";
 
 export function newEventDTO(
   taskId: number,
-  field: SortBy,
+  field: Field,
   afterUpdate: string | number | undefined,
   beforeUpdate: string | number | undefined
-): TaskEvents {
-  return [
-    {
-      taskId,
-      field: field,
-      afterUpdate: String(afterUpdate),
-      beforeUpdate: String(beforeUpdate),
-    },
-  ];
+): TaskEvent {
+  return {
+    field,
+    taskId,
+    afterUpdate: String(afterUpdate),
+    beforeUpdate: String(beforeUpdate),
+  };
 }

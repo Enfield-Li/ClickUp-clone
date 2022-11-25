@@ -207,6 +207,7 @@ export interface TaskPositionDTO {
   dueDate?: DueDatePosition;
   priority?: PriorityPosition;
   expectedDueDate: Date | null;
+  updateEvent?: UpdateEvent;
 }
 
 export type TaskPositionDTOList = TaskPositionDTO[];

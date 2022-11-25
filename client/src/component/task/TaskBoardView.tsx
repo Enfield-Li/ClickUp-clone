@@ -4,22 +4,17 @@ import produce from "immer";
 import { memo, useCallback, useState } from "react";
 import { useFetchTasks } from "../../hook/useFetch";
 import {
-  DueDatePosition,
   LookUpReorderedColumn,
-  PriorityPosition,
   SetTaskState,
   SortBy,
-  StatusPosition,
   Task,
-  TaskList,
   TaskPositionDTO,
   TaskPositionDTOList,
   TaskState,
   UndeterminedColumns,
-  UndeterminedPosition,
+  UpdateEvent,
   UpdateTasksPositionDTO,
 } from "../../types";
-import { useLocalTasks } from "../../useLocalState/useLocalState";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
 import { updateTasksPosition } from "./actions/networkActions";
@@ -210,24 +205,43 @@ async function handleDragEnd(
           // move down
           const isMoveDown = sourceTaskIndex < destinationTaskIndex;
           if (isMoveDown) {
-            handleMoveDownMultipleRows(
-              sourceTasksArr.taskList,
-              sortBy,
-              sourceTaskIndex,
-              destinationTaskIndex,
-              taskListForUpdate
-            );
+            const taskList = sourceTasksArr.taskList;
+            const sourceItem = taskList[sourceTaskIndex];
+            const targetItem = taskList[destinationTaskIndex];
+            const targetItemPosition = targetItem[sortBy].orderIndex;
+
+            const taskListOrderIndex: number[] = [];
+            for (const task of taskList) {
+              taskListOrderIndex.push(task[sortBy].orderIndex);
+            }
+
+            for (let i = sourceTaskIndex; i < destinationTaskIndex + 1; i++) {
+              const task = taskList[i];
+              const taskBeforeOrderIndex = taskListOrderIndex[i - 1];
+              task[sortBy].orderIndex = taskBeforeOrderIndex;
+              if (task.id !== sourceItem.id) {
+                taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
+              }
+            }
+            sourceItem[sortBy].orderIndex = targetItemPosition;
           }
 
           // move up
           else {
-            handleMoveUpMultipleRows(
-              sourceTasksArr.taskList,
-              sortBy,
-              sourceTaskIndex,
-              destinationTaskIndex,
-              taskListForUpdate
-            );
+            const taskList = sourceTasksArr.taskList;
+
+            const sourceItem = taskList[sourceTaskIndex];
+            const targetItem = taskList[destinationTaskIndex];
+            const targetItemPosition = targetItem[sortBy].orderIndex;
+
+            // increase all tasks in between sourceTask and targetTask
+            for (let i = destinationTaskIndex; i < sourceTaskIndex; i++) {
+              const task = taskList[i];
+              const taskAfter = taskList[i + 1];
+              task[sortBy].orderIndex = taskAfter[sortBy].orderIndex;
+              taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
+            }
+            sourceItem[sortBy].orderIndex = targetItemPosition;
           }
         }
 
@@ -239,12 +253,14 @@ async function handleDragEnd(
          */
         // Override all previous update events
         // So as to keep the event consistent when submitting to server
-        sourceTask.taskEvents = newEventDTO(
-          sourceTask.id!,
-          sortBy,
-          sourceColumnId,
-          destinationColumnId
-        );
+        sourceTask.taskEvents = [
+          newEventDTO(
+            sourceTask.id!,
+            sortBy,
+            sourceColumnId,
+            destinationColumnId
+          ),
+        ];
         // Change column
         sourceTask[sortBy].columnId = destinationColumnId;
         sourceTask[sortBy].name = destinationTaskColumn!.title;
@@ -270,13 +286,15 @@ async function handleDragEnd(
         else {
           sourceTask[sortBy].orderIndex = destinationTask[sortBy].orderIndex;
 
-          insertTask(
-            destinationTasksArr.taskList,
-            sortBy,
-            destination.index,
-            destinationTasksArrLength,
-            taskListForUpdate
-          );
+          const taskList = destinationTasksArr.taskList;
+          const targetIndex = destination.index;
+
+          // increase all tasks orderIndex after targetIndex position
+          for (let i = targetIndex; i < destinationTasksArrLength; i++) {
+            const item = taskList[i];
+            item[sortBy].orderIndex = item[sortBy].orderIndex + 1;
+            taskListForUpdate.push(newTaskPositionDTO(item, sortBy));
+          }
         }
 
         sourceTasksArr.taskList.splice(source.index, 1); // delete original
@@ -289,15 +307,17 @@ async function handleDragEnd(
         taskDtoList: taskListForUpdate,
       };
       updateTasksPosition(updateTaskListDTO);
-      // Clear events from taskState task
     })
   );
 }
 
 function newTaskPositionDTO(task: Task, sortBy: SortBy): TaskPositionDTO {
+  const lastUpdateEvent = task.taskEvents[0] as UpdateEvent;
+
   const taskPositionDto: TaskPositionDTO = {
     taskId: task.id!,
     expectedDueDate: task.expectedDueDate,
+    updateEvent: lastUpdateEvent,
   };
 
   if (sortBy === SortBy.STATUS) {
@@ -314,70 +334,8 @@ function newTaskPositionDTO(task: Task, sortBy: SortBy): TaskPositionDTO {
   return taskPositionDto;
 }
 
-function insertTask(
-  taskList: TaskList,
-  sortBy: SortBy,
-  targetIndex: number,
-  targetTasksArrLength: number,
-  taskListForUpdate: TaskPositionDTOList
-) {
-  // increase all tasks orderIndex after targetIndex position
-  for (let i = targetIndex; i < targetTasksArrLength; i++) {
-    const item = taskList[i];
-    item[sortBy].orderIndex = item[sortBy].orderIndex + 1;
-    taskListForUpdate.push(newTaskPositionDTO(item, sortBy));
-  }
-}
-
-function handleMoveUpMultipleRows(
-  taskList: TaskList,
-  sortBy: SortBy,
-  sourceIndex: number,
-  targetIndex: number,
-  taskListForUpdate: TaskPositionDTOList
-) {
-  const sourceItem = taskList[sourceIndex];
-  const targetItem = taskList[targetIndex];
-  const targetItemPosition = targetItem[sortBy].orderIndex;
-
-  // increase all tasks in between sourceTask and targetTask
-  for (let i = targetIndex; i < sourceIndex; i++) {
-    const task = taskList[i];
-    const taskAfter = taskList[i + 1];
-    task[sortBy].orderIndex = taskAfter[sortBy].orderIndex;
-    taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
-  }
-  sourceItem[sortBy].orderIndex = targetItemPosition;
-}
-
-function handleMoveDownMultipleRows(
-  taskList: TaskList,
-  sortBy: SortBy,
-  sourceIndex: number,
-  targetIndex: number,
-  taskListForUpdate: TaskPositionDTOList
-) {
-  const sourceItem = taskList[sourceIndex];
-  const targetItem = taskList[targetIndex];
-  const targetItemPosition = targetItem[sortBy].orderIndex;
-
-  const taskListOrderIndex: number[] = [];
-  for (const task of taskList) {
-    taskListOrderIndex.push(task[sortBy].orderIndex);
-  }
-
-  for (let i = sourceIndex; i < targetIndex + 1; i++) {
-    const task = taskList[i];
-    const taskBeforeOrderIndex = taskListOrderIndex[i - 1];
-    task[sortBy].orderIndex = taskBeforeOrderIndex;
-    if (task.id !== sourceItem.id) {
-      taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
-    }
-  }
-  sourceItem[sortBy].orderIndex = targetItemPosition;
-}
-
 /* 
+// minimal product
     type Item = { id: number; position: number };
 
     const arr: Item[] = [

@@ -77,15 +77,14 @@ public class TaskService {
         // Task drop into a different column
         // publish task update event
         var taskEvents = sourceTask.get().taskEvents();
-        if (!CollectionUtils.isEmpty(taskEvents)) {
-            var updateEventDTO = taskEvents.get(0);
-            updateEventDTO.setUserId(userId);
-            updateEventDTO.setUsername(username);
+        if (taskEvents != null) {
+            taskEvents.setUserId(userId);
+            taskEvents.setUsername(username);
 
             rabbitMQMessageProducer.publish(
                 internalExchange,
                 taskEventRoutingKey,
-                updateEventDTO
+                taskEvents
             );
         }
 
@@ -128,8 +127,6 @@ public class TaskService {
     }
 
     public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {
-        // Update other tasks position
-        taskRepository.saveAll(Task.setTaskForWatcher(tasksForUpdate));
         // Delete the task in question
         taskRepository.deleteById(taskId);
         return true;
