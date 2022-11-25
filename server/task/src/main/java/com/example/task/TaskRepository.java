@@ -16,17 +16,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query(nativeQuery = true, value = "SELECT title FROM task WHERE id = :id")
     String getTaskTitle(@Param("id") Integer id);
 
-    // @Query(
-    //     nativeQuery = true,
-    //     value = "UPDATE taskDueDatePosition SET order_index = : orderIndex" +
-    //     " WHERE task_id = :taskId"
-    // )
-    // @Modifying(clearAutomatically = true)
-    // Integer updateTaskStatusPosition(
-    //     @Param("taskId") Integer taskId,
-    //     @Param("orderIndex") Integer orderIndex
-    // );
-
     @Query(
         nativeQuery = true,
         value = "UPDATE task" +

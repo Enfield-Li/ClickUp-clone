@@ -7,7 +7,7 @@ import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.TaskPositionDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -22,11 +22,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
+    private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
@@ -63,19 +65,19 @@ public class TaskService {
         var userId = userInfo.userId();
         var username = userInfo.username();
 
-        // When updating sourceTask, a new event will be created for it
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
 
         // Find sourceTask
         var sourceTask = taskDtoList
             .stream()
-            .filter(task -> task.id() == sourceTaskId)
+            .filter(task -> task.taskId() == sourceTaskId)
             .findFirst();
 
+        // Task drop into a different column
         // publish task update event
         var taskEvents = sourceTask.get().taskEvents();
-        if (!taskEvents.isEmpty()) {
+        if (!CollectionUtils.isEmpty(taskEvents)) {
             var updateEventDTO = taskEvents.get(0);
             updateEventDTO.setUserId(userId);
             updateEventDTO.setUsername(username);
@@ -87,14 +89,41 @@ public class TaskService {
             );
         }
 
-        // DTO to entity
-        var tasks = new ArrayList<Task>();
+        var statusTableName = "status_position";
+        var dueDateTableName = "due_date_position";
+        var priorityTableName = "priority_position";
+
+        // update position
         taskDtoList.forEach(taskDTO -> {
-            var task = Task.convertFromUpdateTaskDto(taskDTO);
-            tasks.add(task);
+            if (taskDTO.status() != null) {
+                taskMapper.updateTaskPosition(
+                    taskDTO.status().getId(),
+                    statusTableName,
+                    taskDTO.status().getOrderIndex()
+                );
+            } else if (taskDTO.dueDate() != null) {
+                var isSourceTaskExpectedDueDateUpdated =
+                    taskDTO.expectedDueDate() != null &&
+                    taskDTO.taskId() == sourceTaskId;
+                if (isSourceTaskExpectedDueDateUpdated) {
+                    taskMapper.updateTaskExpectedDueDate(
+                        taskDTO.expectedDueDate()
+                    );
+                }
+                taskMapper.updateTaskPosition(
+                    taskDTO.dueDate().getId(),
+                    dueDateTableName,
+                    taskDTO.dueDate().getOrderIndex()
+                );
+            } else if (taskDTO.priority() != null) {
+                taskMapper.updateTaskPosition(
+                    taskDTO.priority().getId(),
+                    priorityTableName,
+                    taskDTO.priority().getOrderIndex()
+                );
+            }
         });
 
-        taskRepository.saveAll(tasks);
         return true;
     }
 

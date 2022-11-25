@@ -3,7 +3,7 @@ package com.example.task;
 import static com.example.clients.UrlConstants.*;
 import static com.example.task.config.Constants.*;
 
-import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.TaskPositionDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;

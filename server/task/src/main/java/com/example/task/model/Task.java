@@ -1,12 +1,13 @@
 package com.example.task.model;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 
-import com.example.task.dto.UpdateTaskDTO;
+import com.example.task.dto.TaskPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
-import com.example.task.model.taskPosition.TaskDueDatePosition;
-import com.example.task.model.taskPosition.TaskPriorityPosition;
-import com.example.task.model.taskPosition.TaskStatusPosition;
+import com.example.task.model.taskPosition.DueDatePosition;
+import com.example.task.model.taskPosition.PriorityPosition;
+import com.example.task.model.taskPosition.StatusPosition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -54,8 +55,8 @@ public class Task {
 
     @NotNull
     @JoinColumn(name = "statusId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private TaskStatusPosition status;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private StatusPosition status;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
@@ -63,8 +64,8 @@ public class Task {
 
     @NotNull
     @JoinColumn(name = "priorityId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private TaskPriorityPosition priority;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private PriorityPosition priority;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
@@ -72,8 +73,8 @@ public class Task {
 
     @NotNull
     @JoinColumn(name = "dueDateId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private TaskDueDatePosition dueDate;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private DueDatePosition dueDate;
 
     private Date expectedDueDate;
 
@@ -130,9 +131,9 @@ public class Task {
 
     public Task(
         @NotNull String title,
-        @NotNull TaskStatusPosition status,
-        @NotNull TaskPriorityPosition priority,
-        @NotNull TaskDueDatePosition dueDate,
+        @NotNull StatusPosition status,
+        @NotNull PriorityPosition priority,
+        @NotNull DueDatePosition dueDate,
         @NotNull Participant creator,
         @NotNull Set<Participant> watchers
     ) {
@@ -153,25 +154,6 @@ public class Task {
     //     watchers.remove(userInfo);
     //     userInfo.setTaskWatcher(null);
     // }
-
-    public static Task convertFromUpdateTaskDto(UpdateTaskDTO updateTaskDTO) {
-        var task = Task
-            .builder()
-            .id(updateTaskDTO.id())
-            .creator(updateTaskDTO.creator())
-            .title(updateTaskDTO.title())
-            .status(updateTaskDTO.status())
-            .dueDate(updateTaskDTO.dueDate())
-            .priority(updateTaskDTO.priority())
-            .description(updateTaskDTO.description())
-            .expectedDueDate(updateTaskDTO.expectedDueDate())
-            .watchers(updateTaskDTO.watchers())
-            .assignees(updateTaskDTO.assignees())
-            .build();
-
-        setTaskForWatcher(task); // Manage relationship
-        return task;
-    }
 
     public static Task convertFromCreateTaskDto(
         CreateTaskDTO createTaskDTO,
@@ -211,6 +193,7 @@ public class Task {
                 }
                 watcher.setTaskWatcher(task);
             });
+
         return task;
     }
 

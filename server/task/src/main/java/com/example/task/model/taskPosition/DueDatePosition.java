@@ -12,4 +12,4 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class TaskDueDatePosition extends Position<String> {}
+public class DueDatePosition extends Position<String> {}

@@ -12,4 +12,4 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class TaskStatusPosition extends Position<String> {}
+public class PriorityPosition extends Position<Priority> {}

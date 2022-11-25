@@ -7,11 +7,11 @@ import {
   SortBy,
   TargetColumnAndId,
   Task,
-  TaskDueDatePosition,
+  DueDatePosition,
   TaskList,
-  TaskPriorityPosition,
+  PriorityPosition,
   TaskState,
-  TaskStatusPosition,
+  StatusPosition,
   UndeterminedColumn,
   UndeterminedColumns,
   UserInfo,
@@ -53,8 +53,8 @@ export async function createNewTask(
     status,
     priority
   );
+  setOtherColumnPosition(targetColumnAndId, taskState, newTask);
 
-  updateTaskOnTargetColumnAndId(targetColumnAndId, taskState, newTask);
   // network call
   const createdTask = await createTask(newTask);
 
@@ -99,7 +99,7 @@ export function setCurrentTaskAttribute(
     : 1;
 }
 
-export function updateTaskOnTargetColumnAndId(
+export function setOtherColumnPosition(
   targetColumnAndId: TargetColumnAndId,
   taskState: TaskState,
   task: Task
@@ -221,21 +221,21 @@ export function newCreator(userId: number, username: string): UserInfo {
   return { userId, username };
 }
 
-function newTaskStatusPosition(): TaskStatusPosition {
+function newTaskStatusPosition(): StatusPosition {
   return {
     name: "",
     columnId: -1,
     orderIndex: -1,
   };
 }
-function newTaskPriorityPosition(): TaskPriorityPosition {
+function newTaskPriorityPosition(): PriorityPosition {
   return {
     name: Priority.NO_PRIORITY,
     columnId: 1,
     orderIndex: -1,
   };
 }
-function newTaskDueDatePosition(): TaskDueDatePosition {
+function newTaskDueDatePosition(): DueDatePosition {
   return {
     name: DueDateRange.NO_DUE_DATE,
     columnId: 1,

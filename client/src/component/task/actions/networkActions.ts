@@ -66,17 +66,18 @@ export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
   console.log(deepCopy(updateTasksPositionDTO));
-  //   try {
-  //     const response = await axiosInstance.put<boolean>(
-  //       API_ENDPOINT.TASK,
-  //       deepCopy(updateTasksPositionDTO)
-  //     );
+//   try {
+//     const response = await axiosInstance.put<boolean>(
+//       API_ENDPOINT.TASK,
+//       deepCopy(updateTasksPositionDTO)
+//     );
+//     console.log({ data: response.data });
 
-  //     // return response.data;
-  //   } catch (error) {
-  //     const err = error as AxiosError;
-  //     console.log(err);
-  //   }
+//     // return response.data;
+//   } catch (error) {
+//     const err = error as AxiosError;
+//     console.log(err);
+//   }
 }
 
 export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {

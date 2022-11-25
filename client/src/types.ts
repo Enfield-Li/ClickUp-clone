@@ -126,18 +126,18 @@ export interface Position<T> {
   orderIndex: number;
 }
 
-export type TaskStatusPosition = Position<string>;
-export type TaskDueDatePosition = Position<DueDate>;
-export type TaskPriorityPosition = Position<Priority>;
+export type StatusPosition = Position<string>;
+export type DueDatePosition = Position<DueDate>;
+export type PriorityPosition = Position<Priority>;
 export type UndeterminedPosition =
-  | TaskStatusPosition
-  | TaskDueDatePosition
-  | TaskPriorityPosition;
+  | StatusPosition
+  | DueDatePosition
+  | PriorityPosition;
 
 interface TaskPositions {
-  status: TaskStatusPosition;
-  dueDate: TaskDueDatePosition;
-  priority: TaskPriorityPosition;
+  status: StatusPosition;
+  dueDate: DueDatePosition;
+  priority: PriorityPosition;
 }
 
 export interface Task {
@@ -156,9 +156,9 @@ export interface Task {
   assignees: UserInfo[];
   taskEvents: TaskEvent[];
 
-  status: TaskStatusPosition;
-  dueDate: TaskDueDatePosition;
-  priority: TaskPriorityPosition;
+  status: StatusPosition;
+  dueDate: DueDatePosition;
+  priority: PriorityPosition;
 
   // Keep previousTask record when set to finish
   taskStateInMain?: TaskPositions;
@@ -201,10 +201,20 @@ export type TargetColumnAndId = {
 };
 export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
 
-export type UpdateTasksPositionDTO = {
+export interface TaskPositionDTO {
+  taskId: number;
+  status?: StatusPosition;
+  dueDate?: DueDatePosition;
+  priority?: PriorityPosition;
+  expectedDueDate: Date | null;
+}
+
+export type TaskPositionDTOList = TaskPositionDTO[];
+
+export interface UpdateTasksPositionDTO {
   sourceTaskId: number;
-  taskDtoList: TaskList;
-};
+  taskDtoList: TaskPositionDTOList;
+}
 
 export interface UpdateTaskTitleDTO {
   taskId: number;
