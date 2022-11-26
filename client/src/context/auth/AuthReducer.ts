@@ -1,4 +1,4 @@
-import { AuthStateType, AuthActionType, AUTH_ACTION } from "./AuthContextTypes";
+import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
 
 export default function authReducer(
   taskState: AuthStateType,

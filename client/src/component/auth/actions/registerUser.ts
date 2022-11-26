@@ -1,15 +1,15 @@
 import { AxiosError } from "axios";
 import React from "react";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
+import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {
   Credentials,
   AuthActionType,
   UserResponse,
   AUTH_ACTION,
   LogInError,
-} from "../../../context/auth/AuthContextTypes";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
-import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
+} from "../../../types";
 
 export async function registerUser(
   credentials: Credentials,

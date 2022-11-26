@@ -15,6 +15,7 @@ import {
   UpdateEvent,
   UpdateTasksPositionDTO,
 } from "../../types";
+import { useLocalTasks } from "../../useLocalState/useLocalState";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
 import { updateTasksPosition } from "./actions/networkActions";
@@ -31,8 +32,8 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
-  const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
-  //   const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
+  //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
+  const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   console.log(taskState);
 

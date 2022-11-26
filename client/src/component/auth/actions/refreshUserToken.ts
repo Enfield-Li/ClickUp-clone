@@ -6,7 +6,7 @@ import {
   AuthActionType,
   UserResponse,
   AUTH_ACTION,
-} from "../../../context/auth/AuthContextTypes";
+} from "../../../AuthContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
 

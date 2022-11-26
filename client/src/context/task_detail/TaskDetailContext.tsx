@@ -4,7 +4,7 @@ import { Task } from "../../types";
 import {
   TaskDetailContextType,
   TaskStateContext,
-} from "./TaskDetailContextTypes";
+} from "./TaskDetailContextType";
 
 export const taskDetailContext = createContext<TaskDetailContextType | null>(
   null

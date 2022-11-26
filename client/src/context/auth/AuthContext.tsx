@@ -1,5 +1,5 @@
 import { createContext, useReducer } from "react";
-import { authInitialState, AuthContextType } from "./AuthContextTypes";
+import { AuthContextType, authInitialState } from "../../types";
 import authReducer from "./AuthReducer";
 
 export const AuthContext = createContext<AuthContextType | null>(null);

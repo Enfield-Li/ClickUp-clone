@@ -5,7 +5,7 @@ type Props = {};
 export default function SubNavbar({}: Props) {
   return (
     <Box>
-      <Box></Box>
+      <Box>abc</Box>
     </Box>
   );
 }

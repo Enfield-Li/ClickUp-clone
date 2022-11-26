@@ -12,7 +12,7 @@ import {
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Credentials, FieldErrors } from "../../context/auth/AuthContextTypes";
+import { Credentials, FieldErrors } from "../../AuthContextTypes";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { CLIENT_ROUTE } from "../../constant";
 import { registerUser } from "./actions/registerUser";

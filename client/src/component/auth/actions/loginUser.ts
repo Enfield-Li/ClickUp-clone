@@ -1,16 +1,16 @@
 import { API_ENDPOINT } from "../../../constant";
 import { AxiosError } from "axios";
 import React from "react";
-import {
-  AuthActionType,
-  AUTH_ACTION,
-  Credentials,
-  LogInError,
-  UserResponse,
-} from "../../../context/auth/AuthContextTypes";
 import { ACCESS_TOKEN } from "../../../constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import {
+  Credentials,
+  AuthActionType,
+  UserResponse,
+  AUTH_ACTION,
+  LogInError,
+} from "../../../types";
 
 export async function loginUser(
   credentials: Credentials,

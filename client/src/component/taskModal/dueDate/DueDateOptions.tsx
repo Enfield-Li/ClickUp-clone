@@ -1,6 +1,6 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import { AuthStateType } from "../../../context/auth/AuthContextTypes";
+import { AuthStateType } from "../../../AuthContextTypes";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import {
