@@ -11,15 +11,13 @@ export default function authReducer(
         user: {
           id: action.payload.id,
           username: action.payload.username,
+          spaces: action.payload.spaces,
         },
       };
     }
 
     case AUTH_ACTION.LOGOUT_USER: {
-      return {
-        ...taskState,
-        user: undefined,
-      };
+      return { user: null };
     }
 
     default: {

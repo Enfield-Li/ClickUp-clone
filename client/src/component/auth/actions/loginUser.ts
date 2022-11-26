@@ -25,12 +25,10 @@ export async function loginUser(
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
 
-    const user = { id: response.data.id, username: response.data.username };
-
     // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
-      payload: user,
+      payload: response.data,
     });
 
     toast({

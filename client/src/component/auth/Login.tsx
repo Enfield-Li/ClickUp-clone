@@ -13,13 +13,14 @@ import {
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Credentials, FieldErrors } from "../../AuthContextTypes";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { CLIENT_ROUTE } from "../../constant";
 import { loginUser } from "./actions/loginUser";
+import { Credentials, FieldErrors } from "../../types";
 
 type Props = {};
 
+export default memo(Login);
 function Login({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
@@ -102,5 +103,3 @@ function Login({}: Props) {
     </Center>
   );
 }
-
-export default memo(Login);

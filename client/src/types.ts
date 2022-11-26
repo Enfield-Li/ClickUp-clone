@@ -49,6 +49,7 @@ interface Column<T> {
   id: number;
   title: T;
   color: string;
+  listId: number;
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<Status> {
@@ -143,6 +144,7 @@ interface TaskPositions {
 export interface Task {
   id?: number;
   title: string;
+  listId: number;
   createdAt?: Date;
   updatedAt?: Date;
   archived?: boolean;
@@ -228,7 +230,7 @@ export interface UpdateTaskDescDTO {
 }
 
 // auth
-export const authInitialState: AuthStateType = {};
+export const authInitialState: AuthStateType = { user: null };
 
 export type AuthContextType = {
   authState: AuthStateType;
@@ -236,7 +238,7 @@ export type AuthContextType = {
 };
 
 export type AuthStateType = {
-  user?: User;
+  user: User | null;
 };
 
 export type Credentials = {
@@ -257,16 +259,46 @@ export type LogInError = {
   errors: FieldError[];
 };
 
-export type User = {
+export interface List {
   id: number;
-  username: string;
-};
+  name: string;
+  spaceId: number;
+  owner: UserInfo;
+  createdAt: Date;
+  isPrivate: boolean;
+  member: UserInfo[];
+  taskAmount: number;
 
-export type UserResponse = {
+  subList: List[];
+  parentList: List | null;
+  allStatuses: StatusColumns;
+
+  //   boardViewSetting?: string;
+  //   listViewSetting?: string;
+}
+
+export interface Space {
   id: number;
+  name: string;
+  color: string;
+  isOpen: boolean;
+  isPrivate: boolean;
+  orderIndex: number;
+  allList: List[]; // client side
+}
+
+export interface User {
+  id: number;
+  spaces: Space[];
+  username: string;
+}
+
+export interface UserResponse {
+  id: number;
+  spaces: Space[];
   username: string;
   accessToken: string;
-};
+}
 
 export type AuthActionType = LogInUser | LogOutUser;
 

@@ -4,40 +4,93 @@ import {
   DueDateRange,
   Priority,
   TaskList,
+  User,
+  UserInfo,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
+const statusColumns = [
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
+  {
+    id: 2,
+    title: "IN_PROGRESS",
+    color: "purple.400",
+    orderIndex: 2,
+    listId: 1,
+  },
+];
+
+const userInfo: UserInfo = { userId: 1, username: "mockUser" };
+
+export const mockUser: User = {
+  id: 1,
+  username: "mockUser",
+  spaces: [
+    {
+      id: 1,
+      isOpen: false,
+      name: "space",
+      orderIndex: 1,
+      color: "green",
+      isPrivate: false,
+      allList: [
+        {
+          id: 1,
+          allStatuses: statusColumns,
+          createdAt: new Date(),
+          isPrivate: false,
+          member: [],
+          name: "list1",
+          owner: userInfo,
+          parentList: null,
+          spaceId: 1,
+          subList: [],
+          taskAmount: 5,
+        },
+      ],
+    },
+  ],
+};
+
 export const mockColumnOptions: ColumnOptions = {
   statusColumns: [
-    { id: 1, title: "TO DO", color: "blue.300", orderIndex: 1 },
-    { id: 3, title: "DONE", color: "green.400", orderIndex: 3 },
-    { id: 2, title: "IN PROGRESS", color: "purple.400", orderIndex: 2 },
+    { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
+    { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
+    {
+      id: 2,
+      title: "IN_PROGRESS",
+      color: "purple.400",
+      orderIndex: 2,
+      listId: 1,
+    },
   ],
   priorityColumns: [
-    { id: 1, title: Priority.NO_PRIORITY, color: "gray.400" },
-    { id: 2, title: Priority.URGENT, color: "red.400" },
-    { id: 3, title: Priority.HIGH, color: "yellow.400" },
-    { id: 4, title: Priority.NORMAL, color: "blue.200" },
-    { id: 5, title: Priority.LOW, color: "gray.400" },
+    { id: 1, title: Priority.NO_PRIORITY, color: "gray.400", listId: 1 },
+    { id: 2, title: Priority.URGENT, color: "red.400", listId: 1 },
+    { id: 3, title: Priority.HIGH, color: "yellow.400", listId: 1 },
+    { id: 4, title: Priority.NORMAL, color: "blue.200", listId: 1 },
+    { id: 5, title: Priority.LOW, color: "gray.400", listId: 1 },
   ],
   dueDateColumns: [
-    { id: 1, title: DueDateRange.NO_DUE_DATE, color: "gray.400" },
-    { id: 2, title: DueDateRange.OVER_DUE, color: "gray.400" },
-    { id: 3, title: CurrentWeek.MONDAY, color: "gray.400" },
-    { id: 4, title: CurrentWeek.TUESDAY, color: "gray.400" },
-    { id: 5, title: CurrentWeek.WEDNESDAY, color: "gray.400" },
-    { id: 6, title: CurrentWeek.THURSDAY, color: "gray.400" },
-    { id: 7, title: CurrentWeek.FRIDAY, color: "gray.400" },
-    { id: 8, title: CurrentWeek.SATURDAY, color: "gray.400" },
-    { id: 9, title: CurrentWeek.SUNDAY, color: "gray.400" },
-    { id: 10, title: DueDateRange.FUTURE, color: "gray.400" },
+    { id: 1, title: DueDateRange.NO_DUE_DATE, color: "gray.400", listId: 1 },
+    { id: 2, title: DueDateRange.OVER_DUE, color: "gray.400", listId: 1 },
+    { id: 3, title: CurrentWeek.MONDAY, color: "gray.400", listId: 1 },
+    { id: 4, title: CurrentWeek.TUESDAY, color: "gray.400", listId: 1 },
+    { id: 5, title: CurrentWeek.WEDNESDAY, color: "gray.400", listId: 1 },
+    { id: 6, title: CurrentWeek.THURSDAY, color: "gray.400", listId: 1 },
+    { id: 7, title: CurrentWeek.FRIDAY, color: "gray.400", listId: 1 },
+    { id: 8, title: CurrentWeek.SATURDAY, color: "gray.400", listId: 1 },
+    { id: 9, title: CurrentWeek.SUNDAY, color: "gray.400", listId: 1 },
+    { id: 10, title: DueDateRange.FUTURE, color: "gray.400", listId: 1 },
   ],
 };
 
 export const mockTaskList: TaskList = [
   {
     id: 111,
-    creator: { userId: 1, username: "abc" },
+    listId: 1,
+    creator: userInfo,
     title: "11111",
     description: "desc here",
     expectedDueDate: null,
@@ -52,8 +105,9 @@ export const mockTaskList: TaskList = [
   },
   {
     id: 222,
+    listId: 1,
     title: "22222",
-    creator: { userId: 1, username: "abc" },
+    creator: userInfo,
     expectedDueDate: getNextNWeekDay(2),
     createdAt: getDaysBefore(4),
     watchers: [],
@@ -66,8 +120,9 @@ export const mockTaskList: TaskList = [
   },
   {
     id: 333,
+    listId: 1,
     title: "33333",
-    creator: { userId: 1, username: "abc" },
+    creator: userInfo,
     expectedDueDate: new Date(),
     createdAt: getDaysBefore(4),
     watchers: [],
@@ -80,8 +135,9 @@ export const mockTaskList: TaskList = [
   },
   {
     id: 444,
+    listId: 1,
     title: "44444",
-    creator: { userId: 1, username: "abc" },
+    creator: userInfo,
     expectedDueDate: new Date(),
     createdAt: getDaysBefore(4),
     watchers: [],
@@ -94,8 +150,9 @@ export const mockTaskList: TaskList = [
   },
   {
     id: 555,
+    listId: 1,
     title: "55555",
-    creator: { userId: 1, username: "abc" },
+    creator: userInfo,
     expectedDueDate: new Date(),
     createdAt: getDaysBefore(4),
     watchers: [],

@@ -66,15 +66,18 @@ function CreateTask({
         priority,
       };
 
-      const creator = newCreator(authState.user!.id!, authState.user!.username);
-      createNewTask(
+      const creator = newCreator({
+        userId: authState.user!.id!,
+        username: authState.user!.username,
+      });
+      createNewTask({
         sortBy,
         creator,
-        newTask,
         taskState,
         setTaskState,
-        currentColumn
-      );
+        currentColumn,
+        newTaskInput: newTask,
+      });
       continueCreateTask();
     }
   }

@@ -27,33 +27,47 @@ export type NewTask = {
   expectedDueDate: Date | null;
 };
 
-export async function createNewTask(
-  sortBy: SortBy,
-  creator: UserInfo,
-  newTaskInput: NewTask,
-  taskState: TaskState,
-  setTaskState: SetTaskState,
-  currentColumn: UndeterminedColumn
-) {
+interface CreateNewTaskParam {
+  sortBy: SortBy;
+  creator: UserInfo;
+  newTaskInput: NewTask;
+  taskState: TaskState;
+  setTaskState: SetTaskState;
+  currentColumn: UndeterminedColumn;
+}
+
+export async function createNewTask({
+  sortBy,
+  creator,
+  taskState,
+  newTaskInput,
+  setTaskState,
+  currentColumn,
+}: CreateNewTaskParam) {
   // Prepare newTask
   const { title, expectedDueDate, priority, status } = newTaskInput;
-  const newTask = newTaskFactory(creator, title, expectedDueDate);
+  const newTask = newTaskFactory({
+    creator,
+    title,
+    listId: currentColumn.listId,
+    expectedDueDate,
+  });
   const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
     taskState.columnOptions.dueDateColumns,
     expectedDueDate
   );
 
   // Set position under current column/sortBy
-  setCurrentTaskAttribute(newTask, sortBy, taskState, currentColumn);
+  setCurrentTaskAttribute({ newTask, sortBy, taskState, currentColumn });
 
   // set position for other sortBys'
-  const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId(
+  const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId({
     sortBy,
-    dueDateColumnId,
     status,
-    priority
-  );
-  setOtherColumnPosition(targetColumnAndId, taskState, newTask);
+    priority,
+    dueDateColumnId,
+  });
+  setOtherColumnPosition({ targetColumnAndId, taskState, task: newTask });
 
   // network call
   const createdTask = await createTask(newTask);
@@ -80,12 +94,18 @@ export async function createNewTask(
   );
 }
 
-export function setCurrentTaskAttribute(
-  newTask: Task,
-  sortBy: SortBy,
-  taskState: TaskState,
-  currentColumn: UndeterminedColumn
-) {
+interface SetCurrentTaskAttributeParam {
+  newTask: Task;
+  sortBy: SortBy;
+  taskState: TaskState;
+  currentColumn: UndeterminedColumn;
+}
+export function setCurrentTaskAttribute({
+  newTask,
+  sortBy,
+  taskState,
+  currentColumn,
+}: SetCurrentTaskAttributeParam) {
   const currentTaskList = taskState.orderedTasks.find(
     (orderedTaskList) => orderedTaskList.columnId === currentColumn.id
   );
@@ -99,11 +119,16 @@ export function setCurrentTaskAttribute(
     : 1;
 }
 
-export function setOtherColumnPosition(
-  targetColumnAndId: TargetColumnAndId,
-  taskState: TaskState,
-  task: Task
-) {
+interface SetOtherColumnPositionParam {
+  targetColumnAndId: TargetColumnAndId;
+  taskState: TaskState;
+  task: Task;
+}
+export function setOtherColumnPosition({
+  targetColumnAndId,
+  taskState,
+  task,
+}: SetOtherColumnPositionParam) {
   const numOfKeys = Object.entries(targetColumnAndId).length;
   for (let i = 0; i < numOfKeys; i++) {
     const stateColumnPair = Object.entries(targetColumnAndId)[i];
@@ -177,12 +202,18 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
   return taskList;
 }
 
-function newTargetStateColumnId(
-  sortBy: SortBy,
-  dueDateColumnId: number,
-  status?: number,
-  priority?: number
-) {
+interface NewTargetStateColumnIdParam {
+  sortBy: SortBy;
+  status?: number;
+  priority?: number;
+  dueDateColumnId: number;
+}
+function newTargetStateColumnId({
+  sortBy,
+  status,
+  priority,
+  dueDateColumnId,
+}: NewTargetStateColumnIdParam) {
   const targetColumn: TargetColumnAndId = {};
   if (sortBy === SortBy.STATUS) {
     targetColumn.dueDate = dueDateColumnId;
@@ -197,14 +228,22 @@ function newTargetStateColumnId(
   return targetColumn;
 }
 
-function newTaskFactory(
-  creator: UserInfo,
-  title: string,
-  expectedDueDate: Date | null
-): Task {
+interface NewTaskFactoryParam {
+  creator: UserInfo;
+  title: string;
+  listId: number;
+  expectedDueDate: Date | null;
+}
+function newTaskFactory({
+  creator,
+  title,
+  listId,
+  expectedDueDate,
+}: NewTaskFactoryParam): Task {
   return {
     id: Math.random(),
     title,
+    listId,
     expectedDueDate,
     taskEvents: [],
     watchers: [creator],
@@ -217,7 +256,11 @@ function newTaskFactory(
   };
 }
 
-export function newCreator(userId: number, username: string): UserInfo {
+interface newCreatorParam {
+  userId: number;
+  username: string;
+}
+export function newCreator({ userId, username }: newCreatorParam): UserInfo {
   return { userId, username };
 }
 

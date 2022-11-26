@@ -1,21 +1,11 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import { AuthStateType } from "../../../AuthContextTypes";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import {
-  DueDateColumn,
-  DueDateRange,
-  SetTaskState,
-  SortBy,
-  Task,
-} from "../../../types";
+import { DueDateColumn, DueDateRange, SortBy, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
-import {
-  newUpdateEvent,
-  updateTaskAttribute,
-} from "../../task/actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;

@@ -1,15 +1,9 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
-import useGlobalContext from "../context/global/useGlobalContext";
-import useAuthContext from "../context/auth/useAuthContext";
 import { useNavigate } from "react-router-dom";
-import {
-  getLookUpDueDateTable,
-  calculateDueDateInThisWeek,
-} from "../component/task/actions/columnProcessing";
-import { getMonthAndDay } from "../utils/getWeekDays";
-import { refreshUserToken } from "../component/auth/actions/refreshUserToken";
+import { ACCESS_TOKEN } from "../constant";
+import useAuthContext from "../context/auth/useAuthContext";
+import useGlobalContext from "../context/global/useGlobalContext";
 
 export default function useInit() {
   const navigate = useNavigate();
@@ -19,7 +13,10 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    authDispatch({ type: "LOGIN_USER", payload: { id: 3, username: "user" } });
+    authDispatch({
+      type: "LOGIN_USER",
+      payload: { id: 3, username: "user", spaces: [] },
+    });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);
     //   setInterval(() => {
@@ -29,14 +26,4 @@ export default function useInit() {
     //   navigate(CLIENT_ROUTE.LOGIN);
     // }
   }, []);
-
-  // toast for indicating network error
-  useEffect(() => {
-    if (globalState.error)
-      toast({
-        title: "Something's gone wrong...",
-        description: globalState.error,
-        status: "error",
-      });
-  }, [globalState.error]);
 }
