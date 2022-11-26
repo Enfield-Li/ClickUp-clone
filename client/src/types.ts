@@ -269,12 +269,11 @@ export interface List {
   member: UserInfo[];
   taskAmount: number;
 
-  subList: List[];
   parentList: List | null;
   allStatuses: StatusColumns;
 
-  //   boardViewSetting?: string;
-  //   listViewSetting?: string;
+  //   boardViewSetting?:
+  //   listViewSetting?:
 }
 
 export interface Space {

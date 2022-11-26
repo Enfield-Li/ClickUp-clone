@@ -1,16 +1,26 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
-  groupTaskListOnSortBy,
   collectAllTasks,
+  groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { ColumnOptions, SortBy, TaskState } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
-import { mockColumnOptions, mockTaskList } from "./mockData";
+import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
+import {
+  space1TaskList,
+  staticColumnOptions,
+  space1StatusColumns,
+  space2StatusColumns,
+  space2TaskList,
+} from "./mockData";
 
-export function useLocalTasks(sortBy: SortBy) {
+interface UseLocalTasksParam {
+  sortBy: SortBy;
+  spaceId: number;
+}
+export function useLocalTasks({ sortBy, spaceId }: UseLocalTasksParam) {
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const { task, setTask, taskStateContext, setTaskStateContext } =
@@ -21,8 +31,15 @@ export function useLocalTasks(sortBy: SortBy) {
 
     function initLocalState() {
       setLoading(true);
-      const columnDataFromApi = mockColumnOptions;
 
+      const statusColumnsDataFromApi: StatusColumns =
+        spaceId === 1 ? space1StatusColumns : space2StatusColumns;
+
+      const columnDataFromApi: ColumnOptions = {
+        dueDateColumns: staticColumnOptions.dueDateColumns,
+        priorityColumns: staticColumnOptions.priorityColumns,
+        statusColumns: statusColumnsDataFromApi,
+      };
       const { reorderedDueDateColumns, reorderedStatusColumns } =
         initColumns(columnDataFromApi);
 
@@ -32,8 +49,13 @@ export function useLocalTasks(sortBy: SortBy) {
         statusColumns: reorderedStatusColumns,
       };
 
+      const listDataFromApi = spaceId === 1 ? space1TaskList : space2TaskList;
+
       // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processTaskList(reorderedDueDateColumns, mockTaskList);
+      const taskList = processTaskList(
+        reorderedDueDateColumns,
+        listDataFromApi
+      );
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
@@ -46,7 +68,7 @@ export function useLocalTasks(sortBy: SortBy) {
 
       setLoading(false);
     }
-  }, []);
+  }, [spaceId]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

@@ -15,7 +15,7 @@ import {
   UpdateEvent,
   UpdateTasksPositionDTO,
 } from "../../types";
-import { useLocalTasks } from "../../useLocalState/useLocalState";
+import { useLocalTasks } from "../../hook/useLocalState";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
 import { updateTasksPosition } from "./actions/networkActions";
@@ -25,6 +25,7 @@ import {
 } from "./actions/taskProcessing";
 import Column from "./Column";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
+import { useParams } from "react-router-dom";
 
 type Props = {
   sortBy: SortBy;
@@ -32,8 +33,13 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
+  const param = useParams();
+  const spaceId = Number(param.id);
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
-  const { taskState: taskState, loading, setTaskState } = useLocalTasks(sortBy);
+  const { taskState, loading, setTaskState } = useLocalTasks({
+    sortBy,
+    spaceId,
+  });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   console.log(taskState);
 

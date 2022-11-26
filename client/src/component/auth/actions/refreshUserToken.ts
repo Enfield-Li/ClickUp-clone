@@ -2,13 +2,9 @@ import { AxiosError } from "axios";
 import React from "react";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { NavigateFunction } from "react-router-dom";
-import {
-  AuthActionType,
-  UserResponse,
-  AUTH_ACTION,
-} from "../../../AuthContextTypes";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
+import { AuthActionType, UserResponse, AUTH_ACTION } from "../../../types";
 
 export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
@@ -23,12 +19,10 @@ export async function refreshUserToken(
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
 
-    const user = { id: response.data.id, username: response.data.username };
-
     // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
-      payload: user,
+      payload: response.data,
     });
   } catch (error) {
     const err = error as AxiosError;

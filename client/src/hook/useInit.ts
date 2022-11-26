@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
 import useGlobalContext from "../context/global/useGlobalContext";
+import { mockUser } from "./mockData";
 
 export default function useInit() {
   const navigate = useNavigate();
@@ -13,10 +14,7 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    authDispatch({
-      type: "LOGIN_USER",
-      payload: { id: 3, username: "user", spaces: [] },
-    });
+    authDispatch({ type: "LOGIN_USER", payload: mockUser });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);
     //   setInterval(() => {

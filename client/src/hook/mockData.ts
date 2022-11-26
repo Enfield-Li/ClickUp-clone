@@ -2,14 +2,21 @@ import {
   ColumnOptions,
   CurrentWeek,
   DueDateRange,
+  List,
   Priority,
+  StatusColumns,
   TaskList,
   User,
   UserInfo,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
-const statusColumns = [
+export const space2StatusColumns: StatusColumns = [
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
+];
+
+export const space1StatusColumns: StatusColumns = [
   { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
   {
@@ -22,6 +29,37 @@ const statusColumns = [
 ];
 
 const userInfo: UserInfo = { userId: 1, username: "mockUser" };
+const guestUserInfo: UserInfo = { userId: 1, username: "mockUser" };
+
+export const allSpace1List: List[] = [
+  {
+    id: 1,
+    allStatuses: space1StatusColumns,
+    createdAt: new Date(),
+    isPrivate: false,
+    member: [userInfo, guestUserInfo],
+    name: "list1",
+    owner: userInfo,
+    parentList: null,
+    spaceId: 1,
+    taskAmount: 5,
+  },
+];
+
+const allSpace2List: List[] = [
+  {
+    id: 2,
+    allStatuses: space1StatusColumns,
+    createdAt: new Date(),
+    isPrivate: true,
+    member: [userInfo, guestUserInfo],
+    name: "list2",
+    owner: userInfo,
+    parentList: null,
+    spaceId: 2,
+    taskAmount: 0,
+  },
+];
 
 export const mockUser: User = {
   id: 1,
@@ -29,42 +67,27 @@ export const mockUser: User = {
   spaces: [
     {
       id: 1,
-      isOpen: false,
+      isOpen: true,
       name: "space",
       orderIndex: 1,
       color: "green",
       isPrivate: false,
-      allList: [
-        {
-          id: 1,
-          allStatuses: statusColumns,
-          createdAt: new Date(),
-          isPrivate: false,
-          member: [],
-          name: "list1",
-          owner: userInfo,
-          parentList: null,
-          spaceId: 1,
-          subList: [],
-          taskAmount: 5,
-        },
-      ],
+      allList: allSpace1List,
+    },
+    {
+      id: 2,
+      isOpen: false,
+      name: "space2",
+      orderIndex: 2,
+      color: "yellow",
+      isPrivate: true,
+      allList: allSpace2List,
     },
   ],
 };
 
-export const mockColumnOptions: ColumnOptions = {
-  statusColumns: [
-    { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
-    { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
-    {
-      id: 2,
-      title: "IN_PROGRESS",
-      color: "purple.400",
-      orderIndex: 2,
-      listId: 1,
-    },
-  ],
+export const staticColumnOptions: ColumnOptions = {
+  statusColumns: [],
   priorityColumns: [
     { id: 1, title: Priority.NO_PRIORITY, color: "gray.400", listId: 1 },
     { id: 2, title: Priority.URGENT, color: "red.400", listId: 1 },
@@ -86,7 +109,7 @@ export const mockColumnOptions: ColumnOptions = {
   ],
 };
 
-export const mockTaskList: TaskList = [
+export const space1TaskList: TaskList = [
   {
     id: 111,
     listId: 1,
@@ -152,6 +175,85 @@ export const mockTaskList: TaskList = [
     id: 555,
     listId: 1,
     title: "55555",
+    creator: userInfo,
+    expectedDueDate: new Date(),
+    createdAt: getDaysBefore(4),
+    watchers: [],
+    assignees: [],
+    taskEvents: [],
+    subTasks: [],
+    status: { name: "IN PROGRESS", columnId: 2, orderIndex: 1 },
+    priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 5 },
+    dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 5 },
+  },
+];
+
+export const space2TaskList: TaskList = [
+  {
+    id: 1111,
+    listId: 1,
+    creator: userInfo,
+    title: "1",
+    description: "desc here",
+    expectedDueDate: null,
+    createdAt: getDaysBefore(11),
+    watchers: [],
+    assignees: [],
+    subTasks: [],
+    taskEvents: [],
+    status: { name: "TO DO", columnId: 1, orderIndex: 1 },
+    priority: { name: Priority.HIGH, columnId: 3, orderIndex: 3 },
+    dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 1 },
+  },
+  {
+    id: 2222,
+    listId: 1,
+    title: "2",
+    creator: userInfo,
+    expectedDueDate: getNextNWeekDay(2),
+    createdAt: getDaysBefore(4),
+    watchers: [],
+    assignees: [],
+    taskEvents: [],
+    subTasks: [],
+    status: { name: "TO DO", columnId: 1, orderIndex: 2 },
+    priority: { name: Priority.HIGH, columnId: 3, orderIndex: 2 },
+    dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 3 },
+  },
+  {
+    id: 3333,
+    listId: 1,
+    title: "3",
+    creator: userInfo,
+    expectedDueDate: new Date(),
+    createdAt: getDaysBefore(4),
+    watchers: [],
+    assignees: [],
+    taskEvents: [],
+    subTasks: [],
+    status: { name: "TO DO", columnId: 1, orderIndex: 3 },
+    priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 2 },
+    dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 2 },
+  },
+  {
+    id: 4444,
+    listId: 1,
+    title: "4",
+    creator: userInfo,
+    expectedDueDate: new Date(),
+    createdAt: getDaysBefore(4),
+    watchers: [],
+    assignees: [],
+    taskEvents: [],
+    subTasks: [],
+    status: { name: "TO DO", columnId: 1, orderIndex: 4 },
+    priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 4 },
+    dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 4 },
+  },
+  {
+    id: 5555,
+    listId: 1,
+    title: "5",
     creator: userInfo,
     expectedDueDate: new Date(),
     createdAt: getDaysBefore(4),

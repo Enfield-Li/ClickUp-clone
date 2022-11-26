@@ -11,7 +11,7 @@ import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
 import useGlobalContext from "../context/global/useGlobalContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
-import { mockColumnOptions } from "../useLocalState/mockData";
+import { staticColumnOptions } from "./mockData";
 import { sleep } from "../utils/sleep";
 import { useToast } from "@chakra-ui/react";
 
@@ -84,7 +84,7 @@ export function useFetchTasks(sortBy: SortBy) {
     );
 
     if (tasksData) {
-      const columnDataFromApi = mockColumnOptions;
+      const columnDataFromApi = staticColumnOptions;
 
       const { reorderedDueDateColumns, reorderedStatusColumns } =
         initColumns(columnDataFromApi);
