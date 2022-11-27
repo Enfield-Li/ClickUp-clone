@@ -6,7 +6,7 @@ import {
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { CLIENT_ROUTE } from "../constant";
+import { CLIENT_ROUTE, TASK_BOARD_PARAM } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
@@ -24,7 +24,7 @@ interface UseLocalTasksParam {
 }
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
-  let spaceId = Number(param.id);
+  let spaceId = Number(param[`${TASK_BOARD_PARAM}`]);
 
   const navigate = useNavigate();
   const { authState } = useAuthContext();

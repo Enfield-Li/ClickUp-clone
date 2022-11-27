@@ -30,6 +30,9 @@ export const API_ENDPOINT = {
   TASK_EVENT: TASK_EVENT_API_VERSION,
 };
 
+export const TASK_PARAM = "taskId";
+export const TASK_BOARD_PARAM = "listId";
+
 // Client route
 export const CLIENT_ROUTE = {
   HOME: "/",
