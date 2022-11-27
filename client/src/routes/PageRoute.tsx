@@ -19,11 +19,17 @@ export default function PageRoute({}: Props) {
       <Route
         path={CLIENT_ROUTE.TASK_BOARD + `/:${TASK_BOARD_PARAM}`}
         element={<TaskView />}
-      />
-      <Route
-        path={CLIENT_ROUTE.TASK + `/:${TASK_PARAM}`}
-        element={<TaskDetailModal />}
-      />
+      >
+        <Route
+          path={
+            CLIENT_ROUTE.TASK_BOARD +
+            `/:${TASK_BOARD_PARAM}` +
+            CLIENT_ROUTE.TASK +
+            `/:${TASK_PARAM}`
+          }
+          element={<TaskDetailModal />}
+        />
+      </Route>
       <Route path={CLIENT_ROUTE.REGISTER} element={<Register />} />
       <Route path={CLIENT_ROUTE.TEST_DEV} element={<TestDev />} />
     </Routes>

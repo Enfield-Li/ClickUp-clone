@@ -37,7 +37,7 @@ function OptionWrapper({
 
         {/* Option name */}
         <Box fontSize="smaller" fontWeight="bold">
-          {optionName}
+          {optionName.replaceAll("_", " ")}
         </Box>
       </Flex>
     </Box>

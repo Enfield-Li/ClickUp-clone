@@ -109,7 +109,7 @@ function SelectStatusIcons({}: Props) {
                 {/* Choose status */}
                 <PopoverTrigger>
                   <Box color="white" fontWeight="bold">
-                    {column?.title}
+                    {column?.title.replaceAll("_", " ")}
                   </Box>
                 </PopoverTrigger>
 
