@@ -1,35 +1,59 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
+import { CLIENT_ROUTE } from "../constant";
+import useAuthContext from "../context/auth/useAuthContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 import {
-  space1TaskList,
-  staticColumnOptions,
   space1StatusColumns,
+  space1TaskList,
   space2StatusColumns,
   space2TaskList,
+  staticColumnOptions,
 } from "./mockData";
 
 interface UseLocalTasksParam {
   sortBy: SortBy;
-  spaceId: number;
 }
-export function useLocalTasks({ sortBy, spaceId }: UseLocalTasksParam) {
-  const [taskState, setTaskState] = useState<TaskState>();
+export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
+  const param = useParams();
+  let spaceId = Number(param.id);
+
+  const navigate = useNavigate();
+  const { authState } = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const [taskState, setTaskState] = useState<TaskState>();
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
+  // init task state based on initial space's open state
+  useEffect(() => {
+    if (!spaceId && authState.user) {
+      const initialOpenSpace = authState.user.spaces.find(
+        (space) => space.isOpen
+      );
+
+      if (initialOpenSpace) {
+        spaceId = initialOpenSpace.id;
+        navigate(CLIENT_ROUTE.TASK_BOARD + `/${spaceId}`, { replace: true });
+      } else {
+        throw new Error("Failed to initialize spaceId...");
+      }
+    }
+  }, [authState.user, spaceId]);
+
+  // update task state based on space selected
   useEffect(() => {
     initLocalState();
 
-    function initLocalState() {
+    async function initLocalState() {
       setLoading(true);
 
       const statusColumnsDataFromApi: StatusColumns =
@@ -66,6 +90,7 @@ export function useLocalTasks({ sortBy, spaceId }: UseLocalTasksParam) {
       setTaskStateContext({ columnOptions, setTaskState, sortBy });
       setTaskState({ orderedTasks, columnOptions });
 
+      await sleep(0);
       setLoading(false);
     }
   }, [spaceId]);

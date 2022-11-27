@@ -18,12 +18,12 @@ function TaskView({}: Props) {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.STATUS);
 
   // Reset to base url when modal closed
-  useEffect(() => {
-    if (!isModalOpen) {
-      //   navigate(-1);
-      navigate(CLIENT_ROUTE.TASK);
-    }
-  }, [isModalOpen]);
+  //   useEffect(() => {
+  //     if (!isModalOpen) {
+  //   navigate(-1);
+  // navigate(CLIENT_ROUTE.TASK);
+  //     }
+  //   }, [isModalOpen]);
 
   return (
     <Box>

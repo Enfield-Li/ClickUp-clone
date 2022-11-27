@@ -1,5 +1,4 @@
-import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
@@ -16,7 +15,7 @@ export default function SubNavbarContent({}: Props) {
     listId: number
   ) {
     e.stopPropagation();
-    navigate(CLIENT_ROUTE.TASK + `/${listId}`);
+    navigate(CLIENT_ROUTE.TASK_BOARD + `/${listId}`, { replace: true });
   }
 
   return (

@@ -38,7 +38,7 @@ function FixedNavBar({
       borderRightColor="darkMain.400"
     >
       {/* Expand icon -- absolute position */}
-      {!isExpanded && currentSection === "tasks" && (
+      {!isExpanded && currentSection === Section.TASKS && (
         <Center cursor="pointer" onClick={handleOpenSubNavbar}>
           <Center
             mt="76px"
@@ -66,7 +66,7 @@ function FixedNavBar({
         aria-label="logo"
         cursor="pointer"
         onClick={() => {
-          setCurrentSection("home");
+          setCurrentSection(Section.HOME);
           navigate(CLIENT_ROUTE.HOME);
         }}
       >
@@ -75,22 +75,22 @@ function FixedNavBar({
 
       {/* Task icon */}
       <Box mt={6}>
-        <Box onClick={() => setCurrentSection("tasks")}>
+        <Box onClick={() => setCurrentSection(Section.TASKS)}>
           <NavIcon
             name="Task"
-            url={CLIENT_ROUTE.TASK}
-            isSelected={currentSection === "tasks"}
+            url={CLIENT_ROUTE.TASK_BOARD}
+            isSelected={currentSection === Section.TASKS}
           >
             <i className="bi bi-check-square-fill"></i>
           </NavIcon>
         </Box>
 
         {/* Dev test */}
-        <Box onClick={() => setCurrentSection("dev")}>
+        <Box onClick={() => setCurrentSection(Section.DEV)}>
           <NavIcon
             name="test"
             url={CLIENT_ROUTE.TEST_DEV}
-            isSelected={currentSection === "dev"}
+            isSelected={currentSection === Section.DEV}
           >
             <i className="bi bi-question-circle"></i>
           </NavIcon>

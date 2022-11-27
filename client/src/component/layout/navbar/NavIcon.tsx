@@ -29,7 +29,7 @@ function NavIcon({ url, name, isSelected, children }: Props) {
     <Tooltip
       ml={0}
       px={4}
-      py={1}
+      pb={1}
       hasArrow
       label={name}
       arrowSize={7}

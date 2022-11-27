@@ -37,7 +37,7 @@ describe("App", () => {
 
     const taskIcon = screen.getByRole("menuitem", { name: "Task" });
     await user.click(taskIcon);
-    expect(navigate).toHaveBeenCalledWith(CLIENT_ROUTE.TASK);
+    expect(navigate).toHaveBeenCalledWith(CLIENT_ROUTE.TASK_BOARD);
   });
 
   test("click to navigate to dev test", async () => {

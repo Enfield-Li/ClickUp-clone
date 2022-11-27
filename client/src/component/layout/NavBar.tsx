@@ -5,27 +5,31 @@ import FixedNavBar from "./navbar/FixedNavBar";
 import ToggleNavBar from "./navbar/SubNavbar";
 
 type Props = {};
-export type Section = "home" | "tasks" | "dev";
+export enum Section {
+  HOME = "home",
+  TASKS = "tasks",
+  DEV = "dev",
+}
 
 export default memo(NavBar);
 function NavBar({}: Props) {
   const location = useLocation();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
-  const [currentSection, setCurrentSection] = useState<Section>("home");
+  const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
 
   const fixedNavbarWidth = "55px";
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
   const { getDisclosureProps, isOpen, onClose, onOpen } = useDisclosure({
-    defaultIsOpen: true,
+    defaultIsOpen: false,
   });
 
   // Sync up url with currentSection taskState after user refresh page
   useEffect(() => {
     if (location.pathname.includes("task")) {
-      setCurrentSection("tasks");
+      setCurrentSection(Section.TASKS);
     } else if (location.pathname.includes("test_dev")) {
-      setCurrentSection("dev");
+      setCurrentSection(Section.DEV);
     }
   }, []);
 

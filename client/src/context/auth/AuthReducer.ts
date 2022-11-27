@@ -17,7 +17,11 @@ export default function authReducer(
     }
 
     case AUTH_ACTION.LOGOUT_USER: {
-      return { user: null };
+      return { ...taskState, user: null };
+    }
+
+    case AUTH_ACTION.SET_OPEN_SPACE_ID: {
+      return { ...taskState,openedSpaceId: action.payload };
     }
 
     default: {

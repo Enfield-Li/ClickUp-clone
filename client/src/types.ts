@@ -230,7 +230,10 @@ export interface UpdateTaskDescDTO {
 }
 
 // auth
-export const authInitialState: AuthStateType = { user: null };
+export const authInitialState: AuthStateType = {
+  user: null,
+  openedSpaceId: null,
+};
 
 export type AuthContextType = {
   authState: AuthStateType;
@@ -239,6 +242,7 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
+  openedSpaceId: number | null;
 };
 
 export type Credentials = {
@@ -299,12 +303,17 @@ export interface UserResponse {
   accessToken: string;
 }
 
-export type AuthActionType = LogInUser | LogOutUser;
+export type AuthActionType = LogInUser | LogOutUser | SetOpenSpaceId;
 
 type LogInUser = { type: typeof AUTH_ACTION.LOGIN_USER; payload: User };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
+type SetOpenSpaceId = {
+  type: typeof AUTH_ACTION.SET_OPEN_SPACE_ID;
+  payload: number;
+};
 
 export const AUTH_ACTION = {
-  LOGIN_USER: "LOGIN_USER",
-  LOGOUT_USER: "LOGOUT_USER",
+  LOGIN_USER: "login_user",
+  LOGOUT_USER: "logout_user",
+  SET_OPEN_SPACE_ID: "set_open_space_id",
 } as const;
