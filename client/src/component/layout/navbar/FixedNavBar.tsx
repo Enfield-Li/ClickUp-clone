@@ -2,6 +2,7 @@ import { Center, Box } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import { Section } from "../NavBar";
 import NavIcon from "./NavIcon";
 
@@ -24,6 +25,7 @@ function FixedNavBar({
   setCurrentSection,
 }: Props) {
   const navigate = useNavigate();
+  const { authState } = useAuthContext();
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -78,7 +80,7 @@ function FixedNavBar({
         <Box onClick={() => setCurrentSection(Section.TASKS)}>
           <NavIcon
             name="Task"
-            url={CLIENT_ROUTE.TASK_BOARD}
+            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedSpaceId}`}
             isSelected={currentSection === Section.TASKS}
           >
             <i className="bi bi-check-square-fill"></i>

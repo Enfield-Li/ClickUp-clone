@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { ACCESS_TOKEN } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
+import { AUTH_ACTION } from "../types";
 import { mockUser } from "./mockData";
 
 export default function useInit() {
@@ -10,7 +11,7 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    authDispatch({ type: "LOGIN_USER", payload: mockUser });
+    authDispatch({ type: AUTH_ACTION.LOGIN_USER, payload: mockUser });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);
     //   setInterval(() => {

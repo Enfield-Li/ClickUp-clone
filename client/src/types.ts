@@ -303,17 +303,12 @@ export interface UserResponse {
   accessToken: string;
 }
 
-export type AuthActionType = LogInUser | LogOutUser | SetOpenSpaceId;
+export type AuthActionType = LogInUser | LogOutUser;
 
 type LogInUser = { type: typeof AUTH_ACTION.LOGIN_USER; payload: User };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
-type SetOpenSpaceId = {
-  type: typeof AUTH_ACTION.SET_OPEN_SPACE_ID;
-  payload: number;
-};
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
-  SET_OPEN_SPACE_ID: "set_open_space_id",
 } as const;
