@@ -271,6 +271,7 @@ export interface BaseList {
   createdAt: Date;
   member: UserInfo[];
   isPrivate: boolean;
+  isSelected: boolean;
   color: string | null;
 }
 
@@ -279,7 +280,6 @@ export interface FolderType extends BaseList {
   allLists: ListType[];
 }
 export interface ListType extends BaseList {
-  isSelected: boolean;
   taskAmount: number | null;
   allStatuses: StatusColumns;
   parentFolderId: number | null;
@@ -292,6 +292,7 @@ export interface Space {
   name: string;
   isOpen: boolean;
   isPrivate: boolean;
+  isSelected: boolean;
   orderIndex: number;
   color: string | null;
   allList: (FolderType | ListType)[]; // client side
@@ -310,12 +311,38 @@ export interface UserResponse {
   accessToken: string;
 }
 
-export type AuthActionType = LogInUser | LogOutUser;
+export type AuthActionType =
+  | LogInUser
+  | LogOutUser
+  | UpdateOpenedSpace
+  | UpdateOpenedFolder
+  | UpdateSelectedList
+  | UpdateSelectedFolder;
 
 type LogInUser = { type: typeof AUTH_ACTION.LOGIN_USER; payload: User };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
+type UpdateOpenedSpace = {
+  type: typeof AUTH_ACTION.UPDATE_OPENED_SPACE;
+  payload: { spaceId: number };
+};
+type UpdateOpenedFolder = {
+  type: typeof AUTH_ACTION.UPDATE_OPENED_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
+type UpdateSelectedList = {
+  type: typeof AUTH_ACTION.UPDATE_SELECTED_LIST;
+  payload: { spaceId: number; folderId: number | undefined; listId: number };
+};
+type UpdateSelectedFolder = {
+  type: typeof AUTH_ACTION.UPDATE_SELECTED_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
+  UPDATE_OPENED_SPACE: "update_opened_space",
+  UPDATE_OPENED_FOLDER: "update_opened_folder",
+  UPDATE_SELECTED_LIST: "update_selected_list",
+  UPDATE_SELECTED_FOLDER: "update_selected_folder",
 } as const;

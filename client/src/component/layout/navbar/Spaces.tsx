@@ -8,6 +8,7 @@ export default memo(Spaces);
 function Spaces({ space }: Props) {
   const [hover, setHover] = useState(false);
   const { colorMode } = useColorMode();
+  const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -51,9 +52,7 @@ function Spaces({ space }: Props) {
         flexGrow="1"
         rounded="4px"
         alignItems="center"
-        _hover={{
-          bgColor: colorMode === "dark" ? "darkMain.300" : "darkMain.200",
-        }}
+        _hover={{ bgColor: hoverBgColor }}
       >
         {/* Square */}
         <Center

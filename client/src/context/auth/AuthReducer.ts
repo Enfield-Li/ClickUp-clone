@@ -10,7 +10,7 @@ export default function authReducer(
       const openedSpaceId = spaces.find((space) => space.isOpen)?.id;
 
       return {
-        openedSpaceId,
+        openedSpaceId: openedSpaceId ? openedSpaceId : null,
         user: {
           id: action.payload.id,
           username: action.payload.username,
@@ -24,7 +24,7 @@ export default function authReducer(
     }
 
     default: {
-      return taskState;
+      throw new Error("Illegal action performed in authReducer");
     }
   }
 }

@@ -2,6 +2,7 @@ import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../../constant";
+import useAuthContext from "../../../../context/auth/useAuthContext";
 import { FolderType } from "../../../../types";
 import List from "./List";
 
@@ -11,6 +12,8 @@ export default memo(Folder);
 function Folder({ folder }: Props) {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
+  const { authDispatch } = useAuthContext();
+  const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleNavigateToList(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -30,9 +33,7 @@ function Folder({ folder }: Props) {
         cursor="pointer"
         position="relative"
         alignItems="center"
-        _hover={{
-          bgColor: colorMode === "dark" ? "darkMain.300" : "darkMain.200",
-        }}
+        _hover={{ bgColor: hoverBgColor }}
       >
         {/* Drag icon */}
         {/* {hover && (

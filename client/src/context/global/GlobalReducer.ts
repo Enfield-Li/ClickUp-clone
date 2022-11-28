@@ -18,7 +18,7 @@ export default function globalReducer(
     }
 
     default: {
-      return taskState;
+      throw new Error("Illegal action performed in globalReducer");
     }
   }
 }

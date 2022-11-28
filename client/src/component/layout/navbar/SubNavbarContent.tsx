@@ -10,6 +10,7 @@ export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
   const { authState } = useAuthContext();
   const { colorMode } = useColorMode();
+  const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   return (
     <Box color="lightMain.200" fontWeight="semibold" pl="10px" pr="3">
@@ -23,9 +24,7 @@ function SubNavbarContent({}: Props) {
         rounded="4px"
         cursor="pointer"
         alignItems="center"
-        _hover={{
-          bgColor: colorMode === "dark" ? "darkMain.300" : "darkMain.200",
-        }}
+        _hover={{ bgColor: hoverBgColor }}
       >
         <Box mr="1">
           <i className="bi bi-grid"></i>

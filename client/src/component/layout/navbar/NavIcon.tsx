@@ -49,9 +49,7 @@ function NavIcon({ url, name, isSelected, children }: Props) {
           onMouseOutCapture={onClose}
           onClick={() => navigate(url)}
           bgColor={isSelected ? "customBlue.200" : undefined}
-          _hover={{
-            backgroundColor: isSelected ? undefined : "darkMain.300",
-          }}
+          _hover={{ bgColor: isSelected ? undefined : "darkMain.300" }}
         >
           {children}
         </Center>

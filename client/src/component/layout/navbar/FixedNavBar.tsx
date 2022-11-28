@@ -80,8 +80,8 @@ function FixedNavBar({
         <Box onClick={() => setCurrentSection(Section.TASKS)}>
           <NavIcon
             name="Task"
-            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedSpaceId}`}
             isSelected={currentSection === Section.TASKS}
+            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedSpaceId}`}
           >
             <i className="bi bi-check-square-fill"></i>
           </NavIcon>
