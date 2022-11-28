@@ -163,7 +163,7 @@ export const mockUser: User = {
       color: "green",
       isPrivate: false,
       isSelected: false,
-      allList: allSpace1ListOrFolder,
+      allListOrFolder: allSpace1ListOrFolder,
     },
     {
       id: 2,
@@ -173,7 +173,7 @@ export const mockUser: User = {
       color: "yellow",
       isPrivate: true,
       isSelected: false,
-      allList: allSpace2ListOrFolder,
+      allListOrFolder: allSpace2ListOrFolder,
     },
   ],
 };

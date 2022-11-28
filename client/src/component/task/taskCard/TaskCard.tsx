@@ -64,7 +64,7 @@ function TaskCard({ task, index }: Props) {
       setTask(task);
       navigate(
         CLIENT_ROUTE.TASK_BOARD +
-          `/${authState.openedSpaceId}` +
+          `/${authState.openedListId}` +
           `${CLIENT_ROUTE.TASK}` +
           `/${task.id}`
       );

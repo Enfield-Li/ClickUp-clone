@@ -38,7 +38,7 @@ function SubNavbarContent({}: Props) {
             <Spaces space={space} />
 
             {space.isOpen &&
-              space.allList.map((folder) => (
+              space.allListOrFolder.map((folder) => (
                 <Box key={folder.id}>
                   <FolderAndList folder={folder} />
                 </Box>

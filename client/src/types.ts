@@ -232,7 +232,7 @@ export interface UpdateTaskDescDTO {
 // auth
 export const authInitialState: AuthStateType = {
   user: null,
-  openedSpaceId: null,
+  openedListId: undefined,
 };
 
 export type AuthContextType = {
@@ -242,7 +242,7 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
-  openedSpaceId: number | null;
+  openedListId: number | undefined;
 };
 
 export type Credentials = {
@@ -295,7 +295,7 @@ export interface Space {
   isSelected: boolean;
   orderIndex: number;
   color: string | null;
-  allList: (FolderType | ListType)[]; // client side
+  allListOrFolder: (FolderType | ListType)[]; // client side
 }
 
 export interface User {
@@ -317,6 +317,7 @@ export type AuthActionType =
   | UpdateOpenedSpace
   | UpdateOpenedFolder
   | UpdateSelectedList
+  | UpdateSelectedSpace
   | UpdateSelectedFolder;
 
 type LogInUser = { type: typeof AUTH_ACTION.LOGIN_USER; payload: User };
@@ -325,24 +326,29 @@ type UpdateOpenedSpace = {
   type: typeof AUTH_ACTION.UPDATE_OPENED_SPACE;
   payload: { spaceId: number };
 };
+type UpdateSelectedSpace = {
+  type: typeof AUTH_ACTION.UPDATE_SELECTED_SPACE;
+  payload: { spaceId: number };
+};
 type UpdateOpenedFolder = {
   type: typeof AUTH_ACTION.UPDATE_OPENED_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
+type UpdateSelectedFolder = {
+  type: typeof AUTH_ACTION.UPDATE_SELECTED_FOLDER;
   payload: { spaceId: number; folderId: number };
 };
 type UpdateSelectedList = {
   type: typeof AUTH_ACTION.UPDATE_SELECTED_LIST;
   payload: { spaceId: number; folderId: number | undefined; listId: number };
 };
-type UpdateSelectedFolder = {
-  type: typeof AUTH_ACTION.UPDATE_SELECTED_FOLDER;
-  payload: { spaceId: number; folderId: number };
-};
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
-  UPDATE_OPENED_SPACE: "update_opened_space",
-  UPDATE_OPENED_FOLDER: "update_opened_folder",
-  UPDATE_SELECTED_LIST: "update_selected_list",
+  UPDATE_OPENED_SPACE: "update_opened_space", //
+  UPDATE_SELECTED_SPACE: "update_selected_space",
+  UPDATE_OPENED_FOLDER: "update_opened_folder", //
   UPDATE_SELECTED_FOLDER: "update_selected_folder",
+  UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;

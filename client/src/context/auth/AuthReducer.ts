@@ -1,3 +1,5 @@
+import produce from "immer";
+import { determineFolderType } from "../../component/layout/navbar/folderAndList/determineList";
 import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
 
 export default function authReducer(
@@ -10,7 +12,7 @@ export default function authReducer(
       const openedSpaceId = spaces.find((space) => space.isOpen)?.id;
 
       return {
-        openedSpaceId: openedSpaceId ? openedSpaceId : null,
+        openedSpaceId,
         user: {
           id: action.payload.id,
           username: action.payload.username,
@@ -21,6 +23,53 @@ export default function authReducer(
 
     case AUTH_ACTION.LOGOUT_USER: {
       return { ...taskState, user: null };
+    }
+
+    case AUTH_ACTION.UPDATE_OPENED_SPACE: {
+      return produce(taskState, (draftState) => {
+        const { spaceId } = action.payload;
+
+        draftState.openedListId = spaceId;
+        draftState.user?.spaces.forEach((space) => {
+          if (space.isOpen && space.id !== spaceId) {
+            space.isOpen = false;
+          }
+          if (space.id === spaceId) {
+            space.isOpen = true;
+          }
+        });
+      });
+    }
+
+    case AUTH_ACTION.UPDATE_OPENED_FOLDER: {
+      return produce(taskState, (draftState) => {
+        const { spaceId, folderId } = action.payload;
+
+        draftState.user?.spaces.forEach((space) => {
+          if (space.id === spaceId) {
+            space.allListOrFolder.forEach((listOrFolder) => {
+              if (
+                determineFolderType(listOrFolder) &&
+                listOrFolder.id === folderId
+              ) {
+                listOrFolder.isOpen = true;
+              }
+            });
+          }
+        });
+      });
+    }
+
+    case AUTH_ACTION.UPDATE_SELECTED_FOLDER: {
+      throw new Error("not implemented");
+    }
+
+    case AUTH_ACTION.UPDATE_SELECTED_LIST: {
+      throw new Error("not implemented");
+    }
+
+    case AUTH_ACTION.UPDATE_SELECTED_SPACE: {
+      throw new Error("not implemented");
     }
 
     default: {
