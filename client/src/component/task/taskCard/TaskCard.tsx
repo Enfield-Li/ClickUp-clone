@@ -1,7 +1,7 @@
 import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { memo, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CLIENT_ROUTE, TASK_BOARD_PARAM, TASK_PARAM } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
@@ -21,6 +21,7 @@ type Props = {
 export default memo(TaskCard);
 function TaskCard({ task, index }: Props) {
   const navigate = useNavigate();
+  const params = useParams();
   const { authState } = useAuthContext();
   const [showSubTask, setShowSubTask] = useState(false);
   const [showAddSubTask, setShowAddSubTask] = useState(true);
@@ -64,7 +65,8 @@ function TaskCard({ task, index }: Props) {
       setTask(task);
       navigate(
         CLIENT_ROUTE.TASK_BOARD +
-          `/${authState.openedTaskListId}` +
+          //   `/${Number(params[TASK_BOARD_PARAM])}` +
+          `/${authState.openedListId}` +
           `${CLIENT_ROUTE.TASK}` +
           `/${task.id}`
       );

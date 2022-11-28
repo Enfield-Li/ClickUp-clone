@@ -2,7 +2,7 @@ import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
 import React, { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import FixedNavBar from "./navbar/FixedNavBar";
-import ToggleNavBar from "./navbar/SubNavbar";
+import SubNavbar from "./navbar/SubNavbar";
 
 type Props = {};
 export enum Section {
@@ -55,7 +55,7 @@ function NavBar({}: Props) {
           position={isExpanded ? undefined : "absolute"}
           onMouseOverCapture={subNavOpenable ? onOpen : undefined}
         >
-          <ToggleNavBar
+          <SubNavbar
             isOpen={isOpen}
             onClose={onClose}
             isExpanded={isExpanded}

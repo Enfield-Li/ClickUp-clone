@@ -49,7 +49,7 @@ export async function createNewTask({
   const newTask = newTaskFactory({
     creator,
     title,
-    listId: currentColumn.listId,
+    listId: 1,
     expectedDueDate,
   });
   const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(

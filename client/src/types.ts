@@ -168,7 +168,6 @@ export interface Task {
 }
 
 export type TaskList = Task[];
-export type InitialData = { tasks: TaskList };
 export type UndeterminedColumn = Column<string>;
 export type UndeterminedColumns = UndeterminedColumn[];
 
@@ -232,7 +231,8 @@ export interface UpdateTaskDescDTO {
 // auth
 export const authInitialState: AuthStateType = {
   user: null,
-  openedTaskListId: undefined,
+  spaces: [],
+  openedListId: undefined,
 };
 
 export type AuthContextType = {
@@ -242,7 +242,8 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
-  openedTaskListId: number | undefined;
+  spaces: SpaceType[];
+  openedListId: number | undefined;
 };
 
 export type Credentials = {
@@ -287,7 +288,7 @@ export interface ListType extends BaseList {
   //   listViewSetting?: unknown
 }
 
-export interface Space {
+export interface SpaceType {
   id: number;
   name: string;
   isOpen: boolean;
@@ -300,13 +301,12 @@ export interface Space {
 
 export interface User {
   id: number;
-  spaces: Space[];
   username: string;
 }
 
 export interface UserResponse {
   id: number;
-  spaces: Space[];
+  spaces: SpaceType[];
   username: string;
   accessToken: string;
 }
@@ -320,10 +320,13 @@ export type AuthActionType =
   | UpdateSelectedSpace
   | UpdateSelectedFolder;
 
-type LogInUser = { type: typeof AUTH_ACTION.LOGIN_USER; payload: User };
+type LogInUser = {
+  type: typeof AUTH_ACTION.LOGIN_USER;
+  payload: { spaces: SpaceType[], user: User };
+};
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
 type UpdateOpenedSpace = {
-  type: typeof AUTH_ACTION.UPDATE_OPENED_SPACE;
+  type: typeof AUTH_ACTION.UPDATE_OPEN_SPACE;
   payload: { spaceId: number };
 };
 type UpdateSelectedSpace = {
@@ -331,7 +334,7 @@ type UpdateSelectedSpace = {
   payload: { spaceId: number };
 };
 type UpdateOpenedFolder = {
-  type: typeof AUTH_ACTION.UPDATE_OPENED_FOLDER;
+  type: typeof AUTH_ACTION.UPDATE_OPEN_FOLDER;
   payload: { spaceId: number; folderId: number };
 };
 type UpdateSelectedFolder = {
@@ -340,15 +343,15 @@ type UpdateSelectedFolder = {
 };
 type UpdateSelectedList = {
   type: typeof AUTH_ACTION.UPDATE_SELECTED_LIST;
-  payload: { spaceId: number; folderId: number | undefined; listId: number };
+  payload: { listId: number };
 };
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
-  UPDATE_OPENED_SPACE: "update_opened_space", //
+  UPDATE_OPEN_SPACE: "update_open_space", //
   UPDATE_SELECTED_SPACE: "update_selected_space",
-  UPDATE_OPENED_FOLDER: "update_opened_folder", //
+  UPDATE_OPEN_FOLDER: "update_open_folder", //
   UPDATE_SELECTED_FOLDER: "update_selected_folder",
   UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;

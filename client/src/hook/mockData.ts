@@ -11,6 +11,7 @@ import {
   UserInfo,
   FolderType,
   DefaultStatus,
+  SpaceType,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
@@ -99,7 +100,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     isPrivate: false,
     isSelected: false,
     member: [userInfo, guestUserInfo],
-    name: "folder1",
+    name: "folder1.5",
     owner: userInfo,
     spaceId: 2,
     allLists: list,
@@ -151,31 +152,32 @@ const allSpace2ListOrFolder: (FolderType | ListType)[] = [
   },
 ];
 
+export const initialSpaces: SpaceType[] = [
+  {
+    id: 1,
+    isOpen: true,
+    name: "space1",
+    orderIndex: 1,
+    color: "green",
+    isPrivate: false,
+    isSelected: false,
+    allListOrFolder: allSpace1ListOrFolder,
+  },
+  {
+    id: 2,
+    isOpen: false,
+    name: "space2",
+    orderIndex: 2,
+    color: "yellow",
+    isPrivate: true,
+    isSelected: false,
+    allListOrFolder: allSpace2ListOrFolder,
+  },
+];
+
 export const mockUser: User = {
   id: 1,
   username: "mockUser",
-  spaces: [
-    {
-      id: 1,
-      isOpen: true,
-      name: "space1",
-      orderIndex: 1,
-      color: "green",
-      isPrivate: false,
-      isSelected: false,
-      allListOrFolder: allSpace1ListOrFolder,
-    },
-    {
-      id: 2,
-      isOpen: false,
-      name: "space2",
-      orderIndex: 2,
-      color: "yellow",
-      isPrivate: true,
-      isSelected: false,
-      allListOrFolder: allSpace2ListOrFolder,
-    },
-  ],
 };
 
 export const staticColumnOptions: ColumnOptions = {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Params, useNavigate, useParams } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
@@ -24,7 +24,7 @@ interface UseLocalTasksParam {
 }
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
-  let spaceId = Number(param[`${TASK_BOARD_PARAM}`]);
+  let panelId = Number(param[TASK_BOARD_PARAM]);
 
   const navigate = useNavigate();
   const { authState } = useAuthContext();
@@ -33,31 +33,34 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
+  // init spaceId
+  useEffect(() => {
+    function isNestedRoute(param: Readonly<Params<string>>) {
+      return Object.entries(param).length > 1;
+    }
+
+    if (!panelId && authState.spaces.length && !isNestedRoute(param)) {
+      const initialPanel = authState.spaces.find((space) => space.isOpen);
+
+      if (initialPanel) {
+        panelId = initialPanel.id;
+        navigate(CLIENT_ROUTE.TASK_BOARD + `/${panelId}`, { replace: true });
+      } else {
+        throw new Error("Failed to initialize panelId...");
+      }
+    }
+  }, [authState.spaces, panelId, param]);
+
   // update task state based on space selected
   useEffect(() => {
     initLocalState();
 
     async function initLocalState() {
-      // init spaceId
-      if (!spaceId && authState.user?.spaces.length) {
-        const initialOpenSpace = authState.user.spaces.find(
-          (space) => space.isOpen
-        );
-
-        if (initialOpenSpace) {
-          spaceId = initialOpenSpace.id;
-          navigate(CLIENT_ROUTE.TASK_BOARD + `/${spaceId}`, { replace: true });
-        } else {
-          throw new Error("Failed to initialize spaceId...");
-        }
-      }
-
-      // process state
-      else if (spaceId && authState.user?.spaces.length) {
+      if (panelId) {
         setLoading(true);
 
         const statusColumnsDataFromApi: StatusColumns =
-          spaceId === 1 ? space1StatusColumns : space2StatusColumns;
+          panelId === 1 ? space1StatusColumns : space2StatusColumns;
 
         const columnDataFromApi: ColumnOptions = {
           dueDateColumns: staticColumnOptions.dueDateColumns,
@@ -73,7 +76,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
           statusColumns: reorderedStatusColumns,
         };
 
-        const listDataFromApi = spaceId === 1 ? space1TaskList : space2TaskList;
+        const listDataFromApi = panelId === 1 ? space1TaskList : space2TaskList;
 
         // init taskEvents and convert expectedDueDate to dueDate
         const taskList = processTaskList(
@@ -94,7 +97,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
         setLoading(false);
       }
     }
-  }, [authState.user?.spaces, spaceId]);
+  }, [panelId]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;
@@ -125,7 +128,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
     }
   }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
 
-  // sync up with modal task
+  // sync up with modal task after task updated in modal
   useEffect(() => {
     if (task && taskState) {
       const allTasks = collectAllTasks(taskState.orderedTasks);

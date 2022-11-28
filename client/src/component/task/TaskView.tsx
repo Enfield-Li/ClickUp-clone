@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
@@ -20,14 +20,14 @@ function TaskView({}: Props) {
   const { isModalOpen } = modalState;
 
   // Reset to base url when modal closed
-  useEffect(() => {
-    if (!isModalOpen) {
-      //   navigate(-1);
-      navigate(CLIENT_ROUTE.TASK_BOARD + `/${authState.openedTaskListId}`, {
-        replace: true,
-      });
-    }
-  }, [isModalOpen]);
+  //   useEffect(() => {
+  //     if (!isModalOpen) {
+  //       //   navigate(-1);
+  //       navigate(CLIENT_ROUTE.TASK_BOARD + `/${1}`, {
+  //         replace: true,
+  //       });
+  //     }
+  //   }, [isModalOpen, authState.openedTaskListId]);
 
   return (
     <>
@@ -35,6 +35,7 @@ function TaskView({}: Props) {
       <TaskBoardView sortBy={sortBy} />
 
       {isModalOpen && <TaskDetailsModal />}
+      {/* <Outlet /> */}
     </>
   );
 }

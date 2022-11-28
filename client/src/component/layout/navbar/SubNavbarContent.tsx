@@ -1,8 +1,7 @@
 import { Box, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import FolderAndList from "./folderAndList/FolderAndList";
-import Spaces from "./Spaces";
+import SpaceList from "./space/SpaceList";
 
 type Props = {};
 
@@ -11,6 +10,10 @@ function SubNavbarContent({}: Props) {
   const { authState } = useAuthContext();
   const { colorMode } = useColorMode();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+
+  function handleClickToSeeEveryTasks(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Box color="lightMain.200" fontWeight="semibold" pl="10px" pr="3">
@@ -25,6 +28,7 @@ function SubNavbarContent({}: Props) {
         cursor="pointer"
         alignItems="center"
         _hover={{ bgColor: hoverBgColor }}
+        onClick={handleClickToSeeEveryTasks}
       >
         <Box mr="1">
           <i className="bi bi-grid"></i>
@@ -33,16 +37,9 @@ function SubNavbarContent({}: Props) {
       </Flex>
 
       <Box>
-        {authState.user?.spaces.map((space) => (
+        {authState.spaces.map((space) => (
           <Box key={space.id}>
-            <Spaces space={space} />
-
-            {space.isOpen &&
-              space.allListOrFolder.map((folder) => (
-                <Box key={folder.id}>
-                  <FolderAndList folder={folder} />
-                </Box>
-              ))}
+            <SpaceList space={space} />
           </Box>
         ))}
       </Box>

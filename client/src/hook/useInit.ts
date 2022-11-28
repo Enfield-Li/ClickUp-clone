@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { ACCESS_TOKEN } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
 import { AUTH_ACTION } from "../types";
-import { mockUser } from "./mockData";
+import { initialSpaces, mockUser } from "./mockData";
 
 export default function useInit() {
   const { authDispatch } = useAuthContext();
@@ -11,7 +11,10 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    authDispatch({ type: AUTH_ACTION.LOGIN_USER, payload: mockUser });
+    authDispatch({
+      type: AUTH_ACTION.LOGIN_USER,
+      payload: { user: mockUser, spaces: initialSpaces },
+    });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);
     //   setInterval(() => {

@@ -1,20 +1,25 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import { Space } from "../../../types";
+import useAuthContext from "../../../../context/auth/useAuthContext";
+import { SpaceType, AUTH_ACTION } from "../../../../types";
 
-type Props = { space: Space };
+type Props = { space: SpaceType };
 
-export default memo(Spaces);
-function Spaces({ space }: Props) {
-  const [hover, setHover] = useState(false);
+export default memo(Space);
+function Space({ space }: Props) {
+  const { authDispatch } = useAuthContext();
   const { colorMode } = useColorMode();
+  const [hover, setHover] = useState(false);
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     spaceId: number
   ): void {
-    throw new Error("Function not implemented.");
+    authDispatch({
+      type: AUTH_ACTION.UPDATE_OPEN_SPACE,
+      payload: { spaceId },
+    });
   }
 
   return (
@@ -25,6 +30,7 @@ function Spaces({ space }: Props) {
       alignItems="center"
       onMouseLeave={() => setHover(false)}
       onMouseOverCapture={() => setHover(true)}
+      onClick={(e) => handleOpenSpace(e, space.id)}
     >
       {/* Drag icon */}
       {/* {hover && (
@@ -70,11 +76,7 @@ function Spaces({ space }: Props) {
           {space.name[0]}
         </Center>
 
-        <Center
-          pb="3px"
-          fontSize="17px"
-          onClick={(e) => handleOpenSpace(e, space.id)}
-        >
+        <Center pb="3px" fontSize="17px">
           {space.name}
         </Center>
       </Flex>

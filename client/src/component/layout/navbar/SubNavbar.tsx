@@ -54,13 +54,10 @@ function SubNavbar({
       hidden={hidden}
       initial={false}
       transition="none"
-      animate={{ width: isOpen ? subNavWidth : 0 }}
       onAnimationStart={() => setHidden(false)}
       onAnimationComplete={() => setHidden(!isOpen)}
-      style={{
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      }}
+      animate={{ width: isOpen ? subNavWidth : 0 }}
+      style={{ overflow: "hidden", whiteSpace: "nowrap" }}
     >
       <Box
         height="100vh"
