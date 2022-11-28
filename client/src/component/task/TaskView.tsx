@@ -23,7 +23,7 @@ function TaskView({}: Props) {
   useEffect(() => {
     if (!isModalOpen) {
       //   navigate(-1);
-      navigate(CLIENT_ROUTE.TASK_BOARD + `/${authState.openedListId}`, {
+      navigate(CLIENT_ROUTE.TASK_BOARD + `/${authState.openedTaskListId}`, {
         replace: true,
       });
     }

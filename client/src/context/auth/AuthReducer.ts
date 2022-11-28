@@ -3,33 +3,33 @@ import { determineFolderType } from "../../component/layout/navbar/folderAndList
 import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
 
 export default function authReducer(
-  taskState: AuthStateType,
-  action: AuthActionType
+  authState: AuthStateType,
+  authAction: AuthActionType
 ) {
-  switch (action.type) {
+  switch (authAction.type) {
     case AUTH_ACTION.LOGIN_USER: {
-      const { spaces } = action.payload;
+      const { spaces } = authAction.payload;
       const openedSpaceId = spaces.find((space) => space.isOpen)?.id;
 
       return {
         openedSpaceId,
         user: {
-          id: action.payload.id,
-          username: action.payload.username,
+          id: authAction.payload.id,
+          username: authAction.payload.username,
           spaces,
         },
       };
     }
 
     case AUTH_ACTION.LOGOUT_USER: {
-      return { ...taskState, user: null };
+      return { ...authState, user: null };
     }
 
     case AUTH_ACTION.UPDATE_OPENED_SPACE: {
-      return produce(taskState, (draftState) => {
-        const { spaceId } = action.payload;
+      return produce(authState, (draftState) => {
+        const { spaceId } = authAction.payload;
 
-        draftState.openedListId = spaceId;
+        draftState.openedTaskListId = spaceId;
         draftState.user?.spaces.forEach((space) => {
           if (space.isOpen && space.id !== spaceId) {
             space.isOpen = false;
@@ -42,8 +42,8 @@ export default function authReducer(
     }
 
     case AUTH_ACTION.UPDATE_OPENED_FOLDER: {
-      return produce(taskState, (draftState) => {
-        const { spaceId, folderId } = action.payload;
+      return produce(authState, (draftState) => {
+        const { spaceId, folderId } = authAction.payload;
 
         draftState.user?.spaces.forEach((space) => {
           if (space.id === spaceId) {

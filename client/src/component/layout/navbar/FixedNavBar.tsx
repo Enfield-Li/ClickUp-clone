@@ -81,7 +81,7 @@ function FixedNavBar({
           <NavIcon
             name="Task"
             isSelected={currentSection === Section.TASKS}
-            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedListId}`}
+            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedTaskListId}`}
           >
             <i className="bi bi-check-square-fill"></i>
           </NavIcon>

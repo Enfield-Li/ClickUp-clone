@@ -232,7 +232,7 @@ export interface UpdateTaskDescDTO {
 // auth
 export const authInitialState: AuthStateType = {
   user: null,
-  openedListId: undefined,
+  openedTaskListId: undefined,
 };
 
 export type AuthContextType = {
@@ -242,7 +242,7 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
-  openedListId: number | undefined;
+  openedTaskListId: number | undefined;
 };
 
 export type Credentials = {
