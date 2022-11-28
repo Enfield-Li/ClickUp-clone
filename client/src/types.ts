@@ -263,31 +263,38 @@ export type LogInError = {
   errors: FieldError[];
 };
 
-export interface List {
+export interface BaseList {
   id: number;
   name: string;
   spaceId: number;
   owner: UserInfo;
   createdAt: Date;
-  isPrivate: boolean;
   member: UserInfo[];
-  taskAmount: number;
+  isPrivate: boolean;
+  color: string | null;
+}
 
-  parentList: List | null;
+export interface FolderType extends BaseList {
+  isOpen: boolean;
+  allLists: ListType[];
+}
+export interface ListType extends BaseList {
+  isSelected: boolean;
+  taskAmount: number | null;
   allStatuses: StatusColumns;
-
-  //   boardViewSetting?:
-  //   listViewSetting?:
+  parentFolderId: number | null;
+  //   boardViewSetting?: unknown
+  //   listViewSetting?: unknown
 }
 
 export interface Space {
   id: number;
   name: string;
-  color: string;
   isOpen: boolean;
   isPrivate: boolean;
   orderIndex: number;
-  allList: List[]; // client side
+  color: string | null;
+  allList: (FolderType | ListType)[]; // client side
 }
 
 export interface User {

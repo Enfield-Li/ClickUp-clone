@@ -2,12 +2,14 @@ import {
   ColumnOptions,
   CurrentWeek,
   DueDateRange,
-  List,
+  BaseList,
+  ListType,
   Priority,
   StatusColumns,
   TaskList,
   User,
   UserInfo,
+  FolderType,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
@@ -29,34 +31,107 @@ export const space1StatusColumns: StatusColumns = [
 ];
 
 const userInfo: UserInfo = { userId: 1, username: "mockUser" };
-const guestUserInfo: UserInfo = { userId: 1, username: "mockUser" };
+const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
 
-export const allSpace1List: List[] = [
+const list: ListType[] = [
   {
-    id: 1,
+    id: 5,
     allStatuses: space1StatusColumns,
     createdAt: new Date(),
+    color: "green",
+    isSelected: true,
     isPrivate: false,
     member: [userInfo, guestUserInfo],
-    name: "list1",
+    name: "sub list 1",
     owner: userInfo,
-    parentList: null,
+    parentFolderId: 2,
+    spaceId: 1,
+    taskAmount: 5,
+  },
+  {
+    id: 6,
+    allStatuses: space1StatusColumns,
+    createdAt: new Date(),
+    color: "",
+    isSelected: false,
+    isPrivate: false,
+    member: [userInfo, guestUserInfo],
+    name: "sub list 2",
+    owner: userInfo,
+    parentFolderId: 2,
     spaceId: 1,
     taskAmount: 5,
   },
 ];
 
-const allSpace2List: List[] = [
+export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
+  {
+    id: 1,
+    createdAt: new Date(),
+    color: "",
+    isOpen: true,
+    isPrivate: true,
+    member: [userInfo, guestUserInfo],
+    name: "folder1",
+    owner: userInfo,
+    spaceId: 2,
+    allLists: list,
+  },
+  {
+    id: 1.5,
+    createdAt: new Date(),
+    color: "green",
+    isOpen: false,
+    isPrivate: false,
+    member: [userInfo, guestUserInfo],
+    name: "folder1",
+    owner: userInfo,
+    spaceId: 2,
+    allLists: list,
+  },
   {
     id: 2,
     allStatuses: space1StatusColumns,
     createdAt: new Date(),
+    color: "",
+    isSelected: false,
     isPrivate: true,
+    member: [userInfo, guestUserInfo],
+    name: "list1",
+    owner: userInfo,
+    parentFolderId: null,
+    spaceId: 1,
+    taskAmount: 5,
+  },
+  {
+    id: 4,
+    allStatuses: space1StatusColumns,
+    createdAt: new Date(),
+    color: "",
+    isSelected: false,
+    isPrivate: false,
     member: [userInfo, guestUserInfo],
     name: "list2",
     owner: userInfo,
-    parentList: null,
-    spaceId: 2,
+    parentFolderId: null,
+    spaceId: 1,
+    taskAmount: 5,
+  },
+];
+
+const allSpace2ListOrFolder: (FolderType | ListType)[] = [
+  {
+    id: 3,
+    color: "",
+    isPrivate: true,
+    isSelected: false,
+    allStatuses: space1StatusColumns,
+    createdAt: new Date(),
+    member: [userInfo, guestUserInfo],
+    name: "list3",
+    owner: userInfo,
+    parentFolderId: null,
+    spaceId: 3,
     taskAmount: 0,
   },
 ];
@@ -68,11 +143,11 @@ export const mockUser: User = {
     {
       id: 1,
       isOpen: true,
-      name: "space",
+      name: "space1",
       orderIndex: 1,
       color: "green",
       isPrivate: false,
-      allList: allSpace1List,
+      allList: allSpace1ListOrFolder,
     },
     {
       id: 2,
@@ -81,7 +156,7 @@ export const mockUser: User = {
       orderIndex: 2,
       color: "yellow",
       isPrivate: true,
-      allList: allSpace2List,
+      allList: allSpace2ListOrFolder,
     },
   ],
 };

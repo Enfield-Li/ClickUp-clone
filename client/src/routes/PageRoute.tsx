@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../component/auth/Login";
 import Register from "../component/auth/Register";
@@ -10,7 +11,8 @@ import { CLIENT_ROUTE, TASK_BOARD_PARAM, TASK_PARAM } from "../constant";
 
 type Props = {};
 
-export default function PageRoute({}: Props) {
+export default memo(PageRoute);
+function PageRoute({}: Props) {
   return (
     <Routes>
       <Route path={CLIENT_ROUTE.HOME} element={<Home />} />

@@ -6,7 +6,7 @@ import {
   TaskStateContext,
 } from "./TaskDetailContextType";
 
-export const taskDetailContext = createContext<TaskDetailContextType | null>(
+export const TaskDetailContext = createContext<TaskDetailContextType | null>(
   null
 );
 
@@ -26,7 +26,7 @@ export default function TaskDetailProvider({ children }: ProviderType) {
     useState<TaskStateContext | null>(null);
 
   return (
-    <taskDetailContext.Provider
+    <TaskDetailContext.Provider
       value={{
         task,
         setTask,
@@ -36,6 +36,6 @@ export default function TaskDetailProvider({ children }: ProviderType) {
       }}
     >
       {children}
-    </taskDetailContext.Provider>
+    </TaskDetailContext.Provider>
   );
 }

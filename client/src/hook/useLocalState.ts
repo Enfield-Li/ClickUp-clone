@@ -33,67 +33,68 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
-  // init task state based on initial space's open state
-  useEffect(() => {
-    if (!spaceId && authState.user) {
-      const initialOpenSpace = authState.user.spaces.find(
-        (space) => space.isOpen
-      );
-
-      if (initialOpenSpace) {
-        spaceId = initialOpenSpace.id;
-        navigate(CLIENT_ROUTE.TASK_BOARD + `/${spaceId}`, { replace: true });
-      } else {
-        throw new Error("Failed to initialize spaceId...");
-      }
-    }
-  }, [authState.user, spaceId]);
-
   // update task state based on space selected
   useEffect(() => {
     initLocalState();
 
     async function initLocalState() {
-      setLoading(true);
+      // init spaceId
+      if (!spaceId && authState.user?.spaces.length) {
+        const initialOpenSpace = authState.user.spaces.find(
+          (space) => space.isOpen
+        );
 
-      const statusColumnsDataFromApi: StatusColumns =
-        spaceId === 1 ? space1StatusColumns : space2StatusColumns;
+        if (initialOpenSpace) {
+          spaceId = initialOpenSpace.id;
+          navigate(CLIENT_ROUTE.TASK_BOARD + `/${spaceId}`, { replace: true });
+        } else {
+          throw new Error("Failed to initialize spaceId...");
+        }
+      }
 
-      const columnDataFromApi: ColumnOptions = {
-        dueDateColumns: staticColumnOptions.dueDateColumns,
-        priorityColumns: staticColumnOptions.priorityColumns,
-        statusColumns: statusColumnsDataFromApi,
-      };
-      const { reorderedDueDateColumns, reorderedStatusColumns } =
-        initColumns(columnDataFromApi);
+      // process state
+      else if (spaceId && authState.user?.spaces.length) {
+        setLoading(true);
 
-      const columnOptions: ColumnOptions = {
-        ...columnDataFromApi,
-        dueDateColumns: reorderedDueDateColumns,
-        statusColumns: reorderedStatusColumns,
-      };
+        const statusColumnsDataFromApi: StatusColumns =
+          spaceId === 1 ? space1StatusColumns : space2StatusColumns;
 
-      const listDataFromApi = spaceId === 1 ? space1TaskList : space2TaskList;
+        const columnDataFromApi: ColumnOptions = {
+          dueDateColumns: staticColumnOptions.dueDateColumns,
+          priorityColumns: staticColumnOptions.priorityColumns,
+          statusColumns: statusColumnsDataFromApi,
+        };
+        const { reorderedDueDateColumns, reorderedStatusColumns } =
+          initColumns(columnDataFromApi);
 
-      // init taskEvents and convert expectedDueDate to dueDate
-      const taskList = processTaskList(
-        reorderedDueDateColumns,
-        listDataFromApi
-      );
+        const columnOptions: ColumnOptions = {
+          ...columnDataFromApi,
+          dueDateColumns: reorderedDueDateColumns,
+          statusColumns: reorderedStatusColumns,
+        };
 
-      const orderedTasks = groupTaskListOnSortBy(
-        taskList,
-        columnDataFromApi[`${sortBy}Columns`],
-        sortBy
-      );
+        const listDataFromApi = spaceId === 1 ? space1TaskList : space2TaskList;
 
-      setTaskStateContext({ columnOptions, setTaskState, sortBy });
-      setTaskState({ orderedTasks, columnOptions });
+        // init taskEvents and convert expectedDueDate to dueDate
+        const taskList = processTaskList(
+          reorderedDueDateColumns,
+          listDataFromApi
+        );
 
-      await sleep(0);
-      setLoading(false);
+        const orderedTasks = groupTaskListOnSortBy(
+          taskList,
+          columnDataFromApi[`${sortBy}Columns`],
+          sortBy
+        );
+
+        setTaskStateContext({ columnOptions, setTaskState, sortBy });
+        setTaskState({ orderedTasks, columnOptions });
+
+        await sleep(0);
+        setLoading(false);
+      }
     }
-  }, [spaceId]);
+  }, [authState.user?.spaces, spaceId]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

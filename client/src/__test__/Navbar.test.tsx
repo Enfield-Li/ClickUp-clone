@@ -32,13 +32,13 @@ describe("App", () => {
     expect(navigate).toHaveBeenCalledWith(CLIENT_ROUTE.HOME);
   });
 
-  test("click to navigate to task", async () => {
-    renderInProvider(<NavBar />);
+  //   test("click to navigate to task", async () => {
+  //     renderInProvider(<NavBar />);
 
-    const taskIcon = screen.getByRole("menuitem", { name: "Task" });
-    await user.click(taskIcon);
-    expect(navigate).toHaveBeenCalledWith(CLIENT_ROUTE.TASK_BOARD);
-  });
+  //     const taskIcon = screen.getByRole("menuitem", { name: "Task" });
+  //     await user.click(taskIcon);
+  //     expect(navigate).toHaveBeenCalledWith(CLIENT_ROUTE.TASK_BOARD);
+  //   });
 
   test("click to navigate to dev test", async () => {
     renderInProvider(<NavBar />);

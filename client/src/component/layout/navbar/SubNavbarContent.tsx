@@ -1,42 +1,49 @@
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../constant";
+import { Box, Flex, useColorMode } from "@chakra-ui/react";
+import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
+import FolderAndList from "./folderAndList/FolderAndList";
+import Spaces from "./Spaces";
 
 type Props = {};
 
-export default function SubNavbarContent({}: Props) {
+export default memo(SubNavbarContent);
+function SubNavbarContent({}: Props) {
   const { authState } = useAuthContext();
-  const navigate = useNavigate();
-  const textColor = useColorModeValue("darkMain.400", "lightMain.200");
-
-  function handleNavigateToList(
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    listId: number
-  ) {
-    e.stopPropagation();
-    navigate(CLIENT_ROUTE.TASK_BOARD + `/${listId}`, { replace: true });
-  }
+  const { colorMode } = useColorMode();
 
   return (
-    <Box color={textColor} fontWeight="semibold" px="3">
-      <Flex height="35px" alignItems="center">
+    <Box color="lightMain.200" fontWeight="semibold" pl="10px" pr="3">
+      <Flex height="35px" alignItems="center" cursor="pointer" pl="2">
         <Box>Spaces</Box>
+      </Flex>
+
+      <Flex
+        py="1"
+        pl="2"
+        rounded="4px"
+        cursor="pointer"
+        alignItems="center"
+        _hover={{
+          bgColor: colorMode === "dark" ? "darkMain.300" : "darkMain.200",
+        }}
+      >
+        <Box mr="1">
+          <i className="bi bi-grid"></i>
+        </Box>
+        <Box>Everything</Box>
       </Flex>
 
       <Box>
         {authState.user?.spaces.map((space) => (
           <Box key={space.id}>
-            {space.allList.map((list) => (
-              <Box key={list.id}>
-                <Box
-                  cursor="pointer"
-                  onClick={(e) => handleNavigateToList(e, list.id)}
-                >
-                  {list.name}
+            <Spaces space={space} />
+
+            {space.isOpen &&
+              space.allList.map((folder) => (
+                <Box key={folder.id}>
+                  <FolderAndList folder={folder} />
                 </Box>
-              </Box>
-            ))}
+              ))}
           </Box>
         ))}
       </Box>

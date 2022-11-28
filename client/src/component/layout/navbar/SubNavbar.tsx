@@ -32,6 +32,7 @@ function SubNavbar({
   const navigate = useNavigate();
   const [hidden, setHidden] = useState(!isOpen);
 
+  const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
   const subNavBGColor = useColorModeValue("darkMain.400", "darkMain.200");
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
@@ -53,7 +54,7 @@ function SubNavbar({
       hidden={hidden}
       initial={false}
       transition="none"
-      animate={{ width: isOpen ? 200 : 0 }}
+      animate={{ width: isOpen ? subNavWidth : 0 }}
       onAnimationStart={() => setHidden(false)}
       onAnimationComplete={() => setHidden(!isOpen)}
       style={{
@@ -67,17 +68,19 @@ function SubNavbar({
         borderColor="darkMain.400"
         backgroundColor={subNavBGColor}
       >
+        {/* Close icon */}
         {isExpanded && (
           <Center cursor="pointer" onClick={handleCloseSubNavbar}>
             <Center
               zIndex="3"
+              pr="1.5px"
               mt="128px"
-              ml="200px"
+              ml={subNavWidth}
               border="1px"
               width="20px"
               height="20px"
               rounded="full"
-              fontSize="10px"
+              fontSize="11px"
               position="absolute"
               color={collapseIconArrow}
               backgroundColor={collapseIcon}
