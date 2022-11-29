@@ -346,7 +346,6 @@ type FetchSpaceList = {
   type: typeof SPACE_LIST_ACTION.INIT_SPACE_LIST;
   payload: { spaceList: SpaceType[] };
 };
-
 type UpdateOpenedSpace = {
   type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_SPACE;
   payload: { spaceId: number };

@@ -11,9 +11,9 @@ import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 import {
-  space1StatusColumns,
+  statusColumns2,
   space1TaskList,
-  space2StatusColumns,
+  statusColumns1,
   space2TaskList,
   staticColumnOptions,
 } from "./mockData";
@@ -24,7 +24,6 @@ interface UseLocalTasksParam {
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
   let panelId = Number(param[TASK_BOARD_PARAM]);
-  console.log(param);
 
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
@@ -40,7 +39,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
         setLoading(true);
 
         const statusColumnsDataFromApi: StatusColumns =
-          panelId === 1 ? space1StatusColumns : space2StatusColumns;
+          panelId === 1 ? statusColumns2 : statusColumns1;
 
         const columnDataFromApi: ColumnOptions = {
           dueDateColumns: staticColumnOptions.dueDateColumns,

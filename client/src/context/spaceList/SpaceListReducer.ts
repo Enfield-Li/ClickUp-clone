@@ -57,11 +57,11 @@ export default function spaceListReducer(
         draftState.spaceList?.forEach((space) => {
           if (space.id === spaceId) {
             space.allListOrFolder.forEach((listOrFolder) => {
-              if (
-                listOrFolder.id === folderId &&
-                determineFolderType(listOrFolder)
-              ) {
-                listOrFolder.isOpen = true;
+              const isFolder = determineFolderType(listOrFolder);
+              const isCurrentFolder = listOrFolder.id === folderId;
+
+              if (isFolder && isCurrentFolder) {
+                listOrFolder.isOpen = !listOrFolder.isOpen;
               }
             });
           }
@@ -74,15 +74,28 @@ export default function spaceListReducer(
         const { listId } = action.payload;
 
         draftState.openedListId = listId;
+        // undo previous selected list
         draftState.spaceList?.forEach((space) =>
           space.allListOrFolder.forEach((listOrFolder) => {
-            if (listOrFolder.id === listId) {
-              listOrFolder.isSelected = false;
+            // list is under space
+            if (!determineFolderType(listOrFolder)) {
+              const list = listOrFolder;
+              if (list.id !== listId) {
+                list.isSelected = false;
+              } else if (list.id === listId) {
+                list.isSelected = true;
+              }
             }
-            if (determineFolderType(listOrFolder)) {
-              listOrFolder.allLists.forEach(
-                (list) => list.id === listId && (list.isSelected = false)
-              );
+
+            // list is under folder
+            else if (determineFolderType(listOrFolder)) {
+              listOrFolder.allLists.forEach((list) => {
+                if (list.id !== listId) {
+                  list.isSelected = false;
+                } else if (list.id === listId) {
+                  list.isSelected = true;
+                }
+              });
             }
           })
         );

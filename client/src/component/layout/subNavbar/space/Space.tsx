@@ -1,8 +1,7 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
 import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
-import { SpaceType, AUTH_ACTION, SPACE_LIST_ACTION } from "../../../../types";
+import { SpaceType, SPACE_LIST_ACTION } from "../../../../types";
 
 type Props = { space: SpaceType };
 

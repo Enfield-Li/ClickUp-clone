@@ -15,7 +15,7 @@ import {
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
-export const space2StatusColumns: StatusColumns = [
+export const statusColumns1: StatusColumns = [
   {
     id: 1,
     title: DefaultStatus.TO_DO,
@@ -26,7 +26,7 @@ export const space2StatusColumns: StatusColumns = [
   { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
 ];
 
-export const space1StatusColumns: StatusColumns = [
+export const statusColumns2: StatusColumns = [
   {
     id: 1,
     title: DefaultStatus.TO_DO,
@@ -47,10 +47,10 @@ export const space1StatusColumns: StatusColumns = [
 const userInfo: UserInfo = { userId: 1, username: "mockUser" };
 const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
 
-const list: ListType[] = [
+const allFolder1List: ListType[] = [
   {
     id: 5,
-    allStatuses: space1StatusColumns,
+    allStatuses: statusColumns1,
     createdAt: new Date(),
     color: "green",
     isSelected: true,
@@ -62,9 +62,12 @@ const list: ListType[] = [
     spaceId: 1,
     taskAmount: 5,
   },
+];
+
+const allFolder15List: ListType[] = [
   {
     id: 6,
-    allStatuses: space1StatusColumns,
+    allStatuses: statusColumns2,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -90,24 +93,24 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     name: "folder1",
     owner: userInfo,
     spaceId: 2,
-    allLists: list,
+    allLists: allFolder1List,
   },
   {
     id: 1.5,
     createdAt: new Date(),
     color: "green",
-    isOpen: false,
+    isOpen: true,
     isPrivate: false,
     isSelected: false,
     member: [userInfo, guestUserInfo],
     name: "folder1.5",
     owner: userInfo,
     spaceId: 2,
-    allLists: list,
+    allLists: allFolder15List,
   },
   {
     id: 2,
-    allStatuses: space1StatusColumns,
+    allStatuses: statusColumns1,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -121,7 +124,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
   {
     id: 4,
-    allStatuses: space1StatusColumns,
+    allStatuses: statusColumns2,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -141,7 +144,7 @@ const allSpace2ListOrFolder: (FolderType | ListType)[] = [
     color: "",
     isPrivate: true,
     isSelected: false,
-    allStatuses: space1StatusColumns,
+    allStatuses: statusColumns1,
     createdAt: new Date(),
     member: [userInfo, guestUserInfo],
     name: "list3",

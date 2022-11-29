@@ -19,7 +19,7 @@ function SpaceList({ space }: Props) {
           animate={{ opacity: space.isOpen ? 1 : 0 }}
           transition={{ type: "keyframes", duration: 0.1 }}
         >
-          <FolderAndList folder={folder} />
+          <FolderAndList spaceId={space.id} folder={folder} />
         </motion.div>
       ))}
     </motion.div>

@@ -1,15 +1,22 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
-import { useNavigate } from "react-router-dom";
-import { ListType } from "../../../../types";
+import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
+import { ListType, SPACE_LIST_ACTION } from "../../../../types";
 
 type Props = { list: ListType; isSubList?: boolean };
 
 export default memo(List);
 function List({ list, isSubList }: Props) {
-  const navigate = useNavigate();
   const { colorMode } = useColorMode();
+  const { spaceListDispatch } = useSpaceListContext();
   const bgHoverColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+
+  function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    spaceListDispatch({
+      payload: { listId: list.id },
+      type: SPACE_LIST_ACTION.UPDATE_SELECTED_LIST,
+    });
+  }
 
   return (
     <Flex
@@ -24,6 +31,7 @@ function List({ list, isSubList }: Props) {
       alignItems="center"
       ml={isSubList ? "35px" : "5"}
       justifyContent="space-between"
+      onClick={handleSelectList}
       bgColor={list.isSelected ? "customBlue.200" : ""}
       _hover={list.isSelected ? undefined : { bgColor: bgHoverColor }}
     >

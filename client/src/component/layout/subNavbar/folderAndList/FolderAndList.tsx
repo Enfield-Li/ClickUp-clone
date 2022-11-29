@@ -5,13 +5,19 @@ import determineListType from "./determineList";
 import Folder from "./Folder";
 import List from "./List";
 
-type Props = { folder: FolderType | ListType };
+type Props = { spaceId: number; folder: FolderType | ListType };
 
 export default memo(FolderAndList);
-function FolderAndList({ folder }: Props) {
+function FolderAndList({ folder, spaceId }: Props) {
   const isList = determineListType(folder);
 
   return (
-    <Box>{!isList ? <Folder folder={folder} /> : <List list={folder} />}</Box>
+    <Box>
+      {!isList ? (
+        <Folder folder={folder} spaceId={spaceId} />
+      ) : (
+        <List list={folder} />
+      )}
+    </Box>
   );
 }

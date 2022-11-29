@@ -1,26 +1,26 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../../constant";
-import useAuthContext from "../../../../context/auth/useAuthContext";
-import { FolderType } from "../../../../types";
+import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
+import { FolderType, SPACE_LIST_ACTION } from "../../../../types";
 import List from "./List";
 
-type Props = { folder: FolderType };
+type Props = { spaceId: number; folder: FolderType };
 
 export default memo(Folder);
-function Folder({ folder }: Props) {
-  const navigate = useNavigate();
+function Folder({ folder, spaceId }: Props) {
   const { colorMode } = useColorMode();
-  const { authDispatch } = useAuthContext();
+  const { spaceListDispatch } = useSpaceListContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenFolder(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    listId: number
+    folderId: number
   ) {
     e.stopPropagation();
-    navigate(CLIENT_ROUTE.TASK_BOARD + `/${listId}`, { replace: true });
+    spaceListDispatch({
+      payload: { spaceId, folderId },
+      type: SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER,
+    });
   }
 
   return (
@@ -34,6 +34,7 @@ function Folder({ folder }: Props) {
         position="relative"
         alignItems="center"
         _hover={{ bgColor: hoverBgColor }}
+        onClick={(e) => handleOpenFolder(e, folder.id)}
       >
         {/* Drag icon */}
         {/* {hover && (
@@ -56,9 +57,7 @@ function Folder({ folder }: Props) {
         </Box>
 
         {/* name */}
-        <Center fontSize="13px" onClick={(e) => handleOpenFolder(e, folder.id)}>
-          {folder.name}
-        </Center>
+        <Center fontSize="13px">{folder.name}</Center>
 
         {folder.isPrivate && (
           <Center fontSize="12px" color="gray" ml="1">
