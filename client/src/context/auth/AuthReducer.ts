@@ -1,7 +1,7 @@
 import produce from "immer";
 import determineListType, {
   determineFolderType,
-} from "../../component/layout/navbar/folderAndList/determineList";
+} from "../../component/layout/subNavbar/folderAndList/determineList";
 import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
 
 export default function authReducer(

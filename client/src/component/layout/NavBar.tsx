@@ -1,8 +1,10 @@
 import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
 import React, { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import useAuthContext from "../../context/auth/useAuthContext";
+import { SpaceType } from "../../types";
 import FixedNavBar from "./navbar/FixedNavBar";
-import SubNavbar from "./navbar/SubNavbar";
+import SubNavbar from "./subNavbar/SubNavbar";
 
 type Props = {};
 export enum Section {
@@ -14,6 +16,7 @@ export enum Section {
 export default memo(NavBar);
 function NavBar({}: Props) {
   const location = useLocation();
+  const { authState } = useAuthContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
   const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
@@ -32,6 +35,14 @@ function NavBar({}: Props) {
       setCurrentSection(Section.DEV);
     }
   }, []);
+
+  const [spaceList, setSpaceList] = useState<SpaceType | null>(null);
+
+  useEffect(() => {
+    if (authState.user && spaceList !== null) {
+        
+    }
+  }, [authState.user, spaceList]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>
