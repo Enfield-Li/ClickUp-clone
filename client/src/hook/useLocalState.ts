@@ -39,7 +39,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
         setLoading(true);
 
         const statusColumnsDataFromApi: StatusColumns =
-          panelId === 1 ? statusColumns2 : statusColumns1;
+          panelId % 2 ? statusColumns2 : statusColumns1;
 
         const columnDataFromApi: ColumnOptions = {
           dueDateColumns: staticColumnOptions.dueDateColumns,

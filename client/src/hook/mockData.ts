@@ -50,7 +50,6 @@ const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
 const allFolder1List: ListType[] = [
   {
     id: 5,
-    allStatuses: statusColumns1,
     createdAt: new Date(),
     color: "green",
     isSelected: true,
@@ -67,7 +66,6 @@ const allFolder1List: ListType[] = [
 const allFolder15List: ListType[] = [
   {
     id: 6,
-    allStatuses: statusColumns2,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -110,7 +108,6 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
   {
     id: 2,
-    allStatuses: statusColumns1,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -124,7 +121,6 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
   {
     id: 4,
-    allStatuses: statusColumns2,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -144,7 +140,6 @@ const allSpace2ListOrFolder: (FolderType | ListType)[] = [
     color: "",
     isPrivate: true,
     isSelected: false,
-    allStatuses: statusColumns1,
     createdAt: new Date(),
     member: [userInfo, guestUserInfo],
     name: "list3",

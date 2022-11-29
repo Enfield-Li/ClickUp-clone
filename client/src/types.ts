@@ -53,6 +53,7 @@ interface Column<T> {
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<Status> {
+  listId: number;
   orderIndex: number;
 }
 export interface DueDateColumn extends Column<DueDate> {
@@ -278,7 +279,6 @@ export interface FolderType extends BaseList {
 }
 export interface ListType extends BaseList {
   taskAmount: number | null;
-  allStatuses: StatusColumns;
   parentFolderId: number | null;
   //   boardViewSetting?: unknown
   //   listViewSetting?: unknown
