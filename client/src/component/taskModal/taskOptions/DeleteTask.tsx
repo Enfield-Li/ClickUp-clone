@@ -24,7 +24,7 @@ function TaskOptions({}: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover isLazy>
         <PopoverTrigger>
           <Center px={3} py={1} cursor="pointer">
             <i className="bi bi-three-dots"></i>

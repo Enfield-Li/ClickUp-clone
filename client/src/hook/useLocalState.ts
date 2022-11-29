@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Params, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { CLIENT_ROUTE, TASK_BOARD_PARAM } from "../constant";
-import useAuthContext from "../context/auth/useAuthContext";
+import { TASK_BOARD_PARAM } from "../constant";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
@@ -25,9 +24,8 @@ interface UseLocalTasksParam {
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
   let panelId = Number(param[TASK_BOARD_PARAM]);
+  console.log(param);
 
-  const navigate = useNavigate();
-  const { authState } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
   const { task, setTask, taskStateContext, setTaskStateContext } =

@@ -76,6 +76,7 @@ function SelectStatusIcons({}: Props) {
   return (
     <Center>
       <Popover
+        isLazy
         isOpen={isOpen}
         onClose={onClose}
         placement="bottom"

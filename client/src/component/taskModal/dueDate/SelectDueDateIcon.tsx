@@ -22,6 +22,7 @@ function SelectDueDateIcon({ task, children, setIsPopoverOpen }: Props) {
 
   return (
     <Popover
+      isLazy
       placement="bottom"
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}

@@ -15,7 +15,7 @@ function Folder({ folder }: Props) {
   const { authDispatch } = useAuthContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
-  function handleNavigateToList(
+  function handleOpenFolder(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     listId: number
   ) {
@@ -56,10 +56,7 @@ function Folder({ folder }: Props) {
         </Box>
 
         {/* name */}
-        <Center
-          fontSize="13px"
-          onClick={(e) => handleNavigateToList(e, folder.id)}
-        >
+        <Center fontSize="13px" onClick={(e) => handleOpenFolder(e, folder.id)}>
           {folder.name}
         </Center>
 

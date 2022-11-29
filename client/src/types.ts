@@ -313,66 +313,66 @@ type LogInUser = {
   payload: { user: User };
 };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
-type UpdateOpenedSpace = {
-  type: typeof AUTH_ACTION.UPDATE_OPEN_SPACE;
-  payload: { spaceId: number };
-};
-type UpdateSelectedSpace = {
-  type: typeof AUTH_ACTION.UPDATE_SELECTED_SPACE;
-  payload: { spaceId: number };
-};
-type UpdateOpenedFolder = {
-  type: typeof AUTH_ACTION.UPDATE_OPEN_FOLDER;
-  payload: { spaceId: number; folderId: number };
-};
-type UpdateSelectedFolder = {
-  type: typeof AUTH_ACTION.UPDATE_SELECTED_FOLDER;
-  payload: { spaceId: number; folderId: number };
-};
-type UpdateSelectedList = {
-  type: typeof AUTH_ACTION.UPDATE_SELECTED_LIST;
-  payload: { listId: number };
-};
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
-  UPDATE_OPEN_SPACE: "update_open_space", //
-  UPDATE_SELECTED_SPACE: "update_selected_space",
-  UPDATE_OPEN_FOLDER: "update_open_folder", //
-  UPDATE_SELECTED_FOLDER: "update_selected_folder",
-  UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;
 
 export type SpaceListContextType = {
-    spaceListState: SpaceListStateType;
-    spaceListDispatch: React.Dispatch<SpaceListActionType>;
-  };
-  
-  export const initialSpaceListState: SpaceListStateType = {
-    openedListId: null,
-    spaceList: null,
-  };
-  
-  export type SpaceListStateType = {
-    openedListId: number | null;
-    spaceList: SpaceType[] | null;
-  };
-  
-  export type SpaceListActionType = NewErrorState | IndicateLoadingState;
-  
-  type NewErrorState = {
-    type: typeof SPACE_LIST_ACTION.NEW_ERROR;
-    payload: string;
-  };
-  
-  type IndicateLoadingState = {
-    type: typeof SPACE_LIST_ACTION.LOADING_STATE;
-    payload: boolean;
-  };
-  
-  export const SPACE_LIST_ACTION = {
-    NEW_ERROR: "NEW_ERROR",
-    LOADING_STATE: "LOADING_STATE",
-  } as const;
-  
+  spaceListState: SpaceListStateType;
+  spaceListDispatch: React.Dispatch<SpaceListActionType>;
+};
+
+export const initialSpaceListState: SpaceListStateType = {
+  openedListId: null,
+  spaceList: null,
+};
+
+export type SpaceListStateType = {
+  openedListId: number | null;
+  spaceList: SpaceType[] | null;
+};
+
+export type SpaceListActionType =
+  | FetchSpaceList
+  | UpdateOpenedSpace
+  | UpdateSelectedSpace
+  | UpdateOpenedFolder
+  | UpdateSelectedFolder
+  | UpdateSelectedList;
+
+type FetchSpaceList = {
+  type: typeof SPACE_LIST_ACTION.INIT_SPACE_LIST;
+  payload: { spaceList: SpaceType[] };
+};
+
+type UpdateOpenedSpace = {
+  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_SPACE;
+  payload: { spaceId: number };
+};
+type UpdateSelectedSpace = {
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_SPACE;
+  payload: { spaceId: number };
+};
+type UpdateOpenedFolder = {
+  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
+type UpdateSelectedFolder = {
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
+type UpdateSelectedList = {
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_LIST;
+  payload: { listId: number };
+};
+
+export const SPACE_LIST_ACTION = {
+  INIT_SPACE_LIST: "init_space_list",
+  UPDATE_OPENED_SPACE: "update_opened_space", //
+  UPDATE_SELECTED_SPACE: "update_selected_space",
+  UPDATE_OPENED_FOLDER: "update_opened_folder", //
+  UPDATE_SELECTED_FOLDER: "update_selected_folder",
+  UPDATE_SELECTED_LIST: "update_selected_list",
+} as const;

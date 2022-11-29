@@ -11,7 +11,6 @@ import { memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
-import useSpaceListContext from "../../context/spaceList/useSpaceListContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { CLIENT_ROUTE } from "../../constant";
 

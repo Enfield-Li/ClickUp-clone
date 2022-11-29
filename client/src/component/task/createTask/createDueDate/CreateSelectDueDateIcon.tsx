@@ -24,7 +24,7 @@ function CreateSelectDueDateIcon({
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   return (
-    <Popover placement="bottom">
+    <Popover isLazy placement="bottom">
       {({ onClose }: { onClose: () => void }) => (
         // https://chakra-ui.com/docs/components/popover/usage#accessing-internal-taskState
         <>

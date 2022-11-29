@@ -32,6 +32,7 @@ function SelectPriorityPopover({
   return (
     // https://github.com/chakra-ui/chakra-ui/issues/2843#issuecomment-748641805
     <Popover
+      isLazy
       placement="bottom"
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}

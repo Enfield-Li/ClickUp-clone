@@ -21,6 +21,7 @@ function RightClickShowCardOptions({ children }: Props) {
 
   return (
     <Popover
+      isLazy
       isOpen={isOpen}
       onClose={onClose}
       placement="right-start"

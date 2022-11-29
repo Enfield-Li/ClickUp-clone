@@ -8,11 +8,11 @@ type Props = {};
 
 export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
+  const { authState } = useAuthContext();
+  const { colorMode } = useColorMode();
   const {
     spaceListState: { spaceList },
   } = useSpaceListContext();
-  const { authState } = useAuthContext();
-  const { colorMode } = useColorMode();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleClickToSeeEveryTasks(): void {

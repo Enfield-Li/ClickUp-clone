@@ -27,7 +27,7 @@ function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover isLazy>
         {({ onClose }: { onClose: () => void }) => {
           return (
             <>

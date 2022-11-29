@@ -19,7 +19,7 @@ export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
-  const { spaceListDispatch: globalDispatch } = useSpaceListContext();
+  const { spaceListDispatch } = useSpaceListContext();
 
   async function fetchData() {
     try {

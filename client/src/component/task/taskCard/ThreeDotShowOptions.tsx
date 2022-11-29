@@ -17,6 +17,7 @@ export default memo(ThreeDotShowOptions);
 function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
   return (
     <Popover
+      isLazy
       onOpen={() => setIsPopoverOpen && setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen && setIsPopoverOpen(false)}
     >

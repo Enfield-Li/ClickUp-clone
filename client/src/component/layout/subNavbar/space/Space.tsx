@@ -1,23 +1,24 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
-import { SpaceType, AUTH_ACTION } from "../../../../types";
+import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
+import { SpaceType, AUTH_ACTION, SPACE_LIST_ACTION } from "../../../../types";
 
 type Props = { space: SpaceType };
 
 export default memo(Space);
 function Space({ space }: Props) {
-  const { authDispatch } = useAuthContext();
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
+  const { spaceListDispatch } = useSpaceListContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     spaceId: number
   ): void {
-    authDispatch({
-      type: AUTH_ACTION.UPDATE_OPEN_SPACE,
+    spaceListDispatch({
+      type: SPACE_LIST_ACTION.UPDATE_OPENED_SPACE,
       payload: { spaceId },
     });
   }

@@ -60,7 +60,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
       onMouseOverCapture={() => setShowDeleteButton(true)}
       onMouseOutCapture={() => setShowDeleteButton(false)}
     >
-      <Popover>
+      <Popover isLazy>
         {({
           onClose,
           isOpen: isOptionOpen,

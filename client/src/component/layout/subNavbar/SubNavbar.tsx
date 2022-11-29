@@ -10,8 +10,9 @@ import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
+import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
 import { initialSpaces } from "../../../hook/mockData";
-import { SpaceType } from "../../../types";
+import { SpaceType, SPACE_LIST_ACTION } from "../../../types";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -33,31 +34,43 @@ function SubNavbar({
   getDisclosureProps,
 }: Props) {
   const navigate = useNavigate();
+  const { authState } = useAuthContext();
   const [hidden, setHidden] = useState(!isOpen);
+  const { spaceListDispatch, spaceListState } = useSpaceListContext();
 
   const subNavWidth = "250px";
-  const { authState } = useAuthContext();
   const collapseIcon = useColorModeValue("white", "darkMain.200");
   const subNavBGColor = useColorModeValue("darkMain.400", "darkMain.200");
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
-  // Sub navbar states
-  const [spaceList, setSpaceList] = useState<SpaceType[] | null>(null);
-
+  // init spaceListState
   useEffect(() => {
-    if (authState.user && !spaceList) {
-      setSpaceList(initialSpaces);
+    if (authState.user && !spaceListState.spaceList) {
+      spaceListDispatch({
+        type: SPACE_LIST_ACTION.INIT_SPACE_LIST,
+        payload: { spaceList: initialSpaces },
+      });
     }
-  }, [authState.user, spaceList]);
+  }, [authState.user, spaceListState.spaceList]);
+
+  // sync up url with openedListId
+  useEffect(() => {
+    const selectedListId = spaceListState.openedListId;
+    if (selectedListId) {
+      navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
+        replace: true,
+      });
+    }
+  }, [spaceListState.openedListId]);
 
   function handleCloseSubNavbar() {
     onClose();
     setIsExpanded(false);
     setSelectable(false);
 
-    // Prevent Collapsible from opening after closing
-    setTimeout(() => setSelectable(true), 350);
+    // Prevent subNav from Collapsing right after opening task page
+    setTimeout(() => setSelectable(true), 300);
   }
 
   return (
