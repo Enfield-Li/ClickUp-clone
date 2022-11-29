@@ -1,12 +1,16 @@
 import { Box, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
+import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
 import SpaceList from "./space/SpaceList";
 
 type Props = {};
 
 export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
+  const {
+    spaceListState: { spaceList },
+  } = useSpaceListContext();
   const { authState } = useAuthContext();
   const { colorMode } = useColorMode();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
@@ -37,7 +41,7 @@ function SubNavbarContent({}: Props) {
       </Flex>
 
       <Box>
-        {authState.spaces.map((space) => (
+        {spaceList?.map((space) => (
           <Box key={space.id}>
             <SpaceList space={space} />
           </Box>

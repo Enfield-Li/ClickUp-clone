@@ -11,7 +11,7 @@ import { memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
-import useGlobalContext from "../../context/global/useGlobalContext";
+import useSpaceListContext from "../../context/spaceList/useSpaceListContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { CLIENT_ROUTE } from "../../constant";
 
@@ -23,7 +23,6 @@ function Header({}: Props) {
   const location = useLocation();
   const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
-  const { globalState } = useGlobalContext();
 
   const headerBG = useColorModeValue("white", "darkMain.200");
 
@@ -93,8 +92,6 @@ function Header({}: Props) {
         {/* Dark/light mode switcher */}
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
-      {/* Loading progress bar */}
-      {globalState.loading ? <Progress size="xs" isIndeterminate /> : null}
     </Box>
   );
 }

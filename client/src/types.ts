@@ -231,8 +231,6 @@ export interface UpdateTaskDescDTO {
 // auth
 export const authInitialState: AuthStateType = {
   user: null,
-  spaces: [],
-  openedListId: undefined,
 };
 
 export type AuthContextType = {
@@ -242,8 +240,6 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
-  spaces: SpaceType[];
-  openedListId: number | undefined;
 };
 
 export type Credentials = {
@@ -306,23 +302,15 @@ export interface User {
 
 export interface UserResponse {
   id: number;
-  spaces: SpaceType[];
   username: string;
   accessToken: string;
 }
 
-export type AuthActionType =
-  | LogInUser
-  | LogOutUser
-  | UpdateOpenedSpace
-  | UpdateOpenedFolder
-  | UpdateSelectedList
-  | UpdateSelectedSpace
-  | UpdateSelectedFolder;
+export type AuthActionType = LogInUser | LogOutUser;
 
 type LogInUser = {
   type: typeof AUTH_ACTION.LOGIN_USER;
-  payload: { spaces: SpaceType[], user: User };
+  payload: { user: User };
 };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
 type UpdateOpenedSpace = {
@@ -355,3 +343,36 @@ export const AUTH_ACTION = {
   UPDATE_SELECTED_FOLDER: "update_selected_folder",
   UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;
+
+export type SpaceListContextType = {
+    spaceListState: SpaceListStateType;
+    spaceListDispatch: React.Dispatch<SpaceListActionType>;
+  };
+  
+  export const initialSpaceListState: SpaceListStateType = {
+    openedListId: null,
+    spaceList: null,
+  };
+  
+  export type SpaceListStateType = {
+    openedListId: number | null;
+    spaceList: SpaceType[] | null;
+  };
+  
+  export type SpaceListActionType = NewErrorState | IndicateLoadingState;
+  
+  type NewErrorState = {
+    type: typeof SPACE_LIST_ACTION.NEW_ERROR;
+    payload: string;
+  };
+  
+  type IndicateLoadingState = {
+    type: typeof SPACE_LIST_ACTION.LOADING_STATE;
+    payload: boolean;
+  };
+  
+  export const SPACE_LIST_ACTION = {
+    NEW_ERROR: "NEW_ERROR",
+    LOADING_STATE: "LOADING_STATE",
+  } as const;
+  

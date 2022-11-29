@@ -1,8 +1,7 @@
-import { useDisclosure, Flex, Box, useColorModeValue } from "@chakra-ui/react";
-import React, { memo, useEffect, useState } from "react";
+import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useAuthContext from "../../context/auth/useAuthContext";
-import { SpaceType } from "../../types";
+import SpaceListStateProvider from "../../context/spaceList/SpaceListContext";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
@@ -16,7 +15,6 @@ export enum Section {
 export default memo(NavBar);
 function NavBar({}: Props) {
   const location = useLocation();
-  const { authState } = useAuthContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
   const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
@@ -35,14 +33,6 @@ function NavBar({}: Props) {
       setCurrentSection(Section.DEV);
     }
   }, []);
-
-  const [spaceList, setSpaceList] = useState<SpaceType | null>(null);
-
-  useEffect(() => {
-    if (authState.user && spaceList !== null) {
-        
-    }
-  }, [authState.user, spaceList]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>
@@ -66,14 +56,16 @@ function NavBar({}: Props) {
           position={isExpanded ? undefined : "absolute"}
           onMouseOverCapture={subNavOpenable ? onOpen : undefined}
         >
-          <SubNavbar
-            isOpen={isOpen}
-            onClose={onClose}
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-            setSelectable={setSubNavOpenable}
-            getDisclosureProps={getDisclosureProps}
-          />
+          <SpaceListStateProvider>
+            <SubNavbar
+              isOpen={isOpen}
+              onClose={onClose}
+              isExpanded={isExpanded}
+              setIsExpanded={setIsExpanded}
+              setSelectable={setSubNavOpenable}
+              getDisclosureProps={getDisclosureProps}
+            />
+          </SpaceListStateProvider>
         </Box>
       )}
     </Flex>

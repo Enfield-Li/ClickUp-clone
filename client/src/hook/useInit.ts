@@ -13,7 +13,7 @@ export default function useInit() {
   useEffect(() => {
     authDispatch({
       type: AUTH_ACTION.LOGIN_USER,
-      payload: { user: mockUser, spaces: initialSpaces },
+      payload: { user: mockUser },
     });
     // if (accessToken) {
     //   refreshUserToken(authDispatch, toast, navigate);

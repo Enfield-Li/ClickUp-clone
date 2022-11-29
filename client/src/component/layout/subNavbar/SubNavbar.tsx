@@ -9,6 +9,9 @@ import { motion } from "framer-motion";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
+import useAuthContext from "../../../context/auth/useAuthContext";
+import { initialSpaces } from "../../../hook/mockData";
+import { SpaceType } from "../../../types";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -33,10 +36,20 @@ function SubNavbar({
   const [hidden, setHidden] = useState(!isOpen);
 
   const subNavWidth = "250px";
+  const { authState } = useAuthContext();
   const collapseIcon = useColorModeValue("white", "darkMain.200");
   const subNavBGColor = useColorModeValue("darkMain.400", "darkMain.200");
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
+
+  // Sub navbar states
+  const [spaceList, setSpaceList] = useState<SpaceType[] | null>(null);
+
+  useEffect(() => {
+    if (authState.user && !spaceList) {
+      setSpaceList(initialSpaces);
+    }
+  }, [authState.user, spaceList]);
 
   function handleCloseSubNavbar() {
     onClose();

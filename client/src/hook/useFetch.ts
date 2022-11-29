@@ -8,7 +8,7 @@ import {
   processTaskList,
 } from "../component/task/actions/taskProcessing";
 import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
-import useGlobalContext from "../context/global/useGlobalContext";
+import useSpaceListContext from "../context/spaceList/useSpaceListContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosInstance } from "../utils/AxiosInterceptor";
 import { staticColumnOptions } from "./mockData";
@@ -19,7 +19,7 @@ export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
   const [loading, setLoading] = useState<boolean>();
   const [error, setError] = useState<boolean>();
-  const { globalDispatch } = useGlobalContext();
+  const { spaceListDispatch: globalDispatch } = useSpaceListContext();
 
   async function fetchData() {
     try {

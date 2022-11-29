@@ -33,24 +33,6 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
-  // init spaceId
-  useEffect(() => {
-    function isNestedRoute(param: Readonly<Params<string>>) {
-      return Object.entries(param).length > 1;
-    }
-
-    if (!panelId && authState.spaces.length && !isNestedRoute(param)) {
-      const initialPanel = authState.spaces.find((space) => space.isOpen);
-
-      if (initialPanel) {
-        panelId = initialPanel.id;
-        navigate(CLIENT_ROUTE.TASK_BOARD + `/${panelId}`, { replace: true });
-      } else {
-        throw new Error("Failed to initialize panelId...");
-      }
-    }
-  }, [authState.spaces, panelId, param]);
-
   // update task state based on space selected
   useEffect(() => {
     initLocalState();
