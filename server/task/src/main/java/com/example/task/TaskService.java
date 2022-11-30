@@ -1,51 +1,52 @@
 package com.example.task;
 
-import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
-import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
+import java.time.LocalDateTime;
+import java.util.List;
 
-import com.example.amqp.RabbitMqMessageProducer;
+// import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+// import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
+// import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
+
+// import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.task.dto.TaskPositionDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
-import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
+import com.example.task.model.UserInfo;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
     Integer updateCount;
+    UserInfo userInfo = UserInfo.builder().id(1)
+            .userId(1).username("mockUser").build();
 
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
-    private final RabbitMqMessageProducer rabbitMQMessageProducer;
+    // private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
-    public UserInfo getCurrentUserInfo() {
-        return (UserInfo) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-    }
+    // public UserInfo getCurrentUserInfo() {
+    //     return (UserInfo) SecurityContextHolder
+    //             .getContext()
+    //             .getAuthentication()
+    //             .getPrincipal();
+    // }
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {
-        var userInfo = getCurrentUserInfo();
+        // var userInfo = getCurrentUserInfo();
         var userId = userInfo.getUserId();
         var username = userInfo.getUsername();
 
@@ -60,7 +61,7 @@ public class TaskService {
     @Transactional
     public Boolean updateTasksPosition(
             UpdateTasksPositionDTO updateTasksPositionDTO) {
-        var userInfo = getCurrentUserInfo();
+        // var userInfo = getCurrentUserInfo();
         var userId = userInfo.getUserId();
         var username = userInfo.getUsername();
 
@@ -75,16 +76,16 @@ public class TaskService {
 
         // Task drop into a different column
         // publish task update event
-        var taskEvents = sourceTask.get().taskEvents();
-        if (taskEvents != null) {
-            taskEvents.setUserId(userId);
-            taskEvents.setUsername(username);
+        // var taskEvents = sourceTask.get().taskEvents();
+        // if (taskEvents != null) {
+        //     taskEvents.setUserId(userId);
+        //     taskEvents.setUsername(username);
 
-            rabbitMQMessageProducer.publish(
-                    internalExchange,
-                    taskEventRoutingKey,
-                    taskEvents);
-        }
+        //     rabbitMQMessageProducer.publish(
+        //             internalExchange,
+        //             taskEventRoutingKey,
+        //             taskEvents);
+        // }
 
         var statusTableName = "status_position";
         var dueDateTableName = "due_date_position";
@@ -124,7 +125,7 @@ public class TaskService {
 
     @Transactional
     public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
-        var userInfo = getCurrentUserInfo();
+        // var userInfo = getCurrentUserInfo();
         var userId = userInfo.getUserId();
         var username = userInfo.getUsername();
 
@@ -143,10 +144,10 @@ public class TaskService {
                 .build();
 
         // publish task update title event
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                taskEventRoutingKey,
-                updateEventDTO);
+        // rabbitMQMessageProducer.publish(
+        //         internalExchange,
+        //         taskEventRoutingKey,
+        //         updateEventDTO);
 
         var updateCount = taskRepository.updateTitle(
                 taskId,
