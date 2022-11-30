@@ -1,5 +1,5 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
-import { memo, useState } from "react";
+import { memo, MouseEvent, useState } from "react";
 import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
 import { SpaceType, SPACE_LIST_ACTION } from "../../../../types";
 
@@ -13,13 +13,20 @@ function Space({ space }: Props) {
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     spaceId: number
   ): void {
     spaceListDispatch({
       type: SPACE_LIST_ACTION.UPDATE_OPENED_SPACE,
       payload: { spaceId },
     });
+  }
+
+  function handleAddCategory(
+    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ): void {
+    e.stopPropagation();
+    throw new Error("Function not implemented.");
   }
 
   return (
@@ -58,27 +65,48 @@ function Space({ space }: Props) {
         flexGrow="1"
         rounded="4px"
         alignItems="center"
+        justifyContent="space-between"
         _hover={{ bgColor: hoverBgColor }}
       >
-        {/* Square */}
-        <Center
-          ml="1"
-          mr="2"
-          pb="3.5px"
-          width="20px"
-          height="20px"
-          rounded="4px"
-          fontSize="15px"
-          fontWeight="bold"
-          color="lightMain.200"
-          bgColor={space.color ? space.color : "gray"}
-        >
-          {space.name[0]}
-        </Center>
+        <Flex alignItems="center">
+          {/* Square */}
+          <Center
+            ml="1"
+            mr="2"
+            pb="3.5px"
+            width="20px"
+            height="20px"
+            rounded="4px"
+            fontSize="15px"
+            fontWeight="bold"
+            color="lightMain.200"
+            bgColor={space.color ? space.color : "gray"}
+          >
+            {space.name[0]}
+          </Center>
 
-        <Center pb="3px" fontSize="17px">
-          {space.name}
-        </Center>
+          <Center pb="3px" fontSize="17px">
+            {space.name}
+          </Center>
+        </Flex>
+
+        {hover && (
+          <Center
+            pb="1"
+            mr="3"
+            width="15px"
+            height="15px"
+            rounded="full"
+            fontSize="15px"
+            color="darkMain.200"
+            bgColor="lightMain.400"
+            fontWeight="extrabold"
+            _hover={{ bgColor: "purple.500" }}
+            onClick={(e) => handleAddCategory(e)}
+          >
+            +
+          </Center>
+        )}
       </Flex>
     </Flex>
   );

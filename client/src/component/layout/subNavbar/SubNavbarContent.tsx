@@ -1,4 +1,4 @@
-import { Box, Flex, useColorMode } from "@chakra-ui/react";
+import { Box, Center, Flex, Text, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
@@ -47,6 +47,20 @@ function SubNavbarContent({}: Props) {
           </Box>
         ))}
       </Box>
+
+      <Flex
+        cursor="pointer"
+        alignItems="center"
+        color="lightMain.300"
+        _hover={{ color: "purple.500" }}
+      >
+        <Center fontWeight="bold" fontSize="xl" mx="1">
+          +
+        </Center>
+        <Text fontWeight="normal" fontSize="sm">
+          Add Space
+        </Text>
+      </Flex>
     </Box>
   );
 }

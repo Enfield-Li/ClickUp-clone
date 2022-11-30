@@ -1,8 +1,7 @@
 import {
   ColumnOptions,
   CurrentWeek,
-  DueDateRange,
-  BaseList,
+  DueDateRange, 
   ListType,
   Priority,
   StatusColumns,

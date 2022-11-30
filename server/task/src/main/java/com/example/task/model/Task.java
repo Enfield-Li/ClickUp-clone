@@ -48,6 +48,7 @@ public class Task {
     @NotNull
     private String title;
 
+    private Integer listId;
     private Boolean archived;
 
     @JsonIgnore

@@ -80,7 +80,7 @@ export enum ActionField {
 
 export type Field = ColumnField | ActionField;
 
-interface BaseEvent {
+interface Event {
   id?: number;
   field: Field;
   taskId: number;
@@ -109,12 +109,12 @@ export interface BeforeOrAfterUpdate {
   beforeUpdate: string | null;
 }
 
-export type UpdateEvent = BaseEvent & BeforeOrAfterUpdate;
-export interface CommentEvent extends BaseEvent {
+export type UpdateEvent = Event & BeforeOrAfterUpdate;
+export interface CommentEvent extends Event {
   comment: string;
   reactions: Reaction[];
 }
-export interface AssignmentEvent extends BaseEvent {
+export interface AssignmentEvent extends Event {
   assignmentAction: AssignmentAction;
   assignedUser: UserInfo;
 }
@@ -164,8 +164,9 @@ export interface Task {
   priority: PriorityPosition;
 
   // Keep previousTask record when set to finish
-  taskStateInMain?: TaskPositions;
-  taskStateInListView?: TaskPositions;
+  taskPositionInMain?: TaskPositions;
+  taskPositionInSpace?: TaskPositions;
+  taskPositionInListView?: TaskPositions;
 }
 
 export type TaskList = Task[];
@@ -261,7 +262,7 @@ export type LogInError = {
   errors: FieldError[];
 };
 
-export interface BaseList {
+export interface Category {
   id: number;
   name: string;
   spaceId: number;
@@ -273,11 +274,11 @@ export interface BaseList {
   color: string | null;
 }
 
-export interface FolderType extends BaseList {
+export interface FolderType extends Category {
   isOpen: boolean;
   allLists: ListType[];
 }
-export interface ListType extends BaseList {
+export interface ListType extends Category {
   taskAmount: number | null;
   parentFolderId: number | null;
   //   boardViewSetting?: unknown
@@ -292,7 +293,7 @@ export interface SpaceType {
   isSelected: boolean;
   orderIndex: number;
   color: string | null;
-  allListOrFolder: (FolderType | ListType)[]; // client side
+  allListOrFolder: (FolderType | ListType)[];
 }
 
 export interface User {
@@ -335,43 +336,55 @@ export type SpaceListStateType = {
 };
 
 export type SpaceListActionType =
+  | AddList
+  | AddFolder
   | FetchSpaceList
   | UpdateOpenedSpace
-  | UpdateSelectedSpace
   | UpdateOpenedFolder
-  | UpdateSelectedFolder
-  | UpdateSelectedList;
+  | UpdateSelectedList
+  | UpdateSelectedSpace
+  | UpdateSelectedFolder;
 
+type AddFolder = {
+  payload: { spaceId: number; folderName: string };
+  type: typeof SPACE_LIST_ACTION.ADD_FOLDER;
+};
+type AddList = {
+  payload: { spaceId: number; listName: string };
+  type: typeof SPACE_LIST_ACTION.ADD_LIST;
+};
 type FetchSpaceList = {
-  type: typeof SPACE_LIST_ACTION.INIT_SPACE_LIST;
   payload: { spaceList: SpaceType[] };
+  type: typeof SPACE_LIST_ACTION.INIT_SPACE_LIST;
 };
 type UpdateOpenedSpace = {
-  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_SPACE;
   payload: { spaceId: number };
+  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_SPACE;
 };
 type UpdateSelectedSpace = {
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_SPACE;
   payload: { spaceId: number };
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_SPACE;
 };
 type UpdateOpenedFolder = {
-  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER;
   payload: { spaceId: number; folderId: number };
+  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER;
 };
 type UpdateSelectedFolder = {
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_FOLDER;
   payload: { spaceId: number; folderId: number };
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_FOLDER;
 };
 type UpdateSelectedList = {
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_LIST;
   payload: { listId: number };
+  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_LIST;
 };
 
 export const SPACE_LIST_ACTION = {
+  ADD_LIST: "add_list",
+  ADD_FOLDER: "add_folder",
   INIT_SPACE_LIST: "init_space_list",
-  UPDATE_OPENED_SPACE: "update_opened_space", //
+  UPDATE_OPENED_SPACE: "update_opened_space",
   UPDATE_SELECTED_SPACE: "update_selected_space",
-  UPDATE_OPENED_FOLDER: "update_opened_folder", //
+  UPDATE_OPENED_FOLDER: "update_opened_folder",
   UPDATE_SELECTED_FOLDER: "update_selected_folder",
   UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;

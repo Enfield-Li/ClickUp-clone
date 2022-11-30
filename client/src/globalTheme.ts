@@ -11,6 +11,7 @@ export const darkNavBG = "rgb(43, 52, 59)"; // darkMain.200
 export const darkCardHoverBG = "rgb(56, 64, 71)"; // darkMain.100
 export const darkPopover = "rgb(79, 87, 98)";
 export const darkColumnHeadText = "rgb(171, 174, 176)";
+export const lighterDark = "rgb(130, 133, 136)";
 export const darkText = "rgb(213, 214, 215)";
 export const lightSubNavBG = "rgb(32, 38, 43)"; // darkMain.400
 export const lightColumnHeadText = "rgb(84, 77, 97)";
@@ -76,6 +77,7 @@ export const globalTheme = extendTheme({
       100: lightMainBG,
       200: darkText,
       300: darkColumnHeadText,
+      400: lighterDark,
     },
     customBlue: {
       50: "rgb(107, 93, 202)",
