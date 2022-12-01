@@ -1,8 +1,8 @@
 import { NotAllowedIcon } from "@chakra-ui/icons";
-import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import React from "react";
-import { spaceColors } from "./colors";
+import { spaceColors } from "./utils/colors";
 import { CreateSpace, Step } from "./CreateSpaceModal";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
@@ -11,11 +11,14 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function PickSpaceColor({ createSpace, setCreateSpace }: Props) {
+export default function SpaceColorSetting({
+  createSpace,
+  setCreateSpace,
+}: Props) {
   function handleCancelColor() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
-        draftState.createSpaceDTO.color = "";
+        draftState.createSpaceDTO.color = "gray";
       })
     );
   }
@@ -33,6 +36,7 @@ export default function PickSpaceColor({ createSpace, setCreateSpace }: Props) {
       sectionName="Space color"
       createSpace={createSpace}
       previousSection={Step.NAME}
+      nextSection={Step.IS_PRIVATE}
       setCreateSpace={setCreateSpace}
     >
       <Flex alignItems="center" height="100%">
@@ -48,7 +52,16 @@ export default function PickSpaceColor({ createSpace, setCreateSpace }: Props) {
           {createSpace.createSpaceDTO.name[0].toUpperCase()}
         </Center>
 
-        <Box flexGrow="1">
+        <Box flexGrow="1" pl="6">
+          <Text
+            fontSize="sm"
+            opacity="50%"
+            letterSpacing="wide"
+            fontWeight="semibold"
+          >
+            SPACE COLOR
+          </Text>
+
           {spaceColors.map((colorGroup, index) => (
             <Flex my="6" key={index}>
               {index === 0 && (

@@ -11,7 +11,7 @@ import produce from "immer";
 import { ChangeEvent } from "react";
 import { CreateSpaceDTO } from "../../../../types";
 import { CreateSpace, Step } from "./CreateSpaceModal";
-import NewSpaceSVG from "./NewSpaceSVG";
+import NewSpaceSVG from "./utils/NewSpaceSVG";
 
 type Props = {
   createSpace: CreateSpace;
@@ -62,6 +62,7 @@ export default function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
           <FormLabel fontSize="small" fontWeight="semibold" opacity="90%">
             Space name
           </FormLabel>
+
           <Input
             mb="5"
             autoFocus

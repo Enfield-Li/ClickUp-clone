@@ -1,15 +1,16 @@
 import {
   Modal,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import produce from "immer";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateSpaceDTO } from "../../../../types";
 import EnterSpaceName from "./EnterSpaceName";
-import PickSpaceColor from "./PickSpaceColor";
+import ReviewCreateSpace from "./ReviewCreateSpace";
+import SpaceColorSetting from "./SpaceColorSetting";
+import SpaceColumnsSetting from "./SpaceColumnsSetting";
+import SpacePrivateSetting from "./SpacePrivateSetting";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
@@ -60,14 +61,32 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
           />
         );
       }
-
       case Step.COLOR: {
         return (
-          <PickSpaceColor
+          <SpaceColorSetting
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
           />
         );
+      }
+      case Step.IS_PRIVATE: {
+        return (
+          <SpacePrivateSetting
+            createSpace={createSpace}
+            setCreateSpace={setCreateSpace}
+          />
+        );
+      }
+      case Step.STATUS_COLUMNS: {
+        return (
+          <SpaceColumnsSetting
+            createSpace={createSpace}
+            setCreateSpace={setCreateSpace}
+          />
+        );
+      }
+      case Step.CONFIRM: {
+        return <ReviewCreateSpace />;
       }
 
       default: {
@@ -86,10 +105,6 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
       <ModalOverlay />
       <ModalContent bgColor={contentBgColor} height="530px">
         <>{renderStepComponent()}</>
-        {/* <PickSpaceColor
-          createSpace={createSpace}
-          setCreateSpace={setCreateSpace}
-        /> */}
       </ModalContent>
     </Modal>
   );

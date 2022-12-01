@@ -12,6 +12,7 @@ import React from "react";
 import { CreateSpace, Step } from "./CreateSpaceModal";
 
 type Props = {
+  nextSection: Step;
   sectionName: string;
   previousSection: Step;
   createSpace: CreateSpace;
@@ -21,6 +22,7 @@ type Props = {
 
 export default function CreateSpaceModalTemplate({
   children,
+  nextSection,
   sectionName,
   createSpace,
   setCreateSpace,
@@ -29,7 +31,11 @@ export default function CreateSpaceModalTemplate({
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleNext() {
-    throw new Error("Function not implemented.");
+    setCreateSpace(
+      produce(createSpace, (draftState) => {
+        draftState.step = nextSection;
+      })
+    );
   }
 
   return (
