@@ -73,6 +73,7 @@ export const globalTheme = extendTheme({
       500: lightColumnHeadText,
     },
     lightMain: {
+      40: "rgb(250, 251, 252)",
       50: "rgb(250, 251, 252)",
       100: lightMainBG,
       200: darkText,

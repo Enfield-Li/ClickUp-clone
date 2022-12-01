@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { memo } from "react";
-import { SpaceType } from "../../../../types";
-import FolderAndList from "../folderAndList/FolderAndList";
+import { SpaceType } from "../../../types";
+import FolderAndList from "./folderAndList/FolderAndList";
 import Space from "./Space";
 
 type Props = { space: SpaceType };

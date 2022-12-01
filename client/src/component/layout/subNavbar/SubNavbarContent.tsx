@@ -1,18 +1,24 @@
-import { Box, Center, Flex, Text, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Text,
+  useColorMode,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
 import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
-import SpaceList from "./space/SpaceList";
+import CreateSpaceModal from "./createSpace/CreateSpaceModal";
+import SpaceList from "./SpaceList";
 
 type Props = {};
 
 export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
-  const { authState } = useAuthContext();
   const { colorMode } = useColorMode();
-  const {
-    spaceListState: { spaceList },
-  } = useSpaceListContext();
+  const { spaceListState } = useSpaceListContext();
+  const { spaceList } = spaceListState;
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleClickToSeeEveryTasks(): void {
@@ -49,6 +55,7 @@ function SubNavbarContent({}: Props) {
       </Box>
 
       <Flex
+        onClick={onOpen}
         cursor="pointer"
         alignItems="center"
         color="lightMain.300"
@@ -61,6 +68,8 @@ function SubNavbarContent({}: Props) {
           Add Space
         </Text>
       </Flex>
+
+      <CreateSpaceModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 }

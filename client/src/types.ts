@@ -296,6 +296,13 @@ export interface SpaceType {
   allListOrFolder: (FolderType | ListType)[];
 }
 
+export interface CreateSpaceDTO {
+  name: string;
+  color: string;
+  isPrivate: boolean;
+  orderIndex: number | null;
+}
+
 export interface User {
   id: number;
   username: string;

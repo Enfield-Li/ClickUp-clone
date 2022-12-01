@@ -57,7 +57,7 @@ function List({ list, isSubList }: Props) {
       <Center
         pr="2"
         fontSize="12px"
-        color={list.isSelected ? "lightMain.400" : "gray"}
+        color={list.isSelected ? "lightMain.200" : "gray"}
       >
         {list.taskAmount}
       </Center>
