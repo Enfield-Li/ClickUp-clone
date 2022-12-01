@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
@@ -11,9 +11,7 @@ import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 import {
-  statusColumns2,
   space1TaskList,
-  statusColumns1,
   space2TaskList,
   staticColumnOptions,
 } from "./mockData";
@@ -23,7 +21,8 @@ interface UseLocalTasksParam {
 }
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
-  let panelId = Number(param[TASK_BOARD_PARAM]);
+  const location = useLocation();
+  let selectedListId = Number(param[TASK_BOARD_PARAM]);
 
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
@@ -35,17 +34,18 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
     initLocalState();
 
     async function initLocalState() {
-      if (panelId) {
+      if (selectedListId && location.state) {
         setLoading(true);
 
         const statusColumnsDataFromApi: StatusColumns =
-          panelId % 2 ? statusColumns2 : statusColumns1;
+          location.state.statusColumns;
 
         const columnDataFromApi: ColumnOptions = {
           dueDateColumns: staticColumnOptions.dueDateColumns,
           priorityColumns: staticColumnOptions.priorityColumns,
           statusColumns: statusColumnsDataFromApi,
         };
+
         const { reorderedDueDateColumns, reorderedStatusColumns } =
           initColumns(columnDataFromApi);
 
@@ -55,7 +55,8 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
           statusColumns: reorderedStatusColumns,
         };
 
-        const listDataFromApi = panelId === 1 ? space1TaskList : space2TaskList;
+        const listDataFromApi =
+          selectedListId % 2 ? space1TaskList : space2TaskList;
 
         // init taskEvents and convert expectedDueDate to dueDate
         const taskList = processTaskList(
@@ -76,7 +77,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
         setLoading(false);
       }
     }
-  }, [panelId]);
+  }, [selectedListId, location]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

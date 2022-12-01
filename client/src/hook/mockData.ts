@@ -1,7 +1,7 @@
 import {
   ColumnOptions,
   CurrentWeek,
-  DueDateRange, 
+  DueDateRange,
   ListType,
   Priority,
   StatusColumns,
@@ -9,30 +9,18 @@ import {
   User,
   UserInfo,
   FolderType,
-  DefaultStatus,
   SpaceType,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
+import { kanban, marketing, normal, scrum } from "./defaultStatuses";
 
 export const statusColumns1: StatusColumns = [
-  {
-    id: 1,
-    title: DefaultStatus.TO_DO,
-    color: "blue.300",
-    orderIndex: 1,
-    listId: 1,
-  },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
 ];
 
 export const statusColumns2: StatusColumns = [
-  {
-    id: 1,
-    title: DefaultStatus.TO_DO,
-    color: "blue.300",
-    orderIndex: 1,
-    listId: 1,
-  },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
   {
     id: 2,
@@ -49,6 +37,7 @@ const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
 const allFolder1List: ListType[] = [
   {
     id: 5,
+    statusColumns: kanban,
     createdAt: new Date(),
     color: "green",
     isSelected: true,
@@ -65,6 +54,7 @@ const allFolder1List: ListType[] = [
 const allFolder15List: ListType[] = [
   {
     id: 6,
+    statusColumns: marketing,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -107,6 +97,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
   {
     id: 2,
+    statusColumns: normal,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -120,6 +111,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
   {
     id: 4,
+    statusColumns: scrum,
     createdAt: new Date(),
     color: "",
     isSelected: false,
@@ -136,6 +128,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
 const allSpace2ListOrFolder: (FolderType | ListType)[] = [
   {
     id: 3,
+    statusColumns: normal,
     color: "",
     isPrivate: true,
     isSelected: false,
@@ -213,7 +206,7 @@ export const space1TaskList: TaskList = [
     assignees: [],
     subTasks: [],
     taskEvents: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 1 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 1 },
     priority: { name: Priority.HIGH, columnId: 3, orderIndex: 3 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 1 },
   },
@@ -228,7 +221,7 @@ export const space1TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 2 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 2 },
     priority: { name: Priority.HIGH, columnId: 3, orderIndex: 2 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 3 },
   },
@@ -243,7 +236,7 @@ export const space1TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 3 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 3 },
     priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 2 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 2 },
   },
@@ -258,7 +251,7 @@ export const space1TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 4 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 4 },
     priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 4 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 4 },
   },
@@ -292,7 +285,7 @@ export const space2TaskList: TaskList = [
     assignees: [],
     subTasks: [],
     taskEvents: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 1 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 1 },
     priority: { name: Priority.HIGH, columnId: 3, orderIndex: 3 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 1 },
   },
@@ -307,7 +300,7 @@ export const space2TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 2 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 2 },
     priority: { name: Priority.HIGH, columnId: 3, orderIndex: 2 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 3 },
   },
@@ -322,7 +315,7 @@ export const space2TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 3 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 3 },
     priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 2 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 2 },
   },
@@ -337,7 +330,7 @@ export const space2TaskList: TaskList = [
     assignees: [],
     taskEvents: [],
     subTasks: [],
-    status: { name: DefaultStatus.TO_DO, columnId: 1, orderIndex: 4 },
+    status: { name: "TO_DO", columnId: 1, orderIndex: 4 },
     priority: { name: Priority.NO_PRIORITY, columnId: 1, orderIndex: 4 },
     dueDate: { name: DueDateRange.TODAY, columnId: 0, orderIndex: 4 },
   },

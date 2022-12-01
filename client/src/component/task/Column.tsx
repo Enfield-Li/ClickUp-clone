@@ -3,7 +3,6 @@ import { Droppable } from "@hello-pangea/dnd";
 import { memo, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import {
-  DefaultStatus,
   SortBy,
   TaskList,
   TaskState,

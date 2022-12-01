@@ -7,12 +7,6 @@ export enum SortBy {
 type ColumnField = SortBy;
 
 // Columns
-export enum DefaultStatus {
-  TO_DO = "TO_DO",
-  DONE = "Done",
-}
-export type Status = string | DefaultStatus;
-
 export enum Priority {
   LOW = "LOW",
   NORMAL = "NORMAL",
@@ -52,7 +46,7 @@ interface Column<T> {
   listId: number;
 }
 export type PriorityColumn = Column<Priority>;
-export interface StatusColumn extends Column<Status> {
+export interface StatusColumn extends Column<string> {
   listId: number;
   orderIndex: number;
 }
@@ -270,7 +264,6 @@ export interface Category {
   createdAt: Date;
   member: UserInfo[];
   isPrivate: boolean;
-  isSelected: boolean;
   color: string | null;
 }
 
@@ -279,7 +272,9 @@ export interface FolderType extends Category {
   allLists: ListType[];
 }
 export interface ListType extends Category {
+  isSelected: boolean;
   taskAmount: number | null;
+  statusColumns: StatusColumns;
   parentFolderId: number | null;
   //   boardViewSetting?: unknown
   //   listViewSetting?: unknown
@@ -333,13 +328,17 @@ export type SpaceListContextType = {
 };
 
 export const initialSpaceListState: SpaceListStateType = {
-  openedListId: null,
   spaceList: null,
+  openedListId: null,
+  lookUpStatusColumns: [],
 };
+
+export type LookUpStatusColumns = { [index: number]: StatusColumns };
 
 export type SpaceListStateType = {
   openedListId: number | null;
   spaceList: SpaceType[] | null;
+  lookUpStatusColumns: LookUpStatusColumns;
 };
 
 export type SpaceListActionType =

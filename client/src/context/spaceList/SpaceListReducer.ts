@@ -1,5 +1,7 @@
 import produce from "immer";
-import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
+import determineListType, {
+  determineFolderType,
+} from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
   SpaceListStateType,
   SpaceListActionType,
@@ -18,12 +20,24 @@ export default function spaceListReducer(
 
         spaceList.forEach((space) => {
           space.allListOrFolder.forEach((listOrFolder) => {
+            const isList = determineListType(listOrFolder);
+            const isFolder = determineFolderType(listOrFolder);
+
             // isSelected list is under space
-            if (listOrFolder.isSelected) {
-              draftState.openedListId = listOrFolder.id;
+            if (isList) {
+              // push to lookup table
+              draftState.lookUpStatusColumns[listOrFolder.id] =
+                listOrFolder.statusColumns;
+
+              if (listOrFolder.isSelected) {
+                draftState.openedListId = listOrFolder.id;
+              }
               // isSelected list is under folder
-            } else if (determineFolderType(listOrFolder)) {
+            } else if (isFolder) {
               listOrFolder.allLists.forEach((list) => {
+                // push to lookup table
+                draftState.lookUpStatusColumns[list.id] = list.statusColumns;
+
                 if (list.isSelected) {
                   draftState.openedListId = list.id;
                 }

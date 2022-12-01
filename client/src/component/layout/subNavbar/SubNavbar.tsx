@@ -57,9 +57,13 @@ function SubNavbar({
   // sync up url with openedListId
   useEffect(() => {
     const selectedListId = spaceListState.openedListId;
+
     if (selectedListId) {
       navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
         replace: true,
+        state: {
+          statusColumns: spaceListState.lookUpStatusColumns[selectedListId],
+        },
       });
     }
   }, [spaceListState.openedListId]);
