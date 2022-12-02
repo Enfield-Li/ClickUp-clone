@@ -4,7 +4,7 @@ import { defaultStatusColumnCategories } from "../../hook/defaultStatuses";
 import { StatusColumnCategories } from "../../types";
 import ActiveStatus from "./ActiveStatus";
 import ActiveStatuses from "./ActiveStatuses";
-import StatusItemTitle from "./StatusItemTitle";
+import CategoryList from "./CategoryList";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {};

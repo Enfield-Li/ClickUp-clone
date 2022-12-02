@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    define: envWithProcessPrefix,
     server: { port: 3000 },
+    define: envWithProcessPrefix,
   };
 });

@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import { StatusCategories } from "./StatusColumnsDisplay";
-import StatusItemTitle from "./StatusItemTitle";
+import CategoryList from "./CategoryList";
 
 type Props = {
   statusCategories: StatusCategories;
@@ -15,7 +15,7 @@ export default function StatusTemplate({
   return (
     <Box height="80%">
       {statusCategories?.statusColumnCategories.map((statusColumn) => (
-        <StatusItemTitle
+        <CategoryList
           statusColumn={statusColumn}
           statusCategories={statusCategories}
           setStatusCategories={setStatusCategories}

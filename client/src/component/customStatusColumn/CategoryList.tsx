@@ -1,5 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
 import { StatusColumnCategory } from "../../types";
@@ -11,17 +11,23 @@ type Props = {
   setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
-export default function StatusItemTitle({
+export default function CategoryList({
   statusColumn,
   statusCategories,
   setStatusCategories,
 }: Props) {
   const [hover, setHover] = useState(false);
   const fontColor = useColorModeValue("black", "lightMain.200");
+  const [editing, setEditing] = useState(false);
+
   const color =
     statusCategories?.selectedCategoryName === statusColumn.statusCategoryName
       ? "purple.500"
       : fontColor;
+
+  function handleEditTitle(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    setStatusCategories(produce(statusCategories, (draftState) => {}));
+  }
 
   return (
     <Flex
@@ -38,14 +44,20 @@ export default function StatusItemTitle({
         );
       }}
     >
-      <Box color={color} fontWeight="semibold">
+      <Input value={statusColumn.statusCategoryName} onChange={() => {}} />
+      {/* <Box color={color} fontWeight="semibold">
         {statusColumn.statusCategoryName}
-      </Box>
+      </Box> */}
 
       {hover && statusColumn.statusCategoryName !== "Custom" && (
         <Flex opacity="60%">
           {/* Edit */}
-          <Center fontSize="10px" mr="3" _hover={{ color: "purple.500" }}>
+          <Center
+            mr="3"
+            fontSize="10px"
+            onClick={handleEditTitle}
+            _hover={{ color: "purple.500" }}
+          >
             <i className="bi bi-pencil-fill"></i>
           </Center>
 

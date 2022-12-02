@@ -1,10 +1,9 @@
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
-import React from "react";
 import { spaceColors } from "./utils/colors";
-import { CreateSpace, Step } from "./CreateSpaceModal";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
+import { CreateSpace, CreateSpaceStep } from "../../../../types";
 
 type Props = {
   createSpace: CreateSpace;
@@ -35,8 +34,8 @@ export default function SpaceColorSetting({
     <CreateSpaceModalTemplate
       sectionName="Space color"
       createSpace={createSpace}
-      previousSection={Step.NAME}
-      nextSection={Step.IS_PRIVATE}
+      previousSection={CreateSpaceStep.NAME}
+      nextSection={CreateSpaceStep.IS_PRIVATE}
       setCreateSpace={setCreateSpace}
     >
       <Flex alignItems="center" height="100%">

@@ -1,7 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react";
-import React from "react";
+import { Flex } from "@chakra-ui/react";
+import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import StatusColumnsDisplay from "../../../customStatusColumn/StatusColumnsDisplay";
-import { CreateSpace, Step } from "./CreateSpaceModal";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
@@ -16,9 +15,9 @@ export default function SpaceColumnsSetting({
   return (
     <CreateSpaceModalTemplate
       createSpace={createSpace}
-      nextSection={Step.CONFIRM}
+      nextSection={CreateSpaceStep.CONFIRM}
       setCreateSpace={setCreateSpace}
-      previousSection={Step.IS_PRIVATE}
+      previousSection={CreateSpaceStep.IS_PRIVATE}
       sectionName="What task statuses do you want?"
     >
       <Flex pt="6" height="100%" alignItems="center">

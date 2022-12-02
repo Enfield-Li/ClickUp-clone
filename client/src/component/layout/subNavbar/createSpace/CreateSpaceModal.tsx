@@ -5,7 +5,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { CreateSpaceDTO } from "../../../../types";
+import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../../types";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";
 import SpaceColorSetting from "./SpaceColorSetting";
@@ -13,19 +13,6 @@ import SpaceColumnsSetting from "./SpaceColumnsSetting";
 import SpacePrivateSetting from "./SpacePrivateSetting";
 
 type Props = { isOpen: boolean; onClose: () => void };
-
-export enum Step {
-  NAME = "name",
-  COLOR = "color",
-  IS_PRIVATE = "is_private",
-  STATUS_COLUMNS = "status_columns",
-  CONFIRM = "confirm",
-}
-export interface CreateSpace {
-  step: Step;
-  isAllSet: boolean;
-  createSpaceDTO: CreateSpaceDTO;
-}
 
 const createSpaceDTO: CreateSpaceDTO = {
   name: "",
@@ -35,7 +22,7 @@ const createSpaceDTO: CreateSpaceDTO = {
 };
 
 const initCreateSpace: CreateSpace = {
-  step: Step.NAME,
+  step: CreateSpaceStep.NAME,
   isAllSet: false,
   createSpaceDTO,
 };
@@ -53,7 +40,7 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
 
   function renderStepComponent() {
     switch (createSpace.step) {
-      case Step.NAME: {
+      case CreateSpaceStep.NAME: {
         return (
           <EnterSpaceName
             createSpace={createSpace}
@@ -61,7 +48,7 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
           />
         );
       }
-      case Step.COLOR: {
+      case CreateSpaceStep.COLOR: {
         return (
           <SpaceColorSetting
             createSpace={createSpace}
@@ -69,7 +56,7 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
           />
         );
       }
-      case Step.IS_PRIVATE: {
+      case CreateSpaceStep.IS_PRIVATE: {
         return (
           <SpacePrivateSetting
             createSpace={createSpace}
@@ -77,7 +64,7 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
           />
         );
       }
-      case Step.STATUS_COLUMNS: {
+      case CreateSpaceStep.STATUS_COLUMNS: {
         return (
           <SpaceColumnsSetting
             createSpace={createSpace}
@@ -85,7 +72,7 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
           />
         );
       }
-      case Step.CONFIRM: {
+      case CreateSpaceStep.CONFIRM: {
         return <ReviewCreateSpace />;
       }
 

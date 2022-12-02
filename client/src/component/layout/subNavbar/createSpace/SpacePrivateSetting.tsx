@@ -1,6 +1,6 @@
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
-import { CreateSpace, Step } from "./CreateSpaceModal";
+import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
@@ -34,9 +34,9 @@ export default function SpacePrivateSetting({
   return (
     <CreateSpaceModalTemplate
       createSpace={createSpace}
-      previousSection={Step.COLOR}
+      previousSection={CreateSpaceStep.COLOR}
       setCreateSpace={setCreateSpace}
-      nextSection={Step.STATUS_COLUMNS}
+      nextSection={CreateSpaceStep.STATUS_COLUMNS}
       sectionName={`Share Space "${spaceName}"`}
     >
       <Box height="100%" py="40px">

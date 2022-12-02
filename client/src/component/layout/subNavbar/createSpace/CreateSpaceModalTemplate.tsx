@@ -9,14 +9,14 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React from "react";
-import { CreateSpace, Step } from "./CreateSpaceModal";
+import { CreateSpaceStep, CreateSpace } from "../../../../types";
 
 type Props = {
-  nextSection: Step;
   sectionName: string;
-  previousSection: Step;
   createSpace: CreateSpace;
   children: React.ReactNode;
+  nextSection: CreateSpaceStep;
+  previousSection: CreateSpaceStep;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 

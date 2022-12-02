@@ -12,10 +12,14 @@ export default function ActiveStatuses({
   selectedCategory,
   setStatusCategories,
 }: Props) {
+  const finishedStatus = selectedCategory?.statusColumns.find(
+    (statusColumn) => statusColumn.markAsClosed
+  );
+
   return (
     <Box>
-      <Box height="215px">
-        <Box height="180px" overflow="auto">
+      <Box height="205px">
+        <Box height="170px" overflow="auto">
           {selectedCategory?.statusColumns.map(
             (statusColumn) =>
               !statusColumn.markAsClosed && (
@@ -48,7 +52,7 @@ export default function ActiveStatuses({
           FINISHED STATUS
         </Box>
 
-        <Box height="15px"></Box>
+        {finishedStatus && <ActiveStatus statusColumn={finishedStatus} />}
       </Box>
     </Box>
   );

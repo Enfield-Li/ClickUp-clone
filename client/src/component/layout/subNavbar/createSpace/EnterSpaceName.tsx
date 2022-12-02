@@ -9,8 +9,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { ChangeEvent } from "react";
-import { CreateSpaceDTO } from "../../../../types";
-import { CreateSpace, Step } from "./CreateSpaceModal";
+import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import NewSpaceSVG from "./utils/NewSpaceSVG";
 
 type Props = {
@@ -32,7 +31,7 @@ export default function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
   function handleNextStep() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
-        draftState.step = Step.COLOR;
+        draftState.step = CreateSpaceStep.COLOR;
       })
     );
   }

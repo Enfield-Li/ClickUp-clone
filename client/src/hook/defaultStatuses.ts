@@ -104,11 +104,3 @@ export const defaultStatusColumnCategories: StatusColumnCategories = [
   { statusCategoryName: "Marketing", statusColumns: marketing },
   { statusCategoryName: "Scrum", statusColumns: scrum },
 ];
-
-//     {
-//   Custom: custom,
-//   Normal: normal,
-//   Kanban: kanban,
-//   Marketing: marketing,
-//   Scrum: scrum,
-// } as const;

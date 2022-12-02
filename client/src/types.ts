@@ -401,3 +401,16 @@ export const SPACE_LIST_ACTION = {
   UPDATE_SELECTED_FOLDER: "update_selected_folder",
   UPDATE_SELECTED_LIST: "update_selected_list",
 } as const;
+
+export enum CreateSpaceStep {
+  NAME = "name",
+  COLOR = "color",
+  IS_PRIVATE = "is_private",
+  STATUS_COLUMNS = "status_columns",
+  CONFIRM = "confirm",
+}
+export interface CreateSpace {
+  step: CreateSpaceStep;
+  isAllSet: boolean;
+  createSpaceDTO: CreateSpaceDTO;
+}
