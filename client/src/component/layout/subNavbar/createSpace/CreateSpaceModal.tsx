@@ -104,7 +104,11 @@ export default function CreateSpaceModal({ isOpen, onClose }: Props) {
     >
       <ModalOverlay />
       <ModalContent bgColor={contentBgColor} height="530px">
-        <>{renderStepComponent()}</>
+        {/* <>{renderStepComponent()}</> */}
+        <SpaceColumnsSetting
+          createSpace={createSpace}
+          setCreateSpace={setCreateSpace}
+        />
       </ModalContent>
     </Modal>
   );

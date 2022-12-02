@@ -54,8 +54,8 @@ export default function SpaceColorSetting({
 
         <Box flexGrow="1" pl="6">
           <Text
-            fontSize="sm"
             opacity="50%"
+            fontSize="12px"
             letterSpacing="wide"
             fontWeight="semibold"
           >
