@@ -2,9 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { defaultStatusColumnCategories } from "../../hook/defaultStatuses";
 import { StatusColumnCategories } from "../../types";
-import ActiveStatus from "./ActiveStatus";
 import ActiveStatuses from "./ActiveStatuses";
-import CategoryList from "./CategoryList";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {};

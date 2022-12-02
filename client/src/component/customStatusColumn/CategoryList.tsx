@@ -3,30 +3,50 @@ import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { useState } from "react";
 import { StatusColumnCategory } from "../../types";
+import { deepCopy } from "../../utils/deepCopy";
 import { StatusCategories } from "./StatusColumnsDisplay";
 
 type Props = {
-  statusColumn: StatusColumnCategory;
+  currentCategory: StatusColumnCategory;
   statusCategories: StatusCategories;
   setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
 export default function CategoryList({
-  statusColumn,
+  currentCategory,
   statusCategories,
   setStatusCategories,
 }: Props) {
   const [hover, setHover] = useState(false);
-  const fontColor = useColorModeValue("black", "lightMain.200");
   const [editing, setEditing] = useState(false);
+  const fontColor = useColorModeValue("black", "lightMain.200");
+  const [title, setTitle] = useState(currentCategory.statusCategoryName);
 
   const color =
-    statusCategories?.selectedCategoryName === statusColumn.statusCategoryName
+    statusCategories?.selectedCategoryName ===
+    currentCategory.statusCategoryName
       ? "purple.500"
       : fontColor;
 
-  function handleEditTitle(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    setStatusCategories(produce(statusCategories, (draftState) => {}));
+  function handleClickToEdit() {
+    setEditing(true);
+  }
+
+  function handleEditTitle(e: React.ChangeEvent<HTMLInputElement>) {
+    const newTitle = e.target.value;
+    setTitle(newTitle);
+    setStatusCategories(
+      produce(statusCategories, (draftState) => {
+        draftState.statusColumnCategories.forEach((category) => {
+          const isCurrentCategory =
+            category.statusCategoryName === currentCategory.statusCategoryName;
+          if (isCurrentCategory) {
+            category.statusCategoryName = newTitle;
+            console.log(deepCopy(category));
+          }
+        });
+      })
+    );
   }
 
   return (
@@ -39,32 +59,45 @@ export default function CategoryList({
       onClick={() => {
         setStatusCategories(
           produce(statusCategories, (draftState) => {
-            draftState.selectedCategoryName = statusColumn.statusCategoryName;
+            draftState.selectedCategoryName =
+              currentCategory.statusCategoryName;
           })
         );
       }}
     >
-      <Input value={statusColumn.statusCategoryName} onChange={() => {}} />
-      {/* <Box color={color} fontWeight="semibold">
-        {statusColumn.statusCategoryName}
-      </Box> */}
+      {editing ? (
+        <Input
+          autoFocus
+          height="30px"
+          width="223px"
+          value={title}
+          onChange={handleEditTitle}
+          onBlur={() => setEditing(false)}
+        />
+      ) : (
+        <Box color={color} fontWeight="semibold">
+          {currentCategory.statusCategoryName}
+        </Box>
+      )}
 
-      {hover && statusColumn.statusCategoryName !== "Custom" && (
+      {hover && currentCategory.statusCategoryName !== "Custom" && (
         <Flex opacity="60%">
           {/* Edit */}
           <Center
             mr="3"
             fontSize="10px"
-            onClick={handleEditTitle}
+            onClick={handleClickToEdit}
             _hover={{ color: "purple.500" }}
           >
             <i className="bi bi-pencil-fill"></i>
           </Center>
 
           {/* Close */}
-          <Center fontSize="10px" _hover={{ color: "purple.500" }}>
-            <CloseIcon />
-          </Center>
+          {!editing && (
+            <Center fontSize="10px" _hover={{ color: "purple.500" }}>
+              <CloseIcon />
+            </Center>
+          )}
         </Flex>
       )}
     </Flex>

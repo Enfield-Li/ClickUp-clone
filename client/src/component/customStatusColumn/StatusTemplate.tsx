@@ -14,13 +14,17 @@ export default function StatusTemplate({
 }: Props) {
   return (
     <Box height="80%">
-      {statusCategories?.statusColumnCategories.map((statusColumn) => (
-        <CategoryList
-          statusColumn={statusColumn}
-          statusCategories={statusCategories}
-          setStatusCategories={setStatusCategories}
-        />
-      ))}
+      {statusCategories?.statusColumnCategories.map(
+        (currentCategory, index) => (
+          <Box key={index}>
+            <CategoryList
+              currentCategory={currentCategory}
+              statusCategories={statusCategories}
+              setStatusCategories={setStatusCategories}
+            />
+          </Box>
+        )
+      )}
     </Box>
   );
 }
