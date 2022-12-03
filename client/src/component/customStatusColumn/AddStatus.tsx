@@ -12,6 +12,7 @@ import {
 import produce from "immer";
 import React, { memo, useState } from "react";
 import { StatusColumn } from "../../types";
+import { useFocus } from "../../utils/useFocus";
 import {
   getRandomColor,
   spaceColors3D,
@@ -99,6 +100,7 @@ function AddStatus({
           {/* Square */}
           <Popover
             isOpen={isOpen}
+            autoFocus={false}
             onClose={onClose}
             closeOnBlur={false}
             placement="top-start"

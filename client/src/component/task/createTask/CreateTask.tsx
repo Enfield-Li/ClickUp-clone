@@ -49,7 +49,7 @@ function CreateTask({
   );
 
   // focus element
-  const [htmlElRef, setFocus] = useFocus<HTMLInputElement>();
+  const { htmlElRef, setFocus } = useFocus<HTMLInputElement>();
   function handleOnBlur(e: React.FocusEvent<HTMLDivElement, Element>) {
     // Prevent firing the blur event on children: https://stackoverflow.com/a/60094794/16648127
     // blur event.relatedTarget returns null: https://stackoverflow.com/a/42764495/16648127

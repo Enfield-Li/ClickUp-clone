@@ -7,5 +7,5 @@ export function useFocus<T extends HTMLElement>() {
     const currentEl = htmlElRef.current;
     currentEl && currentEl.focus();
   };
-  return [htmlElRef, setFocus] as const;
+  return { htmlElRef, setFocus } as const;
 }

@@ -1,8 +1,4 @@
-import {
-  StatusColumnCategories,
-  StatusColumnCategory,
-  StatusColumns,
-} from "../types";
+import { StatusColumnCategories, StatusColumns } from "../types";
 
 export const custom: StatusColumns = [
   { id: 1, title: "TO DO", color: "rgb(211, 211, 211)", orderIndex: 1 },
@@ -17,7 +13,7 @@ export const custom: StatusColumns = [
 
 export const kanban: StatusColumns = [
   { id: 1, title: "OPEN", color: "rgb(211, 211, 211)", orderIndex: 1 },
-  { id: 2, title: "IN PROGRESS", color: "purple.400", orderIndex: 2 },
+  { id: 2, title: "IN PROGRESS", color: "rgb(65, 148, 246)", orderIndex: 2 },
   { id: 3, title: "REVIEW", color: "rgb(168, 117, 255)", orderIndex: 3 },
   {
     id: 4,
