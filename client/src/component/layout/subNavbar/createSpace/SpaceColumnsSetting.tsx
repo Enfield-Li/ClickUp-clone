@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import { memo } from "react";
 import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import StatusColumnsDisplay from "../../../customStatusColumn/StatusColumnsDisplay";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
@@ -8,10 +9,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function SpaceColumnsSetting({
-  createSpace,
-  setCreateSpace,
-}: Props) {
+export default memo(SpaceColumnsSetting);
+function SpaceColumnsSetting({ createSpace, setCreateSpace }: Props) {
   return (
     <CreateSpaceModalTemplate
       createSpace={createSpace}

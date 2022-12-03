@@ -1,4 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
+import { memo } from "react";
 import { StatusColumnCategory } from "../../types";
 import ActiveStatus from "./ActiveStatus";
 import { StatusCategories } from "./StatusColumnsDisplay";
@@ -8,10 +9,8 @@ type Props = {
   setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
-export default function ActiveStatuses({
-  selectedCategory,
-  setStatusCategories,
-}: Props) {
+export default memo(ActiveStatuses);
+function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
   const finishedStatus = selectedCategory?.statusColumns.find(
     (statusColumn) => statusColumn.markAsClosed
   );
@@ -21,10 +20,14 @@ export default function ActiveStatuses({
       <Box height="205px">
         <Box height="170px" overflow="auto">
           {selectedCategory?.statusColumns.map(
-            (statusColumn) =>
-              !statusColumn.markAsClosed && (
-                <Box key={statusColumn.id}>
-                  <ActiveStatus statusColumn={statusColumn} />
+            (currentStatusColumn) =>
+              !currentStatusColumn.markAsClosed && (
+                <Box key={currentStatusColumn.id}>
+                  <ActiveStatus
+                    currentStatusColumn={currentStatusColumn}
+                    setStatusCategories={setStatusCategories}
+                    selectedCategoryName={selectedCategory.statusCategoryName}
+                  />
                 </Box>
               )
           )}
@@ -52,7 +55,13 @@ export default function ActiveStatuses({
           FINISHED STATUS
         </Box>
 
-        {finishedStatus && <ActiveStatus statusColumn={finishedStatus} />}
+        {finishedStatus && (
+          <ActiveStatus
+            currentStatusColumn={finishedStatus}
+            setStatusCategories={setStatusCategories}
+            selectedCategoryName={selectedCategory?.statusCategoryName}
+          />
+        )}
       </Box>
     </Box>
   );

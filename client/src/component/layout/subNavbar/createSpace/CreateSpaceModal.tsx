@@ -4,8 +4,12 @@ import {
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../../types";
+import { memo, useEffect, useState } from "react";
+import {
+  CreateSpace,
+  CreateSpaceDTO,
+  CreateSpaceStep,
+} from "../../../../types";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";
 import SpaceColorSetting from "./SpaceColorSetting";
@@ -27,7 +31,8 @@ const initCreateSpace: CreateSpace = {
   createSpaceDTO,
 };
 
-export default function CreateSpaceModal({ isOpen, onClose }: Props) {
+export default memo(CreateSpaceModal);
+function CreateSpaceModal({ isOpen, onClose }: Props) {
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] = useState<CreateSpace>(initCreateSpace);
 

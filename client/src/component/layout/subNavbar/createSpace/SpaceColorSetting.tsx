@@ -4,16 +4,15 @@ import produce from "immer";
 import { spaceColors } from "./utils/colors";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import { CreateSpace, CreateSpaceStep } from "../../../../types";
+import { memo } from "react";
 
 type Props = {
   createSpace: CreateSpace;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function SpaceColorSetting({
-  createSpace,
-  setCreateSpace,
-}: Props) {
+export default memo(SpaceColorSetting);
+function SpaceColorSetting({ createSpace, setCreateSpace }: Props) {
   function handleCancelColor() {
     setCreateSpace(
       produce(createSpace, (draftState) => {

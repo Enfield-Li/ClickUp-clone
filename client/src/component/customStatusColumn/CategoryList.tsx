@@ -1,7 +1,7 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
-import { useState } from "react";
+import { KeyboardEvent, memo, useState } from "react";
 import { StatusColumnCategory } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
 import { StatusCategories } from "./StatusColumnsDisplay";
@@ -12,7 +12,8 @@ type Props = {
   setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
-export default function CategoryList({
+export default memo(CategoryList);
+function CategoryList({
   currentCategory,
   statusCategories,
   setStatusCategories,
@@ -28,21 +29,29 @@ export default function CategoryList({
       ? "purple.500"
       : fontColor;
 
-  function handleClickToEdit() {
-    setEditing(true);
+  function handleFinishedEdit() {
+    setEditing(false);
+    updateStatusCategories();
   }
 
-  function handleEditTitle(e: React.ChangeEvent<HTMLInputElement>) {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
+  function handleKeyPress(e: KeyboardEvent<HTMLInputElement>): void {
+    e.stopPropagation();
+    if (e.key === "Enter") {
+      handleFinishedEdit();
+    } else if (e.key === "Escape") {
+      setEditing(false);
+      setTitle(currentCategory.statusCategoryName);
+    }
+  }
+
+  function updateStatusCategories() {
     setStatusCategories(
       produce(statusCategories, (draftState) => {
         draftState.statusColumnCategories.forEach((category) => {
           const isCurrentCategory =
             category.statusCategoryName === currentCategory.statusCategoryName;
           if (isCurrentCategory) {
-            category.statusCategoryName = newTitle;
-            console.log(deepCopy(category));
+            category.statusCategoryName = title;
           }
         });
       })
@@ -71,8 +80,10 @@ export default function CategoryList({
           height="30px"
           width="223px"
           value={title}
-          onChange={handleEditTitle}
-          onBlur={() => setEditing(false)}
+          variant="flushed"
+          onKeyDown={handleKeyPress}
+          onBlur={handleFinishedEdit}
+          onChange={(e) => setTitle(e.target.value)}
         />
       ) : (
         <Box color={color} fontWeight="semibold">
@@ -86,7 +97,7 @@ export default function CategoryList({
           <Center
             mr="3"
             fontSize="10px"
-            onClick={handleClickToEdit}
+            onClick={() => setEditing(true)}
             _hover={{ color: "purple.500" }}
           >
             <i className="bi bi-pencil-fill"></i>

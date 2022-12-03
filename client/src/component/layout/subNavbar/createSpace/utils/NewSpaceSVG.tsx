@@ -1,8 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 
 type Props = {};
 
-export default function NewSpaceSVG({}: Props) {
+export default memo(NewSpaceSVG);
+function NewSpaceSVG({}: Props) {
   return (
     <svg width="123" height="97" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" fillRule="evenodd">

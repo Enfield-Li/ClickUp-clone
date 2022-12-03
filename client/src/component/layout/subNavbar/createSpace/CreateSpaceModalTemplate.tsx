@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React from "react";
+import React, { memo } from "react";
 import { CreateSpaceStep, CreateSpace } from "../../../../types";
 
 type Props = {
@@ -20,7 +20,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function CreateSpaceModalTemplate({
+export default memo(CreateSpaceModalTemplate);
+function CreateSpaceModalTemplate({
   children,
   nextSection,
   sectionName,

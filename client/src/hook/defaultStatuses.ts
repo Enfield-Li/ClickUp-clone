@@ -5,7 +5,7 @@ import {
 } from "../types";
 
 export const custom: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
+  { id: 1, title: "TO DO", color: "blue.300", orderIndex: 1, listId: 1 },
   {
     id: 2,
     title: "DONE",
@@ -20,7 +20,7 @@ export const kanban: StatusColumns = [
   { id: 1, title: "OPEN", color: "blue.300", orderIndex: 1, listId: 1 },
   {
     id: 2,
-    title: "IN_PROGRESS",
+    title: "IN PROGRESS",
     color: "purple.400",
     orderIndex: 2,
     listId: 1,
@@ -39,7 +39,7 @@ export const kanban: StatusColumns = [
 export const marketing: StatusColumns = [
   { id: 1, title: "OPEN", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 2, title: "CONCEPT", color: "purple.400", orderIndex: 2, listId: 1 },
-  { id: 3, title: "IN_PROGRESS", color: "green.400", orderIndex: 3, listId: 1 },
+  { id: 3, title: "IN PROGRESS", color: "green.400", orderIndex: 3, listId: 1 },
   { id: 4, title: "RUNNING", color: "green.400", orderIndex: 4, listId: 1 },
   { id: 5, title: "REVIEW", color: "green.400", orderIndex: 5, listId: 1 },
   {
@@ -53,10 +53,10 @@ export const marketing: StatusColumns = [
 ];
 
 export const normal: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
+  { id: 1, title: "TO DO", color: "blue.300", orderIndex: 1, listId: 1 },
   {
     id: 2,
-    title: "IN_PROGRESS",
+    title: "IN PROGRESS",
     color: "purple.400",
     orderIndex: 2,
     listId: 1,
@@ -74,9 +74,9 @@ export const normal: StatusColumns = [
 export const scrum: StatusColumns = [
   { id: 1, title: "OPEN", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 2, title: "PENDING", color: "purple.400", orderIndex: 2, listId: 1 },
-  { id: 3, title: "IN_PROGRESS", color: "green.400", orderIndex: 3, listId: 1 },
+  { id: 3, title: "IN PROGRESS", color: "green.400", orderIndex: 3, listId: 1 },
   { id: 4, title: "RUNNING", color: "green.400", orderIndex: 4, listId: 1 },
-  { id: 5, title: "IN_REVIEW", color: "green.400", orderIndex: 5, listId: 1 },
+  { id: 5, title: "IN REVIEW", color: "green.400", orderIndex: 5, listId: 1 },
   { id: 6, title: "ACCEPTED", color: "green.400", orderIndex: 6, listId: 1 },
   { id: 7, title: "REJECTED", color: "green.400", orderIndex: 7, listId: 1 },
   { id: 8, title: "BLOCKED", color: "green.400", orderIndex: 8, listId: 1 },
@@ -91,7 +91,7 @@ export const scrum: StatusColumns = [
   { id: 11, title: "OPEN", color: "blue.300", orderIndex: 1, listId: 1 },
   { id: 21, title: "PENDING", color: "purple.400", orderIndex: 2, listId: 1 },
   { id: 41, title: "RUNNING", color: "green.400", orderIndex: 4, listId: 1 },
-  { id: 51, title: "IN_REVIEW", color: "green.400", orderIndex: 5, listId: 1 },
+  { id: 51, title: "IN REVIEW", color: "green.400", orderIndex: 5, listId: 1 },
   { id: 61, title: "ACCEPTED", color: "green.400", orderIndex: 6, listId: 1 },
   { id: 71, title: "REJECTED", color: "green.400", orderIndex: 7, listId: 1 },
   { id: 81, title: "BLOCKED", color: "green.400", orderIndex: 8, listId: 1 },

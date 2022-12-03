@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { defaultStatusColumnCategories } from "../../hook/defaultStatuses";
 import { StatusColumnCategories } from "../../types";
 import ActiveStatuses from "./ActiveStatuses";
@@ -12,7 +12,8 @@ export interface StatusCategories {
   statusColumnCategories: StatusColumnCategories;
 }
 
-export default function StatusColumnsDisplay({}: Props) {
+export default memo(StatusColumnsDisplay);
+function StatusColumnsDisplay({}: Props) {
   const [statusCategories, setStatusCategories] = useState<StatusCategories>({
     selectedCategoryName: "Custom",
     statusColumnCategories: defaultStatusColumnCategories,

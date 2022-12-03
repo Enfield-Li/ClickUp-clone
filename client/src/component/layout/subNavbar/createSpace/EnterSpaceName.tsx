@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { ChangeEvent } from "react";
+import { ChangeEvent, memo } from "react";
 import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import NewSpaceSVG from "./utils/NewSpaceSVG";
 
@@ -17,7 +17,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
+export default memo(EnterSpaceName);
+function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
   const inputBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {

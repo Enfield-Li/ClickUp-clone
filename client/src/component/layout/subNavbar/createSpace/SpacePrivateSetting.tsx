@@ -1,5 +1,6 @@
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
+import { memo } from "react";
 import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
@@ -8,10 +9,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
-export default function SpacePrivateSetting({
-  createSpace,
-  setCreateSpace,
-}: Props) {
+export default memo(SpacePrivateSetting);
+function SpacePrivateSetting({ createSpace, setCreateSpace }: Props) {
   const borderColor = useColorModeValue("lightMain.200", "lightMain.300");
   const spaceName = createSpace.createSpaceDTO.name;
   const isPrivate = createSpace.createSpaceDTO.isPrivate;
