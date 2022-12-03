@@ -15,8 +15,8 @@ type Props = {
   sectionName: string;
   createSpace: CreateSpace;
   children: React.ReactNode;
-  nextSection: CreateSpaceStep;
   previousSection: CreateSpaceStep;
+  nextSection: CreateSpaceStep | null;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
 };
 
@@ -34,7 +34,7 @@ function CreateSpaceModalTemplate({
   function handleNext() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
-        draftState.step = nextSection;
+        draftState.step = nextSection ? nextSection : CreateSpaceStep.NAME;
       })
     );
   }

@@ -57,11 +57,11 @@ export type StatusColumns = StatusColumn[];
 export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
 
-export interface StatusColumnCategory {
+export interface StatusCategory {
   name: string;
   statusColumns: StatusColumns;
 }
-export type StatusColumnCategories = StatusColumnCategory[];
+export type StatusCategories = StatusCategory[];
 
 export interface ColumnOptions {
   statusColumns: StatusColumns;
@@ -408,7 +408,7 @@ export enum CreateSpaceStep {
   CONFIRM = "confirm",
 }
 export interface CreateSpace {
-  step: CreateSpaceStep;
+  step: CreateSpaceStep | null;
   isAllSet: boolean;
   createSpaceDTO: CreateSpaceDTO;
 }

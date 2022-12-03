@@ -2,19 +2,21 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
-import { StatusColumnCategory } from "../../types";
-import { StatusCategories } from "./StatusColumnsDisplay";
+import { StatusCategory } from "../../types";
+import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
-  statusCategories: StatusCategories;
-  currentCategory: StatusColumnCategory;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  currentCategory: StatusCategory;
+  statusCategoriesSelected: StatusCategoriesSelected;
+  setStatusCategories: React.Dispatch<
+    React.SetStateAction<StatusCategoriesSelected>
+  >;
 };
 
 export default memo(CategoryList);
 function CategoryList({
   currentCategory,
-  statusCategories,
+  statusCategoriesSelected: statusCategories,
   setStatusCategories,
 }: Props) {
   const [hover, setHover] = useState(false);
@@ -45,7 +47,7 @@ function CategoryList({
   function updateStatusCategories() {
     setStatusCategories(
       produce(statusCategories, (draftState) => {
-        draftState.statusColumnCategories.forEach((category) => {
+        draftState.statusCategories.forEach((category) => {
           const isCurrentCategory = category.name === currentCategory.name;
           if (isCurrentCategory) {
             category.name = title;

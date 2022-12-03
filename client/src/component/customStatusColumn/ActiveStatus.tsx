@@ -2,12 +2,14 @@ import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { StatusColumn } from "../../types";
-import { StatusCategories } from "./StatusColumnsDisplay";
+import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
   currentStatusColumn: StatusColumn;
   selectedCategoryName: string | undefined;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  setStatusCategories: React.Dispatch<
+    React.SetStateAction<StatusCategoriesSelected>
+  >;
 };
 
 export default memo(ActiveStatus);
@@ -31,7 +33,7 @@ function ActiveStatus({
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void {
     e.stopPropagation();
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && title) {
       handleFinishedEdit();
     } else if (e.key === "Escape") {
       setEditing(false);
@@ -42,7 +44,7 @@ function ActiveStatus({
   function updateStatusTitle() {
     setStatusCategories((prev) =>
       produce(prev, (draftState) => {
-        draftState.statusColumnCategories.forEach((category) => {
+        draftState.statusCategories.forEach((category) => {
           if (category.name === selectedCategoryName) {
             category.statusColumns.forEach((column) => {
               if (column.id === currentStatusColumn.id) {
@@ -91,7 +93,6 @@ function ActiveStatus({
               value={title}
               fontSize="13px"
               variant="unstyled"
-              fontWeight="semibold"
               textTransform="uppercase"
               onKeyDown={handleKeyPress}
               onBlur={handleFinishedEdit}

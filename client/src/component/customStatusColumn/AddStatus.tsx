@@ -17,12 +17,14 @@ import {
   getRandomColor,
   spaceColors3D,
 } from "../layout/subNavbar/createSpace/utils/colors";
-import { StatusCategories } from "./StatusColumnsDisplay";
+import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
   statusAmount: number | undefined;
   selectedCategoryName: string | undefined;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  setStatusCategories: React.Dispatch<
+    React.SetStateAction<StatusCategoriesSelected>
+  >;
 };
 
 export default memo(AddStatus);
@@ -69,16 +71,15 @@ function AddStatus({
     //   orderIndex: statusAmount ? statusAmount + 1 : 1,
     //   title,
     // };
-
-    setStatusCategories((prev) =>
-      produce(prev, (draftState) => {
-        draftState.statusColumnCategories.forEach((category) => {
-          if (category.name === selectedCategoryName) {
-            // category.statusColumns.push(newColumn);
-          }
-        });
-      })
-    );
+    // setStatusCategories((prev) =>
+    //   produce(prev, (draftState) => {
+    //     draftState.statusCategories.forEach((category) => {
+    //       if (category.name === selectedCategoryName) {
+    //         // category.statusColumns.push(newColumn);
+    //       }
+    //     });
+    //   })
+    // );
   }
 
   return (

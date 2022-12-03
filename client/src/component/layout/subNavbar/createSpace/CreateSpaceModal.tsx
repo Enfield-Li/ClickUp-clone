@@ -1,4 +1,5 @@
 import {
+  Flex,
   Modal,
   ModalContent,
   ModalOverlay,
@@ -10,6 +11,8 @@ import {
   CreateSpaceDTO,
   CreateSpaceStep,
 } from "../../../../types";
+import StatusColumnsDisplay from "../../../customStatusColumn/StatusColumnsDisplay";
+import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";
 import SpaceColorSetting from "./SpaceColorSetting";
@@ -25,7 +28,7 @@ const createSpaceDTO: CreateSpaceDTO = {
   isPrivate: false,
 };
 
-const initCreateSpace: CreateSpace = {
+const initialCreateSpace: CreateSpace = {
   step: CreateSpaceStep.NAME,
   isAllSet: false,
   createSpaceDTO,
@@ -34,12 +37,14 @@ const initCreateSpace: CreateSpace = {
 export default memo(CreateSpaceModal);
 function CreateSpaceModal({ isOpen, onClose }: Props) {
   const contentBgColor = useColorModeValue("white", "darkMain.100");
-  const [createSpace, setCreateSpace] = useState<CreateSpace>(initCreateSpace);
+  const [createSpace, setCreateSpace] =
+    useState<CreateSpace>(initialCreateSpace);
+  const spaceName = createSpace.createSpaceDTO.name;
 
   useEffect(() => {
     if (!isOpen) {
       onClose();
-      setCreateSpace(initCreateSpace);
+      setCreateSpace(initialCreateSpace);
     }
   }, [isOpen]);
 
@@ -55,30 +60,64 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.COLOR: {
         return (
-          <SpaceColorSetting
+          <CreateSpaceModalTemplate
+            sectionName="Space color"
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-          />
+            previousSection={CreateSpaceStep.NAME}
+            nextSection={CreateSpaceStep.IS_PRIVATE}
+          >
+            <SpaceColorSetting
+              createSpace={createSpace}
+              setCreateSpace={setCreateSpace}
+            />
+          </CreateSpaceModalTemplate>
         );
       }
       case CreateSpaceStep.IS_PRIVATE: {
         return (
-          <SpacePrivateSetting
+          <CreateSpaceModalTemplate
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-          />
+            previousSection={CreateSpaceStep.COLOR}
+            sectionName={`Share Space "${spaceName}"`}
+            nextSection={CreateSpaceStep.STATUS_COLUMNS}
+          >
+            <SpacePrivateSetting
+              createSpace={createSpace}
+              setCreateSpace={setCreateSpace}
+            />
+          </CreateSpaceModalTemplate>
         );
       }
       case CreateSpaceStep.STATUS_COLUMNS: {
         return (
-          <SpaceColumnsSetting
+          <CreateSpaceModalTemplate
             createSpace={createSpace}
+            nextSection={CreateSpaceStep.CONFIRM}
             setCreateSpace={setCreateSpace}
-          />
+            previousSection={CreateSpaceStep.IS_PRIVATE}
+            sectionName="What task statuses do you want?"
+          >
+            <SpaceColumnsSetting />
+          </CreateSpaceModalTemplate>
         );
       }
       case CreateSpaceStep.CONFIRM: {
-        return <ReviewCreateSpace />;
+        return (
+          <CreateSpaceModalTemplate
+            nextSection={null}
+            sectionName="All good?"
+            createSpace={createSpace}
+            setCreateSpace={setCreateSpace}
+            previousSection={CreateSpaceStep.STATUS_COLUMNS}
+          >
+            <ReviewCreateSpace
+              createSpace={createSpace}
+              setCreateSpace={setCreateSpace}
+            />
+          </CreateSpaceModalTemplate>
+        );
       }
 
       default: {
@@ -97,10 +136,18 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       <ModalOverlay />
       <ModalContent bgColor={contentBgColor} height="530px">
         {/* <>{renderStepComponent()}</> */}
-        <SpaceColumnsSetting
+        <CreateSpaceModalTemplate
+          nextSection={null}
+          sectionName="All good?"
           createSpace={createSpace}
           setCreateSpace={setCreateSpace}
-        />
+          previousSection={CreateSpaceStep.STATUS_COLUMNS}
+        >
+          <ReviewCreateSpace
+            createSpace={createSpace}
+            setCreateSpace={setCreateSpace}
+          />
+        </CreateSpaceModalTemplate>
       </ModalContent>
     </Modal>
   );
