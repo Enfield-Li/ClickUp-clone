@@ -40,14 +40,12 @@ export enum Columns {
 }
 
 interface Column<T> {
-  id: number;
+  id?: number;
   title: T;
   color: string;
-  listId: number;
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
-  listId: number;
   orderIndex: number;
   markAsClosed?: boolean;
 }
@@ -60,7 +58,7 @@ export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
 
 export interface StatusColumnCategory {
-  statusCategoryName: string;
+  name: string;
   statusColumns: StatusColumns;
 }
 export type StatusColumnCategories = StatusColumnCategory[];

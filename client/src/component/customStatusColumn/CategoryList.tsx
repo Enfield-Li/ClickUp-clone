@@ -3,12 +3,11 @@ import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
 import { StatusColumnCategory } from "../../types";
-import { deepCopy } from "../../utils/deepCopy";
 import { StatusCategories } from "./StatusColumnsDisplay";
 
 type Props = {
-  currentCategory: StatusColumnCategory;
   statusCategories: StatusCategories;
+  currentCategory: StatusColumnCategory;
   setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
@@ -21,11 +20,10 @@ function CategoryList({
   const [hover, setHover] = useState(false);
   const [editing, setEditing] = useState(false);
   const fontColor = useColorModeValue("black", "lightMain.200");
-  const [title, setTitle] = useState(currentCategory.statusCategoryName);
+  const [title, setTitle] = useState(currentCategory.name);
 
   const color =
-    statusCategories?.selectedCategoryName ===
-    currentCategory.statusCategoryName
+    statusCategories?.selectedCategoryName === currentCategory.name
       ? "purple.500"
       : fontColor;
 
@@ -40,7 +38,7 @@ function CategoryList({
       handleFinishedEdit();
     } else if (e.key === "Escape") {
       setEditing(false);
-      setTitle(currentCategory.statusCategoryName);
+      setTitle(currentCategory.name);
     }
   }
 
@@ -48,10 +46,9 @@ function CategoryList({
     setStatusCategories(
       produce(statusCategories, (draftState) => {
         draftState.statusColumnCategories.forEach((category) => {
-          const isCurrentCategory =
-            category.statusCategoryName === currentCategory.statusCategoryName;
+          const isCurrentCategory = category.name === currentCategory.name;
           if (isCurrentCategory) {
-            category.statusCategoryName = title;
+            category.name = title;
           }
         });
       })
@@ -68,8 +65,7 @@ function CategoryList({
       onClick={() => {
         setStatusCategories(
           produce(statusCategories, (draftState) => {
-            draftState.selectedCategoryName =
-              currentCategory.statusCategoryName;
+            draftState.selectedCategoryName = currentCategory.name;
           })
         );
       }}
@@ -87,11 +83,11 @@ function CategoryList({
         />
       ) : (
         <Box color={color} fontWeight="semibold">
-          {currentCategory.statusCategoryName}
+          {currentCategory.name}
         </Box>
       )}
 
-      {hover && currentCategory.statusCategoryName !== "Custom" && (
+      {hover && currentCategory.name !== "Custom" && (
         <Flex opacity="60%">
           {/* Edit */}
           <Center

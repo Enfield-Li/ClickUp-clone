@@ -19,8 +19,7 @@ function StatusColumnsDisplay({}: Props) {
     statusColumnCategories: defaultStatusColumnCategories,
   });
   const selectedCategory = statusCategories.statusColumnCategories.find(
-    (category) =>
-      category.statusCategoryName === statusCategories.selectedCategoryName
+    (category) => category.name === statusCategories.selectedCategoryName
   );
 
   useEffect(() => {

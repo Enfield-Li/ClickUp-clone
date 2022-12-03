@@ -1,7 +1,7 @@
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
-import { spaceColors } from "./utils/colors";
+import { spaceColors2D } from "./utils/colors";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import { CreateSpace, CreateSpaceStep } from "../../../../types";
 import { memo } from "react";
@@ -60,7 +60,7 @@ function SpaceColorSetting({ createSpace, setCreateSpace }: Props) {
             SPACE COLOR
           </Text>
 
-          {spaceColors.map((colorGroup, index) => (
+          {spaceColors2D.map((colorGroup, index) => (
             <Flex my="6" key={index}>
               {index === 0 && (
                 <NotAllowedIcon

@@ -15,20 +15,14 @@ import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 import { kanban, marketing, normal, scrum } from "./defaultStatuses";
 
 export const statusColumns1: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
-  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3 },
 ];
 
 export const statusColumns2: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, listId: 1 },
-  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, listId: 1 },
-  {
-    id: 2,
-    title: "IN_PROGRESS",
-    color: "purple.400",
-    orderIndex: 2,
-    listId: 1,
-  },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3 },
+  { id: 2, title: "IN_PROGRESS", color: "purple.400", orderIndex: 2 },
 ];
 
 const userInfo: UserInfo = { userId: 1, username: "mockUser" };
@@ -173,23 +167,23 @@ export const mockUser: User = {
 export const staticColumnOptions: ColumnOptions = {
   statusColumns: [],
   priorityColumns: [
-    { id: 1, title: Priority.NO_PRIORITY, color: "gray.400", listId: 1 },
-    { id: 2, title: Priority.URGENT, color: "red.400", listId: 1 },
-    { id: 3, title: Priority.HIGH, color: "yellow.400", listId: 1 },
-    { id: 4, title: Priority.NORMAL, color: "blue.200", listId: 1 },
-    { id: 5, title: Priority.LOW, color: "gray.400", listId: 1 },
+    { id: 1, title: Priority.NO_PRIORITY, color: "gray.400" },
+    { id: 2, title: Priority.URGENT, color: "red.400" },
+    { id: 3, title: Priority.HIGH, color: "yellow.400" },
+    { id: 4, title: Priority.NORMAL, color: "blue.200" },
+    { id: 5, title: Priority.LOW, color: "gray.400" },
   ],
   dueDateColumns: [
-    { id: 1, title: DueDateRange.NO_DUE_DATE, color: "gray.400", listId: 1 },
-    { id: 2, title: DueDateRange.OVER_DUE, color: "gray.400", listId: 1 },
-    { id: 3, title: CurrentWeek.MONDAY, color: "gray.400", listId: 1 },
-    { id: 4, title: CurrentWeek.TUESDAY, color: "gray.400", listId: 1 },
-    { id: 5, title: CurrentWeek.WEDNESDAY, color: "gray.400", listId: 1 },
-    { id: 6, title: CurrentWeek.THURSDAY, color: "gray.400", listId: 1 },
-    { id: 7, title: CurrentWeek.FRIDAY, color: "gray.400", listId: 1 },
-    { id: 8, title: CurrentWeek.SATURDAY, color: "gray.400", listId: 1 },
-    { id: 9, title: CurrentWeek.SUNDAY, color: "gray.400", listId: 1 },
-    { id: 10, title: DueDateRange.FUTURE, color: "gray.400", listId: 1 },
+    { id: 1, title: DueDateRange.NO_DUE_DATE, color: "gray.400" },
+    { id: 2, title: DueDateRange.OVER_DUE, color: "gray.400" },
+    { id: 3, title: CurrentWeek.MONDAY, color: "gray.400" },
+    { id: 4, title: CurrentWeek.TUESDAY, color: "gray.400" },
+    { id: 5, title: CurrentWeek.WEDNESDAY, color: "gray.400" },
+    { id: 6, title: CurrentWeek.THURSDAY, color: "gray.400" },
+    { id: 7, title: CurrentWeek.FRIDAY, color: "gray.400" },
+    { id: 8, title: CurrentWeek.SATURDAY, color: "gray.400" },
+    { id: 9, title: CurrentWeek.SUNDAY, color: "gray.400" },
+    { id: 10, title: DueDateRange.FUTURE, color: "gray.400" },
   ],
 };
 

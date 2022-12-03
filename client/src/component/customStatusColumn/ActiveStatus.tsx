@@ -43,7 +43,7 @@ function ActiveStatus({
     setStatusCategories((prev) =>
       produce(prev, (draftState) => {
         draftState.statusColumnCategories.forEach((category) => {
-          if (category.statusCategoryName === selectedCategoryName) {
+          if (category.name === selectedCategoryName) {
             category.statusColumns.forEach((column) => {
               if (column.id === currentStatusColumn.id) {
                 column.title = title;
@@ -86,6 +86,7 @@ function ActiveStatus({
           <Box>
             <Input
               autoFocus
+              color="gray"
               height="20px"
               value={title}
               fontSize="13px"
@@ -98,7 +99,7 @@ function ActiveStatus({
             />
           </Box>
         ) : (
-          <Box>
+          <Box color={currentStatusColumn.color}>
             {currentStatusColumn.title.replaceAll("_", " ").toUpperCase()}
           </Box>
         )}

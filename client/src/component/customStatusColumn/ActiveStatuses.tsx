@@ -2,6 +2,7 @@ import { Box, Button } from "@chakra-ui/react";
 import { memo } from "react";
 import { StatusColumnCategory } from "../../types";
 import ActiveStatus from "./ActiveStatus";
+import AddStatus from "./AddStatus";
 import { StatusCategories } from "./StatusColumnsDisplay";
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export default memo(ActiveStatuses);
 function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
+  const selectedCategoryName = selectedCategory?.name;
   const finishedStatus = selectedCategory?.statusColumns.find(
     (statusColumn) => statusColumn.markAsClosed
   );
@@ -18,7 +20,7 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
   return (
     <Box>
       <Box height="205px">
-        <Box height="170px" overflow="auto">
+        <Box maxHeight="170px" overflow="auto">
           {selectedCategory?.statusColumns.map(
             (currentStatusColumn) =>
               !currentStatusColumn.markAsClosed && (
@@ -26,23 +28,18 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
                   <ActiveStatus
                     currentStatusColumn={currentStatusColumn}
                     setStatusCategories={setStatusCategories}
-                    selectedCategoryName={selectedCategory.statusCategoryName}
+                    selectedCategoryName={selectedCategoryName}
                   />
                 </Box>
               )
           )}
         </Box>
 
-        <Button
-          my="1"
-          size="sm"
-          height="25px"
-          rounded="sm"
-          bgColor="customBlue.200"
-          _hover={{ bgColor: "customBlue.100" }}
-        >
-          + Add status
-        </Button>
+        <AddStatus
+          setStatusCategories={setStatusCategories}
+          selectedCategoryName={selectedCategoryName}
+          statusAmount={selectedCategory?.statusColumns.length}
+        />
       </Box>
 
       <Box height="89.5px">
@@ -59,7 +56,7 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
           <ActiveStatus
             currentStatusColumn={finishedStatus}
             setStatusCategories={setStatusCategories}
-            selectedCategoryName={selectedCategory?.statusCategoryName}
+            selectedCategoryName={selectedCategoryName}
           />
         )}
       </Box>

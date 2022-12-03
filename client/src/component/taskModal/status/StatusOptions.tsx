@@ -17,7 +17,7 @@ function StatusOptions({ onOptionClose }: Props) {
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   function handleSelectStatus(task: Task, column: StatusColumn) {
-    const targetStatusColumnId = column.id;
+    const targetStatusColumnId = column.id!;
 
     updateTaskAttribute(
       authState.user!.id!,

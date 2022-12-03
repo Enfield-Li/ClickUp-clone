@@ -1,4 +1,37 @@
+import { getRandomNumber } from "../../../../../utils/getRandomNumber";
+
+export function getRandomColor() {
+  const randomNum = getRandomNumber(1, 10) * 0.1;
+  return spaceColors[Math.floor(randomNum * spaceColors.length - 1)];
+}
+
 export const spaceColors = [
+  "rgb(62, 187, 133)",
+  "rgb(26, 188, 156)",
+  "rgb(39, 174, 96)",
+  "rgb(0, 215, 23)",
+  "rgb(243, 29, 47)",
+  "rgb(236, 85, 92)",
+  "rgb(252, 87, 94)",
+  "rgb(252, 180, 16)",
+  "rgb(177, 126, 34)",
+  "rgb(242, 77, 22)",
+  "rgb(255, 134, 0)",
+  "rgb(236, 102, 37)",
+  "rgb(41, 128, 185)",
+  "rgb(52, 152, 219)",
+  "rgb(82, 140, 203)",
+  "rgb(9, 24, 236)",
+  "rgb(25, 158, 199)",
+  "rgb(3, 162, 253)",
+  "rgb(123, 104, 238)",
+  "rgb(191, 74, 204)",
+  "rgb(7, 67, 84)",
+  "rgb(52, 73, 94)",
+  "rgb(24, 29, 33)",
+];
+
+export const spaceColors2D = [
   [
     "rgb(62, 187, 133)",
     "rgb(26, 188, 156)",
@@ -25,5 +58,38 @@ export const spaceColors = [
     "rgb(7, 67, 84)",
     "rgb(52, 73, 94)",
     "rgb(24, 29, 33)",
+  ],
+];
+
+export const spaceColors3D = [
+  [
+    "rgb(62, 187, 133)",
+    "rgb(26, 188, 156)",
+    "rgb(39, 174, 96)",
+    "rgb(0, 215, 23)",
+    "rgb(243, 29, 47)",
+    "rgb(236, 85, 92)",
+    "rgb(252, 87, 94)",
+    "rgb(252, 180, 16)",
+  ],
+  [
+    "rgb(177, 126, 34)",
+    "rgb(242, 77, 22)",
+    "rgb(255, 134, 0)",
+    "rgb(236, 102, 37)",
+    "rgb(41, 128, 185)",
+    "rgb(52, 152, 219)",
+    "rgb(82, 140, 203)",
+    "rgb(9, 24, 236)",
+  ],
+  [
+    "rgb(25, 158, 199)",
+    "rgb(3, 162, 253)",
+    "rgb(123, 104, 238)",
+    "rgb(191, 74, 204)",
+    "rgb(7, 67, 84)",
+    "rgb(52, 73, 94)",
+    "rgb(24, 29, 33)",
+    "",
   ],
 ];

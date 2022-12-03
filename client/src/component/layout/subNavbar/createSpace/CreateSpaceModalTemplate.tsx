@@ -85,6 +85,7 @@ function CreateSpaceModalTemplate({
           rounded="sm"
           height="50px"
           onClick={handleNext}
+          color="lightMain.100"
           bgColor="customBlue.200"
           _hover={{ bgColor: "customBlue.100" }}
         >

@@ -16,6 +16,7 @@ type Props = {
   setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export default memo(AddStatusColumnInput);
 function AddStatusColumnInput({
   color,
   setTaskState,
@@ -26,7 +27,6 @@ function AddStatusColumnInput({
 
   function createStatusColumn() {
     const newColumn: StatusColumn = {
-      id: 4,
       color,
       orderIndex: 3,
       title: titleInput,
@@ -110,4 +110,3 @@ function AddStatusColumnInput({
     </InputGroup>
   );
 }
-export default memo(AddStatusColumnInput);
