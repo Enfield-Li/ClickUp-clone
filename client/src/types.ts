@@ -300,7 +300,8 @@ export interface CreateSpaceDTO {
   name: string;
   color: string;
   isPrivate: boolean;
-  orderIndex: number | null;
+  orderIndex: number;
+  defaultStatusColumnId: number;
 }
 
 export interface User {
@@ -408,7 +409,8 @@ export enum CreateSpaceStep {
   CONFIRM = "confirm",
 }
 export interface CreateSpace {
-  step: CreateSpaceStep | null;
   isAllSet: boolean;
+  step: CreateSpaceStep | null;
   createSpaceDTO: CreateSpaceDTO;
+  selectedStatusColumns: StatusColumns;
 }

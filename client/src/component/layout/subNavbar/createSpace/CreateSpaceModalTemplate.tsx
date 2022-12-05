@@ -35,9 +35,14 @@ function CreateSpaceModalTemplate({
     setCreateSpace(
       produce(createSpace, (draftState) => {
         draftState.step = nextSection ? nextSection : CreateSpaceStep.NAME;
+        if (nextSection === CreateSpaceStep.CONFIRM) {
+          draftState.isAllSet = true;
+        }
       })
     );
   }
+
+  function handleCreateSpace() {}
 
   return (
     <>
@@ -89,7 +94,11 @@ function CreateSpaceModalTemplate({
           bgColor="customBlue.200"
           _hover={{ bgColor: "customBlue.100" }}
         >
-          {createSpace.isAllSet ? "Review changes" : "Next"}
+          {!nextSection
+            ? "Create space"
+            : createSpace.isAllSet
+            ? "Review changes"
+            : "Next"}
         </Button>
       </Box>
     </>

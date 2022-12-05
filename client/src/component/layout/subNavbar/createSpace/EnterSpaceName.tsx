@@ -32,7 +32,9 @@ function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
   function handleNextStep() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
-        draftState.step = CreateSpaceStep.COLOR;
+        draftState.step = createSpace.isAllSet
+          ? CreateSpaceStep.CONFIRM
+          : CreateSpaceStep.COLOR;
       })
     );
   }
@@ -78,6 +80,7 @@ function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
           width="100%"
           rounded="sm"
           height="50px"
+          color="lightMain.100"
           bgColor="customBlue.200"
           onClick={handleNextStep}
           _hover={{ bgColor: "customBlue.100" }}

@@ -13,3 +13,7 @@ axiosInstance.interceptors.request.use((config) => {
   config.withCredentials = true;
   return config;
 });
+
+export function createDevAxiosInstance(baseURL: string) {
+  return axios.create({ baseURL });
+}

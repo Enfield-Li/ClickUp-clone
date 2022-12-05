@@ -1,11 +1,14 @@
 import { Box } from "@chakra-ui/react";
+import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { defaultStatusCategories } from "../../hook/defaultStatuses";
-import { StatusCategories } from "../../types";
+import { CreateSpace, StatusCategories } from "../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
-type Props = {};
+type Props = {
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+};
 
 export interface StatusCategoriesSelected {
   selectedCategoryName: string;
@@ -13,7 +16,7 @@ export interface StatusCategoriesSelected {
 }
 
 export default memo(StatusColumnsDisplay);
-function StatusColumnsDisplay({}: Props) {
+function StatusColumnsDisplay({ setCreateSpace }: Props) {
   const [statusCategories, setStatusCategories] =
     useState<StatusCategoriesSelected>({
       selectedCategoryName: "Custom",
@@ -29,6 +32,16 @@ function StatusColumnsDisplay({}: Props) {
       statusCategories: defaultStatusCategories,
     });
   }, []);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setCreateSpace((prev) =>
+        produce(prev, (draftState) => {
+          draftState.selectedStatusColumns = selectedCategory.statusColumns;
+        })
+      );
+    }
+  }, [selectedCategory]);
 
   return (
     <>

@@ -11,6 +11,7 @@ type Props = {
 export default memo(SpacePrivateSetting);
 function SpacePrivateSetting({ createSpace, setCreateSpace }: Props) {
   const borderColor = useColorModeValue("lightMain.200", "lightMain.300");
+  const textColor = useColorModeValue("blackAlpha.600", "lightMain.400");
   const isPrivate = createSpace.createSpaceDTO.isPrivate;
 
   function handleSetToOpen() {
@@ -46,7 +47,9 @@ function SpacePrivateSetting({ createSpace, setCreateSpace }: Props) {
             <Center fontSize="50px">
               <i className="bi bi-people"></i>
             </Center>
-            <Center>Open Workspace</Center>
+            <Center color={!isPrivate ? "purple.500" : textColor}>
+              Open Workspace
+            </Center>
           </Box>
         </Box>
         <Box
@@ -64,7 +67,9 @@ function SpacePrivateSetting({ createSpace, setCreateSpace }: Props) {
             <Center fontSize="50px">
               <i className="bi bi-lock"></i>
             </Center>
-            <Center>Private</Center>
+            <Center color={isPrivate ? "purple.500" : textColor}>
+              Private
+            </Center>
           </Box>
         </Box>
       </Flex>

@@ -12,6 +12,7 @@ type Props = {
 
 export default memo(SpaceColorSetting);
 function SpaceColorSetting({ createSpace, setCreateSpace }: Props) {
+  const mx = "6.8px";
   function handleCancelColor() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
@@ -56,19 +57,18 @@ function SpaceColorSetting({ createSpace, setCreateSpace }: Props) {
           <Flex my="6" key={index}>
             {index === 0 && (
               <NotAllowedIcon
-                mx="1"
+                mx={mx}
                 rounded="4px"
                 width="15px"
                 height="15px"
                 cursor="pointer"
                 onClick={handleCancelColor}
-                //   _hover={{ width: "18px", height: "18px" }}
               />
             )}
 
             {colorGroup.map((color, index) => (
               <Box
-                mx="1"
+                mx={mx}
                 key={index}
                 rounded="4px"
                 width="15px"
@@ -76,7 +76,6 @@ function SpaceColorSetting({ createSpace, setCreateSpace }: Props) {
                 bgColor={color}
                 cursor="pointer"
                 onClick={() => handlePickColor(color)}
-                //   _hover={{ width: "18px", height: "18px" }}
               ></Box>
             ))}
           </Flex>

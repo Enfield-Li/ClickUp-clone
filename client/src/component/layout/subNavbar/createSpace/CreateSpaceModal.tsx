@@ -22,14 +22,16 @@ type Props = { isOpen: boolean; onClose: () => void };
 const createSpaceDTO: CreateSpaceDTO = {
   name: "",
   color: "gray",
-  orderIndex: null,
+  orderIndex: 0,
   isPrivate: false,
+  defaultStatusColumnId: 0,
 };
 
 const initialCreateSpace: CreateSpace = {
-  step: CreateSpaceStep.NAME,
-  isAllSet: false,
   createSpaceDTO,
+  isAllSet: false,
+  selectedStatusColumns: [],
+  step: CreateSpaceStep.NAME,
 };
 
 export default memo(CreateSpaceModal);
@@ -38,6 +40,11 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
   const [createSpace, setCreateSpace] =
     useState<CreateSpace>(initialCreateSpace);
   const spaceName = createSpace.createSpaceDTO.name;
+  const isAllSet = createSpace.isAllSet;
+
+  function redirectToReview(createSpaceStep: CreateSpaceStep) {
+    return isAllSet ? CreateSpaceStep.CONFIRM : createSpaceStep;
+  }
 
   useEffect(() => {
     if (!isOpen) {
@@ -63,7 +70,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
             previousSection={CreateSpaceStep.NAME}
-            nextSection={CreateSpaceStep.IS_PRIVATE}
+            nextSection={redirectToReview(CreateSpaceStep.IS_PRIVATE)}
           >
             <SpaceColorSetting
               createSpace={createSpace}
@@ -79,7 +86,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
             setCreateSpace={setCreateSpace}
             previousSection={CreateSpaceStep.COLOR}
             sectionName={`Share Space "${spaceName}"`}
-            nextSection={CreateSpaceStep.STATUS_COLUMNS}
+            nextSection={redirectToReview(CreateSpaceStep.STATUS_COLUMNS)}
           >
             <SpacePrivateSetting
               createSpace={createSpace}
@@ -92,12 +99,12 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
         return (
           <CreateSpaceModalTemplate
             createSpace={createSpace}
-            nextSection={CreateSpaceStep.CONFIRM}
             setCreateSpace={setCreateSpace}
             previousSection={CreateSpaceStep.IS_PRIVATE}
             sectionName="What task statuses do you want?"
+            nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
           >
-            <SpaceColumnsSetting />
+            <SpaceColumnsSetting setCreateSpace={setCreateSpace} />
           </CreateSpaceModalTemplate>
         );
       }
@@ -133,19 +140,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
     >
       <ModalOverlay />
       <ModalContent bgColor={contentBgColor} height="530px">
-        {/* <>{renderStepComponent()}</> */}
-        <CreateSpaceModalTemplate
-          nextSection={null}
-          sectionName="All good?"
-          createSpace={createSpace}
-          setCreateSpace={setCreateSpace}
-          previousSection={CreateSpaceStep.STATUS_COLUMNS}
-        >
-          <ReviewCreateSpace
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
-          />
-        </CreateSpaceModalTemplate>
+        {renderStepComponent()}
       </ModalContent>
     </Modal>
   );

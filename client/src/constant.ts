@@ -11,8 +11,8 @@ const UPDATE_TASK_DESC = "/update_desc";
 
 export const BASE_ENDPOINT = "http://localhost:8083";
 export const SERVICE_ENDPOINT = {
-  TASK: "http://localhost:8083",
-  STATUS_COLUMN: "http://localhost:8088",
+  TASK: "http://localhost:8084",
+  SPACE: "http://localhost:8088",
 };
 
 const ALL_TASKS = "/all_tasks";
