@@ -27,11 +27,10 @@ public class AccessTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(
-        ServletRequest request,
-        ServletResponse response,
-        FilterChain filterChain
-    )
-        throws IOException, ServletException {
+            ServletRequest request,
+            ServletResponse response,
+            FilterChain filterChain)
+            throws IOException, ServletException {
         var req = (HttpServletRequest) request;
 
         var accessToken = req.getHeader(AUTHORIZATION);
@@ -41,14 +40,13 @@ public class AccessTokenFilter extends GenericFilterBean {
 
             if (userInfo != null) {
                 var authUser = new UsernamePasswordAuthenticationToken(
-                    userInfo,
-                    null,
-                    null
-                );
+                        userInfo,
+                        null,
+                        null);
 
                 SecurityContextHolder.getContext().setAuthentication(authUser);
             }
-            
+
             filterChain.doFilter(request, response);
         } catch (InvalidTokenException e) {
             log.warn("User not authorized" + e);

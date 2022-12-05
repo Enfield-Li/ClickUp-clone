@@ -1,8 +1,7 @@
-package com.example.statusColumn;
+package com.example.space;
 
 import static com.example.clients.UrlConstants.*;
 
-import com.example.statusColumn.model.StatusColumn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.space.model.StatusColumn;
+
 @Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(STATUS_COLUMN_API_VERSION)
-class ColumnController {
+class StatusColumnController {
 
     private final StatusColumnService statusColumnService;
 

@@ -111,12 +111,12 @@ public class Task {
     private Set<Task> subTasks = new HashSet<>();
 
     @NotNull
-    @OneToMany(mappedBy = "taskWatcher", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
+    @OneToMany(mappedBy = "taskWatcher", fetch = EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> watchers = new HashSet<>();
 
-    @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     @Builder.Default
+    @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> assignees = new HashSet<>();
 
     public Task(

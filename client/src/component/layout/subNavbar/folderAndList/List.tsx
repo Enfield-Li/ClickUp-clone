@@ -1,9 +1,9 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
-import { ListType, SPACE_LIST_ACTION } from "../../../../types";
+import { ListCategory, SPACE_LIST_ACTION } from "../../../../types";
 
-type Props = { list: ListType; isSubList?: boolean };
+type Props = { list: ListCategory; isSubList?: boolean };
 
 export default memo(List);
 function List({ list, isSubList }: Props) {

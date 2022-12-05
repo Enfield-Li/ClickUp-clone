@@ -1,4 +1,4 @@
-package com.example.statusColumn;
+package com.example.space;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,17 +8,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // @EnableEurekaClient
 // @EnableFeignClients(basePackages = "com.example.clients")
-@SpringBootApplication(
-    scanBasePackages = {
+@SpringBootApplication(scanBasePackages = {
         "com.example.amqp",
         "com.example.clients",
         "com.example.statusColumn",
         "com.example.serviceSecurityConfig",
-    }
-)
-public class StatusColumnApplication {
+})
+public class SpaceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StatusColumnApplication.class, args);
+        SpringApplication.run(SpaceApplication.class, args);
     }
 }

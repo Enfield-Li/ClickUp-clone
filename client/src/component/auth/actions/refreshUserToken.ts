@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import React from "react";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { NavigateFunction } from "react-router-dom";
@@ -22,7 +22,7 @@ export async function refreshUserToken(
     // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
-      payload: response.data,
+      payload: {user: response.data}
     });
   } catch (error) {
     const err = error as AxiosError;

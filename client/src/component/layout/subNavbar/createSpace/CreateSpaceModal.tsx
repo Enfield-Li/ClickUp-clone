@@ -1,5 +1,4 @@
 import {
-  Flex,
   Modal,
   ModalContent,
   ModalOverlay,
@@ -11,7 +10,6 @@ import {
   CreateSpaceDTO,
   CreateSpaceStep,
 } from "../../../../types";
-import StatusColumnsDisplay from "../../../customStatusColumn/StatusColumnsDisplay";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";

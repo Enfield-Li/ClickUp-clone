@@ -1,10 +1,10 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
-import { FolderType, SPACE_LIST_ACTION } from "../../../../types";
+import { FolderCategory, SPACE_LIST_ACTION } from "../../../../types";
 import List from "./List";
 
-type Props = { spaceId: number; folder: FolderType };
+type Props = { spaceId: number; folder: FolderCategory };
 
 export default memo(Folder);
 function Folder({ folder, spaceId }: Props) {

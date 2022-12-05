@@ -19,7 +19,7 @@
         <module>task</module>
         <module>taskEvent</module>
         <module>taskComment</module>
-        <module>statusColumn</module>
+        <module>space</module>
         <module>serviceSecurityConfig</module>
     </modules>
 

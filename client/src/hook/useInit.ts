@@ -9,6 +9,7 @@ export default function useInit() {
   const { authDispatch } = useAuthContext();
   const toast = useToast({ duration: 3000, isClosable: true });
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  console.log(100 % 20);
 
   useEffect(() => {
     authDispatch({

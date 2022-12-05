@@ -1,8 +1,9 @@
-package com.example.statusColumn;
+package com.example.space;
 
-import com.example.statusColumn.model.StatusColumn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import com.example.space.model.StatusColumn;
 
 @Service
 @RequiredArgsConstructor

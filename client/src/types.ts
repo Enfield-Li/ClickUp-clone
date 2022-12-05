@@ -267,16 +267,16 @@ export interface Category {
   spaceId: number;
   owner: UserInfo;
   createdAt: Date;
-  member: UserInfo[];
+  members: UserInfo[];
   isPrivate: boolean;
   color: string | null;
 }
 
-export interface FolderType extends Category {
+export interface FolderCategory extends Category {
   isOpen: boolean;
-  allLists: ListType[];
+  allLists: ListCategory[];
 }
-export interface ListType extends Category {
+export interface ListCategory extends Category {
   isSelected: boolean;
   taskAmount: number | null;
   statusColumns: StatusColumns;
@@ -289,11 +289,11 @@ export interface SpaceType {
   id: number;
   name: string;
   isOpen: boolean;
+  orderIndex: number;
   isPrivate: boolean;
   isSelected: boolean;
-  orderIndex: number;
   color: string | null;
-  allListOrFolder: (FolderType | ListType)[];
+  allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
 export interface CreateSpaceDTO {

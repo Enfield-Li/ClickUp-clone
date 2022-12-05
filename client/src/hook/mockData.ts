@@ -2,13 +2,13 @@ import {
   ColumnOptions,
   CurrentWeek,
   DueDateRange,
-  ListType,
+  ListCategory,
   Priority,
   StatusColumns,
   TaskList,
   User,
   UserInfo,
-  FolderType,
+  FolderCategory,
   SpaceType,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
@@ -28,7 +28,7 @@ export const statusColumns2: StatusColumns = [
 const userInfo: UserInfo = { userId: 1, username: "mockUser" };
 const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
 
-const allFolder1List: ListType[] = [
+const allFolder1List: ListCategory[] = [
   {
     id: 5,
     statusColumns: kanban,
@@ -36,7 +36,7 @@ const allFolder1List: ListType[] = [
     color: "green",
     isSelected: true,
     isPrivate: false,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "sub list 1",
     owner: userInfo,
     parentFolderId: 2,
@@ -45,7 +45,7 @@ const allFolder1List: ListType[] = [
   },
 ];
 
-const allFolder15List: ListType[] = [
+const allFolder15List: ListCategory[] = [
   {
     id: 6,
     statusColumns: marketing,
@@ -53,7 +53,7 @@ const allFolder15List: ListType[] = [
     color: "",
     isSelected: false,
     isPrivate: false,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "sub list 2",
     owner: userInfo,
     parentFolderId: 2,
@@ -62,7 +62,7 @@ const allFolder15List: ListType[] = [
   },
 ];
 
-export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
+export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
   {
     id: 1,
     createdAt: new Date(),
@@ -70,7 +70,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     isOpen: true,
     isPrivate: true,
     isSelected: false,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "folder1",
     owner: userInfo,
     spaceId: 2,
@@ -83,7 +83,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     isOpen: true,
     isPrivate: false,
     isSelected: false,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "folder1.5",
     owner: userInfo,
     spaceId: 2,
@@ -96,7 +96,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     color: "",
     isSelected: false,
     isPrivate: true,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "list1",
     owner: userInfo,
     parentFolderId: null,
@@ -110,7 +110,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
     color: "",
     isSelected: false,
     isPrivate: false,
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "list2",
     owner: userInfo,
     parentFolderId: null,
@@ -119,7 +119,7 @@ export const allSpace1ListOrFolder: (FolderType | ListType)[] = [
   },
 ];
 
-const allSpace2ListOrFolder: (FolderType | ListType)[] = [
+const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
   {
     id: 3,
     statusColumns: normal,
@@ -127,7 +127,7 @@ const allSpace2ListOrFolder: (FolderType | ListType)[] = [
     isPrivate: true,
     isSelected: false,
     createdAt: new Date(),
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
     name: "list3",
     owner: userInfo,
     parentFolderId: null,
