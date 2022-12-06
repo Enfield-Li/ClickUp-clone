@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,11 +27,11 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
-// https://stackoverflow.com/questions/31664098/lombok-builder-inheritance-workaround
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@DiscriminatorValue(value = "LIST_CATEGORY")
 class ListCategory extends Category {
 
     private Boolean isSelected;

@@ -81,9 +81,14 @@ function FixedNavBar({
           <NavIcon
             name="Task"
             isSelected={currentSection === Section.TASKS}
-            url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedListId}`}
+            // url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedListId}`}
+            url=""
           >
-            <i className="bi bi-check-square-fill"></i>
+            {currentSection === Section.TASKS ? (
+              <i className="bi bi-check-square-fill"></i>
+            ) : (
+              <i className="bi bi-check-square"></i>
+            )}
           </NavIcon>
         </Box>
 
@@ -94,7 +99,11 @@ function FixedNavBar({
             url={CLIENT_ROUTE.TEST_DEV}
             isSelected={currentSection === Section.DEV}
           >
-            <i className="bi bi-question-circle"></i>
+            {currentSection === Section.DEV ? (
+              <i className="bi bi-question-circle-fill"></i>
+            ) : (
+              <i className="bi bi-question-circle"></i>
+            )}
           </NavIcon>
         </Box>
       </Box>

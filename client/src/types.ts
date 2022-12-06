@@ -285,6 +285,12 @@ export interface ListCategory extends Category {
   //   listViewSetting?: unknown
 }
 
+export type Team = {
+  id: number;
+  name: string;
+  spaces: SpaceType[];
+};
+
 export interface SpaceType {
   id: number;
   name: string;
@@ -307,6 +313,7 @@ export interface CreateSpaceDTO {
 export interface User {
   id: number;
   username: string;
+  teams: Team[];
 }
 
 export interface UserResponse {

@@ -10,6 +10,7 @@ import {
   UserInfo,
   FolderCategory,
   SpaceType,
+  Team,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 import { kanban, marketing, normal, scrum } from "./defaultStatuses";
@@ -159,10 +160,9 @@ export const initialSpaces: SpaceType[] = [
   },
 ];
 
-export const mockUser: User = {
-  id: 1,
-  username: "mockUser",
-};
+export const team: Team = { id: 1, name: "workspace", spaces: initialSpaces };
+
+export const mockUser: User = { id: 1, username: "mockUser", teams: [team] };
 
 export const staticColumnOptions: ColumnOptions = {
   statusColumns: [],

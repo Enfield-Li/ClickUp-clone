@@ -3,6 +3,7 @@ package com.example.space.model;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -15,11 +16,11 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
-// https://stackoverflow.com/questions/31664098/lombok-builder-inheritance-workaround
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@DiscriminatorValue(value = "FOLDER_CATEGORY")
 class FolderCategory extends Category {
 
     private Boolean isOpen;

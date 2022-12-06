@@ -5,6 +5,7 @@ import {
   Divider,
   FormLabel,
   Input,
+  ModalCloseButton,
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
@@ -40,7 +41,15 @@ function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
   }
 
   return (
-    <>
+    <Box position="relative">
+      <ModalCloseButton
+        top="37px"
+        right="37px"
+        fontSize="lg"
+        position="absolute"
+        _hover={{ color: "purple.500" }}
+      />
+
       <Center height="280px" flexDir="column">
         <Box alignSelf="center">
           <NewSpaceSVG />
@@ -89,6 +98,6 @@ function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
           {createSpace.isAllSet ? "Review changes" : "Next"}
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }
