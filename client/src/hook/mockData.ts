@@ -140,6 +140,7 @@ const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
 export const initialSpaces: SpaceType[] = [
   {
     id: 1,
+    teamId: 1,
     isOpen: true,
     name: "space1",
     orderIndex: 1,
@@ -150,6 +151,7 @@ export const initialSpaces: SpaceType[] = [
   },
   {
     id: 2,
+    teamId: 1,
     isOpen: false,
     name: "space2",
     orderIndex: 2,
@@ -160,9 +162,9 @@ export const initialSpaces: SpaceType[] = [
   },
 ];
 
-export const team: Team = { id: 1, name: "workspace", spaces: initialSpaces };
+export const team: Team = { id: 1, name: "workspace", spaceIdList: [] };
 
-export const mockUser: User = { id: 1, username: "mockUser", teams: [team] };
+export const mockUser: User = { id: 1, username: "mockUser", teams: [] };
 
 export const staticColumnOptions: ColumnOptions = {
   statusColumns: [],

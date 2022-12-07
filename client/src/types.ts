@@ -288,12 +288,13 @@ export interface ListCategory extends Category {
 export type Team = {
   id: number;
   name: string;
-  spaces: SpaceType[];
+  spaceIdList: Category[];
 };
 
 export interface SpaceType {
   id: number;
   name: string;
+  teamId: number;
   isOpen: boolean;
   orderIndex: number;
   isPrivate: boolean;
@@ -313,11 +314,12 @@ export interface CreateSpaceDTO {
 export interface User {
   id: number;
   username: string;
-  teams: Team[];
+  teams: number[];
 }
 
 export interface UserResponse {
   id: number;
+  teams: Team[];
   username: string;
   accessToken: string;
 }
