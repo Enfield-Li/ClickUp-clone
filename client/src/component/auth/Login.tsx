@@ -1,22 +1,14 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Link as ChakraLink,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import { Field, FieldAttributes, Form, Formik } from "formik";
+import { Box, Center, useToast } from "@chakra-ui/react";
 import { memo, useState } from "react";
+import * as ReactDOMServer from "react-dom/server";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { CLIENT_ROUTE } from "../../constant";
-import { loginUser } from "./actions/loginUser";
-import { Credentials, FieldErrors } from "../../types";
+import { FieldErrors } from "../../types";
+import { getRandomNumber } from "../../utils/getRandomNumber";
+import Disclaimer from "./Disclaimer";
+import HeadInfo from "./HeadInfo";
+import LoginForm from "./LoginForm";
+import LoginSVG from "./LoginSVG";
 
 type Props = {};
 
@@ -27,79 +19,54 @@ function Login({}: Props) {
   const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
+  const svgString = encodeURIComponent(
+    ReactDOMServer.renderToStaticMarkup(<LoginSVG />)
+  );
+
   return (
-    <Center pt={3}>
-      <Box width="50%">
-        <Formik<Credentials>
-          initialValues={{
-            username: "",
-            password: "",
-          }}
-          onSubmit={async (credentials) => {
-            const error = await loginUser(credentials, authDispatch, toast);
+    <Center
+      pt={3}
+      height="100vh"
+      position="relative"
+      bgColor="lightMain.50"
+      backgroundPosition="bottom"
+      backgroundRepeat="no-repeat"
+      style={{ backgroundImage: `url("data:image/svg+xml,${svgString}")` }}
+    >
+      <HeadInfo />
 
-            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            if (error) setErrors(error);
-          }}
+      <Box>
+        <Box
+          p="6"
+          rounded="lg"
+          width="480px"
+          height="400px"
+          boxShadow="2xl"
+          bgColor="white"
         >
-          {(props) => (
-            <Form>
-              {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
-              <FormControl mt={3} isRequired>
-                <Field id="username" name="username">
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <>
-                      <FormLabel>Username:</FormLabel>
-                      <Input {...field} placeholder="John Doe" />
+          <Center fontWeight="bold" fontSize="33px" mt="3">
+            Welcome back!
+          </Center>
+          <Box px="6" mt="6" bgColor="white">
+            <LoginForm />
+          </Box>
+        </Box>
 
-                      <Text textColor={"red.400"}>
-                        {
-                          errors?.find((err) => err.field === "username")
-                            ?.message
-                        }
-                      </Text>
-                    </>
-                  )}
-                </Field>
-
-                <Field id="password" name="password">
-                  {({ field, form }: FieldAttributes<any>) => (
-                    <>
-                      <FormLabel mt={3}>Password:</FormLabel>
-                      <Input {...field} type="password" />
-
-                      <Text textColor={"red.400"}>
-                        {
-                          errors?.find((err) => err.field === "password")
-                            ?.message
-                        }
-                      </Text>
-                    </>
-                  )}
-                </Field>
-
-                <Flex justifyContent={"space-between"}>
-                  <ChakraLink
-                    mt={2}
-                    color="teal.400"
-                    onClick={() => navigate(CLIENT_ROUTE.REGISTER)}
-                  >
-                    Register now
-                  </ChakraLink>
-                  <Button
-                    mt={3}
-                    colorScheme="teal"
-                    isLoading={props.isSubmitting}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                </Flex>
-              </FormControl>
-            </Form>
-          )}
-        </Formik>
+        <Center color="white" mt="6" fontSize="15px">
+          Don't have an account?
+          <span>&nbsp;</span>
+          <Box
+            as="span"
+            cursor="pointer"
+            borderBottomWidth="1px"
+            borderBottomColor="whiteAlpha.600"
+          >
+            Sign up
+          </Box>
+        </Center>
       </Box>
+
+      <Disclaimer />
     </Center>
   );
 }

@@ -69,6 +69,7 @@ function CreateTask({
       const creator = newCreator({
         userId: authState.user!.id!,
         username: authState.user!.username,
+        email: authState.user!.email,
       });
       createNewTask({
         sortBy,

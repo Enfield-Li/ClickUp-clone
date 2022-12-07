@@ -91,6 +91,7 @@ interface Event {
 
 export interface UserInfo {
   userId: number;
+  email: string;
   username: string;
 }
 interface Reaction {
@@ -313,13 +314,15 @@ export interface CreateSpaceDTO {
 
 export interface User {
   id: number;
+  email: string;
   username: string;
   teams: number[];
 }
 
 export interface UserResponse {
   id: number;
-  teams: Team[];
+  email: string;
+  teams: number[];
   username: string;
   accessToken: string;
 }

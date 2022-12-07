@@ -19,6 +19,9 @@ export const lightMainBG = "rgb(238, 238, 238)"; // lightMain.100
 export const customBlue = "rgb(123, 104, 238)";
 export const customHoverBlue = "rgb(91, 67, 234)";
 export const lightText = "black";
+export const linkColor = "rgb(124, 105, 238)";
+export const submitBtn = "rgb(123, 104, 238)";
+const hoverSubmitBtn = "rgb(75, 63, 147)";
 
 const $arrowBg = cssVar("popper-arrow-bg");
 
@@ -73,7 +76,6 @@ export const globalTheme = extendTheme({
       500: lightColumnHeadText,
     },
     lightMain: {
-      40: "rgb(250, 251, 252)",
       50: "rgb(250, 251, 252)",
       100: lightMainBG,
       200: darkText,
@@ -85,5 +87,7 @@ export const globalTheme = extendTheme({
       100: customHoverBlue,
       200: customBlue,
     },
+    linkColor: linkColor,
+    submitBtn: submitBtn,
   },
 });

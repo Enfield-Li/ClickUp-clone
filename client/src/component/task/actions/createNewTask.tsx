@@ -112,7 +112,7 @@ export function setCurrentTaskAttribute({
   const lastTaskInCurrentColumn =
     currentTaskList?.taskList[currentTaskList?.taskList.length - 1];
 
-  newTask[sortBy].columnId = currentColumn.id;
+  newTask[sortBy].columnId = currentColumn.id!;
   newTask[sortBy].name = currentColumn.title;
   newTask[sortBy].orderIndex = lastTaskInCurrentColumn
     ? lastTaskInCurrentColumn[sortBy].orderIndex + 1
@@ -257,11 +257,16 @@ function newTaskFactory({
 }
 
 interface newCreatorParam {
+  email: string;
   userId: number;
   username: string;
 }
-export function newCreator({ userId, username }: newCreatorParam): UserInfo {
-  return { userId, username };
+export function newCreator({
+  userId,
+  username,
+  email,
+}: newCreatorParam): UserInfo {
+  return { userId, username, email };
 }
 
 function newTaskStatusPosition(): StatusPosition {

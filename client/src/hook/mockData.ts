@@ -26,8 +26,8 @@ export const statusColumns2: StatusColumns = [
   { id: 2, title: "IN_PROGRESS", color: "purple.400", orderIndex: 2 },
 ];
 
-const userInfo: UserInfo = { userId: 1, username: "mockUser" };
-const guestUserInfo: UserInfo = { userId: 2, username: "guestUser" };
+const userInfo: UserInfo = { userId: 1, username: "mockUser", email: "" };
+const guestUserInfo: UserInfo = { userId: 2, username: "guestUser", email: "" };
 
 const allFolder1List: ListCategory[] = [
   {
@@ -164,7 +164,12 @@ export const initialSpaces: SpaceType[] = [
 
 export const team: Team = { id: 1, name: "workspace", spaceIdList: [] };
 
-export const mockUser: User = { id: 1, username: "mockUser", teams: [] };
+export const mockUser: User = {
+  id: 1,
+  username: "mockUser",
+  teams: [],
+  email: "",
+};
 
 export const staticColumnOptions: ColumnOptions = {
   statusColumns: [],
