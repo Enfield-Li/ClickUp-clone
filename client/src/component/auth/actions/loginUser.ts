@@ -5,7 +5,7 @@ import { ACCESS_TOKEN } from "../../../constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import {
-  Credentials,
+  LoginCredentials,
   AuthActionType,
   UserResponse,
   AUTH_ACTION,
@@ -13,14 +13,14 @@ import {
 } from "../../../types";
 
 export async function loginUser(
-  credentials: Credentials,
+  loginCredentials: LoginCredentials,
   dispatch: React.Dispatch<AuthActionType>,
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_LOGIN,
-      credentials
+      loginCredentials
     );
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);

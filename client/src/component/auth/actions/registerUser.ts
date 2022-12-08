@@ -4,7 +4,7 @@ import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {
-  Credentials,
+  RegisterCredentials,
   AuthActionType,
   UserResponse,
   AUTH_ACTION,
@@ -12,14 +12,14 @@ import {
 } from "../../../types";
 
 export async function registerUser(
-  credentials: Credentials,
+  registerCredentials: RegisterCredentials,
   dispatch: React.Dispatch<AuthActionType>,
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_REGISTER,
-      credentials
+      registerCredentials
     );
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);

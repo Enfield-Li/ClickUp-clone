@@ -21,6 +21,7 @@ function AuthTemplate({ isLogin, children }: Props) {
       pt="3"
       color="black"
       height="100vh"
+      flexDir="column"
       position="relative"
       bgColor="lightMain.50"
       backgroundPosition="bottom"
@@ -29,24 +30,24 @@ function AuthTemplate({ isLogin, children }: Props) {
     >
       <HeadInfo isLogin={isLogin} />
 
-      <Box>
-        <Box
-          p="6"
-          rounded="lg"
-          width="480px"
-          boxShadow="2xl"
-          bgColor="white"
-          height="fit-content"
-        >
-          <Center fontWeight="bold" fontSize="33px" mt="3">
-            {isLogin ? "Welcome back!" : "Let's go!"}
-          </Center>
-          <Box px="6" mt="6" bgColor="white">
-            {children}
-          </Box>
+      <Box
+        p="6"
+        rounded="lg"
+        width="480px"
+        boxShadow="2xl"
+        bgColor="white"
+        height="fit-content"
+      >
+        <Center fontWeight="bold" fontSize="33px" mt="3">
+          {isLogin ? "Welcome back!" : "Let's go!"}
+        </Center>
+        <Box px="6" mt="6" bgColor="white">
+          {children}
         </Box>
+      </Box>
 
-        <Center color="white" mt="6" fontSize="15px">
+      {isLogin && (
+        <Box color="white" mt="6" fontSize="15px">
           Don't have an account?
           <span>&nbsp;</span>
           <Box
@@ -58,8 +59,8 @@ function AuthTemplate({ isLogin, children }: Props) {
           >
             Sign up
           </Box>
-        </Center>
-      </Box>
+        </Box>
+      )}
 
       <Disclaimer />
     </Center>

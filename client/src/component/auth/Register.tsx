@@ -17,21 +17,34 @@ import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { Credentials, FieldErrors, RegisterCredentials } from "../../types";
+import { FieldErrors, RegisterCredentials } from "../../types";
 import { registerUser } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
+import * as Yup from "yup";
 
 type Props = {};
 
 export default memo(Register);
 function Register({}: Props) {
+  const [show, setShow] = useState(false);
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
   const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
-  const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
+  const signupSchema = Yup.object().shape({
+    username: Yup.string()
+      .min(4, "Username should be at least 4 characters long")
+      .max(50, "Too Long!")
+      .required("Username Required"),
+    password: Yup.string()
+      .min(8, "Password must be 8 characters or longer!")
+      .max(50, "Too Long! 50 max")
+      .required("Password Required"),
+    email: Yup.string()
+      .email("This email is not valid!")
+      .required("Email Required"),
+  });
 
   if (errors) {
     setTimeout(() => {
@@ -43,29 +56,39 @@ function Register({}: Props) {
     <AuthTemplate isLogin={false}>
       <Box height="fit-content">
         <Formik<RegisterCredentials>
+          validationSchema={signupSchema}
           initialValues={{
             email: "",
             username: "",
             password: "",
           }}
-          onSubmit={async (credentials) => {
-            const error = await registerUser(credentials, authDispatch, toast);
+          onSubmit={async (registerCredentials) => {
+            const error = await registerUser(
+              registerCredentials,
+              authDispatch,
+              toast
+            );
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors(error);
           }}
         >
-          {(props) => (
+          {({ errors, touched, isSubmitting }) => (
             <Form>
               {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
               <FormControl mt={3}>
+                {/* Username */}
                 <Field id="username" name="username">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" fontWeight="">
-                        Full name
+                      <FormLabel fontSize="12px" fontWeight="normal">
+                        Username
                       </FormLabel>
 
-                      <InputGroup>
+                      <InputGroup
+                        border={
+                          errors.username && touched.username ? "red" : ""
+                        }
+                      >
                         <InputLeftElement
                           pointerEvents="none"
                           children={
@@ -75,27 +98,38 @@ function Register({}: Props) {
                           }
                         />
 
-                        <Input {...field} rounded="lg" placeholder="John Doe" />
+                        <Input
+                          {...field}
+                          autoFocus
+                          rounded="lg"
+                          placeholder="John Doe"
+                        />
                       </InputGroup>
 
-                      <Text textColor={"red.400"}>
-                        {
-                          errors?.find((err) => err.field === "username")
-                            ?.message
-                        }
-                      </Text>
+                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                        {errors.username && touched.username && (
+                          <Box>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>&nbsp;</span>
+                            {errors.username}
+                          </Box>
+                        )}
+                      </Box>
                     </>
                   )}
                 </Field>
 
+                {/* Email */}
                 <Field id="email" name="email">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" mt={6} fontWeight="">
+                      <FormLabel fontSize="12px" mt={4} fontWeight="normal">
                         Email
                       </FormLabel>
 
-                      <InputGroup>
+                      <InputGroup
+                        border={errors.email && touched.email ? "red" : ""}
+                      >
                         <InputLeftElement
                           pointerEvents="none"
                           children={<EmailIcon color="rgb(191, 208, 230)" />}
@@ -109,12 +143,15 @@ function Register({}: Props) {
                         />
                       </InputGroup>
 
-                      <Text textColor="red.400">
-                        {
-                          errors?.find((err) => err.field === "password")
-                            ?.message
-                        }
-                      </Text>
+                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                        {errors.email && touched.email && (
+                          <Box>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>&nbsp;</span>
+                            {errors.email}
+                          </Box>
+                        )}
+                      </Box>
                     </>
                   )}
                 </Field>
@@ -122,11 +159,15 @@ function Register({}: Props) {
                 <Field id="password" name="password">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" mt={6} fontWeight="">
-                        Password
+                      <FormLabel fontSize="12px" mt={4} fontWeight="normal">
+                        Choose Password
                       </FormLabel>
 
-                      <InputGroup>
+                      <InputGroup
+                        border={
+                          errors.password && touched.password ? "red" : ""
+                        }
+                      >
                         <InputLeftElement
                           pointerEvents="none"
                           children={<UnlockIcon color="rgb(191, 208, 230)" />}
@@ -156,12 +197,15 @@ function Register({}: Props) {
                         />
                       </InputGroup>
 
-                      <Text textColor="red.400">
-                        {
-                          errors?.find((err) => err.field === "password")
-                            ?.message
-                        }
-                      </Text>
+                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                        {errors.password && touched.password && (
+                          <Box>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>&nbsp;</span>
+                            {errors.password}
+                          </Box>
+                        )}
+                      </Box>
                     </>
                   )}
                 </Field>
@@ -169,13 +213,13 @@ function Register({}: Props) {
                 <Box pt="3">
                   <Button
                     mb="1"
-                    mt="6"
+                    mt="4"
                     shadow="md"
                     width="100%"
                     type="submit"
                     color="white"
                     bgColor="submitBtn.100"
-                    isLoading={props.isSubmitting}
+                    isLoading={isSubmitting}
                     _hover={{ bgColor: "submitBtn.200" }}
                   >
                     Submit
@@ -183,7 +227,7 @@ function Register({}: Props) {
                 </Box>
 
                 <Center mt="4" fontSize="small" color="linkColor">
-                  <Box cursor="not-allowed">or login with SSO</Box>
+                  <Box cursor="not-allowed">or sign up with SSO</Box>
                 </Center>
               </FormControl>
             </Form>

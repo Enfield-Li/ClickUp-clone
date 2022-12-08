@@ -18,10 +18,11 @@ import * as ReactDOMServer from "react-dom/server";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { Credentials, FieldErrors } from "../../types";
+import { LoginCredentials, FieldErrors } from "../../types";
 import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
 import LoginSVG from "./LoginSVG";
+import * as Yup from "yup";
 
 type Props = {};
 
@@ -32,29 +33,42 @@ function Login({}: Props) {
   const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
-  const svgString = encodeURIComponent(
-    ReactDOMServer.renderToStaticMarkup(<LoginSVG />)
-  );
+  const loginSchema = Yup.object().shape({
+    username: Yup.string()
+      .min(4, "Username should be at least 4 characters long")
+      .max(50, "Too Long!")
+      .required("Username Required"),
+    password: Yup.string()
+      .min(8, "Password must be 8 characters or longer!")
+      .max(50, "Too Long! 50 max")
+      .required("Password Required"),
+  });
 
   return (
     <AuthTemplate isLogin={true}>
       <Box height="fit-content">
-        <Formik<Credentials>
+        <Formik<LoginCredentials>
+          validationSchema={loginSchema}
           initialValues={{
             username: "",
             password: "",
           }}
-          onSubmit={async (credentials) => {
-            const error = await loginUser(credentials, authDispatch, toast);
+          onSubmit={async (loginCredentials) => {
+            const error = await loginUser(
+              loginCredentials,
+              authDispatch,
+              toast
+            );
 
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors(error);
           }}
         >
-          {(props) => (
+          {({ isSubmitting, touched, errors }) => (
             <Form>
               {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
               <FormControl mt={3}>
+                {/* Username */}
                 <Field id="username" name="username">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
@@ -62,36 +76,49 @@ function Login({}: Props) {
                         Email
                       </FormLabel>
 
-                      <InputGroup>
+                      <InputGroup
+                        border={
+                          errors.username && touched.username ? "red" : ""
+                        }
+                      >
                         <InputLeftElement
                           pointerEvents="none"
                           children={<EmailIcon color="rgb(191, 208, 230)" />}
                         />
                         <Input
                           {...field}
+                          autoFocus
                           rounded="lg"
                           placeholder="Enter your email"
                         />
                       </InputGroup>
 
-                      <Text textColor={"red.400"}>
-                        {
-                          errors?.find((err) => err.field === "username")
-                            ?.message
-                        }
-                      </Text>
+                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                        {errors.username && touched.username && (
+                          <Box>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>&nbsp;</span>
+                            {errors.username}
+                          </Box>
+                        )}
+                      </Box>
                     </>
                   )}
                 </Field>
 
+                {/* Password */}
                 <Field id="password" name="password">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" mt={6} fontWeight="">
+                      <FormLabel fontSize="11px" mt={4} fontWeight="">
                         Password
                       </FormLabel>
 
-                      <InputGroup>
+                      <InputGroup
+                        border={
+                          errors.password && touched.password ? "red" : ""
+                        }
+                      >
                         <InputLeftElement
                           pointerEvents="none"
                           children={<UnlockIcon color="rgb(191, 208, 230)" />}
@@ -118,12 +145,15 @@ function Login({}: Props) {
                         />
                       </InputGroup>
 
-                      <Text textColor="red.400">
-                        {
-                          errors?.find((err) => err.field === "password")
-                            ?.message
-                        }
-                      </Text>
+                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                        {errors.password && touched.password && (
+                          <Box>
+                            <i className="bi bi-exclamation-triangle-fill"></i>
+                            <span>&nbsp;</span>
+                            {errors.password}
+                          </Box>
+                        )}
+                      </Box>
                     </>
                   )}
                 </Field>
@@ -136,7 +166,7 @@ function Login({}: Props) {
                     type="submit"
                     color="white"
                     bgColor="submitBtn.100"
-                    isLoading={props.isSubmitting}
+                    isLoading={isSubmitting}
                     _hover={{ bgColor: "submitBtn.200" }}
                   >
                     Submit

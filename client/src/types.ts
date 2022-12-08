@@ -250,7 +250,7 @@ export type RegisterCredentials = {
   password: string;
 };
 
-export type Credentials = {
+export type LoginCredentials = {
   username: string;
   password: string;
 };
