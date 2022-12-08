@@ -1,11 +1,11 @@
-package com.example.auth;
+package com.example.authorization;
 
-import static com.example.auth.Constants.*;
+import static com.example.authorization.Constants.*;
 import static com.example.clients.UrlConstants.*;
 
-import com.example.auth.dto.AuthorizationResponse;
-import com.example.auth.dto.LoginCredentials;
-import com.example.auth.dto.RegisterCredentials;
+import com.example.authorization.dto.AuthorizationResponse;
+import com.example.authorization.dto.LoginCredentials;
+import com.example.authorization.dto.RegisterCredentials;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;

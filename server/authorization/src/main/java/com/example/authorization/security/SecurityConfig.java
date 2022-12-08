@@ -1,4 +1,4 @@
-package com.example.auth.security;
+package com.example.authorization.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,16 +12,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .cors()
-            .and()
-            .csrf()
-            .disable()
-            .formLogin()
-            .disable()
-            .logout()
-            .disable()
-            .authorizeRequests()
-            .antMatchers("/**")
-            .permitAll();
+                .cors()
+                .and()
+                .csrf()
+                .disable()
+                .formLogin()
+                .disable()
+                .logout()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/**")
+                .permitAll();
     }
 }

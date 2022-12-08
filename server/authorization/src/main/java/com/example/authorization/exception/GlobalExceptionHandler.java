@@ -1,4 +1,4 @@
-package com.example.auth.exception;
+package com.example.authorization.exception;
 
 import com.example.clients.jwt.InvalidTokenException;
 import java.util.List;

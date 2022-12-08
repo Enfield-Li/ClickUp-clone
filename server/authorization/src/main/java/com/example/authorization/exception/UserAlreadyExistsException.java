@@ -1,4 +1,4 @@
-package com.example.auth.exception;
+package com.example.authorization.exception;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.example.auth;
+package com.example.authorization;
 
 import java.util.Optional;
 
@@ -13,5 +13,6 @@ public interface ApplicationUserRepository
     public Boolean existsByEmail(String email);
 
     public Optional<ApplicationUser> findByUsername(String username);
+
     public Optional<ApplicationUser> findByEmail(String email);
 }

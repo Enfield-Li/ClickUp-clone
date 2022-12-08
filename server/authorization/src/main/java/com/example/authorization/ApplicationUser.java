@@ -1,4 +1,4 @@
-package com.example.auth;
+package com.example.authorization;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;

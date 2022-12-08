@@ -1,12 +1,12 @@
-package com.example.auth;
+package com.example.authorization;
 
 import static com.example.clients.UrlConstants.*;
 
-import com.example.auth.dto.AuthorizationResponse;
-import com.example.auth.dto.LoginCredentials;
-import com.example.auth.dto.RegisterCredentials;
-import com.example.auth.exception.LoginFailedException;
-import com.example.auth.exception.UserAlreadyExistsException;
+import com.example.authorization.dto.AuthorizationResponse;
+import com.example.authorization.dto.LoginCredentials;
+import com.example.authorization.dto.RegisterCredentials;
+import com.example.authorization.exception.LoginFailedException;
+import com.example.authorization.exception.UserAlreadyExistsException;
 import com.example.clients.jwt.InvalidTokenException;
 import com.example.clients.jwt.JwtUtilities;
 import javax.servlet.http.HttpServletRequest;
