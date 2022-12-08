@@ -9,18 +9,17 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { FieldErrors, RegisterCredentials } from "../../types";
+import { RegisterCredentials } from "../../types";
 import { registerUser } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
-import * as Yup from "yup";
 
 type Props = {};
 
@@ -29,7 +28,6 @@ function Register({}: Props) {
   const [show, setShow] = useState(false);
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
-  const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
   const signupSchema = Yup.object().shape({
@@ -46,12 +44,6 @@ function Register({}: Props) {
       .required("Email Required"),
   });
 
-  if (errors) {
-    setTimeout(() => {
-      setErrors([]);
-    }, 5000);
-  }
-
   return (
     <AuthTemplate isLogin={false}>
       <Box height="fit-content">
@@ -62,14 +54,14 @@ function Register({}: Props) {
             username: "",
             password: "",
           }}
-          onSubmit={async (registerCredentials) => {
+          onSubmit={async (registerCredentials, { setErrors }) => {
             const error = await registerUser(
               registerCredentials,
               authDispatch,
               toast
             );
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            if (error) setErrors(error);
+            if (error) setErrors({});
           }}
         >
           {({ errors, touched, isSubmitting }) => (
@@ -156,6 +148,7 @@ function Register({}: Props) {
                   )}
                 </Field>
 
+                {/* Password */}
                 <Field id="password" name="password">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
@@ -210,6 +203,7 @@ function Register({}: Props) {
                   )}
                 </Field>
 
+                {/* Submit button */}
                 <Box pt="3">
                   <Button
                     mb="1"

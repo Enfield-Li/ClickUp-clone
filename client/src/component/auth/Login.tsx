@@ -9,20 +9,17 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  Text,
   useToast,
 } from "@chakra-ui/react";
-import { Form, Field, FieldAttributes, Formik } from "formik";
+import { Field, FieldAttributes, Form, Formik } from "formik";
 import { memo, useState } from "react";
-import * as ReactDOMServer from "react-dom/server";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { LoginCredentials, FieldErrors } from "../../types";
+import { FieldErrors, LoginCredentials } from "../../types";
 import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
-import LoginSVG from "./LoginSVG";
-import * as Yup from "yup";
 
 type Props = {};
 
@@ -30,14 +27,12 @@ export default memo(Login);
 function Login({}: Props) {
   const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
-  const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
   const loginSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(4, "Username should be at least 4 characters long")
-      .max(50, "Too Long!")
-      .required("Username Required"),
+    email: Yup.string()
+      .email("This email is not valid!")
+      .required("Email Required"),
     password: Yup.string()
       .min(8, "Password must be 8 characters or longer!")
       .max(50, "Too Long! 50 max")
@@ -50,10 +45,10 @@ function Login({}: Props) {
         <Formik<LoginCredentials>
           validationSchema={loginSchema}
           initialValues={{
-            username: "",
+            email: "",
             password: "",
           }}
-          onSubmit={async (loginCredentials) => {
+          onSubmit={async (loginCredentials, { setErrors }) => {
             const error = await loginUser(
               loginCredentials,
               authDispatch,
@@ -61,7 +56,7 @@ function Login({}: Props) {
             );
 
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            if (error) setErrors(error);
+            if (error) setErrors({});
           }}
         >
           {({ isSubmitting, touched, errors }) => (
@@ -69,7 +64,7 @@ function Login({}: Props) {
               {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
               <FormControl mt={3}>
                 {/* Username */}
-                <Field id="username" name="username">
+                <Field id="email" name="email">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
                       <FormLabel fontSize="11px" fontWeight="">
@@ -77,9 +72,7 @@ function Login({}: Props) {
                       </FormLabel>
 
                       <InputGroup
-                        border={
-                          errors.username && touched.username ? "red" : ""
-                        }
+                        border={errors.email && touched.email ? "red" : ""}
                       >
                         <InputLeftElement
                           pointerEvents="none"
@@ -94,11 +87,11 @@ function Login({}: Props) {
                       </InputGroup>
 
                       <Box height="10px" fontSize="12px" color="red" ml="2">
-                        {errors.username && touched.username && (
+                        {errors.email && touched.email && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
                             <span>&nbsp;</span>
-                            {errors.username}
+                            {errors.email}
                           </Box>
                         )}
                       </Box>
@@ -158,6 +151,7 @@ function Login({}: Props) {
                   )}
                 </Field>
 
+                {/* Submit button */}
                 <Box pt="3">
                   <Button
                     mt="6"
