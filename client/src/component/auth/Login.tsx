@@ -33,10 +33,7 @@ function Login({}: Props) {
     email: Yup.string()
       .email("This email is not valid!")
       .required("Email Required"),
-    password: Yup.string()
-      .min(8, "Password must be 8 characters or longer!")
-      .max(50, "Too Long! 50 max")
-      .required("Password Required"),
+    password: Yup.string().required("Password Required"),
   });
 
   return (
@@ -118,6 +115,7 @@ function Login({}: Props) {
                         />
                         <Input
                           {...field}
+                          pr="115px"
                           rounded="lg"
                           type="password"
                           placeholder="Enter password"

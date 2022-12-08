@@ -167,6 +167,7 @@ function Register({}: Props) {
                         />
 
                         <Input
+                          pr="60px"
                           {...field}
                           rounded="lg"
                           type={show ? "text" : "password"}
