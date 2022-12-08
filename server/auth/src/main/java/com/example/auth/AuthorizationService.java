@@ -49,8 +49,9 @@ public class AuthorizationService {
         var encodedPassword = passwordEncoder.encode(password);
         var applicationUser = ApplicationUser
                 .builder()
-                .username(registerCredentials.username())
                 .password(encodedPassword)
+                .email(registerCredentials.email())
+                .username(registerCredentials.username())
                 .build();
 
         repository.saveAndFlush(applicationUser);

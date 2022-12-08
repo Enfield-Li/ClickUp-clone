@@ -15,12 +15,13 @@
         <module>apigateway</module>
         <module>notification</module>
         <module>amqp</module>
-        <module>auth</module>
+        <module>authorization</module>
         <module>task</module>
         <module>taskEvent</module>
         <module>taskComment</module>
         <module>space</module>
         <module>serviceSecurityConfig</module>
+        <module>serviceCORS</module>
     </modules>
 
     <properties>

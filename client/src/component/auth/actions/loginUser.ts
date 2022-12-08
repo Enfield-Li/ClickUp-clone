@@ -1,23 +1,24 @@
-import { API_ENDPOINT } from "../../../constant";
 import { AxiosError } from "axios";
 import React from "react";
-import { ACCESS_TOKEN } from "../../../constant";
-import { ToastId, UseToastOptions } from "@chakra-ui/react";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { ACCESS_TOKEN, API_ENDPOINT } from "../../../constant";
 import {
-  LoginCredentials,
   AuthActionType,
-  UserResponse,
   AUTH_ACTION,
+  LoginCredentials,
   LogInError,
+  UserResponse,
 } from "../../../types";
+import {
+  axiosAuthServiceInstance,
+  axiosInstance,
+} from "../../../utils/AxiosInterceptor";
 
 export async function loginUser(
   loginCredentials: LoginCredentials,
   dispatch: React.Dispatch<AuthActionType>
 ) {
   try {
-    const response = await axiosInstance.post<UserResponse>(
+    const response = await axiosAuthServiceInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_LOGIN,
       loginCredentials
     );

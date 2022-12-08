@@ -1,7 +1,9 @@
 import { AxiosError } from "axios";
 import React from "react";
-import { ToastId, UseToastOptions } from "@chakra-ui/react";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import {
+  axiosAuthServiceInstance,
+  axiosInstance,
+} from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {
   RegisterCredentials,
@@ -16,7 +18,7 @@ export async function registerUser(
   dispatch: React.Dispatch<AuthActionType>
 ) {
   try {
-    const response = await axiosInstance.post<UserResponse>(
+    const response = await axiosAuthServiceInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_REGISTER,
       registerCredentials
     );

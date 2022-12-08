@@ -29,8 +29,7 @@ class StatusColumnController {
 
     @PostMapping
     ResponseEntity<Boolean> createStatusColumn(
-        @RequestBody StatusColumn statusColumn
-    ) {
+            @RequestBody StatusColumn statusColumn) {
         var created = statusColumnService.createStatusColumn(statusColumn);
         return ResponseEntity.ok(created);
     }
