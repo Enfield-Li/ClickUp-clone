@@ -26,13 +26,12 @@ type Props = {};
 export default memo(Register);
 function Register({}: Props) {
   const [show, setShow] = useState(false);
-  const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
   const navigate = useNavigate();
 
   const signupSchema = Yup.object().shape({
     username: Yup.string()
-      .min(4, "Username should be at least 4 characters long")
+      .min(4, "Username should be at least 4 characters long!")
       .max(50, "Too Long!")
       .required("Username Required"),
     password: Yup.string()
@@ -55,11 +54,7 @@ function Register({}: Props) {
             password: "",
           }}
           onSubmit={async (registerCredentials, { setErrors }) => {
-            const error = await registerUser(
-              registerCredentials,
-              authDispatch,
-              toast
-            );
+            const error = await registerUser(registerCredentials, authDispatch);
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors({});
           }}

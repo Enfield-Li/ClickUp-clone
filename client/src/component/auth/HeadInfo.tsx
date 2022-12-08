@@ -1,4 +1,6 @@
 import { Box, Button, Center, Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../constant";
 import logo from "../../media/clickup_logo.png";
 
 type Props = {
@@ -6,6 +8,12 @@ type Props = {
 };
 
 export default function HeadInfo({ isLogin }: Props) {
+  const navigate = useNavigate();
+
+  function handleOnCLick() {
+    navigate(isLogin ? CLIENT_ROUTE.REGISTER : CLIENT_ROUTE.LOGIN);
+  }
+
   return (
     <Flex
       px="35px"
@@ -37,6 +45,7 @@ export default function HeadInfo({ isLogin }: Props) {
           color="white"
           shadow="dark-lg"
           bgColor="submitBtn.100"
+          onClick={handleOnCLick}
           _hover={{ bgColor: "submitBtn.200" }}
         >
           {isLogin ? "Sign up" : "Login"}

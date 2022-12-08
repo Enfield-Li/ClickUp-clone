@@ -35,35 +35,35 @@ public class JwtUtilitiesImpl implements JwtUtilities {
     @Override
     public String createAccessToken(Integer userId, String username) {
         return Jwts
-            .builder()
-            .setSubject(Integer.toString(userId))
-            .claim("username", username)
-            .setExpiration(setExpirationTime(accessTokenExpirationTime))
-            .setIssuedAt(new Date())
-            .signWith(key)
-            .compact();
+                .builder()
+                .setSubject(Integer.toString(userId))
+                .claim("username", username)
+                .setExpiration(setExpirationTime(accessTokenExpirationTime))
+                .setIssuedAt(new Date())
+                .signWith(key)
+                .compact();
     }
 
     @Override
     public String createRefreshToken(Integer userId, Integer tokenVersion) {
         return Jwts
-            .builder()
-            .setSubject(Integer.toString(userId))
-            .claim(TOKEN_VERSION, tokenVersion)
-            .setExpiration(setExpirationTime(refreshTokenExpirationTime))
-            .setIssuedAt(new Date())
-            .signWith(key)
-            .compact();
+                .builder()
+                .setSubject(Integer.toString(userId))
+                .claim(TOKEN_VERSION, tokenVersion)
+                .setExpiration(setExpirationTime(refreshTokenExpirationTime))
+                .setIssuedAt(new Date())
+                .signWith(key)
+                .compact();
     }
 
     @Override
     public Jws<Claims> validateAccessToken(String jwsToken) {
         try {
             return Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(resolveAccessToken(jwsToken));
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(resolveAccessToken(jwsToken));
         } catch (Exception e) {
             log.error("AccessToken validation error: " + e);
             throw new InvalidTokenException();
@@ -85,14 +85,12 @@ public class JwtUtilitiesImpl implements JwtUtilities {
     @Override
     public UserInfo getUserInfoFromAccessToken(String bearerToken) {
         var userId = Integer.parseInt(
-            validateTokenAndGetClaims(resolveAccessToken(bearerToken))
-                .getSubject()
-        );
+                validateTokenAndGetClaims(resolveAccessToken(bearerToken))
+                        .getSubject());
 
         var username = (String) validateTokenAndGetClaims(
-            resolveAccessToken(bearerToken)
-        )
-            .get("username");
+                resolveAccessToken(bearerToken))
+                        .get("username");
 
         return new UserInfo(userId, username);
     }
@@ -100,11 +98,11 @@ public class JwtUtilitiesImpl implements JwtUtilities {
     private Claims validateTokenAndGetClaims(String jwsToken) {
         try {
             return Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jwsToken)
-                .getBody();
+                    .parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwsToken)
+                    .getBody();
         } catch (Exception e) {
             log.error("Token validation error: " + e);
             throw new InvalidTokenException();
@@ -112,10 +110,8 @@ public class JwtUtilitiesImpl implements JwtUtilities {
     }
 
     private String resolveAccessToken(String bearerToken) {
-        if (
-            StringUtils.hasText(bearerToken) &&
-            bearerToken.startsWith(HEADER_PREFIX)
-        ) {
+        if (StringUtils.hasText(bearerToken) &&
+                bearerToken.startsWith(HEADER_PREFIX)) {
             return bearerToken.substring(7);
         }
 

@@ -1,6 +1,8 @@
 import { Box, Center } from "@chakra-ui/react";
 import React, { memo } from "react";
 import * as ReactDOMServer from "react-dom/server";
+import { useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../constant";
 import Disclaimer from "./Disclaimer";
 import HeadInfo from "./HeadInfo";
 import LoginSVG from "./LoginSVG";
@@ -12,6 +14,7 @@ type Props = {
 
 export default memo(AuthTemplate);
 function AuthTemplate({ isLogin, children }: Props) {
+  const navigate = useNavigate();
   const svgString = encodeURIComponent(
     ReactDOMServer.renderToStaticMarkup(<LoginSVG />)
   );
@@ -56,6 +59,7 @@ function AuthTemplate({ isLogin, children }: Props) {
             borderBottomWidth="1px"
             borderBottomColor="whiteAlpha.600"
             _hover={{ borderBottomColor: "white" }}
+            onClick={() => navigate(CLIENT_ROUTE.REGISTER)}
           >
             Sign up
           </Box>

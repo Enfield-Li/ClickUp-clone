@@ -23,6 +23,9 @@ public class ApplicationUser {
     private Integer id;
 
     @NotNull
+    private String email;
+
+    @NotNull
     @JsonIgnore
     private String password;
 

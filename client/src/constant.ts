@@ -13,6 +13,7 @@ export const BASE_ENDPOINT = "http://localhost:8083";
 export const SERVICE_ENDPOINT = {
   TASK: "http://localhost:8084",
   SPACE: "http://localhost:8088",
+  AUTHORIZATION: "http://localhost:8085",
 };
 
 const ALL_TASKS = "/all_tasks";

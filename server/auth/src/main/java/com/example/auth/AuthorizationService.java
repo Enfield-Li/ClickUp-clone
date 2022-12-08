@@ -3,7 +3,8 @@ package com.example.auth;
 import static com.example.clients.UrlConstants.*;
 
 import com.example.auth.dto.AuthorizationResponse;
-import com.example.auth.dto.Credentials;
+import com.example.auth.dto.LoginCredentials;
+import com.example.auth.dto.RegisterCredentials;
 import com.example.auth.exception.LoginFailedException;
 import com.example.auth.exception.UserAlreadyExistsException;
 import com.example.clients.jwt.InvalidTokenException;
@@ -30,12 +31,13 @@ public class AuthorizationService {
     private final Integer INITIAL_TOKEN_VERSION = 0;
     private final String REFRESH_TOKEN = "refresh_token";
 
-    public AuthorizationResponse register(Credentials credentials) {
-        var username = credentials.getUsername();
-        var password = credentials.getPassword();
+    public AuthorizationResponse register(RegisterCredentials registerCredentials) {
+        var email = registerCredentials.email();
+        var username = registerCredentials.username();
+        var password = registerCredentials.password();
 
         // 1. check if user exist
-        var exist = repository.existsByUsername(username);
+        var exist = repository.existsByEmail(email);
 
         // 1.5 user exists
         if (exist) {
@@ -44,12 +46,12 @@ public class AuthorizationService {
         }
 
         // 2. save user
-        credentials.setPassword(passwordEncoder.encode(password));
+        var encodedPassword = passwordEncoder.encode(password);
         var applicationUser = ApplicationUser
-            .builder()
-            .username(credentials.getUsername())
-            .password(credentials.getPassword())
-            .build();
+                .builder()
+                .username(registerCredentials.username())
+                .password(encodedPassword)
+                .build();
 
         repository.saveAndFlush(applicationUser);
         var userId = applicationUser.getId();
@@ -57,24 +59,22 @@ public class AuthorizationService {
         // 3. generate refresh token and save to session
         //    generate access token & response
         var userResponse = createSaveTokensToSessionAndResponse(
-            userId,
-            username,
-            INITIAL_TOKEN_VERSION
-        );
+                userId,
+                username,
+                INITIAL_TOKEN_VERSION);
 
         return userResponse;
     }
 
-    AuthorizationResponse login(Credentials credentials) {
+    AuthorizationResponse login(LoginCredentials loginCredentials) {
         // 1. check user password
         var applicationUser = repository
-            .findByUsername(credentials.getUsername())
-            .orElseThrow(() -> new LoginFailedException());
+                .findByEmail(loginCredentials.email())
+                .orElseThrow(() -> new LoginFailedException());
 
         boolean matches = passwordEncoder.matches(
-            credentials.getPassword(),
-            applicationUser.getPassword()
-        );
+                loginCredentials.password(),
+                applicationUser.getPassword());
 
         // 1.5 wrong password
         if (!matches) {
@@ -89,10 +89,9 @@ public class AuthorizationService {
         // 3. generate refresh token and save to session
         //    generate access token & response
         var userResponse = createSaveTokensToSessionAndResponse(
-            userId,
-            username,
-            tokenVersion
-        );
+                userId,
+                username,
+                tokenVersion);
 
         // 4. send access token
         return userResponse;
@@ -105,25 +104,21 @@ public class AuthorizationService {
 
         // 2. validate tokens and retrieve payload
         var userIdInAccessToken = jwtUtils.getUserInfoFromAccessToken(
-            accessToken
-        );
+                accessToken);
 
         var refreshTokenPayload = jwtUtils.getPayloadFromRefreshToken(
-            refreshToken
-        );
+                refreshToken);
         var userIdInRefreshToken = refreshTokenPayload.userId();
         var tokenVersion = refreshTokenPayload.tokenVersion();
 
         // 3. check if token version is valid
         var applicationUser = repository
-            .findById(userIdInAccessToken.userId())
-            .orElseThrow(() -> new InvalidTokenException());
+                .findById(userIdInAccessToken.userId())
+                .orElseThrow(() -> new InvalidTokenException());
         var username = applicationUser.getUsername();
 
-        if (
-            tokenVersion != applicationUser.getRefreshTokenVersion() ||
-            userIdInAccessToken.userId() != userIdInRefreshToken
-        ) {
+        if (tokenVersion != applicationUser.getRefreshTokenVersion() ||
+                userIdInAccessToken.userId() != userIdInRefreshToken) {
             log.error("Token version mismatch.");
             session.invalidate();
             throw new InvalidTokenException();
@@ -132,10 +127,9 @@ public class AuthorizationService {
         // 4. generate refresh token and save to session
         //    generate access token & response
         var userResponse = createSaveTokensToSessionAndResponse(
-            userIdInAccessToken.userId(),
-            username,
-            tokenVersion
-        );
+                userIdInAccessToken.userId(),
+                username,
+                tokenVersion);
 
         return userResponse;
     }
@@ -150,20 +144,19 @@ public class AuthorizationService {
     }
 
     private AuthorizationResponse createSaveTokensToSessionAndResponse(
-        Integer userId,
-        String username,
-        Integer tokenVersion
-    ) {
+            Integer userId,
+            String username,
+            Integer tokenVersion) {
         var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
         session.setAttribute(REFRESH_TOKEN, refreshToken);
 
         var accessToken = jwtUtils.createAccessToken(userId, username);
 
         return AuthorizationResponse
-            .builder()
-            .accessToken(accessToken)
-            .username(username)
-            .id(userId)
-            .build();
+                .builder()
+                .accessToken(accessToken)
+                .username(username)
+                .id(userId)
+                .build();
     }
 }

@@ -9,15 +9,14 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  useToast,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik } from "formik";
-import { memo, useState } from "react";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { FieldErrors, LoginCredentials } from "../../types";
+import { LoginCredentials } from "../../types";
 import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
 
@@ -25,7 +24,6 @@ type Props = {};
 
 export default memo(Login);
 function Login({}: Props) {
-  const toast = useToast({ duration: 3000, isClosable: true });
   const { authState, authDispatch } = useAuthContext();
   const navigate = useNavigate();
 
@@ -46,11 +44,7 @@ function Login({}: Props) {
             password: "",
           }}
           onSubmit={async (loginCredentials, { setErrors }) => {
-            const error = await loginUser(
-              loginCredentials,
-              authDispatch,
-              toast
-            );
+            const error = await loginUser(loginCredentials, authDispatch);
 
             if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             if (error) setErrors({});
@@ -64,7 +58,7 @@ function Login({}: Props) {
                 <Field id="email" name="email">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" fontWeight="">
+                      <FormLabel fontSize="12px" fontWeight="normal">
                         Email
                       </FormLabel>
 
@@ -100,7 +94,7 @@ function Login({}: Props) {
                 <Field id="password" name="password">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel fontSize="11px" mt={4} fontWeight="">
+                      <FormLabel fontSize="12px" fontWeight="normal" mt={4}>
                         Password
                       </FormLabel>
 

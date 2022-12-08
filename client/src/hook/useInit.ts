@@ -1,6 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { refreshUserToken } from "../component/auth/actions/refreshUserToken";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
@@ -9,6 +9,7 @@ import { initialSpaces, mockUser } from "./mockData";
 
 export default function useInit() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { authDispatch } = useAuthContext();
   const toast = useToast({ duration: 3000, isClosable: true });
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
@@ -21,7 +22,12 @@ export default function useInit() {
         refreshUserToken(authDispatch, toast, navigate);
       }, 1790000); // 29 min and 50 sec
     } else {
-      //   navigate(CLIENT_ROUTE.LOGIN);
+      if (
+        location.pathname !== CLIENT_ROUTE.LOGIN ||
+        location.pathname !== CLIENT_ROUTE.REGISTER
+      ) {
+        navigate(CLIENT_ROUTE.LOGIN);
+      }
     }
   }, []);
 }

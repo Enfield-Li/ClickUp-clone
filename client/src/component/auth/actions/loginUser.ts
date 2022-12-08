@@ -14,8 +14,7 @@ import {
 
 export async function loginUser(
   loginCredentials: LoginCredentials,
-  dispatch: React.Dispatch<AuthActionType>,
-  toast: (options?: UseToastOptions | undefined) => ToastId
+  dispatch: React.Dispatch<AuthActionType>
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
@@ -30,12 +29,6 @@ export async function loginUser(
       type: AUTH_ACTION.LOGIN_USER,
       payload: { user: response.data },
     });
-
-    toast({
-      title: "Successful!",
-      description: "You've logged in.",
-      status: "success",
-    });
   } catch (error) {
     // clear local auth taskState and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
@@ -44,22 +37,11 @@ export async function loginUser(
     const err = error as AxiosError;
 
     if (err.response?.status == 401) {
-      toast({
-        title: "Login failed...",
-        description: err.response.data as string,
-        status: "error",
-      });
       return [];
     }
 
     console.log(err);
     const response = err.response?.data as LogInError;
-
-    toast({
-      title: "Login failed...",
-      description: "Please check the field.",
-      status: "error",
-    });
 
     return response.errors;
   }

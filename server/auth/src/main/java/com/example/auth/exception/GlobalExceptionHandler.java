@@ -22,80 +22,67 @@ public class GlobalExceptionHandler {
     /* Catch all exception */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> catchAllExceptions(
-        Exception exception
-    ) {
+            Exception exception) {
         log.error(
-            "\n **************** Uncaught Error ****************",
-            exception
-        );
+                "\n **************** Uncaught Error ****************",
+                exception);
         return buildErrorResponse(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            exception.getMessage()
-        );
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                exception.getMessage());
     }
 
     /* Catch InvalidRequestBody */
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     protected ResponseEntity<ErrorResponse> catchInvalidRequestBodyInputException(
-        MethodArgumentNotValidException exception
-    ) {
+            MethodArgumentNotValidException exception) {
         return buildErrorResponse(
-            HttpStatus.BAD_REQUEST,
-            "Error occurred when validating fields, please check the errors list.",
-            exception.getBindingResult().getFieldErrors()
-        );
+                HttpStatus.BAD_REQUEST,
+                "Error occurred when validating fields, please check the errors list.",
+                exception.getBindingResult().getFieldErrors());
     }
 
-    @ExceptionHandler(
-        value = { InvalidTokenException.class, LoginFailedException.class }
-    )
+    @ExceptionHandler(value = { InvalidTokenException.class, LoginFailedException.class })
     ResponseEntity<String> catchLoginFailure() {
         log.error("InvalidateCredentialsException");
         return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("Invalid username or password.");
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid username or password.");
     }
 
+    /* User Already Exists */
     @ExceptionHandler(UserAlreadyExistsException.class)
     ResponseEntity<String> catchUserAlreadyExistsException() {
         log.error("UserAlreadyExistsException");
         return ResponseEntity
-            .status(HttpStatus.UNAUTHORIZED)
-            .body("User already exists.");
+                .status(HttpStatus.BAD_REQUEST)
+                .body("User already exists.");
     }
 
     /*
      * Build ErrorResponse
      */
     private ResponseEntity<ErrorResponse> buildErrorResponse(
-        HttpStatus httpStatus,
-        String message
-    ) {
+            HttpStatus httpStatus,
+            String message) {
         ErrorResponse errorResponse = new ErrorResponse(
-            httpStatus.value(),
-            message
-        );
+                httpStatus.value(),
+                message);
 
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(
-        HttpStatus httpStatus,
-        String message,
-        List<FieldError> errors
-    ) {
+            HttpStatus httpStatus,
+            String message,
+            List<FieldError> errors) {
         ErrorResponse errorResponse = new ErrorResponse(
-            httpStatus.value(),
-            message
-        );
+                httpStatus.value(),
+                message);
 
         errors.forEach(
-            fieldError ->
-                errorResponse.addValidationError(
-                    fieldError.getField(),
-                    fieldError.getDefaultMessage()
-                )
-        );
+                fieldError -> errorResponse.addValidationError(
+                        fieldError.getField(),
+                        fieldError.getDefaultMessage()));
 
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }

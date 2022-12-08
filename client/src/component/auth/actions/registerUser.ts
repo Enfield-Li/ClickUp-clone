@@ -13,8 +13,7 @@ import {
 
 export async function registerUser(
   registerCredentials: RegisterCredentials,
-  dispatch: React.Dispatch<AuthActionType>,
-  toast: (options?: UseToastOptions | undefined) => ToastId
+  dispatch: React.Dispatch<AuthActionType>
 ) {
   try {
     const response = await axiosInstance.post<UserResponse>(
@@ -29,12 +28,6 @@ export async function registerUser(
       type: AUTH_ACTION.LOGIN_USER,
       payload: { user: response.data },
     });
-
-    toast({
-      title: "Successful!",
-      description: "You've logged in.",
-      status: "success",
-    });
   } catch (error) {
     // clear local auth taskState and accessToken
     localStorage.removeItem(ACCESS_TOKEN);
@@ -43,21 +36,10 @@ export async function registerUser(
     const err = error as AxiosError;
 
     if (err.response?.status == 401) {
-      toast({
-        title: "Login failed...",
-        description: err.response.data as string,
-        status: "error",
-      });
       return [];
     }
 
     const response = err.response?.data as LogInError;
-
-    toast({
-      title: "Register failed...",
-      description: "Please check the field.",
-      status: "error",
-    });
 
     return response.errors;
   }

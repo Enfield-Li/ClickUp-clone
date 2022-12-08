@@ -4,7 +4,8 @@ import static com.example.auth.Constants.*;
 import static com.example.clients.UrlConstants.*;
 
 import com.example.auth.dto.AuthorizationResponse;
-import com.example.auth.dto.Credentials;
+import com.example.auth.dto.LoginCredentials;
+import com.example.auth.dto.RegisterCredentials;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +24,21 @@ class AuthorizationController {
 
     @PostMapping(REGISTER)
     ResponseEntity<AuthorizationResponse> register(
-        @Valid @RequestBody Credentials credentials
-    ) {
+            @Valid @RequestBody RegisterCredentials credentials) {
         var userResponse = authorizationService.register(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(LOGIN)
     ResponseEntity<AuthorizationResponse> login(
-        @Valid @RequestBody Credentials credentials
-    ) {
+            @Valid @RequestBody LoginCredentials credentials) {
         var userResponse = authorizationService.login(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(REFRESH_TOKEN)
     ResponseEntity<AuthorizationResponse> refreshToken(
-        HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         var userResponse = authorizationService.refreshToken();
         return ResponseEntity.ok(userResponse);
     }
