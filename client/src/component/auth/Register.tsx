@@ -1,21 +1,25 @@
+import { EmailIcon, UnlockIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Center,
-  Flex,
   FormControl,
   FormLabel,
   Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "../../context/auth/useAuthContext";
 import { CLIENT_ROUTE } from "../../constant";
+import useAuthContext from "../../context/auth/useAuthContext";
+import { Credentials, FieldErrors, RegisterCredentials } from "../../types";
 import { registerUser } from "./actions/registerUser";
-import { FieldErrors, Credentials } from "../../types";
+import AuthTemplate from "./AuthTemplate";
 
 type Props = {};
 
@@ -26,6 +30,9 @@ function Register({}: Props) {
   const [errors, setErrors] = useState<FieldErrors>();
   const navigate = useNavigate();
 
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+
   if (errors) {
     setTimeout(() => {
       setErrors([]);
@@ -33,10 +40,11 @@ function Register({}: Props) {
   }
 
   return (
-    <Center pt={3}>
-      <Box width="50%">
-        <Formik<Credentials>
+    <AuthTemplate isLogin={false}>
+      <Box height="fit-content">
+        <Formik<RegisterCredentials>
           initialValues={{
+            email: "",
             username: "",
             password: "",
           }}
@@ -49,12 +57,26 @@ function Register({}: Props) {
           {(props) => (
             <Form>
               {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
-              <FormControl mt={3} isRequired>
+              <FormControl mt={3}>
                 <Field id="username" name="username">
-                  {({ field }: FieldAttributes<any>) => (
+                  {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel>Username:</FormLabel>
-                      <Input {...field} placeholder="John Doe" />
+                      <FormLabel fontSize="11px" fontWeight="">
+                        Full name
+                      </FormLabel>
+
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={
+                            <Box color="rgb(191, 208, 230)">
+                              <i className="bi bi-person-fill"></i>
+                            </Box>
+                          }
+                        />
+
+                        <Input {...field} rounded="lg" placeholder="John Doe" />
+                      </InputGroup>
 
                       <Text textColor={"red.400"}>
                         {
@@ -66,13 +88,28 @@ function Register({}: Props) {
                   )}
                 </Field>
 
-                <Field id="password" name="password">
-                  {({ field }: FieldAttributes<any>) => (
+                <Field id="email" name="email">
+                  {({ field, form }: FieldAttributes<any>) => (
                     <>
-                      <FormLabel mt={3}>Password:</FormLabel>
-                      <Input {...field} type="password" />
+                      <FormLabel fontSize="11px" mt={6} fontWeight="">
+                        Email
+                      </FormLabel>
 
-                      <Text textColor={"red.400"}>
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<EmailIcon color="rgb(191, 208, 230)" />}
+                        />
+
+                        <Input
+                          {...field}
+                          rounded="lg"
+                          type="email"
+                          placeholder="example@site.com"
+                        />
+                      </InputGroup>
+
+                      <Text textColor="red.400">
                         {
                           errors?.find((err) => err.field === "password")
                             ?.message
@@ -82,22 +119,77 @@ function Register({}: Props) {
                   )}
                 </Field>
 
-                <Flex justifyContent={"space-between"}>
-                  <Box></Box>
+                <Field id="password" name="password">
+                  {({ field, form }: FieldAttributes<any>) => (
+                    <>
+                      <FormLabel fontSize="11px" mt={6} fontWeight="">
+                        Password
+                      </FormLabel>
+
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<UnlockIcon color="rgb(191, 208, 230)" />}
+                        />
+
+                        <Input
+                          {...field}
+                          rounded="lg"
+                          type={show ? "text" : "password"}
+                          placeholder="Minimum 8 characters"
+                        />
+
+                        <InputRightElement
+                          mr="5"
+                          width="fit-content"
+                          children={
+                            <Center
+                              flexGrow="1"
+                              fontSize="12px"
+                              cursor="pointer"
+                              color="linkColor"
+                              onClick={() => setShow(!show)}
+                            >
+                              {show ? "Hide" : "Show"}
+                            </Center>
+                          }
+                        />
+                      </InputGroup>
+
+                      <Text textColor="red.400">
+                        {
+                          errors?.find((err) => err.field === "password")
+                            ?.message
+                        }
+                      </Text>
+                    </>
+                  )}
+                </Field>
+
+                <Box pt="3">
                   <Button
-                    mt={3}
-                    colorScheme="teal"
-                    isLoading={props.isSubmitting}
+                    mb="1"
+                    mt="6"
+                    shadow="md"
+                    width="100%"
                     type="submit"
+                    color="white"
+                    bgColor="submitBtn.100"
+                    isLoading={props.isSubmitting}
+                    _hover={{ bgColor: "submitBtn.200" }}
                   >
                     Submit
                   </Button>
-                </Flex>
+                </Box>
+
+                <Center mt="4" fontSize="small" color="linkColor">
+                  <Box cursor="not-allowed">or login with SSO</Box>
+                </Center>
               </FormControl>
             </Form>
           )}
         </Formik>
       </Box>
-    </Center>
+    </AuthTemplate>
   );
 }

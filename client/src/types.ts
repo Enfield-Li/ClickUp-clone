@@ -244,6 +244,12 @@ export type AuthStateType = {
   user: User | null;
 };
 
+export type RegisterCredentials = {
+  email: string;
+  username: string;
+  password: string;
+};
+
 export type Credentials = {
   username: string;
   password: string;

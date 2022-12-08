@@ -21,7 +21,7 @@ export default function useInit() {
         refreshUserToken(authDispatch, toast, navigate);
       }, 1790000); // 29 min and 50 sec
     } else {
-      navigate(CLIENT_ROUTE.LOGIN);
+      //   navigate(CLIENT_ROUTE.LOGIN);
     }
   }, []);
 }

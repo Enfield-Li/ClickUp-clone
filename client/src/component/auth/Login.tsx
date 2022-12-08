@@ -1,13 +1,26 @@
-import { Box, Center, useToast } from "@chakra-ui/react";
+import { EmailIcon, UnlockIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Center,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import { Form, Field, FieldAttributes, Formik } from "formik";
 import { memo, useState } from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { FieldErrors } from "../../types";
-import { getRandomNumber } from "../../utils/getRandomNumber";
-import Disclaimer from "./Disclaimer";
-import HeadInfo from "./HeadInfo";
-import LoginForm from "./LoginForm";
+import { Credentials, FieldErrors } from "../../types";
+import { loginUser } from "./actions/loginUser";
+import AuthTemplate from "./AuthTemplate";
 import LoginSVG from "./LoginSVG";
 
 type Props = {};
@@ -24,49 +37,120 @@ function Login({}: Props) {
   );
 
   return (
-    <Center
-      pt={3}
-      height="100vh"
-      position="relative"
-      bgColor="lightMain.50"
-      backgroundPosition="bottom"
-      backgroundRepeat="no-repeat"
-      style={{ backgroundImage: `url("data:image/svg+xml,${svgString}")` }}
-    >
-      <HeadInfo />
+    <AuthTemplate isLogin={true}>
+      <Box height="fit-content">
+        <Formik<Credentials>
+          initialValues={{
+            username: "",
+            password: "",
+          }}
+          onSubmit={async (credentials) => {
+            const error = await loginUser(credentials, authDispatch, toast);
 
-      <Box>
-        <Box
-          p="6"
-          rounded="lg"
-          width="480px"
-          height="400px"
-          boxShadow="2xl"
-          bgColor="white"
+            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
+            if (error) setErrors(error);
+          }}
         >
-          <Center fontWeight="bold" fontSize="33px" mt="3">
-            Welcome back!
-          </Center>
-          <Box px="6" mt="6" bgColor="white">
-            <LoginForm />
-          </Box>
-        </Box>
+          {(props) => (
+            <Form>
+              {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
+              <FormControl mt={3}>
+                <Field id="username" name="username">
+                  {({ field, form }: FieldAttributes<any>) => (
+                    <>
+                      <FormLabel fontSize="11px" fontWeight="">
+                        Email
+                      </FormLabel>
 
-        <Center color="white" mt="6" fontSize="15px">
-          Don't have an account?
-          <span>&nbsp;</span>
-          <Box
-            as="span"
-            cursor="pointer"
-            borderBottomWidth="1px"
-            borderBottomColor="whiteAlpha.600"
-          >
-            Sign up
-          </Box>
-        </Center>
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<EmailIcon color="rgb(191, 208, 230)" />}
+                        />
+                        <Input
+                          {...field}
+                          rounded="lg"
+                          placeholder="Enter your email"
+                        />
+                      </InputGroup>
+
+                      <Text textColor={"red.400"}>
+                        {
+                          errors?.find((err) => err.field === "username")
+                            ?.message
+                        }
+                      </Text>
+                    </>
+                  )}
+                </Field>
+
+                <Field id="password" name="password">
+                  {({ field, form }: FieldAttributes<any>) => (
+                    <>
+                      <FormLabel fontSize="11px" mt={6} fontWeight="">
+                        Password
+                      </FormLabel>
+
+                      <InputGroup>
+                        <InputLeftElement
+                          pointerEvents="none"
+                          children={<UnlockIcon color="rgb(191, 208, 230)" />}
+                        />
+                        <Input
+                          {...field}
+                          rounded="lg"
+                          type="password"
+                          placeholder="Enter password"
+                        />
+                        <InputRightElement
+                          mr="4"
+                          width="fit-content"
+                          children={
+                            <Center
+                              flexGrow="1"
+                              fontSize="12px"
+                              color="linkColor"
+                              cursor="not-allowed"
+                            >
+                              Forgot Password?
+                            </Center>
+                          }
+                        />
+                      </InputGroup>
+
+                      <Text textColor="red.400">
+                        {
+                          errors?.find((err) => err.field === "password")
+                            ?.message
+                        }
+                      </Text>
+                    </>
+                  )}
+                </Field>
+
+                <Box pt="3">
+                  <Button
+                    mt="6"
+                    shadow="md"
+                    width="100%"
+                    type="submit"
+                    color="white"
+                    bgColor="submitBtn.100"
+                    isLoading={props.isSubmitting}
+                    _hover={{ bgColor: "submitBtn.200" }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+
+                <Center mt="4" mb="1" fontSize="small" color="linkColor">
+                  <Box cursor="not-allowed">or login with SSO</Box>
+                </Center>
+              </FormControl>
+            </Form>
+          )}
+        </Formik>
       </Box>
-
-      <Disclaimer />
-    </Center>
+    </AuthTemplate>
   );
 }

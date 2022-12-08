@@ -1,7 +1,5 @@
 import { memo } from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../component/auth/Login";
-import Register from "../component/auth/Register";
 import About from "../component/layout/About";
 import Home from "../component/layout/Home";
 import TaskView from "../component/task/TaskView";

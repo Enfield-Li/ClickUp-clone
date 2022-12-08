@@ -1,22 +1,22 @@
-import { Flex, Center, Button, Box } from "@chakra-ui/react";
-import LogoSVG from "../../media/LogoSVG";
+import { Box, Button, Center, Flex } from "@chakra-ui/react";
 import logo from "../../media/clickup_logo.png";
 
-type Props = {};
+type Props = {
+  isLogin: boolean;
+};
 
-export default function HeadInfo({ }: Props) {
+export default function HeadInfo({ isLogin }: Props) {
   return (
     <Flex
       px="35px"
       top="-10px"
       width="100%"
-      cursor="pointer"
       alignItems="center"
       position="absolute"
       height="fit-content"
       justifyContent="space-between"
     >
-      <Center>
+      <Center cursor="pointer">
         <Center boxSize="120px">
           {/* <LogoSVG /> */}
           <img src={logo} />
@@ -31,10 +31,15 @@ export default function HeadInfo({ }: Props) {
 
       <Flex alignItems="center">
         <Box fontSize="smaller" mr="3">
-          Don't have an account?
+          {isLogin ? "Don't have an account?" : "Already playing with ClickUp?"}
         </Box>
-        <Button color="white" bgColor="submitBtn">
-          Sign up
+        <Button
+          color="white"
+          shadow="dark-lg"
+          bgColor="submitBtn.100"
+          _hover={{ bgColor: "submitBtn.200" }}
+        >
+          {isLogin ? "Sign up" : "Login"}
         </Button>
       </Flex>
     </Flex>

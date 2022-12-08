@@ -26,6 +26,7 @@ export default function Disclaimer({}: Props) {
         borderBottomWidth="1px"
         rel="noopener noreferrer"
         borderBottomColor="whiteAlpha.600"
+        _hover={{ borderBottomColor: "white" }}
         href="https://en.wikipedia.org/wiki/ReCAPTCHA"
       >
         reCAPTCHA.
