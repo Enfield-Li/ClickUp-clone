@@ -63,7 +63,7 @@ function Header({}: Props) {
               }}
               onClick={() => {
                 logOutUser(authDispatch, toast);
-                navigate(CLIENT_ROUTE.HOME);
+                navigate(CLIENT_ROUTE.LOGIN);
               }}
             >
               Log out

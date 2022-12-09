@@ -34,7 +34,7 @@ function TaskBoardView({ sortBy }: Props) {
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
   const { taskState, loading, setTaskState } = useLocalTasks({ sortBy });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
-  console.log(taskState);
+//   console.log(taskState);
 
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {

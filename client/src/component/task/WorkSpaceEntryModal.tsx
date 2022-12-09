@@ -8,20 +8,29 @@ import {
   ModalContent,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import logo from "../../media/clickup_logo.png";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
 export default function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { authState } = useAuthContext();
   const username = authState.user?.username;
   const initialInput = username ? `${username}'s Workspace` : "";
   const [input, setInput] = useState(initialInput);
 
-  function handleOnChange(e: ChangeEvent<HTMLInputElement>): void {
-    setInput(e.target.value);
+  function handleFinish() {
+    // https://stackoverflow.com/a/72121443/16648127
+    onClose();
+    navigate(".", {
+      replace: true,
+      state: { statusColumns: location.state.statusColumns },
+    });
   }
 
   return (
@@ -57,7 +66,13 @@ export default function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
             Just one step away!
           </Box>
           <Box mt="60px">What would you like to name your Workspace?</Box>
-          <Input mt="3" width="40%" value={input} onChange={handleOnChange} />
+          <Input
+            mt="3"
+            width="40%"
+            value={input}
+            borderColor="gray.400"
+            onChange={(e) => setInput(e.target.value)}
+          />
           <Box color="blackAlpha.400" fontSize="smaller" mt="1">
             Try the name of your company or organization.
           </Box>
@@ -70,6 +85,7 @@ export default function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
           width="100px"
           color="white"
           position="absolute"
+          onClick={handleFinish}
           bgColor="submitBtn.100"
           _hover={{ bgColor: "submitBtn.200" }}
         >

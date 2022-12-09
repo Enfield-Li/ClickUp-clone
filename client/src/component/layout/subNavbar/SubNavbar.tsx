@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { memo, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
@@ -33,6 +33,7 @@ function SubNavbar({
   setSelectable,
   getDisclosureProps,
 }: Props) {
+  const location = useLocation();
   const navigate = useNavigate();
   const { authState } = useAuthContext();
   const [hidden, setHidden] = useState(!isOpen);
@@ -62,6 +63,7 @@ function SubNavbar({
       navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
         replace: true,
         state: {
+          isNewUser: location.state?.isNewUser,
           statusColumns: spaceListState.lookUpStatusColumns[selectedListId],
         },
       });

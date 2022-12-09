@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { RegisterCredentials } from "../../types";
-import { registerUser } from "./actions/registerUser";
+import { registerUser, registerUserLocal } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};
@@ -54,7 +54,8 @@ function Register({}: Props) {
             password: "",
           }}
           onSubmit={async (registerCredentials, { setErrors }) => {
-            navigate(CLIENT_ROUTE.HOME);
+            registerUserLocal(registerCredentials, authDispatch);
+            navigate(CLIENT_ROUTE.TASK_BOARD, { state: { isNewUser: true } });
             // const error = await registerUser(registerCredentials, authDispatch);
             // if (error === undefined) navigate(CLIENT_ROUTE.HOME);
             // if (error) setErrors({});

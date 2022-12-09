@@ -13,6 +13,21 @@ import {
   LogInError,
 } from "../../../types";
 
+export async function registerUserLocal(
+  registerCredentials: RegisterCredentials,
+  dispatch: React.Dispatch<AuthActionType>
+) {
+  const { email, username } = registerCredentials;
+
+  localStorage.setItem(ACCESS_TOKEN, "abc");
+  dispatch({
+    type: AUTH_ACTION.LOGIN_USER,
+    payload: {
+      user: { id: 1, email, teams: [1, 2], username },
+    },
+  });
+}
+
 export async function registerUser(
   registerCredentials: RegisterCredentials,
   dispatch: React.Dispatch<AuthActionType>

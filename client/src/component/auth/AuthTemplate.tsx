@@ -22,10 +22,10 @@ function AuthTemplate({ isLogin, children }: Props) {
   return (
     <Center
       pt="3"
-      color="black"
       height="100vh"
       flexDir="column"
       position="relative"
+      color="darkMain.200"
       bgColor="lightMain.50"
       backgroundPosition="bottom"
       backgroundRepeat="no-repeat"

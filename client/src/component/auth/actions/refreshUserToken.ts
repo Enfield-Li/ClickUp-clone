@@ -6,6 +6,26 @@ import { axiosInstance } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
 import { AuthActionType, UserResponse, AUTH_ACTION } from "../../../types";
 
+export async function refreshUserTokenLocal(
+  dispatch: React.Dispatch<AuthActionType>
+) {
+  // store accessToken to localStorage
+  localStorage.setItem(ACCESS_TOKEN, "abc");
+
+  // update auth taskState
+  dispatch({
+    type: AUTH_ACTION.LOGIN_USER,
+    payload: {
+      user: {
+        id: 1,
+        teams: [1, 2],
+        username: "mockUser",
+        email: "mockUser@email.com",
+      },
+    },
+  });
+}
+
 export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
   toast: (options?: UseToastOptions | undefined) => ToastId,
@@ -22,7 +42,7 @@ export async function refreshUserToken(
     // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
-      payload: {user: response.data}
+      payload: { user: response.data },
     });
   } catch (error) {
     const err = error as AxiosError;

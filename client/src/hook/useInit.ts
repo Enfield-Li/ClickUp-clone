@@ -1,7 +1,10 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { refreshUserToken } from "../component/auth/actions/refreshUserToken";
+import {
+  refreshUserToken,
+  refreshUserTokenLocal,
+} from "../component/auth/actions/refreshUserToken";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
 import { AUTH_ACTION } from "../types";
@@ -29,5 +32,16 @@ export default function useInit() {
     //     navigate(CLIENT_ROUTE.LOGIN);
     //   }
     // }
+    if (accessToken) {
+      refreshUserTokenLocal(authDispatch);
+    } else {
+      const isLoginProcess =
+        location.pathname !== CLIENT_ROUTE.REGISTER &&
+        location.pathname !== CLIENT_ROUTE.LOGIN;
+
+      if (!isLoginProcess) {
+        navigate(CLIENT_ROUTE.LOGIN);
+      }
+    }
   }, []);
 }
