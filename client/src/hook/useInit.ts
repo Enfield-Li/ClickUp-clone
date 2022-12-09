@@ -1,14 +1,9 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  refreshUserToken,
-  refreshUserTokenLocal,
-} from "../component/auth/actions/refreshUserToken";
+import { refreshUserToken } from "../component/auth/actions/refreshUserToken";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
-import { AUTH_ACTION } from "../types";
-import { initialSpaces, mockUser } from "./mockData";
 
 export default function useInit() {
   const navigate = useNavigate();
@@ -18,7 +13,6 @@ export default function useInit() {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    // authDispatch({ type: AUTH_ACTION.LOGIN_USER, payload: { user: mockUser } });
     if (accessToken) {
       refreshUserToken(authDispatch, toast, navigate);
       setInterval(() => {
@@ -33,16 +27,5 @@ export default function useInit() {
         navigate(CLIENT_ROUTE.LOGIN);
       }
     }
-    // if (accessToken) {
-    //   refreshUserTokenLocal(authDispatch);
-    // } else {
-    //   const isLoginProcess =
-    //     location.pathname !== CLIENT_ROUTE.REGISTER &&
-    //     location.pathname !== CLIENT_ROUTE.LOGIN;
-
-    //   if (!isLoginProcess) {
-    //     navigate(CLIENT_ROUTE.LOGIN);
-    //   }
-    // }
   }, []);
 }

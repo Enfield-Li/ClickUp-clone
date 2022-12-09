@@ -2,7 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import LogoSVG from "../../../media/LogoSVG";
 import { Section } from "../NavBar";
 import NavIcon from "./NavIcon";
 
@@ -61,8 +61,9 @@ function FixedNavBar({
 
       {/* Logo */}
       <Center
-        mt={4}
-        fontSize="lg"
+        mt="26px"
+        ml="23px"
+        boxSize="10px"
         role="menuitem"
         aria-label="logo"
         cursor="pointer"
@@ -71,7 +72,9 @@ function FixedNavBar({
           navigate(CLIENT_ROUTE.HOME);
         }}
       >
-        <i className="bi bi-lightbulb-fill"></i>
+        <Center transform="scale(0.2)" width="fit-content" height="fit-content">
+          <LogoSVG />
+        </Center>
       </Center>
 
       {/* Task icon */}
