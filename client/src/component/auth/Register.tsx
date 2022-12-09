@@ -11,13 +11,13 @@ import {
   InputRightElement,
   useToast,
 } from "@chakra-ui/react";
-import { Field, FieldAttributes, Form, Formik } from "formik";
+import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { RegisterCredentials } from "../../types";
+import { FieldErrors, RegisterCredentials } from "../../types";
 import { registerUser, registerUserLocal } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
 
@@ -28,6 +28,8 @@ function Register({}: Props) {
   const [show, setShow] = useState(false);
   const { authState, authDispatch } = useAuthContext();
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialEmail = location.state?.email ? location.state?.email : "";
 
   const signupSchema = Yup.object().shape({
     username: Yup.string()
@@ -43,22 +45,38 @@ function Register({}: Props) {
       .required("Email Required"),
   });
 
+  function handleError(
+    setErrors: (errors: FormikErrors<RegisterCredentials>) => void,
+    errors: FieldErrors
+  ) {
+    errors.forEach((error) => {
+      if (error.field === "email") {
+        setErrors({ email: error.message });
+      }
+    });
+  }
+
   return (
     <AuthTemplate isLogin={false}>
       <Box height="fit-content">
         <Formik<RegisterCredentials>
           validationSchema={signupSchema}
           initialValues={{
-            email: "",
+            email: initialEmail,
             username: "",
             password: "",
           }}
           onSubmit={async (registerCredentials, { setErrors }) => {
-            const error = await registerUser(registerCredentials, authDispatch);
+            const errors = await registerUser(
+              registerCredentials,
+              authDispatch
+            );
 
-            if (error === undefined) {
+            if (!errors) {
               navigate(CLIENT_ROUTE.TASK_BOARD, { state: { isNewUser: true } });
-            } else if (error) setErrors({});
+            } else if (errors) {
+              handleError(setErrors, errors);
+            }
           }}
         >
           {({ errors, touched, isSubmitting }) => (
@@ -73,6 +91,7 @@ function Register({}: Props) {
                         Username
                       </FormLabel>
 
+                      {/* Input */}
                       <InputGroup
                         border={
                           errors.username && touched.username ? "red" : ""
@@ -95,6 +114,7 @@ function Register({}: Props) {
                         />
                       </InputGroup>
 
+                      {/* Error */}
                       <Box height="10px" fontSize="12px" color="red" ml="2">
                         {errors.username && touched.username && (
                           <Box>
@@ -116,6 +136,7 @@ function Register({}: Props) {
                         Email
                       </FormLabel>
 
+                      {/* Input */}
                       <InputGroup
                         border={errors.email && touched.email ? "red" : ""}
                       >
@@ -132,6 +153,7 @@ function Register({}: Props) {
                         />
                       </InputGroup>
 
+                      {/* Error */}
                       <Box height="10px" fontSize="12px" color="red" ml="2">
                         {errors.email && touched.email && (
                           <Box>
@@ -153,6 +175,7 @@ function Register({}: Props) {
                         Choose Password
                       </FormLabel>
 
+                      {/* Input */}
                       <InputGroup
                         border={
                           errors.password && touched.password ? "red" : ""
@@ -188,6 +211,7 @@ function Register({}: Props) {
                         />
                       </InputGroup>
 
+                      {/* Error */}
                       <Box height="10px" fontSize="12px" color="red" ml="2">
                         {errors.password && touched.password && (
                           <Box>

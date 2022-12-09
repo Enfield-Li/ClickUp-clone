@@ -10,13 +10,13 @@ import {
   InputLeftElement,
   InputRightElement,
 } from "@chakra-ui/react";
-import { Field, FieldAttributes, Form, Formik } from "formik";
+import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { LoginCredentials } from "../../types";
+import { FieldErrors, LoginCredentials } from "../../types";
 import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
 
@@ -34,6 +34,23 @@ function Login({}: Props) {
     password: Yup.string().required("Password Required"),
   });
 
+  function handleError(
+    setErrors: (errors: FormikErrors<LoginCredentials>) => void,
+    errors: FieldErrors
+  ) {
+    errors.forEach((error) => {
+      if (error.field === "email") {
+        setErrors({ email: error.message });
+      } else if (error.field === "password") {
+        setErrors({ password: error.message });
+      }
+    });
+  }
+
+  function handleRegisterWithEmail(email: string) {
+    navigate(CLIENT_ROUTE.REGISTER, { state: { email } });
+  }
+
   return (
     <AuthTemplate isLogin={true}>
       <Box height="fit-content">
@@ -44,17 +61,20 @@ function Login({}: Props) {
             password: "",
           }}
           onSubmit={async (loginCredentials, { setErrors }) => {
-            const error = await loginUser(loginCredentials, authDispatch);
+            const errors = await loginUser(loginCredentials, authDispatch);
 
-            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            if (error) setErrors({});
+            if (!errors) {
+              navigate(CLIENT_ROUTE.HOME);
+            } else if (errors) {
+              handleError(setErrors, errors);
+            }
           }}
         >
-          {({ isSubmitting, touched, errors }) => (
+          {({ isSubmitting, touched, errors, values }) => (
             <Form>
               {/* https://chakra-ui.com/docs/components/form-control/usage#usage-with-form-libraries */}
               <FormControl mt={3}>
-                {/* Username */}
+                {/* Email */}
                 <Field id="email" name="email">
                   {({ field, form }: FieldAttributes<any>) => (
                     <>
@@ -62,6 +82,7 @@ function Login({}: Props) {
                         Email
                       </FormLabel>
 
+                      {/* Input */}
                       <InputGroup
                         border={errors.email && touched.email ? "red" : ""}
                       >
@@ -77,7 +98,18 @@ function Login({}: Props) {
                         />
                       </InputGroup>
 
-                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                      {/* Error */}
+                      <Box
+                        ml="2"
+                        color="red"
+                        height="10px"
+                        fontSize="12px"
+                        cursor="pointer"
+                        onClick={() =>
+                          errors.email?.includes("Email not found") &&
+                          handleRegisterWithEmail(values.email)
+                        }
+                      >
                         {errors.email && touched.email && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
@@ -98,6 +130,7 @@ function Login({}: Props) {
                         Password
                       </FormLabel>
 
+                      {/* Input */}
                       <InputGroup
                         border={
                           errors.password && touched.password ? "red" : ""
@@ -130,6 +163,7 @@ function Login({}: Props) {
                         />
                       </InputGroup>
 
+                      {/* Error */}
                       <Box height="10px" fontSize="12px" color="red" ml="2">
                         {errors.password && touched.password && (
                           <Box>
