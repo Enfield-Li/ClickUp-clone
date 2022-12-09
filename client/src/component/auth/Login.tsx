@@ -185,9 +185,11 @@ function Login({}: Props) {
                     width="100%"
                     type="submit"
                     color="white"
-                    bgColor="submitBtn.100"
+                    bgColor="customBlue.200"
                     isLoading={isSubmitting}
-                    _hover={{ bgColor: "submitBtn.200" }}
+                    _hover={{ bgColor: "customBlue.100" }}
+                    _active={{}}
+                    _focus={{}}
                   >
                     Submit
                   </Button>

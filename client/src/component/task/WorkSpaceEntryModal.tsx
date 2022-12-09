@@ -86,8 +86,8 @@ export default function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
           color="white"
           position="absolute"
           onClick={handleFinish}
-          bgColor="submitBtn.100"
-          _hover={{ bgColor: "submitBtn.200" }}
+          bgColor="customBlue.200"
+          _hover={{ bgColor: "customBlue.100" }}
         >
           GO!
         </Button>

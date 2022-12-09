@@ -44,9 +44,11 @@ export default function HeadInfo({ isLogin }: Props) {
         <Button
           color="white"
           shadow="dark-lg"
-          bgColor="submitBtn.100"
           onClick={handleOnCLick}
-          _hover={{ bgColor: "submitBtn.200" }}
+          bgColor="customBlue.200"
+          _hover={{ bgColor: "customBlue.100" }}
+          _active={{}}
+          _focus={{}}
         >
           {isLogin ? "Sign up" : "Login"}
         </Button>

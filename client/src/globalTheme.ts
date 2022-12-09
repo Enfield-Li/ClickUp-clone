@@ -20,8 +20,6 @@ export const customBlue = "rgb(123, 104, 238)";
 export const customHoverBlue = "rgb(91, 67, 234)";
 export const lightText = "black";
 export const linkColor = "rgb(124, 105, 238)";
-export const submitBtn = "rgb(123, 104, 238)";
-export const hoverSubmitBtn = "rgb(95, 72, 234)";
 
 const $arrowBg = cssVar("popper-arrow-bg");
 
@@ -88,9 +86,5 @@ export const globalTheme = extendTheme({
       200: customBlue,
     },
     linkColor: linkColor,
-    submitBtn: {
-      100: submitBtn,
-      200: hoverSubmitBtn,
-    },
   },
 });
