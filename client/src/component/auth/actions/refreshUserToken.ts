@@ -2,7 +2,10 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { NavigateFunction } from "react-router-dom";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import {
+  axiosAuthServiceInstance,
+  axiosGatewayInstance,
+} from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
 import { AuthActionType, UserResponse, AUTH_ACTION } from "../../../types";
 
@@ -32,7 +35,7 @@ export async function refreshUserToken(
   navigate: NavigateFunction
 ) {
   try {
-    const response = await axiosInstance.post<UserResponse>(
+    const response = await axiosAuthServiceInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_REFRESH_TOKEN
     );
 

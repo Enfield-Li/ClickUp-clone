@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { ACCESS_TOKEN } from "../../constant";
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
-import { axiosInstance } from "../../utils/AxiosInterceptor";
+import { axiosGatewayInstance } from "../../utils/AxiosInterceptor";
 import { AuthActionType, AUTH_ACTION } from "../../types";
 
 export default function useAuthContext() {
@@ -20,7 +20,7 @@ export function logOutUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   // invalidate session
-  axiosInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
+  axiosGatewayInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
 
   // clear local auth taskState and accessToken
   localStorage.removeItem(ACCESS_TOKEN);

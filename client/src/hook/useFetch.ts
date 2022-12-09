@@ -10,7 +10,7 @@ import {
 import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
 import useSpaceListContext from "../context/spaceList/useSpaceListContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
-import { axiosInstance } from "../utils/AxiosInterceptor";
+import { axiosGatewayInstance } from "../utils/AxiosInterceptor";
 import { staticColumnOptions } from "./mockData";
 import { sleep } from "../utils/sleep";
 import { useToast } from "@chakra-ui/react";
@@ -25,7 +25,7 @@ export function useFetch<T>(url: string) {
       setLoading(true);
       // indicateLoading(true, globalDispatch);
 
-      const response = await axiosInstance.get<T>(url);
+      const response = await axiosGatewayInstance.get<T>(url);
       setData(response.data);
     } catch (error) {
       setError(true);

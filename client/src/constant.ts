@@ -9,8 +9,8 @@ const REGISTER = "/register";
 const REFRESH_TOKEN = "/refresh_token";
 const UPDATE_TASK_DESC = "/update_desc";
 
-export const BASE_ENDPOINT = "http://localhost:8083";
 export const SERVICE_ENDPOINT = {
+  GATEWAY: "http://localhost:8083",
   TASK: "http://localhost:8084",
   SPACE: "http://localhost:8088",
   AUTHORIZATION: "http://localhost:8085",
@@ -32,7 +32,7 @@ export const API_ENDPOINT = {
   TASK_ALL_TASKS: TASK_API_VERSION + ALL_TASKS,
   TASK_UPDATE_TITLE: TASK_API_VERSION + UPDATE_TASK_TITLE,
   TASK_UPDATE_DESC: TASK_API_VERSION + UPDATE_TASK_DESC,
-  
+
   TASK_EVENT: TASK_EVENT_API_VERSION,
 };
 

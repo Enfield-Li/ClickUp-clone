@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import React from "react";
 import {
   axiosAuthServiceInstance,
-  axiosInstance,
+  axiosGatewayInstance,
 } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {

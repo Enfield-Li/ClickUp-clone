@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "Error occurred when validating fields, please check the errors list.",
-                getValidationError(exception));
+                exception.getField() == null ? null : getValidationError(exception));
     }
 
     /*
@@ -89,9 +89,11 @@ public class GlobalExceptionHandler {
                 httpStatus.value(),
                 message);
 
-        errorResponse.addValidationError(
-                error.getField(),
-                error.getMessage());
+        if (error != null) {
+            errorResponse.addValidationError(
+                    error.getField(),
+                    error.getMessage());
+        }
 
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }

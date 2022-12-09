@@ -1,27 +1,25 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import {
-  ACCESS_TOKEN,
-  BASE_ENDPOINT,
-  BEARER,
-  SERVICE_ENDPOINT,
-} from "../constant";
-
-export const axiosInstance = axios.create({
-  baseURL: BASE_ENDPOINT,
-});
-
-axiosInstance.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  if (accessToken && config.headers) {
-    config.headers.Authorization = BEARER + accessToken;
-  }
-  config.withCredentials = true;
-  return config;
-});
+import axios from "axios";
+import { ACCESS_TOKEN, BEARER, SERVICE_ENDPOINT } from "../constant";
 
 export function createDevAxiosInstance(baseURL: string) {
-  return axios.create({ baseURL });
+  const axiosInstance = axios.create({ baseURL });
+
+  axiosInstance.interceptors.request.use((config) => {
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+    if (accessToken && config.headers) {
+      config.headers.Authorization = BEARER + accessToken;
+    }
+
+    config.withCredentials = true;
+    return config;
+  });
+
+  return axiosInstance;
 }
+
+export const axiosGatewayInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.GATEWAY
+);
 
 export const axiosAuthServiceInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.AUTHORIZATION

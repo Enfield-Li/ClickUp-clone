@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { axiosInstance } from "../../../utils/AxiosInterceptor";
+import { axiosGatewayInstance } from "../../../utils/AxiosInterceptor";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
   Task,
@@ -15,7 +15,7 @@ export async function getTasks() {}
 
 export async function deleteTask(taskId: number, taskListForUpdate: TaskList) {
   try {
-    const response = await axiosInstance.put<boolean>(
+    const response = await axiosGatewayInstance.put<boolean>(
       API_ENDPOINT.TASK + `/${taskId}`,
       deepCopy(taskListForUpdate)
     );
@@ -28,7 +28,7 @@ export async function deleteTask(taskId: number, taskListForUpdate: TaskList) {
 
 export async function fetchTaskEvents(taskId: number) {
   try {
-    const response = await axiosInstance.get<TaskEvents>(
+    const response = await axiosGatewayInstance.get<TaskEvents>(
       API_ENDPOINT.TASK_EVENT + `/${taskId}`
     );
     return response.data;
@@ -40,7 +40,7 @@ export async function fetchTaskEvents(taskId: number) {
 
 export async function createTask(task: Task) {
   try {
-    const res = await axiosInstance.post<Task>(API_ENDPOINT.TASK, task);
+    const res = await axiosGatewayInstance.post<Task>(API_ENDPOINT.TASK, task);
 
     return res.data;
   } catch (error) {
@@ -51,7 +51,7 @@ export async function createTask(task: Task) {
 
 export async function fetchAllTasks(errorHandler: () => void) {
   try {
-    const response = await axiosInstance.get<TaskList>(
+    const response = await axiosGatewayInstance.get<TaskList>(
       API_ENDPOINT.TASK_ALL_TASKS
     );
 
@@ -67,7 +67,7 @@ export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
   try {
-    const response = await axiosInstance.put<boolean>(
+    const response = await axiosGatewayInstance.put<boolean>(
       API_ENDPOINT.TASK,
       deepCopy(updateTasksPositionDTO)
     );
@@ -82,7 +82,7 @@ export async function updateTasksPosition(
 
 export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {
   try {
-    const response = await axiosInstance.put<boolean>(
+    const response = await axiosGatewayInstance.put<boolean>(
       API_ENDPOINT.TASK_UPDATE_TITLE,
       updateTaskTitleDTO
     );
@@ -97,7 +97,7 @@ export async function updateTaskDescription(
   updateTaskDescDTO: UpdateTaskDescDTO
 ) {
   try {
-    const response = await axiosInstance.put<boolean>(
+    const response = await axiosGatewayInstance.put<boolean>(
       API_ENDPOINT.TASK_UPDATE_DESC,
       updateTaskDescDTO
     );
