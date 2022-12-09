@@ -54,9 +54,10 @@ function Register({}: Props) {
             password: "",
           }}
           onSubmit={async (registerCredentials, { setErrors }) => {
-            const error = await registerUser(registerCredentials, authDispatch);
-            if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            if (error) setErrors({});
+            navigate(CLIENT_ROUTE.HOME);
+            // const error = await registerUser(registerCredentials, authDispatch);
+            // if (error === undefined) navigate(CLIENT_ROUTE.HOME);
+            // if (error) setErrors({});
           }}
         >
           {({ errors, touched, isSubmitting }) => (

@@ -16,8 +16,8 @@ function MainContent({}: Props) {
       <Route path={CLIENT_ROUTE.HOME} element={<Home />} />
       <Route path={CLIENT_ROUTE.ABOUT} element={<About />} />
       <Route
-        path={CLIENT_ROUTE.TASK_BOARD + `/:${TASK_BOARD_PARAM}`}
         element={<TaskView />}
+        path={CLIENT_ROUTE.TASK_BOARD + `/:${TASK_BOARD_PARAM}`}
       >
         <Route
           path={

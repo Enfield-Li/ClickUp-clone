@@ -1,4 +1,4 @@
-import { Center, Box } from "@chakra-ui/react";
+import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
@@ -25,7 +25,6 @@ function FixedNavBar({
   setCurrentSection,
 }: Props) {
   const navigate = useNavigate();
-  const { authState } = useAuthContext();
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -80,9 +79,8 @@ function FixedNavBar({
         <Box onClick={() => setCurrentSection(Section.TASKS)}>
           <NavIcon
             name="Task"
+            url={CLIENT_ROUTE.TASK_BOARD}
             isSelected={currentSection === Section.TASKS}
-            // url={CLIENT_ROUTE.TASK_BOARD + `/${authState.openedListId}`}
-            url=""
           >
             {currentSection === Section.TASKS ? (
               <i className="bi bi-check-square-fill"></i>

@@ -16,18 +16,18 @@ export default function useInit() {
 
   useEffect(() => {
     // authDispatch({ type: AUTH_ACTION.LOGIN_USER, payload: { user: mockUser } });
-    if (accessToken) {
-      refreshUserToken(authDispatch, toast, navigate);
-      setInterval(() => {
-        refreshUserToken(authDispatch, toast, navigate);
-      }, 1790000); // 29 min and 50 sec
-    } else {
-      if (
-        location.pathname !== CLIENT_ROUTE.LOGIN ||
-        location.pathname !== CLIENT_ROUTE.REGISTER
-      ) {
-        navigate(CLIENT_ROUTE.LOGIN);
-      }
-    }
+    // if (accessToken) {
+    //   refreshUserToken(authDispatch, toast, navigate);
+    //   setInterval(() => {
+    //     refreshUserToken(authDispatch, toast, navigate);
+    //   }, 1790000); // 29 min and 50 sec
+    // } else {
+    //   if (
+    //     location.pathname !== CLIENT_ROUTE.LOGIN ||
+    //     location.pathname !== CLIENT_ROUTE.REGISTER
+    //   ) {
+    //     navigate(CLIENT_ROUTE.LOGIN);
+    //   }
+    // }
   }, []);
 }

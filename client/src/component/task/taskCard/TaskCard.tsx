@@ -63,13 +63,13 @@ function TaskCard({ task, index }: Props) {
     if (task?.id) {
       onModalOpen();
       setTask(task);
-      navigate(
-        CLIENT_ROUTE.TASK_BOARD +
-          //   `/${Number(params[TASK_BOARD_PARAM])}` +
-          `/${authState.openedListId}` +
-          `${CLIENT_ROUTE.TASK}` +
-          `/${task.id}`
-      );
+      //   navigate(
+      //     CLIENT_ROUTE.TASK_BOARD +
+      //       //   `/${Number(params[TASK_BOARD_PARAM])}` +
+      //       `/${authState.openedListId}` +
+      //       `${CLIENT_ROUTE.TASK}` +
+      //       `/${task.id}`
+      //   );
     }
   }
 

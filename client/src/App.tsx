@@ -10,7 +10,8 @@ export default function App() {
 
   return (
     <Box height="100vh">
-      {authState.user ? <ApplicationEntry /> : <Authentication />}
+      <ApplicationEntry />
+      {/* {authState.user ? <ApplicationEntry /> : <Authentication />} */}
     </Box>
   );
 }
