@@ -3,7 +3,7 @@ package com.example.authorization;
 import static com.example.authorization.Constants.*;
 import static com.example.clients.UrlConstants.*;
 
-import com.example.authorization.dto.AuthorizationResponse;
+import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginCredentials;
 import com.example.authorization.dto.RegisterCredentials;
 import javax.servlet.http.HttpServletRequest;
@@ -23,21 +23,21 @@ class AuthorizationController {
     private final AuthorizationService authorizationService;
 
     @PostMapping(REGISTER)
-    ResponseEntity<AuthorizationResponse> register(
+    ResponseEntity<AuthorizationResponseDTO> register(
             @Valid @RequestBody RegisterCredentials credentials) {
         var userResponse = authorizationService.register(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(LOGIN)
-    ResponseEntity<AuthorizationResponse> login(
+    ResponseEntity<AuthorizationResponseDTO> login(
             @Valid @RequestBody LoginCredentials credentials) {
         var userResponse = authorizationService.login(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(REFRESH_TOKEN)
-    ResponseEntity<AuthorizationResponse> refreshToken(
+    ResponseEntity<AuthorizationResponseDTO> refreshToken(
             HttpServletRequest request) {
         var userResponse = authorizationService.refreshToken();
         return ResponseEntity.ok(userResponse);

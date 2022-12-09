@@ -7,7 +7,7 @@ import {
   AUTH_ACTION,
   FieldErrors,
   LoginCredentials,
-  UserResponse,
+  AuthenticationResponse,
 } from "../../../types";
 import { axiosAuthServiceInstance } from "../../../utils/AxiosInterceptor";
 
@@ -16,10 +16,11 @@ export async function loginUser(
   dispatch: React.Dispatch<AuthActionType>
 ): Promise<FieldErrors | undefined> {
   try {
-    const response = await axiosAuthServiceInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_LOGIN,
-      loginCredentials
-    );
+    const response =
+      await axiosAuthServiceInstance.post<AuthenticationResponse>(
+        API_ENDPOINT.AUTH_LOGIN,
+        loginCredentials
+      );
     console.log(response.data.accessToken);
 
     // store accessToken to localStorage

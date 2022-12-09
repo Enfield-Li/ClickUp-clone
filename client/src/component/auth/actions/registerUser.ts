@@ -8,7 +8,7 @@ import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {
   RegisterCredentials,
   AuthActionType,
-  UserResponse,
+  AuthenticationResponse,
   AUTH_ACTION,
   AuthenticationError,
   FieldErrors,
@@ -34,10 +34,11 @@ export async function registerUser(
   dispatch: React.Dispatch<AuthActionType>
 ): Promise<FieldErrors | undefined> {
   try {
-    const response = await axiosAuthServiceInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_REGISTER,
-      registerCredentials
-    );
+    const response =
+      await axiosAuthServiceInstance.post<AuthenticationResponse>(
+        API_ENDPOINT.AUTH_REGISTER,
+        registerCredentials
+      );
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
 

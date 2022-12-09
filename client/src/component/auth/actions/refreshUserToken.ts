@@ -7,7 +7,11 @@ import {
   axiosGatewayInstance,
 } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "../../../constant";
-import { AuthActionType, UserResponse, AUTH_ACTION } from "../../../types";
+import {
+  AuthActionType,
+  AuthenticationResponse,
+  AUTH_ACTION,
+} from "../../../types";
 
 export async function refreshUserTokenLocal(
   dispatch: React.Dispatch<AuthActionType>
@@ -35,9 +39,10 @@ export async function refreshUserToken(
   navigate: NavigateFunction
 ) {
   try {
-    const response = await axiosAuthServiceInstance.post<UserResponse>(
-      API_ENDPOINT.AUTH_REFRESH_TOKEN
-    );
+    const response =
+      await axiosAuthServiceInstance.post<AuthenticationResponse>(
+        API_ENDPOINT.AUTH_REFRESH_TOKEN
+      );
 
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);

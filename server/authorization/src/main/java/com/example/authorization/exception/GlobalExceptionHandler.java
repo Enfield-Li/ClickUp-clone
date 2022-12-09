@@ -46,6 +46,12 @@ public class GlobalExceptionHandler {
     ResponseEntity<ErrorResponse> catchLoginFailure(AuthenticationFailureException exception) {
         log.error("InvalidateCredentialsException");
 
+        if (exception.getField() == null) {
+            return buildErrorResponse(
+                    HttpStatus.UNAUTHORIZED,
+                    "Account login time out, please login again.");
+        }
+
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "Error occurred when validating fields, please check the errors list.",

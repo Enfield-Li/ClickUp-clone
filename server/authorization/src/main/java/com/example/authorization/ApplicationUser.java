@@ -1,6 +1,9 @@
 package com.example.authorization;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +34,8 @@ public class ApplicationUser {
 
     @NotNull
     private String username;
+
+    private Set<Integer> teams;
 
     @NotNull
     @Builder.Default
