@@ -3,20 +3,18 @@ import React from "react";
 import { ACCESS_TOKEN, API_ENDPOINT } from "../../../constant";
 import {
   AuthActionType,
+  AuthenticationError,
   AUTH_ACTION,
+  FieldErrors,
   LoginCredentials,
-  LogInError,
   UserResponse,
 } from "../../../types";
-import {
-  axiosAuthServiceInstance,
-  axiosInstance,
-} from "../../../utils/AxiosInterceptor";
+import { axiosAuthServiceInstance } from "../../../utils/AxiosInterceptor";
 
 export async function loginUser(
   loginCredentials: LoginCredentials,
   dispatch: React.Dispatch<AuthActionType>
-) {
+): Promise<FieldErrors | undefined> {
   try {
     const response = await axiosAuthServiceInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_LOGIN,
@@ -36,14 +34,7 @@ export async function loginUser(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     const err = error as AxiosError;
-
-    if (err.response?.status == 401) {
-      return [];
-    }
-
-    console.log(err);
-    const response = err.response?.data as LogInError;
-
+    const response = err.response?.data as AuthenticationError;
     return response.errors;
   }
 }

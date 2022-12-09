@@ -11,8 +11,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
-import { initialSpaces } from "../../../hook/mockData";
-import { SpaceType, SPACE_LIST_ACTION } from "../../../types";
+import { SPACE_LIST_ACTION } from "../../../types";
+import { fetchSpaceListLocal } from "../../task/actions/fetchSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -48,9 +48,11 @@ function SubNavbar({
   // init spaceListState
   useEffect(() => {
     if (authState.user && !spaceListState.spaceList) {
+      const teamIds = authState.user.teams;
+
       spaceListDispatch({
         type: SPACE_LIST_ACTION.INIT_SPACE_LIST,
-        payload: { spaceList: initialSpaces },
+        payload: { spaceList: fetchSpaceListLocal(teamIds) },
       });
     }
   }, [authState.user, spaceListState.spaceList]);

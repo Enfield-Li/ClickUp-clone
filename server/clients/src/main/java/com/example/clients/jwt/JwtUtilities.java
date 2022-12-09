@@ -9,11 +9,11 @@ public interface JwtUtilities {
     String createRefreshToken(Integer userId, Integer tokenVersion);
 
     Jws<Claims> validateAccessToken(String jwsToken)
-        throws InvalidTokenException;
+            throws AuthenticationFailureException;
 
     RefreshTokenPayload getPayloadFromRefreshToken(String bearerToken)
-        throws InvalidTokenException;
+            throws AuthenticationFailureException;
 
     UserInfo getUserInfoFromAccessToken(String bearerToken)
-        throws InvalidTokenException;
+            throws AuthenticationFailureException;
 }

@@ -1,6 +1,7 @@
 package com.example.authorization.exception;
 
-import com.example.clients.jwt.InvalidTokenException;
+import com.example.clients.jwt.AuthenticationFailedField;
+import com.example.clients.jwt.AuthenticationFailureException;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -41,21 +42,14 @@ public class GlobalExceptionHandler {
                 exception.getBindingResult().getFieldErrors());
     }
 
-    @ExceptionHandler(value = { InvalidTokenException.class, LoginFailedException.class })
-    ResponseEntity<String> catchLoginFailure() {
+    @ExceptionHandler(value = AuthenticationFailureException.class)
+    ResponseEntity<ErrorResponse> catchLoginFailure(AuthenticationFailureException exception) {
         log.error("InvalidateCredentialsException");
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Invalid username or password.");
-    }
 
-    /* User Already Exists */
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    ResponseEntity<String> catchUserAlreadyExistsException() {
-        log.error("UserAlreadyExistsException");
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("User already exists.");
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Error occurred when validating fields, please check the errors list.",
+                getValidationError(exception));
     }
 
     /*
@@ -85,5 +79,26 @@ public class GlobalExceptionHandler {
                         fieldError.getDefaultMessage()));
 
         return ResponseEntity.status(httpStatus).body(errorResponse);
+    }
+
+    private ResponseEntity<ErrorResponse> buildErrorResponse(
+            HttpStatus httpStatus,
+            String message,
+            ValidationError error) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                httpStatus.value(),
+                message);
+
+        errorResponse.addValidationError(
+                error.getField(),
+                error.getMessage());
+
+        return ResponseEntity.status(httpStatus).body(errorResponse);
+    }
+
+    private ValidationError getValidationError(
+            AuthenticationFailureException exception) {
+        return new ValidationError(exception.getField().toString(),
+                exception.getMessage());
     }
 }

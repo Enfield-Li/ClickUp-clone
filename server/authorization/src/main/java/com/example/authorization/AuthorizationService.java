@@ -5,9 +5,8 @@ import static com.example.clients.UrlConstants.*;
 import com.example.authorization.dto.AuthorizationResponse;
 import com.example.authorization.dto.LoginCredentials;
 import com.example.authorization.dto.RegisterCredentials;
-import com.example.authorization.exception.LoginFailedException;
-import com.example.authorization.exception.UserAlreadyExistsException;
-import com.example.clients.jwt.InvalidTokenException;
+import com.example.clients.jwt.AuthenticationFailedField;
+import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -31,18 +30,18 @@ public class AuthorizationService {
     private final Integer INITIAL_TOKEN_VERSION = 0;
     private final String REFRESH_TOKEN = "refresh_token";
 
-    public AuthorizationResponse register(RegisterCredentials registerCredentials) {
+    AuthorizationResponse register(RegisterCredentials registerCredentials) {
         var email = registerCredentials.email();
         var username = registerCredentials.username();
         var password = registerCredentials.password();
 
-        // 1. check if user exist
-        var exist = repository.existsByEmail(email);
+        // 1. check if email is taken
+        var isEmailTaken = repository.existsByEmail(email);
 
-        // 1.5 user exists
-        if (exist) {
-            log.error("User already exists.");
-            throw new UserAlreadyExistsException();
+        if (isEmailTaken) {
+            log.error("Email already taken!");
+            throw new AuthenticationFailureException(
+                    AuthenticationFailedField.email, "Email already taken!");
         }
 
         // 2. save user
@@ -59,10 +58,7 @@ public class AuthorizationService {
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = createSaveTokensToSessionAndResponse(
-                userId,
-                username,
-                INITIAL_TOKEN_VERSION);
+        var userResponse = generateToken(userId, username, INITIAL_TOKEN_VERSION);
 
         return userResponse;
     }
@@ -71,16 +67,18 @@ public class AuthorizationService {
         // 1. check user password
         var applicationUser = repository
                 .findByEmail(loginCredentials.email())
-                .orElseThrow(() -> new LoginFailedException());
+                .orElseThrow(() -> new AuthenticationFailureException(
+                        AuthenticationFailedField.email,
+                        "Email not found. Click here to create an account!"));
 
         boolean matches = passwordEncoder.matches(
                 loginCredentials.password(),
                 applicationUser.getPassword());
 
-        // 1.5 wrong password
         if (!matches) {
             log.error("Invalid password");
-            throw new LoginFailedException();
+            throw new AuthenticationFailureException(
+                    AuthenticationFailedField.password, "Incorrect password for this email.");
         }
 
         var userId = applicationUser.getId();
@@ -89,10 +87,7 @@ public class AuthorizationService {
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = createSaveTokensToSessionAndResponse(
-                userId,
-                username,
-                tokenVersion);
+        var userResponse = generateToken(userId, username, tokenVersion);
 
         // 4. send access token
         return userResponse;
@@ -115,36 +110,33 @@ public class AuthorizationService {
         // 3. check if token version is valid
         var applicationUser = repository
                 .findById(userIdInAccessToken.userId())
-                .orElseThrow(() -> new InvalidTokenException());
+                .orElseThrow(() -> new AuthenticationFailureException());
         var username = applicationUser.getUsername();
 
         if (tokenVersion != applicationUser.getRefreshTokenVersion() ||
                 userIdInAccessToken.userId() != userIdInRefreshToken) {
             log.error("Token version mismatch.");
             session.invalidate();
-            throw new InvalidTokenException();
+            throw new AuthenticationFailureException();
         }
 
         // 4. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = createSaveTokensToSessionAndResponse(
-                userIdInAccessToken.userId(),
-                username,
-                tokenVersion);
+        var userResponse = generateToken(userIdInAccessToken.userId(), username, tokenVersion);
 
         return userResponse;
     }
 
-    public void logout() {
+    void logout() {
         session.invalidate();
         // TODO: invalidate all related tokens
     }
 
-    public void changePassword() {
+    void changePassword() {
         // TODO: increment tokenVersion by 1
     }
 
-    private AuthorizationResponse createSaveTokensToSessionAndResponse(
+    private AuthorizationResponse generateToken(
             Integer userId,
             String username,
             Integer tokenVersion) {

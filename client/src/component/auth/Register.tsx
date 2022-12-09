@@ -54,11 +54,11 @@ function Register({}: Props) {
             password: "",
           }}
           onSubmit={async (registerCredentials, { setErrors }) => {
-            registerUserLocal(registerCredentials, authDispatch);
-            navigate(CLIENT_ROUTE.TASK_BOARD, { state: { isNewUser: true } });
-            // const error = await registerUser(registerCredentials, authDispatch);
-            // if (error === undefined) navigate(CLIENT_ROUTE.HOME);
-            // if (error) setErrors({});
+            const error = await registerUser(registerCredentials, authDispatch);
+
+            if (error === undefined) {
+              navigate(CLIENT_ROUTE.TASK_BOARD, { state: { isNewUser: true } });
+            } else if (error) setErrors({});
           }}
         >
           {({ errors, touched, isSubmitting }) => (

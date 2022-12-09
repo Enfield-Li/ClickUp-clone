@@ -7,11 +7,9 @@ import Authentication from "./routes/Authentication";
 export default function App() {
   useInit();
   const { authState } = useAuthContext();
-  console.log(authState.user);
 
   return (
     <Box height="100vh">
-      {/* <ApplicationEntry /> */}
       {authState.user ? <ApplicationEntry /> : <Authentication />}
     </Box>
   );

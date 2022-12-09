@@ -262,10 +262,10 @@ export type FieldError = {
 
 export type FieldErrors = FieldError[];
 
-export type LogInError = {
+export type AuthenticationError = {
   status: number;
   message: string;
-  errors: FieldError[];
+  errors: FieldErrors;
 };
 
 export interface Category {

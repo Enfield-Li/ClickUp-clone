@@ -2,7 +2,7 @@ package com.example.serviceSecurityConfig;
 
 import static com.example.clients.UrlConstants.AUTHORIZATION;
 
-import com.example.clients.jwt.InvalidTokenException;
+import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -48,7 +48,7 @@ public class AccessTokenFilter extends GenericFilterBean {
             }
 
             filterChain.doFilter(request, response);
-        } catch (InvalidTokenException e) {
+        } catch (AuthenticationFailureException e) {
             log.warn("User not authorized" + e);
             var httpResponse = (HttpServletResponse) response;
             httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);

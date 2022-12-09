@@ -10,7 +10,8 @@ import {
   AuthActionType,
   UserResponse,
   AUTH_ACTION,
-  LogInError,
+  AuthenticationError,
+  FieldErrors,
 } from "../../../types";
 
 export async function registerUserLocal(
@@ -31,7 +32,7 @@ export async function registerUserLocal(
 export async function registerUser(
   registerCredentials: RegisterCredentials,
   dispatch: React.Dispatch<AuthActionType>
-) {
+): Promise<FieldErrors | undefined> {
   try {
     const response = await axiosAuthServiceInstance.post<UserResponse>(
       API_ENDPOINT.AUTH_REGISTER,
@@ -51,13 +52,7 @@ export async function registerUser(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     const err = error as AxiosError;
-
-    if (err.response?.status == 401) {
-      return [];
-    }
-
-    const response = err.response?.data as LogInError;
-
+    const response = err.response?.data as AuthenticationError;
     return response.errors;
   }
 }
