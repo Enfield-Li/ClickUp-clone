@@ -327,6 +327,9 @@ export interface User {
   email: string;
   username: string;
   teams: Team[];
+  defaultTeam?: number;
+  defaultSpace?: number;
+  defaultList?: number;
 }
 
 export interface AuthenticationResponse {

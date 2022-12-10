@@ -173,6 +173,7 @@ export const mockUser: User = {
   username: "mockUser",
   teams: [],
   email: "",
+  defaultTeam: 1,
 };
 
 export const team: Team = {

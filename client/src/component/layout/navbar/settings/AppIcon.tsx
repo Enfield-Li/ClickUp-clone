@@ -4,7 +4,14 @@ type Props = { children: React.ReactNode; iconName: string };
 
 export default function AppIcon({ children, iconName }: Props) {
   return (
-    <Tooltip label={iconName} hasArrow arrowSize={6} mb="-1" rounded="md">
+    <Tooltip
+      mb="-1"
+      hasArrow
+      rounded="md"
+      arrowSize={6}
+      label={iconName}
+      fontWeight="semibold"
+    >
       <Box
         mx="6px"
         fontSize="16px"
