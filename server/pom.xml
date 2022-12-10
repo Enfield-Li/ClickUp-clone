@@ -19,7 +19,8 @@
         <module>task</module>
         <module>taskEvent</module>
         <module>taskComment</module>
-        <module>space</module>
+        <module>team</module>
+        <module>statusColumn</module>
         <module>serviceSecurityConfig</module>
         <module>serviceCORS</module>
     </modules>

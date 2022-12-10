@@ -16,14 +16,20 @@ import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 import { kanban, marketing, normal, scrum } from "./defaultStatuses";
 
 export const statusColumns1: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1 },
-  { id: 3, title: "DONE", color: "green.400", orderIndex: 3 },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, teamId: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, teamId: 1 },
 ];
 
 export const statusColumns2: StatusColumns = [
-  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1 },
-  { id: 3, title: "DONE", color: "green.400", orderIndex: 3 },
-  { id: 2, title: "IN_PROGRESS", color: "purple.400", orderIndex: 2 },
+  { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, teamId: 1 },
+  { id: 3, title: "DONE", color: "green.400", orderIndex: 3, teamId: 1 },
+  {
+    id: 2,
+    title: "IN_PROGRESS",
+    color: "purple.400",
+    orderIndex: 2,
+    teamId: 1,
+  },
 ];
 
 const userInfo: UserInfo = { userId: 1, username: "mockUser", email: "" };
@@ -162,13 +168,19 @@ export const initialSpaces: SpaceType[] = [
   },
 ];
 
-export const team: Team = { id: 1, name: "workspace", spaceIdList: [] };
-
 export const mockUser: User = {
   id: 1,
   username: "mockUser",
   teams: [],
   email: "",
+};
+
+export const team: Team = {
+  id: 1,
+  name: "workspace",
+  owner: mockUser,
+  spaces: [],
+  isPrivate: false,
 };
 
 export const staticColumnOptions: ColumnOptions = {

@@ -46,6 +46,7 @@ interface Column<T> {
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
+  teamId: number;
   orderIndex: number;
   markAsClosed?: boolean;
 }
@@ -278,7 +279,6 @@ export interface Category {
   isPrivate: boolean;
   color: string | null;
 }
-
 export interface FolderCategory extends Category {
   isOpen: boolean;
   allLists: ListCategory[];
@@ -292,12 +292,6 @@ export interface ListCategory extends Category {
   //   listViewSetting?: unknown
 }
 
-export type Team = {
-  id: number;
-  name: string;
-  spaceIdList: Category[];
-};
-
 export interface SpaceType {
   id: number;
   name: string;
@@ -309,6 +303,14 @@ export interface SpaceType {
   color: string | null;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
+
+export type Team = {
+  id: number;
+  owner: User;
+  name: string;
+  isPrivate: boolean;
+  spaces: SpaceType[];
+};
 
 export interface CreateSpaceDTO {
   name: string;
