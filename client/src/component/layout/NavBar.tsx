@@ -1,8 +1,13 @@
 import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../constant";
+import useAuthContext from "../../context/auth/useAuthContext";
 import TeamStateProvider from "../../context/team/TeamContext";
+import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../routes/ApplicationEntry";
+import { TEAM_STATE_ACTION } from "../../types";
+import { fetchSpaceListLocal } from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
@@ -14,8 +19,11 @@ type Props = {
 export default memo(NavBar);
 function NavBar({ currentSection, setCurrentSection }: Props) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { authState } = useAuthContext();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
+  const { teamStateDispatch, teamState } = useTeamStateContext();
 
   const fixedNavbarWidth = "55px";
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
@@ -31,6 +39,18 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
       setCurrentSection(Section.DEV);
     }
   }, []);
+
+  // init spaceListState
+  useEffect(() => {
+    if (authState.user && !teamState.spaceList) {
+      const teamId = 11;
+
+      teamStateDispatch({
+        type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
+        payload: { spaceList: fetchSpaceListLocal(teamId) },
+      });
+    }
+  }, [authState.user, teamState.spaceList]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>

@@ -1,6 +1,6 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
-import useSpaceListContext from "../../../context/team/useTeamContext";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { SpaceType, TEAM_STATE_ACTION } from "../../../types";
 
 type Props = { space: SpaceType };
@@ -9,14 +9,14 @@ export default memo(Space);
 function Space({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { TeamStateDispatch: spaceListDispatch } = useSpaceListContext();
+  const { teamStateDispatch } = useTeamStateContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     spaceId: number
   ): void {
-    spaceListDispatch({
+    teamStateDispatch({
       type: TEAM_STATE_ACTION.UPDATE_OPENED_SPACE,
       payload: { spaceId },
     });

@@ -280,11 +280,11 @@ export interface Category {
   color: string | null;
 }
 export interface FolderCategory extends Category {
-  isOpen: boolean;
+  isOpen: boolean; // client state;
   allLists: ListCategory[];
 }
 export interface ListCategory extends Category {
-  isSelected: boolean;
+  isSelected: boolean; // client state;
   taskAmount: number | null;
   statusColumns: StatusColumns;
   parentFolderId: number | null;
@@ -296,10 +296,10 @@ export interface SpaceType {
   id: number;
   name: string;
   teamId: number;
-  isOpen: boolean;
+  isOpen: boolean; // client state
   orderIndex: number;
   isPrivate: boolean;
-  isSelected: boolean;
+  isSelected: boolean; // client state;
   color: string | null;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
@@ -311,6 +311,7 @@ export type Team = {
   color: string;
   member: User[];
   isPrivate: boolean;
+  isSelected: boolean; // client state
   spaces: SpaceType[];
 };
 
@@ -353,23 +354,15 @@ export const AUTH_ACTION = {
   LOGOUT_USER: "logout_user",
 } as const;
 
-export type TeamContextType = {
-  teamState: TeamStateType;
-  TeamStateDispatch: React.Dispatch<TeamStateActionType>;
-};
-
-export const initialTeamContextState: TeamStateType = {
-  spaceList: null,
-  openedListId: null,
-  lookUpStatusColumns: [],
-};
-
-export type LookUpStatusColumns = { [index: number]: StatusColumns };
-
+type LookUpStatusColumns = { [index: number]: StatusColumns };
 export type TeamStateType = {
   openedListId: number | null;
   spaceList: SpaceType[] | null;
   lookUpStatusColumns: LookUpStatusColumns;
+};
+export type TeamContextType = {
+  teamState: TeamStateType;
+  teamStateDispatch: React.Dispatch<TeamStateActionType>;
 };
 
 export type TeamStateActionType =

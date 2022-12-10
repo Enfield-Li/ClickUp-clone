@@ -1,5 +1,5 @@
 import { createContext, useReducer, useState } from "react";
-import { TeamContextType, initialTeamContextState } from "../../types";
+import { TeamContextType, TeamStateType } from "../../types";
 import spaceListReducer from "./TeamReducer";
 
 export const TeamContext = createContext<TeamContextType | null>(null);
@@ -8,6 +8,11 @@ type ProviderType = {
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {
+  const initialTeamContextState: TeamStateType = {
+    spaceList: null,
+    openedListId: null,
+    lookUpStatusColumns: [],
+  };
   const [globalState, globalDispatch] = useReducer(
     spaceListReducer,
     initialTeamContextState
@@ -15,7 +20,7 @@ export default function TeamStateProvider({ children }: ProviderType) {
 
   return (
     <TeamContext.Provider
-      value={{ teamState: globalState, TeamStateDispatch: globalDispatch }}
+      value={{ teamState: globalState, teamStateDispatch: globalDispatch }}
     >
       {children}
     </TeamContext.Provider>

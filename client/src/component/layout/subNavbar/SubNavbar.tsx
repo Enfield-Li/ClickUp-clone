@@ -10,7 +10,7 @@ import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import useSpaceListContext from "../../../context/team/useTeamContext";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { TEAM_STATE_ACTION } from "../../../types";
 import { fetchSpaceListLocal } from "../../task/actions/fetchSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
@@ -37,8 +37,7 @@ function SubNavbar({
   const navigate = useNavigate();
   const { authState } = useAuthContext();
   const [hidden, setHidden] = useState(!isOpen);
-  const { TeamStateDispatch: spaceListDispatch, teamState: spaceListState } =
-    useSpaceListContext();
+  const { teamStateDispatch, teamState } = useTeamStateContext();
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
@@ -46,32 +45,32 @@ function SubNavbar({
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
-  // init spaceListState
-  useEffect(() => {
-    if (authState.user && !spaceListState.spaceList) {
-      const teamId = 11;
+  //   // init spaceListState
+  //   useEffect(() => {
+  //     if (authState.user && !teamState.spaceList) {
+  //       const teamId = 11;
 
-      spaceListDispatch({
-        type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
-        payload: { spaceList: fetchSpaceListLocal(teamId) },
-      });
-    }
-  }, [authState.user, spaceListState.spaceList]);
+  //       teamStateDispatch({
+  //         type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
+  //         payload: { spaceList: fetchSpaceListLocal(teamId) },
+  //       });
+  //     }
+  //   }, [authState.user, teamState.spaceList]);
 
   // sync up url with openedListId
   useEffect(() => {
-    const selectedListId = spaceListState.openedListId;
+    const selectedListId = teamState.openedListId;
 
     if (selectedListId) {
       navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
         replace: true,
         state: {
           isNewUser: location.state?.isNewUser,
-          statusColumns: spaceListState.lookUpStatusColumns[selectedListId],
+          statusColumns: teamState.lookUpStatusColumns[selectedListId],
         },
       });
     }
-  }, [spaceListState.openedListId]);
+  }, [teamState.openedListId]);
 
   function handleCloseSubNavbar() {
     onClose();

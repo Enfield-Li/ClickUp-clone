@@ -1,6 +1,6 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
-import useSpaceListContext from "../../../../context/team/useTeamContext";
+import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { FolderCategory, TEAM_STATE_ACTION } from "../../../../types";
 import List from "./List";
 
@@ -10,7 +10,7 @@ export default memo(Folder);
 function Folder({ folder, spaceId }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { TeamStateDispatch: spaceListDispatch } = useSpaceListContext();
+  const { teamStateDispatch } = useTeamStateContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenFolder(
@@ -18,7 +18,7 @@ function Folder({ folder, spaceId }: Props) {
     folderId: number
   ) {
     e.stopPropagation();
-    spaceListDispatch({
+    teamStateDispatch({
       payload: { spaceId, folderId },
       type: TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER,
     });
