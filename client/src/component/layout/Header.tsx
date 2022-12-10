@@ -13,11 +13,15 @@ import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
 import { CLIENT_ROUTE } from "../../constant";
+import { Section } from "../../routes/ApplicationEntry";
 
-type Props = {};
+type Props = {
+  currentSection: Section;
+  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
+};
 
 export default memo(Header);
-function Header({}: Props) {
+function Header({ currentSection, setCurrentSection }: Props) {
   const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,7 +31,7 @@ function Header({}: Props) {
 
   return (
     <Box backgroundColor={headerBG}>
-      <Flex minWidth="max-content" alignItems="center" gap="2" p={2}>
+      {/* <Flex minWidth="max-content" alignItems="center" gap="2" p={2}>
         <Box>
           {location.pathname === "/" ? (
             <Text>Home</Text>
@@ -36,7 +40,6 @@ function Header({}: Props) {
           )}
         </Box>
         <Spacer />
-        {/* About page */}
         <Box
           p={2}
           borderRadius={3}
@@ -49,7 +52,6 @@ function Header({}: Props) {
         >
           About
         </Box>
-        {/* User info & logout */}
         {authState.user?.username ? (
           <>
             <Text>Hello! {authState.user.username}</Text>
@@ -71,7 +73,6 @@ function Header({}: Props) {
           </>
         ) : (
           <>
-            {/* Login */}
             {location.pathname === CLIENT_ROUTE.LOGIN ? null : (
               <Box
                 p={2}
@@ -88,9 +89,8 @@ function Header({}: Props) {
             )}
           </>
         )}
-        {/* Dark/light mode switcher */}
         <ColorModeSwitcher justifySelf="flex-end" />
-      </Flex>
+      </Flex> */}
     </Box>
   );
 }

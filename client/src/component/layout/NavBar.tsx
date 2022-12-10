@@ -2,22 +2,20 @@ import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SpaceListStateProvider from "../../context/spaceList/SpaceListContext";
+import { Section } from "../../routes/ApplicationEntry";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
-type Props = {};
-export enum Section {
-  HOME = "home",
-  TASKS = "tasks",
-  DEV = "dev",
-}
+type Props = {
+  currentSection: Section;
+  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
+};
 
 export default memo(NavBar);
-function NavBar({}: Props) {
+function NavBar({ currentSection, setCurrentSection }: Props) {
   const location = useLocation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [subNavOpenable, setSubNavOpenable] = useState(true);
-  const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
 
   const fixedNavbarWidth = "55px";
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
@@ -47,7 +45,7 @@ function NavBar({}: Props) {
       />
 
       {/* Sub navbar */}
-      {currentSection === "tasks" && (
+      {currentSection === Section.TASKS && (
         <Box
           zIndex="2"
           opacity="100%"

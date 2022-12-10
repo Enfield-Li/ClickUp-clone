@@ -308,6 +308,7 @@ export type Team = {
   id: number;
   owner: User;
   name: string;
+  color: string;
   member: User[];
   isPrivate: boolean;
   spaces: SpaceType[];

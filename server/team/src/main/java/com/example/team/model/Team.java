@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,12 +37,18 @@ public class Team {
     @CreationTimestamp
     private Date createdAt;
 
+    @NotNull
     private String name;
 
+    @NotNull
+    private String color;
+
+    @NotNull
     @OneToOne
     private UserInfo owner;
 
-    private Boolean isPrivate;
+    @Builder.Default
+    private Boolean isPrivate = false;
 
     @Builder.Default
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
