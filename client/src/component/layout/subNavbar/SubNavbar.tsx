@@ -48,11 +48,11 @@ function SubNavbar({
   // init spaceListState
   useEffect(() => {
     if (authState.user && !spaceListState.spaceList) {
-      const teamIds = authState.user.teams;
+      const teamId = 11;
 
       spaceListDispatch({
         type: SPACE_LIST_ACTION.INIT_SPACE_LIST,
-        payload: { spaceList: fetchSpaceListLocal(teamIds) },
+        payload: { spaceList: fetchSpaceListLocal(teamId) },
       });
     }
   }, [authState.user, spaceListState.spaceList]);

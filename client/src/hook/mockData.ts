@@ -178,6 +178,7 @@ export const mockUser: User = {
 export const team: Team = {
   id: 1,
   spaces: [],
+  color: "green",
   owner: mockUser,
   isPrivate: false,
   name: "workspace",
