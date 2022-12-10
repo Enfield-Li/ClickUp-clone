@@ -10,7 +10,7 @@ import {
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
-  AuthenticationError,
+  ErrorResponse,
   FieldErrors,
 } from "../../../types";
 
@@ -24,7 +24,7 @@ export async function registerUserLocal(
   dispatch({
     type: AUTH_ACTION.LOGIN_USER,
     payload: {
-      user: { id: 1, email, teams: [1, 2], username },
+      user: { id: 1, email, teams: [], username },
     },
   });
 }
@@ -53,7 +53,7 @@ export async function registerUser(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     const err = error as AxiosError;
-    const response = err.response?.data as AuthenticationError;
+    const response = err.response?.data as ErrorResponse;
     return response.errors;
   }
 }

@@ -1,7 +1,7 @@
 import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import SpaceListStateProvider from "../../context/spaceList/SpaceListContext";
+import TeamStateProvider from "../../context/team/TeamContext";
 import { Section } from "../../routes/ApplicationEntry";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
@@ -54,16 +54,14 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
           position={isExpanded ? undefined : "absolute"}
           onMouseOverCapture={subNavOpenable ? onOpen : undefined}
         >
-          <SpaceListStateProvider>
-            <SubNavbar
-              isOpen={isOpen}
-              onClose={onClose}
-              isExpanded={isExpanded}
-              setIsExpanded={setIsExpanded}
-              setSelectable={setSubNavOpenable}
-              getDisclosureProps={getDisclosureProps}
-            />
-          </SpaceListStateProvider>
+          <SubNavbar
+            isOpen={isOpen}
+            onClose={onClose}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+            setSelectable={setSubNavOpenable}
+            getDisclosureProps={getDisclosureProps}
+          />
         </Box>
       )}
     </Flex>

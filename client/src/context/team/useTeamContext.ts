@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { SpaceListActionType, SPACE_LIST_ACTION } from "../../types";
-import { SpaceListContext } from "./SpaceListContext";
+import { TeamStateActionType, TEAM_STATE_ACTION } from "../../types";
+import { TeamContext } from "./TeamContext";
 
 export default function useSpaceListContext() {
-  const context = useContext(SpaceListContext);
+  const context = useContext(TeamContext);
   if (!context) {
     throw new Error(
       "useSpaceListContext must be used within a authContextProvider"

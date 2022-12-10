@@ -1,20 +1,20 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
-import useSpaceListContext from "../../../../context/spaceList/useSpaceListContext";
-import { ListCategory, SPACE_LIST_ACTION } from "../../../../types";
+import useSpaceListContext from "../../../../context/team/useTeamContext";
+import { ListCategory, TEAM_STATE_ACTION } from "../../../../types";
 
 type Props = { list: ListCategory; isSubList?: boolean };
 
 export default memo(List);
 function List({ list, isSubList }: Props) {
   const { colorMode } = useColorMode();
-  const { spaceListDispatch } = useSpaceListContext();
+  const { TeamStateDispatch: spaceListDispatch } = useSpaceListContext();
   const bgHoverColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     spaceListDispatch({
       payload: { listId: list.id },
-      type: SPACE_LIST_ACTION.UPDATE_SELECTED_LIST,
+      type: TEAM_STATE_ACTION.UPDATE_SELECTED_LIST,
     });
   }
 

@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
+import useSpaceListContext from "../../../context/team/useTeamContext";
 import CreateSpaceModal from "./createSpace/CreateSpaceModal";
 import SpaceList from "./SpaceList";
 
@@ -16,7 +16,7 @@ type Props = {};
 export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
   const { colorMode } = useColorMode();
-  const { spaceListState } = useSpaceListContext();
+  const { teamState: spaceListState } = useSpaceListContext();
   const { spaceList } = spaceListState;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";

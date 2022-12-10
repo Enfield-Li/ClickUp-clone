@@ -3,7 +3,7 @@ import React from "react";
 import { ACCESS_TOKEN, API_ENDPOINT } from "../../../constant";
 import {
   AuthActionType,
-  AuthenticationError,
+  ErrorResponse,
   AUTH_ACTION,
   FieldErrors,
   LoginCredentials,
@@ -37,7 +37,7 @@ export async function loginUser(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     const err = error as AxiosError;
-    const response = err.response?.data as AuthenticationError;
+    const response = err.response?.data as ErrorResponse;
     return response.errors;
   }
 }

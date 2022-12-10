@@ -2,6 +2,7 @@ import { Flex, Box } from "@chakra-ui/react";
 import { useState } from "react";
 import Header from "../component/layout/Header";
 import NavBar from "../component/layout/NavBar";
+import TeamStateProvider from "../context/team/TeamContext";
 import MainContent from "./MainContent";
 
 type Props = {};
@@ -18,10 +19,12 @@ export default function ApplicationEntry({}: Props) {
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
   return (
     <Flex height="100vh" position="relative" overflow="hidden">
-      <NavBar
-        currentSection={currentSection}
-        setCurrentSection={setCurrentSection}
-      />
+      <TeamStateProvider>
+        <NavBar
+          currentSection={currentSection}
+          setCurrentSection={setCurrentSection}
+        />
+      </TeamStateProvider>
 
       {/* Header && Main */}
       <Box

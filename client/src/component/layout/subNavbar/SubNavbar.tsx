@@ -10,8 +10,8 @@ import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
-import useSpaceListContext from "../../../context/spaceList/useSpaceListContext";
-import { SPACE_LIST_ACTION } from "../../../types";
+import useSpaceListContext from "../../../context/team/useTeamContext";
+import { TEAM_STATE_ACTION } from "../../../types";
 import { fetchSpaceListLocal } from "../../task/actions/fetchSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
@@ -37,7 +37,8 @@ function SubNavbar({
   const navigate = useNavigate();
   const { authState } = useAuthContext();
   const [hidden, setHidden] = useState(!isOpen);
-  const { spaceListDispatch, spaceListState } = useSpaceListContext();
+  const { TeamStateDispatch: spaceListDispatch, teamState: spaceListState } =
+    useSpaceListContext();
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
@@ -51,7 +52,7 @@ function SubNavbar({
       const teamId = 11;
 
       spaceListDispatch({
-        type: SPACE_LIST_ACTION.INIT_SPACE_LIST,
+        type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
         payload: { spaceList: fetchSpaceListLocal(teamId) },
       });
     }

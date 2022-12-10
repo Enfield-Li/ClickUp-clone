@@ -263,7 +263,7 @@ export type FieldError = {
 
 export type FieldErrors = FieldError[];
 
-export type AuthenticationError = {
+export type ErrorResponse = {
   status: number;
   message: string;
   errors: FieldErrors;
@@ -326,7 +326,7 @@ export interface User {
   id: number;
   email: string;
   username: string;
-  teams: Team[];
+  teams: number[];
   defaultTeam?: number;
   defaultSpace?: number;
   defaultList?: number;
@@ -353,12 +353,12 @@ export const AUTH_ACTION = {
   LOGOUT_USER: "logout_user",
 } as const;
 
-export type SpaceListContextType = {
-  spaceListState: SpaceListStateType;
-  spaceListDispatch: React.Dispatch<SpaceListActionType>;
+export type TeamContextType = {
+  teamState: TeamStateType;
+  TeamStateDispatch: React.Dispatch<TeamStateActionType>;
 };
 
-export const initialSpaceListState: SpaceListStateType = {
+export const initialTeamContextState: TeamStateType = {
   spaceList: null,
   openedListId: null,
   lookUpStatusColumns: [],
@@ -366,13 +366,13 @@ export const initialSpaceListState: SpaceListStateType = {
 
 export type LookUpStatusColumns = { [index: number]: StatusColumns };
 
-export type SpaceListStateType = {
+export type TeamStateType = {
   openedListId: number | null;
   spaceList: SpaceType[] | null;
   lookUpStatusColumns: LookUpStatusColumns;
 };
 
-export type SpaceListActionType =
+export type TeamStateActionType =
   | AddList
   | AddFolder
   | FetchSpaceList
@@ -384,38 +384,38 @@ export type SpaceListActionType =
 
 type AddFolder = {
   payload: { spaceId: number; folderName: string };
-  type: typeof SPACE_LIST_ACTION.ADD_FOLDER;
+  type: typeof TEAM_STATE_ACTION.ADD_FOLDER;
 };
 type AddList = {
   payload: { spaceId: number; listName: string };
-  type: typeof SPACE_LIST_ACTION.ADD_LIST;
+  type: typeof TEAM_STATE_ACTION.ADD_LIST;
 };
 type FetchSpaceList = {
   payload: { spaceList: SpaceType[] };
-  type: typeof SPACE_LIST_ACTION.INIT_SPACE_LIST;
+  type: typeof TEAM_STATE_ACTION.INIT_SPACE_LIST;
 };
 type UpdateOpenedSpace = {
   payload: { spaceId: number };
-  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_SPACE;
+  type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_SPACE;
 };
 type UpdateSelectedSpace = {
   payload: { spaceId: number };
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_SPACE;
+  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE;
 };
 type UpdateOpenedFolder = {
   payload: { spaceId: number; folderId: number };
-  type: typeof SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER;
+  type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER;
 };
 type UpdateSelectedFolder = {
   payload: { spaceId: number; folderId: number };
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_FOLDER;
+  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER;
 };
 type UpdateSelectedList = {
   payload: { listId: number };
-  type: typeof SPACE_LIST_ACTION.UPDATE_SELECTED_LIST;
+  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_LIST;
 };
 
-export const SPACE_LIST_ACTION = {
+export const TEAM_STATE_ACTION = {
   ADD_LIST: "add_list",
   ADD_FOLDER: "add_folder",
   INIT_SPACE_LIST: "init_space_list",

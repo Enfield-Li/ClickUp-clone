@@ -8,7 +8,7 @@ import {
   processTaskList,
 } from "../component/task/actions/taskProcessing";
 import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
-import useSpaceListContext from "../context/spaceList/useSpaceListContext";
+import useSpaceListContext from "../context/team/useTeamContext";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosGatewayInstance } from "../utils/AxiosInterceptor";
 import { staticColumnOptions } from "./mockData";

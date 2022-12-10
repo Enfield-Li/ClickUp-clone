@@ -3,17 +3,17 @@ import determineListType, {
   determineFolderType,
 } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
-  SpaceListStateType,
-  SpaceListActionType,
-  SPACE_LIST_ACTION,
+  TeamStateType,
+  TeamStateActionType,
+  TEAM_STATE_ACTION,
 } from "../../types";
 
 export default function spaceListReducer(
-  spaceListState: SpaceListStateType,
-  action: SpaceListActionType
+  spaceListState: TeamStateType,
+  action: TeamStateActionType
 ) {
   switch (action.type) {
-    case SPACE_LIST_ACTION.INIT_SPACE_LIST: {
+    case TEAM_STATE_ACTION.INIT_SPACE_LIST: {
       return produce(spaceListState, (draftState) => {
         const { spaceList } = action.payload;
         draftState.spaceList = spaceList;
@@ -48,7 +48,7 @@ export default function spaceListReducer(
       });
     }
 
-    case SPACE_LIST_ACTION.UPDATE_OPENED_SPACE: {
+    case TEAM_STATE_ACTION.UPDATE_OPENED_SPACE: {
       return produce(spaceListState, (draftState) => {
         const { spaceId } = action.payload;
 
@@ -64,7 +64,7 @@ export default function spaceListReducer(
       });
     }
 
-    case SPACE_LIST_ACTION.UPDATE_OPENED_FOLDER: {
+    case TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER: {
       return produce(spaceListState, (draftState) => {
         const { spaceId, folderId } = action.payload;
 
@@ -83,7 +83,7 @@ export default function spaceListReducer(
       });
     }
 
-    case SPACE_LIST_ACTION.UPDATE_SELECTED_LIST: {
+    case TEAM_STATE_ACTION.UPDATE_SELECTED_LIST: {
       return produce(spaceListState, (draftState) => {
         const { listId } = action.payload;
 
@@ -116,11 +116,11 @@ export default function spaceListReducer(
       });
     }
 
-    case SPACE_LIST_ACTION.UPDATE_SELECTED_FOLDER: {
+    case TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER: {
       throw new Error("not implemented");
     }
 
-    case SPACE_LIST_ACTION.UPDATE_SELECTED_SPACE: {
+    case TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE: {
       throw new Error("not implemented");
     }
 
