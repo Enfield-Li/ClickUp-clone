@@ -1,12 +1,9 @@
 package com.example.statusColumn.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,16 +30,14 @@ public class StatusColumn {
     private String color;
 
     @NotNull
-    private Integer listId;
+    private Integer teamId;
 
     @NotNull
     private Integer orderIndex;
 
+    private Boolean markAsClosed;
+
     @JsonIgnore
-    @Column(updatable = false, insertable = false)
     private Integer listCategoryId;
 
-    @ManyToOne
-    @JoinColumn(name = "listCategoryId")
-    private ListCategory listCategory;
 }

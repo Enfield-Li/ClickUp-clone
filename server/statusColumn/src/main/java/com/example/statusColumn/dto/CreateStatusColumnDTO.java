@@ -1,6 +1,6 @@
 package com.example.statusColumn.dto;
 
-public record CreateSpaceDTO(
+public record CreateStatusColumnDTO(
         String name,
         String color,
         Boolean isPrivate,

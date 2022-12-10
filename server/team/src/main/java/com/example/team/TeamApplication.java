@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         "com.example.amqp",
         "com.example.clients",
+        "com.example.serviceCORS",
         "com.example.statusColumn",
         "com.example.serviceSecurityConfig",
 })

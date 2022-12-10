@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 // @EnableEurekaClient
-@SpringBootApplication(scanBasePackages = { "com.example.authorization",
+@SpringBootApplication(scanBasePackages = {
         "com.example.clients",
-        "com.example.serviceCORS" })
+        "com.example.serviceCORS",
+        "com.example.authorization",
+})
 public class AuthorizationApplication {
 
     public static void main(String[] args) {
