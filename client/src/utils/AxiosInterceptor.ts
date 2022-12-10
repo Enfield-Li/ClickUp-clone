@@ -29,6 +29,6 @@ export const axiosTaskServiceInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.TASK
 );
 
-export const axiosSpaceServiceInstance = createDevAxiosInstance(
-  SERVICE_ENDPOINT.SPACE
+export const axiosTeamServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TEAM
 );

@@ -177,10 +177,11 @@ export const mockUser: User = {
 
 export const team: Team = {
   id: 1,
-  name: "workspace",
-  owner: mockUser,
   spaces: [],
+  owner: mockUser,
   isPrivate: false,
+  name: "workspace",
+  member: [mockUser],
 };
 
 export const staticColumnOptions: ColumnOptions = {

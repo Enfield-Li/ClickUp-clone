@@ -28,7 +28,8 @@ public class TaskService {
 
     Integer updateCount;
     UserInfo userInfo = UserInfo.builder().id(1)
-            .userId(1).username("mockUser").build();
+            .userId(1).username("mockUser")
+            .email("mockUser@google.com").build();
 
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;

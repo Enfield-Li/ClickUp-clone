@@ -12,7 +12,7 @@ const UPDATE_TASK_DESC = "/update_desc";
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost:8083",
   TASK: "http://localhost:8084",
-  SPACE: "http://localhost:8088",
+  TEAM: "http://localhost:8088",
   AUTHORIZATION: "http://localhost:8085",
 };
 

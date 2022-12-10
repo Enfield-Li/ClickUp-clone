@@ -1,5 +1,6 @@
 package com.example.team.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,9 +26,10 @@ class FolderCategory extends Category {
 
     private Boolean isOpen;
 
-    @OneToMany(mappedBy = "folderCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ListCategory> allLists;
+    @OneToMany(
+        mappedBy = "folderCategory", 
+        cascade = CascadeType.ALL, 
+        fetch = FetchType.EAGER)
+    private Set<ListCategory> allLists = new HashSet<>();
 
-    @OneToMany(mappedBy = "folderCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserInfo> members;
 }

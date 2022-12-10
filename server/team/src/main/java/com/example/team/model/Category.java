@@ -43,6 +43,7 @@ abstract class Category {
     private Date createdAt;
 
     private String color;
+    
     private Boolean isPrivate;
 
     @JsonIgnore

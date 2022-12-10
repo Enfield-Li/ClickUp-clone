@@ -1,20 +1,10 @@
 package com.example.team.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,10 +36,5 @@ class ListCategory extends Category {
     @ManyToOne
     @JoinColumn(name = "folderCategoryId")
     private FolderCategory folderCategory;
-
-    @NotNull
-    @Builder.Default
-    @OneToMany(mappedBy = "folderCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserInfo> members = new HashSet<>();
 
 }

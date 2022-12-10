@@ -34,21 +34,4 @@ public class UserInfo {
     @NotNull
     private String email;
 
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer folderCategoryId;
-
-    @JsonIgnore
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "folderCategoryId")
-    private FolderCategory folderCategory;
-
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer listCategoryId;
-
-    @JsonIgnore
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "listCategoryId")
-    private ListCategory listCategory;
 }
