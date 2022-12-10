@@ -3,6 +3,7 @@ import {
   Center,
   Flex,
   Popover,
+  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
 } from "@chakra-ui/react";
@@ -27,18 +28,21 @@ export default function Settings({}: Props) {
       </PopoverTrigger>
 
       <PopoverContent
+        rounded="md"
         left="-20px"
-        bottom="-45px"
         width="400px"
         height="400px"
+        bottom="-45px"
+        shadow="dark-lg"
         position="absolute"
       >
-        <Flex height="90%">
+        <PopoverCloseButton mr="-1" />
+        <Flex height="90%" borderTopRadius="md">
           <TeamList />
 
           <Flex flexGrow="1" height="100%">
-            <AccountSettings />
             <TeamSettings />
+            <AccountSettings />
           </Flex>
         </Flex>
 

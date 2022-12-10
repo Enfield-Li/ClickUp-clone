@@ -5,7 +5,7 @@ type Props = {};
 export default function TeamSettings({}: Props) {
   return (
     <Box bgColor="yellow" height="100%" width="50%">
-      <Box></Box>
+      <Box>team</Box>
     </Box>
   );
 }
