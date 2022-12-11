@@ -21,7 +21,7 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
         const { teams, panelActivity } = action.payload;
-        const { TeamActivities, defaultTeamId } = panelActivity;
+        const { teamActivities: TeamActivities, defaultTeamId } = panelActivity;
 
         const currentTeamActivities = TeamActivities.find(
           (teamActivity) => teamActivity.teamId === defaultTeamId

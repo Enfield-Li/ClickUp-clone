@@ -16,9 +16,10 @@ const initialTeamContextState: TeamStateType = {
     currentStatusColumns: [],
   },
   panelActivity: {
+    id: 0,
     userId: 0,
     defaultTeamId: 0,
-    TeamActivities: [],
+    teamActivities: [],
   },
 };
 

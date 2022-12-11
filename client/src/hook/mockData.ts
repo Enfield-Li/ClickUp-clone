@@ -181,16 +181,19 @@ export const mockUser: User = {
 };
 
 export const initPanelActivity: PanelActivity = {
+  id: 1,
   userId: 1,
   defaultTeamId: 1,
-  TeamActivities: [
+  teamActivities: [
     {
+      id: 1,
       teamId: 1,
       spaceIds: [1, 2],
       folderIds: [1, 2],
       listId: 3,
     },
     {
+      id: 1,
       teamId: 1,
       folderIds: [1],
       spaceIds: [1],

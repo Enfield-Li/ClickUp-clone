@@ -21,6 +21,7 @@
         <module>taskComment</module>
         <module>team</module>
         <module>statusColumn</module>
+        <module>panelActivity</module>
         <module>serviceSecurityConfig</module>
         <module>serviceCORS</module>
     </modules>

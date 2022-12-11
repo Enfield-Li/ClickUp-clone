@@ -351,15 +351,17 @@ export const AUTH_ACTION = {
 } as const;
 
 export type TeamActivity = {
+  id: number;
   teamId: number;
   spaceIds: number[];
   folderIds: number[];
   listId: number;
 };
 export type PanelActivity = {
+  id: number;
   userId: number;
   defaultTeamId: number;
-  TeamActivities: TeamActivity[];
+  teamActivities: TeamActivity[];
 };
 type ActiveTeamState = {
   selectedTeamId: number;
