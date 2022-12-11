@@ -10,7 +10,7 @@ function List({ list, isSubList }: Props) {
   const { colorMode } = useColorMode();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgHoverColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
-  const isListSelected = list.id === teamState.defaultListId;
+  const isListSelected = list.id === teamState.activeTeamState.selectedListId;
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     teamStateDispatch({

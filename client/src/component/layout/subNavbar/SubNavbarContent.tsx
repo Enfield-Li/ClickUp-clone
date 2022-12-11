@@ -20,7 +20,7 @@ function SubNavbarContent({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
   const currentTeam = teamState.teams.find(
-    (team) => team.id === teamState.defaultTeamId
+    (team) => team.id === teamState.activeTeamState.selectedTeamId
   );
 
   function handleClickToSeeEveryTasks(): void {

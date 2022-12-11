@@ -27,8 +27,8 @@ export default function teamReducer(
 
         // draftState.teams = teams;
         draftState.teams = deepCopy(teams); // hack
-        draftState.defaultTeamId = defaultTeamId;
-        draftState.defaultListId = defaultListId;
+        draftState.activeTeamState.selectedTeamId = defaultTeamId;
+        draftState.activeTeamState.selectedListId = defaultListId;
 
         function setStatusColumn(
           team: WritableDraft<Team>,
@@ -45,7 +45,8 @@ export default function teamReducer(
               "Failed to init teamState, failed to find current statusColumnCategory";
             if (!statusColumnCategory) throw new Error(errorMsg);
 
-            draftState.statusColumns = statusColumnCategory.statusColumns;
+            draftState.activeTeamState.currentStatusColumns =
+              statusColumnCategory.statusColumns;
           }
         }
 
@@ -78,7 +79,7 @@ export default function teamReducer(
         const { spaceId } = action.payload;
 
         draftState.teams.forEach((team) => {
-          if (team.id === draftState.defaultTeamId) {
+          if (team.id === draftState.activeTeamState.selectedTeamId) {
             team.spaceList?.forEach((space) => {
               // update previous space.isOpen to false
               if (space.isOpen && space.id !== spaceId) {
@@ -98,7 +99,7 @@ export default function teamReducer(
         const { spaceId, folderId } = action.payload;
 
         draftState.teams.forEach((team) => {
-          if (team.id === draftState.defaultTeamId) {
+          if (team.id === draftState.activeTeamState.selectedTeamId) {
             team.spaceList?.forEach((space) => {
               if (space.id === spaceId) {
                 space.allListOrFolder.forEach((listOrFolder) => {
@@ -118,7 +119,7 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.UPDATE_SELECTED_LIST: {
       return produce(spaceListState, (draftState) => {
-        draftState.defaultListId = action.payload.listId;
+        draftState.activeTeamState.selectedListId = action.payload.listId;
       });
     }
 
@@ -129,7 +130,7 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.SELECT_TEAM: {
       return produce(spaceListState, (draftState) => {
         const { teamId } = action.payload;
-        draftState.defaultTeamId = teamId;
+        draftState.activeTeamState.selectedTeamId = teamId;
       });
     }
 

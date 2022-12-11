@@ -175,12 +175,8 @@ const initialSpaceList2: SpaceType[] = [
 export const mockUser: User = {
   id: 1,
   username: "mockUser",
-  teamIds: [1, 2],
   email: "",
-  defaultTeamId: 1,
-  defaultFolderIds: [1, 2],
-  defaultSpaceIds: [1, 2],
-  defaultListId: 2,
+  joinedTeamIds: [1, 2],
 };
 
 export const teams: Team[] = [

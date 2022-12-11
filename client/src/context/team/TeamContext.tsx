@@ -10,9 +10,11 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
-  defaultTeamId: 0,
-  defaultListId: 0,
-  statusColumns: [],
+  activeTeamState: {
+    selectedTeamId: 0,
+    selectedListId: 0,
+    currentStatusColumns: [],
+  },
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {

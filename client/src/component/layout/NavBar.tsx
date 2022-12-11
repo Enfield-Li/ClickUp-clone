@@ -43,22 +43,16 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
   // init spaceListState
   useEffect(() => {
     if (authState.user && !teamState.teams.length) {
-      const {
-        teamIds,
-        defaultTeamId,
-        defaultSpaceIds,
-        defaultFolderIds,
-        defaultListId,
-      } = authState.user;
+      const { joinedTeamIds: teamIds } = authState.user;
 
       teamStateDispatch({
         type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
         payload: {
           teams: fetchTeamListLocal(teamIds),
-          defaultTeamId,
-          defaultSpaceIds,
-          defaultFolderIds,
-          defaultListId,
+          defaultTeamId: 1,
+          defaultFolderIds: [1, 2],
+          defaultSpaceIds: [1, 2],
+          defaultListId: 2,
         },
       });
     }

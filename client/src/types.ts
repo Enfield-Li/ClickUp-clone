@@ -321,15 +321,12 @@ export interface CreateSpaceDTO {
   orderIndex: number;
   defaultStatusColumnId: number;
 }
+
 export interface User {
   id: number;
   email: string;
-  teamIds: number[];
   username: string;
-  defaultTeamId: number;
-  defaultSpaceIds: number[];
-  defaultFolderIds: number[];
-  defaultListId: number;
+  joinedTeamIds: number[];
 }
 
 export interface AuthenticationResponse {
@@ -353,11 +350,28 @@ export const AUTH_ACTION = {
   LOGOUT_USER: "logout_user",
 } as const;
 
-export type TeamStateType = {
-  teams: Team[];
+export type TeamActivity = {
+  userId: number;
+  teamId: number;
+  spaceIds: number[];
+  folderIds: number[];
+  listId: number;
+};
+type PanelActivity = {
+  userId: number;
   defaultTeamId: number;
-  defaultListId: number;
-  statusColumns: StatusColumns;
+  TeamActivities: TeamActivity[];
+};
+type ActiveTeamState = {
+  selectedTeamId: number;
+  selectedListId: number;
+  currentStatusColumns: StatusColumns;
+};
+
+export type TeamStateType = {
+  teams: Team[]; // server
+//   panelActivity: PanelActivity;
+  activeTeamState: ActiveTeamState; // client
 };
 export type TeamContextType = {
   teamState: TeamStateType;

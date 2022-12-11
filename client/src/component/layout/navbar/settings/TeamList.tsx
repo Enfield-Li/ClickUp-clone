@@ -40,7 +40,7 @@ export default function TeamList({ onClose }: Props) {
             borderStyle="solid"
             borderColor="purple.500"
             onClick={() => handleSelectTeam(team.id)}
-            borderWidth={team.id === teamState.defaultTeamId ? "1px" : ""}
+            borderWidth={team.id === teamState.selectedTeamId ? "1px" : ""}
           >
             <Center
               width="26px"

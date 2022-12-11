@@ -44,28 +44,20 @@ function SubNavbar({
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
-  //   // init spaceListState
-  //   useEffect(() => {
-  //     if (authState.user && !teamState.spaceList) {
-  //       const teamId = 11;
-
-  //       teamStateDispatch({
-  //         type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
-  //         payload: { spaceList: fetchSpaceListLocal(teamId) },
-  //       });
-  //     }
-  //   }, [authState.user, teamState.spaceList]);
-
   // sync up url with openedListId
   useEffect(() => {
     if (teamState.teams.length) {
-      navigate(CLIENT_ROUTE.TASK_BOARD + `/${teamState.defaultListId}`, {
-        replace: true,
-        state: {
-          isNewUser: location.state?.isNewUser,
-          statusColumns: teamState.statusColumns,
-        },
-      });
+      navigate(
+        CLIENT_ROUTE.TASK_BOARD +
+          `/${teamState.activeTeamState.selectedListId}`,
+        {
+          replace: true,
+          state: {
+            isNewUser: location.state?.isNewUser,
+            statusColumns: teamState.activeTeamState.currentStatusColumns,
+          },
+        }
+      );
     }
   }, [teamState]);
 
