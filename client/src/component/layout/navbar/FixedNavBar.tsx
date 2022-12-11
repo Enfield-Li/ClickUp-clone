@@ -74,7 +74,7 @@ function FixedNavBar({
           {/* Logo */}
           <Center
             mt="26px"
-            ml="23px"
+            ml="22px"
             boxSize="10px"
             role="menuitem"
             aria-label="logo"

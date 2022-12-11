@@ -4,6 +4,7 @@ import {
   DueDateRange,
   FolderCategory,
   ListCategory,
+  PanelActivity,
   Priority,
   SpaceType,
   StatusColumns,
@@ -81,7 +82,7 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
     allLists: allFolder1List,
   },
   {
-    id: 1.5,
+    id: 2,
     createdAt: new Date(),
     color: "green",
     isOpen: null,
@@ -93,7 +94,7 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
     allLists: allFolder15List,
   },
   {
-    id: 2,
+    id: 3,
     statusColumnsCategoryId: 3,
     createdAt: new Date(),
     color: "",
@@ -122,7 +123,7 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
 
 const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
   {
-    id: 3,
+    id: 5,
     statusColumnsCategoryId: 1,
     color: "",
     isPrivate: true,
@@ -177,6 +178,25 @@ export const mockUser: User = {
   username: "mockUser",
   email: "",
   joinedTeamIds: [1, 2],
+};
+
+export const initPanelActivity: PanelActivity = {
+  userId: 1,
+  defaultTeamId: 1,
+  TeamActivities: [
+    {
+      teamId: 1,
+      spaceIds: [1, 2],
+      folderIds: [1, 2],
+      listId: 3,
+    },
+    {
+      teamId: 1,
+      folderIds: [1],
+      spaceIds: [1],
+      listId: 4,
+    },
+  ],
 };
 
 export const teams: Team[] = [

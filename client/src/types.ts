@@ -351,13 +351,12 @@ export const AUTH_ACTION = {
 } as const;
 
 export type TeamActivity = {
-  userId: number;
   teamId: number;
   spaceIds: number[];
   folderIds: number[];
   listId: number;
 };
-type PanelActivity = {
+export type PanelActivity = {
   userId: number;
   defaultTeamId: number;
   TeamActivities: TeamActivity[];
@@ -370,7 +369,7 @@ type ActiveTeamState = {
 
 export type TeamStateType = {
   teams: Team[]; // server
-//   panelActivity: PanelActivity;
+  panelActivity: PanelActivity;
   activeTeamState: ActiveTeamState; // client
 };
 export type TeamContextType = {
@@ -393,10 +392,7 @@ type FetchSpaceList = {
   type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
   payload: {
     teams: Team[];
-    defaultTeamId: number;
-    defaultSpaceIds: number[];
-    defaultFolderIds: number[];
-    defaultListId: number;
+    panelActivity: PanelActivity;
   };
 };
 type AddFolder = {

@@ -10,6 +10,9 @@ import {
 } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
 
+const errorMsg =
+  "Failed to init teamState, failed to find current statusColumnCategory";
+
 export default function teamReducer(
   spaceListState: TeamStateType,
   action: TeamStateActionType
@@ -17,32 +20,32 @@ export default function teamReducer(
   switch (action.type) {
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
-        const {
-          teams,
-          defaultTeamId,
-          defaultSpaceIds,
-          defaultFolderIds,
-          defaultListId,
-        } = action.payload;
+        const { teams, panelActivity } = action.payload;
+        const { TeamActivities, defaultTeamId } = panelActivity;
+
+        const currentTeamActivities = TeamActivities.find(
+          (teamActivity) => teamActivity.teamId === defaultTeamId
+        );
+        if (!currentTeamActivities) throw new Error(errorMsg);
+
+        const { folderIds, listId, spaceIds } = currentTeamActivities;
 
         // draftState.teams = teams;
         draftState.teams = deepCopy(teams); // hack
         draftState.activeTeamState.selectedTeamId = defaultTeamId;
-        draftState.activeTeamState.selectedListId = defaultListId;
+        draftState.activeTeamState.selectedListId =
+          currentTeamActivities.listId;
 
         function setStatusColumn(
           team: WritableDraft<Team>,
           list: ListCategory,
-          defaultListId: number
+          selectedListId: number
         ) {
-          if (list.id === defaultListId) {
+          if (list.id === selectedListId) {
             const statusColumnCategory =
               team.defaultStatusColumnCategories.find(
                 (category) => category.id === list.statusColumnsCategoryId
               );
-
-            const errorMsg =
-              "Failed to init teamState, failed to find current statusColumnCategory";
             if (!statusColumnCategory) throw new Error(errorMsg);
 
             draftState.activeTeamState.currentStatusColumns =
@@ -54,18 +57,20 @@ export default function teamReducer(
           (team) =>
             team.id === defaultTeamId &&
             team.spaceList.forEach((space) => {
-              if (space.id in defaultSpaceIds) {
+              if (space.id in spaceIds) {
                 space.isOpen = true;
+
                 space.allListOrFolder.forEach((listOrFolder) => {
                   const isFolder = determineFolderType(listOrFolder);
 
-                  if (isFolder && listOrFolder.id in defaultFolderIds) {
+                  if (isFolder && listOrFolder.id in folderIds) {
                     listOrFolder.isOpen = true;
+
                     listOrFolder.allLists.forEach((list) => {
-                      setStatusColumn(team, list, defaultListId);
+                      setStatusColumn(team, list, listId);
                     });
                   } else if (!isFolder) {
-                    setStatusColumn(team, listOrFolder, defaultListId);
+                    setStatusColumn(team, listOrFolder, listId);
                   }
                 });
               }

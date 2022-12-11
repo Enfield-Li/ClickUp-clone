@@ -15,6 +15,11 @@ const initialTeamContextState: TeamStateType = {
     selectedListId: 0,
     currentStatusColumns: [],
   },
+  panelActivity: {
+    userId: 0,
+    defaultTeamId: 0,
+    TeamActivities: [],
+  },
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {

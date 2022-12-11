@@ -5,6 +5,7 @@ import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import TeamStateProvider from "../../context/team/TeamContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
+import { initPanelActivity } from "../../hook/mockData";
 import { Section } from "../../routes/ApplicationEntry";
 import { TEAM_STATE_ACTION } from "../../types";
 import { fetchTeamListLocal } from "../task/actions/fetchSpaceList";
@@ -49,10 +50,7 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
         type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
         payload: {
           teams: fetchTeamListLocal(teamIds),
-          defaultTeamId: 1,
-          defaultFolderIds: [1, 2],
-          defaultSpaceIds: [1, 2],
-          defaultListId: 2,
+          panelActivity: initPanelActivity,
         },
       });
     }
