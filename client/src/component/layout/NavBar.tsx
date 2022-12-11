@@ -1,9 +1,7 @@
 import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../constant";
+import { useLocation } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
-import TeamStateProvider from "../../context/team/TeamContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { initPanelActivity } from "../../hook/mockData";
 import { Section } from "../../routes/ApplicationEntry";
@@ -20,14 +18,13 @@ type Props = {
 export default memo(NavBar);
 function NavBar({ currentSection, setCurrentSection }: Props) {
   const location = useLocation();
-  const navigate = useNavigate();
   const { authState } = useAuthContext();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [subNavOpenable, setSubNavOpenable] = useState(true);
-  const { teamStateDispatch, teamState } = useTeamStateContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
 
   const fixedNavbarWidth = "55px";
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
+
+  const [isExpanded, setIsExpanded] = useState(false);
   const { getDisclosureProps, isOpen, onClose, onOpen } = useDisclosure({
     defaultIsOpen: false,
   });
@@ -73,17 +70,16 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
         <Box
           zIndex="2"
           opacity="100%"
+          onMouseOverCapture={onOpen}
           backgroundColor={collapsibleBG}
           ml={isExpanded ? undefined : fixedNavbarWidth}
           position={isExpanded ? undefined : "absolute"}
-          onMouseOverCapture={subNavOpenable ? onOpen : undefined}
         >
           <SubNavbar
             isOpen={isOpen}
             onClose={onClose}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
-            setSelectable={setSubNavOpenable}
             getDisclosureProps={getDisclosureProps}
           />
         </Box>

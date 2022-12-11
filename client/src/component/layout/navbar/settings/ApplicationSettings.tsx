@@ -42,7 +42,6 @@ export default function ApplicationSettings({}: Props) {
             position="absolute"
             bgColor={bgColor}
             color={fontColor}
-            // onMouseOver={(e) => e.stopPropagation()}
           >
             <PopoverCloseButton mr="-1" />
 

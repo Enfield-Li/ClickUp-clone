@@ -21,7 +21,6 @@ type Props = {
   onClose: () => void;
   getDisclosureProps: (props?: any) => any;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default memo(SubNavbar);
@@ -30,7 +29,6 @@ function SubNavbar({
   onClose,
   isExpanded,
   setIsExpanded,
-  setSelectable,
   getDisclosureProps,
 }: Props) {
   const location = useLocation();
@@ -64,10 +62,6 @@ function SubNavbar({
   function handleCloseSubNavbar() {
     onClose();
     setIsExpanded(false);
-    setSelectable(false);
-
-    // Prevent subNav from Collapsing right after opening task page
-    setTimeout(() => setSelectable(true), 300);
   }
 
   return (

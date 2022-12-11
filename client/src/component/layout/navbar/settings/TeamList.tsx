@@ -11,11 +11,13 @@ export default function TeamList({ onClose }: Props) {
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   function handleSelectTeam(teamId: number) {
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.SELECT_TEAM,
-      payload: { teamId },
-    });
     onClose();
+    setTimeout(() => {
+      teamStateDispatch({
+        type: TEAM_STATE_ACTION.SELECT_TEAM,
+        payload: { teamId },
+      });
+    }, 500);
   }
 
   return (
@@ -40,7 +42,9 @@ export default function TeamList({ onClose }: Props) {
             borderStyle="solid"
             borderColor="purple.500"
             onClick={() => handleSelectTeam(team.id)}
-            borderWidth={team.id === teamState.selectedTeamId ? "1px" : ""}
+            borderWidth={
+              team.id === teamState.activeTeamState.selectedTeamId ? "1px" : ""
+            }
           >
             <Center
               width="26px"
