@@ -126,6 +126,13 @@ export default function teamReducer(
       throw new Error("not implemented");
     }
 
+    case TEAM_STATE_ACTION.SELECT_TEAM: {
+      return produce(spaceListState, (draftState) => {
+        const { teamId } = action.payload;
+        draftState.defaultTeamId = teamId;
+      });
+    }
+
     case TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE: {
       throw new Error("not implemented");
     }

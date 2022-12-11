@@ -13,7 +13,7 @@ import LogoSVG from "../../../media/LogoSVG";
 import { Section } from "../../../routes/ApplicationEntry";
 import AccountSettings from "./settings/AccountSettings";
 import NavIcon from "./NavIcon";
-import Settings from "./settings/Settings";
+import ApplicationSettings from "./settings/ApplicationSettings";
 
 type Props = {
   onOpen: () => void;
@@ -127,7 +127,7 @@ function FixedNavBar({
         </Box>
 
         <Center mb="3">
-          <Settings />
+          <ApplicationSettings />
         </Center>
       </Flex>
     </Box>

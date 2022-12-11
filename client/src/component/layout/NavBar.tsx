@@ -43,8 +43,6 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
   // init spaceListState
   useEffect(() => {
     if (authState.user && !teamState.teams.length) {
-      console.log(authState.user);
-
       const {
         teamIds,
         defaultTeamId,

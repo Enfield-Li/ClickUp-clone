@@ -367,6 +367,7 @@ export type TeamContextType = {
 export type TeamStateActionType =
   | AddList
   | AddFolder
+  | SelectTeam
   | FetchSpaceList
   | UpdateOpenedSpace
   | UpdateOpenedFolder
@@ -392,6 +393,10 @@ type AddList = {
   type: typeof TEAM_STATE_ACTION.ADD_LIST;
   payload: { spaceId: number; listName: string };
 };
+type SelectTeam = {
+  type: typeof TEAM_STATE_ACTION.SELECT_TEAM;
+  payload: { teamId: number };
+};
 type UpdateOpenedSpace = {
   type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_SPACE;
   payload: { spaceId: number };
@@ -416,6 +421,7 @@ type UpdateSelectedList = {
 export const TEAM_STATE_ACTION = {
   ADD_LIST: "add_list",
   ADD_FOLDER: "add_folder",
+  SELECT_TEAM: "select_team",
   INIT_TEAM_STATE: "init_team_state",
   UPDATE_OPENED_SPACE: "update_opened_space",
   UPDATE_SELECTED_SPACE: "update_selected_space",
