@@ -7,7 +7,7 @@ import TeamStateProvider from "../../context/team/TeamContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../routes/ApplicationEntry";
 import { TEAM_STATE_ACTION } from "../../types";
-import { fetchSpaceListLocal } from "../task/actions/fetchSpaceList";
+import { fetchTeamListLocal } from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
@@ -42,15 +42,27 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
 
   // init spaceListState
   useEffect(() => {
-    if (authState.user && !teamState.spaceList) {
-      const teamId = 11;
+    if (authState.user && !teamState.teams.length) {
+      const {
+        teamIds,
+        defaultTeamId,
+        defaultSpaceId,
+        defaultFolderId,
+        defaultListId,
+      } = authState.user;
 
       teamStateDispatch({
-        type: TEAM_STATE_ACTION.INIT_SPACE_LIST,
-        payload: { spaceList: fetchSpaceListLocal(teamId) },
+        type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
+        payload: {
+          teams: fetchTeamListLocal(teamIds),
+          defaultTeamId,
+          defaultSpaceId,
+          defaultFolderId,
+          defaultListId,
+        },
       });
     }
-  }, [authState.user, teamState.spaceList]);
+  }, [authState.user, teamState]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>

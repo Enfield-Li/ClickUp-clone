@@ -1,20 +1,24 @@
 import { createContext, useReducer, useState } from "react";
 import { TeamContextType, TeamStateType } from "../../types";
-import spaceListReducer from "./TeamReducer";
+import teamReducer from "./TeamReducer";
 
 export const TeamContext = createContext<TeamContextType | null>(null);
+
 type ProviderType = {
   children: React.ReactNode;
 };
 
+const initialTeamContextState: TeamStateType = {
+  teams: [],
+  statusColumns: [],
+  defaultListId: 0,
+  defaultSpaceId: 0,
+  defaultTeamId: 0,
+};
+
 export default function TeamStateProvider({ children }: ProviderType) {
-  const initialTeamContextState: TeamStateType = {
-    spaceList: null,
-    openedListId: null,
-    lookUpStatusColumns: [],
-  };
   const [globalState, globalDispatch] = useReducer(
-    spaceListReducer,
+    teamReducer,
     initialTeamContextState
   );
 

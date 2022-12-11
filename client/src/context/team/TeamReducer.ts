@@ -1,118 +1,92 @@
 import produce from "immer";
-import determineListType, {
-  determineFolderType,
-} from "../../component/layout/subNavbar/folderAndList/determineList";
+import { WritableDraft } from "immer/dist/internal";
+import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
   TeamStateType,
   TeamStateActionType,
   TEAM_STATE_ACTION,
+  ListCategory,
+  Team,
 } from "../../types";
 
-export default function spaceListReducer(
+export default function teamReducer(
   spaceListState: TeamStateType,
   action: TeamStateActionType
 ) {
   switch (action.type) {
-    case TEAM_STATE_ACTION.INIT_SPACE_LIST: {
+    case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
-        const { spaceList } = action.payload;
-        draftState.spaceList = spaceList;
+        const {
+          teams,
+          defaultTeamId,
+          defaultSpaceId,
+          defaultFolderId,
+          defaultListId,
+        } = action.payload;
 
-        spaceList.forEach((space) => {
-          space.allListOrFolder.forEach((listOrFolder) => {
-            const isList = determineListType(listOrFolder);
-            const isFolder = determineFolderType(listOrFolder);
+        draftState.teams = teams;
+        draftState.defaultTeamId = defaultTeamId;
+        draftState.defaultSpaceId = defaultSpaceId;
+        draftState.defaultFolderId = defaultFolderId;
+        draftState.defaultListId = defaultListId;
 
-            // isSelected list is under space
-            if (isList) {
-              // push to lookup table
-              draftState.lookUpStatusColumns[listOrFolder.id] =
-                listOrFolder.statusColumns;
+        function setStatusColumn(
+          team: WritableDraft<Team>,
+          list: ListCategory,
+          defaultListId: number
+        ) {
+          if (list.id === defaultListId) {
+            const statusColumnCategory =
+              team.defaultStatusColumnCategories.find(
+                (category) => category.id === list.statusColumnsCategoryId
+              );
 
-              if (listOrFolder.isSelected) {
-                draftState.openedListId = listOrFolder.id;
-              }
-              // isSelected list is under folder
-            } else if (isFolder) {
-              listOrFolder.allLists.forEach((list) => {
-                // push to lookup table
-                draftState.lookUpStatusColumns[list.id] = list.statusColumns;
+            const errorMsg =
+              "Failed to init teamState, failed to find current statusColumnCategory";
+            if (!statusColumnCategory) throw new Error(errorMsg);
 
-                if (list.isSelected) {
-                  draftState.openedListId = list.id;
-                }
-              });
-            }
-          });
-        });
+            draftState.statusColumns = statusColumnCategory.statusColumns;
+          }
+        }
+
+        draftState.teams.forEach(
+          (team) =>
+            team.id === defaultTeamId &&
+            team.spaceList.forEach(
+              (space) =>
+                space.id === defaultSpaceId &&
+                space.allListOrFolder.forEach((listOrFolder) => {
+                  const isFolder = determineFolderType(listOrFolder);
+
+                  if (isFolder && listOrFolder.id === defaultFolderId) {
+                    listOrFolder.allLists.forEach((list) => {
+                      setStatusColumn(team, list, defaultListId);
+                    });
+                  } else if (!isFolder) {
+                    setStatusColumn(team, listOrFolder, defaultListId);
+                  }
+                })
+            )
+        );
       });
     }
 
     case TEAM_STATE_ACTION.UPDATE_OPENED_SPACE: {
       return produce(spaceListState, (draftState) => {
-        const { spaceId } = action.payload;
-
-        draftState.spaceList?.forEach((space) => {
-          // update previous space.isOpen to false
-          if (space.isOpen && space.id !== spaceId) {
-            space.isOpen = false;
-          }
-          if (space.id === spaceId) {
-            space.isOpen = !space.isOpen;
-          }
-        });
+        draftState.defaultSpaceId = action.payload.spaceId;
       });
     }
 
     case TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER: {
       return produce(spaceListState, (draftState) => {
-        const { spaceId, folderId } = action.payload;
-
-        draftState.spaceList?.forEach((space) => {
-          if (space.id === spaceId) {
-            space.allListOrFolder.forEach((listOrFolder) => {
-              const isFolder = determineFolderType(listOrFolder);
-              const isCurrentFolder = listOrFolder.id === folderId;
-
-              if (isFolder && isCurrentFolder) {
-                listOrFolder.isOpen = !listOrFolder.isOpen;
-              }
-            });
-          }
-        });
+        draftState.defaultSpaceId = action.payload.spaceId;
+        draftState.defaultFolderId = action.payload.folderId;
       });
     }
 
     case TEAM_STATE_ACTION.UPDATE_SELECTED_LIST: {
       return produce(spaceListState, (draftState) => {
-        const { listId } = action.payload;
-
-        draftState.openedListId = listId;
-        // undo previous selected list
-        draftState.spaceList?.forEach((space) =>
-          space.allListOrFolder.forEach((listOrFolder) => {
-            // list is under space
-            if (!determineFolderType(listOrFolder)) {
-              const list = listOrFolder;
-              if (list.id !== listId) {
-                list.isSelected = false;
-              } else if (list.id === listId) {
-                list.isSelected = true;
-              }
-            }
-
-            // list is under folder
-            else if (determineFolderType(listOrFolder)) {
-              listOrFolder.allLists.forEach((list) => {
-                if (list.id !== listId) {
-                  list.isSelected = false;
-                } else if (list.id === listId) {
-                  list.isSelected = true;
-                }
-              });
-            }
-          })
-        );
+        draftState.defaultListId = action.payload.listId;
       });
     }
 

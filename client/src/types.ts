@@ -46,7 +46,7 @@ interface Column<T> {
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
-  teamId: number;
+  teamId?: number; // server state
   orderIndex: number;
   markAsClosed?: boolean;
 }
@@ -58,11 +58,12 @@ export type StatusColumns = StatusColumn[];
 export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
 
-export interface StatusCategory {
+export interface DefaultStatusColumnCategory {
+  id: number;
   name: string;
   statusColumns: StatusColumns;
 }
-export type StatusCategories = StatusCategory[];
+export type DefaultStatusColumnCategories = DefaultStatusColumnCategory[];
 
 export interface ColumnOptions {
   statusColumns: StatusColumns;
@@ -280,14 +281,12 @@ export interface Category {
   color: string | null;
 }
 export interface FolderCategory extends Category {
-  isOpen: boolean; // client state;
   allLists: ListCategory[];
 }
 export interface ListCategory extends Category {
-  isSelected: boolean; // client state;
   taskAmount: number | null;
-  statusColumns: StatusColumns;
   parentFolderId: number | null;
+  statusColumnsCategoryId: number;
   //   boardViewSetting?: unknown
   //   listViewSetting?: unknown
 }
@@ -296,10 +295,8 @@ export interface SpaceType {
   id: number;
   name: string;
   teamId: number;
-  isOpen: boolean; // client state
   orderIndex: number;
   isPrivate: boolean;
-  isSelected: boolean; // client state;
   color: string | null;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
@@ -311,8 +308,8 @@ export type Team = {
   color: string;
   member: User[];
   isPrivate: boolean;
-  isSelected: boolean; // client state
-  spaces: SpaceType[];
+  spaceList: SpaceType[];
+  defaultStatusColumnCategories: DefaultStatusColumnCategories;
 };
 
 export interface CreateSpaceDTO {
@@ -322,15 +319,15 @@ export interface CreateSpaceDTO {
   orderIndex: number;
   defaultStatusColumnId: number;
 }
-
 export interface User {
   id: number;
   email: string;
+  teamIds: number[];
   username: string;
-  teams: number[];
-  defaultTeam?: number;
-  defaultSpace?: number;
-  defaultList?: number;
+  defaultTeamId: number;
+  defaultSpaceId: number;
+  defaultListId: number;
+  defaultFolderId: number
 }
 
 export interface AuthenticationResponse {
@@ -354,11 +351,13 @@ export const AUTH_ACTION = {
   LOGOUT_USER: "logout_user",
 } as const;
 
-type LookUpStatusColumns = { [index: number]: StatusColumns };
 export type TeamStateType = {
-  openedListId: number | null;
-  spaceList: SpaceType[] | null;
-  lookUpStatusColumns: LookUpStatusColumns;
+  teams: Team[];
+  defaultTeamId: number;
+  defaultSpaceId: number;
+  defaultFolderId?: number;
+  defaultListId: number;
+  statusColumns: StatusColumns;
 };
 export type TeamContextType = {
   teamState: TeamStateType;
@@ -375,6 +374,16 @@ export type TeamStateActionType =
   | UpdateSelectedSpace
   | UpdateSelectedFolder;
 
+type FetchSpaceList = {
+  payload: {
+    teams: Team[];
+    defaultTeamId: number;
+    defaultSpaceId: number;
+    defaultFolderId: number;
+    defaultListId: number;
+  };
+  type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
+};
 type AddFolder = {
   payload: { spaceId: number; folderName: string };
   type: typeof TEAM_STATE_ACTION.ADD_FOLDER;
@@ -382,10 +391,6 @@ type AddFolder = {
 type AddList = {
   payload: { spaceId: number; listName: string };
   type: typeof TEAM_STATE_ACTION.ADD_LIST;
-};
-type FetchSpaceList = {
-  payload: { spaceList: SpaceType[] };
-  type: typeof TEAM_STATE_ACTION.INIT_SPACE_LIST;
 };
 type UpdateOpenedSpace = {
   payload: { spaceId: number };
@@ -411,7 +416,7 @@ type UpdateSelectedList = {
 export const TEAM_STATE_ACTION = {
   ADD_LIST: "add_list",
   ADD_FOLDER: "add_folder",
-  INIT_SPACE_LIST: "init_space_list",
+  INIT_TEAM_STATE: "init_team_state",
   UPDATE_OPENED_SPACE: "update_opened_space",
   UPDATE_SELECTED_SPACE: "update_selected_space",
   UPDATE_OPENED_FOLDER: "update_opened_folder",

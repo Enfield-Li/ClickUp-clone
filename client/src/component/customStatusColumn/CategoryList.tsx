@@ -2,11 +2,11 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
-import { StatusCategory } from "../../types";
+import { DefaultStatusColumnCategory } from "../../types";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
-  currentCategory: StatusCategory;
+  currentCategory: DefaultStatusColumnCategory;
   statusCategoriesSelected: StatusCategoriesSelected;
   setStatusCategories: React.Dispatch<
     React.SetStateAction<StatusCategoriesSelected>

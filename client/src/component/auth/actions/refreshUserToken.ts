@@ -25,7 +25,7 @@ export async function refreshUserTokenLocal(
     payload: {
       user: {
         id: 1,
-        teams: [1, 2],
+        teamIds: [1, 2],
         username: "mockUser",
         email: "mockUser@email.com",
       },

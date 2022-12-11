@@ -1,8 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { defaultStatusCategories } from "../../hook/defaultStatuses";
-import { CreateSpace, StatusCategories } from "../../types";
+import { defaultStatusColumnCategories } from "../../hook/defaultStatuses";
+import { CreateSpace, DefaultStatusColumnCategories } from "../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
@@ -12,7 +12,7 @@ type Props = {
 
 export interface StatusCategoriesSelected {
   selectedCategoryName: string;
-  statusCategories: StatusCategories;
+  statusCategories: DefaultStatusColumnCategories;
 }
 
 export default memo(StatusColumnsDisplay);
@@ -20,7 +20,7 @@ function StatusColumnsDisplay({ setCreateSpace }: Props) {
   const [statusCategories, setStatusCategories] =
     useState<StatusCategoriesSelected>({
       selectedCategoryName: "Custom",
-      statusCategories: defaultStatusCategories,
+      statusCategories: defaultStatusColumnCategories,
     });
   const selectedCategory = statusCategories.statusCategories.find(
     (category) => category.name === statusCategories.selectedCategoryName
@@ -29,7 +29,7 @@ function StatusColumnsDisplay({ setCreateSpace }: Props) {
   useEffect(() => {
     setStatusCategories({
       selectedCategoryName: "Custom",
-      statusCategories: defaultStatusCategories,
+      statusCategories: defaultStatusColumnCategories,
     });
   }, []);
 

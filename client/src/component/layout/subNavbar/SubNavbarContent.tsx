@@ -9,17 +9,19 @@ import {
 import { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import CreateSpaceModal from "./createSpace/CreateSpaceModal";
-import SpaceList from "./SpaceList";
+import Space from "./Space";
 
 type Props = {};
 
 export default memo(SubNavbarContent);
 function SubNavbarContent({}: Props) {
   const { colorMode } = useColorMode();
-  const { teamState: teamState } = useTeamStateContext();
-  const { spaceList } = teamState;
+  const { teamState } = useTeamStateContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+  const currentTeam = teamState.teams.find(
+    (team) => team.id === teamState.defaultTeamId
+  );
 
   function handleClickToSeeEveryTasks(): void {
     throw new Error("Function not implemented.");
@@ -47,9 +49,9 @@ function SubNavbarContent({}: Props) {
       </Flex>
 
       <Box>
-        {spaceList?.map((space) => (
+        {currentTeam?.spaceList?.map((space) => (
           <Box key={space.id}>
-            <SpaceList space={space} />
+            <Space space={space} />
           </Box>
         ))}
       </Box>

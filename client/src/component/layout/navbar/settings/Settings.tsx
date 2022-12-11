@@ -20,7 +20,7 @@ export default function Settings({}: Props) {
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   return (
-    <Popover>
+    <Popover isLazy>
       <PopoverTrigger>
         <Box
           width="30px"

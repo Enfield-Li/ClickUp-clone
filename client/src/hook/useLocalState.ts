@@ -22,6 +22,8 @@ interface UseLocalTasksParam {
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
   const location = useLocation();
+  console.log(location.state);
+
   let selectedListId = Number(param[TASK_BOARD_PARAM]);
 
   const [loading, setLoading] = useState(false);

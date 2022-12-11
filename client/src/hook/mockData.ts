@@ -2,18 +2,18 @@ import {
   ColumnOptions,
   CurrentWeek,
   DueDateRange,
+  FolderCategory,
   ListCategory,
   Priority,
+  SpaceType,
   StatusColumns,
   TaskList,
+  Team,
   User,
   UserInfo,
-  FolderCategory,
-  SpaceType,
-  Team,
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
-import { kanban, marketing, normal, scrum } from "./defaultStatuses";
+import { defaultStatusColumnCategories } from "./defaultStatuses";
 
 export const statusColumns1: StatusColumns = [
   { id: 1, title: "TO_DO", color: "blue.300", orderIndex: 1, teamId: 1 },
@@ -38,10 +38,9 @@ const guestUserInfo: UserInfo = { userId: 2, username: "guestUser", email: "" };
 const allFolder1List: ListCategory[] = [
   {
     id: 5,
-    statusColumns: kanban,
+    statusColumnsCategoryId: 1,
     createdAt: new Date(),
     color: "green",
-    isSelected: true,
     isPrivate: false,
     members: [userInfo, guestUserInfo],
     name: "sub list 1",
@@ -55,10 +54,9 @@ const allFolder1List: ListCategory[] = [
 const allFolder15List: ListCategory[] = [
   {
     id: 6,
-    statusColumns: marketing,
+    statusColumnsCategoryId: 2,
     createdAt: new Date(),
     color: "",
-    isSelected: false,
     isPrivate: false,
     members: [userInfo, guestUserInfo],
     name: "sub list 2",
@@ -74,9 +72,7 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
     id: 1,
     createdAt: new Date(),
     color: "",
-    isOpen: true,
     isPrivate: true,
-    isSelected: false,
     members: [userInfo, guestUserInfo],
     name: "folder1",
     owner: userInfo,
@@ -87,9 +83,7 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
     id: 1.5,
     createdAt: new Date(),
     color: "green",
-    isOpen: true,
     isPrivate: false,
-    isSelected: false,
     members: [userInfo, guestUserInfo],
     name: "folder1.5",
     owner: userInfo,
@@ -98,10 +92,9 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
   },
   {
     id: 2,
-    statusColumns: normal,
+    statusColumnsCategoryId: 3,
     createdAt: new Date(),
     color: "",
-    isSelected: false,
     isPrivate: true,
     members: [userInfo, guestUserInfo],
     name: "list1",
@@ -112,10 +105,9 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
   },
   {
     id: 4,
-    statusColumns: scrum,
+    statusColumnsCategoryId: 4,
     createdAt: new Date(),
     color: "",
-    isSelected: false,
     isPrivate: false,
     members: [userInfo, guestUserInfo],
     name: "list2",
@@ -129,10 +121,9 @@ export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
 const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
   {
     id: 3,
-    statusColumns: normal,
+    statusColumnsCategoryId: 1,
     color: "",
     isPrivate: true,
-    isSelected: false,
     createdAt: new Date(),
     members: [userInfo, guestUserInfo],
     name: "list3",
@@ -143,27 +134,35 @@ const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
   },
 ];
 
-export const initialSpaces: SpaceType[] = [
+export const initialSpaceList1: SpaceType[] = [
   {
     id: 1,
     teamId: 1,
-    isOpen: true,
     name: "space1",
     orderIndex: 1,
     color: "green",
     isPrivate: false,
-    isSelected: false,
     allListOrFolder: allSpace1ListOrFolder,
   },
   {
     id: 2,
     teamId: 1,
-    isOpen: false,
     name: "space2",
     orderIndex: 2,
     color: "yellow",
     isPrivate: true,
-    isSelected: false,
+    allListOrFolder: allSpace2ListOrFolder,
+  },
+];
+
+const initialSpaceList2: SpaceType[] = [
+  {
+    id: 2,
+    teamId: 1,
+    name: "space2",
+    orderIndex: 2,
+    color: "yellow",
+    isPrivate: true,
     allListOrFolder: allSpace2ListOrFolder,
   },
 ];
@@ -171,20 +170,33 @@ export const initialSpaces: SpaceType[] = [
 export const mockUser: User = {
   id: 1,
   username: "mockUser",
-  teams: [],
+  teamIds: [1, 2],
   email: "",
-  defaultTeam: 1,
+  defaultTeamId: 1,
 };
 
-export const team: Team = {
-  id: 1,
-  spaces: [],
-  color: "green",
-  owner: mockUser,
-  isPrivate: false,
-  name: "workspace",
-  member: [mockUser],
-};
+export const teams: Team[] = [
+  {
+    id: 1,
+    spaceList: initialSpaceList1,
+    defaultStatusColumnCategories,
+    color: "blue",
+    owner: mockUser,
+    isPrivate: false,
+    name: "1",
+    member: [mockUser],
+  },
+  {
+    id: 2,
+    spaceList: initialSpaceList2,
+    color: "yellow",
+    owner: mockUser,
+    defaultStatusColumnCategories,
+    isPrivate: false,
+    name: "2workspace",
+    member: [mockUser],
+  },
+];
 
 export const staticColumnOptions: ColumnOptions = {
   statusColumns: [],

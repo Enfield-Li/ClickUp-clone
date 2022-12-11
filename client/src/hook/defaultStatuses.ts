@@ -1,4 +1,4 @@
-import { StatusCategories, StatusColumns } from "../types";
+import { DefaultStatusColumnCategories, StatusColumns } from "../types";
 
 export const custom: StatusColumns = [
   { id: 1, title: "TO DO", color: "rgb(211, 211, 211)", orderIndex: 1 },
@@ -69,10 +69,10 @@ export const scrum: StatusColumns = [
   },
 ];
 
-export const defaultStatusCategories: StatusCategories = [
-  { name: "Custom", statusColumns: custom },
-  { name: "Normal", statusColumns: normal },
-  { name: "Kanban", statusColumns: kanban },
-  { name: "Marketing", statusColumns: marketing },
-  { name: "Scrum", statusColumns: scrum },
+export const defaultStatusColumnCategories: DefaultStatusColumnCategories = [
+  { id: 1, name: "Custom", statusColumns: custom },
+  { id: 2, name: "Normal", statusColumns: normal },
+  { id: 3, name: "Kanban", statusColumns: kanban },
+  { id: 4, name: "Marketing", statusColumns: marketing },
+  { id: 5, name: "Scrum", statusColumns: scrum },
 ];

@@ -7,13 +7,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import { StatusCategory } from "../../types";
+import { DefaultStatusColumnCategory } from "../../types";
 import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
-  selectedCategory: StatusCategory | undefined;
+  selectedCategory: DefaultStatusColumnCategory | undefined;
   setStatusCategories: React.Dispatch<
     React.SetStateAction<StatusCategoriesSelected>
   >;

@@ -10,7 +10,8 @@ export default memo(Folder);
 function Folder({ folder, spaceId }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { teamStateDispatch } = useTeamStateContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const isFolderSelected = folder.id === teamState.defaultFolderId;
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenFolder(
@@ -57,7 +58,7 @@ function Folder({ folder, spaceId }: Props) {
         <Flex alignItems="center">
           {/* Folder icon */}
           <Box mr="2" color={folder.color ? folder.color : ""}>
-            {folder.isOpen ? (
+            {isFolderSelected ? (
               <Box>
                 <i className="bi bi-folder2-open"></i>
               </Box>
@@ -97,7 +98,7 @@ function Folder({ folder, spaceId }: Props) {
         )}
       </Flex>
 
-      {folder.isOpen && (
+      {isFolderSelected && (
         <Box>
           {folder.allLists.map((list) => (
             <Box key={list.id}>

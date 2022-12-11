@@ -8,8 +8,9 @@ type Props = { list: ListCategory; isSubList?: boolean };
 export default memo(List);
 function List({ list, isSubList }: Props) {
   const { colorMode } = useColorMode();
-  const { teamStateDispatch } = useTeamStateContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgHoverColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+  const isListSelected = list.id === teamState.defaultListId;
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     teamStateDispatch({
@@ -32,8 +33,8 @@ function List({ list, isSubList }: Props) {
       ml={isSubList ? "35px" : "5"}
       justifyContent="space-between"
       onClick={handleSelectList}
-      bgColor={list.isSelected ? "customBlue.200" : ""}
-      _hover={list.isSelected ? undefined : { bgColor: bgHoverColor }}
+      bgColor={isListSelected ? "customBlue.200" : ""}
+      _hover={isListSelected ? undefined : { bgColor: bgHoverColor }}
     >
       <Box
         left="-5px"
@@ -57,7 +58,7 @@ function List({ list, isSubList }: Props) {
       <Center
         pr="2"
         fontSize="12px"
-        color={list.isSelected ? "lightMain.200" : "gray"}
+        color={isListSelected ? "lightMain.200" : "gray"}
       >
         {list.taskAmount}
       </Center>

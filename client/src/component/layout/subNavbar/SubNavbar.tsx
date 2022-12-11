@@ -12,7 +12,7 @@ import { CLIENT_ROUTE } from "../../../constant";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { TEAM_STATE_ACTION } from "../../../types";
-import { fetchSpaceListLocal } from "../../task/actions/fetchSpaceList";
+import { fetchTeamListLocal } from "../../task/actions/fetchSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -35,9 +35,8 @@ function SubNavbar({
 }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { authState } = useAuthContext();
+  const { teamState } = useTeamStateContext();
   const [hidden, setHidden] = useState(!isOpen);
-  const { teamStateDispatch, teamState } = useTeamStateContext();
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
@@ -59,18 +58,16 @@ function SubNavbar({
 
   // sync up url with openedListId
   useEffect(() => {
-    const selectedListId = teamState.openedListId;
-
-    if (selectedListId) {
-      navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
+    if (teamState.teams.length) {
+      navigate(CLIENT_ROUTE.TASK_BOARD + `/${teamState.defaultListId}`, {
         replace: true,
         state: {
           isNewUser: location.state?.isNewUser,
-          statusColumns: teamState.lookUpStatusColumns[selectedListId],
+          statusColumns: teamState.statusColumns,
         },
       });
     }
-  }, [teamState.openedListId]);
+  }, [teamState]);
 
   function handleCloseSubNavbar() {
     onClose();
