@@ -281,6 +281,7 @@ export interface Category {
   color: string | null;
 }
 export interface FolderCategory extends Category {
+  isOpen: boolean | null;
   allLists: ListCategory[];
 }
 export interface ListCategory extends Category {
@@ -298,6 +299,7 @@ export interface SpaceType {
   orderIndex: number;
   isPrivate: boolean;
   color: string | null;
+  isOpen: boolean | null;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
@@ -325,9 +327,9 @@ export interface User {
   teamIds: number[];
   username: string;
   defaultTeamId: number;
-  defaultSpaceId: number;
+  defaultSpaceIds: number[];
+  defaultFolderIds: number[];
   defaultListId: number;
-  defaultFolderId: number
 }
 
 export interface AuthenticationResponse {
@@ -354,8 +356,6 @@ export const AUTH_ACTION = {
 export type TeamStateType = {
   teams: Team[];
   defaultTeamId: number;
-  defaultSpaceId: number;
-  defaultFolderId?: number;
   defaultListId: number;
   statusColumns: StatusColumns;
 };
@@ -375,42 +375,42 @@ export type TeamStateActionType =
   | UpdateSelectedFolder;
 
 type FetchSpaceList = {
+  type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
   payload: {
     teams: Team[];
     defaultTeamId: number;
-    defaultSpaceId: number;
-    defaultFolderId: number;
+    defaultSpaceIds: number[];
+    defaultFolderIds: number[];
     defaultListId: number;
   };
-  type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
 };
 type AddFolder = {
-  payload: { spaceId: number; folderName: string };
   type: typeof TEAM_STATE_ACTION.ADD_FOLDER;
+  payload: { spaceId: number; folderName: string };
 };
 type AddList = {
-  payload: { spaceId: number; listName: string };
   type: typeof TEAM_STATE_ACTION.ADD_LIST;
+  payload: { spaceId: number; listName: string };
 };
 type UpdateOpenedSpace = {
-  payload: { spaceId: number };
   type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_SPACE;
+  payload: { spaceId: number };
 };
 type UpdateSelectedSpace = {
-  payload: { spaceId: number };
   type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE;
+  payload: { spaceId: number };
 };
 type UpdateOpenedFolder = {
-  payload: { spaceId: number; folderId: number };
   type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER;
+  payload: { spaceId: number; folderId: number };
 };
 type UpdateSelectedFolder = {
-  payload: { spaceId: number; folderId: number };
   type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER;
+  payload: { spaceId: number; folderId: number };
 };
 type UpdateSelectedList = {
-  payload: { listId: number };
   type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_LIST;
+  payload: { listId: number };
 };
 
 export const TEAM_STATE_ACTION = {

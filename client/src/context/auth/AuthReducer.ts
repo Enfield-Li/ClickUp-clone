@@ -11,8 +11,7 @@ export default function authReducer(
   switch (authAction.type) {
     case AUTH_ACTION.LOGIN_USER: {
       return produce(authState, (draftState) => {
-        const { user } = authAction.payload;
-        draftState.user = { id: user.id, username: user.username };
+        draftState.user = authAction.payload.user;
       });
     }
 

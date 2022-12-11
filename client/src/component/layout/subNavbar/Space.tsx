@@ -11,7 +11,6 @@ function Space({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const isSpaceSelected = space.id === teamState.defaultSpaceId;
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleOpenSpace(
@@ -51,7 +50,7 @@ function Space({ space }: Props) {
 
         {/* Triangle */}
         <Center fontSize="8px" color="gray" mr="1" pl="1">
-          {isSpaceSelected ? (
+          {space.isOpen ? (
             <Box>
               <i className="bi bi-caret-down-fill"></i>
             </Box>
@@ -112,11 +111,13 @@ function Space({ space }: Props) {
           )}
         </Flex>
       </Flex>
-      {space.allListOrFolder.map((folder) => (
-        <Box key={folder.id} hidden={!isSpaceSelected}>
-          <FolderAndList spaceId={space.id} folder={folder} />
-        </Box>
-      ))}
+
+      {space.isOpen &&
+        space.allListOrFolder.map((folder) => (
+          <Box key={folder.id}>
+            <FolderAndList spaceId={space.id} folder={folder} />
+          </Box>
+        ))}
     </Box>
   );
 }

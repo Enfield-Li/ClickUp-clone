@@ -8,6 +8,7 @@ import {
   ListCategory,
   Team,
 } from "../../types";
+import { deepCopy } from "../../utils/deepCopy";
 
 export default function teamReducer(
   spaceListState: TeamStateType,
@@ -19,15 +20,14 @@ export default function teamReducer(
         const {
           teams,
           defaultTeamId,
-          defaultSpaceId,
-          defaultFolderId,
+          defaultSpaceIds,
+          defaultFolderIds,
           defaultListId,
         } = action.payload;
 
-        draftState.teams = teams;
+        // draftState.teams = teams;
+        draftState.teams = deepCopy(teams); // hack
         draftState.defaultTeamId = defaultTeamId;
-        draftState.defaultSpaceId = defaultSpaceId;
-        draftState.defaultFolderId = defaultFolderId;
         draftState.defaultListId = defaultListId;
 
         function setStatusColumn(
@@ -52,35 +52,67 @@ export default function teamReducer(
         draftState.teams.forEach(
           (team) =>
             team.id === defaultTeamId &&
-            team.spaceList.forEach(
-              (space) =>
-                space.id === defaultSpaceId &&
+            team.spaceList.forEach((space) => {
+              if (space.id in defaultSpaceIds) {
+                space.isOpen = true;
                 space.allListOrFolder.forEach((listOrFolder) => {
                   const isFolder = determineFolderType(listOrFolder);
 
-                  if (isFolder && listOrFolder.id === defaultFolderId) {
+                  if (isFolder && listOrFolder.id in defaultFolderIds) {
+                    listOrFolder.isOpen = true;
                     listOrFolder.allLists.forEach((list) => {
                       setStatusColumn(team, list, defaultListId);
                     });
                   } else if (!isFolder) {
                     setStatusColumn(team, listOrFolder, defaultListId);
                   }
-                })
-            )
+                });
+              }
+            })
         );
       });
     }
 
     case TEAM_STATE_ACTION.UPDATE_OPENED_SPACE: {
       return produce(spaceListState, (draftState) => {
-        draftState.defaultSpaceId = action.payload.spaceId;
+        const { spaceId } = action.payload;
+
+        draftState.teams.forEach((team) => {
+          if (team.id === draftState.defaultTeamId) {
+            team.spaceList?.forEach((space) => {
+              // update previous space.isOpen to false
+              if (space.isOpen && space.id !== spaceId) {
+                space.isOpen = false;
+              }
+              if (space.id === spaceId) {
+                space.isOpen = !space.isOpen;
+              }
+            });
+          }
+        });
       });
     }
 
     case TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER: {
       return produce(spaceListState, (draftState) => {
-        draftState.defaultSpaceId = action.payload.spaceId;
-        draftState.defaultFolderId = action.payload.folderId;
+        const { spaceId, folderId } = action.payload;
+
+        draftState.teams.forEach((team) => {
+          if (team.id === draftState.defaultTeamId) {
+            team.spaceList?.forEach((space) => {
+              if (space.id === spaceId) {
+                space.allListOrFolder.forEach((listOrFolder) => {
+                  const isFolder = determineFolderType(listOrFolder);
+                  const isCurrentFolder = listOrFolder.id === folderId;
+
+                  if (isFolder && isCurrentFolder) {
+                    listOrFolder.isOpen = !listOrFolder.isOpen;
+                  }
+                });
+              }
+            });
+          }
+        });
       });
     }
 

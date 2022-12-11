@@ -10,22 +10,20 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
-  statusColumns: [],
-  defaultListId: 0,
-  defaultSpaceId: 0,
   defaultTeamId: 0,
+  defaultListId: 0,
+  statusColumns: [],
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {
-  const [globalState, globalDispatch] = useReducer(
+  const [teamState, teamStateDispatch] = useReducer(
     teamReducer,
     initialTeamContextState
   );
+  console.log({ teamState });
 
   return (
-    <TeamContext.Provider
-      value={{ teamState: globalState, teamStateDispatch: globalDispatch }}
-    >
+    <TeamContext.Provider value={{ teamState, teamStateDispatch }}>
       {children}
     </TeamContext.Provider>
   );
