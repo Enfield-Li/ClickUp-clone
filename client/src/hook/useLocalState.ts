@@ -24,7 +24,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const location = useLocation();
 
   let selectedListId = Number(param[TASK_BOARD_PARAM]);
-  //   console.log({ selectedListId, locationState: location.state });
+  console.log({ selectedListId, locationState: location.state });
 
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
@@ -36,48 +36,51 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
     initLocalState();
 
     async function initLocalState() {
-      if (selectedListId && location.state) {
-        setLoading(true);
-
-        const statusColumnsDataFromApi: StatusColumns =
-          location.state.statusColumns;
-
-        const columnDataFromApi: ColumnOptions = {
-          dueDateColumns: staticColumnOptions.dueDateColumns,
-          priorityColumns: staticColumnOptions.priorityColumns,
-          statusColumns: statusColumnsDataFromApi,
-        };
-
-        const { reorderedDueDateColumns, reorderedStatusColumns } =
-          initColumns(columnDataFromApi);
-
-        const columnOptions: ColumnOptions = {
-          ...columnDataFromApi,
-          dueDateColumns: reorderedDueDateColumns,
-          statusColumns: reorderedStatusColumns,
-        };
-
-        const listDataFromApi =
-          selectedListId % 2 ? space1TaskList : space2TaskList;
-
-        // init taskEvents and convert expectedDueDate to dueDate
-        const taskList = processTaskList(
-          reorderedDueDateColumns,
-          listDataFromApi
-        );
-
-        const orderedTasks = groupTaskListOnSortBy(
-          taskList,
-          columnDataFromApi[`${sortBy}Columns`],
-          sortBy
-        );
-
-        setTaskStateContext({ columnOptions, setTaskState, sortBy });
-        setTaskState({ orderedTasks, columnOptions });
-
-        await sleep(0);
-        setLoading(false);
+      if (!selectedListId && !location.state) {
+        setTaskState(undefined);
+        setTaskStateContext(null);
+        return;
       }
+      setLoading(true);
+
+      const statusColumnsDataFromApi: StatusColumns =
+        location.state.statusColumns;
+
+      const columnDataFromApi: ColumnOptions = {
+        dueDateColumns: staticColumnOptions.dueDateColumns,
+        priorityColumns: staticColumnOptions.priorityColumns,
+        statusColumns: statusColumnsDataFromApi,
+      };
+
+      const { reorderedDueDateColumns, reorderedStatusColumns } =
+        initColumns(columnDataFromApi);
+
+      const columnOptions: ColumnOptions = {
+        ...columnDataFromApi,
+        dueDateColumns: reorderedDueDateColumns,
+        statusColumns: reorderedStatusColumns,
+      };
+
+      const listDataFromApi =
+        selectedListId % 2 ? space1TaskList : space2TaskList;
+
+      // init taskEvents and convert expectedDueDate to dueDate
+      const taskList = processTaskList(
+        reorderedDueDateColumns,
+        listDataFromApi
+      );
+
+      const orderedTasks = groupTaskListOnSortBy(
+        taskList,
+        columnDataFromApi[`${sortBy}Columns`],
+        sortBy
+      );
+
+      setTaskStateContext({ columnOptions, setTaskState, sortBy });
+      setTaskState({ orderedTasks, columnOptions });
+
+      await sleep(0);
+      setLoading(false);
     }
   }, [selectedListId, location.state]);
 

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
-import TeamList from "./TeamList";
+import JoinedTeamList from "./JoinedTeamList";
 import TeamSettings from "./TeamSettings";
 
 type Props = {};
@@ -52,7 +52,7 @@ export default function ApplicationSettings({}: Props) {
               borderBottomWidth="1px"
               borderColor={borderColor}
             >
-              <TeamList onClose={onClose} />
+              <JoinedTeamList onClose={onClose} />
 
               <Flex flexGrow="1" height="100%">
                 <TeamSettings />

@@ -228,6 +228,13 @@ export const initPanelActivity: PanelActivity = {
       folderIds: [50],
       listId: 60,
     },
+    {
+      id:33,
+      teamId: 3,
+      spaceIds: [ ],
+      folderIds: [ ],
+      listId: null,
+    },
   ],
 };
 
@@ -250,6 +257,16 @@ export const teams: Team[] = [
     defaultStatusColumnCategories,
     isPrivate: false,
     name: "2workspace",
+    member: [mockUser],
+  },
+  {
+    id: 3,
+    spaceList: [],
+    color: "purple",
+    owner: mockUser,
+    defaultStatusColumnCategories,
+    isPrivate: false,
+    name: "3workspace",
     member: [mockUser],
   },
 ];

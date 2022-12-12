@@ -2,7 +2,7 @@ import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { SpaceType, TEAM_STATE_ACTION } from "../../../types";
-import FolderAndList from "./folderAndList/FolderAndList";
+import SpaceContent from "./folderAndList/SpaceContent";
 
 type Props = { space: SpaceType };
 
@@ -112,12 +112,7 @@ function Space({ space }: Props) {
         </Flex>
       </Flex>
 
-      {space.isOpen &&
-        space.allListOrFolder.map((folder) => (
-          <Box key={folder.id}>
-            <FolderAndList spaceId={space.id} folder={folder} />
-          </Box>
-        ))}
+      {space.isOpen && <SpaceContent space={space} />}
     </Box>
   );
 }

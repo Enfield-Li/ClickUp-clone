@@ -4,10 +4,10 @@ import { TEAM_STATE_ACTION } from "../../../../types";
 
 type Props = { onClose: () => void };
 
-export default function TeamList({ onClose }: Props) {
+export default function JoinedTeamList({ onClose }: Props) {
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const bgColor = useColorModeValue("lightMain.100", "darkMain.200");
+  const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   function handleSelectTeam(teamId: number) {

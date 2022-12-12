@@ -355,7 +355,7 @@ export type TeamActivity = {
   teamId: number;
   spaceIds: number[];
   folderIds: number[];
-  listId: number;
+  listId: number | null;
 };
 export type PanelActivity = {
   id: number;
@@ -365,8 +365,8 @@ export type PanelActivity = {
 };
 type ActiveTeamState = {
   selectedTeamId: number;
-  selectedListId: number;
-  currentStatusColumns: StatusColumns;
+  selectedListId: number | null;
+  currentStatusColumns: StatusColumns | null;
 };
 
 export type TeamStateType = {

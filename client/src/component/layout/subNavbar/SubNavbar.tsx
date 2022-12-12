@@ -50,10 +50,12 @@ function SubNavbar({
           `/${teamState.activeTeamState.selectedListId}`,
         {
           replace: true,
-          state: {
-            isNewUser: location.state?.isNewUser,
-            statusColumns: teamState.activeTeamState.currentStatusColumns,
-          },
+          state: teamState.activeTeamState.selectedListId
+            ? {
+                isNewUser: location.state?.isNewUser,
+                statusColumns: teamState.activeTeamState.currentStatusColumns,
+              }
+            : null,
         }
       );
     }

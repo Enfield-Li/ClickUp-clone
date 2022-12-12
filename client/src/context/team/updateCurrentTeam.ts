@@ -56,7 +56,7 @@ function setStatusColumn(
   draftState: WritableDraft<TeamStateType>,
   team: WritableDraft<Team>,
   list: ListCategory,
-  selectedListId: number
+  selectedListId: number | null
 ) {
   if (list.id === selectedListId) {
     const statusColumnCategory = team.defaultStatusColumnCategories.find(
@@ -74,7 +74,7 @@ type ValidateTeamParam = {
   teamId: number;
   spaceIds: number[];
   folderIds: number[];
-  listId: number;
+  listId: number | null;
 };
 
 function validateTeamActivities({

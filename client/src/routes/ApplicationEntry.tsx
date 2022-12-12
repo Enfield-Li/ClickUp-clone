@@ -1,5 +1,5 @@
 import { Flex, Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../component/layout/Header";
 import NavBar from "../component/layout/NavBar";
@@ -14,7 +14,8 @@ export enum Section {
   DEV = "dev",
 }
 
-export default function ApplicationEntry({}: Props) {
+export default memo(ApplicationEntry);
+function ApplicationEntry({}: Props) {
   const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
 
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
