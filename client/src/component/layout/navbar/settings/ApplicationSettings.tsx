@@ -25,10 +25,14 @@ export default function ApplicationSettings({}: Props) {
 
   const currentTeamId = teamState.activeTeamState.selectedTeamId;
   const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
+  console.log({ currentTeamId, teams: teamState.teams });
+
+  //   if (!currentTeam) throw new Error("Current team does not exist.");
+
   const isTeamOwner = currentTeam?.owner.id === authState.user?.id;
 
   return (
-    <Popover isLazy>
+    <Popover isLazy placement="top-start">
       {({ onClose }: { onClose: () => void }) => (
         <>
           <PopoverTrigger>
@@ -42,20 +46,19 @@ export default function ApplicationSettings({}: Props) {
           </PopoverTrigger>
 
           <PopoverContent
-            left="-15px"
+            left="-0.5"
             bottom="-45px"
+            fontSize="12px"
             shadow="dark-lg"
-            position="absolute"
             bgColor={bgColor}
             color={fontColor}
             width={isTeamOwner ? "410px" : "225px"}
-            height={isTeamOwner ? "410px" : "470px"}
+            height={isTeamOwner ? "405px" : "470px"}
           >
             <PopoverCloseButton mr="-1" />
 
             <Flex
               height="90%"
-              fontSize="12px"
               borderTopRadius="md"
               borderBottomWidth="1px"
               borderColor={borderColor}
@@ -63,8 +66,8 @@ export default function ApplicationSettings({}: Props) {
               <JoinedTeamList onClose={onClose} />
 
               <Flex flexGrow="1" height="100%">
-                {isTeamOwner && <TeamSettings />}
-                <AccountSettings />
+                {isTeamOwner && <TeamSettings currentTeam={currentTeam} />}
+                <AccountSettings isTeamOwner={isTeamOwner} />
               </Flex>
             </Flex>
 

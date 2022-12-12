@@ -1,4 +1,4 @@
-import { Flex, Center, useColorModeValue } from "@chakra-ui/react";
+import { Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import AppIcon from "./AppIcon";
 
 type Props = { isTeamOwner: boolean };
@@ -11,7 +11,6 @@ export default function DownloadApp({ isTeamOwner }: Props) {
     <Flex
       px="4"
       height="10%"
-      fontSize="5px"
       bgColor={bgColor}
       color={fontColor}
       alignItems="center"

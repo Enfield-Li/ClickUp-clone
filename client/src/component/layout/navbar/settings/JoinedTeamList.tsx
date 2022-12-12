@@ -1,4 +1,10 @@
-import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Tooltip,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { TEAM_STATE_ACTION } from "../../../../types";
 
@@ -22,7 +28,7 @@ export default function JoinedTeamList({ onClose }: Props) {
     }, 100);
   }
 
-  function handleAddTeam(): void {
+  function handleAddTeam() {
     throw new Error("Function not implemented.");
   }
 
@@ -41,7 +47,7 @@ export default function JoinedTeamList({ onClose }: Props) {
         {teamState.teams.map((team) => (
           <Center
             p="2px"
-            my="3px"
+            my="1px"
             key={team.id}
             rounded="full"
             cursor="pointer"
@@ -64,23 +70,32 @@ export default function JoinedTeamList({ onClose }: Props) {
           </Center>
         ))}
 
-        <Center
-          my="3px"
-          pb="3px"
-          width="26px"
-          height="26px"
-          fontSize="sm"
-          rounded="full"
-          cursor="pointer"
-          borderWidth="1px"
-          color="purple.500"
-          borderStyle="dashed"
-          fontWeight="extrabold"
-          borderColor="purple.500"
-          onClick={() => handleAddTeam()}
+        <Tooltip
+          ml="2"
+          hasArrow
+          rounded="md"
+          arrowSize={6}
+          placement="right"
+          label="Add Workspace"
         >
-          +
-        </Center>
+          <Center
+            my="3px"
+            pb="3px"
+            width="26px"
+            height="26px"
+            fontSize="sm"
+            rounded="full"
+            cursor="pointer"
+            borderWidth="1px"
+            color="purple.400"
+            borderStyle="dashed"
+            fontWeight="extrabold"
+            borderColor="purple.400"
+            onClick={() => handleAddTeam()}
+          >
+            +
+          </Center>
+        </Tooltip>
       </Flex>
     </Box>
   );

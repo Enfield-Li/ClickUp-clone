@@ -1,30 +1,27 @@
-import {
-  IconButton,
-  IconButtonProps,
-  useColorMode,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import * as React from "react";
+import { IconButton, useColorModeValue } from "@chakra-ui/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
-type ColorModeSwitcherProps = Omit<IconButtonProps, "aria-label">;
+type Props = {};
 
 // https://stackoverflow.com/questions/64558533/changing-the-dark-mode-color-in-chakra-ui
-export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = (props) => {
-  const { toggleColorMode } = useColorMode();
+export default function ColorModeSwitcher({}: Props) {
   const text = useColorModeValue("dark", "light");
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 
   return (
     <IconButton
+      mr="-2"
       size="sm"
+      _hover={{}}
+      _active={{}}
       fontSize="md"
       variant="ghost"
       color="current"
-      onClick={toggleColorMode}
+      overflow="hidden"
+      width="fit-content"
+      height="fit-content"
       icon={<SwitchIcon />}
       aria-label={`Switch to ${text} mode`}
-      {...props}
     />
   );
-};
+}
