@@ -24,13 +24,6 @@ export default function teamReducer(
         draftState.teams = deepCopy(teams); // hack
         draftState.panelActivity.teamActivities = teamActivities;
 
-        const targetTeamActivity = teamActivities.find(
-          (teamActivity) => teamActivity.teamId === defaultTeamId
-        );
-        if (!targetTeamActivity)
-          throw new Error(errorMsg + "default team does not exist");
-        const { folderIds, listId, spaceIds } = targetTeamActivity;
-
         updateActiveTeamState({
           draftState,
           teamId: defaultTeamId,

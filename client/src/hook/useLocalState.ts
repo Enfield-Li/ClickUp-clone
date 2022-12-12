@@ -22,9 +22,9 @@ interface UseLocalTasksParam {
 export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const param = useParams();
   const location = useLocation();
-  console.log(param);
 
   let selectedListId = Number(param[TASK_BOARD_PARAM]);
+  //   console.log({ selectedListId, locationState: location.state });
 
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
@@ -75,11 +75,11 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
         setTaskStateContext({ columnOptions, setTaskState, sortBy });
         setTaskState({ orderedTasks, columnOptions });
 
-        await sleep(10);
+        await sleep(0);
         setLoading(false);
       }
     }
-  }, [selectedListId, location]);
+  }, [selectedListId, location.state]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;
@@ -104,7 +104,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
           ),
         });
 
-        await sleep(10);
+        await sleep(0);
         setLoading(false);
       }
     }

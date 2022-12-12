@@ -5,11 +5,11 @@ import NavBar from "../component/layout/NavBar";
 import { CLIENT_ROUTE } from "../constant";
 import renderInProvider from "./test-utils";
 
-const navigate = jest.fn();
-beforeEach(() => {
-  // https://stackoverflow.com/a/72289488/16648127
-  jest.spyOn(router, "useNavigate").mockImplementation(() => navigate);
-});
+// const navigate = jest.fn();
+// beforeEach(() => {
+//   // https://stackoverflow.com/a/72289488/16648127
+//   jest.spyOn(router, "useNavigate").mockImplementation(() => navigate);
+// });
 
 describe("App", () => {
 //   test("renders", () => {
