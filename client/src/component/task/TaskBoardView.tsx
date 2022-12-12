@@ -55,7 +55,7 @@ function TaskBoardView({ sortBy }: Props) {
 
   if (!taskState)
     return (
-      <Center flexGrow={1}>
+      <Center flexGrow={1} mt="-30px">
         <CreateListPanel />
       </Center>
     );

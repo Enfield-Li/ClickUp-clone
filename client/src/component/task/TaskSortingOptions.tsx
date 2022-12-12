@@ -9,7 +9,7 @@ type Props = {
 
 export default function TaskSortingOptions({ sortBy, setSortBy }: Props) {
   return (
-    <Flex p={2} mx={3}>
+    <Flex p={2} mx={3} height="40px" overflow="hidden">
       <Box>Task navigation</Box>
 
       <Spacer />

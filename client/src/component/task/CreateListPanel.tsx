@@ -1,5 +1,4 @@
 import { Box, Button, Center } from "@chakra-ui/react";
-import React from "react";
 import EmptySpaceSVG from "../../media/EmptySpaceSVG";
 
 type Props = {};
@@ -11,7 +10,7 @@ export default function CreateListPanel({}: Props) {
         <EmptySpaceSVG />
       </Box>
 
-      <Box mt="3" mb="5" color="lightMain.300">
+      <Box mt="3" mb="4" color="lightMain.300">
         This Space is empty. Create a List to get started.
       </Box>
 
@@ -22,6 +21,9 @@ export default function CreateListPanel({}: Props) {
         color="lightMain.100"
         fontWeight="semibold"
         bgColor="customBlue.200"
+        _hover={{ bgColor: "customBlue.100" }}
+        _active={{}}
+        _focus={{}}
       >
         + Create List
       </Button>

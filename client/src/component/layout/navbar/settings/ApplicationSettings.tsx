@@ -7,6 +7,8 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
+import useAuthContext from "../../../../context/auth/useAuthContext";
+import useTeamStateContext from "../../../../context/team/useTeamContext";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
 import JoinedTeamList from "./JoinedTeamList";
@@ -15,9 +17,15 @@ import TeamSettings from "./TeamSettings";
 type Props = {};
 
 export default function ApplicationSettings({}: Props) {
+  const { authState } = useAuthContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
-  const bgColor = useColorModeValue("lightMain.100", "darkMain.200");
+  const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
+
+  const currentTeamId = teamState.activeTeamState.selectedTeamId;
+  const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
+  const isTeamOwner = currentTeam?.owner.id === authState.user?.id;
 
   return (
     <Popover isLazy>
@@ -34,14 +42,14 @@ export default function ApplicationSettings({}: Props) {
           </PopoverTrigger>
 
           <PopoverContent
-            left="-20px"
-            width="400px"
-            height="400px"
+            left="-15px"
             bottom="-45px"
             shadow="dark-lg"
             position="absolute"
             bgColor={bgColor}
             color={fontColor}
+            width={isTeamOwner ? "410px" : "225px"}
+            height={isTeamOwner ? "410px" : "470px"}
           >
             <PopoverCloseButton mr="-1" />
 
@@ -55,12 +63,12 @@ export default function ApplicationSettings({}: Props) {
               <JoinedTeamList onClose={onClose} />
 
               <Flex flexGrow="1" height="100%">
-                <TeamSettings />
+                {isTeamOwner && <TeamSettings />}
                 <AccountSettings />
               </Flex>
             </Flex>
 
-            <DownloadApp />
+            <DownloadApp isTeamOwner={isTeamOwner} />
           </PopoverContent>
         </>
       )}

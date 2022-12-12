@@ -1,8 +1,12 @@
 import { Box, Tooltip } from "@chakra-ui/react";
 
-type Props = { children: React.ReactNode; iconName: string };
+type Props = {
+  iconName: string;
+  isTeamOwner: boolean;
+  children: React.ReactNode;
+};
 
-export default function AppIcon({ children, iconName }: Props) {
+export default function AppIcon({ children, iconName, isTeamOwner }: Props) {
   return (
     <Tooltip
       mb="-1"
@@ -13,10 +17,10 @@ export default function AppIcon({ children, iconName }: Props) {
       fontWeight="semibold"
     >
       <Box
-        mx="6px"
-        fontSize="16px"
         cursor="not-allowed"
         _hover={{ color: "purple.500" }}
+        mx={isTeamOwner ? "6px" : "3px"}
+        fontSize={!isTeamOwner ? "12px" : "16px"}
       >
         {children}
       </Box>

@@ -11,7 +11,7 @@ export default function TeamSettings({}: Props) {
       py="4"
       width="50%"
       height="100%"
-      borderRightWidth="1px"
+      borderRightWidth="0.5px"
       borderColor={borderColor}
     >
       <Box>team</Box>

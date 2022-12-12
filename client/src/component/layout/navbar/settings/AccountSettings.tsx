@@ -5,7 +5,7 @@ type Props = {};
 
 export default function AccountSettings({}: Props) {
   return (
-    <Box px="4" py="4" width="50%" height="100%" borderTopRightRadius="md">
+    <Box px="4" py="4" flexGrow="1" height="100%" borderTopRightRadius="md">
       <Box>account</Box>
 
       <Flex alignItems="center" justifyContent="space-between">

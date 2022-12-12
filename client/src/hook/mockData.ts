@@ -208,6 +208,12 @@ export const mockUser: User = {
   email: "",
   joinedTeamIds: [1, 2],
 };
+const guestUser: User = {
+  id: 2,
+  username: "guestUser",
+  email: "",
+  joinedTeamIds: [1, 2],
+};
 
 export const initPanelActivity: PanelActivity = {
   id: 1,
@@ -229,10 +235,10 @@ export const initPanelActivity: PanelActivity = {
       listId: 60,
     },
     {
-      id:33,
+      id: 33,
       teamId: 3,
-      spaceIds: [ ],
-      folderIds: [ ],
+      spaceIds: [],
+      folderIds: [],
       listId: null,
     },
   ],
@@ -247,7 +253,7 @@ export const teams: Team[] = [
     owner: mockUser,
     isPrivate: false,
     name: "1",
-    member: [mockUser],
+    member: [mockUser, guestUser],
   },
   {
     id: 2,
@@ -257,17 +263,17 @@ export const teams: Team[] = [
     defaultStatusColumnCategories,
     isPrivate: false,
     name: "2workspace",
-    member: [mockUser],
+    member: [mockUser, guestUser],
   },
   {
     id: 3,
     spaceList: [],
     color: "purple",
-    owner: mockUser,
+    owner: guestUser,
     defaultStatusColumnCategories,
     isPrivate: false,
     name: "3workspace",
-    member: [mockUser],
+    member: [mockUser, guestUser],
   },
 ];
 
