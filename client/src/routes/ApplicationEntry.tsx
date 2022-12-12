@@ -29,8 +29,10 @@ function ApplicationEntry({}: Props) {
       </TeamStateProvider>
 
       {/* Header && Main */}
-      <Box
-        width={"100%"}
+      <Flex
+        width="100%"
+        height="100%"
+        flexDir="column"
         overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
       >
         <Box role="heading">
@@ -41,10 +43,10 @@ function ApplicationEntry({}: Props) {
         </Box>
 
         {/* Main content */}
-        <Box role="main">
+        <Box role="main" flexGrow="1">
           <MainContent />
         </Box>
-      </Box>
+      </Flex>
     </Flex>
   );
 }

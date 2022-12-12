@@ -212,7 +212,7 @@ export const mockUser: User = {
 export const initPanelActivity: PanelActivity = {
   id: 1,
   userId: 1,
-  defaultTeamId: 1,
+  defaultTeamId: 3,
   teamActivities: [
     {
       id: 11,

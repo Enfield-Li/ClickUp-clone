@@ -1,4 +1,4 @@
-import { useDisclosure } from "@chakra-ui/react";
+import { Flex, useDisclosure } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
@@ -26,12 +26,12 @@ function TaskView({}: Props) {
   }, [location]);
 
   return (
-    <>
+    <Flex flexDir="column" height="100%">
       <TaskSortingOptions sortBy={sortBy} setSortBy={setSortBy} />
       <TaskBoardView sortBy={sortBy} />
 
       {isModalOpen && <TaskDetailsModal />}
       {isOpen && <WorkSpaceEntryModal isOpen={isOpen} onClose={onClose} />}
-    </>
+    </Flex>
   );
 }

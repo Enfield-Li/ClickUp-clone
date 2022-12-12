@@ -24,7 +24,7 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
   const location = useLocation();
 
   let selectedListId = Number(param[TASK_BOARD_PARAM]);
-  console.log({ selectedListId, locationState: location.state });
+  //   console.log({ selectedListId, locationState: location.state });
 
   const [loading, setLoading] = useState(false);
   const [taskState, setTaskState] = useState<TaskState>();
@@ -37,6 +37,8 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
 
     async function initLocalState() {
       if (!selectedListId && !location.state) {
+        console.log("here");
+
         setTaskState(undefined);
         setTaskStateContext(null);
         return;
@@ -90,26 +92,28 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
     updateLocalState();
 
     async function updateLocalState() {
+      if (!taskState || !taskStateContext) {
+        return;
+      }
+
       setLoading(true);
 
-      if (taskState && taskStateContext) {
-        setTaskStateContext({
-          ...taskStateContext,
-          sortBy,
-        });
+      setTaskStateContext({
+        ...taskStateContext,
+        sortBy,
+      });
 
-        setTaskState({
-          ...taskState,
-          orderedTasks: groupTaskListOnSortBy(
-            collectAllTasks(taskState.orderedTasks),
-            taskState.columnOptions[`${sortBy}Columns`],
-            sortBy
-          ),
-        });
+      setTaskState({
+        ...taskState,
+        orderedTasks: groupTaskListOnSortBy(
+          collectAllTasks(taskState.orderedTasks),
+          taskState.columnOptions[`${sortBy}Columns`],
+          sortBy
+        ),
+      });
 
-        await sleep(0);
-        setLoading(false);
-      }
+      await sleep(0);
+      setLoading(false);
     }
   }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
 

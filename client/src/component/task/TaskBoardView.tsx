@@ -23,6 +23,7 @@ import {
   getLookUpReorderedColumnTable,
 } from "./actions/taskProcessing";
 import Column from "./Column";
+import CreateListPanel from "./CreateListPanel";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
 
 type Props = {
@@ -34,6 +35,8 @@ function TaskBoardView({ sortBy }: Props) {
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
   const { taskState, loading, setTaskState } = useLocalTasks({ sortBy });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+  console.log(loading);
+
   //   console.log(taskState);
 
   const memHandleDragEnd = useCallback(
@@ -43,10 +46,17 @@ function TaskBoardView({ sortBy }: Props) {
     [taskState, sortBy]
   );
 
-  if (!taskState || loading)
+  if (loading)
     return (
       <Center>
         <Spinner />
+      </Center>
+    );
+
+  if (!taskState)
+    return (
+      <Center flexGrow={1}>
+        <CreateListPanel />
       </Center>
     );
 

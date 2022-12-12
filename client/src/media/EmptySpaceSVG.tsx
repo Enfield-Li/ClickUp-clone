@@ -41,17 +41,17 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 41.4)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M100.19 49.16H40.54V53h59.65v-3.84z"
         fill="#E9E9E9"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M78.12 31H31v3.84h47.12V31z"
         fill="#4FBDFA"
       />
@@ -79,7 +79,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="462.24"
@@ -119,11 +119,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 59.3)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M171.76 67.05H40.54v3.84h131.22v-3.84z"
         fill="#E9E9E9"
       />
@@ -135,7 +135,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="468.2"
@@ -167,11 +167,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 77.19)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M124.05 84.94h-83.5v3.84h83.5v-3.84z"
         fill="#E9E9E9"
       />
@@ -205,11 +205,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 95.08)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M171.76 102.84H40.54v3.84h131.22v-3.84z"
         fill="#E9E9E9"
       />
@@ -243,11 +243,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 112.98)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M124.05 120.73h-83.5v3.84h83.5v-3.84z"
         fill="#E9E9E9"
       />
@@ -267,7 +267,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="462.24"
@@ -307,17 +307,17 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 158.3)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M100.19 166.06H40.54v3.84h59.65v-3.84z"
         fill="#E9E9E9"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M78.12 147.9H31v3.85h47.12v-3.84z"
         fill="#CF7FD2"
       />
@@ -337,7 +337,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="462.24"
@@ -377,11 +377,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 176.2)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M231.41 183.96H40.54v3.84h190.87v-3.84z"
         fill="#E9E9E9"
       />
@@ -393,7 +393,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="468.2"
@@ -425,11 +425,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 194.1)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M124.05 201.85h-83.5v3.84h83.5v-3.84z"
         fill="#E9E9E9"
       />
@@ -463,17 +463,17 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 237.64)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M100.19 245.39H40.54v3.84h59.65v-3.84z"
         fill="#E9E9E9"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M78.12 227.23H31v3.84h47.12v-3.84z"
         fill="#8FD27F"
       />
@@ -485,7 +485,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="462.24"
@@ -525,11 +525,11 @@ export default function EmptySpaceSVG({}: Props) {
         rx="4.5"
         transform="matrix(-1 0 0 1 484.5 255.53)"
         stroke="#979797"
-        stroke-opacity="0.112899"
+        strokeOpacity="0.112899"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M231.41 263.28H40.54v3.85h190.87v-3.85z"
         fill="#E9E9E9"
       />
@@ -541,7 +541,7 @@ export default function EmptySpaceSVG({}: Props) {
         height="10.7374"
         rx="5.16634"
         stroke="#979797"
-        stroke-dasharray="2"
+        strokeDasharray="2"
       />
       <rect
         x="468.2"
@@ -567,9 +567,9 @@ export default function EmptySpaceSVG({}: Props) {
           width="514"
           height="306"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
