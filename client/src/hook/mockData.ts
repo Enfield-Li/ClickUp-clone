@@ -36,7 +36,7 @@ export const statusColumns2: StatusColumns = [
 const userInfo: UserInfo = { userId: 1, username: "mockUser", email: "" };
 const guestUserInfo: UserInfo = { userId: 2, username: "guestUser", email: "" };
 
-const allFolder1List: ListCategory[] = [
+const allFolder1ListForTeam1: ListCategory[] = [
   {
     id: 5,
     statusColumnsCategoryId: 1,
@@ -52,7 +52,7 @@ const allFolder1List: ListCategory[] = [
   },
 ];
 
-const allFolder15List: ListCategory[] = [
+const allFolder2ListForTeam1: ListCategory[] = [
   {
     id: 6,
     statusColumnsCategoryId: 2,
@@ -68,60 +68,61 @@ const allFolder15List: ListCategory[] = [
   },
 ];
 
-export const allSpace1ListOrFolder: (FolderCategory | ListCategory)[] = [
-  {
-    id: 1,
-    createdAt: new Date(),
-    color: "",
-    isOpen: null,
-    isPrivate: true,
-    members: [userInfo, guestUserInfo],
-    name: "folder1",
-    owner: userInfo,
-    spaceId: 2,
-    allLists: allFolder1List,
-  },
-  {
-    id: 2,
-    createdAt: new Date(),
-    color: "green",
-    isOpen: null,
-    isPrivate: false,
-    members: [userInfo, guestUserInfo],
-    name: "folder1.5",
-    owner: userInfo,
-    spaceId: 2,
-    allLists: allFolder15List,
-  },
-  {
-    id: 3,
-    statusColumnsCategoryId: 3,
-    createdAt: new Date(),
-    color: "",
-    isPrivate: true,
-    members: [userInfo, guestUserInfo],
-    name: "list1",
-    owner: userInfo,
-    parentFolderId: null,
-    spaceId: 1,
-    taskAmount: 5,
-  },
-  {
-    id: 4,
-    statusColumnsCategoryId: 4,
-    createdAt: new Date(),
-    color: "",
-    isPrivate: false,
-    members: [userInfo, guestUserInfo],
-    name: "list2",
-    owner: userInfo,
-    parentFolderId: null,
-    spaceId: 1,
-    taskAmount: 5,
-  },
-];
+export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
+  [
+    {
+      id: 1,
+      createdAt: new Date(),
+      color: "",
+      isOpen: null,
+      isPrivate: true,
+      members: [userInfo, guestUserInfo],
+      name: "folder1-team1",
+      owner: userInfo,
+      spaceId: 2,
+      allLists: allFolder1ListForTeam1,
+    },
+    {
+      id: 2,
+      createdAt: new Date(),
+      color: "green",
+      isOpen: null,
+      isPrivate: false,
+      members: [userInfo, guestUserInfo],
+      name: "folder-team1",
+      owner: userInfo,
+      spaceId: 2,
+      allLists: allFolder2ListForTeam1,
+    },
+    {
+      id: 3,
+      statusColumnsCategoryId: 3,
+      createdAt: new Date(),
+      color: "",
+      isPrivate: true,
+      members: [userInfo, guestUserInfo],
+      name: "list1-team1",
+      owner: userInfo,
+      parentFolderId: null,
+      spaceId: 1,
+      taskAmount: 5,
+    },
+    {
+      id: 4,
+      statusColumnsCategoryId: 4,
+      createdAt: new Date(),
+      color: "",
+      isPrivate: false,
+      members: [userInfo, guestUserInfo],
+      name: "list2-team1",
+      owner: userInfo,
+      parentFolderId: null,
+      spaceId: 1,
+      taskAmount: 5,
+    },
+  ];
 
-const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
+const allSpace2ListOrFolderForTeam1: (FolderCategory | ListCategory)[] = [
   {
     id: 5,
     statusColumnsCategoryId: 1,
@@ -137,39 +138,67 @@ const allSpace2ListOrFolder: (FolderCategory | ListCategory)[] = [
   },
 ];
 
-export const initialSpaceList1: SpaceType[] = [
+const allSpace2ListOrFolderForTeam2: (FolderCategory | ListCategory)[] = [
+  {
+    id: 50,
+    createdAt: new Date(),
+    color: "",
+    isOpen: null,
+    isPrivate: true,
+    members: [userInfo, guestUserInfo],
+    name: "folder1-team2",
+    owner: userInfo,
+    spaceId: 2,
+    allLists: [],
+  },
+  {
+    id: 60,
+    statusColumnsCategoryId: 1,
+    color: "",
+    isPrivate: true,
+    createdAt: new Date(),
+    members: [userInfo, guestUserInfo],
+    name: "list1-team2",
+    owner: userInfo,
+    parentFolderId: null,
+    spaceId: 100,
+    taskAmount: 0,
+  },
+];
+
+export const initialSpaceListForTeam1: SpaceType[] = [
   {
     id: 1,
     teamId: 1,
-    name: "space1",
+    name: "space1-team1",
     orderIndex: 1,
     color: "green",
     isOpen: null,
     isPrivate: false,
-    allListOrFolder: allSpace1ListOrFolder,
+    allListOrFolder: allSpace1ListOrFolderForTeam1,
   },
   {
     id: 2,
     teamId: 1,
-    name: "space2",
+    name: "space2-team1",
     orderIndex: 2,
     isOpen: null,
     color: "yellow",
     isPrivate: true,
-    allListOrFolder: allSpace2ListOrFolder,
+    allListOrFolder: allSpace2ListOrFolderForTeam1,
   },
 ];
 
-const initialSpaceList2: SpaceType[] = [
+const initialSpaceList2ForTeam2: SpaceType[] = [
   {
-    id: 2,
+    id: 100,
     teamId: 1,
     name: "space2",
     isOpen: null,
     orderIndex: 2,
     color: "yellow",
     isPrivate: true,
-    allListOrFolder: allSpace2ListOrFolder,
+    allListOrFolder: allSpace2ListOrFolderForTeam2,
   },
 ];
 
@@ -186,18 +215,18 @@ export const initPanelActivity: PanelActivity = {
   defaultTeamId: 1,
   teamActivities: [
     {
-      id: 1,
+      id: 11,
       teamId: 1,
       spaceIds: [1, 2],
       folderIds: [1, 2],
       listId: 3,
     },
     {
-      id: 1,
-      teamId: 1,
-      folderIds: [1],
-      spaceIds: [1],
-      listId: 4,
+      id: 22,
+      teamId: 2,
+      spaceIds: [100],
+      folderIds: [50],
+      listId: 60,
     },
   ],
 };
@@ -205,7 +234,7 @@ export const initPanelActivity: PanelActivity = {
 export const teams: Team[] = [
   {
     id: 1,
-    spaceList: initialSpaceList1,
+    spaceList: initialSpaceListForTeam1,
     defaultStatusColumnCategories,
     color: "blue",
     owner: mockUser,
@@ -215,7 +244,7 @@ export const teams: Team[] = [
   },
   {
     id: 2,
-    spaceList: initialSpaceList2,
+    spaceList: initialSpaceList2ForTeam2,
     color: "yellow",
     owner: mockUser,
     defaultStatusColumnCategories,

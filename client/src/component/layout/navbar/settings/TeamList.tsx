@@ -12,12 +12,14 @@ export default function TeamList({ onClose }: Props) {
 
   function handleSelectTeam(teamId: number) {
     onClose();
+
+    // Performance hack
     setTimeout(() => {
       teamStateDispatch({
         type: TEAM_STATE_ACTION.SELECT_TEAM,
         payload: { teamId },
       });
-    }, 500);
+    }, 100);
   }
 
   return (

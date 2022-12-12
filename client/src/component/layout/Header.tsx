@@ -30,7 +30,7 @@ function Header({ currentSection, setCurrentSection }: Props) {
   const headerBG = useColorModeValue("white", "darkMain.200");
 
   return (
-    <Box backgroundColor={headerBG}>
+    <Box bgColor={headerBG} height="54px">
       {/* <Flex minWidth="max-content" alignItems="center" gap="2" p={2}>
         <Box>
           {location.pathname === "/" ? (

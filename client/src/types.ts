@@ -419,7 +419,7 @@ type UpdateSelectedSpace = {
 };
 type UpdateOpenedFolder = {
   type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER;
-  payload: { spaceId: number; folderId: number };
+  payload: { folderId: number };
 };
 type UpdateSelectedFolder = {
   type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER;

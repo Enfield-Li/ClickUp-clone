@@ -4,10 +4,10 @@ import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { FolderCategory, TEAM_STATE_ACTION } from "../../../../types";
 import List from "./List";
 
-type Props = { spaceId: number; folder: FolderCategory };
+type Props = { folder: FolderCategory };
 
 export default memo(Folder);
-function Folder({ folder, spaceId }: Props) {
+function Folder({ folder }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
   const { teamState, teamStateDispatch } = useTeamStateContext();
@@ -19,7 +19,7 @@ function Folder({ folder, spaceId }: Props) {
   ) {
     e.stopPropagation();
     teamStateDispatch({
-      payload: { spaceId, folderId },
+      payload: { folderId },
       type: TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER,
     });
   }

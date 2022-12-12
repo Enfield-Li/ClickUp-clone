@@ -1,5 +1,6 @@
 import { Flex, Box } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../component/layout/Header";
 import NavBar from "../component/layout/NavBar";
 import TeamStateProvider from "../context/team/TeamContext";

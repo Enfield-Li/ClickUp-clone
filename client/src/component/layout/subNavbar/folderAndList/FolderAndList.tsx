@@ -12,12 +12,6 @@ function FolderAndList({ folder, spaceId }: Props) {
   const isList = determineListType(folder);
 
   return (
-    <Box>
-      {!isList ? (
-        <Folder folder={folder} spaceId={spaceId} />
-      ) : (
-        <List list={folder} />
-      )}
-    </Box>
+    <Box>{!isList ? <Folder folder={folder} /> : <List list={folder} />}</Box>
   );
 }
