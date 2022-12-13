@@ -335,6 +335,7 @@ export interface AuthenticationResponse {
   teams: number[];
   username: string;
   accessToken: string;
+  joinedTeamIds: number[];
 }
 
 export type AuthActionType = LogInUser | LogOutUser;

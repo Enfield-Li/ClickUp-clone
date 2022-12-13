@@ -218,7 +218,7 @@ const guestUser: User = {
 export const initPanelActivity: PanelActivity = {
   id: 1,
   userId: 1,
-  defaultTeamId: 3,
+  defaultTeamId: 1,
   teamActivities: [
     {
       id: 11,

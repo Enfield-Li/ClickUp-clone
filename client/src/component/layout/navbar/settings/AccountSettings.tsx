@@ -81,18 +81,42 @@ export default function AccountSettings({ isTeamOwner }: Props) {
                 {title}
               </Box>
             ))
-          : mySettingTitles2.map((title, index) => (
-              <Box
-                my="12px"
-                key={index}
-                width="100%"
-                fontSize="12px"
-                cursor="not-allowed"
-                _hover={{ color: "purple.500" }}
-              >
-                {title}
-              </Box>
-            ))}
+          : mySettingTitles2.map((title, index) =>
+              title !== "Template Center" ? (
+                <Box
+                  my="12px"
+                  key={index}
+                  width="100%"
+                  fontSize="12px"
+                  cursor="not-allowed"
+                  _hover={{ color: "purple.500" }}
+                >
+                  {title}
+                </Box>
+              ) : (
+                <Flex
+                  my="12px"
+                  key={index}
+                  width="100%"
+                  fontSize="12px"
+                  alignItems="center"
+                  cursor="not-allowed"
+                >
+                  <Box mr="2" _hover={{ color: "purple.500" }}>
+                    {title}
+                  </Box>
+                  <Center
+                    width="35px"
+                    rounded="2px"
+                    height="17px"
+                    fontWeight="bold"
+                    bgColor="customBlue.200"
+                  >
+                    New
+                  </Center>
+                </Flex>
+              )
+            )}
 
         <Divider my="19px" borderColor={borderColor} opacity="100%" />
 

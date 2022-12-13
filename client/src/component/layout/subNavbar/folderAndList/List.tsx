@@ -47,7 +47,7 @@ function List({ list, isSubList }: Props) {
       ></Box>
 
       <Flex>
-        <Center>{list.name}</Center>
+        <Center fontSize="13px">{list.name}</Center>
         {list.isPrivate && (
           <Center fontSize="12px" color="gray" ml="1">
             <i className="bi bi-lock"></i>
