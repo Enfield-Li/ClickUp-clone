@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import { CreateSpace } from "../../../../types";
+import { CreateSpace } from "../../../types";
 
 type Props = {
   createSpace: CreateSpace;

@@ -11,12 +11,9 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
-import { StatusColumn } from "../../types";
-import { useFocus } from "../../utils/useFocus";
-import {
-  getRandomColor,
-  spaceColors3D,
-} from "../layout/subNavbar/createSpace/utils/colors";
+import { StatusColumn } from "../../../types";
+import { useFocus } from "../../../utils/useFocus";
+import { getRandomColor, spaceColors3D } from "../../../media/colors";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {

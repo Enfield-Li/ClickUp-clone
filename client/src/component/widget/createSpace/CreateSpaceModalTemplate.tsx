@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo } from "react";
-import { CreateSpaceStep, CreateSpace } from "../../../../types";
+import { CreateSpaceStep, CreateSpace } from "../../../types";
 
 type Props = {
   sectionName: string;

@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import { CreateSpace } from "../../../../types";
-import StatusColumnsDisplay from "../../../customStatusColumn/StatusColumnsDisplay";
+import { CreateSpace } from "../../../types";
+import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
 
 type Props = {
   //   createSpace: CreateSpace;

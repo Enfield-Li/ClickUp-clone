@@ -11,7 +11,7 @@ import {
   CreateSpace,
   CreateSpaceDTO,
   CreateSpaceStep,
-} from "../../../../types";
+} from "../../../types";
 
 type Props = {
   createSpace: CreateSpace;

@@ -5,11 +5,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import {
-  CreateSpace,
-  CreateSpaceDTO,
-  CreateSpaceStep,
-} from "../../../../types";
+import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../types";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";

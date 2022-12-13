@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import { DefaultStatusColumnCategory } from "../../types";
+import { DefaultStatusColumnCategory } from "../../../types";
 import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";

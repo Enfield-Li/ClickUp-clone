@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import CreateSpaceModal from "./createSpace/CreateSpaceModal";
+import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
 import Space from "./Space";
 
 type Props = {};

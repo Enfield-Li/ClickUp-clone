@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { StatusColumn } from "../../types";
+import { StatusColumn } from "../../../types";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {

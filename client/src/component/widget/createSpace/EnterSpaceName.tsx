@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { ChangeEvent, memo } from "react";
-import { CreateSpace, CreateSpaceStep } from "../../../../types";
-import NewSpaceSVG from "./utils/NewSpaceSVG";
+import { CreateSpace, CreateSpaceStep } from "../../../types";
+import NewSpaceSVG from "../../../media/NewSpaceSVG";
 
 type Props = {
   createSpace: CreateSpace;

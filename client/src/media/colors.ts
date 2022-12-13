@@ -1,4 +1,4 @@
-import { getRandomNumber } from "../../../../../utils/getRandomNumber";
+import { getRandomNumber } from "../utils/getRandomNumber";
 
 export function getRandomColor() {
   const randomNum = getRandomNumber(1, 10) * 0.1;
