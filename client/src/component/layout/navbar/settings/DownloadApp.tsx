@@ -5,7 +5,7 @@ type Props = { isTeamOwner: boolean };
 
 export default function DownloadApp({ isTeamOwner }: Props) {
   const bgColor = useColorModeValue("lightMain.100", "darkMain.200");
-  const fontColor = useColorModeValue("lightMain.400", "lightMain.300");
+  const fontColor = useColorModeValue("lightMain.300", "lightMain.300");
 
   return (
     <Flex

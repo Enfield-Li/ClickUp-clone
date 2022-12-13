@@ -35,8 +35,6 @@ function TaskBoardView({ sortBy }: Props) {
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
   const { taskState, loading, setTaskState } = useLocalTasks({ sortBy });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
-  console.log(loading);
-
   //   console.log(taskState);
 
   const memHandleDragEnd = useCallback(
@@ -55,7 +53,7 @@ function TaskBoardView({ sortBy }: Props) {
 
   if (!taskState)
     return (
-      <Center flexGrow={1} mt="-30px">
+      <Center flexGrow={1} mt="-60px">
         <CreateListPanel />
       </Center>
     );
@@ -63,7 +61,7 @@ function TaskBoardView({ sortBy }: Props) {
   const selectedColumns = taskState.columnOptions[`${sortBy}Columns`];
 
   return (
-    <Box px={6} overflowY={"auto"} mr={3}>
+    <Box px={6} overflowY="auto" mr={3} pt="3">
       <DragDropContext
         onDragEnd={(result) => memHandleDragEnd(result, taskState)}
       >

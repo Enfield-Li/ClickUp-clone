@@ -19,13 +19,12 @@ type Props = {};
 export default function ApplicationSettings({}: Props) {
   const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
+  const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   const currentTeamId = teamState.activeTeamState.selectedTeamId;
   const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
-  console.log({ currentTeamId, teams: teamState.teams });
 
   //   if (!currentTeam) throw new Error("Current team does not exist.");
 
@@ -47,7 +46,7 @@ export default function ApplicationSettings({}: Props) {
 
           <PopoverContent
             left="-0.5"
-            bottom="-45px"
+            bottom="-46px"
             fontSize="12px"
             shadow="dark-lg"
             bgColor={bgColor}

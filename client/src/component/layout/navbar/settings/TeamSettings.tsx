@@ -30,6 +30,7 @@ export default function TeamSettings({ currentTeam }: Props) {
       borderRightWidth="0.5px"
       borderColor={borderColor}
     >
+      {/* User */}
       <Flex
         mb="4"
         width="100%"
@@ -51,24 +52,58 @@ export default function TeamSettings({ currentTeam }: Props) {
         </Center>
       </Flex>
 
+      {/* Settings */}
       <Box>
         {teamSettingsTitles.map((title, index) => (
           <Box key={index}>
             {title !== "Upgrade" ? (
-              <Box
-                my="11px"
-                width="100%"
-                fontSize="12px"
-                cursor="not-allowed"
-                _hover={{ color: "purple.500" }}
-              >
-                {title}
-              </Box>
+              title === "People" ? (
+                // Invite
+                <Flex
+                  my="11px"
+                  width="100%"
+                  fontSize="12px"
+                  overflow="hidden"
+                  alignItems="center"
+                  cursor="not-allowed"
+                >
+                  <Center mr="2" _hover={{ color: "purple.500" }}>
+                    {title}
+                  </Center>
+                  <Flex
+                    px="1"
+                    width="60px"
+                    color="white"
+                    rounded="2px"
+                    height="19px"
+                    alignItems="center"
+                    justifyContent="center"
+                    background="linear-gradient(90deg, rgba(136,51,253,1) 0%, rgba(74,201,249,1) 100%)"
+                  >
+                    <i className="bi bi-person-plus-fill"></i>
+                    <Box ml="1" fontWeight="bold">
+                      Invite
+                    </Box>
+                  </Flex>
+                </Flex>
+              ) : (
+                // Normal
+                <Box
+                  my="11px"
+                  width="100%"
+                  fontSize="12px"
+                  cursor="not-allowed"
+                  _hover={{ color: "purple.500" }}
+                >
+                  {title}
+                </Box>
+              )
             ) : (
+              // Upgrade
               <Button
                 _focus={{}}
-                rounded="sm"
                 _active={{}}
+                rounded="sm"
                 width="100%"
                 height="25px"
                 fontWeight=""

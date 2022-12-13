@@ -9,12 +9,13 @@ type Props = {
 
 export default function TaskSortingOptions({ sortBy, setSortBy }: Props) {
   return (
-    <Flex p={2} mx={3} height="40px" overflow="hidden">
+    <Flex p="2" mx="3">
       <Box>Task navigation</Box>
 
       <Spacer />
+
       <Select
-        width={"125px"}
+        width="125px"
         onChange={(e) => {
           setSortBy(e.target.value as SortBy);
         }}

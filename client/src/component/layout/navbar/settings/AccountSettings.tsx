@@ -35,6 +35,7 @@ export default function AccountSettings({ isTeamOwner }: Props) {
   const { authState } = useAuthContext();
   const { toggleColorMode } = useColorMode();
   const fontColor = useColorModeValue("black", "lightMain.200");
+  const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   return (
     <Box
@@ -93,7 +94,7 @@ export default function AccountSettings({ isTeamOwner }: Props) {
               </Box>
             ))}
 
-        <Divider my="19px" />
+        <Divider my="19px" borderColor={borderColor} opacity="100%" />
 
         {helpTitles.map((title, index) => (
           <Box key={index}>
