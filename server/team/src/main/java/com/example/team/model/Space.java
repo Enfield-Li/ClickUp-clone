@@ -16,13 +16,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.example.team.dto.CreateSpaceDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-class Space {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Space {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,22 +47,33 @@ class Space {
     @NotNull
     private Integer orderIndex;
 
+    @NotNull
+    private Integer defaultStatusColumnId;
+
     private String color;
 
     private Boolean isSelected;
-    
+
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer teamId;
-    
+
     @JsonIgnore
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "teamId")
     private Team team;
-    
-    @OneToMany(
-        mappedBy = "space", 
-        cascade = CascadeType.ALL, 
-        fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> allListOrFolder = new HashSet<>();
+
+    public static Space convertFromCreateSpaceDTO(CreateSpaceDTO createSpaceDTO) {
+        return Space
+                .builder()
+                .name(createSpaceDTO.name())
+                .color(createSpaceDTO.color())
+                .isPrivate(createSpaceDTO.isPrivate())
+                .orderIndex(createSpaceDTO.orderIndex())
+                .defaultStatusColumnId(createSpaceDTO.defaultStatusColumnId())
+                .build();
+    }
 }

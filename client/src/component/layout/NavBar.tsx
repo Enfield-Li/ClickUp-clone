@@ -11,12 +11,12 @@ import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
 type Props = {
-  currentSection: Section;
-  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
+  selectedSection: Section;
+  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
 export default memo(NavBar);
-function NavBar({ currentSection, setCurrentSection }: Props) {
+function NavBar({ selectedSection, setSelectedSection }: Props) {
   const location = useLocation();
   const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
@@ -29,12 +29,12 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
     defaultIsOpen: false,
   });
 
-  // Sync up url with currentSection taskState after user refresh page
+  // Sync up url with selectedSection taskState after user refresh page
   useEffect(() => {
     if (location.pathname.includes("task")) {
-      setCurrentSection(Section.TASKS);
+      setSelectedSection(Section.TASKS);
     } else if (location.pathname.includes("test_dev")) {
-      setCurrentSection(Section.DEV);
+      setSelectedSection(Section.DEV);
     }
   }, []);
 
@@ -60,13 +60,13 @@ function NavBar({ currentSection, setCurrentSection }: Props) {
         onOpen={onOpen}
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
-        currentSection={currentSection}
+        selectedSection={selectedSection}
         fixedNavbarWidth={fixedNavbarWidth}
-        setCurrentSection={setCurrentSection}
+        setSelectedSection={setSelectedSection}
       />
 
       {/* Sub navbar */}
-      {currentSection === Section.TASKS && (
+      {selectedSection === Section.TASKS && (
         <Box
           zIndex="2"
           opacity="100%"

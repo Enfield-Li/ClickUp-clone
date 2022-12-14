@@ -46,7 +46,7 @@ interface Column<T> {
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
-  teamId?: number; // server state
+  listId?: number; // server state
   orderIndex: number;
   markAsClosed?: boolean;
 }
@@ -57,13 +57,6 @@ export interface DueDateColumn extends Column<DueDate> {
 export type StatusColumns = StatusColumn[];
 export type PriorityColumns = PriorityColumn[];
 export type DueDateColumns = DueDateColumn[];
-
-export interface DefaultStatusColumnCategory {
-  id: number;
-  name: string;
-  statusColumns: StatusColumns;
-}
-export type DefaultStatusColumnCategories = DefaultStatusColumnCategory[];
 
 export interface ColumnOptions {
   statusColumns: StatusColumns;
@@ -281,7 +274,7 @@ export interface Category {
   color: string | null;
 }
 export interface FolderCategory extends Category {
-  isOpen: boolean | null;
+  isOpen: boolean | null; // client side
   allLists: ListCategory[];
 }
 export interface ListCategory extends Category {
@@ -299,9 +292,16 @@ export interface SpaceType {
   orderIndex: number;
   isPrivate: boolean;
   color: string | null;
-  isOpen: boolean | null;
+  isOpen: boolean | null; // client side
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
+
+export interface TeamStatusColumn {
+  id: number;
+  name: string;
+  statusColumns: StatusColumns;
+}
+export type TeamStatusColumns = TeamStatusColumn[];
 
 export type Team = {
   id: number;
@@ -311,7 +311,7 @@ export type Team = {
   member: User[];
   isPrivate: boolean;
   spaceList: SpaceType[];
-  defaultStatusColumnCategories: DefaultStatusColumnCategories;
+  teamStatusColumn: TeamStatusColumns;
 };
 
 export interface CreateSpaceDTO {
@@ -406,6 +406,10 @@ type AddList = {
   type: typeof TEAM_STATE_ACTION.ADD_LIST;
   payload: { spaceId: number; listName: string };
 };
+type AddSpace = {
+  type: typeof TEAM_STATE_ACTION.ADD_SPACE;
+  payload: { spaceId: number; listName: string };
+};
 type SelectTeam = {
   type: typeof TEAM_STATE_ACTION.SELECT_TEAM;
   payload: { teamId: number };
@@ -433,6 +437,7 @@ type UpdateSelectedList = {
 
 export const TEAM_STATE_ACTION = {
   ADD_LIST: "add_list",
+  ADD_SPACE: "add_space",
   ADD_FOLDER: "add_folder",
   SELECT_TEAM: "select_team",
   INIT_TEAM_STATE: "init_team_state",

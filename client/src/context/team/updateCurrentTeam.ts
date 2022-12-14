@@ -59,7 +59,7 @@ function setStatusColumn(
   selectedListId: number | null
 ) {
   if (list.id === selectedListId) {
-    const statusColumnCategory = team.defaultStatusColumnCategories.find(
+    const statusColumnCategory = team.teamStatusColumn.find(
       (category) => category.id === list.statusColumnsCategoryId
     );
     if (!statusColumnCategory) throw new Error(errorMsg);

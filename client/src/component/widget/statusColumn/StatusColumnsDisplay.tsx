@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { defaultStatusColumnCategories } from "../../../hook/defaultStatuses";
-import { CreateSpace, DefaultStatusColumnCategories } from "../../../types";
+import { CreateSpace, TeamStatusColumns } from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
@@ -12,7 +12,7 @@ type Props = {
 
 export interface StatusCategoriesSelected {
   selectedCategoryName: string;
-  statusCategories: DefaultStatusColumnCategories;
+  statusCategories: TeamStatusColumns;
 }
 
 export default memo(StatusColumnsDisplay);

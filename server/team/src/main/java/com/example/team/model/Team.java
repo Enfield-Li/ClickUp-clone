@@ -58,7 +58,7 @@ public class Team {
     @Builder.Default
     private Set<UserInfo> members = new HashSet<>();
 
-    public static Team converFromCreateTeamDTO(
+    public static Team convertFromCreateTeamDTO(
             CreateTeamDTO createTeamDTO, UserInfo userInfo) {
 
         return Team.builder()

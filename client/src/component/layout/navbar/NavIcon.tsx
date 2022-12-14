@@ -1,29 +1,18 @@
-import {
-  Center,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Center, Tooltip } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import FixedNavBar from "./FixedNavBar";
+import { Section } from "../../../routes/ApplicationEntry";
 
 type Props = {
-  url: string;
-  name: string;
-  isSelected: boolean;
+  url?: string;
+  name?: string;
+  isSelected?: boolean;
   children: React.ReactNode;
 };
 
 export default memo(NavIcon);
 function NavIcon({ url, name, isSelected, children }: Props) {
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Tooltip
@@ -33,21 +22,23 @@ function NavIcon({ url, name, isSelected, children }: Props) {
       hasArrow
       label={name}
       arrowSize={7}
+      rounded="3px"
       role="tooltip"
+      fontSize="12px"
       placement="right"
+      fontWeight="bold"
     >
-      <Center mt={2}>
+      <Center my="3px">
         <Center
-          rounded="sm"
-          width="38px"
-          height="38px"
-          fontSize="19px"
-          cursor="pointer"
+          p="2"
+          width="35px"
+          height="35px"
+          rounded="3px"
           role="menuitem"
+          fontSize="16.5px"
           aria-label={name}
-          onMouseOverCapture={onOpen}
-          onMouseOutCapture={onClose}
-          onClick={() => navigate(url)}
+          onClick={() => url && navigate(url)}
+          cursor={url ? "pointer" : "not-allowed"}
           bgColor={isSelected ? "customBlue.200" : undefined}
           _hover={{ bgColor: isSelected ? undefined : "darkMain.300" }}
         >

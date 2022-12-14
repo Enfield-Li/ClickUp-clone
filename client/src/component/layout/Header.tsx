@@ -16,12 +16,12 @@ import { CLIENT_ROUTE } from "../../constant";
 import { Section } from "../../routes/ApplicationEntry";
 
 type Props = {
-  currentSection: Section;
-  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
+  selectedSection: Section;
+  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
 export default memo(Header);
-function Header({ currentSection, setCurrentSection }: Props) {
+function Header({ selectedSection, setSelectedSection }: Props) {
   const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
   const navigate = useNavigate();

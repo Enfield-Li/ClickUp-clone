@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Divider,
   Flex,
   Popover,
   PopoverContent,
@@ -18,10 +19,10 @@ import ApplicationSettings from "./settings/ApplicationSettings";
 type Props = {
   onOpen: () => void;
   isExpanded: boolean;
-  currentSection: Section;
+  selectedSection: Section;
   fixedNavbarWidth: string;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentSection: React.Dispatch<React.SetStateAction<Section>>;
+  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
 export default memo(FixedNavBar);
@@ -29,15 +30,20 @@ function FixedNavBar({
   onOpen,
   isExpanded,
   setIsExpanded,
-  currentSection,
+  selectedSection,
   fixedNavbarWidth,
-  setCurrentSection,
+  setSelectedSection,
 }: Props) {
   const navigate = useNavigate();
 
   function handleOpenSubNavbar() {
     onOpen();
     setIsExpanded(true);
+  }
+
+  function handleGoHome() {
+    setSelectedSection(Section.HOME);
+    navigate(CLIENT_ROUTE.HOME);
   }
 
   return (
@@ -51,7 +57,7 @@ function FixedNavBar({
       <Flex flexDir="column" height="100%" justifyContent="space-between">
         <Box>
           {/* Expand icon -- absolute position */}
-          {!isExpanded && currentSection === Section.TASKS && (
+          {!isExpanded && selectedSection === Section.TASKS && (
             <Center cursor="pointer" onClick={handleOpenSubNavbar}>
               <Center
                 mt="76px"
@@ -73,16 +79,13 @@ function FixedNavBar({
 
           {/* Logo */}
           <Center
-            mt="26px"
+            mt="22px"
             ml="22px"
             boxSize="10px"
             role="menuitem"
-            aria-label="logo"
             cursor="pointer"
-            onClick={() => {
-              setCurrentSection(Section.HOME);
-              navigate(CLIENT_ROUTE.HOME);
-            }}
+            aria-label="logo"
+            onClick={handleGoHome}
           >
             <Center
               width="fit-content"
@@ -94,14 +97,34 @@ function FixedNavBar({
           </Center>
 
           {/* Task icon */}
-          <Box mt={6}>
-            <Box onClick={() => setCurrentSection(Section.TASKS)}>
+          <Center flexDir="column" mt={6}>
+            <Box onClick={() => setSelectedSection(Section.HOME)}>
+              <NavIcon
+                name="Home"
+                url={CLIENT_ROUTE.HOME}
+                isSelected={selectedSection === Section.HOME}
+              >
+                {selectedSection === Section.HOME ? (
+                  <i className="bi bi-house-door-fill"></i>
+                ) : (
+                  <i className="bi bi-house-door"></i>
+                )}
+              </NavIcon>
+            </Box>
+
+            <Box>
+              <NavIcon name="Search">
+                <i className="bi bi-search"></i>
+              </NavIcon>
+            </Box>
+
+            <Box onClick={() => setSelectedSection(Section.TASKS)}>
               <NavIcon
                 name="Task"
                 url={CLIENT_ROUTE.TASK_BOARD}
-                isSelected={currentSection === Section.TASKS}
+                isSelected={selectedSection === Section.TASKS}
               >
-                {currentSection === Section.TASKS ? (
+                {selectedSection === Section.TASKS ? (
                   <i className="bi bi-check-square-fill"></i>
                 ) : (
                   <i className="bi bi-check-square"></i>
@@ -109,25 +132,79 @@ function FixedNavBar({
               </NavIcon>
             </Box>
 
+            <Box>
+              <NavIcon name="Notifications">
+                <i className="bi bi-bell"></i>
+                {/* <i className="bi bi-bell-fill"></i> */}
+              </NavIcon>
+            </Box>
+
+            <Box px="3" width="100%" my="3px">
+              <Divider opacity="100%" borderColor="blackAlpha.600" />
+            </Box>
+
+            <Box>
+              <NavIcon>
+                <i className="bi bi-grid-1x2"></i>
+                {/* <i className="bi bi-grid-1x2-fill"></i> */}
+              </NavIcon>
+            </Box>
+
             {/* Dev test */}
-            <Box onClick={() => setCurrentSection(Section.DEV)}>
+            <Box onClick={() => setSelectedSection(Section.DEV)}>
               <NavIcon
                 name="test"
                 url={CLIENT_ROUTE.TEST_DEV}
-                isSelected={currentSection === Section.DEV}
+                isSelected={selectedSection === Section.DEV}
               >
-                {currentSection === Section.DEV ? (
+                {selectedSection === Section.DEV ? (
                   <i className="bi bi-question-circle-fill"></i>
                 ) : (
                   <i className="bi bi-question-circle"></i>
                 )}
               </NavIcon>
             </Box>
-          </Box>
+          </Center>
         </Box>
 
-        <Center mb="3">
-          <ApplicationSettings />
+        <Center flexDir="column">
+          <Box>
+            <NavIcon>
+              <i className="bi bi-file-earmark-text"></i>
+              {/* <i className="bi bi-file-earmark-text-fill"></i> */}
+            </NavIcon>
+          </Box>
+
+          <Box>
+            <NavIcon>
+              <i className="bi bi-broadcast"></i>
+            </NavIcon>
+          </Box>
+
+          <Box>
+            <NavIcon>
+              <i className="bi bi-trophy"></i>
+              {/* <i className="bi bi-trophy-fill"></i> */}
+            </NavIcon>
+          </Box>
+
+          <Box>
+            <NavIcon>
+              <i className="bi bi-question-lg"></i>
+            </NavIcon>
+          </Box>
+
+          <Box>
+            <NavIcon>
+              <i className="bi bi-three-dots-vertical"></i>
+            </NavIcon>
+          </Box>
+
+          <Divider borderColor="blackAlpha.500" mt="2" opacity="60%" />
+
+          <Box mt="6" mb="3">
+            <ApplicationSettings />
+          </Box>
         </Center>
       </Flex>
     </Box>
