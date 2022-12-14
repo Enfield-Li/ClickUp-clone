@@ -50,7 +50,7 @@ function ApplicationSettings({}: Props) {
                 height="30px"
                 rounded="full"
                 position="absolute"
-                bgColor={getRandomColor()}
+                bgColor={authState.user?.color}
               >
                 {authState.user?.username[0].toUpperCase()}
               </Center>

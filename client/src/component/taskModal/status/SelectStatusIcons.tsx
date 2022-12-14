@@ -48,7 +48,7 @@ function SelectStatusIcons({}: Props) {
     : columnOptions.statusColumns[columnIndex + 1];
 
   function handleNextStage() {
-    const targetStatusColumnId = nextStatus.id;
+    const targetStatusColumnId = nextStatus!.id!;
 
     updateTaskAttribute(
       authState.user!.id!,

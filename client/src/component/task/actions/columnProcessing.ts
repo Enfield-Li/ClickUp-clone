@@ -154,8 +154,8 @@ export function getExpectedDueDateFromWeekString(weekString: DueDate) {
 */
 export function getLookUpDueDateTable() {
   const lookUpExpectedDueDate: LookUpExpectedDueDate = {
-    "NO_DUE_DATE": null,
-    "OVER_DUE": null,
+    NO_DUE_DATE: null,
+    OVER_DUE: null,
     TODAY: null,
     TOMORROW: null,
     SATURDAY: null,

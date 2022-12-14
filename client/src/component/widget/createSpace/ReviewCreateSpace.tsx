@@ -7,11 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import {
-  CreateSpace,
-  CreateSpaceDTO,
-  CreateSpaceStep,
-} from "../../../types";
+import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../types";
 
 type Props = {
   createSpace: CreateSpace;

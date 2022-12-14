@@ -55,7 +55,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
                       task,
                       authState.user!.id!,
                       setTaskState,
-                      priorityColumn.id,
+                      priorityColumn.id!,
                       onOptionClose
                     )
                   }

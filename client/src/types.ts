@@ -324,6 +324,7 @@ export interface CreateSpaceDTO {
 
 export interface User {
   id: number;
+  color?: string;
   email: string;
   username: string;
   joinedTeamIds: number[];
@@ -331,6 +332,7 @@ export interface User {
 
 export interface AuthenticationResponse {
   id: number;
+  color: string;
   email: string;
   teams: number[];
   username: string;

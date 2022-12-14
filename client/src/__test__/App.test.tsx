@@ -5,7 +5,7 @@ import { CLIENT_ROUTE } from "../constant";
 import renderInProvider from "./test-utils";
 
 describe("App", () => {
-    test("renders", () => {
+  test("renders", () => {
     //   renderInProvider(<App />);
     //   const main = screen.getByRole("main");
     //   const header = screen.getByRole("heading");
@@ -15,7 +15,7 @@ describe("App", () => {
     //   expect(navBar).toBeInTheDocument();
     //   const history = createMemoryHistory();
     //   expect(history.location.pathname).toBe(CLIENT_ROUTE.HOME);
-      // const homeText = screen.getByText("Under construction");
-      // expect(homeText).toBeInTheDocument();
-    });
+    // const homeText = screen.getByText("Under construction");
+    // expect(homeText).toBeInTheDocument();
+  });
 });

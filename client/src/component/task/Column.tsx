@@ -2,12 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import { memo, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import {
-  SortBy,
-  TaskList,
-  TaskState,
-  UndeterminedColumn,
-} from "../../types";
+import { SortBy, TaskList, TaskState, UndeterminedColumn } from "../../types";
 import CreateTask from "./createTask/CreateTask";
 import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";

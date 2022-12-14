@@ -1,18 +1,7 @@
-import {
-  Box,
-  Flex,
-  Progress,
-  Spacer,
-  Text,
-  useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, useColorModeValue, useToast } from "@chakra-ui/react";
 import { memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ColorModeSwitcher } from "../../ColorModeSwitcher";
-import useAuthContext, { logOutUser } from "../../context/auth/useAuthContext";
-import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { CLIENT_ROUTE } from "../../constant";
+import useAuthContext from "../../context/auth/useAuthContext";
 import { Section } from "../../routes/ApplicationEntry";
 
 type Props = {

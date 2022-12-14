@@ -36,7 +36,7 @@ function DueDateOptions({ task, onClose }: Props) {
       SortBy.DUE_DATE,
       task!,
       setTaskState,
-      targetColumn.id,
+      targetColumn.id!,
       expectedDueDate
     );
   }

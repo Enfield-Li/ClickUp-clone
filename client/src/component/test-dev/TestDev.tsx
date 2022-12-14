@@ -5,9 +5,6 @@ export default function TestDev() {
   return (
     <Box height="340px" rounded="md" width="500px">
       <i className="bi bi-person-plus"></i>
-
-
-
     </Box>
   );
 }
