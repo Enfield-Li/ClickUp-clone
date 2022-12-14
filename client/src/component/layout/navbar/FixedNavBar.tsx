@@ -202,7 +202,7 @@ function FixedNavBar({
 
           <Divider borderColor="blackAlpha.500" mt="2" opacity="60%" />
 
-          <Box mt="6" mb="3">
+          <Box mt="26px" mb="7px">
             <ApplicationSettings />
           </Box>
         </Center>

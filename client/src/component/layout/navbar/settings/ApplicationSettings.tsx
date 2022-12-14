@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
+import { getRandomColor } from "../../../../media/colors";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
 import JoinedTeamList from "./JoinedTeamList";
@@ -34,33 +35,36 @@ export default function ApplicationSettings({}: Props) {
       {({ onClose }: { onClose: () => void }) => (
         <>
           <PopoverTrigger>
-            <Center position="relative">
+            <Center
+              position="relative"
+              fontSize="13px"
+              cursor="pointer"
+              fontWeight="semibold"
+              color="lightMain.200"
+            >
               <Center
                 top="-18px"
                 width="30px"
                 height="30px"
                 rounded="full"
-                fontSize="13px"
-                cursor="pointer"
                 position="absolute"
-                fontWeight="semibold"
-                color="lightMain.200"
-                bgColor={currentTeam?.color}
+                bgColor={getRandomColor()}
               >
                 {authState.user?.username[0].toUpperCase()}
               </Center>
 
-              <Center bgColor="darkMain.200" zIndex="10" rounded="full">
+              <Center
+                zIndex="10"
+                rounded="full"
+                overflow="hidden"
+                bgColor="darkMain.200"
+              >
                 <Center
-                  mt="2px"
+                  m="2px"
                   zIndex="10"
                   width="30px"
                   height="30px"
                   rounded="full"
-                  fontSize="13px"
-                  cursor="pointer"
-                  fontWeight="semibold"
-                  color="lightMain.200"
                   bgColor={currentTeam?.color}
                 >
                   {currentTeam?.name[0].toUpperCase()}
