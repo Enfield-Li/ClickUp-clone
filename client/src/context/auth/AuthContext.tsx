@@ -1,11 +1,16 @@
-import { createContext, useReducer, useState } from "react";
-import { AuthContextType, authInitialState } from "../../types";
+import { createContext, useReducer } from "react";
+import { AuthContextType, AuthStateType } from "../../types";
 import authReducer from "./AuthReducer";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 type ProviderType = {
   children: React.ReactNode;
+};
+
+// auth
+const authInitialState: AuthStateType = {
+  user: null,
 };
 
 export default function AuthStateProvider({ children }: ProviderType) {

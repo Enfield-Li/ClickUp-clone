@@ -35,6 +35,8 @@ public class ApplicationUser {
     @NotNull
     private String username;
 
+    private String color;
+
     private Set<Integer> teams;
 
     @NotNull

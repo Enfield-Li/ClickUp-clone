@@ -225,11 +225,6 @@ export interface UpdateTaskDescDTO {
   newDesc: string;
 }
 
-// auth
-export const authInitialState: AuthStateType = {
-  user: null,
-};
-
 export type AuthContextType = {
   authState: AuthStateType;
   authDispatch: React.Dispatch<AuthActionType>;
@@ -299,6 +294,8 @@ export interface SpaceType {
 export interface TeamStatusColumn {
   id: number;
   name: string;
+  teamId: number;
+  defaultId: number;
   statusColumns: StatusColumns;
 }
 export type TeamStatusColumns = TeamStatusColumn[];

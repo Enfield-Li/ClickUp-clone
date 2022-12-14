@@ -70,9 +70,15 @@ export const scrum: StatusColumns = [
 ];
 
 export const defaultStatusColumnCategories: TeamStatusColumns = [
-  { id: 1, name: "Custom", statusColumns: custom },
-  { id: 2, name: "Normal", statusColumns: normal },
-  { id: 3, name: "Kanban", statusColumns: kanban },
-  { id: 4, name: "Marketing", statusColumns: marketing },
-  { id: 5, name: "Scrum", statusColumns: scrum },
+  { id: 1, defaultId: 1, teamId: 1, name: "Custom", statusColumns: custom },
+  { id: 2, defaultId: 2, teamId: 1, name: "Normal", statusColumns: normal },
+  { id: 3, defaultId: 3, teamId: 1, name: "Kanban", statusColumns: kanban },
+  {
+    id: 4,
+    defaultId: 4,
+    teamId: 1,
+    name: "Marketing",
+    statusColumns: marketing,
+  },
+  { id: 5, defaultId: 5, teamId: 1, name: "Scrum", statusColumns: scrum },
 ];
