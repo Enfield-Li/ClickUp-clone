@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Flex,
   Popover,
   PopoverCloseButton,
@@ -26,8 +27,6 @@ export default function ApplicationSettings({}: Props) {
   const currentTeamId = teamState.activeTeamState.selectedTeamId;
   const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
 
-  //   if (!currentTeam) throw new Error("Current team does not exist.");
-
   const isTeamOwner = currentTeam?.owner.id === authState.user?.id;
 
   return (
@@ -35,13 +34,39 @@ export default function ApplicationSettings({}: Props) {
       {({ onClose }: { onClose: () => void }) => (
         <>
           <PopoverTrigger>
-            <Box
-              width="30px"
-              height="30px"
-              rounded="full"
-              bgColor="white"
-              cursor="pointer"
-            ></Box>
+            <Center position="relative">
+              <Center
+                top="-18px"
+                width="30px"
+                height="30px"
+                rounded="full"
+                fontSize="13px"
+                cursor="pointer"
+                position="absolute"
+                fontWeight="semibold"
+                color="lightMain.200"
+                bgColor={currentTeam?.color}
+              >
+                {authState.user?.username[0].toUpperCase()}
+              </Center>
+
+              <Center bgColor="darkMain.200" zIndex="10" rounded="full">
+                <Center
+                  mt="2px"
+                  zIndex="10"
+                  width="30px"
+                  height="30px"
+                  rounded="full"
+                  fontSize="13px"
+                  cursor="pointer"
+                  fontWeight="semibold"
+                  color="lightMain.200"
+                  bgColor={currentTeam?.color}
+                >
+                  {currentTeam?.name[0].toUpperCase()}
+                </Center>
+              </Center>
+            </Center>
           </PopoverTrigger>
 
           <PopoverContent
