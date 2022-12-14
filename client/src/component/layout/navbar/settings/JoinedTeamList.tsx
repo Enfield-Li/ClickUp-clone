@@ -5,12 +5,14 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { memo } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { TEAM_STATE_ACTION } from "../../../../types";
 
 type Props = { onClose: () => void };
 
-export default function JoinedTeamList({ onClose }: Props) {
+export default memo(JoinedTeamList);
+function JoinedTeamList({ onClose }: Props) {
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");

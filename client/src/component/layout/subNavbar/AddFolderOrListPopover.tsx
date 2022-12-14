@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 
 type Props = {
   isPopoverOpen: boolean;
@@ -17,7 +17,8 @@ type Props = {
   onCreateFolderModalOpen: () => void;
 };
 
-export default function AddFolderOrListPopover({
+export default memo(AddFolderOrListPopover);
+function AddFolderOrListPopover({
   children,
   isPopoverOpen,
   onPopoverClose,

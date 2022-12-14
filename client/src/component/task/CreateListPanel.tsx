@@ -1,9 +1,11 @@
 import { Box, Button, Center } from "@chakra-ui/react";
+import { memo } from "react";
 import EmptySpaceSVG from "../../media/EmptySpaceSVG";
 
 type Props = {};
 
-export default function CreateListPanel({}: Props) {
+export default memo(CreateListPanel);
+function CreateListPanel({}: Props) {
   return (
     <Center flexDir="column">
       <Box opacity="80%">

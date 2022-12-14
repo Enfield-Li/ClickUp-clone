@@ -8,14 +8,15 @@ import {
   ModalContent,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import logo from "../../media/clickup_logo.png";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
-export default function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
+export default memo(WorkSpaceEntryModal);
+function WorkSpaceEntryModal({ isOpen, onClose }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
 

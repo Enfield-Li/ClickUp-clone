@@ -1,9 +1,10 @@
 import { Box, Center, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 
 type Props = {};
 
-export default function About({}: Props) {
+export default memo(About);
+function About({}: Props) {
   return (
     <Box p={3}>
       <Center fontSize="xl">A clone of ClickUp: </Center>

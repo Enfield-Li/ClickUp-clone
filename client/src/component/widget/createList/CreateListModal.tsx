@@ -10,7 +10,7 @@ import {
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { darkNavBG } from "../../../globalTheme";
 
 type Props = {
@@ -18,7 +18,8 @@ type Props = {
   onCreateListModalClose: () => void;
 };
 
-export default function CreateListModal({
+export default memo(CreateListModal);
+function CreateListModal({
   isCreateListModalOpen,
   onCreateListModalClose,
 }: Props) {

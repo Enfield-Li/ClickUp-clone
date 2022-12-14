@@ -1,4 +1,5 @@
 import { Box, Button, Center, Flex } from "@chakra-ui/react";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import logo from "../../media/clickup_logo.png";
@@ -7,7 +8,8 @@ type Props = {
   isLogin: boolean;
 };
 
-export default function HeadInfo({ isLogin }: Props) {
+export default memo(HeadInfo);
+function HeadInfo({ isLogin }: Props) {
   const navigate = useNavigate();
 
   function handleOnCLick() {

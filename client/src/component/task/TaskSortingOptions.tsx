@@ -1,5 +1,5 @@
 import { Box, Flex, Select, Spacer } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { SortBy } from "../../types";
 
 type Props = {
@@ -7,7 +7,8 @@ type Props = {
   setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
 };
 
-export default function TaskSortingOptions({ sortBy, setSortBy }: Props) {
+export default memo(TaskSortingOptions);
+function TaskSortingOptions({ sortBy, setSortBy }: Props) {
   return (
     <Flex p="2" mx="3">
       <Box>Task navigation</Box>

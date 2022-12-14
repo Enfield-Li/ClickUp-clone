@@ -1,8 +1,10 @@
 import { Center, Box } from "@chakra-ui/react";
+import { memo } from "react";
 
 type Props = {};
 
-export default function Disclaimer({}: Props) {
+export default memo(Disclaimer);
+function Disclaimer({}: Props) {
   return (
     <Center
       bottom="20px"

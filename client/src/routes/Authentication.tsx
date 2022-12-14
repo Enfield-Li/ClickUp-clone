@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "../component/auth/Login";
 import Register from "../component/auth/Register";
@@ -6,7 +6,8 @@ import { CLIENT_ROUTE } from "../constant";
 
 type Props = {};
 
-export default function Authentication({}: Props) {
+export default memo(Authentication);
+function Authentication({}: Props) {
   return (
     <Routes>
       <Route path={CLIENT_ROUTE.LOGIN} element={<Login />} />

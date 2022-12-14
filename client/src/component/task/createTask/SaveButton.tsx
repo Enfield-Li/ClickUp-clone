@@ -1,9 +1,10 @@
 import { Center, Tooltip } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 
 type Props = { taskName: string };
 
-export default function SaveButton({ taskName }: Props) {
+export default memo(SaveButton);
+function SaveButton({ taskName }: Props) {
   return (
     <Tooltip
       mb={2}

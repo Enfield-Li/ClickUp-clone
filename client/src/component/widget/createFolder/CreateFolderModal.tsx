@@ -11,14 +11,15 @@ import {
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 type Props = {
   isCreateFolderModalOpen: boolean;
   onCreateFolderModalClose: () => void;
 };
 
-export default function CreateFolderModal({
+export default memo(CreateFolderModal);
+function CreateFolderModal({
   isCreateFolderModalOpen,
   onCreateFolderModalClose,
 }: Props) {

@@ -8,6 +8,7 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { getRandomColor } from "../../../../media/colors";
@@ -18,7 +19,8 @@ import TeamSettings from "./TeamSettings";
 
 type Props = {};
 
-export default function ApplicationSettings({}: Props) {
+export default memo(ApplicationSettings);
+function ApplicationSettings({}: Props) {
   const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");

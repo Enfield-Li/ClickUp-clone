@@ -1,4 +1,5 @@
 import { Box, Button, Center, Flex, useColorModeValue } from "@chakra-ui/react";
+import { memo } from "react";
 import { Team } from "../../../../types";
 
 const teamSettingsTitles: string[] = [
@@ -16,7 +17,8 @@ const teamSettingsTitles: string[] = [
 
 type Props = { currentTeam: Team | undefined };
 
-export default function TeamSettings({ currentTeam }: Props) {
+export default memo(TeamSettings);
+function TeamSettings({ currentTeam }: Props) {
   const fontColor = useColorModeValue("black", "lightMain.200");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 

@@ -6,6 +6,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { memo } from "react";
 import ColorModeSwitcher from "../../../../ColorModeSwitcher";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 
@@ -31,7 +32,8 @@ const helpTitles: string[] = ["Help", "Hotkeys", "Dark mode"];
 
 type Props = { isTeamOwner: boolean };
 
-export default function AccountSettings({ isTeamOwner }: Props) {
+export default memo(AccountSettings);
+function AccountSettings({ isTeamOwner }: Props) {
   const { authState } = useAuthContext();
   const { toggleColorMode } = useColorMode();
   const fontColor = useColorModeValue("black", "lightMain.200");

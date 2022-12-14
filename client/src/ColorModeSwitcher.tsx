@@ -1,10 +1,12 @@
 import { IconButton, useColorModeValue } from "@chakra-ui/react";
+import { memo } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
 type Props = {};
 
 // https://stackoverflow.com/questions/64558533/changing-the-dark-mode-color-in-chakra-ui
-export default function ColorModeSwitcher({}: Props) {
+export default memo(ColorModeSwitcher);
+function ColorModeSwitcher({}: Props) {
   const text = useColorModeValue("dark", "light");
   const SwitchIcon = useColorModeValue(FaMoon, FaSun);
 

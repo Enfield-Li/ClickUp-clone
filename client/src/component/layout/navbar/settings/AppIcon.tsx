@@ -1,4 +1,5 @@
 import { Box, Tooltip } from "@chakra-ui/react";
+import { memo } from "react";
 
 type Props = {
   iconName: string;
@@ -6,7 +7,8 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AppIcon({ children, iconName, isTeamOwner }: Props) {
+export default memo(AppIcon);
+function AppIcon({ children, iconName, isTeamOwner }: Props) {
   return (
     <Tooltip
       mb="-1"

@@ -1,18 +1,9 @@
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@chakra-ui/react";
+import { Box, Center, Divider, Flex } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import LogoSVG from "../../../media/LogoSVG";
 import { Section } from "../../../routes/ApplicationEntry";
-import AccountSettings from "./settings/AccountSettings";
 import NavIcon from "./NavIcon";
 import ApplicationSettings from "./settings/ApplicationSettings";
 
@@ -144,7 +135,7 @@ function FixedNavBar({
             </Box>
 
             <Box>
-              <NavIcon>
+              <NavIcon name="Dashboards">
                 <i className="bi bi-grid-1x2"></i>
                 {/* <i className="bi bi-grid-1x2-fill"></i> */}
               </NavIcon>
@@ -169,27 +160,27 @@ function FixedNavBar({
 
         <Center flexDir="column">
           <Box>
-            <NavIcon>
+            <NavIcon name="Docs">
               <i className="bi bi-file-earmark-text"></i>
               {/* <i className="bi bi-file-earmark-text-fill"></i> */}
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon>
+            <NavIcon name="Pulse">
               <i className="bi bi-broadcast"></i>
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon>
+            <NavIcon name="Goals">
               <i className="bi bi-trophy"></i>
               {/* <i className="bi bi-trophy-fill"></i> */}
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon>
+            <NavIcon name="Help">
               <i className="bi bi-question-lg"></i>
             </NavIcon>
           </Box>

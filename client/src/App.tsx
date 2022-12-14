@@ -1,10 +1,12 @@
 import { Box } from "@chakra-ui/react";
+import { memo } from "react";
 import useAuthContext from "./context/auth/useAuthContext";
 import useInit from "./hook/useInit";
 import ApplicationEntry from "./routes/ApplicationEntry";
 import Authentication from "./routes/Authentication";
 
-export default function App() {
+export default memo(App);
+function App() {
   useInit();
   const { authState } = useAuthContext();
 
