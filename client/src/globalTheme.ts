@@ -20,6 +20,7 @@ export const customBlue = "rgb(123, 104, 238)";
 export const customHoverBlue = "rgb(91, 67, 234)";
 export const lightText = "black";
 export const linkColor = "rgb(124, 105, 238)";
+// export const
 
 const $arrowBg = cssVar("popper-arrow-bg");
 

@@ -20,13 +20,15 @@ export function updateActiveTeamState(
     throw new Error(
       errorMsg + "target team or targetTeamActivity does not exist"
     );
-  const { folderIds, listId, spaceIds } = targetTeamActivity;
 
+  const { folderIds, listId, spaceIds } = targetTeamActivity;
   validateTeamActivities({ draftState, teamId, spaceIds, folderIds, listId });
 
+  // Selected state
   draftState.activeTeamState.selectedListId = listId;
   draftState.activeTeamState.selectedTeamId = teamId;
 
+  // Opened state
   draftState.teams.forEach(
     (team) =>
       team.id === teamId &&
@@ -41,10 +43,10 @@ export function updateActiveTeamState(
               listOrFolder.isOpen = true;
 
               listOrFolder.allLists.forEach((list) => {
-                setStatusColumn(draftState, team, list, listId);
+                initStatusColumnAndSelectedSpaceId(draftState, team, list, listId, space.id);
               });
             } else if (!isFolder) {
-              setStatusColumn(draftState, team, listOrFolder, listId);
+              initStatusColumnAndSelectedSpaceId(draftState, team, listOrFolder, listId, space.id);
             }
           });
         }
@@ -52,13 +54,16 @@ export function updateActiveTeamState(
   );
 }
 
-function setStatusColumn(
+function initStatusColumnAndSelectedSpaceId(
   draftState: WritableDraft<TeamStateType>,
   team: WritableDraft<Team>,
   list: ListCategory,
-  selectedListId: number | null
+  selectedListId: number | null,
+  spaceId: number
 ) {
   if (list.id === selectedListId) {
+    draftState.activeTeamState.selectedSpaceId = spaceId;
+
     const statusColumnCategory = team.teamStatusColumn.find(
       (category) => category.id === list.statusColumnsCategoryId
     );

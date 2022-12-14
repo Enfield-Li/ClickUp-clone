@@ -16,9 +16,9 @@ function SpaceContent({ space }: Props) {
           <Box key={folder.id}>
             <Box>
               {!determineListType(folder) ? (
-                <Folder folder={folder} />
+                <Folder space={space} folder={folder} />
               ) : (
-                <List list={folder} />
+                <List space={space} list={folder} />
               )}
             </Box>
           </Box>

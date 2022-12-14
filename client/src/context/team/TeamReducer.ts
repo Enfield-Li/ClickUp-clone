@@ -16,6 +16,7 @@ export default function teamReducer(
   action: TeamStateActionType
 ) {
   switch (action.type) {
+    // Init
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
         const { teams, panelActivity } = action.payload;
@@ -31,6 +32,7 @@ export default function teamReducer(
       });
     }
 
+    // Select
     case TEAM_STATE_ACTION.SELECT_TEAM: {
       return produce(spaceListState, (draftState) => {
         const { teamId } = action.payload;
@@ -43,7 +45,16 @@ export default function teamReducer(
       });
     }
 
-    case TEAM_STATE_ACTION.UPDATE_OPENED_SPACE: {
+    case TEAM_STATE_ACTION.SELECT_LIST: {
+      return produce(spaceListState, (draftState) => {
+        const { spaceId, listId } = action.payload;
+
+        draftState.activeTeamState.selectedListId = listId;
+        draftState.activeTeamState.selectedSpaceId = spaceId;
+      });
+    }
+
+    case TEAM_STATE_ACTION.OPEN_SPACE: {
       return produce(spaceListState, (draftState) => {
         const { spaceId } = action.payload;
 
@@ -63,7 +74,7 @@ export default function teamReducer(
       });
     }
 
-    case TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER: {
+    case TEAM_STATE_ACTION.OPEN_FOLDER: {
       return produce(spaceListState, (draftState) => {
         const { folderId } = action.payload;
 
@@ -82,22 +93,6 @@ export default function teamReducer(
           }
         });
       });
-    }
-
-    case TEAM_STATE_ACTION.UPDATE_SELECTED_LIST: {
-      return produce(spaceListState, (draftState) => {
-        const { listId } = action.payload;
-
-        draftState.activeTeamState.selectedListId = listId;
-      });
-    }
-
-    case TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER: {
-      throw new Error("not implemented");
-    }
-
-    case TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE: {
-      throw new Error("not implemented");
     }
 
     default: {

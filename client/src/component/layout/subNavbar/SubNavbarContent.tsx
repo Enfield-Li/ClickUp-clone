@@ -28,13 +28,19 @@ function SubNavbarContent({}: Props) {
   }
 
   return (
-    <Box color="lightMain.200" fontWeight="semibold" pl="10px" pr="3">
+    <Box
+      pr="3"
+      pl="10px"
+      fontSize="15px"
+      color="lightMain.200"
+      fontWeight="semibold"
+    >
       <Flex height="35px" alignItems="center" cursor="pointer" pl="2">
         <Box>Spaces</Box>
       </Flex>
 
       <Flex
-        py="1"
+        py="2"
         pl="2"
         rounded="4px"
         cursor="pointer"

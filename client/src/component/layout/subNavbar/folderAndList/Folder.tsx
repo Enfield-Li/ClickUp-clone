@@ -1,17 +1,22 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { FolderCategory, TEAM_STATE_ACTION } from "../../../../types";
+import {
+  FolderCategory,
+  SpaceType,
+  TEAM_STATE_ACTION,
+} from "../../../../types";
 import List from "./List";
 
-type Props = { folder: FolderCategory };
+type Props = { space: SpaceType; folder: FolderCategory };
 
 export default memo(Folder);
-function Folder({ folder }: Props) {
+function Folder({ space, folder }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+  const hoverBgColor =
+    colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
 
   function handleOpenFolder(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -20,7 +25,7 @@ function Folder({ folder }: Props) {
     e.stopPropagation();
     teamStateDispatch({
       payload: { folderId },
-      type: TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER,
+      type: TEAM_STATE_ACTION.OPEN_FOLDER,
     });
   }
 
@@ -101,7 +106,7 @@ function Folder({ folder }: Props) {
         <Box>
           {folder.allLists.map((list) => (
             <Box key={list.id}>
-              <List list={list} isSubList={true} />
+              <List space={space} folder={folder} list={list} />
             </Box>
           ))}
         </Box>

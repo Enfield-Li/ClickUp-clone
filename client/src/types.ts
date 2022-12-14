@@ -367,6 +367,7 @@ export type PanelActivity = {
 type ActiveTeamState = {
   selectedTeamId: number;
   selectedListId: number | null;
+  selectedSpaceId: number | null;
   currentStatusColumns: StatusColumns | null;
 };
 
@@ -384,68 +385,77 @@ export type TeamStateActionType =
   | AddList
   | AddFolder
   | SelectTeam
-  | FetchSpaceList
+  | InitTeamState
   | UpdateOpenedSpace
   | UpdateOpenedFolder
-  | UpdateSelectedList
-  | UpdateSelectedSpace
-  | UpdateSelectedFolder;
+  | SelectList
+  | SelectSpace
+  | SelectFolder;
 
-type FetchSpaceList = {
+type InitTeamState = {
   type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
   payload: {
     teams: Team[];
     panelActivity: PanelActivity;
   };
 };
+
+// Add
 type AddFolder = {
   type: typeof TEAM_STATE_ACTION.ADD_FOLDER;
-  payload: { spaceId: number; folderName: string };
+  payload: { teamId: number; folderName: string };
 };
 type AddList = {
   type: typeof TEAM_STATE_ACTION.ADD_LIST;
-  payload: { spaceId: number; listName: string };
+  payload: { spaceId: number; folderId?: number; listName: string };
 };
 type AddSpace = {
   type: typeof TEAM_STATE_ACTION.ADD_SPACE;
   payload: { spaceId: number; listName: string };
 };
+
+// Select
 type SelectTeam = {
   type: typeof TEAM_STATE_ACTION.SELECT_TEAM;
   payload: { teamId: number };
 };
-type UpdateOpenedSpace = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_SPACE;
+type SelectSpace = {
+  type: typeof TEAM_STATE_ACTION.SELECT_SPACE;
   payload: { spaceId: number };
 };
-type UpdateSelectedSpace = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_SPACE;
+type SelectFolder = {
+  type: typeof TEAM_STATE_ACTION.SELECT_FOLDER;
+  payload: { spaceId: number; folderId: number };
+};
+type SelectList = {
+  type: typeof TEAM_STATE_ACTION.SELECT_LIST;
+  payload: { spaceId: number; listId: number };
+};
+
+// Open
+type UpdateOpenedSpace = {
+  type: typeof TEAM_STATE_ACTION.OPEN_SPACE;
   payload: { spaceId: number };
 };
 type UpdateOpenedFolder = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_OPENED_FOLDER;
+  type: typeof TEAM_STATE_ACTION.OPEN_FOLDER;
   payload: { folderId: number };
-};
-type UpdateSelectedFolder = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_FOLDER;
-  payload: { spaceId: number; folderId: number };
-};
-type UpdateSelectedList = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_SELECTED_LIST;
-  payload: { listId: number };
 };
 
 export const TEAM_STATE_ACTION = {
+  INIT_TEAM_STATE: "init_team_state",
+
   ADD_LIST: "add_list",
   ADD_SPACE: "add_space",
   ADD_FOLDER: "add_folder",
+
+  SELECT_LIST: "select_list",
   SELECT_TEAM: "select_team",
-  INIT_TEAM_STATE: "init_team_state",
-  UPDATE_OPENED_SPACE: "update_opened_space",
-  UPDATE_SELECTED_SPACE: "update_selected_space",
-  UPDATE_OPENED_FOLDER: "update_opened_folder",
-  UPDATE_SELECTED_FOLDER: "update_selected_folder",
-  UPDATE_SELECTED_LIST: "update_selected_list",
+  SELECT_SPACE: "select_space",
+  SELECT_FOLDER: "select_folder",
+
+  OPEN_FOLDER: "open_folder",
+  OPEN_SPACE: "open_space",
 } as const;
 
 export enum CreateSpaceStep {

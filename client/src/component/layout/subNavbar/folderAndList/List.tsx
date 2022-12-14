@@ -1,40 +1,46 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { ListCategory, TEAM_STATE_ACTION } from "../../../../types";
+import {
+  FolderCategory,
+  ListCategory,
+  SpaceType,
+  TEAM_STATE_ACTION,
+} from "../../../../types";
 
-type Props = { list: ListCategory; isSubList?: boolean };
+type Props = { space: SpaceType; list: ListCategory; folder?: FolderCategory };
 
 export default memo(List);
-function List({ list, isSubList }: Props) {
+function List({ space, folder, list }: Props) {
   const { colorMode } = useColorMode();
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const bgHoverColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
+  const hoverBgColor =
+    colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
   const isListSelected = list.id === teamState.activeTeamState.selectedListId;
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     teamStateDispatch({
-      payload: { listId: list.id },
-      type: TEAM_STATE_ACTION.UPDATE_SELECTED_LIST,
+      type: TEAM_STATE_ACTION.SELECT_LIST,
+      payload: { listId: list.id, spaceId: space.id },
     });
   }
 
   return (
     <Flex
       pr="2"
-      my="1"
-      p="3px"
+      px="3px"
+      py="5px"
       pl="15px"
       flexGrow="1"
       rounded="4px"
       cursor="pointer"
       position="relative"
       alignItems="center"
-      ml={isSubList ? "35px" : "5"}
+      ml={folder ? "35px" : "5"}
       justifyContent="space-between"
       onClick={handleSelectList}
       bgColor={isListSelected ? "customBlue.200" : ""}
-      _hover={isListSelected ? undefined : { bgColor: bgHoverColor }}
+      _hover={isListSelected ? undefined : { bgColor: hoverBgColor }}
     >
       <Box
         left="-5px"

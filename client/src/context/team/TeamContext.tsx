@@ -12,7 +12,8 @@ const initialTeamContextState: TeamStateType = {
   teams: [],
   activeTeamState: {
     selectedTeamId: 0,
-    selectedListId: 0,
+    selectedListId: null,
+    selectedSpaceId: null,
     currentStatusColumns: [],
   },
   panelActivity: {
@@ -28,7 +29,7 @@ export default function TeamStateProvider({ children }: ProviderType) {
     teamReducer,
     initialTeamContextState
   );
-//   console.log({ teamState });
+  //   console.log({ teamState });
 
   return (
     <TeamContext.Provider value={{ teamState, teamStateDispatch }}>
