@@ -192,7 +192,7 @@ export const initialSpaceListForTeam1: SpaceType[] = [
 const initialSpaceList2ForTeam2: SpaceType[] = [
   {
     id: 100,
-    teamId: 1,
+    teamId: 2,
     name: "space2",
     isOpen: null,
     orderIndex: 2,

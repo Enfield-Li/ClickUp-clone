@@ -1,6 +1,7 @@
 import { WritableDraft } from "immer/dist/internal";
 import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import { TeamStateType, Team, ListCategory } from "../../types";
+import { deepCopy } from "../../utils/deepCopy";
 import { errorMsg } from "./TeamReducer";
 
 type UpdateCurrentTeamParam = {
@@ -12,6 +13,7 @@ export function updateActiveTeamState(
   updateCurrentTeamParam: UpdateCurrentTeamParam
 ) {
   const { draftState, teamId } = updateCurrentTeamParam;
+
   const targetTeam = draftState.teams.find((team) => team.id === teamId);
   const targetTeamActivity = draftState.panelActivity.teamActivities.find(
     (teamActivity) => teamActivity.teamId === teamId
@@ -33,20 +35,32 @@ export function updateActiveTeamState(
     (team) =>
       team.id === teamId &&
       team.spaceList.forEach((space) => {
-        if (space.id in spaceIds) {
+        if (spaceIds.includes(space.id)) {
           space.isOpen = true;
 
           space.allListOrFolder.forEach((listOrFolder) => {
             const isFolder = determineFolderType(listOrFolder);
 
-            if (isFolder && listOrFolder.id in folderIds) {
+            if (isFolder && folderIds.includes(listOrFolder.id)) {
               listOrFolder.isOpen = true;
 
               listOrFolder.allLists.forEach((list) => {
-                initStatusColumnAndSelectedSpaceId(draftState, team, list, listId, space.id);
+                initStatusColumnAndSelectedSpaceId(
+                  draftState,
+                  team,
+                  list,
+                  listId,
+                  space.id
+                );
               });
             } else if (!isFolder) {
-              initStatusColumnAndSelectedSpaceId(draftState, team, listOrFolder, listId, space.id);
+              initStatusColumnAndSelectedSpaceId(
+                draftState,
+                team,
+                listOrFolder,
+                listId,
+                space.id
+              );
             }
           });
         }
