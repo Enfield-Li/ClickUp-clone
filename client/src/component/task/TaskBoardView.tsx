@@ -2,6 +2,8 @@ import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
+import { useParams } from "react-router-dom";
+import { TASK_BOARD_PARAM } from "../../constant";
 import { useLocalTasks } from "../../hook/useLocalState";
 import {
   LookUpReorderedColumn,
@@ -32,8 +34,13 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
+  const param = useParams();
+  const selectedListId = Number(param[TASK_BOARD_PARAM]);
   //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
-  const { taskState, loading, setTaskState } = useLocalTasks({ sortBy });
+  const { taskState, loading, setTaskState } = useLocalTasks({
+    sortBy,
+    selectedListId,
+  });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   //   console.log(taskState);
 
@@ -43,6 +50,20 @@ function TaskBoardView({ sortBy }: Props) {
     },
     [taskState, sortBy]
   );
+
+  if (selectedListId === -1) {
+    return (
+      <Center
+        mt="-60px"
+        flexGrow={1}
+        opacity="60%"
+        fontSize="20px"
+        fontWeight="semibold"
+      >
+        No Space
+      </Center>
+    );
+  }
 
   if (loading)
     return (

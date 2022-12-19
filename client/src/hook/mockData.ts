@@ -125,7 +125,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
 
 const allSpace2ListOrFolderForTeam1: (FolderCategory | ListCategory)[] = [
   {
-    id: 5,
+    id: 7,
     statusColumnsCategoryId: 1,
     color: getRandomColor(),
     isPrivate: true,

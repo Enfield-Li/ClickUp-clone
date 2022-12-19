@@ -18,15 +18,13 @@ import {
 
 interface UseLocalTasksParam {
   sortBy: SortBy;
+  selectedListId: number;
 }
-export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
-  const param = useParams();
+export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
   const location = useLocation();
-
-  let selectedListId = Number(param[TASK_BOARD_PARAM]);
   //   console.log({ selectedListId, locationState: location.state });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [taskState, setTaskState] = useState<TaskState>();
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
@@ -37,13 +35,10 @@ export function useLocalTasks({ sortBy }: UseLocalTasksParam) {
 
     async function initLocalState() {
       if (!selectedListId && !location.state) {
-        console.log("here");
-
         setTaskState(undefined);
         setTaskStateContext(null);
         return;
       }
-      setLoading(true);
 
       const statusColumnsDataFromApi: StatusColumns =
         location.state.statusColumns;

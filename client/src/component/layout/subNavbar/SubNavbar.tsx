@@ -9,10 +9,7 @@ import { motion } from "framer-motion";
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
-import useAuthContext from "../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { TEAM_STATE_ACTION } from "../../../types";
-import { fetchTeamListLocal } from "../../task/actions/fetchSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -42,22 +39,29 @@ function SubNavbar({
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
 
+  const currentTeam = teamState.teams.find(
+    (team) => team.id === teamState.activeTeamState.selectedTeamId
+  );
+//   console.log(currentTeam);
+
+  const selectedListId = teamState.activeTeamState.selectedListId
+    ? teamState.activeTeamState.selectedListId
+    : currentTeam?.spaceList.length
+    ? 0
+    : -1;
+
   // sync up url with openedListId
   useEffect(() => {
     if (teamState.teams.length) {
-      navigate(
-        CLIENT_ROUTE.TASK_BOARD +
-          `/${teamState.activeTeamState.selectedListId}`,
-        {
-          replace: true,
-          state: teamState.activeTeamState.selectedListId
-            ? {
-                isNewUser: location.state?.isNewUser,
-                statusColumns: teamState.activeTeamState.currentStatusColumns,
-              }
-            : null,
-        }
-      );
+      navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
+        replace: true,
+        state: selectedListId
+          ? {
+              isNewUser: location.state?.isNewUser,
+              statusColumns: teamState.activeTeamState.currentStatusColumns,
+            }
+          : null,
+      });
     }
   }, [teamState]);
 
@@ -119,7 +123,7 @@ function SubNavbar({
         </Flex>
 
         {/* Content */}
-        <SubNavbarContent />
+        <SubNavbarContent currentTeam={currentTeam} />
       </Box>
     </motion.div>
   );

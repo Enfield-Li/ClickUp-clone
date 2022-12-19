@@ -2,30 +2,31 @@ import {
   Box,
   Center,
   Flex,
-  Text,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
-import { memo } from "react";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { memo, useEffect } from "react";
+import { Team } from "../../../types";
 import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
 import Space from "./Space";
 
-type Props = {};
+type Props = { currentTeam: Team | undefined };
 
 export default memo(SubNavbarContent);
-function SubNavbarContent({}: Props) {
+function SubNavbarContent({ currentTeam }: Props) {
   const { colorMode } = useColorMode();
-  const { teamState } = useTeamStateContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
-  const currentTeam = teamState.teams.find(
-    (team) => team.id === teamState.activeTeamState.selectedTeamId
-  );
 
   function handleClickToSeeEveryTasks(): void {
     throw new Error("Function not implemented.");
   }
+
+  useEffect(() => {
+    if (!currentTeam?.spaceList.length) {
+      onOpen();
+    }
+  }, [currentTeam?.spaceList]);
 
   return (
     <Box
@@ -78,12 +79,12 @@ function SubNavbarContent({}: Props) {
         color="lightMain.300"
         _hover={{ color: "purple.500" }}
       >
-        <Center fontWeight="bold" fontSize="xl" mx="1">
+        <Center fontWeight="bold" fontSize="xl" mx="1" pb="2px">
           +
         </Center>
-        <Text fontWeight="normal" fontSize="sm">
+        <Center fontWeight="normal" fontSize="sm">
           Add Space
-        </Text>
+        </Center>
       </Flex>
 
       <CreateSpaceModal isOpen={isOpen} onClose={onClose} />
