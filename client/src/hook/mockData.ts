@@ -226,23 +226,23 @@ export const initPanelActivity: PanelActivity = {
     {
       id: 11,
       teamId: 1,
-      spaceIds: [1, 2],
+      spaceId: 1,
       folderIds: [1, 2],
       listId: 3,
     },
     {
       id: 22,
       teamId: 2,
-      spaceIds: [100],
+      spaceId: 100,
       folderIds: [50],
       listId: 60,
     },
     {
       id: 33,
       teamId: 3,
-      spaceIds: [],
-      folderIds: [],
       listId: null,
+      folderIds: [],
+      spaceId: null,
     },
   ],
 };

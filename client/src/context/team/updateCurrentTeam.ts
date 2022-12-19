@@ -23,8 +23,14 @@ export function updateActiveTeamState(
       errorMsg + "target team or targetTeamActivity does not exist"
     );
 
-  const { folderIds, listId, spaceIds } = targetTeamActivity;
-  validateTeamActivities({ draftState, teamId, spaceIds, folderIds, listId });
+  const { folderIds, listId, spaceId } = targetTeamActivity;
+  validateTeamActivities({
+    draftState,
+    teamId,
+    spaceId,
+    folderIds,
+    listId,
+  });
 
   // Selected state
   draftState.activeTeamState.selectedListId = listId;
@@ -35,7 +41,7 @@ export function updateActiveTeamState(
     (team) =>
       team.id === teamId &&
       team.spaceList.forEach((space) => {
-        if (spaceIds.includes(space.id)) {
+        if (space.id === spaceId) {
           space.isOpen = true;
 
           space.allListOrFolder.forEach((listOrFolder) => {
@@ -91,28 +97,25 @@ function initStatusColumnAndSelectedSpaceId(
 type ValidateTeamParam = {
   draftState: WritableDraft<TeamStateType>;
   teamId: number;
-  spaceIds: number[];
   folderIds: number[];
   listId: number | null;
+  spaceId: number | null;
 };
 
 function validateTeamActivities({
   draftState,
   teamId,
-  spaceIds,
+  spaceId,
   folderIds,
   listId,
 }: ValidateTeamParam) {
   const targetTeam = draftState.teams.find((team) => team.id === teamId);
   if (!targetTeam) throw new Error(errorMsg + "target team does not exist!");
 
-  for (const spaceId of spaceIds) {
-    const targetSpace = targetTeam.spaceList.find(
-      (space) => space.id === spaceId
-    );
-    if (!targetSpace)
-      throw new Error(errorMsg + "target space does not exist!");
-  }
+  const targetSpace = targetTeam.spaceList.find(
+    (space) => space.id === spaceId
+  );
+  if (!targetSpace) throw new Error(errorMsg + "target space does not exist!");
 
   for (const folderId of folderIds) {
     const allFolderOrLists: number[] = [];

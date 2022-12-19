@@ -353,9 +353,9 @@ export const AUTH_ACTION = {
 export type TeamActivity = {
   id: number;
   teamId: number;
-  spaceIds: number[];
   folderIds: number[];
   listId: number | null;
+  spaceId: number | null;
 };
 export type PanelActivity = {
   id: number;
