@@ -54,13 +54,22 @@ function SubNavbarContent({}: Props) {
         <Box>Everything</Box>
       </Flex>
 
-      <Box>
-        {currentTeam?.spaceList?.map((space) => (
-          <Box key={space.id}>
-            <Space space={space} />
+      {currentTeam?.spaceList.length ? (
+        <Box>
+          {currentTeam?.spaceList?.map((space) => (
+            <Box key={space.id}>
+              <Space space={space} />
+            </Box>
+          ))}
+        </Box>
+      ) : (
+        <Flex alignItems="center" flexDir="row" px="4" opacity="80%">
+          <Box display="inline" fontWeight="bold" mr="4" opacity="60%">
+            &#8212;
           </Box>
-        ))}
-      </Box>
+          No Spaces found
+        </Flex>
+      )}
 
       <Flex
         onClick={onOpen}
