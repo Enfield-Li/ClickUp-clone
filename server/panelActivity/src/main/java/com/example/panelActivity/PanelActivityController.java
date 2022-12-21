@@ -1,6 +1,6 @@
 package com.example.panelActivity;
 
-import static com.example.clients.UrlConstants.STATUS_COLUMN_API_VERSION;
+import static com.example.clients.UrlConstants.TEAM_API_VERSION;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(STATUS_COLUMN_API_VERSION)
+@RequestMapping(TEAM_API_VERSION)
 class PanelActivityController {
 
     private final PanelActivityService statusColumnService;

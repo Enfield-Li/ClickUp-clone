@@ -9,7 +9,8 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo } from "react";
-import { CreateSpaceStep, CreateSpace } from "../../../types";
+import useTeamStateContext from "../../../context/team/useTeamContext";
+import { CreateSpaceStep, CreateSpace, CreateSpaceDTO } from "../../../types";
 
 type Props = {
   sectionName: string;
@@ -29,6 +30,7 @@ function CreateSpaceModalTemplate({
   setCreateSpace,
   previousSection,
 }: Props) {
+  const { teamState } = useTeamStateContext();
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleNext() {
@@ -42,7 +44,13 @@ function CreateSpaceModalTemplate({
     );
   }
 
-  function handleCreateSpace() {}
+  function handleCreateSpace() {
+    const createSpaceDTO: CreateSpaceDTO = {
+      ...createSpace.createSpaceDTO,
+      teamId: teamState.activeTeamState.selectedTeamId,
+    };
+    console.log(createSpaceDTO);
+  }
 
   return (
     <>
@@ -89,10 +97,14 @@ function CreateSpaceModalTemplate({
           width="100%"
           rounded="sm"
           height="50px"
-          onClick={handleNext}
           color="lightMain.100"
           bgColor="customBlue.200"
           _hover={{ bgColor: "customBlue.100" }}
+          onClick={
+            createSpace.step === CreateSpaceStep.CONFIRM
+              ? handleCreateSpace
+              : handleNext
+          }
         >
           {!nextSection
             ? "Create space"

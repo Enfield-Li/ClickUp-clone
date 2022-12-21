@@ -15,7 +15,7 @@ import SpacePrivateSetting from "./SpacePrivateSetting";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
-const createSpaceDTO: CreateSpaceDTO = {
+const initCreateSpaceDTO: CreateSpaceDTO = {
   name: "",
   color: "gray",
   orderIndex: 0,
@@ -24,7 +24,7 @@ const createSpaceDTO: CreateSpaceDTO = {
 };
 
 const initialCreateSpace: CreateSpace = {
-  createSpaceDTO,
+  createSpaceDTO: initCreateSpaceDTO,
   isAllSet: false,
   selectedStatusColumns: [],
   step: CreateSpaceStep.NAME,

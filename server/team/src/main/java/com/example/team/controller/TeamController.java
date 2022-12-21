@@ -1,4 +1,4 @@
-package com.example.team;
+package com.example.team.controller;
 
 import static com.example.clients.UrlConstants.*;
 
@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateTeamDTO;
+import com.example.team.model.Space;
 import com.example.team.model.Team;
+import com.example.team.model.UserInfo;
+import com.example.team.service.TeamService;
 
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(STATUS_COLUMN_API_VERSION)
+@RequestMapping(TEAM_API_VERSION)
 class TeamController {
 
     private final TeamService teamService;
@@ -34,4 +37,11 @@ class TeamController {
         var created = teamService.createTeam(createTeamDTO);
         return ResponseEntity.ok(created);
     }
+
+    // @PostMapping("/init_team")
+    // ResponseEntity<Boolean> initTeam(@RequestBody UserInfo userInfo) {
+
+    //     var created = teamService.initTeam(userInfo);
+    //     return ResponseEntity.ok(true);
+    // }
 }

@@ -22,7 +22,7 @@ class TeamActivity {
 
     private Integer listId;
 
-    private Set<Integer> spaceIds = new HashSet<>();
+    private Integer spaceIds;
 
     private Set<Integer> folderIds = new HashSet<>();
 

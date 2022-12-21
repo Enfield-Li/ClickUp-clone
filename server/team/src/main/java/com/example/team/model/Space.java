@@ -39,9 +39,6 @@ public class Space {
     private String name;
 
     @NotNull
-    private Boolean isOpen;
-
-    @NotNull
     private Boolean isPrivate;
 
     @NotNull

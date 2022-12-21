@@ -302,16 +302,17 @@ export type TeamStatusColumns = TeamStatusColumn[];
 
 export type Team = {
   id: number;
-  owner: User;
+  owner: UserInfo;
   name: string;
   color: string;
-  member: User[];
+  member: UserInfo[];
   isPrivate: boolean;
   spaceList: SpaceType[];
   teamStatusColumn: TeamStatusColumns;
 };
 
 export interface CreateSpaceDTO {
+  teamId?: number;
   name: string;
   color: string;
   isPrivate: boolean;

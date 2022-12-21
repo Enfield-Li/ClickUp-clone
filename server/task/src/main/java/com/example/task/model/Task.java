@@ -167,12 +167,12 @@ public class Task {
                 .expectedDueDate(createTaskDTO.expectedDueDate())
                 .build();
 
-        setTaskForWatcher(task); // Manage relationship
+        bindTaskWatcher(task); // Manage relationship
         return task;
     }
 
     // Manage task/watcher relationship in task
-    private static Task setTaskForWatcher(Task task) {
+    private static Task bindTaskWatcher(Task task) {
         task.getWatchers().forEach(watcher -> {
             if (task.getId() != null) {
                 watcher.setTaskWatcherId(task.getId());
@@ -184,8 +184,8 @@ public class Task {
     }
 
     // Manage task/watcher relationship in taskList
-    public static List<Task> setTaskForWatcher(List<Task> taskList) {
-        taskList.forEach(task -> setTaskForWatcher(task));
+    public static List<Task> bindWatcher(List<Task> taskList) {
+        taskList.forEach(task -> bindTaskWatcher(task));
         return taskList;
     }
 }

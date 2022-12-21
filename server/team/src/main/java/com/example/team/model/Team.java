@@ -2,6 +2,7 @@ package com.example.team.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -67,5 +68,21 @@ public class Team {
                 .name(createTeamDTO.name())
                 .isPrivate(createTeamDTO.isPrivate())
                 .build();
+    }
+
+    public static Team bindTeamSpace(Team team) {
+        team.getSpaces().forEach(space -> {
+            if (team.getId() != null) {
+                space.setTeamId(team.getId());
+            }
+            space.setTeam(team);
+        });
+
+        return team;
+    }
+
+    public static List<Team> bindSpace(List<Team> teamList) {
+        teamList.forEach(team -> bindTeamSpace(team));
+        return teamList;
     }
 }

@@ -115,7 +115,8 @@ function validateTeamActivities({
   const targetSpace = targetTeam.spaceList.find(
     (space) => space.id === spaceId
   );
-  if (!targetSpace) throw new Error(errorMsg + "target space does not exist!");
+  if (spaceId !== null && !targetSpace)
+    throw new Error(errorMsg + "target space does not exist!");
 
   for (const folderId of folderIds) {
     const allFolderOrLists: number[] = [];

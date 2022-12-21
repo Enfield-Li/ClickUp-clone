@@ -16,7 +16,7 @@ import com.example.statusColumn.model.StatusColumn;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(STATUS_COLUMN_API_VERSION)
+@RequestMapping(TEAM_API_VERSION)
 class StatusColumnController {
 
     private final StatusColumnService statusColumnService;
