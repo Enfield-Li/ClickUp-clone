@@ -1,4 +1,4 @@
-package com.example.statusColumn.dto;
+package com.example.teamStatusColumn.dto;
 
 public record CreateStatusColumnDTO(
         String name,

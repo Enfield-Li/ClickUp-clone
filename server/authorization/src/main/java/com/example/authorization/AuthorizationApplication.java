@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EnableEurekaClient
 @SpringBootApplication(scanBasePackages = {
         "com.example.clients",
-        "com.example.serviceCORS",
+        "service-config",
         "com.example.authorization",
 })
 public class AuthorizationApplication {

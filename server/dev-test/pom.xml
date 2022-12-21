@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>devTest</artifactId>
+    <artifactId>dev-test</artifactId>
 
     <name>devTest service</name>
 
@@ -48,22 +48,6 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!--    <dependency>
-            <groupId>com.example</groupId>
-        <artifactId>amqp</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        <scope>compile</scope>
-        </dependency>
-       <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-        <artifactId>service-security-config</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        <scope>compile</scope>
-        </dependency> -->
     </dependencies>
 
 </project>

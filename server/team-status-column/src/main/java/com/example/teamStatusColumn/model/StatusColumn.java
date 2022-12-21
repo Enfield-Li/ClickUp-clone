@@ -1,4 +1,4 @@
-package com.example.devTest.model;
+package com.example.teamStatusColumn.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

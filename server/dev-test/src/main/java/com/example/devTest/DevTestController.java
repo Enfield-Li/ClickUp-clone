@@ -11,15 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.devTest.model.StatusColumn;
-
 @Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(TEAM_API_VERSION)
-class StatusColumnController {
+class DevTestController {
 
-    private final StatusColumnService statusColumnService;
+    private final DevTestService devTestService;
 
     @GetMapping
     String test() {
@@ -28,9 +26,9 @@ class StatusColumnController {
     }
 
     @PostMapping
-    ResponseEntity<Boolean> createStatusColumn(
-            @RequestBody StatusColumn statusColumn) {
-        var created = statusColumnService.createStatusColumn(statusColumn);
+    ResponseEntity<Boolean> test(
+            @RequestBody Image statusColumn) {
+        var created = devTestService.test(statusColumn);
         return ResponseEntity.ok(created);
     }
 }

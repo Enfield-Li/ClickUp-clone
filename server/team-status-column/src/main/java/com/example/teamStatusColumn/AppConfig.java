@@ -1,4 +1,4 @@
-package com.example.devTest;
+package com.example.teamStatusColumn;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

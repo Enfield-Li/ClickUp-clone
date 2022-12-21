@@ -11,13 +11,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         // "com.example.amqp",
         "com.example.clients",
-        "com.example.serviceCORS",
+        "service-config",
         "com.example.statusColumn",
         // "com.example.serviceSecurityConfig",
 })
-public class StatusColumnApplication {
+public class DevTestApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StatusColumnApplication.class, args);
+        SpringApplication.run(DevTestApplication.class, args);
     }
 }

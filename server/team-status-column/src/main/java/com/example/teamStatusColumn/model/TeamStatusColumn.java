@@ -1,43 +1,33 @@
-package com.example.statusColumn.model;
+package com.example.teamStatusColumn.model;
+
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatusColumn {
+class TeamStatusColumn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    private String title;
+    private String name;
 
-    private String color;
-
-    @NotNull
     private Integer teamId;
 
-    @NotNull
-    private Integer orderIndex;
+    private Integer defaultId;
 
-    private Boolean markAsClosed;
-
-    @JsonIgnore
-    private Integer listCategoryId;
-
+    @OneToMany
+    private Set<StatusColumn> statusColumns;
 }

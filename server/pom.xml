@@ -22,7 +22,7 @@
         <module>task-event</module>
         <module>task-comment</module>
         <module>team</module>
-        <module>status-column</module>
+        <module>team-status-column</module>
         <module>dev-test </module>
         <module>panel-activity</module>
         <module>service-security-config</module>

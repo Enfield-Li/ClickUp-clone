@@ -1,33 +1,28 @@
-package com.example.statusColumn.model;
-
-import java.util.Set;
+package com.example.devTest;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.Lob;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class TeamStatusColumn {
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    @Lob
+    private Byte[] image;
 
-    private Integer teamId;
-
-    private Integer defaultId;
-
-    @OneToMany
-    private Set<StatusColumn> statusColumns;
 }

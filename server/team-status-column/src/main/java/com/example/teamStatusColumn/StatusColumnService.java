@@ -1,9 +1,9 @@
-package com.example.devTest;
+package com.example.teamStatusColumn;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.example.devTest.model.StatusColumn;
+import com.example.teamStatusColumn.model.StatusColumn;
 
 @Service
 @RequiredArgsConstructor

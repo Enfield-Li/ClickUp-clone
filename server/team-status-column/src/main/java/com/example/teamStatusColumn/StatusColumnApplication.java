@@ -1,4 +1,4 @@
-package com.example.statusColumn;
+package com.example.teamStatusColumn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {
         // "com.example.amqp",
         "com.example.clients",
-        "com.example.serviceCORS",
+        "service-config",
         "com.example.statusColumn",
         // "com.example.serviceSecurityConfig",
 })
