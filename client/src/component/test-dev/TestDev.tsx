@@ -2,9 +2,34 @@ import { Box, Button, Center, Divider, Flex, Input } from "@chakra-ui/react";
 import { MouseEvent, useState } from "react";
 
 export default function TestDev() {
+  const [selectedImage, setSelectedImage] = useState<File | undefined>();
+
   return (
-    <Box height="340px" rounded="md" width="500px">
-      <i className="bi bi-person-plus"></i>
-    </Box>
+    <div>
+      <h1>Upload and Display Image usign React Hook's</h1>
+
+      <br />
+      <input
+        type="file"
+        name="myImage"
+        onChange={(event) => {
+          console.log(event.target.files?.[0]);
+          setSelectedImage(event.target.files?.[0]);
+        }}
+      />
+
+      {selectedImage && (
+        <div>
+          <img
+            alt="not fount"
+            width={"250px"}
+            src={URL.createObjectURL(selectedImage)}
+          />
+          <br />
+          <button onClick={() => setSelectedImage(undefined)}>Remove</button>
+        </div>
+      )}
+      <br />
+    </div>
   );
 }

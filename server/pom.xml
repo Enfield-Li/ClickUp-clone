@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
@@ -17,13 +19,14 @@
         <module>amqp</module>
         <module>authorization</module>
         <module>task</module>
-        <module>taskEvent</module>
-        <module>taskComment</module>
+        <module>task-event</module>
+        <module>task-comment</module>
         <module>team</module>
-        <module>statusColumn</module>
-        <module>panelActivity</module>
-        <module>serviceSecurityConfig</module>
-        <module>serviceCORS</module>
+        <module>status-column</module>
+        <module>dev-test </module>
+        <module>panel-activity</module>
+        <module>service-security-config</module>
+        <module>service-config</module>
     </modules>
 
     <properties>
@@ -93,15 +96,15 @@
         </dependency>
         <!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+        <artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-sleuth</artifactId>
 		</dependency> -->
 
         <!-- Test -->
@@ -129,8 +132,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!-- https://stackoverflow.com/q/42921490/16648127
-					https://www.baeldung.com/spring-boot-repackage-vs-mvn-package 
-					https://docs.spring.io/spring-boot/docs/2.7.4/maven-plugin/reference/htmlsingle/#packaging -->
+                https://www.baeldung.com/spring-boot-repackage-vs-mvn-package
+                https://docs.spring.io/spring-boot/docs/2.7.4/maven-plugin/reference/htmlsingle/#packaging -->
                 <executions>
                     <execution>
                         <goals>
