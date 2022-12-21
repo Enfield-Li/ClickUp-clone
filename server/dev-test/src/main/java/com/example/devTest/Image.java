@@ -23,6 +23,6 @@ public class Image {
     private Integer id;
 
     @Lob
-    private Byte[] image;
+    private byte[] image;
 
 }

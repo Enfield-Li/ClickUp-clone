@@ -1,5 +1,4 @@
-import { Box, Button, Center, Divider, Flex, Input } from "@chakra-ui/react";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 
 export default function TestDev() {
   const [selectedImage, setSelectedImage] = useState<File | undefined>();
