@@ -1,16 +1,6 @@
-import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  Input,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { getRandomTeamColor, teamColors2D } from "../../media/colors";
 import pic from "../../media/onboarding.png";
 import { Team } from "../../types";
 import AvatarColor from "./AvatarColor";
@@ -23,7 +13,7 @@ export type InitTeam = Team & { memberEmails: string };
 
 export default function MultiStepForm({}: Props) {
   const { authState } = useAuthContext();
-  const initTeam: Team & { memberEmails: string } = {
+  const initTeam: InitTeam = {
     color: "rgb(64, 188, 134)",
     isPrivate: false,
     member: [],
@@ -35,22 +25,15 @@ export default function MultiStepForm({}: Props) {
   const ref = useRef<HTMLDivElement[]>([]);
   const [team, setTeam] = useState<InitTeam>(initTeam);
   const bgColor = useColorModeValue("rgb(250, 251, 252)", "lightMain.200");
-  const fileTypes = ["JPEG", "PNG", "GIF"];
 
-  //   useEffect(() => {
-  //     if (!isVisible(ref.current[ref.current]))
-  //       ref.current[ref.current]?.scrollIntoView({
-  //         behavior: "smooth",
-  //         inline: "center",
-  //         block: "center",
-  //       });
-  //   }, [ref]);
-
-  //   function isVisible(element: HTMLDivElement): boolean {
-  //     const { top, bottom } = element.getBoundingClientRect();
-  //     const vHeight = window.innerHeight || document.documentElement.clientHeight;
-  //     return (top > 0 || bottom > 0) && top < vHeight;
-  //   }
+  useEffect(() => {
+    if (ref.current.length) {
+      ref.current[0].scrollIntoView({
+        inline: "center",
+        block: "center",
+      });
+    }
+  }, []);
 
   function handleNextStage(stage: number) {
     setStep(stage);
@@ -61,11 +44,29 @@ export default function MultiStepForm({}: Props) {
     });
   }
 
-  function handleChange() {}
+  function setCurrentStep() {
+    ref.current.forEach((element, index) => {
+      const topPosition = element.getBoundingClientRect().top;
+      if (50 < topPosition && topPosition < 400) {
+        setStep(index);
+      }
+    });
+  }
 
   return (
-    <Flex bgColor={bgColor} height="100vh" color="darkMain.200">
-      <Box flexGrow="1" overflowY="auto" px="150px" width="100%">
+    <Flex
+      height="100vh"
+      bgColor={bgColor}
+      position="relative"
+      color="darkMain.200"
+    >
+      <Box
+        px="150px"
+        flexGrow="1"
+        width="100%"
+        overflowY="auto"
+        onScroll={setCurrentStep}
+      >
         <Box height="200px"></Box>
 
         {/* Name */}
@@ -98,7 +99,7 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* Avatar and color */}
-        <Box ref={(el) => el && (ref.current[1] = el)}>
+        <Box ref={(el) => el && (ref.current[1] = el)} mb="50px">
           <AvatarColor
             team={team}
             step={step}
@@ -107,6 +108,7 @@ export default function MultiStepForm({}: Props) {
           />
         </Box>
 
+        {/* TeamSize */}
         <Box ref={(el) => el && (ref.current[2] = el)}>
           <TeamSize
             step={step}
@@ -115,6 +117,7 @@ export default function MultiStepForm({}: Props) {
           />
         </Box>
 
+        {/* Member email */}
         <Box ref={(el) => el && (ref.current[3] = el)}>
           <OnBoardingTemplate
             step={step}
@@ -143,6 +146,7 @@ export default function MultiStepForm({}: Props) {
           </OnBoardingTemplate>
         </Box>
 
+        {/* Apps */}
         <Box ref={(el) => el && (ref.current[4] = el)}>
           <OnBoardingTemplate
             step={step}
@@ -155,6 +159,7 @@ export default function MultiStepForm({}: Props) {
           </OnBoardingTemplate>
         </Box>
 
+        {/* Import tasks */}
         <Box ref={(el) => el && (ref.current[5] = el)}>
           <OnBoardingTemplate
             step={step}
@@ -167,6 +172,7 @@ export default function MultiStepForm({}: Props) {
           </OnBoardingTemplate>
         </Box>
 
+        {/* Done */}
         <Box ref={(el) => el && (ref.current[6] = el)}>
           <OnBoardingTemplate
             step={step}
@@ -179,6 +185,41 @@ export default function MultiStepForm({}: Props) {
             </Box>
           </OnBoardingTemplate>
         </Box>
+      </Box>
+
+      <Box position="absolute" right="330px" bottom="20px">
+        {step !== 0 && (
+          <Center
+            rounded="md"
+            width="50px"
+            color="white"
+            height="50px"
+            fontSize="2xl"
+            cursor="pointer"
+            bgColor="customBlue.200"
+            _hover={{ bgColor: "customBlue.100" }}
+            onClick={() => handleNextStage(step - 1)}
+          >
+            <i className="bi bi-chevron-up"></i>
+          </Center>
+        )}
+
+        {step !== 6 && (
+          <Center
+            mt="3"
+            rounded="md"
+            width="50px"
+            color="white"
+            height="50px"
+            fontSize="2xl"
+            cursor="pointer"
+            bgColor="customBlue.200"
+            _hover={{ bgColor: "customBlue.100" }}
+            onClick={() => handleNextStage(step + 1)}
+          >
+            <i className="bi bi-chevron-down"></i>
+          </Center>
+        )}
       </Box>
 
       <Box>

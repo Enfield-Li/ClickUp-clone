@@ -88,6 +88,7 @@ export default function AvatarColor({
               {colors.map((color, index) => (
                 <Box
                   mx="6"
+                  key={index}
                   width="20px"
                   height="20px"
                   rounded="full"
