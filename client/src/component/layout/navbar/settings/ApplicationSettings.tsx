@@ -11,7 +11,7 @@ import {
 import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { getRandomColor } from "../../../../media/colors";
+import { getRandomSpaceColor } from "../../../../media/colors";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
 import JoinedTeamList from "./JoinedTeamList";

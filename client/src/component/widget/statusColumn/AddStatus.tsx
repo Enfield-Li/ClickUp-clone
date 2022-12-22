@@ -13,7 +13,7 @@ import produce from "immer";
 import React, { memo, useState } from "react";
 import { StatusColumn } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
-import { getRandomColor, spaceColors3D } from "../../../media/colors";
+import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
@@ -33,7 +33,7 @@ function AddStatus({
   const [title, setTitle] = useState("");
   const [adding, setAdding] = useState(false);
   // https://beta.reactjs.org/apis/react/useState#avoiding-recreating-the-initial-state
-  const [color, setColor] = useState(getRandomColor);
+  const [color, setColor] = useState(getRandomSpaceColor);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleSelectColor(selectedColor: string) {
@@ -43,7 +43,7 @@ function AddStatus({
   function resetAll() {
     setTitle("");
     setAdding(false);
-    setColor(getRandomColor);
+    setColor(getRandomSpaceColor);
   }
 
   function handleOpenEdit() {

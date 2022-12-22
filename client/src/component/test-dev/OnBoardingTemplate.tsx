@@ -1,12 +1,14 @@
-import { Flex, Center, Box } from "@chakra-ui/react";
+import { Flex, Center, Box, Button } from "@chakra-ui/react";
 import React from "react";
 import LogoSVG from "../../media/LogoSVG";
 
 type Props = {
+  step: number;
   title: string;
   stageNumber: number;
-  step: number;
+  buttonTitle?: string;
   children: React.ReactNode;
+  handleNextStage?: (stage: number) => void;
 };
 
 export default function OnBoardingTemplate({
@@ -14,38 +16,17 @@ export default function OnBoardingTemplate({
   title,
   children,
   stageNumber,
+  buttonTitle,
+  handleNextStage,
 }: Props) {
   return (
     <Box height="410px" opacity={step === stageNumber ? "" : "25%"}>
-      <Flex alignItems="center">
-        <Center
-          mr="6"
-          shadow="lg"
-          width="55px"
-          height="55px"
-          rounded="full"
-          boxShadow="lg"
-          bgColor="white"
-        >
-          <Center
-            width="fit-content"
-            height="fit-content"
-            transform="scale(0.25)"
-          >
-            <LogoSVG />
-          </Center>
-        </Center>
-
-        <Box fontSize="25px">{title}</Box>
-      </Flex>
-
       <Flex>
         <Center
-          opacity="0"
           mr="6"
           shadow="lg"
-          width="55px"
-          height="55px"
+          width="58px"
+          height="58px"
           rounded="full"
           boxShadow="lg"
           bgColor="white"
@@ -59,7 +40,31 @@ export default function OnBoardingTemplate({
           </Center>
         </Center>
 
-        <Box flexGrow="1">{children}</Box>
+        <Box flexGrow="1">
+          <Box mt="2" fontSize="25px">
+            {title}
+          </Box>
+
+          <Box mt="40px">{children}</Box>
+
+          {buttonTitle && (
+            <Button
+              mt="50px"
+              size="lg"
+              _focus={{}}
+              _active={{}}
+              rounded="md"
+              color="white"
+              bgColor="customBlue.200"
+              _hover={{ bgColor: "customBlue.100" }}
+              onClick={() =>
+                handleNextStage && handleNextStage(stageNumber + 1)
+              }
+            >
+              {buttonTitle}
+            </Button>
+          )}
+        </Box>
       </Flex>
     </Box>
   );

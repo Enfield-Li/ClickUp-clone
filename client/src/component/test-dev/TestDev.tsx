@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import AvatarEditor from "react-avatar-editor";
+import { Box, Center, Divider, Flex } from "@chakra-ui/react";
 
 const fileTypes = ["JPEG", "PNG", "GIF"];
 export default function TestDev() {
@@ -17,14 +18,47 @@ export default function TestDev() {
       <h1>Upload and Display Image usign React Hook's</h1>
 
       <br />
-      <FileUploader
-        name="file"
-        multiple={false}
-        types={fileTypes}
-        handleChange={handleChange}
-      >
-        abc
-      </FileUploader>
+
+      <Flex>
+        <FileUploader
+          name="file"
+          multiple={false}
+          types={fileTypes}
+          handleChange={handleChange}
+        >
+          <Center
+            width="120px"
+            height="120px"
+            rounded="full"
+            flexDir="column"
+            borderWidth="1px"
+            borderStyle="dashed"
+            borderColor="gray.400"
+          >
+            <Box opacity="35%">
+              <i className="bi bi-cloud-upload"></i>
+            </Box>
+
+            <Center>Drop an image or browse</Center>
+          </Center>
+        </FileUploader>
+
+        <Flex flexDir="column" alignItems="center">
+          <Divider
+            opacity="100%"
+            borderColor="blackAlpha.600"
+            orientation="vertical"
+          />
+          <Box>or</Box>
+          <Divider
+            opacity="100%"
+            borderColor="blackAlpha.600"
+            orientation="vertical"
+          />
+        </Flex>
+
+        <Box>stuff</Box>
+      </Flex>
       {/* <input
         type="file"
         name="myImage"

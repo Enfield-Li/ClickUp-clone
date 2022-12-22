@@ -1,4 +1,4 @@
-import { getRandomColor } from "../media/colors";
+import { getRandomSpaceColor } from "../media/colors";
 import {
   ColumnOptions,
   CurrentWeek,
@@ -42,7 +42,7 @@ const allFolder1ListForTeam1: ListCategory[] = [
     id: 5,
     statusColumnsCategoryId: 1,
     createdAt: new Date(),
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: false,
     members: [userInfo, guestUserInfo],
     name: "sub list 1",
@@ -58,7 +58,7 @@ const allFolder2ListForTeam1: ListCategory[] = [
     id: 6,
     statusColumnsCategoryId: 2,
     createdAt: new Date(),
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: false,
     members: [userInfo, guestUserInfo],
     name: "sub list 2",
@@ -74,7 +74,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
     {
       id: 1,
       createdAt: new Date(),
-      color: getRandomColor(),
+      color: getRandomSpaceColor(),
       isOpen: null,
       isPrivate: true,
       members: [userInfo, guestUserInfo],
@@ -86,7 +86,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
     {
       id: 2,
       createdAt: new Date(),
-      color: getRandomColor(),
+      color: getRandomSpaceColor(),
       isOpen: null,
       isPrivate: false,
       members: [userInfo, guestUserInfo],
@@ -99,7 +99,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
       id: 3,
       statusColumnsCategoryId: 3,
       createdAt: new Date(),
-      color: getRandomColor(),
+      color: getRandomSpaceColor(),
       isPrivate: true,
       members: [userInfo, guestUserInfo],
       name: "list1-team1",
@@ -112,7 +112,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
       id: 4,
       statusColumnsCategoryId: 4,
       createdAt: new Date(),
-      color: getRandomColor(),
+      color: getRandomSpaceColor(),
       isPrivate: false,
       members: [userInfo, guestUserInfo],
       name: "list2-team1",
@@ -127,7 +127,7 @@ const allSpace2ListOrFolderForTeam1: (FolderCategory | ListCategory)[] = [
   {
     id: 7,
     statusColumnsCategoryId: 1,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: true,
     createdAt: new Date(),
     members: [userInfo, guestUserInfo],
@@ -143,7 +143,7 @@ const allSpace2ListOrFolderForTeam2: (FolderCategory | ListCategory)[] = [
   {
     id: 50,
     createdAt: new Date(),
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isOpen: null,
     isPrivate: true,
     members: [userInfo, guestUserInfo],
@@ -155,7 +155,7 @@ const allSpace2ListOrFolderForTeam2: (FolderCategory | ListCategory)[] = [
   {
     id: 60,
     statusColumnsCategoryId: 1,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: true,
     createdAt: new Date(),
     members: [userInfo, guestUserInfo],
@@ -173,7 +173,7 @@ export const initialSpaceListForTeam1: SpaceType[] = [
     teamId: 1,
     name: "space1-team1",
     orderIndex: 1,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isOpen: null,
     isPrivate: false,
     allListOrFolder: allSpace1ListOrFolderForTeam1,
@@ -184,7 +184,7 @@ export const initialSpaceListForTeam1: SpaceType[] = [
     name: "space2-team1",
     orderIndex: 2,
     isOpen: null,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: true,
     allListOrFolder: allSpace2ListOrFolderForTeam1,
   },
@@ -197,7 +197,7 @@ const initialSpaceList2ForTeam2: SpaceType[] = [
     name: "space2",
     isOpen: null,
     orderIndex: 2,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     isPrivate: true,
     allListOrFolder: allSpace2ListOrFolderForTeam2,
   },
@@ -205,14 +205,14 @@ const initialSpaceList2ForTeam2: SpaceType[] = [
 
 export const mockUser: User = {
   id: 1,
-  color: getRandomColor(),
+  color: getRandomSpaceColor(),
   username: "mockUser",
   email: "",
   joinedTeamIds: [1, 2],
 };
 const guestUser: User = {
   id: 2,
-  color: getRandomColor(),
+  color: getRandomSpaceColor(),
   username: "guestUser",
   email: "",
   joinedTeamIds: [1, 2],
@@ -252,7 +252,7 @@ export const teams: Team[] = [
     id: 1,
     spaceList: initialSpaceListForTeam1,
     teamStatusColumn: defaultStatusColumnCategories,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     owner: userInfo,
     isPrivate: false,
     name: "1",
@@ -261,7 +261,7 @@ export const teams: Team[] = [
   {
     id: 2,
     spaceList: initialSpaceList2ForTeam2,
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     owner: userInfo,
     teamStatusColumn: defaultStatusColumnCategories,
     isPrivate: false,
@@ -271,7 +271,7 @@ export const teams: Team[] = [
   {
     id: 3,
     spaceList: [],
-    color: getRandomColor(),
+    color: getRandomSpaceColor(),
     owner: guestUserInfo,
     teamStatusColumn: defaultStatusColumnCategories,
     isPrivate: false,
