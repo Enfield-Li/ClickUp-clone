@@ -301,14 +301,14 @@ export interface TeamStatusColumn {
 export type TeamStatusColumns = TeamStatusColumn[];
 
 export type Team = {
-  id: number;
-  owner: UserInfo;
+  id?: number;
+  owner?: UserInfo;
   name: string;
   color: string;
   member: UserInfo[];
   isPrivate: boolean;
   spaceList: SpaceType[];
-  teamStatusColumn: TeamStatusColumns;
+  teamStatusColumn?: TeamStatusColumns;
 };
 
 export interface CreateSpaceDTO {

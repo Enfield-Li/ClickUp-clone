@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { memo } from "react";
+import MultiStepForm from "./component/test-dev/MultiStepForm";
 import useAuthContext from "./context/auth/useAuthContext";
 import useInit from "./hook/useInit";
 import ApplicationEntry from "./routes/ApplicationEntry";
@@ -12,7 +13,8 @@ function App() {
 
   return (
     <Box height="100vh">
-      {authState.user ? <ApplicationEntry /> : <Authentication />}
+      {/* {authState.user ? <ApplicationEntry /> : <Authentication />} */}
+      <MultiStepForm />
     </Box>
   );
 }

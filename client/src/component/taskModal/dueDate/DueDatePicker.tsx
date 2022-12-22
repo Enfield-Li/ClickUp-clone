@@ -6,7 +6,7 @@ import useTaskDetailContext from "../../../context/task_detail/useTaskDetailCont
 import { SortBy, Task } from "../../../types";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
-import MaterialTheme from "../../test-dev/MaterialTheme";
+import MaterialTheme from "../../../utils/MaterialTheme";
 
 type Props = {
   task: Task;

@@ -10,10 +10,11 @@ import {
   darkText,
   lightMainBG,
   lightText,
-} from "../../globalTheme";
+} from "../globalTheme";
 
 type Props = { children: React.ReactNode };
 
+export default memo(MaterialTheme);
 function MaterialTheme({ children }: Props) {
   const { colorMode } = useColorMode();
 
@@ -142,5 +143,3 @@ function MaterialTheme({ children }: Props) {
     </ThemeProvider>
   );
 }
-
-export default memo(MaterialTheme);
