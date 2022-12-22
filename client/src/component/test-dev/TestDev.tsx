@@ -1,24 +1,48 @@
-import { useRef, useState } from "react";
-import { FileUploader } from "react-drag-drop-files";
+import {
+  Box,
+  Center,
+  Divider,
+  Flex,
+  Modal,
+  ModalContent,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { Box, Center, Divider, Flex } from "@chakra-ui/react";
+import { FileUploader } from "react-drag-drop-files";
+
+const toBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 const fileTypes = ["JPEG", "PNG", "GIF"];
 export default function TestDev() {
   const editor = useRef<AvatarEditor>(null);
-  const [file, setFile] = useState<File | undefined>();
-  const [updatedImg, setUpdatedImg] = useState("");
+  //   const [file, setFile] = useState<File | undefined>();
+  const [imgString, setImageString] = useState("");
+  const [imgStringUpdated, setImgStringUpdated] = useState("");
 
-  const handleChange = (file: File) => {
-    setFile(file);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  console.log({ updatedImg: imgString });
+
+  useEffect(() => {
+    if (imgString) {
+      onOpen();
+    }
+  }, [imgString]);
+
+  async function handleChange(file: File) {
+    setImageString(await toBase64(file));
+  }
 
   return (
     <div>
-      <h1>Upload and Display Image usign React Hook's</h1>
-
-      <br />
-
       <Flex>
         <FileUploader
           name="file"
@@ -59,76 +83,38 @@ export default function TestDev() {
 
         <Box>stuff</Box>
       </Flex>
-      {/* <input
-        type="file"
-        name="myImage"
-        onChange={(event) => {
-          console.log(event.target.files?.[0]);
-          setFile(event.target.files?.[0]);
-        }}
-      /> */}
 
-      {file && (
-        <>
-          {/* <div>
-            <img
-              alt="not fount"
-              width={"250px"}
-              src={URL.createObjectURL(file)}
-            />
-            <br />
-          </div> */}
-          <br />
-          <AvatarEditor
-            ref={editor}
-            rotate={0}
-            scale={1.5}
-            border={50}
-            image={file}
-            width={250}
-            height={250}
-            borderRadius={200}
-            color={[0, 0, 0, 0.6]}
-            backgroundColor="black"
-            onMouseUp={() => console.log("onMouseUp")}
-            onMouseMove={() => {
-              if (editor.current) {
-                // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
-                // drawn on another canvas, or added to the DOM.
-                const canvas = editor.current.getImage();
-                // console.log(canvas);
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          {imgString && (
+            <>
+              <AvatarEditor
+                rotate={0}
+                scale={1.5}
+                border={50}
+                width={250}
+                ref={editor}
+                height={250}
+                image={imgString}
+                borderRadius={200}
+                color={[0, 0, 0, 0.6]}
+                backgroundColor="black"
+                onMouseUp={() => console.log("onMouseUp")}
+                onMouseMove={() => {
+                  if (editor.current) {
+                    const canvasScaled =
+                      editor.current.getImageScaledToCanvas();
+                    setImgStringUpdated(canvasScaled.toDataURL("image/png"));
+                  }
+                }}
+              />
 
-                // If you want the image resized to the canvas size (also a HTMLCanvasElement)
-                const canvasScaled = editor.current.getImageScaledToCanvas();
-                setUpdatedImg(canvasScaled.toDataURL("image/png"));
-              }
-            }}
-          />
-
-          <img alt="not fount" width={"250px"} src={updatedImg} />
-
-          <button
-            onClick={() => {
-              if (editor.current) {
-                // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
-                // drawn on another canvas, or added to the DOM.
-                const canvas = editor.current.getImage();
-                // console.log(canvas);
-
-                // If you want the image resized to the canvas size (also a HTMLCanvasElement)
-                const canvasScaled = editor.current.getImageScaledToCanvas();
-                console.log(
-                  canvasScaled.toDataURL("image/png")
-                  //   .replace("image/png", "image/octet-stream")
-                );
-              }
-            }}
-          >
-            Save
-          </button>
-          <button onClick={() => setFile(undefined)}>Remove</button>
-        </>
-      )}
+              <img alt="not fount" width={"250px"} src={imgStringUpdated} />
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

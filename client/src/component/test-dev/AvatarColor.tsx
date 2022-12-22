@@ -1,6 +1,8 @@
-import { Box, Center, Divider, Flex } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, useDisclosure } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { teamColors2D } from "../../media/colors";
+import EditAvatarModal from "./EditAvatar";
 import { InitTeam } from "./MultiStepForm";
 import OnBoardingTemplate from "./OnBoardingTemplate";
 
@@ -18,7 +20,31 @@ export default function AvatarColor({
   handleNextStage,
 }: Props) {
   const fileTypes = ["JPEG", "PNG", "GIF"];
-  function handleChange() {}
+  const [imgString, setImageString] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (imgString) {
+      onOpen();
+    }
+  }, [imgString]);
+
+  useEffect(() => {
+    if (!isOpen) setImageString("");
+  }, [isOpen]);
+
+  async function toBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  async function handleChange(file: File) {
+    setImageString(await toBase64(file));
+  }
 
   return (
     <OnBoardingTemplate
@@ -39,18 +65,31 @@ export default function AvatarColor({
             width="140px"
             height="140px"
             rounded="full"
+            cursor="pointer"
             flexDir="column"
             borderWidth="1px"
             borderStyle="dashed"
             borderColor="gray.400"
           >
-            <Box opacity="35%">
+            <Box opacity="35%" fontSize="lg">
               <i className="bi bi-cloud-upload"></i>
             </Box>
 
-            <Center>Drop an image or browse</Center>
+            <Center>Drop an image</Center>
+            <Center>
+              or
+              <span>&nbsp;</span>
+              <Box color="blue"> browse</Box>
+            </Center>
           </Center>
         </FileUploader>
+
+        <EditAvatarModal
+          isOpen={isOpen}
+          onClose={onClose}
+          setTeam={setTeam}
+          imgString={imgString}
+        />
 
         <Flex flexDir="column" alignItems="center" mx="30px" opacity="40%">
           <Divider
