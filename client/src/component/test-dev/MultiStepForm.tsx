@@ -24,7 +24,8 @@ export default function MultiStepForm({}: Props) {
   const [step, setStep] = useState(0);
   const ref = useRef<HTMLDivElement[]>([]);
   const [team, setTeam] = useState<InitTeam>(initTeam);
-  const bgColor = useColorModeValue("rgb(250, 251, 252)", "lightMain.200");
+  const bgColor = useColorModeValue("rgb(250, 251, 252)", "darkMain.300");
+  const color = useColorModeValue("darkMain.200", "lightMain.200");
 
   useEffect(() => {
     if (ref.current.length) {
@@ -56,9 +57,9 @@ export default function MultiStepForm({}: Props) {
   return (
     <Flex
       height="100vh"
+      color={color}
       bgColor={bgColor}
       position="relative"
-      color="darkMain.200"
     >
       <Box
         px="150px"
@@ -138,7 +139,7 @@ export default function MultiStepForm({}: Props) {
               value={team.memberEmails}
               borderColor="customBlue.200"
               placeholder="Enter email addresses(or paste multiple)"
-              _placeholder={{ color: "gray.800", fontSize: "30px" }}
+            //   _placeholder={{ color: "gray.800", fontSize: "30px" }}
               onChange={(e) =>
                 setTeam({ ...team, memberEmails: e.target.value })
               }

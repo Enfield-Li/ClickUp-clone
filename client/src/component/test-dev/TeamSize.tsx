@@ -1,4 +1,4 @@
-import { Center, Flex } from "@chakra-ui/react";
+import { Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { InitTeam } from "./MultiStepForm";
 import OnBoardingTemplate from "./OnBoardingTemplate";
@@ -25,6 +25,8 @@ const initSizes = [
 ];
 
 export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
+  const color = useColorModeValue("gray.500", "gray.300");
+
   const [sizeState, setSizeState] = useState<SizeState>({
     selectedSize: "",
     sizes: initSizes,
@@ -54,7 +56,7 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
             fontWeight="semibold"
             _hover={{ borderColor: "customBlue.200" }}
             onClick={() => handleSelect(size)}
-            color={sizeState.selectedSize === size ? "purple.500" : "gray.500"}
+            color={sizeState.selectedSize === size ? "purple.500" : color}
             borderColor={
               sizeState.selectedSize === size ? "purple.500" : "gray.300"
             }
@@ -76,9 +78,7 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
         fontWeight="semibold"
         _hover={{ borderColor: "customBlue.200" }}
         onClick={() => handleSelect("I don't know")}
-        color={
-          sizeState.selectedSize === "I don't know" ? "purple.500" : "gray.500"
-        }
+        color={sizeState.selectedSize === "I don't know" ? "purple.500" : color}
         borderColor={
           sizeState.selectedSize === "I don't know" ? "purple.500" : "gray.300"
         }
