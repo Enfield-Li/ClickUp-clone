@@ -44,7 +44,7 @@ export async function registerUser(
 
     // update auth taskState
     dispatch({
-      type: AUTH_ACTION.LOGIN_USER,
+      type: AUTH_ACTION.REGISTER_USER,
       payload: { user: response.data },
     });
   } catch (error) {

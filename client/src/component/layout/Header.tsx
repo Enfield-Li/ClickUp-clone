@@ -2,7 +2,7 @@ import { Box, useColorModeValue, useToast } from "@chakra-ui/react";
 import { memo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { Section } from "../../routes/ApplicationEntry";
+import { Section } from "../../ApplicationEntry";
 
 type Props = {
   selectedSection: Section;

@@ -42,7 +42,7 @@ function SubNavbar({
   const currentTeam = teamState.teams.find(
     (team) => team.id === teamState.activeTeamState.selectedTeamId
   );
-//   console.log(currentTeam);
+  //   console.log(currentTeam);
 
   const selectedListId = teamState.activeTeamState.selectedListId
     ? teamState.activeTeamState.selectedListId
@@ -57,7 +57,6 @@ function SubNavbar({
         replace: true,
         state: selectedListId
           ? {
-              isNewUser: location.state?.isNewUser,
               statusColumns: teamState.activeTeamState.currentStatusColumns,
             }
           : null,

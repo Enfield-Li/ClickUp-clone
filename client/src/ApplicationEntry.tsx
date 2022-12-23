@@ -1,10 +1,9 @@
-import { Flex, Box } from "@chakra-ui/react";
-import { memo, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Header from "../component/layout/Header";
-import NavBar from "../component/layout/NavBar";
-import TeamStateProvider from "../context/team/TeamContext";
-import MainContent from "./MainContent";
+import { Box, Flex } from "@chakra-ui/react";
+import { memo, useState } from "react";
+import Header from "./component/layout/Header";
+import NavBar from "./component/layout/NavBar";
+import TeamStateProvider from "./context/team/TeamContext";
+import MainContent from "./routes/MainContent";
 
 type Props = {};
 

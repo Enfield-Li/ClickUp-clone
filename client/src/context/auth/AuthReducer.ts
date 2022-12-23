@@ -15,9 +15,28 @@ export default function authReducer(
       });
     }
 
+    case AUTH_ACTION.REGISTER_USER: {
+      return produce(authState, (draftState) => {
+        draftState.user = authAction.payload.user;
+        draftState.onboarding = true;
+      });
+    }
+
     case AUTH_ACTION.LOGOUT_USER: {
       return produce(authState, (draftState) => {
         draftState.user = null;
+      });
+    }
+
+    case AUTH_ACTION.OPEN_ONBOARDING: {
+      return produce(authState, (draftState) => {
+        draftState.onboarding = true;
+      });
+    }
+
+    case AUTH_ACTION.CLOSE_ONBOARDING: {
+      return produce(authState, (draftState) => {
+        draftState.onboarding = false;
       });
     }
 

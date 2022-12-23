@@ -29,8 +29,7 @@ function ApplicationSettings({}: Props) {
 
   const currentTeamId = teamState.activeTeamState.selectedTeamId;
   const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
-
-  const isTeamOwner = currentTeam?.owner.id === authState.user?.id;
+  const isTeamOwner = currentTeam?.owner?.userId === authState.user?.id;
 
   return (
     <Popover isLazy placement="top-start">

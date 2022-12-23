@@ -11,6 +11,7 @@ type ProviderType = {
 // auth
 const authInitialState: AuthStateType = {
   user: null,
+  onboarding: false,
 };
 
 export default function AuthStateProvider({ children }: ProviderType) {

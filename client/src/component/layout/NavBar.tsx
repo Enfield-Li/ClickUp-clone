@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { initPanelActivity } from "../../hook/mockData";
-import { Section } from "../../routes/ApplicationEntry";
+import { Section } from "../../ApplicationEntry";
 import { TEAM_STATE_ACTION } from "../../types";
 import { fetchTeamListLocal } from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";

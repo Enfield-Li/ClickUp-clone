@@ -24,8 +24,8 @@ type Props = {};
 
 export default memo(Login);
 function Login({}: Props) {
-  const { authState, authDispatch } = useAuthContext();
   const navigate = useNavigate();
+  const { authDispatch } = useAuthContext();
 
   const loginSchema = Yup.object().shape({
     email: Yup.string()

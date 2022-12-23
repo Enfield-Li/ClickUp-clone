@@ -1,7 +1,7 @@
 import { Center, Tooltip } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Section } from "../../../routes/ApplicationEntry";
+import { Section } from "../../../ApplicationEntry";
 
 type Props = {
   url?: string;

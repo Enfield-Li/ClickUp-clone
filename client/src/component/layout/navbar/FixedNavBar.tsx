@@ -3,7 +3,7 @@ import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import LogoSVG from "../../../media/LogoSVG";
-import { Section } from "../../../routes/ApplicationEntry";
+import { Section } from "../../../ApplicationEntry";
 import NavIcon from "./NavIcon";
 import ApplicationSettings from "./settings/ApplicationSettings";
 

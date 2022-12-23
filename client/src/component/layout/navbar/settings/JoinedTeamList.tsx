@@ -6,13 +6,15 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
+import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { TEAM_STATE_ACTION } from "../../../../types";
+import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../../../types";
 
 type Props = { onClose: () => void };
 
 export default memo(JoinedTeamList);
 function JoinedTeamList({ onClose }: Props) {
+  const { authDispatch } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
@@ -31,7 +33,7 @@ function JoinedTeamList({ onClose }: Props) {
   }
 
   function handleAddTeam() {
-    throw new Error("Function not implemented.");
+    authDispatch({ type: AUTH_ACTION.OPEN_ONBOARDING });
   }
 
   return (
@@ -56,7 +58,7 @@ function JoinedTeamList({ onClose }: Props) {
             borderStyle="solid"
             color="lightMain.200"
             borderColor="purple.500"
-            onClick={() => handleSelectTeam(team.id)}
+            onClick={() => handleSelectTeam(team.id!)}
             borderWidth={
               team.id === teamState.activeTeamState.selectedTeamId ? "1px" : ""
             }

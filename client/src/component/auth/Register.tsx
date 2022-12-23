@@ -25,10 +25,9 @@ type Props = {};
 
 export default memo(Register);
 function Register({}: Props) {
-  const [show, setShow] = useState(false);
-  const { authState, authDispatch } = useAuthContext();
-  const navigate = useNavigate();
   const location = useLocation();
+  const [show, setShow] = useState(false);
+  const { authDispatch } = useAuthContext();
   const initialEmail = location.state?.email ? location.state?.email : "";
 
   const signupSchema = Yup.object().shape({
@@ -72,9 +71,7 @@ function Register({}: Props) {
               authDispatch
             );
 
-            if (!errors) {
-              navigate(CLIENT_ROUTE.TASK_BOARD, { state: { isNewUser: true } });
-            } else if (errors) {
+            if (errors) {
               handleError(setErrors, errors);
             }
           }}

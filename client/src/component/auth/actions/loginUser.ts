@@ -21,7 +21,6 @@ export async function loginUser(
         API_ENDPOINT.AUTH_LOGIN,
         loginCredentials
       );
-    console.log(response.data.accessToken);
 
     // store accessToken to localStorage
     localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);

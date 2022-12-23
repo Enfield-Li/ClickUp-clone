@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import ColorModeSwitcher from "../../../../ColorModeSwitcher";
+import ColorModeSwitcher from "./ColorModeSwitcher";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 
 const mySettingTitles1: string[] = [

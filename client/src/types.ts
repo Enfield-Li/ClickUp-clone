@@ -232,6 +232,7 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
+  onboarding: boolean;
 };
 
 export type RegisterCredentials = {
@@ -339,17 +340,31 @@ export interface AuthenticationResponse {
   joinedTeamIds: number[];
 }
 
-export type AuthActionType = LogInUser | LogOutUser;
+export type AuthActionType =
+  | LogInUser
+  | LogOutUser
+  | RegisterUser
+  | OpenOnboarding
+  | CloseOnboarding;
 
 type LogInUser = {
   type: typeof AUTH_ACTION.LOGIN_USER;
   payload: { user: User };
 };
+type RegisterUser = {
+  type: typeof AUTH_ACTION.REGISTER_USER;
+  payload: { user: User };
+};
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
+type OpenOnboarding = { type: typeof AUTH_ACTION.OPEN_ONBOARDING };
+type CloseOnboarding = { type: typeof AUTH_ACTION.CLOSE_ONBOARDING };
 
 export const AUTH_ACTION = {
   LOGIN_USER: "login_user",
   LOGOUT_USER: "logout_user",
+  REGISTER_USER: "register_user",
+  OPEN_ONBOARDING: "open_onboarding",
+  CLOSE_ONBOARDING: "close_onboarding",
 } as const;
 
 export type TeamActivity = {

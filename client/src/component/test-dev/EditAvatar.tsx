@@ -33,7 +33,6 @@ export default function EditAvatarModal({
 }: Props) {
   const editor = useRef<AvatarEditor>(null);
   const [scale, setScale] = useState(100);
-  console.log(scale);
 
   function handleUpdateAvatar() {
     if (editor.current) {
