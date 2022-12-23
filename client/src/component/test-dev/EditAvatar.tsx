@@ -4,23 +4,34 @@ import AvatarEditor from "react-avatar-editor";
 import { InitTeam } from "./MultiStepForm";
 
 type Props = {
+  team: InitTeam;
   isOpen: boolean;
   imgString: string;
   onClose: () => void;
   setTeam: React.Dispatch<React.SetStateAction<InitTeam>>;
 };
 
-export default function EditAvatarModal({ onClose, isOpen, imgString }: Props) {
+export default function EditAvatarModal({
+  team,
+  isOpen,
+  onClose,
+  setTeam,
+  imgString,
+}: Props) {
   const editor = useRef<AvatarEditor>(null);
-  const [imgStringUpdated, setImgStringUpdated] = useState("");
 
-  function handleClose() {
-    onClose();
-    setImgStringUpdated("");
+  function handleUpdateAvatar() {
+    if (editor.current) {
+      const canvasScaled = editor.current.getImageScaledToCanvas();
+      setTeam({
+        ...team,
+        avatar: canvasScaled.toDataURL("image/png"),
+      });
+    }
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         {imgString && (
@@ -36,16 +47,10 @@ export default function EditAvatarModal({ onClose, isOpen, imgString }: Props) {
               borderRadius={200}
               color={[0, 0, 0, 0.6]}
               backgroundColor="black"
-              onMouseUp={() => console.log("onMouseUp")}
-              onMouseMove={() => {
-                if (editor.current) {
-                  const canvasScaled = editor.current.getImageScaledToCanvas();
-                  setImgStringUpdated(canvasScaled.toDataURL("image/png"));
-                }
-              }}
+              onMouseMove={handleUpdateAvatar}
             />
 
-            <img alt="not fount" width={"250px"} src={imgStringUpdated} />
+            <img alt="not fount" width={"250px"} src={team.avatar} />
           </>
         )}
       </ModalContent>

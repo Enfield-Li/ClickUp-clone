@@ -85,6 +85,7 @@ export default function AvatarColor({
         </FileUploader>
 
         <EditAvatarModal
+          team={team}
           isOpen={isOpen}
           onClose={onClose}
           setTeam={setTeam}

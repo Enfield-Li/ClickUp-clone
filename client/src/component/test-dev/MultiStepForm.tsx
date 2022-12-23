@@ -48,19 +48,14 @@ export default function MultiStepForm({}: Props) {
   function setCurrentStep() {
     ref.current.forEach((element, index) => {
       const topPosition = element.getBoundingClientRect().top;
-      if (50 < topPosition && topPosition < 400) {
+      if (50 < topPosition && topPosition < 450) {
         setStep(index);
       }
     });
   }
 
   return (
-    <Flex
-      height="100vh"
-      color={color}
-      bgColor={bgColor}
-      position="relative"
-    >
+    <Flex height="100vh" color={color} bgColor={bgColor} position="relative">
       <Box
         px="150px"
         flexGrow="1"
@@ -139,7 +134,7 @@ export default function MultiStepForm({}: Props) {
               value={team.memberEmails}
               borderColor="customBlue.200"
               placeholder="Enter email addresses(or paste multiple)"
-            //   _placeholder={{ color: "gray.800", fontSize: "30px" }}
+              //   _placeholder={{ color: "gray.800", fontSize: "30px" }}
               onChange={(e) =>
                 setTeam({ ...team, memberEmails: e.target.value })
               }

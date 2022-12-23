@@ -302,9 +302,10 @@ export type TeamStatusColumns = TeamStatusColumn[];
 
 export type Team = {
   id?: number;
-  owner?: UserInfo;
   name: string;
   color: string;
+  avatar?: string;
+  owner?: UserInfo;
   member: UserInfo[];
   isPrivate: boolean;
   spaceList: SpaceType[];
