@@ -1,12 +1,16 @@
 import { Flex, Center, Box, Button } from "@chakra-ui/react";
 import React from "react";
+import { API_ENDPOINT } from "../../constant";
 import LogoSVG from "../../media/LogoSVG";
+import { axiosTeamServiceInstance } from "../../utils/AxiosInterceptor";
+import { CreateTeamDTO } from "./CreateTeam";
 
 type Props = {
   step: number;
   title: string;
   stageNumber: number;
   buttonTitle?: string;
+  createTeamDTO?: CreateTeamDTO;
   children: React.ReactNode;
   handleNextStage?: (stage: number) => void;
 };
@@ -17,8 +21,28 @@ export default function OnBoardingTemplate({
   children,
   stageNumber,
   buttonTitle,
+  createTeamDTO,
   handleNextStage,
 }: Props) {
+  async function createTeam() {
+    if (createTeamDTO) {
+      const response = await axiosTeamServiceInstance.post(
+        API_ENDPOINT.SPACE_API_VERSION,
+        createTeamDTO
+      );
+    }
+  }
+
+  function handleClickButton() {
+    if (handleNextStage) {
+      handleNextStage(stageNumber + 1);
+      return;
+    }
+    if (buttonTitle === "Play with ClickUp") {
+      createTeam();
+    }
+  }
+
   return (
     <Box height="410px" opacity={step === stageNumber ? "" : "25%"}>
       <Flex>
@@ -56,10 +80,8 @@ export default function OnBoardingTemplate({
               rounded="md"
               color="white"
               bgColor="customBlue.200"
+              onClick={handleClickButton}
               _hover={{ bgColor: "customBlue.100" }}
-              onClick={() =>
-                handleNextStage && handleNextStage(stageNumber + 1)
-              }
             >
               {buttonTitle}
             </Button>

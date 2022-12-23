@@ -25,7 +25,8 @@ public class TeamService {
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
-        var space = Space.builder().team(team).name("space").orderIndex(1).isPrivate(false).build();
+        var space = Space.builder().team(team)
+                .name("space").orderIndex(1).isPrivate(false).build();
         team.setSpaces(Set.of(space));
 
         teamRepository.save(team);

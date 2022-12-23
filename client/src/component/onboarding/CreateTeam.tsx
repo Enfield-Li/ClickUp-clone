@@ -15,7 +15,7 @@ import TeamSize from "./TeamSize";
 
 type Props = {};
 
-export type CreateTeamState = {
+export type CreateTeamDTO = {
   name: string;
   color: string;
   avatar: string;
@@ -24,7 +24,7 @@ export type CreateTeamState = {
 
 export default function CreateTeam({}: Props) {
   const { authState } = useAuthContext();
-  const initTeam: CreateTeamState = {
+  const initTeam: CreateTeamDTO = {
     avatar: "",
     color: "rgb(64, 188, 134)",
     name: `${authState.user?.username}'s Workspace`,
@@ -32,7 +32,7 @@ export default function CreateTeam({}: Props) {
   };
   const [step, setStep] = useState(0);
   const ref = useRef<HTMLDivElement[]>([]);
-  const [team, setTeam] = useState<CreateTeamState>(initTeam);
+  const [team, setTeam] = useState<CreateTeamDTO>(initTeam);
   const color = useColorModeValue("darkMain.200", "lightMain.200");
   const bgColor = useColorModeValue("rgb(250, 251, 252)", "darkMain.300");
 
@@ -178,6 +178,7 @@ export default function CreateTeam({}: Props) {
         {/* Done */}
         <Box ref={(element) => element && (ref.current[6] = element)}>
           <OnBoardingTemplate
+            createTeamDTO={team}
             step={step}
             stageNumber={6}
             buttonTitle="Play with ClickUp"
@@ -190,6 +191,7 @@ export default function CreateTeam({}: Props) {
         </Box>
       </Box>
 
+      {/* Step Button */}
       <Box position="absolute" right="330px" bottom="20px">
         {step !== 0 && (
           <Center

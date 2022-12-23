@@ -14,14 +14,14 @@ import {
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { CreateTeamState } from "./CreateTeam";
+import { CreateTeamDTO } from "./CreateTeam";
 
 type Props = {
   isOpen: boolean;
   imgString: string;
   onClose: () => void;
-  team: CreateTeamState;
-  setTeam: React.Dispatch<React.SetStateAction<CreateTeamState>>;
+  team: CreateTeamDTO;
+  setTeam: React.Dispatch<React.SetStateAction<CreateTeamDTO>>;
 };
 
 export default function EditAvatarModal({

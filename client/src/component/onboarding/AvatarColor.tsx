@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { teamColors2D } from "../../media/colors";
 import EditAvatarModal from "./EditAvatar";
-import { CreateTeamState } from "./CreateTeam";
+import { CreateTeamDTO } from "./CreateTeam";
 import OnBoardingTemplate from "./OnBoardingTemplate";
 
 type Props = {
-  team: CreateTeamState;
+  team: CreateTeamDTO;
   step: number;
   handleNextStage(stage: number): void;
-  setTeam: React.Dispatch<React.SetStateAction<CreateTeamState>>;
+  setTeam: React.Dispatch<React.SetStateAction<CreateTeamDTO>>;
 };
 
 export default function AvatarColor({
