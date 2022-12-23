@@ -1,31 +1,40 @@
-import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Input,
+  useColorModeValue,
+  Image,
+} from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
 import pic from "../../media/onboarding.png";
-import { Team } from "../../types";
 import AvatarColor from "./AvatarColor";
 import OnBoardingTemplate from "./OnBoardingTemplate";
 import TeamSize from "./TeamSize";
 
 type Props = {};
 
-export type InitTeam = Team & { memberEmails: string };
+export type CreateTeamState = {
+  name: string;
+  color: string;
+  avatar: string;
+  memberEmails: string;
+};
 
-export default function MultiStepForm({}: Props) {
+export default function CreateTeam({}: Props) {
   const { authState } = useAuthContext();
-  const initTeam: InitTeam = {
+  const initTeam: CreateTeamState = {
+    avatar: "",
     color: "rgb(64, 188, 134)",
-    isPrivate: false,
-    member: [],
     name: `${authState.user?.username}'s Workspace`,
-    spaceList: [],
     memberEmails: "",
   };
   const [step, setStep] = useState(0);
   const ref = useRef<HTMLDivElement[]>([]);
-  const [team, setTeam] = useState<InitTeam>(initTeam);
-  const bgColor = useColorModeValue("rgb(250, 251, 252)", "darkMain.300");
+  const [team, setTeam] = useState<CreateTeamState>(initTeam);
   const color = useColorModeValue("darkMain.200", "lightMain.200");
+  const bgColor = useColorModeValue("rgb(250, 251, 252)", "darkMain.300");
 
   useEffect(() => {
     if (ref.current.length) {
@@ -48,7 +57,7 @@ export default function MultiStepForm({}: Props) {
   function setCurrentStep() {
     ref.current.forEach((element, index) => {
       const topPosition = element.getBoundingClientRect().top;
-      if (50 < topPosition && topPosition < 450) {
+      if (50 < topPosition && topPosition < 350) {
         setStep(index);
       }
     });
@@ -66,7 +75,7 @@ export default function MultiStepForm({}: Props) {
         <Box height="200px"></Box>
 
         {/* Name */}
-        <Box ref={(el) => el && (ref.current[0] = el)}>
+        <Box ref={(element) => element && (ref.current[0] = element)}>
           <OnBoardingTemplate
             step={step}
             stageNumber={0}
@@ -95,7 +104,7 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* Avatar and color */}
-        <Box ref={(el) => el && (ref.current[1] = el)} mb="50px">
+        <Box ref={(element) => element && (ref.current[1] = element)} mb="50px">
           <AvatarColor
             team={team}
             step={step}
@@ -105,7 +114,7 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* TeamSize */}
-        <Box ref={(el) => el && (ref.current[2] = el)}>
+        <Box ref={(element) => element && (ref.current[2] = element)}>
           <TeamSize
             step={step}
             setTeam={setTeam}
@@ -114,7 +123,7 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* Member email */}
-        <Box ref={(el) => el && (ref.current[3] = el)}>
+        <Box ref={(element) => element && (ref.current[3] = element)}>
           <OnBoardingTemplate
             step={step}
             stageNumber={3}
@@ -126,7 +135,6 @@ export default function MultiStepForm({}: Props) {
               pb="3"
               mt="30px"
               size="lg"
-              autoFocus
               width="100%"
               display="block"
               fontSize="40px"
@@ -134,7 +142,6 @@ export default function MultiStepForm({}: Props) {
               value={team.memberEmails}
               borderColor="customBlue.200"
               placeholder="Enter email addresses(or paste multiple)"
-              //   _placeholder={{ color: "gray.800", fontSize: "30px" }}
               onChange={(e) =>
                 setTeam({ ...team, memberEmails: e.target.value })
               }
@@ -143,7 +150,7 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* Apps */}
-        <Box ref={(el) => el && (ref.current[4] = el)}>
+        <Box ref={(element) => element && (ref.current[4] = element)}>
           <OnBoardingTemplate
             step={step}
             stageNumber={4}
@@ -156,20 +163,20 @@ export default function MultiStepForm({}: Props) {
         </Box>
 
         {/* Import tasks */}
-        <Box ref={(el) => el && (ref.current[5] = el)}>
+        <Box ref={(element) => element && (ref.current[5] = element)}>
           <OnBoardingTemplate
             step={step}
             stageNumber={5}
-            title="Do you want to import tasks?"
             buttonTitle="No, thanks"
             handleNextStage={handleNextStage}
+            title="Do you want to import tasks?"
           >
             <Box opacity="70%">(some more icons and stuff...)</Box>
           </OnBoardingTemplate>
         </Box>
 
         {/* Done */}
-        <Box ref={(el) => el && (ref.current[6] = el)}>
+        <Box ref={(element) => element && (ref.current[6] = element)}>
           <OnBoardingTemplate
             step={step}
             stageNumber={6}
@@ -219,7 +226,7 @@ export default function MultiStepForm({}: Props) {
       </Box>
 
       <Box>
-        <img style={{ height: "100vh", width: "400px" }} src={pic} />
+        <Image height="100vh" width="400px" src={pic} />
       </Box>
     </Flex>
   );

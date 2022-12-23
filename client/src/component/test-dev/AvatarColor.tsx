@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { teamColors2D } from "../../media/colors";
 import EditAvatarModal from "./EditAvatar";
-import { InitTeam } from "./MultiStepForm";
+import { CreateTeamState } from "./CreateTeam";
 import OnBoardingTemplate from "./OnBoardingTemplate";
 
 type Props = {
-  team: InitTeam;
+  team: CreateTeamState;
   step: number;
   handleNextStage(stage: number): void;
-  setTeam: React.Dispatch<React.SetStateAction<InitTeam>>;
+  setTeam: React.Dispatch<React.SetStateAction<CreateTeamState>>;
 };
 
 export default function AvatarColor({
@@ -68,8 +68,8 @@ export default function AvatarColor({
             cursor="pointer"
             flexDir="column"
             borderWidth="1px"
-            borderStyle="dashed"
             borderColor="gray.400"
+            borderStyle={!team.avatar ? "dashed" : ""}
           >
             <Box opacity="35%" fontSize="lg">
               <i className="bi bi-cloud-upload"></i>
@@ -115,11 +115,13 @@ export default function AvatarColor({
           flexDir="column"
           fontWeight="bold"
           borderWidth="1px"
-          bgColor={team.color}
           borderStyle="dashed"
           borderColor="gray.400"
+          backgroundSize="contain"
+          backgroundImage={team.avatar}
+          bgColor={!team.avatar ? team.color : ""}
         >
-          {team.name[0].toUpperCase()}
+          {!team.avatar && team.name[0].toUpperCase()}
         </Center>
 
         <Box ml="6" mt="6">
@@ -134,7 +136,7 @@ export default function AvatarColor({
                   rounded="full"
                   bgColor={color}
                   cursor="pointer"
-                  onClick={() => setTeam({ ...team, color })}
+                  onClick={() => setTeam({ ...team, color, avatar: "" })}
                 ></Box>
               ))}
             </Flex>

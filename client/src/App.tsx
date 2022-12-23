@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { memo } from "react";
-import MultiStepForm from "./component/test-dev/MultiStepForm";
+import CreateTeam from "./component/test-dev/CreateTeam";
 import useAuthContext from "./context/auth/useAuthContext";
 import useInit from "./hook/useInit";
 import ApplicationEntry from "./routes/ApplicationEntry";
@@ -14,7 +14,7 @@ function App() {
   return (
     <Box height="100vh">
       {/* {authState.user ? <ApplicationEntry /> : <Authentication />} */}
-      <MultiStepForm />
+      <CreateTeam />
     </Box>
   );
 }

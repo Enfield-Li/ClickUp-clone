@@ -1,12 +1,12 @@
 import { Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
-import { InitTeam } from "./MultiStepForm";
+import { CreateTeamState } from "./CreateTeam";
 import OnBoardingTemplate from "./OnBoardingTemplate";
 
 type Props = {
   step: number;
   handleNextStage(stage: number): void;
-  setTeam: React.Dispatch<React.SetStateAction<InitTeam>>;
+  setTeam: React.Dispatch<React.SetStateAction<CreateTeamState>>;
 };
 
 type SizeState = {
