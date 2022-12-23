@@ -22,6 +22,7 @@ import com.example.team.dto.CreateTeamDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -29,6 +30,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = { "spaces" })
 public class Team {
 
     @Id
@@ -44,8 +46,10 @@ public class Team {
     @NotNull
     private String color;
 
+    private String avatar;
+
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserInfo owner;
 
     @Builder.Default
@@ -61,12 +65,12 @@ public class Team {
 
     public static Team convertFromCreateTeamDTO(
             CreateTeamDTO createTeamDTO, UserInfo userInfo) {
-
         return Team.builder()
                 .owner(userInfo)
                 .members(Set.of(userInfo))
                 .name(createTeamDTO.name())
-                .isPrivate(createTeamDTO.isPrivate())
+                .color(createTeamDTO.color())
+                .avatar(createTeamDTO.avatar())
                 .build();
     }
 

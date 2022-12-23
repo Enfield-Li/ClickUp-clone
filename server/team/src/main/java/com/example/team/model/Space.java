@@ -44,12 +44,11 @@ public class Space {
     @NotNull
     private Integer orderIndex;
 
-    @NotNull
-    private Integer defaultStatusColumnId;
-
     private String color;
 
     private Boolean isSelected;
+
+    private Integer defaultStatusColumnId;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
@@ -73,4 +72,5 @@ public class Space {
                 .defaultStatusColumnId(createSpaceDTO.defaultStatusColumnId())
                 .build();
     }
+
 }
