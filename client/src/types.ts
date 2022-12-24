@@ -388,8 +388,8 @@ type ActiveTeamState = {
 
 export type TeamStateType = {
   teams: Team[]; // server
-  panelActivity: PanelActivity;
   activeTeamState: ActiveTeamState; // client
+  panelActivity: PanelActivity | null;
 };
 export type TeamContextType = {
   teamState: TeamStateType;

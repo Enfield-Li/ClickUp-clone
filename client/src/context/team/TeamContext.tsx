@@ -10,17 +10,12 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
+  panelActivity: null,
   activeTeamState: {
     selectedTeamId: 0,
     selectedListId: null,
     selectedSpaceId: null,
     currentStatusColumns: [],
-  },
-  panelActivity: {
-    id: 0,
-    userId: 0,
-    defaultTeamId: 0,
-    teamActivities: [],
   },
 };
 

@@ -15,7 +15,7 @@ export function updateActiveTeamState(
   const { draftState, teamId } = updateCurrentTeamParam;
 
   const targetTeam = draftState.teams.find((team) => team.id === teamId);
-  const targetTeamActivity = draftState.panelActivity.teamActivities.find(
+  const targetTeamActivity = draftState.panelActivity!.teamActivities.find(
     (teamActivity) => teamActivity.teamId === teamId
   );
   if (!targetTeam || !targetTeamActivity)
@@ -84,7 +84,7 @@ function initStatusColumnAndSelectedSpaceId(
   if (list.id === selectedListId) {
     draftState.activeTeamState.selectedSpaceId = spaceId;
 
-    const statusColumnCategory = team.teamStatusColumn.find(
+    const statusColumnCategory = team.teamStatusColumn!.find(
       (category) => category.id === list.statusColumnsCategoryId
     );
     if (!statusColumnCategory) throw new Error(errorMsg);

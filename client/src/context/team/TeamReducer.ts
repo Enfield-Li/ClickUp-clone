@@ -20,10 +20,10 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
         const { teams, panelActivity } = action.payload;
-        const { teamActivities, defaultTeamId } = panelActivity;
+        const { defaultTeamId } = panelActivity;
 
         draftState.teams = deepCopy(teams); // hack
-        draftState.panelActivity.teamActivities = teamActivities;
+        draftState.panelActivity = panelActivity;
 
         updateActiveTeamState({
           draftState,
@@ -36,7 +36,7 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.SELECT_TEAM: {
       return produce(spaceListState, (draftState) => {
         const { teamId } = action.payload;
-        draftState.panelActivity.defaultTeamId = teamId;
+        draftState.panelActivity!.defaultTeamId = teamId;
 
         updateActiveTeamState({
           draftState,

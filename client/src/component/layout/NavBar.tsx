@@ -39,7 +39,7 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
 
   // init spaceListState
   useEffect(() => {
-    if (authState.user && !teamState.teams.length) {
+    if (authState.user && !teamState.teams.length && !teamState.panelActivity) {
       const { teams, initPanelActivity } = fetchTeamListLocal(
         authState.user.id
       );
