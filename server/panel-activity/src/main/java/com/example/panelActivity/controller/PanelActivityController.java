@@ -1,4 +1,4 @@
-package com.example.panelActivity;
+package com.example.panelActivity.controller;
 
 import static com.example.clients.UrlConstants.PANEL_ACTIVITY_API_VERSION;
 
@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
-import com.example.panelActivity.dto.InitPanelActivityDTO;
 import com.example.panelActivity.model.PanelActivity;
+import com.example.panelActivity.service.PanelActivityService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,13 +32,6 @@ class PanelActivityController {
         return "Got it";
     }
 
-    // @PostMapping("/init_panel_activity")
-    // ResponseEntity<PanelActivity> initPanelActivity(
-    //         @PathVariable("userId") Integer userId) {
-    //     var panelActivity = panelActivityService.getPanelActivity(userId);
-    //     return ResponseEntity.ok(panelActivity);
-    // }
-
     @GetMapping("/{userId}")
     ResponseEntity<PanelActivity> getPanelActivity(
             @PathVariable("userId") Integer userId) {
@@ -47,18 +39,11 @@ class PanelActivityController {
         return ResponseEntity.ok(panelActivity);
     }
 
-    // @PostMapping
-    // ResponseEntity<Boolean> initPanelActivity(
-    //         @RequestBody InitPanelActivityDTO createPanelActivityDTO) {
-    //     var created = panelActivityService.initPanelActivity(createPanelActivityDTO);
-    //     return ResponseEntity.ok(created);
-    // }
-
-    @PutMapping
+    @PostMapping
     ResponseEntity<Boolean> updateDefaultTeamId(
-            @RequestBody UpdateDefaultTeamIdDTO updateDefaultTeamIdDTO) {
-        var updated = panelActivityService.updateDefaultTeamId(updateDefaultTeamIdDTO);
-        return ResponseEntity.ok(updated);
+            @RequestBody UpdateDefaultTeamIdDTO createPanelActivityDTO) {
+        var created = panelActivityService.updatePanelActivity(createPanelActivityDTO);
+        return ResponseEntity.ok(created);
     }
 
 }

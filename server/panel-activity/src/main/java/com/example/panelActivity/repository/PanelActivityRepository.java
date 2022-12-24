@@ -1,4 +1,4 @@
-package com.example.panelActivity;
+package com.example.panelActivity.repository;
 
 import java.util.Optional;
 

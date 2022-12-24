@@ -54,16 +54,4 @@ public class PanelActivity {
                 .build();
     }
 
-    public static PanelActivity initPanelActivity(
-            Integer userId, Integer teamId) {
-        var defaultTeamActivity = TeamActivity.builder()
-                .teamId(teamId)
-                .build();
-
-        return PanelActivity.builder()
-                .userId(userId)
-                .defaultTeamId(teamId)
-                .teamActivities(Set.of(defaultTeamActivity))
-                .build();
-    }
 }

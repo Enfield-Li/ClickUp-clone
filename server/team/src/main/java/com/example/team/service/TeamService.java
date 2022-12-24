@@ -49,15 +49,9 @@ public class TeamService {
         teamRepository.saveAndFlush(team);
 
         // update panel activity
-        var dto = new UpdateDefaultTeamIdDTO(userInfo.getUserId(), team.getId());
+        var dto = new UpdateDefaultTeamIdDTO(team.getId(), space.getId());
         var response = panelActivityClient.updateDefaultTeamId(dto);
         return response;
     }
 
-    // public Boolean initTeam(UserInfo userInfo) {
-    //     var initSpace = Space.builder().name("Space").build();
-    //     var initTeam = Team.builder().owner(userInfo).build();
-    //     // teamRepository.save(createTeamDTO);
-    //     return true;
-    // }
 }
