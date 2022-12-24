@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.example.clients.panelActivity.PanelActivityClient;
+import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
@@ -27,11 +28,10 @@ public class TeamService {
             .userId(1).username("mockUser").build();
 
     public void test() {
-        // return teamRepository.findAll();
-        System.out.println("start: ");
-        System.out.println(teamRepository.findByMembersUserId(1));
-        System.out.println(teamRepository.findByIdIn(List.of(1, 2)));
-        System.out.println("end...");
+        Team.builder()
+                .name("team2")
+                .color("rgb(255, 87, 34)")
+                .build();
     }
 
     public TeamAndPanelActivityDTO getAllTeams(Integer userId) {
@@ -46,10 +46,12 @@ public class TeamService {
                 .name("space").orderIndex(1).isPrivate(false).build();
         team.setSpaces(Set.of(space));
 
-        teamRepository.save(team);
+        teamRepository.saveAndFlush(team);
 
-        // update userTeam service
-        return true;
+        // update panel activity
+        var dto = new UpdateDefaultTeamIdDTO(userInfo.getUserId(), team.getId());
+        var response = panelActivityClient.updateDefaultTeamId(dto);
+        return response;
     }
 
     // public Boolean initTeam(UserInfo userInfo) {

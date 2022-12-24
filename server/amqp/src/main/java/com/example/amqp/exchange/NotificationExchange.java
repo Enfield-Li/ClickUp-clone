@@ -6,6 +6,5 @@ public class NotificationExchange {
 
     public static final String notificationQueue = "notification.queue";
 
-    public static final String notificationRoutingKey =
-        "internal.notification.routing-key";
+    public static final String notificationRoutingKey = "internal.notification.routing-key";
 }

@@ -1,4 +1,4 @@
-import { getRandomSpaceColor } from "../media/colors";
+import { getRandomSpaceColor, getRandomTeamColor } from "../media/colors";
 import {
   ColumnOptions,
   CurrentWeek,
@@ -317,7 +317,7 @@ export const teams: Team[] = [
     id: 1,
     spaces: initialSpaceListForTeam1,
     teamStatusColumn: defaultTeamStatusColumns,
-    color: getRandomSpaceColor(),
+    color: getRandomTeamColor(),
     owner: userInfo,
     isPrivate: false,
     name: "1",
@@ -326,7 +326,7 @@ export const teams: Team[] = [
   {
     id: 2,
     spaces: initialSpaceList2ForTeam2,
-    color: getRandomSpaceColor(),
+    color: getRandomTeamColor(),
     owner: userInfo,
     teamStatusColumn: defaultTeamStatusColumns,
     isPrivate: false,

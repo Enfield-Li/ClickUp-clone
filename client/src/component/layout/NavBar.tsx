@@ -39,7 +39,7 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
 
   // init spaceListState
   useEffect(() => {
-    if (authState.user && !teamState.teams.length && !teamState.panelActivity) {
+    if (authState.user) {
       const { teams, initPanelActivity } = fetchTeamListLocal(
         authState.user.id
       );
@@ -52,7 +52,7 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
         },
       });
     }
-  }, [authState.user, teamState]);
+  }, [authState.user]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>

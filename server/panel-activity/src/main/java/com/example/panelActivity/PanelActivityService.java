@@ -3,6 +3,7 @@ package com.example.panelActivity;
 import org.springframework.stereotype.Service;
 
 import com.example.clients.jwt.UserInfo;
+import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
 import com.example.panelActivity.dto.InitPanelActivityDTO;
 import com.example.panelActivity.model.PanelActivity;
 
@@ -26,6 +27,15 @@ public class PanelActivityService {
                 .initPanelActivity(userId, teamId, spaceId);
         panelActivityRepository.save(panelActivity);
         return true;
+    }
+
+    public Boolean updateDefaultTeamId(
+            UpdateDefaultTeamIdDTO updateDefaultTeamId) {
+        var userId = updateDefaultTeamId.userId();
+        var teamId = updateDefaultTeamId.teamId();
+
+        var rowsAffected = panelActivityRepository.updateDefaultTeamId(userId, teamId);
+        return rowsAffected > 0;
     }
 
     public PanelActivity getPanelActivity(Integer userId) {
