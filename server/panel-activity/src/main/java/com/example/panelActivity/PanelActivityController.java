@@ -33,6 +33,13 @@ class PanelActivityController {
         return "Got it";
     }
 
+    // @PostMapping("/init_panel_activity")
+    // ResponseEntity<PanelActivity> initPanelActivity(
+    //         @PathVariable("userId") Integer userId) {
+    //     var panelActivity = panelActivityService.getPanelActivity(userId);
+    //     return ResponseEntity.ok(panelActivity);
+    // }
+
     @GetMapping("/{userId}")
     ResponseEntity<PanelActivity> getPanelActivity(
             @PathVariable("userId") Integer userId) {
@@ -40,12 +47,12 @@ class PanelActivityController {
         return ResponseEntity.ok(panelActivity);
     }
 
-    @PostMapping
-    ResponseEntity<Boolean> createStatusColumn(
-            @RequestBody InitPanelActivityDTO createPanelActivityDTO) {
-        var created = panelActivityService.createStatusColumn(createPanelActivityDTO);
-        return ResponseEntity.ok(created);
-    }
+    // @PostMapping
+    // ResponseEntity<Boolean> initPanelActivity(
+    //         @RequestBody InitPanelActivityDTO createPanelActivityDTO) {
+    //     var created = panelActivityService.initPanelActivity(createPanelActivityDTO);
+    //     return ResponseEntity.ok(created);
+    // }
 
     @PutMapping
     ResponseEntity<Boolean> updateDefaultTeamId(

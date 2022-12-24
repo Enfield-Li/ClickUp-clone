@@ -15,4 +15,5 @@ public interface TeamRepository
 
     List<Team> findByMembersUserId(Integer userId);
 
+    Boolean existsByMembersUserId(Integer userId);
 }

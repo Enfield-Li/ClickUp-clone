@@ -16,23 +16,36 @@ public class PanelActivityService {
     private final UserInfo userInfo = new UserInfo(1, "mockUser");
     private final PanelActivityRepository panelActivityRepository;
 
-    public Boolean createStatusColumn(
-            InitPanelActivityDTO createPanelActivityDTO) {
-        var userId = userInfo.userId();
-        var teamId = createPanelActivityDTO.teamId();
-        var spaceId = createPanelActivityDTO.spaceId();
-        // validateSpaceId(spaceId);
+    // public Boolean initPanelActivity(
+    //         InitPanelActivityDTO createPanelActivityDTO) {
+    //     var userId = userInfo.userId();
+    //     var teamId = createPanelActivityDTO.teamId();
+    //     var spaceId = createPanelActivityDTO.spaceId();
+    //     // validateSpaceId(spaceId);
 
-        var panelActivity = PanelActivity
-                .initPanelActivity(userId, teamId, spaceId);
-        panelActivityRepository.save(panelActivity);
-        return true;
-    }
+    //     var exists = panelActivityRepository.existsByUserId(userId);
+    //     if (exists) {
+    //         throw new Error("Failed to init panel activity, it already exists!");
+    //     }
+
+    //     var panelActivity = PanelActivity
+    //             .initPanelActivity(userId, teamId, spaceId);
+    //     panelActivityRepository.save(panelActivity);
+    //     return true;
+    // }
 
     public Boolean updateDefaultTeamId(
             UpdateDefaultTeamIdDTO updateDefaultTeamId) {
         var userId = updateDefaultTeamId.userId();
         var teamId = updateDefaultTeamId.teamId();
+
+        var exists = panelActivityRepository.existsByUserId(userId);
+        if (!exists) {
+            var panelActivity = PanelActivity
+                    .initPanelActivity(userId, teamId);
+            panelActivityRepository.save(panelActivity);
+            return true;
+        }
 
         var rowsAffected = panelActivityRepository.updateDefaultTeamId(userId, teamId);
         return rowsAffected > 0;

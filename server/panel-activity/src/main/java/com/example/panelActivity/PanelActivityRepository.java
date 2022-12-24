@@ -14,6 +14,8 @@ public interface PanelActivityRepository
 
     Optional<PanelActivity> findByUserId(Integer userId);
 
+    Boolean existsByUserId(Integer userId);
+
     @Query(nativeQuery = true, value = ""
             + "UPDATE panel_activity"
             + " SET default_team_id = :teamId"
