@@ -11,5 +11,5 @@ public interface PanelActivityClient {
 
     @GetMapping(path = PANEL_ACTIVITY_API_VERSION + "/{userId}")
     PanelActivityDTO getPanelActivity(
-            @PathVariable("customerId") Integer userId);
+            @PathVariable("userId") Integer userId);
 }

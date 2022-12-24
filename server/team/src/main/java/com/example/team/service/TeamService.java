@@ -34,9 +34,9 @@ public class TeamService {
         System.out.println("end...");
     }
 
-    public TeamAndPanelActivityDTO getAllTeams(List<Integer> teamIds) {
+    public TeamAndPanelActivityDTO getAllTeams(Integer userId) {
         var panelActivityDTO = panelActivityClient.getPanelActivity(userInfo.getUserId());
-        var teams = teamRepository.findByIdIn(teamIds);
+        var teams = teamRepository.findByMembersUserId(userId);
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
