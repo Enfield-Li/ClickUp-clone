@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateTeamDTO;
@@ -27,15 +28,17 @@ class TeamController {
 
     private final TeamService teamService;
 
-    @GetMapping
+    @GetMapping("/test")
     String test() {
         System.out.println("***called***");
+        teamService.test();
         return "Got it";
     }
 
-    @GetMapping("/all_teams")
-    List<Team> getAllTeams() {
-        return teamService.getAllTeams();
+    @GetMapping
+    ResponseEntity<List<Team>> getAllTeams(@RequestBody List<Integer> teamIds) {
+        var teams = teamService.getAllTeams(teamIds);
+        return ResponseEntity.ok(teams);
     }
 
     @PostMapping

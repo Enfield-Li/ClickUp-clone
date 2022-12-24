@@ -24,8 +24,16 @@ public class TeamService {
             .userId(1).username("mockUser")
             .email("mockUser@google.com").build();
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+    public void test() {
+        // return teamRepository.findAll();
+        System.out.println("start: ");
+        System.out.println(teamRepository.findByMembersUserId(1));
+        System.out.println(teamRepository.findByIdIn(List.of(1, 2)));
+        System.out.println("end...");
+    }
+
+    public List<Team> getAllTeams(List<Integer> teamIds) {
+        return teamRepository.findByIdIn(teamIds);
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {

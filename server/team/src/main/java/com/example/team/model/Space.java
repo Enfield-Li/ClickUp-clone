@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -53,6 +54,7 @@ public class Space {
     private Integer teamId;
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "teamId")
     private Team team;

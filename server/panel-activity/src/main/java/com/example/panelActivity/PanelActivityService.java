@@ -14,7 +14,7 @@ public class PanelActivityService {
 
     private final PanelActivityRepository panelActivityRepository;
 
-    UserInfo userInfo = new UserInfo("mockUser@gmail.com", 1, "mockUser");
+    UserInfo userInfo = new UserInfo(1, "mockUser");
 
     public Boolean createStatusColumn(
             InitPanelActivityDTO createPanelActivityDTO) {
@@ -30,9 +30,9 @@ public class PanelActivityService {
     }
 
     public PanelActivity getPanelActivity(Integer userId) {
-        var panelActivity = panelActivityRepository.findByUserId(userId).orElseThrow();
+        var panelActivity = panelActivityRepository.findByUserId(userId)
+                .orElseThrow();
         validatePanelActivity(panelActivity);
-
         return panelActivity;
     }
 

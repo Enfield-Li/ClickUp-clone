@@ -33,10 +33,9 @@ public class JwtUtilitiesImpl implements JwtUtilities {
     }
 
     @Override
-    public String createAccessToken(Integer userId, String username, String email) {
+    public String createAccessToken(Integer userId, String username) {
         return Jwts
                 .builder()
-                .claim("email", email)
                 .claim("username", username)
                 .setSubject(Integer.toString(userId))
                 .setExpiration(setExpirationTime(accessTokenExpirationTime))
@@ -93,11 +92,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
                 resolveAccessToken(bearerToken))
                         .get("username");
 
-        var email = (String) validateTokenAndGetClaims(
-                resolveAccessToken(bearerToken))
-                        .get("email");
-
-        return new UserInfo(email, userId, username);
+        return new UserInfo(userId, username);
     }
 
     private Claims validateTokenAndGetClaims(String jwsToken) {
