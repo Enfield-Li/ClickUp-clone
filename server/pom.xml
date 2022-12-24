@@ -24,6 +24,7 @@
         <module>team</module>
         <module>team-status-column</module>
         <module>dev-test </module>
+        <module>user-team</module>
         <module>panel-activity</module>
         <module>service-security-config</module>
         <module>service-config</module>

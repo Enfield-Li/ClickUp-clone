@@ -128,7 +128,6 @@ public class AuthorizationService {
             Integer tokenVersion) {
         var userId = applicationUser.getId();
         var email = applicationUser.getEmail();
-        var teams = applicationUser.getTeams();
         var username = applicationUser.getUsername();
 
         // store refreshToken in session
@@ -142,7 +141,6 @@ public class AuthorizationService {
         return AuthorizationResponseDTO
                 .builder()
                 .id(userId)
-                .teams(teams)
                 .email(email)
                 .username(username)
                 .accessToken(accessToken)
