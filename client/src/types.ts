@@ -46,7 +46,6 @@ interface Column<T> {
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
-  listId?: number; // server state
   orderIndex: number;
   markAsClosed?: boolean;
 }
