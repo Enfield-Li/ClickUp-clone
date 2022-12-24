@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.team.dto.CreateTeamDTO;
+import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.model.UserInfo;
@@ -19,6 +21,7 @@ public class TeamService {
 
     private final SpaceService spaceService;
     private final TeamRepository teamRepository;
+    private final PanelActivityClient panelActivityClient;
 
     private final UserInfo userInfo = UserInfo.builder()
             .userId(1).username("mockUser").build();
@@ -31,8 +34,10 @@ public class TeamService {
         System.out.println("end...");
     }
 
-    public List<Team> getAllTeams(List<Integer> teamIds) {
-        return teamRepository.findByIdIn(teamIds);
+    public TeamAndPanelActivityDTO getAllTeams(List<Integer> teamIds) {
+        var panelActivityDTO = panelActivityClient.getPanelActivity(userInfo.getUserId());
+        var teams = teamRepository.findByIdIn(teamIds);
+        return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
