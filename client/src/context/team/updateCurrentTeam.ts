@@ -40,7 +40,7 @@ export function updateActiveTeamState(
   draftState.teams.forEach(
     (team) =>
       team.id === teamId &&
-      team.spaceList.forEach((space) => {
+      team.spaces.forEach((space) => {
         if (space.id === spaceId) {
           space.isOpen = true;
 
@@ -112,16 +112,14 @@ function validateTeamActivities({
   const targetTeam = draftState.teams.find((team) => team.id === teamId);
   if (!targetTeam) throw new Error(errorMsg + "target team does not exist!");
 
-  const targetSpace = targetTeam.spaceList.find(
-    (space) => space.id === spaceId
-  );
+  const targetSpace = targetTeam.spaces.find((space) => space.id === spaceId);
   if (spaceId !== null && !targetSpace)
     throw new Error(errorMsg + "target space does not exist!");
 
   for (const folderId of folderIds) {
     const allFolderOrLists: number[] = [];
 
-    targetTeam.spaceList.forEach((space) => {
+    targetTeam.spaces.forEach((space) => {
       space.allListOrFolder.forEach((listOrFolder) => {
         const isFolder = determineFolderType(listOrFolder);
         allFolderOrLists.push(listOrFolder.id);

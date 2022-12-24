@@ -4,11 +4,11 @@ import useTeamStateContext from "../../../../context/team/useTeamContext";
 import {
   FolderCategory,
   ListCategory,
-  SpaceType,
+  Space,
   TEAM_STATE_ACTION,
 } from "../../../../types";
 
-type Props = { space: SpaceType; list: ListCategory; folder?: FolderCategory };
+type Props = { space: Space; list: ListCategory; folder?: FolderCategory };
 
 export default memo(List);
 function List({ space, folder, list }: Props) {

@@ -46,7 +46,7 @@ function SubNavbar({
 
   const selectedListId = teamState.activeTeamState.selectedListId
     ? teamState.activeTeamState.selectedListId
-    : currentTeam?.spaceList.length
+    : currentTeam?.spaces.length
     ? 0
     : -1;
 

@@ -281,7 +281,7 @@ export interface ListCategory extends Category {
   //   listViewSetting?: unknown
 }
 
-export interface SpaceType {
+export interface Space {
   id: number;
   name: string;
   teamId: number;
@@ -309,7 +309,7 @@ export type Team = {
   owner?: UserInfo;
   member: UserInfo[];
   isPrivate: boolean;
-  spaceList: SpaceType[];
+  spaces: Space[];
   teamStatusColumn?: TeamStatusColumns;
 };
 

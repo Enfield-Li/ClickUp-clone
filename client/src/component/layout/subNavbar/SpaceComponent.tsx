@@ -7,16 +7,16 @@ import {
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { SpaceType, TEAM_STATE_ACTION } from "../../../types";
+import { Space, TEAM_STATE_ACTION } from "../../../types";
 import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
 import CreateListModal from "../../widget/createList/CreateListModal";
 import AddFolderOrListPopover from "./AddFolderOrListPopover";
 import SpaceContent from "./folderAndList/SpaceContent";
 
-type Props = { space: SpaceType };
+type Props = { space: Space };
 
-export default memo(Space);
-function Space({ space }: Props) {
+export default memo(SpaceComponent);
+function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
   const { teamState, teamStateDispatch } = useTeamStateContext();

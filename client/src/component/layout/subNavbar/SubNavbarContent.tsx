@@ -8,7 +8,7 @@ import {
 import { memo, useEffect } from "react";
 import { Team } from "../../../types";
 import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
-import Space from "./Space";
+import SpaceComponent from "./SpaceComponent";
 
 type Props = { currentTeam: Team | undefined };
 
@@ -23,10 +23,10 @@ function SubNavbarContent({ currentTeam }: Props) {
   }
 
   useEffect(() => {
-    if (!currentTeam?.spaceList.length) {
+    if (!currentTeam?.spaces.length) {
       onOpen();
     }
-  }, [currentTeam?.spaceList]);
+  }, [currentTeam?.spaces]);
 
   return (
     <Box
@@ -55,11 +55,11 @@ function SubNavbarContent({ currentTeam }: Props) {
         <Box>Everything</Box>
       </Flex>
 
-      {currentTeam?.spaceList.length ? (
+      {currentTeam?.spaces.length ? (
         <Box>
-          {currentTeam?.spaceList?.map((space) => (
+          {currentTeam?.spaces?.map((space) => (
             <Box key={space.id}>
-              <Space space={space} />
+              <SpaceComponent space={space} />
             </Box>
           ))}
         </Box>

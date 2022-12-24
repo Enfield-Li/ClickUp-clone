@@ -24,17 +24,16 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue(value = "LIST_CATEGORY")
 class ListCategory extends Category {
 
-    private Boolean isSelected;
-
     @Builder.Default
     private Integer taskAmount = 0;
 
-    @JsonIgnore
     @Column(updatable = false, insertable = false)
-    private Integer folderCategoryId;
+    private Integer parentFolderId;
 
     @ManyToOne
-    @JoinColumn(name = "folderCategoryId")
+    @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
+
+    private Integer statusColumnsCategoryId;
 
 }

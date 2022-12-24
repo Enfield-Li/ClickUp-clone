@@ -60,7 +60,7 @@ export default function teamReducer(
 
         draftState.teams.forEach((team) => {
           if (team.id === draftState.activeTeamState.selectedTeamId) {
-            team.spaceList?.forEach((space) => {
+            team.spaces?.forEach((space) => {
               // update previous space.isOpen to false
               if (space.isOpen && space.id !== spaceId) {
                 space.isOpen = false;
@@ -80,7 +80,7 @@ export default function teamReducer(
 
         draftState.teams.forEach((team) => {
           if (team.id === draftState.activeTeamState.selectedTeamId) {
-            team.spaceList?.forEach((space) => {
+            team.spaces?.forEach((space) => {
               space.allListOrFolder.forEach((listOrFolder) => {
                 const isFolder = determineFolderType(listOrFolder);
                 const isCurrentFolder = listOrFolder.id === folderId;

@@ -1,11 +1,11 @@
 import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
-import { SpaceType } from "../../../../types";
+import { Space } from "../../../../types";
 import determineListType from "./determineList";
 import Folder from "./Folder";
 import List from "./List";
 
-type Props = { space: SpaceType };
+type Props = { space: Space };
 
 export default memo(SpaceContent);
 function SpaceContent({ space }: Props) {

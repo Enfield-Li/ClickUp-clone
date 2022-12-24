@@ -1,14 +1,10 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import {
-  FolderCategory,
-  SpaceType,
-  TEAM_STATE_ACTION,
-} from "../../../../types";
+import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
 import List from "./List";
 
-type Props = { space: SpaceType; folder: FolderCategory };
+type Props = { space: Space; folder: FolderCategory };
 
 export default memo(Folder);
 function Folder({ space, folder }: Props) {

@@ -40,12 +40,13 @@ public class Space {
     private String name;
 
     @NotNull
-    private Boolean isPrivate;
-
-    @NotNull
     private Integer orderIndex;
 
     private String color;
+
+    @NotNull
+    @Builder.Default
+    private Boolean isPrivate = false;
 
     private Integer defaultStatusColumnId;
 

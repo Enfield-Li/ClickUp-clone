@@ -7,7 +7,7 @@ import {
   ListCategory,
   PanelActivity,
   Priority,
-  SpaceType,
+  Space,
   StatusColumns,
   TaskList,
   Team,
@@ -167,7 +167,7 @@ const allSpace2ListOrFolderForTeam2: (FolderCategory | ListCategory)[] = [
   },
 ];
 
-export const initialSpaceListForTeam1: SpaceType[] = [
+export const initialSpaceListForTeam1: Space[] = [
   {
     id: 1,
     teamId: 1,
@@ -190,7 +190,7 @@ export const initialSpaceListForTeam1: SpaceType[] = [
   },
 ];
 
-const initialSpaceList2ForTeam2: SpaceType[] = [
+const initialSpaceList2ForTeam2: Space[] = [
   {
     id: 100,
     teamId: 2,
@@ -248,7 +248,7 @@ export const initPanelActivity: PanelActivity = {
 export const teams: Team[] = [
   {
     id: 1,
-    spaceList: initialSpaceListForTeam1,
+    spaces: initialSpaceListForTeam1,
     teamStatusColumn: defaultStatusColumnCategories,
     color: getRandomSpaceColor(),
     owner: userInfo,
@@ -258,7 +258,7 @@ export const teams: Team[] = [
   },
   {
     id: 2,
-    spaceList: initialSpaceList2ForTeam2,
+    spaces: initialSpaceList2ForTeam2,
     color: getRandomSpaceColor(),
     owner: userInfo,
     teamStatusColumn: defaultStatusColumnCategories,
@@ -268,7 +268,7 @@ export const teams: Team[] = [
   },
   {
     id: 3,
-    spaceList: [],
+    spaces: [],
     color: getRandomSpaceColor(),
     owner: guestUserInfo,
     teamStatusColumn: defaultStatusColumnCategories,
