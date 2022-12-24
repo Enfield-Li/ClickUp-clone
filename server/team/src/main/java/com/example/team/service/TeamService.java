@@ -20,9 +20,8 @@ public class TeamService {
     private final SpaceService spaceService;
     private final TeamRepository teamRepository;
 
-    UserInfo userInfo = UserInfo.builder()
-            .userId(1).username("mockUser")
-            .email("mockUser@google.com").build();
+    private final UserInfo userInfo = UserInfo.builder()
+            .userId(1).username("mockUser").build();
 
     public void test() {
         // return teamRepository.findAll();

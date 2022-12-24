@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PanelActivityService {
 
+    private final UserInfo userInfo = new UserInfo(1, "mockUser");
     private final PanelActivityRepository panelActivityRepository;
-
-    UserInfo userInfo = new UserInfo(1, "mockUser");
 
     public Boolean createStatusColumn(
             InitPanelActivityDTO createPanelActivityDTO) {

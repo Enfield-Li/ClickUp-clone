@@ -18,7 +18,6 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String email;
     private Integer userId;
     private String username;
 }

@@ -39,9 +39,6 @@ public class UserInfo {
     @NotNull
     private String username;
 
-    @NotNull
-    private String email;
-
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer taskWatcherId;

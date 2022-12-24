@@ -28,7 +28,4 @@ public class UserInfo {
     @NotNull
     private String username;
 
-    @NotNull
-    private String email;
-
 }
