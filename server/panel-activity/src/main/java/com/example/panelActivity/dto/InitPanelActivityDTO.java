@@ -1,6 +1,6 @@
 package com.example.panelActivity.dto;
 
-public record CreatePanelActivityDTO(
+public record InitPanelActivityDTO(
         Integer teamId,
         Integer spaceId) {
 }
