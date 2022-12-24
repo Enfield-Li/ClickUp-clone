@@ -1,5 +1,6 @@
 package com.example.team.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class TeamService {
             .userId(1).username("mockUser")
             .email("mockUser@google.com").build();
 
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
+
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
         var space = Space.builder().team(team)
@@ -30,6 +35,8 @@ public class TeamService {
         team.setSpaces(Set.of(space));
 
         teamRepository.save(team);
+
+        // update userTeam service
         return true;
     }
 

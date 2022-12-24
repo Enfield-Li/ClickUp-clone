@@ -59,8 +59,8 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Space> spaces = new HashSet<>();
 
-    @OneToMany
     @Builder.Default
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
     public static Team convertFromCreateTeamDTO(

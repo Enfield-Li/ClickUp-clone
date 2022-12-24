@@ -13,7 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "service-config",
         "com.example.team",
         "com.example.clients",
-        "com.example.statusColumn",
         // "com.example.serviceSecurityConfig",
 })
 public class TeamApplication {

@@ -1,10 +1,10 @@
 import { API_ENDPOINT } from "../../../constant";
-import { teams } from "../../../hook/mockData";
+import { initPanelActivity, teams } from "../../../hook/mockData";
 import { Team } from "../../../types";
 import { axiosTeamServiceInstance } from "../../../utils/AxiosInterceptor";
 
-export function fetchTeamListLocal(teamIds: number[]) {
-  return teams;
+export function fetchTeamListLocal(userId: number) {
+  return { teams, initPanelActivity };
 }
 
 export async function fetchTeamList(teamId: number) {

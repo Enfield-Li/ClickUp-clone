@@ -46,8 +46,6 @@ public class Space {
 
     private String color;
 
-    private Boolean isSelected;
-
     private Integer defaultStatusColumnId;
 
     @JsonIgnore
@@ -59,6 +57,7 @@ public class Space {
     @JoinColumn(name = "teamId")
     private Team team;
 
+    @Builder.Default
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> allListOrFolder = new HashSet<>();
 

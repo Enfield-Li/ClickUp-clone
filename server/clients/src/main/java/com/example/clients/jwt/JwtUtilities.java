@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 
 public interface JwtUtilities {
-    String createAccessToken(Integer userId, String username);
+    String createAccessToken(Integer userId, String username, String email);
 
     String createRefreshToken(Integer userId, Integer tokenVersion);
 

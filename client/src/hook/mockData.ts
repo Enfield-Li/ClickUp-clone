@@ -208,14 +208,12 @@ export const mockUser: User = {
   color: getRandomSpaceColor(),
   username: "mockUser",
   email: "",
-  joinedTeamIds: [1, 2],
 };
 const guestUser: User = {
   id: 2,
   color: getRandomSpaceColor(),
   username: "guestUser",
   email: "",
-  joinedTeamIds: [1, 2],
 };
 
 export const initPanelActivity: PanelActivity = {

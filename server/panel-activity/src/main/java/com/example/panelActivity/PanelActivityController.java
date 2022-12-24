@@ -1,6 +1,6 @@
 package com.example.panelActivity;
 
-import static com.example.clients.UrlConstants.TEAM_API_VERSION;
+import static com.example.clients.UrlConstants.PANEL_ACTIVITY_API_VERSION;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.panelActivity.dto.CreatePanelActivityDTO;
 import com.example.panelActivity.model.PanelActivity;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(TEAM_API_VERSION)
+@RequestMapping(PANEL_ACTIVITY_API_VERSION)
 class PanelActivityController {
 
     private final PanelActivityService statusColumnService;
@@ -30,8 +31,8 @@ class PanelActivityController {
 
     @PostMapping
     ResponseEntity<Boolean> createStatusColumn(
-            @RequestBody PanelActivity statusColumn) {
-        var created = statusColumnService.createStatusColumn(statusColumn);
+            @RequestBody CreatePanelActivityDTO createPanelActivityDTO) {
+        var created = statusColumnService.createStatusColumn(createPanelActivityDTO);
         return ResponseEntity.ok(created);
     }
 }

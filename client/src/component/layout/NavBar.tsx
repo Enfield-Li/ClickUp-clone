@@ -3,7 +3,6 @@ import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
-import { initPanelActivity } from "../../hook/mockData";
 import { Section } from "../../ApplicationEntry";
 import { TEAM_STATE_ACTION } from "../../types";
 import { fetchTeamListLocal } from "../task/actions/fetchSpaceList";
@@ -41,12 +40,14 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
   // init spaceListState
   useEffect(() => {
     if (authState.user && !teamState.teams.length) {
-      const { joinedTeamIds: teamIds } = authState.user;
+      const { teams, initPanelActivity } = fetchTeamListLocal(
+        authState.user.id
+      );
 
       teamStateDispatch({
         type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
         payload: {
-          teams: fetchTeamListLocal(teamIds),
+          teams,
           panelActivity: initPanelActivity,
         },
       });

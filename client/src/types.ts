@@ -327,7 +327,6 @@ export interface User {
   color?: string;
   email: string;
   username: string;
-  joinedTeamIds: number[];
 }
 
 export interface AuthenticationResponse {

@@ -3,7 +3,9 @@ package com.example.panelActivity.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,8 +34,22 @@ public class PanelActivity {
     @NotNull
     private Integer defaultTeamId;
 
-    @OneToMany
     @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<TeamActivity> teamActivities = new HashSet<>();
 
+    public static PanelActivity initPanelActivity(
+            Integer userId, Integer teamId, Integer spaceId) {
+        var defaultTeamActivity = TeamActivity.builder()
+                .teamId(teamId)
+                .spaceId(spaceId)
+                .build();
+
+        return PanelActivity.builder()
+                .userId(userId)
+                .defaultTeamId(teamId)
+                .teamActivities(Set.of(defaultTeamActivity))
+                .build();
+
+    }
 }

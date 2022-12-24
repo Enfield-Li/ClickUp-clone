@@ -135,7 +135,7 @@ public class AuthorizationService {
         session.setAttribute(REFRESH_TOKEN, refreshToken);
 
         // send accessToken to client
-        var accessToken = jwtUtils.createAccessToken(userId, username);
+        var accessToken = jwtUtils.createAccessToken(userId, username, email);
 
         // response dto
         return AuthorizationResponseDTO

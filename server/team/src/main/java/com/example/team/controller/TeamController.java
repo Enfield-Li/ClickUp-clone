@@ -2,6 +2,8 @@ package com.example.team.controller;
 
 import static com.example.clients.UrlConstants.*;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,11 @@ class TeamController {
     String test() {
         System.out.println("***called***");
         return "Got it";
+    }
+
+    @GetMapping("/all_teams")
+    List<Team> getAllTeams() {
+        return teamService.getAllTeams();
     }
 
     @PostMapping

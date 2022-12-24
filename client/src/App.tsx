@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import CreateTeam from "./component/test-dev/CreateTeam";
 import useAuthContext from "./context/auth/useAuthContext";
 import useInit from "./hook/useInit";
 import ApplicationEntry from "./ApplicationEntry";
 import Authentication from "./routes/Authentication";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "./constant";
+import CreateTeam from "./component/onboarding/CreateTeam";
 
 export default memo(App);
 function App() {
