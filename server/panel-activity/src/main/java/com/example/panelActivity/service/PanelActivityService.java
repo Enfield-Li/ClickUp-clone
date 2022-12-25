@@ -5,12 +5,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
+import com.example.panelActivity.exception.InternalDataIntegrityException;
+import com.example.panelActivity.exception.InvalidRequestException;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class PanelActivityService {
@@ -19,21 +23,22 @@ public class PanelActivityService {
 
     @Transactional
     public Boolean updatePanelActivity(
-            UpdateDefaultTeamIdDTO createPanelActivityDTO) {
+            UpdateDefaultTeamIdDTO updatePanelActivityDTO) {
         UserInfo userInfo = new UserInfo(1, "mockUser");
         var userId = userInfo.userId();
-        var teamId = createPanelActivityDTO.teamId();
-        var spaceId = createPanelActivityDTO.spaceId();
+        var teamId = updatePanelActivityDTO.teamId();
+        var spaceId = updatePanelActivityDTO.spaceId();
         // validateSpaceId(spaceId);
 
         var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
         if (optionalPanelActivity.isPresent()) {
             var panelActivity = optionalPanelActivity.get();
-            panelActivity.setDefaultTeamId(teamId);
             var newTeamActivity = TeamActivity.builder()
                     .teamId(teamId)
                     .spaceId(spaceId)
                     .build();
+
+            panelActivity.setDefaultTeamId(teamId);
             panelActivity.getTeamActivities().add(newTeamActivity);
             return true;
         }
@@ -41,14 +46,18 @@ public class PanelActivityService {
         // init
         var panelActivity = PanelActivity
                 .initPanelActivity(userId, teamId, spaceId);
-        panelActivityRepository.save(panelActivity);
 
+        panelActivityRepository.save(panelActivity);
         return true;
     }
 
     public PanelActivity getPanelActivity(Integer userId) {
         var panelActivity = panelActivityRepository.findByUserId(userId)
-                .orElseThrow(() -> new Error("User does not exist!"));
+                .orElseThrow(() -> new InvalidRequestException(
+                        "Invalid request, because either"
+                                + "1. User's workspace activity has yet been initialized"
+                                + "or 2. user no longer exists."));
+
         validatePanelActivity(panelActivity);
         return panelActivity;
     }
@@ -58,11 +67,15 @@ public class PanelActivityService {
                 .filter(teamActivity -> teamActivity.getTeamId()
                         .equals(panelActivity.getDefaultTeamId()))
                 .findAny()
-                .orElseThrow();
+                .orElseThrow(() -> new InternalDataIntegrityException(
+                        "PanelActivity data integrity breached, this really shouldn't happen..."));
     }
 
     private void validateSpaceId(Integer spaceId) {
         // check validity
+        var errorMessage = "Space id validation failed, space does not exist!";
+        log.error(errorMessage);
+        throw new InternalDataIntegrityException(errorMessage);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.authorization.exception;
+package com.example.panelActivity.exception;
 
 import java.util.List;
 
@@ -37,27 +37,28 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     protected ResponseEntity<ErrorResponse> catchInvalidRequestBodyInputException(
             MethodArgumentNotValidException exception) {
-        log.error(exception);
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 "Error occurred when validating fields, please check the errors list.",
                 exception.getBindingResult().getFieldErrors());
     }
 
-    @ExceptionHandler(value = AuthenticationFailureException.class)
-    ResponseEntity<ErrorResponse> catchLoginFailure(AuthenticationFailureException exception) {
-        log.error("InvalidateCredentialsException");
+    /* Catch InternalDataIntegrityException */
+    @ExceptionHandler(value = { InternalDataIntegrityException.class })
+    protected ResponseEntity<ErrorResponse> catchInternalDataIntegrityException(
+            InternalDataIntegrityException exception) {
+        return buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                exception.getMessage());
+    }
 
-        if (exception.getField() == null) {
-            return buildErrorResponse(
-                    HttpStatus.UNAUTHORIZED,
-                    "Account login time out, please login again.");
-        }
-
+    /* Catch InternalDataIntegrityException */
+    @ExceptionHandler(value = { InvalidRequestException.class })
+    protected ResponseEntity<ErrorResponse> catchInvalidRequestException(
+            InternalDataIntegrityException exception) {
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
-                "Error occurred when validating fields, please check the errors list.",
-                exception.getField() == null ? null : getValidationError(exception));
+                exception.getMessage());
     }
 
     /*
