@@ -345,7 +345,7 @@ export const teams: Team[] = [
   },
 ];
 
-export const staticColumnOptions: ColumnOptions = {
+export const defaultColumnOptions: ColumnOptions = {
   statusColumns: [],
   priorityColumns: [
     { id: 1, title: Priority.NO_PRIORITY, color: "gray.400" },

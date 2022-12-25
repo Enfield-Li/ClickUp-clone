@@ -10,7 +10,7 @@ import {
 import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { axiosGatewayInstance } from "../utils/AxiosInterceptor";
-import { staticColumnOptions } from "./mockData";
+import { defaultColumnOptions } from "./mockData";
 import { sleep } from "../utils/sleep";
 import { useToast } from "@chakra-ui/react";
 
@@ -82,7 +82,7 @@ export function useFetchTasks(sortBy: SortBy) {
     );
 
     if (tasksData) {
-      const columnDataFromApi = staticColumnOptions;
+      const columnDataFromApi = defaultColumnOptions;
 
       const { reorderedDueDateColumns, reorderedStatusColumns } =
         initColumns(columnDataFromApi);

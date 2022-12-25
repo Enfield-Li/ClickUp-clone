@@ -8,7 +8,6 @@ import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
-import com.example.panelActivity.repository.TeamActivityRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PanelActivityService {
 
-    private final TeamActivityRepository teamActivityRepository;
     private final PanelActivityRepository panelActivityRepository;
 
     @Transactional
@@ -28,15 +26,14 @@ public class PanelActivityService {
         var spaceId = createPanelActivityDTO.spaceId();
         // validateSpaceId(spaceId);
 
-        // insert new TeamActivity record and update DefaultTeamId
-        var exists = panelActivityRepository.existsByUserId(userId);
-        if (exists) {
-            var panelActivity = panelActivityRepository.findByUserId(userId).orElseThrow();
+        var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
+        if (optionalPanelActivity.isPresent()) {
+            var panelActivity = optionalPanelActivity.get();
+            panelActivity.setDefaultTeamId(teamId);
             var newTeamActivity = TeamActivity.builder()
                     .teamId(teamId)
                     .spaceId(spaceId)
                     .build();
-            panelActivity.setDefaultTeamId(teamId);
             panelActivity.getTeamActivities().add(newTeamActivity);
             return true;
         }
@@ -45,6 +42,7 @@ public class PanelActivityService {
         var panelActivity = PanelActivity
                 .initPanelActivity(userId, teamId, spaceId);
         panelActivityRepository.save(panelActivity);
+
         return true;
     }
 

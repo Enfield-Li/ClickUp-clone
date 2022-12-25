@@ -1,5 +1,9 @@
 import { API_ENDPOINT } from "../../../constant";
-import { initPanelActivity, teams } from "../../../hook/mockData";
+import {
+  defaultTeamStatusColumns,
+  initPanelActivity,
+  teams,
+} from "../../../hook/mockData";
 import { PanelActivity, Team } from "../../../types";
 import { axiosTeamServiceInstance } from "../../../utils/AxiosInterceptor";
 
@@ -17,6 +21,11 @@ export async function fetchTeamList() {
     const response = await axiosTeamServiceInstance.get<InitTeamDTO>(
       API_ENDPOINT.TEAM
     );
-    console.log(response);
+
+    response.data.teams.forEach(
+      (team) => (team.teamStatusColumn = defaultTeamStatusColumns)
+    );
+
+    console.log(response.data);
   } catch (error) {}
 }

@@ -16,13 +16,13 @@ public interface PanelActivityRepository
 
     Optional<PanelActivity> findByUserId(Integer userId);
 
-    Boolean existsByUserId(Integer userId);
+    // Boolean existsByUserId(Integer userId);
 
-    @Modifying
-    @Query(nativeQuery = true, value = ""
-            + "UPDATE panel_activity"
-            + " SET default_team_id = :teamId"
-            + " WHERE user_id = :userId")
-    Integer updateDefaultTeamId(@Param("userId") Integer userId,
-            @Param("teamId") Integer teamId);
+    // @Modifying
+    // @Query(nativeQuery = true, value = ""
+    //         + "UPDATE panel_activity"
+    //         + " SET default_team_id = :teamId"
+    //         + " WHERE user_id = :userId")
+    // Integer updateDefaultTeamId(@Param("userId") Integer userId,
+    //         @Param("teamId") Integer teamId);
 }

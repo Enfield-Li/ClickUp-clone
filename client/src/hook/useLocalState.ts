@@ -10,10 +10,11 @@ import { TASK_BOARD_PARAM } from "../constant";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
+import { fetchLocalTaskList } from "./fetchLocalTaskList";
 import {
   space1TaskList,
   space2TaskList,
-  staticColumnOptions,
+  defaultColumnOptions,
 } from "./mockData";
 
 interface UseLocalTasksParam {
@@ -40,26 +41,25 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
         return;
       }
 
-      const statusColumnsDataFromApi: StatusColumns =
+      const statusColumnFromRouter: StatusColumns =
         location.state.statusColumns;
 
-      const columnDataFromApi: ColumnOptions = {
-        dueDateColumns: staticColumnOptions.dueDateColumns,
-        priorityColumns: staticColumnOptions.priorityColumns,
-        statusColumns: statusColumnsDataFromApi,
+      const allColumns: ColumnOptions = {
+        dueDateColumns: defaultColumnOptions.dueDateColumns,
+        priorityColumns: defaultColumnOptions.priorityColumns,
+        statusColumns: statusColumnFromRouter,
       };
 
       const { reorderedDueDateColumns, reorderedStatusColumns } =
-        initColumns(columnDataFromApi);
+        initColumns(allColumns);
 
       const columnOptions: ColumnOptions = {
-        ...columnDataFromApi,
+        ...allColumns,
         dueDateColumns: reorderedDueDateColumns,
         statusColumns: reorderedStatusColumns,
       };
 
-      const listDataFromApi =
-        selectedListId % 2 ? space1TaskList : space2TaskList;
+      const listDataFromApi = fetchLocalTaskList(selectedListId);
 
       // init taskEvents and convert expectedDueDate to dueDate
       const taskList = processTaskList(
@@ -69,7 +69,7 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
 
       const orderedTasks = groupTaskListOnSortBy(
         taskList,
-        columnDataFromApi[`${sortBy}Columns`],
+        allColumns[`${sortBy}Columns`],
         sortBy
       );
 
