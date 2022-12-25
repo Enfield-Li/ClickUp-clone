@@ -5,7 +5,7 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../ApplicationEntry";
 import { TEAM_STATE_ACTION } from "../../types";
-import { fetchTeamListLocal } from "../task/actions/fetchSpaceList";
+import { fetchTeamList, fetchTeamListLocal } from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
@@ -40,9 +40,8 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
   // init spaceListState
   useEffect(() => {
     if (authState.user) {
-      const { teams, initPanelActivity } = fetchTeamListLocal(
-        authState.user.id
-      );
+      const { teams, initPanelActivity } = fetchTeamListLocal();
+      fetchTeamList();
 
       teamStateDispatch({
         type: TEAM_STATE_ACTION.INIT_TEAM_STATE,

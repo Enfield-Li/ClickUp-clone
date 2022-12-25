@@ -79,7 +79,9 @@ function JoinedTeamList({ onClose }: Props) {
           hasArrow
           rounded="md"
           arrowSize={6}
+          fontSize="small"
           placement="right"
+          fontWeight="semibold"
           label="Add Workspace"
         >
           <Center

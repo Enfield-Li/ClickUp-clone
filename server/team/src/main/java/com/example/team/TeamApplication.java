@@ -9,9 +9,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(scanBasePackages = {
         // "com.example.amqp",
-        "service-config",
         "com.example.team",
         "com.example.clients",
+        "com.example.serviceConfig",
 // "com.example.serviceSecurityConfig",
 })
 public class TeamApplication {

@@ -13,5 +13,4 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI().components(new Components());
     }
-
 }

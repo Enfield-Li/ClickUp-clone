@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(scanBasePackages = {
         // "com.example.amqp",
-        "service-config",
         "com.example.clients",
+        "com.example.serviceConfig",
         "com.example.panelActivity",
         // "com.example.serviceSecurityConfig",
 })

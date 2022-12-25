@@ -34,10 +34,9 @@ class TeamController {
         return "Got it";
     }
 
-    @GetMapping("/{userId}")
-    ResponseEntity<TeamAndPanelActivityDTO> getAllTeams(
-            @PathVariable("userId") Integer userId) {
-        var teamAndPanelActivityDTO = teamService.getAllTeams(userId);
+    @GetMapping
+    ResponseEntity<TeamAndPanelActivityDTO> getAllTeams() {
+        var teamAndPanelActivityDTO = teamService.getAllTeams();
         return ResponseEntity.ok(teamAndPanelActivityDTO);
     }
 

@@ -25,8 +25,6 @@ public class TeamService {
     private final SpaceService spaceService;
     private final TeamRepository teamRepository;
     private final PanelActivityClient panelActivityClient;
-    UserInfo userInfo = UserInfo.builder()
-            .userId(1).username("mockUser").build();
 
     public void test() {
         Team.builder()
@@ -35,8 +33,10 @@ public class TeamService {
                 .build();
     }
 
-    public TeamAndPanelActivityDTO getAllTeams(Integer userId) {
-        var panelActivityDTO = panelActivityClient.getPanelActivity(userInfo.getUserId());
+    public TeamAndPanelActivityDTO getAllTeams() {
+        var userId = 1;
+
+        var panelActivityDTO = panelActivityClient.getPanelActivity(userId);
         var teams = teamRepository.findByMembersUserId(userId);
         validateTeamsAndPanelActivity(panelActivityDTO, teams);
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);

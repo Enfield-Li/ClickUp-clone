@@ -26,10 +26,12 @@ export default function OnBoardingTemplate({
 }: Props) {
   async function createTeam() {
     if (createTeamDTO) {
-      const response = await axiosTeamServiceInstance.post(
+      const response = await axiosTeamServiceInstance.post<boolean>(
         API_ENDPOINT.SPACE_API_VERSION,
         createTeamDTO
       );
+
+        
     }
   }
 
