@@ -1,10 +1,12 @@
 package com.example.panelActivity.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
 import com.example.panelActivity.model.PanelActivity;
+import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
 import com.example.panelActivity.repository.TeamActivityRepository;
 
@@ -14,23 +16,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PanelActivityService {
 
-    private final UserInfo userInfo = new UserInfo(1, "mockUser");
     private final TeamActivityRepository teamActivityRepository;
     private final PanelActivityRepository panelActivityRepository;
 
+    @Transactional
     public Boolean updatePanelActivity(
             UpdateDefaultTeamIdDTO createPanelActivityDTO) {
+        UserInfo userInfo = new UserInfo(1, "mockUser");
         var userId = userInfo.userId();
         var teamId = createPanelActivityDTO.teamId();
         var spaceId = createPanelActivityDTO.spaceId();
         // validateSpaceId(spaceId);
 
-        // update original
+        // insert new TeamActivity record and update DefaultTeamId
         var exists = panelActivityRepository.existsByUserId(userId);
         if (exists) {
-            var rowsAffected = panelActivityRepository.updateDefaultTeamId(userId, teamId);
-            var updated = teamActivityRepository.updateOpenedSpaceId(teamId, spaceId);
-            return rowsAffected + updated == 2;
+            var panelActivity = panelActivityRepository.findByUserId(userId).orElseThrow();
+            var newTeamActivity = TeamActivity.builder()
+                    .teamId(teamId)
+                    .spaceId(spaceId)
+                    .build();
+            panelActivity.setDefaultTeamId(teamId);
+            panelActivity.getTeamActivities().add(newTeamActivity);
+            return true;
         }
 
         // init
@@ -42,7 +50,7 @@ public class PanelActivityService {
 
     public PanelActivity getPanelActivity(Integer userId) {
         var panelActivity = panelActivityRepository.findByUserId(userId)
-                .orElseThrow();
+                .orElseThrow(() -> new Error("User does not exist!"));
         validatePanelActivity(panelActivity);
         return panelActivity;
     }

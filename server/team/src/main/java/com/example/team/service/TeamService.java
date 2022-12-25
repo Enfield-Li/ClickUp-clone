@@ -2,10 +2,12 @@ package com.example.team.service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.clients.panelActivity.PanelActivityClient;
+import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
@@ -23,8 +25,7 @@ public class TeamService {
     private final SpaceService spaceService;
     private final TeamRepository teamRepository;
     private final PanelActivityClient panelActivityClient;
-
-    private final UserInfo userInfo = UserInfo.builder()
+    UserInfo userInfo = UserInfo.builder()
             .userId(1).username("mockUser").build();
 
     public void test() {
@@ -37,10 +38,14 @@ public class TeamService {
     public TeamAndPanelActivityDTO getAllTeams(Integer userId) {
         var panelActivityDTO = panelActivityClient.getPanelActivity(userInfo.getUserId());
         var teams = teamRepository.findByMembersUserId(userId);
+        validateTeamsAndPanelActivity(panelActivityDTO, teams);
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
+        UserInfo userInfo = UserInfo.builder()
+                .userId(1).username("mockUser").build();
+
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
         var space = Space.builder().team(team)
                 .name("space").orderIndex(1).isPrivate(false).build();
@@ -51,7 +56,17 @@ public class TeamService {
         // update panel activity
         var dto = new UpdateDefaultTeamIdDTO(team.getId(), space.getId());
         var response = panelActivityClient.updateDefaultTeamId(dto);
+
         return response;
+    }
+
+    private void validateTeamsAndPanelActivity(
+            PanelActivityDTO panelActivityDTO, List<Team> teams) {
+        var ids = teams.stream().map(Team::getId).collect(Collectors.toList());
+        var validateResult = panelActivityDTO.teamActivities().stream().allMatch(ta -> ids.contains(ta.teamId()));
+        if (!validateResult) {
+            throw new Error("Data integrity breached");
+        }
     }
 
 }
