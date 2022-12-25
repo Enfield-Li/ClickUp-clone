@@ -1,15 +1,17 @@
 package com.example.authorization.exception;
 
-import com.example.clients.jwt.AuthenticationFailedField;
-import com.example.clients.jwt.AuthenticationFailureException;
 import java.util.List;
-import lombok.extern.log4j.Log4j2;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import com.example.clients.jwt.AuthenticationFailureException;
+
+import lombok.extern.log4j.Log4j2;
 
 /*
  * https://www.baeldung.com/exception-handling-for-rest-with-spring

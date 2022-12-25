@@ -14,6 +14,7 @@ export default function useInit() {
   const toast = useToast({ duration: 3000, isClosable: true });
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
+  // localStorage.removeItem("access token");
   useEffect(() => {
     // authDispatch({ type: AUTH_ACTION.LOGIN_USER, payload: { user: mockUser } });
     if (accessToken) {

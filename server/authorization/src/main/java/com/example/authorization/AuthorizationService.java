@@ -67,9 +67,9 @@ public class AuthorizationService {
                         AuthenticationFailedField.email,
                         "Email not found. Click here to create an account!"));
 
-        boolean matches = passwordEncoder.matches(
-                loginCredentials.password(),
-                applicationUser.getPassword());
+        boolean matches = passwordEncoder
+                .matches(loginCredentials.password(),
+                        applicationUser.getPassword());
         if (!matches) {
             log.error("Invalid password");
             throw new AuthenticationFailureException(
