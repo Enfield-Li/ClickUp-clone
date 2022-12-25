@@ -32,7 +32,7 @@ import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
 import com.example.clients.jwt.RefreshTokenPayload;
 import com.example.clients.jwt.UserInfo;
-import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
+import com.example.clients.panelActivity.UpdateDefaultTeamDTO;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
@@ -69,12 +69,12 @@ public class PanelActivityServiceTest implements WithAssertions {
         // given 
         var teamId = 11;
         var spaceId = 10;
-        var updatePanelActivityDTO = new UpdateDefaultTeamIdDTO(teamId, spaceId);
+        var updatePanelActivityDTO = new UpdateDefaultTeamDTO(teamId, spaceId);
 
         given(repository.findByUserId(any())).willReturn(Optional.empty());
 
         // when
-        var actualReturn = underTest.updatePanelActivity(updatePanelActivityDTO);
+        var actualReturn = underTest.updateDefaultTeam(updatePanelActivityDTO);
 
         // then
         verify(repository).save(panelActivityArgCaptor.capture());
@@ -95,7 +95,7 @@ public class PanelActivityServiceTest implements WithAssertions {
         // given 
         var teamId = 11;
         var spaceId = 10;
-        var updatePanelActivityDTO = new UpdateDefaultTeamIdDTO(teamId, spaceId);
+        var updatePanelActivityDTO = new UpdateDefaultTeamDTO(teamId, spaceId);
         var panelActivity = new PanelActivity();
         var expectedNewTeamActivity = TeamActivity.builder()
                 .teamId(teamId)
@@ -105,7 +105,7 @@ public class PanelActivityServiceTest implements WithAssertions {
         given(repository.findByUserId(any())).willReturn(Optional.of(panelActivity));
 
         // when
-        var actualReturn = underTest.updatePanelActivity(updatePanelActivityDTO);
+        var actualReturn = underTest.updateDefaultTeam(updatePanelActivityDTO);
 
         // then
         assertThat(panelActivity.getDefaultTeamId()).isEqualTo(teamId);

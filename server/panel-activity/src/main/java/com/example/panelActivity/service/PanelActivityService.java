@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserInfo;
-import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
+import com.example.clients.panelActivity.UpdateDefaultTeamDTO;
 import com.example.panelActivity.exception.InternalDataIntegrityException;
 import com.example.panelActivity.exception.InvalidRequestException;
 import com.example.panelActivity.model.PanelActivity;
@@ -22,13 +22,12 @@ public class PanelActivityService {
     private final PanelActivityRepository panelActivityRepository;
 
     @Transactional
-    public Boolean updatePanelActivity(
-            UpdateDefaultTeamIdDTO updatePanelActivityDTO) {
+    public Boolean updateDefaultTeam(
+            UpdateDefaultTeamDTO updatePanelActivityDTO) {
         UserInfo userInfo = new UserInfo(1, "mockUser");
         var userId = userInfo.userId();
         var teamId = updatePanelActivityDTO.teamId();
         var spaceId = updatePanelActivityDTO.spaceId();
-        // validateSpaceId(spaceId);
 
         var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
         if (optionalPanelActivity.isPresent()) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
-import com.example.clients.panelActivity.UpdateDefaultTeamIdDTO;
+import com.example.clients.panelActivity.UpdateDefaultTeamDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
@@ -27,10 +27,7 @@ public class TeamService {
     private final PanelActivityClient panelActivityClient;
 
     public void test() {
-        Team.builder()
-                .name("team2")
-                .color("rgb(255, 87, 34)")
-                .build();
+        Team.builder().name("team2").color("rgb(255, 87, 34)").build();
     }
 
     public TeamAndPanelActivityDTO getAllTeams() {
@@ -54,8 +51,8 @@ public class TeamService {
         teamRepository.saveAndFlush(team);
 
         // update panel activity
-        var dto = new UpdateDefaultTeamIdDTO(team.getId(), space.getId());
-        var response = panelActivityClient.updateDefaultTeamId(dto);
+        var dto = new UpdateDefaultTeamDTO(team.getId(), space.getId());
+        var response = panelActivityClient.updateDefaultTeam(dto);
 
         return response;
     }

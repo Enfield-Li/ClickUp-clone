@@ -1,6 +1,6 @@
 package com.example.clients.panelActivity;
 
-public record UpdateDefaultTeamIdDTO(
+public record UpdateDefaultTeamDTO(
         Integer teamId,
         Integer spaceId) {
 }
