@@ -52,17 +52,16 @@ export async function createTask(createTaskDTO: Task) {
   }
 }
 
-export async function fetchAllTasks(errorHandler: () => void) {
+export async function fetchAllTasks(listId: number) {
   try {
     const response = await axiosGatewayInstance.get<TaskList>(
-      API_ENDPOINT.TASK_ALL_TASKS
+      API_ENDPOINT.TASK_ALL_TASKS + `/${listId}`
     );
 
     return response.data;
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);
-    errorHandler();
   }
 }
 

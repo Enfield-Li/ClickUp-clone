@@ -252,9 +252,21 @@ function newTaskFactory({
     assignees: [],
     subTasks: [],
     creator,
-    status: newTaskStatusPosition(),
-    dueDate: newTaskDueDatePosition(),
-    priority: newTaskPriorityPosition(),
+    status: {
+      name: "",
+      columnId: -1,
+      orderIndex: -1,
+    },
+    dueDate: {
+      name: DueDateRange.NO_DUE_DATE,
+      columnId: 1,
+      orderIndex: -1,
+    },
+    priority: {
+      name: Priority.NO_PRIORITY,
+      columnId: 1,
+      orderIndex: -1,
+    },
   };
 }
 
@@ -269,26 +281,4 @@ export function newCreator({
   email,
 }: newCreatorParam): UserInfo {
   return { userId, username, email };
-}
-
-function newTaskStatusPosition(): StatusPosition {
-  return {
-    name: "",
-    columnId: -1,
-    orderIndex: -1,
-  };
-}
-function newTaskPriorityPosition(): PriorityPosition {
-  return {
-    name: Priority.NO_PRIORITY,
-    columnId: 1,
-    orderIndex: -1,
-  };
-}
-function newTaskDueDatePosition(): DueDatePosition {
-  return {
-    name: DueDateRange.NO_DUE_DATE,
-    columnId: 1,
-    orderIndex: -1,
-  };
 }

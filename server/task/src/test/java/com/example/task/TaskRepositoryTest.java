@@ -39,8 +39,10 @@ public class TaskRepositoryTest implements WithAssertions {
         var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
         var creator = UserInfo.builder().userId(1).username("user1").build();
 
-        var task1 = new Task(taskOneTitle, status, priority, dueDate, creator, Set.of(creator));
-        var task2 = new Task(taskTwoTitle, status, priority, dueDate, creator, Set.of(creator));
+        var task1 = Task.builder().listId(1).title(taskOneTitle).status(status).priority(priority).dueDate(dueDate)
+                .creator(creator).build();
+        var task2 = Task.builder().listId(1).title(taskTwoTitle).status(status).priority(priority).dueDate(dueDate)
+                .creator(creator).build();
         var savedTask1 = underTest.save(task1);
         taskOneTitle = savedTask1.getTitle();
         taskOneId = savedTask1.getId();

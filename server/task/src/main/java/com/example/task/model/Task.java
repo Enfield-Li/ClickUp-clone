@@ -121,42 +121,9 @@ public class Task {
     @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> assignees = new HashSet<>();
 
-    public Task(
-            @NotNull String title,
-            @NotNull StatusPosition status,
-            @NotNull PriorityPosition priority,
-            @NotNull DueDatePosition dueDate,
-            @NotNull UserInfo creator,
-            @NotNull Set<UserInfo> watchers) {
-        this.title = title;
-        this.status = status;
-        this.priority = priority;
-        this.dueDate = dueDate;
-        this.watchers = watchers;
-        this.creator = creator;
-    }
-
-    // public void addWatcher(Participant userInfo) {
-    //     watchers.add(userInfo);
-    //     userInfo.setTaskWatcher(this);
-    // }
-
-    // public void removeWatcher(Participant userInfo) {
-    //     watchers.remove(userInfo);
-    //     userInfo.setTaskWatcher(null);
-    // }
-
     public static Task convertFromCreateTaskDto(
             CreateTaskDTO createTaskDTO,
-            Integer creatorId,
-            String creatorName) {
-        // Initialize creator as watcher
-        var creator = UserInfo
-                .builder()
-                .userId(creatorId)
-                .username(creatorName)
-                .build();
-
+            UserInfo creator) {
         var task = Task
                 .builder()
                 .creator(creator)

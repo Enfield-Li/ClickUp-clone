@@ -14,35 +14,12 @@ import { defaultColumnOptions } from "./mockData";
 import { sleep } from "../utils/sleep";
 import { useToast } from "@chakra-ui/react";
 
-export function useFetch<T>(url: string) {
-  const [data, setData] = useState<T>();
-  const [loading, setLoading] = useState<boolean>();
-  const [error, setError] = useState<boolean>();
-
-  async function fetchData() {
-    try {
-      setLoading(true);
-      // indicateLoading(true, globalDispatch);
-
-      const response = await axiosGatewayInstance.get<T>(url);
-      setData(response.data);
-    } catch (error) {
-      setError(true);
-      const err = error as AxiosError;
-      // popUpError(err.message, globalDispatch);
-      console.log(err);
-    }
-  }
-
-  fetchData();
-
-  setLoading(false);
-  // indicateLoading(false, globalDispatch);
-
-  return { data, loading, error };
+interface UseFetchTasksParam {
+  sortBy: SortBy;
+  selectedListId: number;
 }
 
-export function useFetchTasks(sortBy: SortBy) {
+export function useFetchTasks({ sortBy, selectedListId }: UseFetchTasksParam) {
   const toast = useToast();
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
@@ -74,12 +51,7 @@ export function useFetchTasks(sortBy: SortBy) {
     setLoading(true);
 
     // Task data
-    const tasksData: TaskList | undefined = await fetchAllTasks(() =>
-      toast({
-        colorScheme: "red",
-        description: "Service unavailable, please retry...",
-      })
-    );
+    const tasksData: TaskList | undefined = await fetchAllTasks(selectedListId);
 
     if (tasksData) {
       const columnDataFromApi = defaultColumnOptions;
@@ -102,7 +74,12 @@ export function useFetchTasks(sortBy: SortBy) {
         sortBy
       );
 
-      setTaskStateContext({ columnOptions, setTaskState, sortBy });
+      setTaskStateContext({
+        columnOptions,
+        setTaskState,
+        sortBy,
+        currentListId: selectedListId,
+      });
       setTaskState({ orderedTasks, columnOptions });
 
       setLoading(false);

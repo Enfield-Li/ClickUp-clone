@@ -44,7 +44,8 @@ public class TaskMapperTest implements WithAssertions {
         var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
         var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
         var creator = UserInfo.builder().userId(1).username("user1").build();
-        var task = new Task(taskOneTitle, status, priority, dueDate, creator, Set.of(creator));
+        var task = Task.builder().listId(1).title(taskOneTitle).status(status).priority(priority).dueDate(dueDate)
+                .creator(creator).watchers(Set.of(creator)).build();
 
         taskId = taskRepository.save(task).getId();
         taskRepository.findById(taskId).orElseThrow();

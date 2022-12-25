@@ -67,7 +67,7 @@ public class TaskServiceTest implements WithAssertions {
         var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
         var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
         var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
-        var createTaskDto = new CreateTaskDTO("desc", LocalDateTime.now(), "title", status, dueDate, priority);
+        var createTaskDto = new CreateTaskDTO("desc", LocalDateTime.now(), "title", 1, status, dueDate, priority);
 
         given(taskRepository.save(any())).willReturn(new Task());
 
