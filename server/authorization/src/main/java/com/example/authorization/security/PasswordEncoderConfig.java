@@ -1,19 +1,12 @@
-package com.example.authorization.config;
+package com.example.authorization.security;
 
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class AppConfig {
-
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI().components(new Components());
-    }
+public class PasswordEncoderConfig {
 
     @Bean
     PasswordEncoder passwordEncoder() {

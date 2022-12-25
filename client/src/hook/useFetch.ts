@@ -1,5 +1,5 @@
-import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import { fetchAllTasks } from "../component/task/actions/networkActions";
 import {
@@ -7,34 +7,119 @@ import {
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { ColumnOptions, SortBy, TaskList, TaskState } from "../types";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
-import { axiosGatewayInstance } from "../utils/AxiosInterceptor";
-import { defaultColumnOptions } from "./mockData";
+import {
+  ColumnOptions,
+  SortBy,
+  StatusColumns,
+  TaskList,
+  TaskState,
+} from "../types";
 import { sleep } from "../utils/sleep";
-import { useToast } from "@chakra-ui/react";
+import { defaultColumnOptions } from "./mockData";
 
 interface UseFetchTasksParam {
   sortBy: SortBy;
   selectedListId: number;
 }
-
 export function useFetchTasks({ sortBy, selectedListId }: UseFetchTasksParam) {
-  const toast = useToast();
+  const location = useLocation();
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
   useEffect(() => {
     initTaskState();
-  }, []);
+
+    async function initTaskState() {
+      if (!selectedListId && !location.state) {
+        setTaskState(undefined);
+        setTaskStateContext(null);
+        return;
+      }
+
+      setLoading(true);
+
+      // Task data
+      const tasksData = await fetchAllTasks(selectedListId);
+
+      if (tasksData) {
+        const statusColumnFromRouter: StatusColumns =
+          location.state.statusColumns;
+
+        const allColumns: ColumnOptions = {
+          dueDateColumns: defaultColumnOptions.dueDateColumns,
+          priorityColumns: defaultColumnOptions.priorityColumns,
+          statusColumns: statusColumnFromRouter,
+        };
+
+        const { reorderedDueDateColumns, reorderedStatusColumns } =
+          initColumns(allColumns);
+
+        const columnOptions: ColumnOptions = {
+          ...allColumns,
+          dueDateColumns: reorderedDueDateColumns,
+          statusColumns: reorderedStatusColumns,
+        };
+
+        // init taskEvents and convert expectedDueDate to dueDate columns
+        const taskList = processTaskList(reorderedDueDateColumns, tasksData);
+
+        const orderedTasks = groupTaskListOnSortBy(
+          taskList,
+          allColumns[`${sortBy}Columns`],
+          sortBy
+        );
+
+        setTaskStateContext({
+          columnOptions,
+          setTaskState,
+          sortBy,
+          currentListId: selectedListId,
+        });
+        setTaskState({ orderedTasks, columnOptions });
+
+        setLoading(false);
+      }
+    }
+  }, [selectedListId, location.state]);
 
   // Sync up orderedTasks with columns under sortBy
+  const statusColumnCount = taskState?.columnOptions.statusColumns.length;
   useEffect(() => {
     updateTaskState();
-  }, [sortBy, taskState?.columnOptions.statusColumns]); // Change of sortBy and adding status column
+
+    async function updateTaskState() {
+      if (!taskState || !taskStateContext) {
+        return;
+      }
+
+      setLoading(true);
+
+      if (taskState && taskStateContext) {
+        setTaskStateContext({
+          ...taskStateContext,
+          sortBy,
+        });
+
+        setTaskState({
+          ...taskState,
+          orderedTasks: groupTaskListOnSortBy(
+            collectAllTasks(taskState.orderedTasks),
+            taskState.columnOptions[`${sortBy}Columns`],
+            sortBy
+          ),
+        });
+
+        await sleep(10);
+      }
+
+      setLoading(false);
+    }
+  }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
 
   // sync up with modal task
   useEffect(() => {
@@ -46,76 +131,6 @@ export function useFetchTasks({ sortBy, selectedListId }: UseFetchTasksParam) {
       if (updatedTask) setTask(updatedTask);
     }
   }, [taskState]);
-
-  async function initTaskState() {
-    setLoading(true);
-
-    // Task data
-    const tasksData: TaskList | undefined = await fetchAllTasks(selectedListId);
-
-    if (tasksData) {
-      const columnDataFromApi = defaultColumnOptions;
-
-      const { reorderedDueDateColumns, reorderedStatusColumns } =
-        initColumns(columnDataFromApi);
-
-      const columnOptions: ColumnOptions = {
-        ...columnDataFromApi,
-        dueDateColumns: reorderedDueDateColumns,
-        statusColumns: reorderedStatusColumns,
-      };
-
-      // init taskEvents and convert expectedDueDate to dueDate columns
-      const taskList = processTaskList(reorderedDueDateColumns, tasksData);
-
-      const orderedTasks = groupTaskListOnSortBy(
-        taskList,
-        columnDataFromApi[`${sortBy}Columns`],
-        sortBy
-      );
-
-      setTaskStateContext({
-        columnOptions,
-        setTaskState,
-        sortBy,
-        currentListId: selectedListId,
-      });
-      setTaskState({ orderedTasks, columnOptions });
-
-      setLoading(false);
-    }
-  }
-
-  async function updateTaskState() {
-    setLoading(true);
-
-    if (taskState && taskStateContext) {
-      setTaskStateContext({
-        ...taskStateContext,
-        sortBy,
-        columnOptions: taskState.columnOptions,
-      });
-
-      // init taskEvents and convert expectedDueDate to dueDate columns
-      const taskList = processTaskList(
-        taskState.columnOptions.dueDateColumns,
-        collectAllTasks(taskState.orderedTasks)
-      );
-
-      setTaskState({
-        ...taskState,
-        orderedTasks: groupTaskListOnSortBy(
-          taskList,
-          taskState.columnOptions[`${sortBy}Columns`],
-          sortBy
-        ),
-      });
-
-      await sleep(0);
-    }
-
-    setLoading(false);
-  }
 
   return { taskState, setTaskState, loading, error };
 }

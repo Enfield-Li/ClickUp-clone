@@ -36,6 +36,8 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
         return;
       }
 
+      const listDataFromApi = fetchLocalTaskList(selectedListId);
+
       const statusColumnFromRouter: StatusColumns =
         location.state.statusColumns;
 
@@ -53,8 +55,6 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
         dueDateColumns: reorderedDueDateColumns,
         statusColumns: reorderedStatusColumns,
       };
-
-      const listDataFromApi = fetchLocalTaskList(selectedListId);
 
       // init taskEvents and convert expectedDueDate to dueDate
       const taskList = processTaskList(
@@ -107,7 +107,7 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
         ),
       });
 
-      await sleep(0);
+      await sleep(10);
       setLoading(false);
     }
   }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column

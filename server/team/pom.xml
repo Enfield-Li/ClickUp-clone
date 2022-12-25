@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>Team</artifactId>
+    <artifactId>team</artifactId>
 
     <name>Team service</name>
 
@@ -48,6 +48,12 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>service-security-config</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <!--   <dependency>
             <groupId>com.example</groupId>
         <artifactId>amqp</artifactId>
@@ -58,12 +64,7 @@
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-        <artifactId>service-security-config</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        <scope>compile</scope>
-        </dependency> -->
+     -->
     </dependencies>
 
 </project>
