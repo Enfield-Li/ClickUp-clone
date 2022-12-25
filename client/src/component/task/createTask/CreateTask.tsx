@@ -59,7 +59,7 @@ function CreateTask({
   }
 
   function handleCreateTask() {
-    if (taskName) {
+    if (taskName && taskStateContext) {
       const newTask: NewTask = {
         title: taskName,
         expectedDueDate,
@@ -78,6 +78,7 @@ function CreateTask({
         setTaskState,
         currentColumn,
         newTaskInput: newTask,
+        listId: taskStateContext.currentListId,
       });
       continueCreateTask();
     }

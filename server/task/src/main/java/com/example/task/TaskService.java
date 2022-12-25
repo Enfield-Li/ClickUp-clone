@@ -42,8 +42,8 @@ public class TaskService {
     //             .getPrincipal();
     // }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public List<Task> getAllTasks(Integer listId) {
+        return taskRepository.findByListId(listId);
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {

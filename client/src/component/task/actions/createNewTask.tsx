@@ -28,6 +28,7 @@ export type NewTask = {
 };
 
 interface CreateNewTaskParam {
+  listId: number;
   sortBy: SortBy;
   creator: UserInfo;
   newTaskInput: NewTask;
@@ -37,6 +38,7 @@ interface CreateNewTaskParam {
 }
 
 export async function createNewTask({
+  listId,
   sortBy,
   creator,
   taskState,
@@ -47,9 +49,9 @@ export async function createNewTask({
   // Prepare newTask
   const { title, expectedDueDate, priority, status } = newTaskInput;
   const newTask = newTaskFactory({
-    creator,
     title,
-    listId: 1,
+    listId,
+    creator,
     expectedDueDate,
   });
   const dueDateColumnId = getDueDateColumnIdFromExpectedDueDate(

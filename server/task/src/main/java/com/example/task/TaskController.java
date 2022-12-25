@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,51 +43,45 @@ class TaskController {
         System.out.println(sourceTask.getWatchers());
     }
 
-    @GetMapping(ALL_TASKS)
-    ResponseEntity<List<Task>> getAllTasks() {
-        var allTasks = taskService.getAllTasks();
+    @GetMapping("/{listId}")
+    ResponseEntity<List<Task>> getAllTasks(@RequestParam("listId") Integer listId) {
+        var allTasks = taskService.getAllTasks(listId);
         return ResponseEntity.ok(allTasks);
     }
 
     @PostMapping
     ResponseEntity<Task> createTask(
-        @Valid @RequestBody CreateTaskDTO createTaskDTO
-    ) {
+            @Valid @RequestBody CreateTaskDTO createTaskDTO) {
         var task = taskService.createTask(createTaskDTO);
         return ResponseEntity.ok(task);
     }
 
     @PutMapping
     ResponseEntity<Boolean> updateTasksPosition(
-        @Valid @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO
-    ) {
+            @Valid @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO) {
         var updatedTasks = taskService.updateTasksPosition(
-            updateTasksPositionDTO
-        );
+                updateTasksPositionDTO);
         return ResponseEntity.ok(updatedTasks);
     }
 
     @PutMapping("/{taskId}")
     ResponseEntity<Boolean> deleteTask(
-        @PathVariable Integer taskId,
-        @RequestBody List<Task> tasksForUpdate
-    ) {
+            @PathVariable Integer taskId,
+            @RequestBody List<Task> tasksForUpdate) {
         var isTaskDeleted = taskService.deleteTask(taskId, tasksForUpdate);
         return ResponseEntity.ok(isTaskDeleted);
     }
 
     @PutMapping("/update_title")
     ResponseEntity<Boolean> updateTaskTitle(
-        @Valid @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO
-    ) {
+            @Valid @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO) {
         var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
         return ResponseEntity.ok(updated);
     }
 
     @PutMapping("/update_desc")
     ResponseEntity<Boolean> updateTasksDesc(
-        @Valid @RequestBody UpdateTaskDescDTO updateTaskDescDTO
-    ) {
+            @Valid @RequestBody UpdateTaskDescDTO updateTaskDescDTO) {
         var updated = taskService.updateTaskDesc(updateTaskDescDTO);
         return ResponseEntity.ok(updated);
     }

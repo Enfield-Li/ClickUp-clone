@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
   groupTaskListOnSortBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import { TASK_BOARD_PARAM } from "../constant";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 import { fetchLocalTaskList } from "./fetchLocalTaskList";
-import {
-  space1TaskList,
-  space2TaskList,
-  defaultColumnOptions,
-} from "./mockData";
+import { defaultColumnOptions } from "./mockData";
 
 interface UseLocalTasksParam {
   sortBy: SortBy;
@@ -73,7 +68,12 @@ export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
         sortBy
       );
 
-      setTaskStateContext({ columnOptions, setTaskState, sortBy });
+      setTaskStateContext({
+        columnOptions,
+        setTaskState,
+        sortBy,
+        currentListId: selectedListId,
+      });
       setTaskState({ orderedTasks, columnOptions });
 
       await sleep(0);

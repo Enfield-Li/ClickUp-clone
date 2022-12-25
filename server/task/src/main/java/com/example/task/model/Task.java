@@ -48,7 +48,9 @@ public class Task {
     @NotNull
     private String title;
 
+    @NotNull
     private Integer listId;
+
     private Boolean archived;
 
     @JsonIgnore
@@ -160,6 +162,7 @@ public class Task {
                 .creator(creator)
                 .watchers(Set.of(creator))
                 .title(createTaskDTO.title())
+                .listId(createTaskDTO.listId())
                 .status(createTaskDTO.status())
                 .dueDate(createTaskDTO.dueDate())
                 .priority(createTaskDTO.priority())

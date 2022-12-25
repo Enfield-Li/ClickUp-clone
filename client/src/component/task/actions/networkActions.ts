@@ -1,6 +1,5 @@
 import { AxiosError } from "axios";
-import { axiosGatewayInstance } from "../../../utils/AxiosInterceptor";
-import { deepCopy } from "../../../utils/deepCopy";
+import { API_ENDPOINT } from "../../../constant";
 import {
   Task,
   TaskEvents,
@@ -9,7 +8,8 @@ import {
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
 } from "../../../types";
-import { API_ENDPOINT } from "../../../constant";
+import { axiosGatewayInstance } from "../../../utils/AxiosInterceptor";
+import { deepCopy } from "../../../utils/deepCopy";
 
 export async function getTasks() {}
 
@@ -38,9 +38,12 @@ export async function fetchTaskEvents(taskId: number) {
   }
 }
 
-export async function createTask(task: Task) {
+export async function createTask(createTaskDTO: Task) {
   try {
-    const res = await axiosGatewayInstance.post<Task>(API_ENDPOINT.TASK, task);
+    const res = await axiosGatewayInstance.post<Task>(
+      API_ENDPOINT.TASK,
+      createTaskDTO
+    );
 
     return res.data;
   } catch (error) {

@@ -9,11 +9,12 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 
 public record CreateTaskDTO(
-    String description,
-    LocalDateTime expectedDueDate,
+        String description,
+        LocalDateTime expectedDueDate,
 
-    @NotNull String title,
-    @NotNull StatusPosition status,
-    @NotNull DueDatePosition dueDate,
-    @NotNull PriorityPosition priority
-) {}
+        @NotNull String title,
+        @NotNull Integer listId,
+        @NotNull StatusPosition status,
+        @NotNull DueDatePosition dueDate,
+        @NotNull PriorityPosition priority) {
+}
