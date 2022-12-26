@@ -51,8 +51,8 @@ public class PanelActivityService {
         var panelActivity = panelActivityRepository.findByUserId(userId)
                 .orElseThrow(() -> new InvalidRequestException(
                         "Invalid request, because either"
-                                + "1. User's workspace activity has yet been initialized, or "
-                                + "2. User record no longer exists."));
+                                + " 1. User's workspace activity has yet been initialized, or"
+                                + " 2. User record no longer exists."));
 
         validatePanelActivity(panelActivity);
         return panelActivity;
@@ -76,5 +76,4 @@ public class PanelActivityService {
         log.error(errorMessage);
         throw new InternalDataIntegrityException(errorMessage);
     }
-
 }

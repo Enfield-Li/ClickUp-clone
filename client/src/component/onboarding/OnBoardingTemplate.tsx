@@ -27,11 +27,11 @@ export default function OnBoardingTemplate({
   async function createTeam() {
     if (createTeamDTO) {
       const response = await axiosTeamServiceInstance.post<boolean>(
-        API_ENDPOINT.SPACE_API_VERSION,
+        API_ENDPOINT.TEAM,
         createTeamDTO
       );
-
-        
+      // TODO: redirect after click button
+      console.log(response);
     }
   }
 

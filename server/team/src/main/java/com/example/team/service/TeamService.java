@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
+import com.example.serviceExceptionHandling.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
@@ -33,8 +34,12 @@ public class TeamService {
     public TeamAndPanelActivityDTO getAllTeams() {
         var userId = 1;
 
-        var panelActivityDTO = panelActivityClient.getPanelActivity(userId);
         var teams = teamRepository.findByMembersUserId(userId);
+        if (teams.isEmpty()) {
+            throw new InvalidRequestException("Let's create or join a Workspace first!");
+        }
+
+        var panelActivityDTO = panelActivityClient.getPanelActivity(userId);
         validateTeamsAndPanelActivity(panelActivityDTO, teams);
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
@@ -66,5 +71,4 @@ public class TeamService {
             throw new Error("Data integrity breached");
         }
     }
-
 }

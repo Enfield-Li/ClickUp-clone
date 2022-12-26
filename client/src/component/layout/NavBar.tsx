@@ -1,11 +1,20 @@
-import { Box, Flex, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  useColorModeValue,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../ApplicationEntry";
-import { TEAM_STATE_ACTION } from "../../types";
-import { fetchTeamList, fetchTeamListLocal } from "../task/actions/fetchSpaceList";
+import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
+import {
+  fetchTeamList,
+  fetchTeamListLocal,
+} from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 
@@ -17,7 +26,8 @@ type Props = {
 export default memo(NavBar);
 function NavBar({ selectedSection, setSelectedSection }: Props) {
   const location = useLocation();
-  const { authState } = useAuthContext();
+  const toast = useToast();
+  const { authState, authDispatch } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
 
   const fixedNavbarWidth = "55px";
@@ -40,16 +50,30 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
   // init spaceListState
   useEffect(() => {
     if (authState.user) {
-      const { teams, initPanelActivity } = fetchTeamListLocal();
-      fetchTeamList();
-
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-        payload: {
-          teams,
-          panelActivity: initPanelActivity,
+      fetchTeamList(
+        (data) => {
+          teamStateDispatch({
+            type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
+            payload: {
+              teams: data.teams,
+              panelActivity: data.panelActivity,
+            },
+          });
         },
-      });
+        (msg) => {
+          authDispatch({ type: AUTH_ACTION.OPEN_ONBOARDING });
+          toast({ description: msg });
+        }
+      );
+
+      //   const { teams, initPanelActivity } = fetchTeamListLocal();
+      //   teamStateDispatch({
+      //     type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
+      //     payload: {
+      //       teams,
+      //       panelActivity: initPanelActivity,
+      //     },
+      //   });
     }
   }, [authState.user]);
 

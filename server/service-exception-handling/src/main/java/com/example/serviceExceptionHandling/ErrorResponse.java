@@ -3,15 +3,17 @@ package com.example.serviceExceptionHandling;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ErrorResponse {
 
-    private final Integer status;
-    private final String message;
+    private Integer status;
+    private String message;
 
     private List<ValidationError> errors = new ArrayList<>();
 

@@ -131,8 +131,8 @@ public class PanelActivityServiceTest implements WithAssertions {
         // given 
         var userId = 11;
         var errorMessage = "Invalid request, because either"
-                + "1. User's workspace activity has yet been initialized, or "
-                + "2. User record no longer exists.";
+                + " 1. User's workspace activity has yet been initialized, or"
+                + " 2. User record no longer exists.";
 
         given(repository.findByUserId(any())).willReturn(Optional.empty());
 
