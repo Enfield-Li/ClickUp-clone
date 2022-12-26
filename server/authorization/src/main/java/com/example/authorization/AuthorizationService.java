@@ -87,7 +87,7 @@ public class AuthorizationService {
 
     AuthorizationResponseDTO refreshToken() {
         // 1. get both tokens
-        var accessToken = request.getHeader(AUTHORIZATION);
+        var accessToken = request.getHeader(AUTHORIZATION_HEADER);
         var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
         // 2. validate tokens and retrieve payload

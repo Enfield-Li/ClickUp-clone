@@ -17,40 +17,36 @@ public class GlobalExceptionHandler {
 
     /* Catch all exception */
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> catchAllExceptions(
+    public ResponseEntity<ErrorResponse> catchAllExceptions(
             Exception exception) {
         log.error("\n **************** Uncaught Error ****************",
                 exception);
-        return buildErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage());
     }
 
-    /* Catch InvalidRequestBody */
-    @ExceptionHandler(value = { MethodArgumentNotValidException.class })
-    protected ResponseEntity<ErrorResponse> catchInvalidRequestBodyInputException(
+    /* InvalidRequestBody */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> catchInvalidRequestBodyInputException(
             MethodArgumentNotValidException exception) {
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
+        return buildErrorResponse(HttpStatus.BAD_REQUEST,
                 "Error occurred when validating fields, please check the errors list.",
                 exception.getBindingResult().getFieldErrors());
     }
 
-    /* Catch InternalDataIntegrityException */
-    @ExceptionHandler(value = { InternalDataIntegrityException.class })
-    protected ResponseEntity<ErrorResponse> catchInternalDataIntegrityException(
+    /* InternalDataIntegrityException */
+    @ExceptionHandler(InternalDataIntegrityException.class)
+    public ResponseEntity<ErrorResponse> catchInternalDataIntegrityException(
             InternalDataIntegrityException exception) {
-        return buildErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage());
     }
 
-    /* Catch InternalDataIntegrityException */
-    @ExceptionHandler(value = { InvalidRequestException.class })
-    protected ResponseEntity<ErrorResponse> catchInvalidRequestException(
-            InternalDataIntegrityException exception) {
-        return buildErrorResponse(
-                HttpStatus.BAD_REQUEST,
+    /* InvalidRequestException */
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ErrorResponse> catchInvalidRequestException(
+            InvalidRequestException exception) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST,
                 exception.getMessage());
     }
 

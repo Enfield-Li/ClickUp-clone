@@ -3,7 +3,7 @@ package com.example.task;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,12 +35,12 @@ public class TaskService {
     private final TaskRepository taskRepository;
     // private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
-    // public UserInfo getCurrentUserInfo() {
-    //     return (UserInfo) SecurityContextHolder
-    //             .getContext()
-    //             .getAuthentication()
-    //             .getPrincipal();
-    // }
+    public UserInfo getCurrentUserInfo() {
+        return (UserInfo) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
 
     public List<Task> getAllTasks(Integer listId) {
         return taskRepository.findByListId(listId);

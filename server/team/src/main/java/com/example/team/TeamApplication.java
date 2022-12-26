@@ -12,8 +12,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
         "com.example.team",
         "com.example.clients",
         "com.example.serviceConfig",
+        "com.example.serviceSecurityConfig",
         "com.example.serviceExceptionHandling",
-// "com.example.serviceSecurityConfig",
 })
 public class TeamApplication {
 

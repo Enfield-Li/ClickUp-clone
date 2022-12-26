@@ -2,7 +2,7 @@ package com.example.clients;
 
 public class UrlConstants {
 
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String TASK_API_VERSION = "/api/v1/task";
     public static final String TEAM_API_VERSION = "/api/v1/team";
     public static final String SPACE_API_VERSION = "/api/v1/space";

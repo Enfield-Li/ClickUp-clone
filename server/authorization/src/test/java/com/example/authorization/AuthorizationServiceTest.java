@@ -1,6 +1,6 @@
 package com.example.authorization;
 
-import static com.example.clients.UrlConstants.AUTHORIZATION;
+import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -260,7 +260,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var newRefreshToken = "newRefreshToken";
 
         given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION)).willReturn(accessToken);
+        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(userInfo);
         given(jwtUtils.getPayloadFromRefreshToken(any())).willReturn(refreshTokenPayload);
         given(repository.findById(any())).willReturn(Optional.of(applicationUser));
@@ -305,7 +305,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var logMessage = "Token version mismatch.";
 
         given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION)).willReturn(accessToken);
+        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(userInfo);
         given(jwtUtils.getPayloadFromRefreshToken(any())).willReturn(refreshTokenPayload);
         given(repository.findById(any())).willReturn(Optional.of(applicationUser));
@@ -348,7 +348,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var logMessage = "Token version mismatch.";
 
         given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION)).willReturn(accessToken);
+        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(userInfo);
         given(jwtUtils.getPayloadFromRefreshToken(any())).willReturn(refreshTokenPayload);
         given(repository.findById(any())).willThrow(new AuthenticationFailureException());

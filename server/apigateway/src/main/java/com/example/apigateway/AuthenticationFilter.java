@@ -24,12 +24,11 @@ public class AuthenticationFilter implements GatewayFilter {
 
     @Override
     public Mono<Void> filter(
-        ServerWebExchange exchange,
-        GatewayFilterChain chain
-    ) {
+            ServerWebExchange exchange,
+            GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        var authHeader = request.getHeaders().get(AUTHORIZATION);
+        var authHeader = request.getHeaders().get(AUTHORIZATION_HEADER);
 
         // An auth request must have "Authorization" header to carry access token
         if (authHeader == null) {
@@ -47,9 +46,8 @@ public class AuthenticationFilter implements GatewayFilter {
     }
 
     private Mono<Void> onAuthenticationError(
-        ServerWebExchange exchange,
-        HttpStatus httpStatus
-    ) {
+            ServerWebExchange exchange,
+            HttpStatus httpStatus) {
         log.warn("User not authorized");
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);

@@ -57,7 +57,7 @@ export default function CreateTeam({}: Props) {
   function setCurrentStep() {
     ref.current.forEach((element, index) => {
       const topPosition = element.getBoundingClientRect().top;
-      if (50 < topPosition && topPosition < 350) {
+      if (50 < topPosition && topPosition < 500) {
         setStep(index);
       }
     });
@@ -176,7 +176,7 @@ export default function CreateTeam({}: Props) {
         </Box>
 
         {/* Done */}
-        <Box ref={(element) => element && (ref.current[6] = element)}>
+        <Box ref={(element) => element && (ref.current[6] = element)} mb="40px">
           <OnBoardingTemplate
             createTeamDTO={team}
             step={step}

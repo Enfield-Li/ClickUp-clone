@@ -1,6 +1,6 @@
 package com.example.serviceSecurityConfig;
 
-import static com.example.clients.UrlConstants.AUTHORIZATION;
+import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
 
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
@@ -11,19 +11,20 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 @Log4j2
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccessTokenFilter extends GenericFilterBean {
 
     JwtUtilities jwtUtilities;
-
-    public AccessTokenFilter(JwtUtilities jwtUtilities) {
-        this.jwtUtilities = jwtUtilities;
-    }
 
     @Override
     public void doFilter(
@@ -33,7 +34,7 @@ public class AccessTokenFilter extends GenericFilterBean {
             throws IOException, ServletException {
         var req = (HttpServletRequest) request;
 
-        var accessToken = req.getHeader(AUTHORIZATION);
+        var accessToken = req.getHeader(AUTHORIZATION_HEADER);
 
         try {
             var userInfo = jwtUtilities.getUserInfoFromAccessToken(accessToken);
@@ -41,7 +42,7 @@ public class AccessTokenFilter extends GenericFilterBean {
             if (userInfo != null) {
                 var authUser = new UsernamePasswordAuthenticationToken(
                         userInfo,
-                        null,
+                        accessToken,
                         null);
 
                 SecurityContextHolder.getContext().setAuthentication(authUser);
