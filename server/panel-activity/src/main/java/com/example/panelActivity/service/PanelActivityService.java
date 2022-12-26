@@ -21,7 +21,6 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class PanelActivityService {
 
-    private final EntityManager entityManager;
     private final TeamActivityRepository teamActivityRepository;
     private final PanelActivityRepository panelActivityRepository;
 
@@ -40,18 +39,6 @@ public class PanelActivityService {
             return true;
         }
 
-        // var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
-        // if (optionalPanelActivity.isPresent()) {
-        //     var panelActivity = optionalPanelActivity.get();
-        //     var newTeamActivity = TeamActivity.builder()
-        //             .teamId(teamId)
-        //             .spaceId(spaceId)
-        //             .build();
-        //     panelActivity.setDefaultTeamId(teamId);
-        //     panelActivity.getTeamActivities().add(newTeamActivity);
-        //     return true;
-        // }
-
         // init
         var panelActivity = PanelActivity
                 .initPanelActivity(userId, teamId, spaceId);
@@ -65,7 +52,7 @@ public class PanelActivityService {
                 .orElseThrow(() -> new InvalidRequestException(
                         "Invalid request, because either"
                                 + "1. User's workspace activity has yet been initialized, or "
-                                + "2. user no longer exists."));
+                                + "2. User record no longer exists."));
 
         validatePanelActivity(panelActivity);
         return panelActivity;
@@ -76,8 +63,11 @@ public class PanelActivityService {
                 .filter(teamActivity -> teamActivity.getTeamId()
                         .equals(panelActivity.getDefaultTeamId()))
                 .findAny()
-                .orElseThrow(() -> new InternalDataIntegrityException(
-                        "PanelActivity data integrity breached, this really shouldn't happen..."));
+                .orElseThrow(() -> {
+                    log.error("InternalDataIntegrityException, This really shouldn't have happened...");
+                    throw new InternalDataIntegrityException(
+                            "PanelActivity data integrity breached...");
+                });
     }
 
     private void validateSpaceId(Integer spaceId) {

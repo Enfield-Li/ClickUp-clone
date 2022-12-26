@@ -186,9 +186,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var loginCredentials = new LoginCredentials(email, password);
 
         var errorMessage = "Email not found. Click here to create an account!";
-        given(repository.findByEmail(any()))
-                .willThrow(new AuthenticationFailureException(
-                        AuthenticationFailedField.email, errorMessage));
+        given(repository.findByEmail(any())).willReturn(Optional.empty());
 
         // when 
         assertThatThrownBy(() -> underTest.login(loginCredentials))
