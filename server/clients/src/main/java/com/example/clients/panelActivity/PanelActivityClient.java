@@ -16,7 +16,7 @@ public interface PanelActivityClient {
             @PathVariable("userId") Integer userId);
 
     @PostMapping(path = PANEL_ACTIVITY_API_VERSION)
-    Boolean updateDefaultTeam(
-            @RequestBody UpdateDefaultTeamDTO createPanelActivityDTO);
+    Boolean updateDefaultTeamInCreation(
+            @RequestBody UpdateDefaultTeamInCreationDTO createPanelActivityDTO);
 
 }

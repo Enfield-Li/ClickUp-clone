@@ -37,7 +37,7 @@ public class PanelActivity {
     private Integer defaultTeamId;
 
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "panelActivity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<TeamActivity> teamActivities = new HashSet<>();
 
     public static PanelActivity initPanelActivity(

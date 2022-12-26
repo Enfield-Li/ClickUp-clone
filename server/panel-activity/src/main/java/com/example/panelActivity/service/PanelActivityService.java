@@ -1,10 +1,12 @@
 package com.example.panelActivity.service;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserInfo;
-import com.example.clients.panelActivity.UpdateDefaultTeamDTO;
+import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.panelActivity.exception.InternalDataIntegrityException;
 import com.example.panelActivity.exception.InvalidRequestException;
 import com.example.panelActivity.model.PanelActivity;
@@ -19,11 +21,12 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class PanelActivityService {
 
+    private final EntityManager entityManager;
     private final PanelActivityRepository panelActivityRepository;
 
     @Transactional
-    public Boolean updateDefaultTeam(
-            UpdateDefaultTeamDTO updatePanelActivityDTO) {
+    public Boolean updateDefaultTeamInCreation(
+            UpdateDefaultTeamInCreationDTO updatePanelActivityDTO) {
         UserInfo userInfo = new UserInfo(1, "mockUser");
         var userId = userInfo.userId();
         var teamId = updatePanelActivityDTO.teamId();

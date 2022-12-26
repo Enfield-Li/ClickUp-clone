@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.clients.panelActivity.UpdateDefaultTeamDTO;
+import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.service.PanelActivityService;
 
@@ -40,9 +40,9 @@ class PanelActivityController {
     }
 
     @PostMapping
-    ResponseEntity<Boolean> updateDefaultTeam(
-            @RequestBody UpdateDefaultTeamDTO createPanelActivityDTO) {
-        var created = panelActivityService.updateDefaultTeam(createPanelActivityDTO);
+    ResponseEntity<Boolean> updateDefaultTeamInCreation(
+            @RequestBody UpdateDefaultTeamInCreationDTO createPanelActivityDTO) {
+        var created = panelActivityService.updateDefaultTeamInCreation(createPanelActivityDTO);
         return ResponseEntity.ok(created);
     }
 

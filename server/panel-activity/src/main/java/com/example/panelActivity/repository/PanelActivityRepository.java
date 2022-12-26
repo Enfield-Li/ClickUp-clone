@@ -16,6 +16,12 @@ public interface PanelActivityRepository
 
     Optional<PanelActivity> findByUserId(Integer userId);
 
+    @Query(nativeQuery = true, value = ""
+            + "SELECT id"
+            + " FROM panel_activity"
+            + " WHERE user_id = :userId")
+    Integer findIdByUserId(@Param("userId") Integer userId);
+
     // Boolean existsByUserId(Integer userId);
 
     // @Modifying
