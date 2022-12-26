@@ -332,10 +332,9 @@ export interface AuthenticationResponse {
   id: number;
   color: string;
   email: string;
-  teams: number[];
   username: string;
   accessToken: string;
-  joinedTeamIds: number[];
+  numOfTeamJoined: number;
 }
 
 export type AuthActionType =
@@ -347,7 +346,7 @@ export type AuthActionType =
 
 type LogInUser = {
   type: typeof AUTH_ACTION.LOGIN_USER;
-  payload: { user: User };
+  payload: { user: AuthenticationResponse };
 };
 type RegisterUser = {
   type: typeof AUTH_ACTION.REGISTER_USER;

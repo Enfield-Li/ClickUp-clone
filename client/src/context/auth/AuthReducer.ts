@@ -11,7 +11,12 @@ export default function authReducer(
   switch (authAction.type) {
     case AUTH_ACTION.LOGIN_USER: {
       return produce(authState, (draftState) => {
-        draftState.user = authAction.payload.user;
+        const { user } = authAction.payload;
+        draftState.user = user;
+
+        if (!user.numOfTeamJoined) {
+          draftState.onboarding = true;
+        }
       });
     }
 

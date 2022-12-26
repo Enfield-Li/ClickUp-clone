@@ -62,6 +62,8 @@ public class TeamService {
         var dto = new UpdateDefaultTeamInCreationDTO(team.getId(), space.getId());
         var response = panelActivityClient.updateDefaultTeamInCreation(dto);
 
+        // TODO: update user.joinedTeamAmount
+
         return response;
     }
 

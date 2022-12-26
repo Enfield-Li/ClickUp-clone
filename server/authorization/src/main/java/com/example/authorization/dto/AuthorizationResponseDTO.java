@@ -13,5 +13,5 @@ public class AuthorizationResponseDTO {
     private String email;
     private String username;
     private String accessToken;
-    private Set<Integer> teams;
+    private Integer numOfTeamJoined;
 }
