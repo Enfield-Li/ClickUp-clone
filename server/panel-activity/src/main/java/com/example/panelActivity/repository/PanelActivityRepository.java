@@ -20,11 +20,12 @@ public interface PanelActivityRepository
             + "SELECT id"
             + " FROM panel_activity"
             + " WHERE user_id = :userId")
-    Integer findIdByUserId(@Param("userId") Integer userId);
+    Integer findPanelActivityIdByUserId(
+            @Param("userId") Integer userId);
 
     // Boolean existsByUserId(Integer userId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(nativeQuery = true, value = ""
             + "UPDATE panel_activity"
             + " SET default_team_id = :teamId"

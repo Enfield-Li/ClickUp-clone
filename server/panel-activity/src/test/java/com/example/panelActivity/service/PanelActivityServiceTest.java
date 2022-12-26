@@ -68,7 +68,7 @@ public class PanelActivityServiceTest implements WithAssertions {
         var spaceId = 10;
         var updatePanelActivityDTO = new UpdateDefaultTeamInCreationDTO(teamId, spaceId);
 
-        given(repository.findIdByUserId(any())).willReturn(null);
+        given(repository.findPanelActivityIdByUserId(any())).willReturn(null);
 
         // when
         var actualReturn = underTest.updateDefaultTeamInCreation(updatePanelActivityDTO);
@@ -95,7 +95,7 @@ public class PanelActivityServiceTest implements WithAssertions {
         var panelActivityId = 12;
         var updatePanelActivityDTO = new UpdateDefaultTeamInCreationDTO(teamId, spaceId);
 
-        given(repository.findIdByUserId(any())).willReturn(panelActivityId);
+        given(repository.findPanelActivityIdByUserId(any())).willReturn(panelActivityId);
 
         // when
         var actualReturn = underTest.updateDefaultTeamInCreation(updatePanelActivityDTO);

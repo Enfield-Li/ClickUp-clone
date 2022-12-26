@@ -32,7 +32,7 @@ public class PanelActivityService {
         var teamId = updatePanelActivityDTO.teamId();
         var spaceId = updatePanelActivityDTO.spaceId();
 
-        var panelActivityId = panelActivityRepository.findIdByUserId(userId);
+        var panelActivityId = panelActivityRepository.findPanelActivityIdByUserId(userId);
         if (panelActivityId != null) {
             panelActivityRepository.updateDefaultTeamId(userId, teamId);
             teamActivityRepository.createNewTeamActivity(teamId, spaceId, panelActivityId);

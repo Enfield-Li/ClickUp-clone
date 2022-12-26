@@ -27,7 +27,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
             " SET title = :title" +
             ", updated_at = :updatedAt" +
             " WHERE id = :taskId")
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     Integer updateTitle(
             @Param("taskId") Integer taskId,
             @Param("title") String title,
@@ -38,7 +38,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
             " SET description = :description" +
             ", updated_at = :updatedAt" +
             " WHERE id = :taskId")
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     Integer updateDesc(
             @Param("taskId") Integer taskId,
             @Param("description") String description,

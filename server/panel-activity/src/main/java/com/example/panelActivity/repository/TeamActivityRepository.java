@@ -19,7 +19,7 @@ public interface TeamActivityRepository extends JpaRepository<TeamActivity, Inte
     // Integer updateOpenedSpaceId(@Param("teamId") Integer teamId,
     //         @Param("spaceId") Integer spaceId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(nativeQuery = true, value = ""
             + "INSERT INTO team_activity"
             + " (team_id, space_id, panel_activity_id)"
