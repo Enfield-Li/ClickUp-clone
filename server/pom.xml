@@ -26,6 +26,7 @@
         <module>dev-test </module>
         <module>panel-activity</module>
         <module>service-security-config</module>
+        <module>service-exception-handling</module>
         <module>service-config</module>
     </modules>
 

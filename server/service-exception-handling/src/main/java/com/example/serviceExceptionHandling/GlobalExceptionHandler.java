@@ -1,4 +1,4 @@
-package com.example.panelActivity.exception;
+package com.example.serviceExceptionHandling;
 
 import java.util.List;
 
@@ -9,15 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.example.clients.jwt.AuthenticationFailureException;
-
 import lombok.extern.log4j.Log4j2;
 
-/*
- * https://www.baeldung.com/exception-handling-for-rest-with-spring
- * https://reflectoring.io/spring-boot-exception-handling/#controlleradvice
- * https://stackoverflow.com/questions/33663801/how-do-i-customize-default-error-message-from-spring-valid-validation
- */
 @Log4j2
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -107,9 +100,4 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
-    private ValidationError getValidationError(
-            AuthenticationFailureException exception) {
-        return new ValidationError(exception.getField().toString(),
-                exception.getMessage());
-    }
 }

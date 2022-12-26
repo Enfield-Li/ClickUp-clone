@@ -48,6 +48,12 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>service-exception-handling</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- <dependency>
             <groupId>com.example</groupId>
             <artifactId>service-security-config</artifactId>

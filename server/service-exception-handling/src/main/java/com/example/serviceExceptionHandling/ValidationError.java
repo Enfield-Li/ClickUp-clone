@@ -1,4 +1,4 @@
-package com.example.panelActivity.exception;
+package com.example.serviceExceptionHandling;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

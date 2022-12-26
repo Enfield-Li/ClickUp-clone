@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.example.clients",
         "com.example.serviceConfig",
         "com.example.panelActivity",
+        "com.example.serviceExceptionHandling",
         // "com.example.serviceSecurityConfig",
 })
 public class PanelActivityApplication {

@@ -1,4 +1,4 @@
-package com.example.panelActivity.exception;
+package com.example.serviceExceptionHandling;
 
 import java.util.ArrayList;
 import java.util.List;

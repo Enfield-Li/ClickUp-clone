@@ -18,26 +18,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .cors()
-            .and()
-            .csrf()
-            .disable()
-            .formLogin()
-            .disable()
-            .logout()
-            .disable()
-            .authorizeRequests()
-            .antMatchers("/**")
-            .permitAll()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore( // Verify JWT on every request
-                new AccessTokenFilter(jwtUtilities),
-                UsernamePasswordAuthenticationFilter.class
-            );
+        http.cors().and().csrf().disable()
+                .formLogin().disable()
+                .logout().disable()
+                .authorizeRequests().antMatchers("/**").permitAll()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore( // Verify JWT on every request
+                        new AccessTokenFilter(jwtUtilities),
+                        UsernamePasswordAuthenticationFilter.class);
 
         // Disable anonymousUser
         http.authorizeRequests().anyRequest().authenticated();

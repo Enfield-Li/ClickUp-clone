@@ -7,12 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserInfo;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
-import com.example.panelActivity.exception.InternalDataIntegrityException;
-import com.example.panelActivity.exception.InvalidRequestException;
 import com.example.panelActivity.model.PanelActivity;
-import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
 import com.example.panelActivity.repository.TeamActivityRepository;
+import com.example.serviceExceptionHandling.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.InvalidRequestException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
