@@ -1,11 +1,10 @@
 package com.example.panelActivity.service;
 
-import javax.persistence.EntityManager;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.clients.jwt.UserInfo;
+import com.example.clients.jwt.UserCredentials;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
@@ -24,11 +23,17 @@ public class PanelActivityService {
     private final TeamActivityRepository teamActivityRepository;
     private final PanelActivityRepository panelActivityRepository;
 
+    public UserCredentials getCurrentUserInfo() {
+        return (UserCredentials) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
+
     @Transactional
     public Boolean updateDefaultTeamInCreation(
             UpdateDefaultTeamInCreationDTO updatePanelActivityDTO) {
-        UserInfo userInfo = new UserInfo(1, "mockUser");
-        var userId = userInfo.userId();
+        var userId = getCurrentUserInfo().userId();
         var teamId = updatePanelActivityDTO.teamId();
         var spaceId = updatePanelActivityDTO.spaceId();
 
@@ -47,7 +52,9 @@ public class PanelActivityService {
         return true;
     }
 
-    public PanelActivity getPanelActivity(Integer userId) {
+    public PanelActivity getPanelActivity() {
+        var userId = getCurrentUserInfo().userId();
+
         var panelActivity = panelActivityRepository.findByUserId(userId)
                 .orElseThrow(() -> new InvalidRequestException(
                         "Invalid request, because either"

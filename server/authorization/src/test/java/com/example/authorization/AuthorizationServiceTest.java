@@ -32,7 +32,7 @@ import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
 import com.example.clients.jwt.RefreshTokenPayload;
-import com.example.clients.jwt.UserInfo;
+import com.example.clients.jwt.UserCredentials;
 
 // OutputCaptureExtension.class
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
@@ -251,7 +251,7 @@ public class AuthorizationServiceTest implements WithAssertions {
                 .refreshTokenVersion(tokenVersion)
                 .build();
 
-        var userInfo = new UserInfo(id, username);
+        var userInfo = new UserCredentials(id, username);
         var refreshTokenPayload = new RefreshTokenPayload(id, tokenVersion);
 
         var accessToken = "accessToken";
@@ -297,7 +297,7 @@ public class AuthorizationServiceTest implements WithAssertions {
                 .refreshTokenVersion(tokenVersion2)
                 .build();
 
-        var userInfo = new UserInfo(id, username);
+        var userInfo = new UserCredentials(id, username);
         var refreshTokenPayload = new RefreshTokenPayload(id, tokenVersion1);
 
         var accessToken = "accessToken";
@@ -340,7 +340,7 @@ public class AuthorizationServiceTest implements WithAssertions {
                 .refreshTokenVersion(tokenVersion2)
                 .build();
 
-        var userInfo = new UserInfo(id, username);
+        var userInfo = new UserCredentials(id, username);
         var refreshTokenPayload = new RefreshTokenPayload(id, tokenVersion1);
 
         var accessToken = "accessToken";

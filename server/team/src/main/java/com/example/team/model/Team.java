@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.example.clients.jwt.UserCredentials;
 import com.example.team.dto.CreateTeamDTO;
 
 import lombok.AllArgsConstructor;
@@ -64,7 +65,12 @@ public class Team {
     private Set<UserInfo> members = new HashSet<>();
 
     public static Team convertFromCreateTeamDTO(
-            CreateTeamDTO createTeamDTO, UserInfo userInfo) {
+            CreateTeamDTO createTeamDTO, UserCredentials userCredentials) {
+        var userInfo = UserInfo.builder()
+                .userId(userCredentials.userId())
+                .username(userCredentials.username())
+                .build();
+
         var team = Team.builder()
                 .owner(userInfo)
                 .members(Set.of(userInfo))

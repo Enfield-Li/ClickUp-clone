@@ -5,16 +5,16 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.example.clients.jwt.UserInfo;
+import com.example.clients.jwt.UserCredentials;
 
 public record TeamDTO(
         Integer id,
         Date createdAt,
         @NotNull String name,
         @NotNull String color,
-        @NotNull UserInfo owner,
+        @NotNull UserCredentials owner,
         String avatar,
         Boolean isPrivate,
         List<SpaceDTO> spaces,
-        List<UserInfo> members) {
+        List<UserCredentials> members) {
 }

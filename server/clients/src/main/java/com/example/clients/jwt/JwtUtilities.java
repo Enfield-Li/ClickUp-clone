@@ -14,6 +14,6 @@ public interface JwtUtilities {
     RefreshTokenPayload getPayloadFromRefreshToken(String bearerToken)
             throws AuthenticationFailureException;
 
-    UserInfo getUserInfoFromAccessToken(String bearerToken)
+    UserCredentials getUserInfoFromAccessToken(String bearerToken)
             throws AuthenticationFailureException;
 }

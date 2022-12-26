@@ -27,15 +27,8 @@ class PanelActivityController {
     private final PanelActivityService panelActivityService;
 
     @GetMapping
-    String test() {
-        System.out.println("***called***");
-        return "Got it";
-    }
-
-    @GetMapping("/{userId}")
-    ResponseEntity<PanelActivity> getPanelActivity(
-            @PathVariable("userId") Integer userId) {
-        var panelActivity = panelActivityService.getPanelActivity(userId);
+    ResponseEntity<PanelActivity> getPanelActivity() {
+        var panelActivity = panelActivityService.getPanelActivity();
         return ResponseEntity.ok(panelActivity);
     }
 

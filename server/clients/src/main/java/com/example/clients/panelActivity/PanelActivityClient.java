@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "fraud", url = "${clients.panelActivity.url}")
 public interface PanelActivityClient {
 
-    @GetMapping(path = PANEL_ACTIVITY_API_VERSION + "/{userId}")
-    PanelActivityDTO getPanelActivity(
-            @PathVariable("userId") Integer userId);
+    @GetMapping(path = PANEL_ACTIVITY_API_VERSION)
+    PanelActivityDTO getPanelActivity();
 
     @PostMapping(path = PANEL_ACTIVITY_API_VERSION)
     Boolean updateDefaultTeamInCreation(

@@ -27,9 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class TaskService {
 
     Integer updateCount;
-    UserInfo userInfo = UserInfo.builder()
-            .userId(1).username("mockUser")
-            .build();
 
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
@@ -47,6 +44,7 @@ public class TaskService {
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {
+        var userInfo = getCurrentUserInfo();
         var task = Task.convertFromCreateTaskDto(
                 createTaskDTO,
                 userInfo);
@@ -118,7 +116,7 @@ public class TaskService {
 
     @Transactional
     public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
-        // var userInfo = getCurrentUserInfo();
+        var userInfo = getCurrentUserInfo();
         var userId = userInfo.getUserId();
         var username = userInfo.getUsername();
 

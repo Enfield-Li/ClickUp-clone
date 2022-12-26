@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.clients.panelActivity.PanelActivityClient;
@@ -14,8 +15,8 @@ import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
-import com.example.team.model.UserInfo;
 import com.example.team.repository.TeamRepository;
+import com.example.clients.jwt.UserCredentials;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,26 +28,28 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PanelActivityClient panelActivityClient;
 
-    public void test() {
-        Team.builder().name("team2").color("rgb(255, 87, 34)").build();
+    public UserCredentials getCurrentUserInfo() {
+        return (UserCredentials) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
     }
 
     public TeamAndPanelActivityDTO getAllTeams() {
-        var userId = 1;
+        var userId = getCurrentUserInfo().userId();
 
         var teams = teamRepository.findByMembersUserId(userId);
         if (teams.isEmpty()) {
             throw new InvalidRequestException("Let's create or join a Workspace first!");
         }
 
-        var panelActivityDTO = panelActivityClient.getPanelActivity(userId);
+        var panelActivityDTO = panelActivityClient.getPanelActivity();
         validateTeamsAndPanelActivity(panelActivityDTO, teams);
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
-        UserInfo userInfo = UserInfo.builder()
-                .userId(1).username("mockUser").build();
+        var userInfo = getCurrentUserInfo();
 
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
         var space = Space.builder().team(team)

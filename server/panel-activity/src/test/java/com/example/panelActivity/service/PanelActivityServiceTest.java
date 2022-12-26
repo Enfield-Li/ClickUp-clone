@@ -21,8 +21,9 @@ import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.clients.jwt.UserInfo;
+import com.example.clients.jwt.UserCredentials;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
@@ -51,14 +52,14 @@ public class PanelActivityServiceTest implements WithAssertions {
     @Captor
     ArgumentCaptor<PanelActivity> panelActivityArgCaptor;
 
-    UserInfo userInfo = new UserInfo(1, "mockUser");
+    UserCredentials userCredentials = new UserCredentials(1, "mockUser");
 
     @BeforeEach
     void setUp() {
         underTest = new PanelActivityService(teamActivityRepository, repository);
-        // SecurityContextHolder.setContext(securityContext);
-        // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
-        // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(userInfo);
+        SecurityContextHolder.setContext(securityContext);
+        given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
+        given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(userCredentials);
     }
 
     @Test
@@ -111,7 +112,6 @@ public class PanelActivityServiceTest implements WithAssertions {
     @Test
     void test_get_panel_activity_should_pass() {
         // given 
-        var userId = 11;
         var teamId = 22;
         var teamActivity = TeamActivity.builder().teamId(teamId).build();
         var panelActivity = PanelActivity.builder().defaultTeamId(teamId)
@@ -120,7 +120,7 @@ public class PanelActivityServiceTest implements WithAssertions {
         given(repository.findByUserId(any())).willReturn(Optional.of(panelActivity));
 
         // when
-        var actualReturn = underTest.getPanelActivity(userId);
+        var actualReturn = underTest.getPanelActivity();
 
         // then
         assertThat(actualReturn).isEqualTo(panelActivity);
@@ -129,7 +129,6 @@ public class PanelActivityServiceTest implements WithAssertions {
     @Test
     void test_get_panel_activity_should_fail_for_invalid_request() {
         // given 
-        var userId = 11;
         var errorMessage = "Invalid request, because either"
                 + " 1. User's workspace activity has yet been initialized, or"
                 + " 2. User record no longer exists.";
@@ -138,7 +137,7 @@ public class PanelActivityServiceTest implements WithAssertions {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.getPanelActivity(userId))
+        assertThatThrownBy(() -> underTest.getPanelActivity())
                 .isInstanceOf(InvalidRequestException.class)
                 .hasMessage(String.format(errorMessage));
     }
@@ -146,7 +145,6 @@ public class PanelActivityServiceTest implements WithAssertions {
     @Test
     void test_get_panel_activity_should_fail_for_data_integrity(CapturedOutput output) {
         // given 
-        var userId = 11;
         var teamId1 = 22;
         var teamId2 = 23;
         var errorMessage = "PanelActivity data integrity breached...";
@@ -159,7 +157,7 @@ public class PanelActivityServiceTest implements WithAssertions {
 
         // when
         // then
-        assertThatThrownBy(() -> underTest.getPanelActivity(userId))
+        assertThatThrownBy(() -> underTest.getPanelActivity())
                 .isInstanceOf(InternalDataIntegrityException.class)
                 .hasMessage(String.format(errorMessage));
         assertThat(output).contains(logMessage);

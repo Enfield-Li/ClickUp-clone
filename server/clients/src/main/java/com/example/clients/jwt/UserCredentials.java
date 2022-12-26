@@ -1,6 +1,6 @@
 package com.example.clients.jwt;
 
-public record UserInfo(
+public record UserCredentials(
         Integer userId,
         String username) {
 }

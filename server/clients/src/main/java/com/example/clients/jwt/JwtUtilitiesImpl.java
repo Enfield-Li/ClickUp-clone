@@ -83,7 +83,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
 
     // Includes parsing and validate token
     @Override
-    public UserInfo getUserInfoFromAccessToken(String bearerToken) {
+    public UserCredentials getUserInfoFromAccessToken(String bearerToken) {
         var userId = Integer.parseInt(
                 validateTokenAndGetClaims(resolveAccessToken(bearerToken))
                         .getSubject());
@@ -92,7 +92,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
                 resolveAccessToken(bearerToken))
                         .get("username");
 
-        return new UserInfo(userId, username);
+        return new UserCredentials(userId, username);
     }
 
     private Claims validateTokenAndGetClaims(String jwsToken) {
