@@ -42,16 +42,19 @@ public class PanelActivity {
 
     public static PanelActivity initPanelActivity(
             Integer userId, Integer teamId, Integer spaceId) {
+        var panelActivity = PanelActivity.builder()
+                .userId(userId)
+                .defaultTeamId(teamId)
+                .build();
+
         var defaultTeamActivity = TeamActivity.builder()
                 .teamId(teamId)
                 .spaceId(spaceId)
+                .panelActivity(panelActivity)
                 .build();
 
-        return PanelActivity.builder()
-                .userId(userId)
-                .defaultTeamId(teamId)
-                .teamActivities(Set.of(defaultTeamActivity))
-                .build();
+        panelActivity.setTeamActivities(Set.of(defaultTeamActivity));
+        return panelActivity;
     }
 
 }

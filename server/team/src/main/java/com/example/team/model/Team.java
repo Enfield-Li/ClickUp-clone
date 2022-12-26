@@ -65,13 +65,16 @@ public class Team {
 
     public static Team convertFromCreateTeamDTO(
             CreateTeamDTO createTeamDTO, UserInfo userInfo) {
-        return Team.builder()
+        var team = Team.builder()
                 .owner(userInfo)
                 .members(Set.of(userInfo))
                 .name(createTeamDTO.name())
                 .color(createTeamDTO.color())
                 .avatar(createTeamDTO.avatar())
                 .build();
+
+        userInfo.setTeam(team);
+        return team;
     }
 
     public static Team bindTeamSpace(Team team) {

@@ -60,7 +60,8 @@ public class TeamService {
     private void validateTeamsAndPanelActivity(
             PanelActivityDTO panelActivityDTO, List<Team> teams) {
         var ids = teams.stream().map(Team::getId).collect(Collectors.toList());
-        var validateResult = panelActivityDTO.teamActivities().stream().allMatch(ta -> ids.contains(ta.teamId()));
+        var validateResult = panelActivityDTO.teamActivities().stream()
+                .allMatch(teamActivity -> ids.contains(teamActivity.teamId()));
         if (!validateResult) {
             throw new Error("Data integrity breached");
         }

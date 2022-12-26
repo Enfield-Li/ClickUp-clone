@@ -12,6 +12,7 @@ import com.example.panelActivity.exception.InvalidRequestException;
 import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
+import com.example.panelActivity.repository.TeamActivityRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 public class PanelActivityService {
 
     private final EntityManager entityManager;
+    private final TeamActivityRepository teamActivityRepository;
     private final PanelActivityRepository panelActivityRepository;
 
     @Transactional
@@ -32,18 +34,24 @@ public class PanelActivityService {
         var teamId = updatePanelActivityDTO.teamId();
         var spaceId = updatePanelActivityDTO.spaceId();
 
-        var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
-        if (optionalPanelActivity.isPresent()) {
-            var panelActivity = optionalPanelActivity.get();
-            var newTeamActivity = TeamActivity.builder()
-                    .teamId(teamId)
-                    .spaceId(spaceId)
-                    .build();
-
-            panelActivity.setDefaultTeamId(teamId);
-            panelActivity.getTeamActivities().add(newTeamActivity);
+        var panelActivityId = panelActivityRepository.findIdByUserId(userId);
+        if (panelActivityId != null) {
+            panelActivityRepository.updateDefaultTeamId(userId, teamId);
+            teamActivityRepository.createNewTeamActivity(teamId, spaceId, panelActivityId);
             return true;
         }
+
+        // var optionalPanelActivity = panelActivityRepository.findByUserId(userId);
+        // if (optionalPanelActivity.isPresent()) {
+        //     var panelActivity = optionalPanelActivity.get();
+        //     var newTeamActivity = TeamActivity.builder()
+        //             .teamId(teamId)
+        //             .spaceId(spaceId)
+        //             .build();
+        //     panelActivity.setDefaultTeamId(teamId);
+        //     panelActivity.getTeamActivities().add(newTeamActivity);
+        //     return true;
+        // }
 
         // init
         var panelActivity = PanelActivity
@@ -57,8 +65,8 @@ public class PanelActivityService {
         var panelActivity = panelActivityRepository.findByUserId(userId)
                 .orElseThrow(() -> new InvalidRequestException(
                         "Invalid request, because either"
-                                + "1. User's workspace activity has yet been initialized"
-                                + "or 2. user no longer exists."));
+                                + "1. User's workspace activity has yet been initialized, or "
+                                + "2. user no longer exists."));
 
         validatePanelActivity(panelActivity);
         return panelActivity;
