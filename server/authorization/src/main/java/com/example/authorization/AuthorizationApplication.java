@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.example.clients",
         "com.example.serviceConfig",
         "com.example.authorization",
+        "com.example.serviceExceptionHandling",
 })
 public class AuthorizationApplication {
 

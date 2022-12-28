@@ -2,6 +2,7 @@ package com.example.serviceExceptionHandling;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.example.clients.jwt.AuthenticationFailureException;
+import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +57,22 @@ public class GlobalExceptionHandler {
                 exception.getMessage());
     }
 
+    @ExceptionHandler(value = AuthenticationFailureException.class)
+    ResponseEntity<ErrorResponse> catchLoginFailure(AuthenticationFailureException exception) {
+        log.error("AuthenticationFailureException");
+
+        if (exception.getField() == null) {
+            return buildErrorResponse(
+                    HttpStatus.UNAUTHORIZED,
+                    "Account login time out, please login again.");
+        }
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "Error occurred when validating fields, please check the errors list.",
+                getValidationError(exception));
+    }
+
     /* InvalidRequestException */
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorResponse> catchInvalidRequestException(
@@ -65,7 +85,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ErrorResponse> catchFeignClientException(
             FeignException exception) throws JsonMappingException, JsonProcessingException {
-        var responseBody = retrieveErrorResponse(exception.responseBody().get());
+        var responseBody = getErrorResponse(exception.responseBody().get());
         return buildErrorResponse(HttpStatus.valueOf(exception.status()),
                 responseBody.getMessage());
     }
@@ -101,9 +121,33 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
-    private ErrorResponse retrieveErrorResponse(ByteBuffer ByteBuffer)
+    private ResponseEntity<ErrorResponse> buildErrorResponse(
+            HttpStatus httpStatus,
+            String message,
+            ValidationError error) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                httpStatus.value(),
+                message,
+                new ArrayList<>());
+
+        if (error != null) {
+            errorResponse.addValidationError(
+                    error.getField(),
+                    error.getMessage());
+        }
+
+        return ResponseEntity.status(httpStatus).body(errorResponse);
+    }
+
+    private ErrorResponse getErrorResponse(ByteBuffer ByteBuffer)
             throws JsonMappingException, JsonProcessingException {
         var responseBodyJSON = StandardCharsets.UTF_8.decode(ByteBuffer).toString();
         return objectMapper.readValue(responseBodyJSON, ErrorResponse.class);
+    }
+
+    private ValidationError getValidationError(
+            AuthenticationFailureException exception) {
+        return new ValidationError(exception.getField().toString(),
+                exception.getMessage());
     }
 }

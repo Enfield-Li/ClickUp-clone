@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
-import com.example.serviceExceptionHandling.InvalidRequestException;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;

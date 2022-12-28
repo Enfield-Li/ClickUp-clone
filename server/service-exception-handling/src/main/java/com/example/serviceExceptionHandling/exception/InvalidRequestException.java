@@ -1,4 +1,4 @@
-package com.example.serviceExceptionHandling;
+package com.example.serviceExceptionHandling.exception;
 
 import lombok.NoArgsConstructor;
 

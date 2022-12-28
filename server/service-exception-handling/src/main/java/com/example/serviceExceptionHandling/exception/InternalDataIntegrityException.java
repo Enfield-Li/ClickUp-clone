@@ -1,4 +1,4 @@
-package com.example.serviceExceptionHandling;
+package com.example.serviceExceptionHandling.exception;
 
 import lombok.NoArgsConstructor;
 
@@ -8,5 +8,4 @@ public class InternalDataIntegrityException extends RuntimeException {
     public InternalDataIntegrityException(String message) {
         super(message);
     }
-
 }

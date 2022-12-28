@@ -29,8 +29,8 @@ import com.example.panelActivity.model.PanelActivity;
 import com.example.panelActivity.model.TeamActivity;
 import com.example.panelActivity.repository.PanelActivityRepository;
 import com.example.panelActivity.repository.TeamActivityRepository;
-import com.example.serviceExceptionHandling.InternalDataIntegrityException;
-import com.example.serviceExceptionHandling.InvalidRequestException;
+import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 public class PanelActivityServiceTest implements WithAssertions {
