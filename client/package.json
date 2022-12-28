@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite",
-    "build": "tsc -p tsconfig.prod.json && vite build",
+    "build": "vite build",
     "test": "jest",
     "preview": "vite preview"
   },

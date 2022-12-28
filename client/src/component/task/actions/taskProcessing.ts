@@ -85,9 +85,10 @@ export function groupTaskListOnSortBy(
 
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    const columnId = column.id;
+    const columnId = column.id!;
 
     orderedTasks[i] = { columnId, taskList: [] };
+
     // Find all the entailing element based on sortBy
 
     const taskWithCurrentColumnId: TaskList = [];
@@ -128,7 +129,7 @@ export function getLookUpReorderedColumnTable(
 ) {
   for (let i = 0; i < orderedTasks.length; i++) {
     const orderedTask = orderedTasks[i];
-    lookUpColumnId[orderedTask.columnId] = columns[i].id;
+    lookUpColumnId[orderedTask.columnId] = columns[i].id!;
   }
 }
 
@@ -142,7 +143,7 @@ export function getDueDateColumnIdFromExpectedDueDate(
       dateInput,
       dueDateColumn
     );
-    if (targetDueDateColumn) return targetDueDateColumn.id;
+    if (targetDueDateColumn) return targetDueDateColumn.id!;
 
     // overdue or future
     const todayDate = new Date();

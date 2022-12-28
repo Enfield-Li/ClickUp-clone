@@ -21,6 +21,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
   const itemHoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
 
   const lookUpTitle: Record<keyof CreateSpaceDTO, string> = {
+    teamId: "0",
     color: "Color",
     orderIndex: "",
     name: "Space name",
@@ -29,6 +30,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
   };
 
   const lookUpStep: Record<keyof CreateSpaceDTO, CreateSpaceStep | null> = {
+    teamId: null,
     color: CreateSpaceStep.COLOR,
     orderIndex: null,
     name: CreateSpaceStep.NAME,
@@ -58,6 +60,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
       </Center>
     ),
     orderIndex: <></>,
+    teamId: <></>,
     name: <Box>{name}</Box>,
     isPrivate: isPrivate ? <Box>Private</Box> : <Box>Public</Box>,
     defaultStatusColumnId: (

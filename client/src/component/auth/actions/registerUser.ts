@@ -24,7 +24,14 @@ export async function registerUserLocal(
   dispatch({
     type: AUTH_ACTION.LOGIN_USER,
     payload: {
-      user: { id: 1, email, username },
+      user: {
+        id: 1,
+        email,
+        username,
+        accessToken: "a",
+        color: "yellow",
+        numOfTeamJoined: 1,
+      },
     },
   });
 }

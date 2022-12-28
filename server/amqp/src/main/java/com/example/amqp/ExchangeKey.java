@@ -12,4 +12,7 @@ public class ExchangeKey {
 
     public static final String panelActivityQueue = "panelActivity.queue";
     public static final String panelActivityRoutingKey = "internal.panelActivity.routing-key";
+
+    public static final String AuthorizationQueue = "authorizationQueue.queue";
+    public static final String AuthorizationRoutingKey = "internal.Authorization.routing-key";
 }

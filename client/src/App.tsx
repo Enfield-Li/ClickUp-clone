@@ -15,11 +15,11 @@ function App() {
   const location = useLocation();
   const { authState } = useAuthContext();
 
-//   useEffect(() => {
-//     if (!authState.user) {
-//       navigate(CLIENT_ROUTE.LOGIN);
-//     }
-//   }, [authState]);
+  //   useEffect(() => {
+  //     if (!authState.user) {
+  //       navigate(CLIENT_ROUTE.LOGIN);
+  //     }
+  //   }, [authState]);
 
   return (
     <Box height="100vh">

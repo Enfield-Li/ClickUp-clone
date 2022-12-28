@@ -29,7 +29,7 @@ function SubTaskIcons({ task, setShowSubTask }: Props) {
         );
         if (statusColumn)
           statusTaskList.push({
-            id: statusColumn.id,
+            id: statusColumn.id!,
             color: statusColumn.color,
             name: statusColumn.title,
             amount: 1,

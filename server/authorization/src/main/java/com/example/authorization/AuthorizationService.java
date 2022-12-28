@@ -5,6 +5,7 @@ import static com.example.clients.UrlConstants.*;
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginCredentials;
 import com.example.authorization.dto.RegisterCredentials;
+import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
@@ -145,5 +146,8 @@ public class AuthorizationService {
                 .username(username)
                 .accessToken(accessToken)
                 .build();
+    }
+
+    public void updateUserJoinedTeam(UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
     }
 }
