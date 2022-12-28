@@ -1,12 +1,13 @@
 package com.example.taskComment;
 
-import static com.example.amqp.exchange.NotificationExchange.*;
-
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.fraud.FraudCheckResponse;
 // import com.example.clients.fraud.FraudClient;
 import com.example.clients.notification.NotificationRequest;
 import lombok.RequiredArgsConstructor;
+
+import static com.example.amqp.ExchangeKey.*;
+
 import org.springframework.stereotype.Service;
 
 // import org.springframework.web.client.RestTemplate;

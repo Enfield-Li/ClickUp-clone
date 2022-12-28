@@ -1,10 +1,11 @@
 package com.example.taskEvent.message;
 
-import static com.example.amqp.exchange.TaskEventExchange.*;
-
 import com.example.clients.notification.NotificationRequest;
 import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.taskEvent.service.TaskEventService;
+
+import static com.example.amqp.ExchangeKey.*;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

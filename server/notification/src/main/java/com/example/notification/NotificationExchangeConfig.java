@@ -1,6 +1,6 @@
 package com.example.notification;
 
-import static com.example.amqp.exchange.NotificationExchange.*;
+import static com.example.amqp.ExchangeKey.*;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -25,8 +25,8 @@ public class NotificationExchangeConfig {
     @Bean
     public Binding internalToNotificationBinding() {
         return BindingBuilder
-            .bind(notificationQueue())
-            .to(internalTopicExchange())
-            .with(notificationRoutingKey);
+                .bind(notificationQueue())
+                .to(internalTopicExchange())
+                .with(notificationRoutingKey);
     }
 }

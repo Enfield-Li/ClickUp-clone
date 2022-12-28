@@ -1,6 +1,6 @@
 package com.example.taskEvent.message;
 
-import static com.example.amqp.exchange.TaskEventExchange.*;
+import static com.example.amqp.ExchangeKey.*;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -25,8 +25,8 @@ public class TaskEventExchangeConfig {
     @Bean
     public Binding internalToTaskEventBinding() {
         return BindingBuilder
-            .bind(taskEventQueue())
-            .to(internalTopicExchange())
-            .with(taskEventRoutingKey);
+                .bind(taskEventQueue())
+                .to(internalTopicExchange())
+                .with(taskEventRoutingKey);
     }
 }

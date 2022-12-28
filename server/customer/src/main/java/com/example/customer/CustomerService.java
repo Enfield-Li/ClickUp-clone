@@ -1,12 +1,13 @@
 package com.example.customer;
 
-import static com.example.amqp.exchange.NotificationExchange.*;
-
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.fraud.FraudCheckResponse;
 // import com.example.clients.fraud.FraudClient;
 import com.example.clients.notification.NotificationRequest;
 import lombok.RequiredArgsConstructor;
+
+import static com.example.amqp.ExchangeKey.*;
+
 import org.springframework.stereotype.Service;
 
 // import org.springframework.web.client.RestTemplate;
@@ -22,10 +23,10 @@ public class CustomerService {
 
     public void registerCustomer(CustomerRegistrationRequest request) {
         Customer customer = Customer
-            .builder()
-            .username(request.getUsername())
-            .email(request.getPassword())
-            .build();
+                .builder()
+                .username(request.getUsername())
+                .email(request.getPassword())
+                .build();
 
         customerRepository.saveAndFlush(customer);
         // Customer savedCustomer = customerRepository.save(customer);
@@ -44,15 +45,13 @@ public class CustomerService {
         // }
 
         NotificationRequest notificationPayload = new NotificationRequest(
-            customer.getId(),
-            customer.getEmail(),
-            String.format("Hi %s, welcome ", customer.getUsername())
-        );
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Hi %s, welcome ", customer.getUsername()));
 
         rabbitMQMessageProducer.publish(
-            internalExchange,
-            notificationRoutingKey,
-            notificationPayload
-        );
+                internalExchange,
+                notificationRoutingKey,
+                notificationPayload);
     }
 }
