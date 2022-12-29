@@ -35,8 +35,7 @@ public class TeamService {
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public UserCredentials getCurrentUserInfo() {
-        return (UserCredentials) SecurityContextHolder
-                .getContext()
+        return (UserCredentials) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
     }
@@ -60,8 +59,8 @@ public class TeamService {
         var userInfo = getCurrentUserInfo();
 
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
-        var space = Space.builder().team(team)
-                .name(defaultSpaceName).orderIndex(1).isPrivate(false).build();
+        var space = Space.builder().team(team).name(defaultSpaceName)
+                .orderIndex(1).isPrivate(false).build();
         team.setSpaces(Set.of(space));
 
         teamRepository.saveAndFlush(team);
