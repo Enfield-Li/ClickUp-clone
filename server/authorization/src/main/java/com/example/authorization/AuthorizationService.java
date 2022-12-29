@@ -53,11 +53,11 @@ public class AuthorizationService {
                 .username(username)
                 .password(encodedPassword)
                 .build();
-        repository.saveAndFlush(applicationUser);
+        var user = repository.save(applicationUser);
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(applicationUser,
+        var userResponse = generateResponseAndToken(user,
                 INITIAL_TOKEN_VERSION);
         return userResponse;
     }

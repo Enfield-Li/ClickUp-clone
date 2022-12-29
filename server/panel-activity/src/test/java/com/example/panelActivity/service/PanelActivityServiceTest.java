@@ -143,7 +143,8 @@ public class PanelActivityServiceTest implements WithAssertions {
     }
 
     @Test
-    void test_get_panel_activity_should_fail_for_data_integrity(CapturedOutput output) {
+    void test_get_panel_activity_should_fail_for_data_integrity(
+            CapturedOutput output) {
         // given 
         var teamId1 = 22;
         var teamId2 = 23;

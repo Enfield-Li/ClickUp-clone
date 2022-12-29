@@ -120,16 +120,14 @@ public class AuthorizationServiceTest implements WithAssertions {
                 refreshToken);
         given(jwtUtils.createAccessToken(any(), any())).willReturn(
                 accessToken);
-        // TODO: savenAndFlush method
-        given(repository.saveAndFlush(any())).willReturn(applicationUser);
-        // given(repository.saveAndFlush(any())).
+        given(repository.save(any())).willReturn(applicationUser);
 
         // when 
         var userResponse = underTest.register(registerCredentials);
 
         // then
         verify(passwordEncoder).encode(passwordArgCaptor.capture());
-        verify(repository).saveAndFlush(applicationUserArgCaptor.capture());
+        verify(repository).save(applicationUserArgCaptor.capture());
         verify(httpSession).setAttribute(sessionArgCaptor.capture(),
                 sessionArgCaptor.capture());
 

@@ -43,11 +43,11 @@ Implementation based on this [stackoverflow answer](https://stackoverflow.com/a/
  |  React client  |
  |                |
  +----------------+
-     ^    |  |
-     |    |  |               +---------------+
-     |    |  |  register     |               |                      +------------------------+
-     |    |  |  login        |               |     # 1              |                        |
-     |    |  +-------------->|               |--------------------> | Authorization service  |
+     ^    |    |
+     |    |    |             +---------------+
+     |    |    |  register   |               |                      +------------------------+
+     |    |    |  login      |               |     # 1              |                        |
+     |    |    +------------>|               |--------------------> | Authorization service  |
      |    |                  |               |                      |                        |
      |    |                  |               |                      +------------------------+
      |    |                  |               |                                   ^

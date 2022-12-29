@@ -64,8 +64,9 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
-    public static Team convertFromCreateTeamDTO(
-            CreateTeamDTO createTeamDTO, UserCredentials userCredentials) {
+    public static Team initTeamCreation(CreateTeamDTO createTeamDTO,
+            UserCredentials userCredentials) {
+        var defaultSpaceName = "space";
         var userInfo = UserInfo.builder()
                 .userId(userCredentials.userId())
                 .username(userCredentials.username())
@@ -79,6 +80,10 @@ public class Team {
                 .avatar(createTeamDTO.avatar())
                 .build();
 
+        var space = Space.builder().team(team).name(defaultSpaceName)
+                .orderIndex(1).isPrivate(false).build();
+
+        team.setSpaces(Set.of(space));
         userInfo.setTeam(team);
         return team;
     }

@@ -1,12 +1,17 @@
 package com.example.team.service;
 
+import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
+
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import static com.example.amqp.ExchangeKey.*;
+
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
+import com.example.clients.jwt.UserCredentials;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
@@ -14,12 +19,8 @@ import com.example.serviceExceptionHandling.exception.InternalDataIntegrityExcep
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
-import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.TeamRepository;
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
-import com.example.clients.jwt.UserCredentials;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +34,8 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PanelActivityClient panelActivityClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
+
+    String logErrorMsg = "InternalDataIntegrityException, This really shouldn't have happened...";
 
     public UserCredentials getCurrentUserInfo() {
         return (UserCredentials) SecurityContextHolder.getContext()
@@ -55,15 +58,12 @@ public class TeamService {
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
-        var defaultSpaceName = "space";
         var userInfo = getCurrentUserInfo();
 
-        var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
-        var space = Space.builder().team(team).name(defaultSpaceName)
-                .orderIndex(1).isPrivate(false).build();
-        team.setSpaces(Set.of(space));
+        var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
 
-        teamRepository.saveAndFlush(team);
+        var team = teamRepository.save(initTeam);
+        var space = team.getSpaces().stream().findFirst().get();
 
         // update panel activity
         var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
@@ -71,7 +71,7 @@ public class TeamService {
         var response = panelActivityClient.updateDefaultTeamInCreation(
                 updateDefaultTeamInCreationDTO);
         if (!response) {
-            log.error("InternalDataIntegrityException, This really shouldn't have happened...");
+            log.error(logErrorMsg);
             throw new InternalDataIntegrityException("Data integrity breached");
         }
 
@@ -88,11 +88,18 @@ public class TeamService {
 
     private void validateTeamsAndPanelActivity(
             PanelActivityDTO panelActivityDTO, List<Team> teams) {
-        var ids = teams.stream().map(Team::getId).collect(Collectors.toList());
-        var validateResult = panelActivityDTO.teamActivities().stream()
-                .allMatch(teamActivity -> ids.contains(teamActivity.teamId()));
-        if (!validateResult) {
-            log.error("InternalDataIntegrityException, This really shouldn't have happened...");
+        try {
+            var ids = teams.stream().map(Team::getId).collect(
+                    Collectors.toList());
+            var validateResult = panelActivityDTO.teamActivities().stream()
+                    .allMatch(teamActivity -> ids
+                            .contains(teamActivity.teamId()));
+
+            if (!validateResult) {
+                throw new Error();
+            }
+        } catch (Exception e) {
+            log.error(logErrorMsg);
             throw new InternalDataIntegrityException("Data integrity breached");
         }
     }
