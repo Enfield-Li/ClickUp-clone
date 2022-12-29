@@ -9,12 +9,19 @@ import {
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
-import { fetchLocalTaskList } from "./fetchLocalTaskList";
-import { defaultColumnOptions } from "./mockData";
+import {
+  defaultColumnOptions,
+  space1TaskList,
+  space2TaskList,
+} from "./mockData";
 
 interface UseLocalTasksParam {
   sortBy: SortBy;
   selectedListId: number;
+}
+
+export function fetchLocalTaskList(listId: number) {
+  return listId % 2 ? space1TaskList : space2TaskList;
 }
 export function useLocalTasks({ sortBy, selectedListId }: UseLocalTasksParam) {
   const location = useLocation();

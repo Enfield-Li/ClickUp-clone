@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { API_ENDPOINT, CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import LogoSVG from "../../media/LogoSVG";
+import { createTeam } from "../../networkCalls";
 import { Team, AUTH_ACTION } from "../../types";
 import { axiosTeamServiceInstance } from "../../utils/AxiosInterceptor";
 import { CreateTeamDTO } from "./CreateTeam";
@@ -30,25 +31,13 @@ export default function OnBoardingTemplate({
   const navigate = useNavigate();
   const { authDispatch } = useAuthContext();
 
-  async function createTeam() {
-    if (createTeamDTO) {
-      await axiosTeamServiceInstance.post<boolean>(
-        API_ENDPOINT.TEAM,
-        createTeamDTO
-      );
-
-      navigate(CLIENT_ROUTE.TASK_BOARD);
-      authDispatch({ type: AUTH_ACTION.CLOSE_ONBOARDING });
-    }
-  }
-
   function handleClickButton() {
     if (handleNextStage) {
       handleNextStage(stageNumber + 1);
       return;
     }
     if (buttonTitle === "Play with ClickUp") {
-      createTeam();
+      createTeam(createTeamDTO, navigate, authDispatch);
     }
   }
 

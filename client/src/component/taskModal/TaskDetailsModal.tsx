@@ -17,7 +17,6 @@ import TaskInfo from "./TaskInfo";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { fetchTaskEvents } from "../task/actions/networkActions";
 
 type Props = {};
 

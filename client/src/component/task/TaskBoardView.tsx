@@ -5,6 +5,7 @@ import { memo, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TASK_BOARD_PARAM } from "../../constant";
 import { useLocalTasks } from "../../hook/useLocalState";
+import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
   SetTaskState,
@@ -19,7 +20,6 @@ import {
 } from "../../types";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
-import { updateTasksPosition } from "./actions/networkActions";
 import {
   getExpectedDueDateFromDueDateColumn,
   getLookUpReorderedColumnTable,

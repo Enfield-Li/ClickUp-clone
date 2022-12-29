@@ -9,17 +9,15 @@ import {
   InputGroup,
   InputLeftElement,
   InputRightElement,
-  useToast,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
-import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { getRandomSpaceColor } from "../../media/colors";
+import { registerUser } from "../../networkCalls";
 import { FieldErrors, RegisterUserDTO } from "../../types";
-import { registerUser, registerUserLocal } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};

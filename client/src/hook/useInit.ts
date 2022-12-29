@@ -1,11 +1,9 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { refreshUserToken } from "../component/auth/actions/refreshUserToken";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
-import { AUTH_ACTION } from "../types";
-import { mockUser } from "./mockData";
+import { refreshUserToken } from "../networkCalls";
 
 export default function useInit() {
   const navigate = useNavigate();

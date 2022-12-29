@@ -1,4 +1,5 @@
 import produce from "immer";
+import { createTask } from "../../../networkCalls";
 import {
   DueDateRange,
   OrderedTasks,
@@ -17,7 +18,6 @@ import {
   UserInfo,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
-import { createTask } from "./networkActions";
 import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export type NewTask = {

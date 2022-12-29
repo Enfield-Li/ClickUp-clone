@@ -7,11 +7,9 @@ import {
   EditableTextarea,
   Flex,
 } from "@chakra-ui/react";
-import produce from "immer";
 import { memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SetTaskState, UpdateTaskDescDTO } from "../../types";
-import { updateTaskDescription } from "../task/actions/networkActions";
+import { updateTaskDescription } from "../../networkCalls";
 import SelectPriorityIcon from "./priority/SelectPriorityIcon";
 import SelectStatusIcons from "./status/SelectStatusIcons";
 import TaskOptions from "./taskOptions/DeleteTask";
@@ -71,11 +69,10 @@ function TaskInfo({}: Props) {
           <EditableTextarea
             onBlur={(e) => {
               if (e.target.value !== task!.title) {
-                // updateDescription(
-                //   task!.id!,
-                //   e.currentTarget.value,
-                //   setTaskState,
-                // );
+                updateTaskDescription({
+                  taskId: task!.id!,
+                  newDesc: e.currentTarget.value,
+                });
               }
             }}
           />

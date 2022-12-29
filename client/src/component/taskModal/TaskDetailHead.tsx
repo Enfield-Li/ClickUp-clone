@@ -9,7 +9,7 @@ import produce from "immer";
 import { memo, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { updateTaskTitle } from "../task/actions/networkActions";
+import { updateTaskTitle } from "../../networkCalls";
 import {
   ActionField,
   SetTaskState,
@@ -41,8 +41,11 @@ function TaskDetailHead({}: Props) {
         });
     });
 
-    //   const updateTaskTitleDTO: UpdateTaskTitleDTO = { taskId, newTitle };
-    //   const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
+    const updateTaskTitleDTO: UpdateTaskTitleDTO = {
+      taskId: task!.id!,
+      newTitle,
+    };
+    const updateSuccess = await updateTaskTitle(updateTaskTitleDTO);
   }
 
   return (

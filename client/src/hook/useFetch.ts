@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
-import { fetchAllTasks } from "../component/task/actions/networkActions";
 import {
-  collectAllTasks,
-  groupTaskListOnSortBy,
-  processTaskList,
+    collectAllTasks,
+    groupTaskListOnSortBy,
+    processTaskList
 } from "../component/task/actions/taskProcessing";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
+import { fetchAllTasks } from "../networkCalls";
 import {
-  ColumnOptions,
-  SortBy,
-  StatusColumns,
-  TaskList,
-  TaskState,
+    ColumnOptions,
+    SortBy,
+    StatusColumns, TaskState
 } from "../types";
 import { sleep } from "../utils/sleep";
 import { defaultColumnOptions } from "./mockData";

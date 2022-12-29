@@ -1,8 +1,8 @@
 import { Box, Center, Divider, Flex, Spinner } from "@chakra-ui/react";
 import { useRef, useEffect, useState, memo } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { fetchTaskEvents } from "../../networkCalls";
 import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
-import { fetchTaskEvents } from "../task/actions/networkActions";
 import DueDateDetails from "./dueDate/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";
@@ -23,7 +23,7 @@ function TaskEvent({}: Props) {
     async function getTaskEvents() {
       if (task?.id) {
         setLoadingTaskEvents(true);
-        // const events = await fetchTaskEvents(task.id);
+        const events = await fetchTaskEvents(task.id);
         // setTask(events);
         setLoadingTaskEvents(false);
       }

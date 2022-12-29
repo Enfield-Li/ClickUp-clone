@@ -11,12 +11,9 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../ApplicationEntry";
 import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
-import {
-  fetchTeamList,
-  fetchTeamListLocal,
-} from "../task/actions/fetchSpaceList";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
+import { fetchTeamList } from "../../networkCalls";
 
 type Props = {
   selectedSection: Section;

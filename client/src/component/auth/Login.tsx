@@ -16,8 +16,8 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
+import { loginUser } from "../../networkCalls";
 import { FieldErrors, LoginUserDTO } from "../../types";
-import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};

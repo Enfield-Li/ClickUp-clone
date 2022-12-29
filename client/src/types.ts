@@ -485,3 +485,8 @@ export interface CreateSpace {
   createSpaceDTO: CreateSpaceDTO;
   selectedStatusColumns: StatusColumns;
 }
+
+export type InitTeamDTO = {
+  teams: Team[];
+  panelActivity: PanelActivity;
+};
