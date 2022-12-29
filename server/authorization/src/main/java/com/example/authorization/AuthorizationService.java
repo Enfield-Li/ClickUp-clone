@@ -57,7 +57,8 @@ public class AuthorizationService {
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(applicationUser, INITIAL_TOKEN_VERSION);
+        var userResponse = generateResponseAndToken(applicationUser,
+                INITIAL_TOKEN_VERSION);
         return userResponse;
     }
 
@@ -75,13 +76,15 @@ public class AuthorizationService {
         if (!matches) {
             log.error("Invalid password");
             throw new AuthenticationFailureException(
-                    AuthenticationFailedField.password, "Incorrect password for this email.");
+                    AuthenticationFailedField.password,
+                    "Incorrect password for this email.");
         }
 
         // 3. generate refresh token and save to session
         //    generate access token & response
         var tokenVersion = applicationUser.getRefreshTokenVersion();
-        var userResponse = generateResponseAndToken(applicationUser, tokenVersion);
+        var userResponse = generateResponseAndToken(applicationUser,
+                tokenVersion);
 
         // 4. send access token
         return userResponse;
@@ -93,8 +96,10 @@ public class AuthorizationService {
         var refreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
         // 2. validate tokens and retrieve payload
-        var userIdInAccessToken = jwtUtils.getUserInfoFromAccessToken(accessToken);
-        var refreshTokenPayload = jwtUtils.getPayloadFromRefreshToken(refreshToken);
+        var userIdInAccessToken = jwtUtils.getUserInfoFromAccessToken(
+                accessToken);
+        var refreshTokenPayload = jwtUtils.getPayloadFromRefreshToken(
+                refreshToken);
         var userIdInRefreshToken = refreshTokenPayload.userId();
         var tokenVersion = refreshTokenPayload.tokenVersion();
 
@@ -102,7 +107,8 @@ public class AuthorizationService {
         var applicationUser = repository
                 .findById(userIdInAccessToken.userId())
                 .orElseThrow(() -> new AuthenticationFailureException());
-        var isTokenNotValid = tokenVersion != applicationUser.getRefreshTokenVersion() ||
+        var isTokenNotValid = tokenVersion != applicationUser
+                .getRefreshTokenVersion() ||
                 userIdInAccessToken.userId() != userIdInRefreshToken;
         if (isTokenNotValid) {
             log.error("Token version mismatch.");
@@ -112,8 +118,20 @@ public class AuthorizationService {
 
         // 4. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(applicationUser, tokenVersion);
+        var userResponse = generateResponseAndToken(applicationUser,
+                tokenVersion);
         return userResponse;
+    }
+
+    @Transactional
+    public Boolean updateUserJoinedTeam(
+            UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
+        var userId = updateUserJoinedTeamsDTO.userId();
+        var isJoinTeam = updateUserJoinedTeamsDTO.isJoinTeam();
+
+        var rowsAffected = repository
+                .updateUserJoinedTeamCount(userId, isJoinTeam ? 1 : -1);
+        return rowsAffected > 0;
     }
 
     void logout() {
@@ -126,8 +144,7 @@ public class AuthorizationService {
     }
 
     private AuthorizationResponseDTO generateResponseAndToken(
-            ApplicationUser applicationUser,
-            Integer tokenVersion) {
+            ApplicationUser applicationUser, Integer tokenVersion) {
         var userId = applicationUser.getId();
         var email = applicationUser.getEmail();
         var username = applicationUser.getUsername();
@@ -150,14 +167,4 @@ public class AuthorizationService {
                 .build();
     }
 
-    @Transactional
-    public Boolean updateUserJoinedTeam(
-            UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
-        var userId = updateUserJoinedTeamsDTO.userId();
-        var isJoinTeam = updateUserJoinedTeamsDTO.isJoinTeam();
-
-        var rowsAffected = repository
-                .updateUserJoinedTeamCount(userId, isJoinTeam ? 1 : -1);
-        return rowsAffected > 0;
-    }
 }
