@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 // @EnableEurekaClient
 @SpringBootApplication(scanBasePackages = {
+        "com.example.amqp",
         "com.example.clients",
         "com.example.serviceConfig",
         "com.example.authorization",

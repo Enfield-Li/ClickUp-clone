@@ -27,7 +27,7 @@ export async function refreshUserTokenLocal(
         id: 1,
         username: "mockUser",
         email: "mockUser@email.com",
-        numOfTeamJoined: 1,
+        joinedTeamCount: 1,
         accessToken: "abc",
         color: "blue",
       },

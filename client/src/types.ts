@@ -334,7 +334,7 @@ export interface AuthenticationResponse {
   email: string;
   username: string;
   accessToken: string;
-  numOfTeamJoined: number;
+  joinedTeamCount: number;
 }
 
 export type AuthActionType =

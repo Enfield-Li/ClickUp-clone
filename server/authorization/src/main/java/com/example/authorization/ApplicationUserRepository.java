@@ -3,6 +3,9 @@ package com.example.authorization;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,4 +18,12 @@ public interface ApplicationUserRepository
     public Optional<ApplicationUser> findByUsername(String username);
 
     public Optional<ApplicationUser> findByEmail(String email);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(nativeQuery = true, value = ""
+            + "UPDATE application_user"
+            + " SET joined_team_count = joined_team_count + :updateTeamCount"
+            + " WHERE id = :userId")
+    Integer updateUserJoinedTeamCount(@Param("userId") Integer userId,
+            @Param("updateTeamCount") Integer updateTeamCount);
 }

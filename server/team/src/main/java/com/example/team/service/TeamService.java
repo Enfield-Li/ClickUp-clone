@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import static com.example.amqp.ExchangeKey.*;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
@@ -16,6 +16,8 @@ import com.example.team.dto.TeamAndPanelActivityDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.TeamRepository;
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class TeamService {
     private final SpaceService spaceService;
     private final TeamRepository teamRepository;
     private final PanelActivityClient panelActivityClient;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public UserCredentials getCurrentUserInfo() {
         return (UserCredentials) SecurityContextHolder
@@ -40,7 +43,8 @@ public class TeamService {
 
         var teams = teamRepository.findByMembersUserId(userId);
         if (teams.isEmpty()) {
-            throw new InvalidRequestException("Let's create or join a Workspace first!");
+            throw new InvalidRequestException(
+                    "Let's create or join a Workspace first!");
         }
 
         var panelActivityDTO = panelActivityClient.getPanelActivity();
@@ -59,10 +63,18 @@ public class TeamService {
         teamRepository.saveAndFlush(team);
 
         // update panel activity
-        var dto = new UpdateDefaultTeamInCreationDTO(team.getId(), space.getId());
-        var response = panelActivityClient.updateDefaultTeamInCreation(dto);
+        var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
+                team.getId(), space.getId());
+        var response = panelActivityClient.updateDefaultTeamInCreation(
+                updateDefaultTeamInCreationDTO);
 
-        // TODO: update user.joinedTeamAmount
+        // publish event
+        var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
+                userInfo.userId(), true);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                AuthorizationRoutingKey,
+                updateUserJoinedTeamsDTO);
 
         return response;
     }

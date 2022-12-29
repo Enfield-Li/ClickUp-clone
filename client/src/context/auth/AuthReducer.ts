@@ -14,7 +14,7 @@ export default function authReducer(
         const { user } = authAction.payload;
         draftState.user = user;
 
-        if (!user.numOfTeamJoined) {
+        if (!user.joinedTeamCount) {
           draftState.onboarding = true;
         }
       });

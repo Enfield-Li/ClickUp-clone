@@ -39,5 +39,9 @@ public class ApplicationUser {
 
     @NotNull
     @Builder.Default
+    private Integer joinedTeamCount = 0; 
+
+    @NotNull
+    @Builder.Default
     private Integer refreshTokenVersion = 0;
 }

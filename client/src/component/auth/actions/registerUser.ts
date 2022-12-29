@@ -30,7 +30,7 @@ export async function registerUserLocal(
         username,
         accessToken: "a",
         color: "yellow",
-        numOfTeamJoined: 1,
+        joinedTeamCount: 1,
       },
     },
   });

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
 @Service
@@ -148,6 +149,14 @@ public class AuthorizationService {
                 .build();
     }
 
-    public void updateUserJoinedTeam(UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
+    @Transactional
+    public Boolean updateUserJoinedTeam(
+            UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
+        var userId = updateUserJoinedTeamsDTO.userId();
+        var isJoinTeam = updateUserJoinedTeamsDTO.isJoinTeam();
+
+        var rowsAffected = repository
+                .updateUserJoinedTeamCount(userId, isJoinTeam ? 1 : -1);
+        return rowsAffected > 0;
     }
 }
