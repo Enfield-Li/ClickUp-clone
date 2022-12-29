@@ -17,7 +17,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { FieldErrors, RegisterCredentials } from "../../types";
+import { getRandomSpaceColor } from "../../media/colors";
+import { FieldErrors, RegisterUserDTO } from "../../types";
 import { registerUser, registerUserLocal } from "./actions/registerUser";
 import AuthTemplate from "./AuthTemplate";
 
@@ -45,7 +46,7 @@ function Register({}: Props) {
   });
 
   function handleError(
-    setErrors: (errors: FormikErrors<RegisterCredentials>) => void,
+    setErrors: (errors: FormikErrors<RegisterUserDTO>) => void,
     errors: FieldErrors
   ) {
     errors.forEach((error) => {
@@ -58,18 +59,16 @@ function Register({}: Props) {
   return (
     <AuthTemplate isLogin={false}>
       <Box height="fit-content">
-        <Formik<RegisterCredentials>
+        <Formik<RegisterUserDTO>
           validationSchema={signupSchema}
           initialValues={{
             email: initialEmail,
             username: "",
             password: "",
+            color: getRandomSpaceColor(),
           }}
-          onSubmit={async (registerCredentials, { setErrors }) => {
-            const errors = await registerUser(
-              registerCredentials,
-              authDispatch
-            );
+          onSubmit={async (registerUserDTO, { setErrors }) => {
+            const errors = await registerUser(registerUserDTO, authDispatch);
 
             if (errors) {
               handleError(setErrors, errors);

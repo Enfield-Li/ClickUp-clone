@@ -6,7 +6,7 @@ import {
 } from "../../../utils/AxiosInterceptor";
 import { API_ENDPOINT, ACCESS_TOKEN } from "../../../constant";
 import {
-  RegisterCredentials,
+  RegisterUserDTO,
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
@@ -15,7 +15,7 @@ import {
 } from "../../../types";
 
 export async function registerUserLocal(
-  registerCredentials: RegisterCredentials,
+  registerCredentials: RegisterUserDTO,
   dispatch: React.Dispatch<AuthActionType>
 ) {
   const { email, username } = registerCredentials;
@@ -37,7 +37,7 @@ export async function registerUserLocal(
 }
 
 export async function registerUser(
-  registerCredentials: RegisterCredentials,
+  registerCredentials: RegisterUserDTO,
   dispatch: React.Dispatch<AuthActionType>
 ): Promise<FieldErrors | undefined> {
   try {

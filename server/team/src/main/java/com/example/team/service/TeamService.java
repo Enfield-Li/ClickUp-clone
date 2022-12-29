@@ -10,6 +10,7 @@ import static com.example.amqp.ExchangeKey.*;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
+import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
@@ -21,7 +22,9 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -53,11 +56,12 @@ public class TeamService {
     }
 
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
+        var defaultSpaceName = "space";
         var userInfo = getCurrentUserInfo();
 
         var team = Team.convertFromCreateTeamDTO(createTeamDTO, userInfo);
         var space = Space.builder().team(team)
-                .name("space").orderIndex(1).isPrivate(false).build();
+                .name(defaultSpaceName).orderIndex(1).isPrivate(false).build();
         team.setSpaces(Set.of(space));
 
         teamRepository.saveAndFlush(team);
@@ -67,6 +71,10 @@ public class TeamService {
                 team.getId(), space.getId());
         var response = panelActivityClient.updateDefaultTeamInCreation(
                 updateDefaultTeamInCreationDTO);
+        if (!response) {
+            log.error("InternalDataIntegrityException, This really shouldn't have happened...");
+            throw new InternalDataIntegrityException("Data integrity breached");
+        }
 
         // publish event
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
@@ -76,7 +84,7 @@ public class TeamService {
                 AuthorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
-        return response;
+        return true;
     }
 
     private void validateTeamsAndPanelActivity(
@@ -85,7 +93,8 @@ public class TeamService {
         var validateResult = panelActivityDTO.teamActivities().stream()
                 .allMatch(teamActivity -> ids.contains(teamActivity.teamId()));
         if (!validateResult) {
-            throw new Error("Data integrity breached");
+            log.error("InternalDataIntegrityException, This really shouldn't have happened...");
+            throw new InternalDataIntegrityException("Data integrity breached");
         }
     }
 }

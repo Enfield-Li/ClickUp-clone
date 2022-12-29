@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
+import { getRandomTeamColor } from "../../media/colors";
 import pic from "../../media/onboarding.png";
 import AvatarColor from "./AvatarColor";
 import OnBoardingTemplate from "./OnBoardingTemplate";
@@ -26,7 +27,7 @@ export default function CreateTeam({}: Props) {
   const { authState } = useAuthContext();
   const initTeam: CreateTeamDTO = {
     avatar: "",
-    color: "rgb(64, 188, 134)",
+    color: getRandomTeamColor(),
     name: `${authState.user?.username}'s Workspace`,
     memberEmails: "",
   };
@@ -57,7 +58,7 @@ export default function CreateTeam({}: Props) {
   function setCurrentStep() {
     ref.current.forEach((element, index) => {
       const topPosition = element.getBoundingClientRect().top;
-      if (50 < topPosition && topPosition < 500) {
+      if (50 < topPosition && topPosition < 450) {
         setStep(index);
       }
     });
@@ -154,9 +155,9 @@ export default function CreateTeam({}: Props) {
           <OnBoardingTemplate
             step={step}
             stageNumber={4}
-            title="Do you use any of these apps?"
             buttonTitle="No, thanks"
             handleNextStage={handleNextStage}
+            title="Do you use any of these apps?"
           >
             <Box opacity="70%">(some icons and stuff...)</Box>
           </OnBoardingTemplate>
@@ -176,11 +177,11 @@ export default function CreateTeam({}: Props) {
         </Box>
 
         {/* Done */}
-        <Box ref={(element) => element && (ref.current[6] = element)} mb="40px">
+        <Box ref={(element) => element && (ref.current[6] = element)} mb="65px">
           <OnBoardingTemplate
-            createTeamDTO={team}
             step={step}
             stageNumber={6}
+            createTeamDTO={team}
             buttonTitle="Play with ClickUp"
             title="That's it. Now go and change the world!"
           >

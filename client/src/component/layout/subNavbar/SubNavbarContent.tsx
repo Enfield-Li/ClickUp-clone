@@ -23,10 +23,10 @@ function SubNavbarContent({ currentTeam }: Props) {
   }
 
   useEffect(() => {
-    if (!currentTeam?.spaces.length) {
+    if (currentTeam && !currentTeam.spaces.length) {
       onOpen();
     }
-  }, [currentTeam?.spaces]);
+  }, [currentTeam]);
 
   return (
     <Box

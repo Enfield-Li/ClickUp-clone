@@ -1,7 +1,10 @@
 import { Flex, Center, Box, Button } from "@chakra-ui/react";
 import React from "react";
-import { API_ENDPOINT } from "../../constant";
+import { useNavigate } from "react-router-dom";
+import { API_ENDPOINT, CLIENT_ROUTE } from "../../constant";
+import useAuthContext from "../../context/auth/useAuthContext";
 import LogoSVG from "../../media/LogoSVG";
+import { Team, AUTH_ACTION } from "../../types";
 import { axiosTeamServiceInstance } from "../../utils/AxiosInterceptor";
 import { CreateTeamDTO } from "./CreateTeam";
 
@@ -10,8 +13,8 @@ type Props = {
   title: string;
   stageNumber: number;
   buttonTitle?: string;
-  createTeamDTO?: CreateTeamDTO;
   children: React.ReactNode;
+  createTeamDTO?: CreateTeamDTO;
   handleNextStage?: (stage: number) => void;
 };
 
@@ -24,14 +27,18 @@ export default function OnBoardingTemplate({
   createTeamDTO,
   handleNextStage,
 }: Props) {
+  const navigate = useNavigate();
+  const { authDispatch } = useAuthContext();
+
   async function createTeam() {
     if (createTeamDTO) {
-      const response = await axiosTeamServiceInstance.post<boolean>(
+      await axiosTeamServiceInstance.post<boolean>(
         API_ENDPOINT.TEAM,
         createTeamDTO
       );
-      // TODO: redirect after click button
-      console.log(response);
+
+      navigate(CLIENT_ROUTE.TASK_BOARD);
+      authDispatch({ type: AUTH_ACTION.CLOSE_ONBOARDING });
     }
   }
 

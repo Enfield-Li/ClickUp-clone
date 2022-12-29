@@ -66,6 +66,7 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
         }
       );
 
+      // local
       //   const { teams, initPanelActivity } = fetchTeamListLocal();
       //   teamStateDispatch({
       //     type: TEAM_STATE_ACTION.INIT_TEAM_STATE,

@@ -4,8 +4,8 @@ import static com.example.authorization.Constants.*;
 import static com.example.clients.UrlConstants.*;
 
 import com.example.authorization.dto.AuthorizationResponseDTO;
-import com.example.authorization.dto.LoginCredentials;
-import com.example.authorization.dto.RegisterCredentials;
+import com.example.authorization.dto.LoginUserDTO;
+import com.example.authorization.dto.RegisterUserDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ class AuthorizationController {
 
     @PostMapping(REGISTER)
     ResponseEntity<AuthorizationResponseDTO> register(
-            @Valid @RequestBody RegisterCredentials credentials) {
+            @Valid @RequestBody RegisterUserDTO credentials) {
         var userResponse = authorizationService.register(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(LOGIN)
     ResponseEntity<AuthorizationResponseDTO> login(
-            @Valid @RequestBody LoginCredentials credentials) {
+            @Valid @RequestBody LoginUserDTO credentials) {
         var userResponse = authorizationService.login(credentials);
         return ResponseEntity.ok(userResponse);
     }

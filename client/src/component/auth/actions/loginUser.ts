@@ -6,20 +6,20 @@ import {
   ErrorResponse,
   AUTH_ACTION,
   FieldErrors,
-  LoginCredentials,
+  LoginUserDTO,
   AuthenticationResponse,
 } from "../../../types";
 import { axiosAuthServiceInstance } from "../../../utils/AxiosInterceptor";
 
 export async function loginUser(
-  loginCredentials: LoginCredentials,
+  loginUserDTO: LoginUserDTO,
   dispatch: React.Dispatch<AuthActionType>
 ): Promise<FieldErrors | undefined> {
   try {
     const response =
       await axiosAuthServiceInstance.post<AuthenticationResponse>(
         API_ENDPOINT.AUTH_LOGIN,
-        loginCredentials
+        loginUserDTO
       );
 
     // store accessToken to localStorage

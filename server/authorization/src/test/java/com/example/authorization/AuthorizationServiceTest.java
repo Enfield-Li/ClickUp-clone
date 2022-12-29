@@ -26,8 +26,8 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.authorization.dto.LoginCredentials;
-import com.example.authorization.dto.RegisterCredentials;
+import com.example.authorization.dto.LoginUserDTO;
+import com.example.authorization.dto.RegisterUserDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
@@ -88,7 +88,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var accessToken = "accessToken";
         var refreshToken = "refreshToken";
 
-        var registerCredentials = new RegisterCredentials(username, password, email);
+        var registerCredentials = new RegisterUserDTO(username, password, email);
         given(repository.existsByEmail(any())).willReturn(false);
         given(passwordEncoder.encode(any())).willReturn(encodedPassword);
         given(jwtUtils.createRefreshToken(any(), any())).willReturn(refreshToken);
@@ -119,7 +119,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var password = "password";
         var email = "user1@gmail.com";
         var errorMessage = "Email already taken!";
-        var registerCredentials = new RegisterCredentials(username, password, email);
+        var registerCredentials = new RegisterUserDTO(username, password, email);
         var logMessage = "Email already taken!";
 
         given(repository.existsByEmail(any())).willReturn(true);
@@ -158,7 +158,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var accessToken = "accessToken";
         var refreshToken = "refreshToken";
 
-        var loginCredentials = new LoginCredentials(email, password);
+        var loginCredentials = new LoginUserDTO(email, password);
 
         given(repository.findByEmail(any())).willReturn(Optional.of(applicationUser));
         given(jwtUtils.createRefreshToken(any(), any())).willReturn(refreshToken);
@@ -183,7 +183,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var password = "password";
         var email = "user1@gmail.com";
 
-        var loginCredentials = new LoginCredentials(email, password);
+        var loginCredentials = new LoginUserDTO(email, password);
 
         var errorMessage = "Email not found. Click here to create an account!";
         given(repository.findByEmail(any())).willReturn(Optional.empty());
@@ -216,7 +216,7 @@ public class AuthorizationServiceTest implements WithAssertions {
                 .refreshTokenVersion(tokenVersion)
                 .build();
 
-        var loginCredentials = new LoginCredentials(email, password);
+        var loginCredentials = new LoginUserDTO(email, password);
         var errorMessage = "Incorrect password for this email.";
         var logMessage = "Invalid password";
 

@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import { FieldErrors, LoginCredentials } from "../../types";
+import { FieldErrors, LoginUserDTO } from "../../types";
 import { loginUser } from "./actions/loginUser";
 import AuthTemplate from "./AuthTemplate";
 
@@ -35,7 +35,7 @@ function Login({}: Props) {
   });
 
   function handleError(
-    setErrors: (errors: FormikErrors<LoginCredentials>) => void,
+    setErrors: (errors: FormikErrors<LoginUserDTO>) => void,
     errors: FieldErrors
   ) {
     errors.forEach((error) => {
@@ -54,14 +54,14 @@ function Login({}: Props) {
   return (
     <AuthTemplate isLogin={true}>
       <Box height="fit-content">
-        <Formik<LoginCredentials>
+        <Formik<LoginUserDTO>
           validationSchema={loginSchema}
           initialValues={{
             email: "",
             password: "",
           }}
-          onSubmit={async (loginCredentials, { setErrors }) => {
-            const errors = await loginUser(loginCredentials, authDispatch);
+          onSubmit={async (loginUserDTO, { setErrors }) => {
+            const errors = await loginUser(loginUserDTO, authDispatch);
 
             if (!errors) {
               navigate(CLIENT_ROUTE.HOME);

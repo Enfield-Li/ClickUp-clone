@@ -3,8 +3,8 @@ package com.example.authorization;
 import static com.example.clients.UrlConstants.*;
 
 import com.example.authorization.dto.AuthorizationResponseDTO;
-import com.example.authorization.dto.LoginCredentials;
-import com.example.authorization.dto.RegisterCredentials;
+import com.example.authorization.dto.LoginUserDTO;
+import com.example.authorization.dto.RegisterUserDTO;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
@@ -32,10 +32,10 @@ public class AuthorizationService {
     private final Integer INITIAL_TOKEN_VERSION = 0;
     private final String REFRESH_TOKEN = "refresh_token";
 
-    AuthorizationResponseDTO register(RegisterCredentials registerCredentials) {
-        var email = registerCredentials.email();
-        var username = registerCredentials.username();
-        var password = registerCredentials.password();
+    AuthorizationResponseDTO register(RegisterUserDTO registerUserDTO) {
+        var email = registerUserDTO.email();
+        var username = registerUserDTO.username();
+        var password = registerUserDTO.password();
 
         // 1. check if email is taken
         var isEmailTaken = repository.existsByEmail(email);
@@ -61,16 +61,16 @@ public class AuthorizationService {
         return userResponse;
     }
 
-    AuthorizationResponseDTO login(LoginCredentials loginCredentials) {
+    AuthorizationResponseDTO login(LoginUserDTO loginUserDTO) {
         // 1. check user password
         var applicationUser = repository
-                .findByEmail(loginCredentials.email())
+                .findByEmail(loginUserDTO.email())
                 .orElseThrow(() -> new AuthenticationFailureException(
                         AuthenticationFailedField.email,
                         "Email not found. Click here to create an account!"));
 
         boolean matches = passwordEncoder
-                .matches(loginCredentials.password(),
+                .matches(loginUserDTO.password(),
                         applicationUser.getPassword());
         if (!matches) {
             log.error("Invalid password");
@@ -131,6 +131,7 @@ public class AuthorizationService {
         var userId = applicationUser.getId();
         var email = applicationUser.getEmail();
         var username = applicationUser.getUsername();
+        var joinedTeamCount = applicationUser.getJoinedTeamCount();
 
         // store refreshToken in session
         var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
@@ -140,12 +141,12 @@ public class AuthorizationService {
         var accessToken = jwtUtils.createAccessToken(userId, username);
 
         // response dto
-        return AuthorizationResponseDTO
-                .builder()
+        return AuthorizationResponseDTO.builder()
                 .id(userId)
                 .email(email)
                 .username(username)
                 .accessToken(accessToken)
+                .joinedTeamCount(joinedTeamCount)
                 .build();
     }
 

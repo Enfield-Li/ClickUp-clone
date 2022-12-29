@@ -234,13 +234,14 @@ export type AuthStateType = {
   onboarding: boolean;
 };
 
-export type RegisterCredentials = {
+export type RegisterUserDTO = {
   email: string;
+  color: string;
   username: string;
   password: string;
 };
 
-export type LoginCredentials = {
+export type LoginUserDTO = {
   email: string;
   password: string;
 };
