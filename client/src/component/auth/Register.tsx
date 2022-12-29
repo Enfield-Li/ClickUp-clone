@@ -14,10 +14,11 @@ import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import * as Yup from "yup";
+import { ACCESS_TOKEN } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { getRandomSpaceColor } from "../../media/colors";
 import { registerUser } from "../../networkCalls";
-import { FieldErrors, RegisterUserDTO } from "../../types";
+import { AUTH_ACTION, FieldErrors, RegisterUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};
@@ -66,11 +67,24 @@ function Register({}: Props) {
             color: getRandomSpaceColor(),
           }}
           onSubmit={async (registerUserDTO, { setErrors }) => {
-            const errors = await registerUser(registerUserDTO, authDispatch);
+            await registerUser(
+              registerUserDTO,
+              (data) => {
+                // store accessToken to localStorage
+                localStorage.setItem(ACCESS_TOKEN, data.accessToken);
 
-            if (errors) {
-              handleError(setErrors, errors);
-            }
+                // update auth taskState
+                authDispatch({
+                  type: AUTH_ACTION.REGISTER_USER,
+                  payload: { user: data },
+                });
+              },
+              (errors) => {
+                localStorage.removeItem(ACCESS_TOKEN);
+                authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
+                handleError(setErrors, errors);
+              }
+            );
           }}
         >
           {({ errors, touched, isSubmitting }) => (

@@ -14,10 +14,10 @@ import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { CLIENT_ROUTE } from "../../constant";
+import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { loginUser } from "../../networkCalls";
-import { FieldErrors, LoginUserDTO } from "../../types";
+import { AUTH_ACTION, FieldErrors, LoginUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};
@@ -61,13 +61,26 @@ function Login({}: Props) {
             password: "",
           }}
           onSubmit={async (loginUserDTO, { setErrors }) => {
-            const errors = await loginUser(loginUserDTO, authDispatch);
+            await loginUser(
+              loginUserDTO,
+              (data) => {
+                // store accessToken to localStorage
+                localStorage.setItem(ACCESS_TOKEN, data.accessToken);
 
-            if (!errors) {
-              navigate(CLIENT_ROUTE.HOME);
-            } else if (errors) {
-              handleError(setErrors, errors);
-            }
+                // update auth taskState
+                authDispatch({
+                  type: AUTH_ACTION.LOGIN_USER,
+                  payload: { user: data },
+                });
+                navigate(CLIENT_ROUTE.HOME);
+              },
+              (errors) => {
+                // clear local auth taskState and accessToken
+                localStorage.removeItem(ACCESS_TOKEN);
+                authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
+                handleError(setErrors, errors);
+              }
+            );
           }}
         >
           {({ isSubmitting, touched, errors, values }) => (

@@ -1,23 +1,23 @@
-import { UseToastOptions, ToastId } from "@chakra-ui/react";
+import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { AxiosError } from "axios";
-import { NavigateFunction, To, NavigateOptions } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { CreateTeamDTO } from "./component/onboarding/CreateTeam";
-import { API_ENDPOINT, ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
+import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
-  RegisterUserDTO,
   AuthActionType,
-  FieldErrors,
   AuthenticationResponse,
   AUTH_ACTION,
   ErrorResponse,
+  FieldErrors,
+  InitTeamDTO,
   LoginUserDTO,
+  RegisterUserDTO,
   Task,
+  TaskEvents,
   TaskList,
+  UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
-  UpdateTaskDescDTO,
-  TaskEvents,
-  InitTeamDTO,
 } from "./types";
 import {
   axiosAuthServiceInstance,
@@ -46,37 +46,29 @@ export async function fetchTeamList(
 
 export async function registerUser(
   registerCredentials: RegisterUserDTO,
-  dispatch: React.Dispatch<AuthActionType>
-): Promise<FieldErrors | undefined> {
+  onSuccess: (data: AuthenticationResponse) => void,
+  onFailure: (msg: FieldErrors) => void
+) {
   try {
     const response =
       await axiosAuthServiceInstance.post<AuthenticationResponse>(
         API_ENDPOINT.AUTH_REGISTER,
         registerCredentials
       );
-    // store accessToken to localStorage
-    localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
 
-    // update auth taskState
-    dispatch({
-      type: AUTH_ACTION.REGISTER_USER,
-      payload: { user: response.data },
-    });
+    onSuccess(response.data);
   } catch (error) {
-    // clear local auth taskState and accessToken
-    localStorage.removeItem(ACCESS_TOKEN);
-    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
-
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
-    return response.errors;
+    onFailure(response.errors);
   }
 }
 
 export async function loginUser(
   loginUserDTO: LoginUserDTO,
-  dispatch: React.Dispatch<AuthActionType>
-): Promise<FieldErrors | undefined> {
+  onSuccess: (data: AuthenticationResponse) => void,
+  onFailure: (msg: FieldErrors) => void
+) {
   try {
     const response =
       await axiosAuthServiceInstance.post<AuthenticationResponse>(
@@ -84,22 +76,11 @@ export async function loginUser(
         loginUserDTO
       );
 
-    // store accessToken to localStorage
-    localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
-
-    // update auth taskState
-    dispatch({
-      type: AUTH_ACTION.LOGIN_USER,
-      payload: { user: response.data },
-    });
+    onSuccess(response.data);
   } catch (error) {
-    // clear local auth taskState and accessToken
-    localStorage.removeItem(ACCESS_TOKEN);
-    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
-
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
-    return response.errors;
+    onFailure(response.errors);
   }
 }
 
@@ -237,18 +218,19 @@ export async function createTask(createTaskDTO: Task) {
 }
 
 export async function createTeam(
-  createTeamDTO: CreateTeamDTO | undefined,
-  navigate: (to: To, options?: NavigateOptions | undefined) => void,
-  authDispatch: (value: AuthActionType) => void
+  createTeamDTO: CreateTeamDTO,
+  onSuccess: () => void
 ) {
-  if (createTeamDTO) {
-    await axiosTeamServiceInstance.post<boolean>(
+  try {
+    const response = await axiosTeamServiceInstance.post<boolean>(
       API_ENDPOINT.TEAM,
       createTeamDTO
     );
 
-    navigate(CLIENT_ROUTE.TASK_BOARD);
-    authDispatch({ type: AUTH_ACTION.CLOSE_ONBOARDING });
+    onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    console.log(err);
   }
 }
 
