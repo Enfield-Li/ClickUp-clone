@@ -1,10 +1,12 @@
 import { Box, Center } from "@chakra-ui/react";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 
 type Props = {};
 
 export default function CreateSpacePanel({}: Props) {
-  const { onCreateSpaceModalOpen } = useModalControlContext();
+  const {
+    modalControls: { onCreateSpaceModalOpen },
+  } = useTeamStateContext();
 
   return (
     <Box opacity="60%" onClick={onCreateSpaceModalOpen}>

@@ -4,10 +4,8 @@ import {
   Flex,
   useColorMode,
   useDisclosure,
-  useModalContext,
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { Space, TEAM_STATE_ACTION } from "../../../types";
 import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
@@ -21,19 +19,15 @@ export default memo(SpaceComponent);
 function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const {
+    teamState,
+    teamStateDispatch,
+    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
+  } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
   const isCurrentSpaceSelected =
     teamState.activeTeamState.selectedSpaceId === space.id;
-  const {
-    isCreateListModalOpen,
-    onCreateListModalOpen,
-    onCreateListModalClose,
-    isCreateFolderModalOpen,
-    onCreateFolderModalOpen,
-    onCreateFolderModalClose,
-  } = useModalControlContext();
 
   const {
     isOpen: isPopoverOpen,
@@ -150,14 +144,8 @@ function SpaceComponent({ space }: Props) {
 
       {space.isOpen && <SpaceContent space={space} />}
 
-      <CreateListModal
-        isCreateListModalOpen={isCreateListModalOpen}
-        onCreateListModalClose={onCreateListModalClose}
-      />
-      <CreateFolderModal
-        isCreateFolderModalOpen={isCreateFolderModalOpen}
-        onCreateFolderModalClose={onCreateFolderModalClose}
-      />
+      <CreateListModal />
+      <CreateFolderModal />
     </Box>
   );
 }

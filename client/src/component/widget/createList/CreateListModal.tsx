@@ -11,21 +11,19 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 
-type Props = {
-  isCreateListModalOpen: boolean;
-  onCreateListModalClose: () => void;
-};
+type Props = {};
 
 export default memo(CreateListModal);
-function CreateListModal({
-  isCreateListModalOpen,
-  onCreateListModalClose,
-}: Props) {
+function CreateListModal({}: Props) {
   const [value, setValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
+  const {
+    modalControls: { isCreateListModalOpen, onCreateListModalClose },
+  } = useTeamStateContext();
 
   function handleCreateList(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>

@@ -1,13 +1,15 @@
 import { Box, Button, Center } from "@chakra-ui/react";
 import { memo } from "react";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import EmptySpaceSVG from "../../../media/EmptySpaceSVG";
 
 type Props = {};
 
 export default memo(CreateListPanel);
 function CreateListPanel({}: Props) {
-  const { onCreateListModalOpen } = useModalControlContext();
+  const {
+    modalControls: { onCreateListModalOpen },
+  } = useTeamStateContext();
 
   return (
     <Center flexDir="column">

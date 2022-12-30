@@ -12,19 +12,17 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 
-type Props = {
-  isCreateFolderModalOpen: boolean;
-  onCreateFolderModalClose: () => void;
-};
+type Props = {};
 
 export default memo(CreateFolderModal);
-function CreateFolderModal({
-  isCreateFolderModalOpen,
-  onCreateFolderModalClose,
-}: Props) {
+function CreateFolderModal({}: Props) {
   const [value, setValue] = useState("");
   const bgColor = useColorModeValue("white", "darkMain.100");
+  const {
+    modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
+  } = useTeamStateContext();
 
   function handleCreateFolder(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
