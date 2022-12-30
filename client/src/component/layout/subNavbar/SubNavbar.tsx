@@ -53,7 +53,7 @@ function SubNavbar({
   // sync up url with openedListId
   useEffect(() => {
     if (teamState.teams.length) {
-      navigate(CLIENT_ROUTE.TASK_BOARD + `/${selectedListId}`, {
+      navigate(CLIENT_ROUTE.TASK_BOARD, {
         replace: true,
         state: selectedListId
           ? {

@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TASK_BOARD_PARAM } from "../../constant";
 import { useFetchTasks } from "../../hook/useFetch";
@@ -28,6 +28,7 @@ import Column from "./Column";
 import CreateListPanel from "./panel/CreateListPanel";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
 import CreateSpacePanel from "./panel/CreateSpacePanel";
+import useTeamStateContext from "../../context/team/useTeamContext";
 
 type Props = {
   sortBy: SortBy;
@@ -37,12 +38,28 @@ export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
   const param = useParams();
   const selectedListId = Number(param[TASK_BOARD_PARAM]);
+  const { teamState } = useTeamStateContext();
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
     selectedListId,
   });
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   //   console.log(taskState);
+
+  const currentTeam = useMemo(
+    () =>
+      teamState.teams.find(
+        (team) => team.id === teamState.activeTeamState.selectedTeamId
+      ),
+    [teamState]
+  );
+  const currentSpace = useMemo(
+    () =>
+      currentTeam?.spaces.find(
+        (space) => space.id === teamState.activeTeamState.selectedSpaceId
+      ),
+    [teamState]
+  );
 
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {
@@ -51,7 +68,7 @@ function TaskBoardView({ sortBy }: Props) {
     [taskState, sortBy]
   );
 
-  if (!selectedListId) {
+  if (!currentTeam?.spaces.length) {
     return (
       <Center height="50vh">
         <CreateSpacePanel />
@@ -59,19 +76,21 @@ function TaskBoardView({ sortBy }: Props) {
     );
   }
 
-  if (loading)
-    return (
-      <Center>
-        <Spinner />
-      </Center>
-    );
-
-  if (!taskState)
+  if (!currentSpace?.allListOrFolder.length) {
     return (
       <Center flexGrow={1} mt="-60px">
         <CreateListPanel />
       </Center>
     );
+  }
+
+  if (loading || !taskState) {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
 
   const selectedColumns = taskState.columnOptions[`${sortBy}Columns`];
 

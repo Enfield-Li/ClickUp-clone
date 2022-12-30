@@ -15,21 +15,8 @@ function MainContentRoute({}: Props) {
     <Routes>
       <Route path={CLIENT_ROUTE.HOME} element={<Home />} />
       <Route path={CLIENT_ROUTE.ABOUT} element={<About />} />
-      <Route
-        element={<TaskView />}
-        path={CLIENT_ROUTE.TASK_BOARD + `/:${TASK_BOARD_PARAM}`}
-      >
-        <Route
-          path={
-            CLIENT_ROUTE.TASK_BOARD +
-            `/:${TASK_BOARD_PARAM}` +
-            CLIENT_ROUTE.TASK +
-            `/:${TASK_PARAM}`
-          }
-          element={<TaskDetailModal />}
-        />
-      </Route>
       <Route path={CLIENT_ROUTE.TEST_DEV} element={<TestDev />} />
+      <Route path={CLIENT_ROUTE.TASK_BOARD} element={<TaskView />} />
     </Routes>
   );
 }
