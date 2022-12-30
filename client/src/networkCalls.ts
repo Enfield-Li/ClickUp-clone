@@ -111,7 +111,6 @@ export async function refreshUserToken(
     localStorage.removeItem(ACCESS_TOKEN);
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
-    navigate(CLIENT_ROUTE.LOGIN);
     toast({
       title: "Error!",
       description: err.response?.data as string,

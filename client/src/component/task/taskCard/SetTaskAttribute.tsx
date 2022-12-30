@@ -30,7 +30,9 @@ function SetTaskAttribute({
 
   function handleSetToFinish(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    const finishedColumnId = 3;
+    const finishedColumnId = taskStateContext?.columnOptions.statusColumns.find(
+      (column) => column.markAsClosed
+    )!.id!;
 
     updateTaskAttribute(
       authState.user!.id!,

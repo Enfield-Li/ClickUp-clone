@@ -4,7 +4,7 @@ import produce from "immer";
 import { memo, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TASK_BOARD_PARAM } from "../../constant";
-import { useLocalTasks } from "../../hook/useLocalState";
+import { useFetchTasks } from "../../hook/useFetch";
 import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
@@ -36,8 +36,7 @@ export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
   const param = useParams();
   const selectedListId = Number(param[TASK_BOARD_PARAM]);
-  //   const { taskState, loading, error, setTaskState } = useFetchTasks(sortBy);
-  const { taskState, loading, setTaskState } = useLocalTasks({
+  const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
     selectedListId,
   });
@@ -51,7 +50,7 @@ function TaskBoardView({ sortBy }: Props) {
     [taskState, sortBy]
   );
 
-  if (selectedListId === -1) {
+  if (!selectedListId) {
     return (
       <Center
         mt="-60px"
@@ -136,7 +135,6 @@ async function handleDragEnd(
   ) {
     return;
   }
-  const isDueDateColumn = sortBy === SortBy.DUE_DATE;
   const currentColumns = taskState.columnOptions[
     `${sortBy}Columns`
   ] as UndeterminedColumns;
@@ -158,9 +156,6 @@ async function handleDragEnd(
     ? lookUpColumnId[Number(destination.droppableId)]
     : Number(destination.droppableId);
 
-  const sourceTaskColumn = currentColumns.find(
-    (column) => column.id === sourceColumnId
-  );
   const sourceTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === sourceColumnId
   );

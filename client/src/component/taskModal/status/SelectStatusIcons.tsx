@@ -11,14 +11,11 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { memo, useState } from "react";
+import { memo, useMemo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy } from "../../../types";
-import {
-  newUpdateEvent,
-  updateTaskAttribute,
-} from "../../task/actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -29,17 +26,28 @@ function SelectStatusIcons({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
   const { authState } = useAuthContext();
-  const [onHover, setOnHover] = useState(false);
   const { isOpen, onToggle, onClose } = useDisclosure();
-
   const { task, taskStateContext } = useTaskDetailContext();
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
-  const column = columnOptions.statusColumns.find(
-    (column) => column.id === task!.status.columnId
+  const column = useMemo(
+    () =>
+      columnOptions.statusColumns.find(
+        (column) => column.id === task!.status.columnId
+      ),
+    [columnOptions]
   );
-  const columnIndex = columnOptions.statusColumns.findIndex(
-    (column) => column.id === task!.status.columnId
+  const columnIndex = useMemo(
+    () =>
+      columnOptions.statusColumns.findIndex(
+        (column) => column.id === task!.status.columnId
+      ),
+    [columnOptions]
+  );
+  const finishedColumnId = useMemo(
+    () =>
+      columnOptions.statusColumns.find((column) => column.markAsClosed)!.id!,
+    [columnOptions]
   );
 
   const isLastStatus = columnIndex + 1 === columnOptions.statusColumns.length;
@@ -61,8 +69,6 @@ function SelectStatusIcons({}: Props) {
   }
 
   function handleSetToFinish() {
-    const finishedColumnId = 3;
-
     updateTaskAttribute(
       authState.user!.id!,
       sortBy,
@@ -93,8 +99,6 @@ function SelectStatusIcons({}: Props) {
               width="fit-content"
               alignContent="center"
               justifyContent="center"
-              onMouseOverCapture={() => setOnHover(true)}
-              onMouseOutCapture={() => setOnHover(false)}
             >
               <Center
                 px={4}
@@ -105,7 +109,6 @@ function SelectStatusIcons({}: Props) {
                 borderLeftRadius="sm"
                 borderColor={column?.color}
                 backgroundColor={column?.color}
-                // height={onHover && !isOpen ? "37px" : "33px"}
               >
                 {/* Choose status */}
                 <PopoverTrigger>
@@ -153,13 +156,13 @@ function SelectStatusIcons({}: Props) {
                   borderColor={column?.color}
                   backgroundColor={column?.color}
                   onClick={() => handleNextStage()}
-                  //   height={onHover && !isOpen ? "37px" : "33px"}
                 >
                   <i className="bi bi-caret-right-fill"></i>
                 </Center>
               </Tooltip>
             </Flex>
 
+            {/* TODO */}
             {/* Set to finish */}
             {task!.status.columnId !== 3 && (
               <Box mx={2}>
