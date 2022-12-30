@@ -4,8 +4,10 @@ import {
   Flex,
   useColorMode,
   useDisclosure,
+  useModalContext,
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { Space, TEAM_STATE_ACTION } from "../../../types";
 import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
@@ -24,23 +26,19 @@ function SpaceComponent({ space }: Props) {
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
   const isCurrentSpaceSelected =
     teamState.activeTeamState.selectedSpaceId === space.id;
+  const {
+    isCreateListModalOpen,
+    onCreateListModalOpen,
+    onCreateListModalClose,
+    isCreateFolderModalOpen,
+    onCreateFolderModalOpen,
+    onCreateFolderModalClose,
+  } = useModalControlContext();
 
   const {
     isOpen: isPopoverOpen,
     onClose: onPopoverClose,
-    onOpen,
-  } = useDisclosure();
-
-  const {
-    isOpen: isCreateListModalOpen,
-    onOpen: onCreateListModalOpen,
-    onClose: onCreateListModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isCreateFolderModalOpen,
-    onOpen: onCreateFolderModalOpen,
-    onClose: onCreateFolderModalClose,
+    onOpen: onPopoverOpen,
   } = useDisclosure();
 
   function handleOpenSpace(
@@ -57,7 +55,7 @@ function SpaceComponent({ space }: Props) {
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ): void {
     e.stopPropagation();
-    onOpen();
+    onPopoverOpen();
     // throw new Error("Function not implemented.");
   }
 

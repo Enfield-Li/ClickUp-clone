@@ -1,11 +1,14 @@
 import { Box, Button, Center } from "@chakra-ui/react";
 import { memo } from "react";
-import EmptySpaceSVG from "../../media/EmptySpaceSVG";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import EmptySpaceSVG from "../../../media/EmptySpaceSVG";
 
 type Props = {};
 
 export default memo(CreateListPanel);
 function CreateListPanel({}: Props) {
+  const { onCreateListModalOpen } = useModalControlContext();
+
   return (
     <Center flexDir="column">
       <Box opacity="80%">
@@ -23,6 +26,7 @@ function CreateListPanel({}: Props) {
         color="lightMain.100"
         fontWeight="semibold"
         bgColor="customBlue.200"
+        onClick={onCreateListModalOpen}
         _hover={{ bgColor: "customBlue.100" }}
         _active={{}}
         _focus={{}}

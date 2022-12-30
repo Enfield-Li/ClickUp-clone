@@ -6,6 +6,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useEffect } from "react";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import { Team } from "../../../types";
 import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
 import SpaceComponent from "./SpaceComponent";
@@ -15,7 +16,11 @@ type Props = { currentTeam: Team | undefined };
 export default memo(SubNavbarContent);
 function SubNavbarContent({ currentTeam }: Props) {
   const { colorMode } = useColorMode();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isCreateSpaceModalOpen,
+    onCreateSpaceModalOpen,
+    onCreateSpaceModalClose,
+  } = useModalControlContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleClickToSeeEveryTasks(): void {
@@ -24,7 +29,7 @@ function SubNavbarContent({ currentTeam }: Props) {
 
   useEffect(() => {
     if (currentTeam && !currentTeam.spaces.length) {
-      onOpen();
+      onCreateSpaceModalOpen();
     }
   }, [currentTeam]);
 
@@ -73,7 +78,7 @@ function SubNavbarContent({ currentTeam }: Props) {
       )}
 
       <Flex
-        onClick={onOpen}
+        onClick={onCreateSpaceModalOpen}
         cursor="pointer"
         alignItems="center"
         color="lightMain.300"
@@ -87,7 +92,10 @@ function SubNavbarContent({ currentTeam }: Props) {
         </Center>
       </Flex>
 
-      <CreateSpaceModal isOpen={isOpen} onClose={onClose} />
+      <CreateSpaceModal
+        isOpen={isCreateSpaceModalOpen}
+        onClose={onCreateSpaceModalClose}
+      />
     </Box>
   );
 }

@@ -25,8 +25,9 @@ import {
   getLookUpReorderedColumnTable,
 } from "./actions/taskProcessing";
 import Column from "./Column";
-import CreateListPanel from "./CreateListPanel";
+import CreateListPanel from "./panel/CreateListPanel";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
+import CreateSpacePanel from "./panel/CreateSpacePanel";
 
 type Props = {
   sortBy: SortBy;
@@ -52,14 +53,8 @@ function TaskBoardView({ sortBy }: Props) {
 
   if (!selectedListId) {
     return (
-      <Center
-        mt="-60px"
-        flexGrow={1}
-        opacity="60%"
-        fontSize="20px"
-        fontWeight="semibold"
-      >
-        No Space
+      <Center height="50vh">
+        <CreateSpacePanel />
       </Center>
     );
   }

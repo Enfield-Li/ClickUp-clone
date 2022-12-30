@@ -393,6 +393,19 @@ export type TeamStateType = {
 export type TeamContextType = {
   teamState: TeamStateType;
   teamStateDispatch: React.Dispatch<TeamStateActionType>;
+  modalControls: {
+    isCreateListModalOpen: boolean;
+    onCreateListModalOpen: () => void;
+    onCreateListModalClose: () => void;
+
+    isCreateFolderModalOpen: boolean;
+    onCreateFolderModalOpen: () => void;
+    onCreateFolderModalClose: () => void;
+
+    isCreateSpaceModalOpen: boolean;
+    onCreateSpaceModalOpen: () => void;
+    onCreateSpaceModalClose: () => void;
+  };
 };
 
 export type TeamStateActionType =
@@ -512,4 +525,16 @@ export type TaskStateContext = {
   currentListId: number;
   setTaskState: SetTaskState;
   columnOptions: ColumnOptions;
+};
+
+export type ModalControlContextType = {
+  isCreateListModalOpen: boolean;
+  onCreateListModalOpen: () => void;
+  onCreateListModalClose: () => void;
+  isCreateFolderModalOpen: boolean;
+  onCreateFolderModalOpen: () => void;
+  onCreateFolderModalClose: () => void;
+  isCreateSpaceModalOpen: boolean;
+  onCreateSpaceModalOpen: () => void;
+  onCreateSpaceModalClose: () => void;
 };
