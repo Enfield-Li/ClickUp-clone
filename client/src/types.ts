@@ -263,8 +263,8 @@ export interface Category {
   id: number;
   name: string;
   spaceId: number;
-  owner: UserInfo;
   createdAt: Date;
+  creator: UserInfo;
   members: UserInfo[];
   isPrivate: boolean;
   color: string | null;
@@ -500,6 +500,7 @@ export interface CreateSpaceState {
 
 export interface CreateFolderDTO {
   name: string;
+  allLists: string[];
   isPrivate: boolean;
   members: UserInfo[];
 }

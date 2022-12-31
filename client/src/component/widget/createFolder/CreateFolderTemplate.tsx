@@ -75,14 +75,16 @@ export default function CreateFolderTemplate({
       <Divider borderColor="blackAlpha.500" opacity="100%" />
 
       <Box px="50px" py="6" mt="4">
-        <Box height="299.5px">{children}</Box>
+        <Box height="fit-content">{children}</Box>
 
         <Button
-          mt="38px"
+          mt="30px"
+          mb="20px"
           _focus={{}}
           _active={{}}
           width="100%"
           height="50px"
+          rounded="3px"
           color="white"
           display="block"
           bgColor="customBlue.200"

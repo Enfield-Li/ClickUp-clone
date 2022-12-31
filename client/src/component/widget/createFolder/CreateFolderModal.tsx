@@ -15,14 +15,17 @@ import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 
 type Props = {};
 
+const iniCreateFolderDTO = {
+  name: "",
+  members: [],
+  isPrivate: false,
+  allLists: ["list"],
+};
+
 const initCreateFolderState: CreateFolderState = {
-  createFolderDTO: {
-    name: "",
-    isPrivate: false,
-    members: [],
-  },
   selectedStatusColumns: [],
   step: CreateFolderStep.ENTRY,
+  createFolderDTO: iniCreateFolderDTO,
 };
 
 export default memo(CreateFolderModal);
@@ -45,11 +48,8 @@ function CreateFolderModal({}: Props) {
   function handleCancel() {
     setCreateFolder(
       produce(createFolder, (draftState) => {
-        draftState.createFolderDTO = {
-          isPrivate: false,
-          name: "",
-          members: [],
-        };
+        draftState.step = CreateFolderStep.ENTRY;
+        draftState.createFolderDTO = iniCreateFolderDTO;
       })
     );
     onCreateFolderModalClose();
@@ -116,7 +116,7 @@ function CreateFolderModal({}: Props) {
     >
       <ModalOverlay />
 
-      <ModalContent bgColor={bgColor} height="560px" rounded="md">
+      <ModalContent bgColor={bgColor} height="fit-content" rounded="md">
         {renderStepComponent()}
       </ModalContent>
     </Modal>
