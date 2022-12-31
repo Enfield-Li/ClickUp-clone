@@ -7,7 +7,7 @@ import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
+  setCreateSpace?: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export interface StatusCategoriesSelected {
@@ -34,7 +34,7 @@ function StatusColumnsDisplay({ setCreateSpace }: Props) {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory) {
+    if (selectedCategory && setCreateSpace) {
       setCreateSpace((prev) =>
         produce(prev, (draftState) => {
           draftState.selectedStatusColumns = selectedCategory.statusColumns;

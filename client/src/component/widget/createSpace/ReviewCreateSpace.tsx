@@ -12,6 +12,7 @@ import {
   CreateSpaceDTO,
   CreateSpaceStep,
 } from "../../../types";
+import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
   createSpace: CreateSpaceState;
@@ -30,7 +31,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
     orderIndex: "",
     name: "Space name",
     isPrivate: "Private setting",
-    defaultStatusColumnId: "Task statuses",
+    statusColumnsCategoryId: "Task statuses",
   };
 
   const lookUpStep: Record<keyof CreateSpaceDTO, CreateSpaceStep | null> = {
@@ -39,7 +40,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
     orderIndex: null,
     name: CreateSpaceStep.NAME,
     isPrivate: CreateSpaceStep.IS_PRIVATE,
-    defaultStatusColumnId: CreateSpaceStep.STATUS_COLUMNS,
+    statusColumnsCategoryId: CreateSpaceStep.STATUS_COLUMNS,
   };
 
   function handleRedirect(createSpaceStep: CreateSpaceStep | null): void {
@@ -67,7 +68,7 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
     teamId: <></>,
     name: <Box>{name}</Box>,
     isPrivate: isPrivate ? <Box>Private</Box> : <Box>Public</Box>,
-    defaultStatusColumnId: (
+    statusColumnsCategoryId: (
       <>
         {createSpace.selectedStatusColumns.map((column) => (
           <Tooltip
@@ -94,35 +95,43 @@ function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
   };
 
   return (
-    <Flex pt="6" height="100%" flexDir="column" justifyContent="center">
-      {Object.entries(createSpace.createSpaceDTO).map((kvPair, index) => {
-        const key = kvPair[0] as keyof CreateSpaceDTO;
+    <CreateSpaceModalTemplate
+      nextSection={null}
+      sectionName="All good?"
+      createSpace={createSpace}
+      setCreateSpace={setCreateSpace}
+      previousSection={CreateSpaceStep.STATUS_COLUMNS}
+    >
+      <Flex pt="6" height="100%" flexDir="column" justifyContent="center">
+        {Object.entries(createSpace.createSpaceDTO).map((kvPair, index) => {
+          const key = kvPair[0] as keyof CreateSpaceDTO;
 
-        return (
-          key !== "orderIndex" && (
-            <Flex
-              px="3"
-              key={index}
-              height="50px"
-              cursor="pointer"
-              borderWidth="1px"
-              bgColor={itemBgColor}
-              borderColor="blackAlpha.400"
-              justifyContent="space-between"
-              _hover={{ bgColor: itemHoverBgColor }}
-              borderTopRadius={key === "name" ? "sm" : ""}
-              onClick={() => handleRedirect(lookUpStep[key])}
-              borderBottomRadius={key === "isPrivate" ? "sm" : ""}
-            >
-              <Center fontWeight="semibold">{lookUpTitle[key]}</Center>
+          return (
+            key !== "orderIndex" && (
+              <Flex
+                px="3"
+                key={index}
+                height="50px"
+                cursor="pointer"
+                borderWidth="1px"
+                bgColor={itemBgColor}
+                borderColor="blackAlpha.400"
+                justifyContent="space-between"
+                _hover={{ bgColor: itemHoverBgColor }}
+                borderTopRadius={key === "name" ? "sm" : ""}
+                onClick={() => handleRedirect(lookUpStep[key])}
+                borderBottomRadius={key === "isPrivate" ? "sm" : ""}
+              >
+                <Center fontWeight="semibold">{lookUpTitle[key]}</Center>
 
-              <Flex alignItems="center" fontSize="12px" fontWeight="semibold">
-                {lookUpContent[key]}
+                <Flex alignItems="center" fontSize="12px" fontWeight="semibold">
+                  {lookUpContent[key]}
+                </Flex>
               </Flex>
-            </Flex>
-          )
-        );
-      })}
-    </Flex>
+            )
+          );
+        })}
+      </Flex>
+    </CreateSpaceModalTemplate>
   );
 }

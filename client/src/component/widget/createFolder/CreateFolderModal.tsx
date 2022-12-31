@@ -1,29 +1,35 @@
 import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Input,
   Modal,
-  ModalCloseButton,
   ModalContent,
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
+import produce from "immer";
 import { memo, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import CreateFolderItem from "./CreateFolderItem";
+import { CreateFolderState, CreateFolderStep } from "../../../types";
+import CreateFolderEntry from "./CreateFolderEntry";
+import CreateFolderSelectList from "./CreateFolderSelectList";
+import CreateFolderSelectStatus from "./CreateFolderSelectStatus";
+import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 
 type Props = {};
 
-type CreateFolderState = {
-    name: string;
-}
+const initCreateFolderState: CreateFolderState = {
+  createFolderDTO: {
+    name: "",
+    isPrivate: false,
+    members: [],
+  },
+  selectedStatusColumns: [],
+  step: CreateFolderStep.ENTRY,
+};
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
-  const [value, setValue] = useState("");
-  const [createFolder, setCreateFolder] = useState();
+  const [createFolder, setCreateFolder] = useState<CreateFolderState>(
+    initCreateFolderState
+  );
 
   const bgColor = useColorModeValue("white", "darkMain.100");
   const {
@@ -37,89 +43,81 @@ function CreateFolderModal({}: Props) {
   }
 
   function handleCancel() {
-    setValue("");
+    setCreateFolder(
+      produce(createFolder, (draftState) => {
+        draftState.createFolderDTO = {
+          isPrivate: false,
+          name: "",
+          members: [],
+        };
+      })
+    );
     onCreateFolderModalClose();
+  }
+
+  function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCreateFolder(
+      produce(createFolder, (draftState) => {
+        draftState.createFolderDTO.name = e.target.value;
+      })
+    );
+  }
+
+  function renderStepComponent() {
+    switch (createFolder.step) {
+      case CreateFolderStep.ENTRY: {
+        return (
+          <CreateFolderEntry
+            createFolder={createFolder}
+            setCreateFolder={setCreateFolder}
+          />
+        );
+      }
+
+      case CreateFolderStep.LISTS: {
+        return (
+          <CreateFolderSelectList
+            createFolder={createFolder}
+            setCreateFolder={setCreateFolder}
+          />
+        );
+      }
+
+      case CreateFolderStep.SHARE: {
+        return (
+          <CreateFolderSetPrivacy
+            createFolder={createFolder}
+            setCreateFolder={setCreateFolder}
+          />
+        );
+      }
+
+      case CreateFolderStep.STATUS: {
+        return (
+          <CreateFolderSelectStatus
+            createFolder={createFolder}
+            setCreateFolder={setCreateFolder}
+          />
+        );
+      }
+
+      default: {
+        throw new Error("CreateSpaceModal step failed");
+      }
+    }
   }
 
   return (
     <Modal
-      size="2xl"
+      size="4xl"
       onClose={handleCancel}
-      closeOnOverlayClick={false}
+      closeOnOverlayClick={true}
       isOpen={isCreateFolderModalOpen}
     >
       <ModalOverlay />
 
       <ModalContent bgColor={bgColor} height="560px" rounded="md">
-        <Center
-          px="37px"
-          height="100px"
-          alignItems="center"
-          borderTopRadius="md"
-        >
-          <Box fontSize="2xl" fontWeight="semibold">
-            Create Folder
-          </Box>
-
-          <ModalCloseButton
-            top="40px"
-            right="37px"
-            fontSize="lg"
-            position="absolute"
-            width="fit-content"
-            height="fit-content"
-            _hover={{ color: "purple.500" }}
-          />
-        </Center>
-
-        <Divider borderColor="blackAlpha.500" opacity="100%" />
-
-        <Box px="37px" py="6" mt="4">
-          <Box fontWeight="semibold" fontSize="sm" mb="1">
-            Folder name
-          </Box>
-
-          <Input
-            autoFocus
-            value={value}
-            variant="unstyled"
-            placeholder="Enter folder name"
-            onChange={(e) => setValue(e.target.value)}
-          />
-
-          <Box
-            mt="55px"
-            cursor="pointer"
-            borderWidth="1px"
-            fontWeight="semibold"
-            borderBottomWidth="0px"
-            borderColor="blackAlpha.500"
-          >
-            <CreateFolderItem left="Lists" right="List" />
-
-            <CreateFolderItem left="Share Folder with" right="people" />
-
-            <CreateFolderItem
-              left="Task statuses"
-              right="User Space statuses"
-            />
-          </Box>
-
-          <Button
-            mt="38px"
-            _focus={{}}
-            _active={{}}
-            width="100%"
-            height="50px"
-            color="white"
-            display="block"
-            bgColor="customBlue.200"
-            onClick={handleCreateFolder}
-            _hover={{ bgColor: "customBlue.100" }}
-          >
-            Create Folder
-          </Button>
-        </Box>
+        {renderStepComponent()}
       </ModalContent>
     </Modal>
   );

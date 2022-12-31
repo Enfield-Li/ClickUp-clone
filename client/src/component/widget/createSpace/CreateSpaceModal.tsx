@@ -10,7 +10,6 @@ import {
   CreateSpaceDTO,
   CreateSpaceStep,
 } from "../../../types";
-import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";
 import SpaceColorSetting from "./SpaceColorSetting";
@@ -24,7 +23,7 @@ const initCreateSpaceDTO: CreateSpaceDTO = {
   color: "gray",
   orderIndex: 0,
   isPrivate: false,
-  defaultStatusColumnId: 0,
+  statusColumnsCategoryId: 0,
 };
 
 const initialCreateSpace: CreateSpaceState = {
@@ -39,7 +38,6 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] =
     useState<CreateSpaceState>(initialCreateSpace);
-  const spaceName = createSpace.createSpaceDTO.name;
   const isAllSet = createSpace.isAllSet;
 
   function redirectToReview(createSpaceStep: CreateSpaceStep) {
@@ -65,63 +63,37 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.COLOR: {
         return (
-          <CreateSpaceModalTemplate
-            sectionName="Space color"
+          <SpaceColorSetting
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-            previousSection={CreateSpaceStep.NAME}
-            nextSection={redirectToReview(CreateSpaceStep.IS_PRIVATE)}
-          >
-            <SpaceColorSetting
-              createSpace={createSpace}
-              setCreateSpace={setCreateSpace}
-            />
-          </CreateSpaceModalTemplate>
+            redirectToReview={redirectToReview}
+          />
         );
       }
       case CreateSpaceStep.IS_PRIVATE: {
         return (
-          <CreateSpaceModalTemplate
+          <SpacePrivateSetting
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-            previousSection={CreateSpaceStep.COLOR}
-            sectionName={`Share Space "${spaceName}"`}
-            nextSection={redirectToReview(CreateSpaceStep.STATUS_COLUMNS)}
-          >
-            <SpacePrivateSetting
-              createSpace={createSpace}
-              setCreateSpace={setCreateSpace}
-            />
-          </CreateSpaceModalTemplate>
+            redirectToReview={redirectToReview}
+          />
         );
       }
       case CreateSpaceStep.STATUS_COLUMNS: {
         return (
-          <CreateSpaceModalTemplate
+          <SpaceColumnsSetting
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-            previousSection={CreateSpaceStep.IS_PRIVATE}
-            sectionName="What task statuses do you want?"
-            nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
-          >
-            <SpaceColumnsSetting setCreateSpace={setCreateSpace} />
-          </CreateSpaceModalTemplate>
+            redirectToReview={redirectToReview}
+          />
         );
       }
       case CreateSpaceStep.CONFIRM: {
         return (
-          <CreateSpaceModalTemplate
-            nextSection={null}
-            sectionName="All good?"
+          <ReviewCreateSpace
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
-            previousSection={CreateSpaceStep.STATUS_COLUMNS}
-          >
-            <ReviewCreateSpace
-              createSpace={createSpace}
-              setCreateSpace={setCreateSpace}
-            />
-          </CreateSpaceModalTemplate>
+          />
         );
       }
 

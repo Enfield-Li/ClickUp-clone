@@ -149,6 +149,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
       owner: userInfo,
       spaceId: 2,
       allLists: allFolder1ListForTeam1,
+      statusColumnsCategoryId: 1,
     },
     {
       id: 2,
@@ -161,6 +162,7 @@ export const allSpace1ListOrFolderForTeam1: (FolderCategory | ListCategory)[] =
       owner: userInfo,
       spaceId: 2,
       allLists: allFolder2ListForTeam1,
+      statusColumnsCategoryId: 1,
     },
     {
       id: 3,
@@ -218,7 +220,8 @@ const allSpace2ListOrFolderForTeam2: (FolderCategory | ListCategory)[] = [
     owner: userInfo,
     spaceId: 2,
     allLists: [],
-  },
+    statusColumnsCategoryId: 1
+},
   {
     id: 60,
     statusColumnsCategoryId: 1,

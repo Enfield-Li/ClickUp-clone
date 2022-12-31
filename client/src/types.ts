@@ -268,6 +268,7 @@ export interface Category {
   members: UserInfo[];
   isPrivate: boolean;
   color: string | null;
+  statusColumnsCategoryId: number;
 }
 export interface FolderCategory extends Category {
   isOpen: boolean | null; // client side
@@ -276,7 +277,6 @@ export interface FolderCategory extends Category {
 export interface ListCategory extends Category {
   taskAmount: number | null;
   parentFolderId: number | null;
-  statusColumnsCategoryId: number;
   //   boardViewSetting?: unknown
   //   listViewSetting?: unknown
 }
@@ -482,9 +482,8 @@ export interface CreateSpaceDTO {
   color: string;
   isPrivate: boolean;
   orderIndex: number;
-  defaultStatusColumnId: number;
+  statusColumnsCategoryId: number;
 }
-
 export enum CreateSpaceStep {
   NAME = "name",
   COLOR = "color",
@@ -499,19 +498,22 @@ export interface CreateSpaceState {
   selectedStatusColumns: StatusColumns;
 }
 
-// export interface CreateFolderDTO {
-//     name: string;
-//     isPrivate: boolean;
-    
-// }
-
-// export enum CreateFolderStep {
-//   ENTRY = "entry",
-//   LISTS = "lists",
-//   SHARE = "share",
-//   STATUS = "status",
-// }
-// export interface CreateFolderState {}
+export interface CreateFolderDTO {
+  name: string;
+  isPrivate: boolean;
+  members: UserInfo[];
+}
+export enum CreateFolderStep {
+  ENTRY = "entry",
+  LISTS = "lists",
+  SHARE = "share",
+  STATUS = "status",
+}
+export interface CreateFolderState {
+  step: CreateFolderStep;
+  createFolderDTO: CreateFolderDTO;
+  selectedStatusColumns: StatusColumns;
+}
 
 export type InitTeamDTO = {
   teams: Team[];

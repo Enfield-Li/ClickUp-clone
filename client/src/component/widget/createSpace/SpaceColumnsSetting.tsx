@@ -1,18 +1,32 @@
 import { Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import { CreateSpaceState } from "../../../types";
+import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
+import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
-  //   createSpace: CreateSpace;
+  createSpace: CreateSpaceState;
+  redirectToReview(createSpaceStep: CreateSpaceStep): CreateSpaceStep;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(SpaceColumnsSetting);
-function SpaceColumnsSetting({ setCreateSpace }: Props) {
+function SpaceColumnsSetting({
+  createSpace,
+  setCreateSpace,
+  redirectToReview,
+}: Props) {
   return (
-    <Flex pt="6" height="100%" alignItems="center">
-      <StatusColumnsDisplay setCreateSpace={setCreateSpace} />
-    </Flex>
+    <CreateSpaceModalTemplate
+      createSpace={createSpace}
+      setCreateSpace={setCreateSpace}
+      previousSection={CreateSpaceStep.IS_PRIVATE}
+      sectionName="What task statuses do you want?"
+      nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
+    >
+      <Flex pt="6" height="100%" alignItems="center">
+        <StatusColumnsDisplay setCreateSpace={setCreateSpace} />
+      </Flex>
+    </CreateSpaceModalTemplate>
   );
 }
