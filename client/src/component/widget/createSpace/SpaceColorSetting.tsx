@@ -2,12 +2,12 @@ import { NotAllowedIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Text } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import { CreateSpace } from "../../../types";
+import { CreateSpaceState } from "../../../types";
 import { spaceColors2D } from "../../../media/colors";
 
 type Props = {
-  createSpace: CreateSpace;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  createSpace: CreateSpaceState;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(SpaceColorSetting);

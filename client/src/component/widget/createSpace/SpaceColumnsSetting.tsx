@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import { CreateSpace } from "../../../types";
+import { CreateSpaceState } from "../../../types";
 import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
 
 type Props = {
   //   createSpace: CreateSpace;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(SpaceColumnsSetting);

@@ -1,11 +1,11 @@
 import { Box, Center, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import { CreateSpace } from "../../../types";
+import { CreateSpaceState } from "../../../types";
 
 type Props = {
-  createSpace: CreateSpace;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  createSpace: CreateSpaceState;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(SpacePrivateSetting);

@@ -7,11 +7,15 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo } from "react";
-import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../types";
+import {
+  CreateSpaceState,
+  CreateSpaceDTO,
+  CreateSpaceStep,
+} from "../../../types";
 
 type Props = {
-  createSpace: CreateSpace;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  createSpace: CreateSpaceState;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(ReviewCreateSpace);

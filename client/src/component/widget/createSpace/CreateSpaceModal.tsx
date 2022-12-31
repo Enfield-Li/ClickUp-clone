@@ -5,7 +5,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { CreateSpace, CreateSpaceDTO, CreateSpaceStep } from "../../../types";
+import {
+  CreateSpaceState,
+  CreateSpaceDTO,
+  CreateSpaceStep,
+} from "../../../types";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import EnterSpaceName from "./EnterSpaceName";
 import ReviewCreateSpace from "./ReviewCreateSpace";
@@ -23,7 +27,7 @@ const initCreateSpaceDTO: CreateSpaceDTO = {
   defaultStatusColumnId: 0,
 };
 
-const initialCreateSpace: CreateSpace = {
+const initialCreateSpace: CreateSpaceState = {
   createSpaceDTO: initCreateSpaceDTO,
   isAllSet: false,
   selectedStatusColumns: [],
@@ -34,7 +38,7 @@ export default memo(CreateSpaceModal);
 function CreateSpaceModal({ isOpen, onClose }: Props) {
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] =
-    useState<CreateSpace>(initialCreateSpace);
+    useState<CreateSpaceState>(initialCreateSpace);
   const spaceName = createSpace.createSpaceDTO.name;
   const isAllSet = createSpace.isAllSet;
 

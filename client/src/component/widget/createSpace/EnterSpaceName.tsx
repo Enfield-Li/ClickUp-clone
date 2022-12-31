@@ -10,12 +10,12 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { ChangeEvent, memo } from "react";
-import { CreateSpace, CreateSpaceStep } from "../../../types";
+import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import NewSpaceSVG from "../../../media/NewSpaceSVG";
 
 type Props = {
-  createSpace: CreateSpace;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  createSpace: CreateSpaceState;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(EnterSpaceName);

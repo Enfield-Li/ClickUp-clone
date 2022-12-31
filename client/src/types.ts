@@ -313,15 +313,6 @@ export type Team = {
   teamStatusColumn?: TeamStatusColumns;
 };
 
-export interface CreateSpaceDTO {
-  teamId?: number;
-  name: string;
-  color: string;
-  isPrivate: boolean;
-  orderIndex: number;
-  defaultStatusColumnId: number;
-}
-
 export interface User {
   id: number;
   color?: string;
@@ -485,6 +476,15 @@ export const TEAM_STATE_ACTION = {
   OPEN_SPACE: "open_space",
 } as const;
 
+export interface CreateSpaceDTO {
+  teamId?: number;
+  name: string;
+  color: string;
+  isPrivate: boolean;
+  orderIndex: number;
+  defaultStatusColumnId: number;
+}
+
 export enum CreateSpaceStep {
   NAME = "name",
   COLOR = "color",
@@ -492,12 +492,26 @@ export enum CreateSpaceStep {
   STATUS_COLUMNS = "status_columns",
   CONFIRM = "confirm",
 }
-export interface CreateSpace {
+export interface CreateSpaceState {
   isAllSet: boolean;
   step: CreateSpaceStep | null;
   createSpaceDTO: CreateSpaceDTO;
   selectedStatusColumns: StatusColumns;
 }
+
+// export interface CreateFolderDTO {
+//     name: string;
+//     isPrivate: boolean;
+    
+// }
+
+// export enum CreateFolderStep {
+//   ENTRY = "entry",
+//   LISTS = "lists",
+//   SHARE = "share",
+//   STATUS = "status",
+// }
+// export interface CreateFolderState {}
 
 export type InitTeamDTO = {
   teams: Team[];

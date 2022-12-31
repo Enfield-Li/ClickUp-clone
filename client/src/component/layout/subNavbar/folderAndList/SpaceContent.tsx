@@ -1,5 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
+import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { Space } from "../../../../types";
 import determineListType from "./determineList";
 import Folder from "./Folder";
@@ -9,6 +10,10 @@ type Props = { space: Space };
 
 export default memo(SpaceContent);
 function SpaceContent({ space }: Props) {
+  const {
+    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
+  } = useTeamStateContext();
+
   return (
     <Box>
       {space.allListOrFolder.length ? (
@@ -24,7 +29,28 @@ function SpaceContent({ space }: Props) {
           </Box>
         ))
       ) : (
-        <Center>Create a Folder or List</Center>
+        <Center>
+          Create a<span>&nbsp;</span>
+          <Box
+            cursor="pointer"
+            borderBottomWidth="1px"
+            borderBottomColor="white"
+            onClick={onCreateFolderModalOpen}
+          >
+            Folder
+          </Box>
+          <span>&nbsp;</span>
+          or
+          <span>&nbsp;</span>
+          <Box
+            cursor="pointer"
+            borderBottomWidth="1px"
+            borderBottomColor="white"
+            onClick={onCreateListModalOpen}
+          >
+            List
+          </Box>
+        </Center>
       )}
     </Box>
   );

@@ -2,12 +2,12 @@ import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { defaultTeamStatusColumns } from "../../../hook/mockData";
-import { CreateSpace, TeamStatusColumns } from "../../../types";
+import { CreateSpaceState, TeamStatusColumns } from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export interface StatusCategoriesSelected {

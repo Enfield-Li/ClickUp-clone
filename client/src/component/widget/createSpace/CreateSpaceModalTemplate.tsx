@@ -10,15 +10,19 @@ import {
 import produce from "immer";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { CreateSpaceStep, CreateSpace, CreateSpaceDTO } from "../../../types";
+import {
+  CreateSpaceStep,
+  CreateSpaceState,
+  CreateSpaceDTO,
+} from "../../../types";
 
 type Props = {
   sectionName: string;
-  createSpace: CreateSpace;
+  createSpace: CreateSpaceState;
   children: React.ReactNode;
   previousSection: CreateSpaceStep;
   nextSection: CreateSpaceStep | null;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpace>>;
+  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(CreateSpaceModalTemplate);

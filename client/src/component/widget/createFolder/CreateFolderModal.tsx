@@ -3,7 +3,6 @@ import {
   Button,
   Center,
   Divider,
-  Flex,
   Input,
   Modal,
   ModalCloseButton,
@@ -13,12 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
+import CreateFolderItem from "./CreateFolderItem";
 
 type Props = {};
+
+type CreateFolderState = {
+    name: string;
+}
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
   const [value, setValue] = useState("");
+  const [createFolder, setCreateFolder] = useState();
+
   const bgColor = useColorModeValue("white", "darkMain.100");
   const {
     modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
@@ -38,9 +44,9 @@ function CreateFolderModal({}: Props) {
   return (
     <Modal
       size="2xl"
+      onClose={handleCancel}
       closeOnOverlayClick={false}
       isOpen={isCreateFolderModalOpen}
-      onClose={onCreateFolderModalClose}
     >
       <ModalOverlay />
 
@@ -81,45 +87,22 @@ function CreateFolderModal({}: Props) {
             onChange={(e) => setValue(e.target.value)}
           />
 
-          <Box mt="55px">
-            <Flex
-              p="5"
-              px="4"
-              fontSize="small"
-              borderWidth="1px"
-              fontWeight="semibold"
-              borderBottomWidth="0px"
-              borderColor="blackAlpha.500"
-              justifyContent="space-between"
-            >
-              <Box>Lists</Box>
-              <Box>List </Box>
-            </Flex>
-            <Flex
-              p="5"
-              px="4"
-              fontSize="small"
-              borderWidth="1px"
-              fontWeight="semibold"
-              borderBottomWidth="0px"
-              borderColor="blackAlpha.500"
-              justifyContent="space-between"
-            >
-              <Box>Share Folder with</Box>
-              <Box>people</Box>
-            </Flex>
-            <Flex
-              p="5"
-              px="4"
-              fontSize="small"
-              borderWidth="1px"
-              fontWeight="semibold"
-              borderColor="blackAlpha.500"
-              justifyContent="space-between"
-            >
-              <Box>Task statuses</Box>
-              <Box>User Space statuses</Box>
-            </Flex>
+          <Box
+            mt="55px"
+            cursor="pointer"
+            borderWidth="1px"
+            fontWeight="semibold"
+            borderBottomWidth="0px"
+            borderColor="blackAlpha.500"
+          >
+            <CreateFolderItem left="Lists" right="List" />
+
+            <CreateFolderItem left="Share Folder with" right="people" />
+
+            <CreateFolderItem
+              left="Task statuses"
+              right="User Space statuses"
+            />
           </Box>
 
           <Button
@@ -131,6 +114,7 @@ function CreateFolderModal({}: Props) {
             color="white"
             display="block"
             bgColor="customBlue.200"
+            onClick={handleCreateFolder}
             _hover={{ bgColor: "customBlue.100" }}
           >
             Create Folder
