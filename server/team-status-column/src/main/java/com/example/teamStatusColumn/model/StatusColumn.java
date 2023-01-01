@@ -46,6 +46,7 @@ public class StatusColumn {
     private Integer teamStatusColumnId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "teamStatusColumnId")
     private TeamStatusColumn teamStatusColumn;
 

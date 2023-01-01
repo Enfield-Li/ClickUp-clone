@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EnableEurekaClient
 // @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(scanBasePackages = {
+        "com.example.teamStatusColumn",
         "com.example.amqp",
         "com.example.clients",
         "com.example.statusColumn",

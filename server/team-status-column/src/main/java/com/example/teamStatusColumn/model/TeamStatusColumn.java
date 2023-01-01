@@ -3,8 +3,10 @@ package com.example.teamStatusColumn.model;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,10 +33,9 @@ public class TeamStatusColumn {
     private String name;
 
     @NotNull
-    @Column(unique = true)
     private Integer teamId;
 
-    @OneToMany
+    @OneToMany(mappedBy = "teamStatusColumn", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<StatusColumn> statusColumns;
 
     public TeamStatusColumn(@NotNull String name,

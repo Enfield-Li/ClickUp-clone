@@ -2,6 +2,7 @@ package com.example.team.service;
 
 import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamStatusColumnRoutingKey;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class TeamService {
     String logErrorMsg = "InternalDataIntegrityException, This really shouldn't have happened...";
 
     public UserCredentials getCurrentUserInfo() {
+        // return new UserCredentials(1, "username");
         return (UserCredentials) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
@@ -75,13 +77,19 @@ public class TeamService {
             throw new InternalDataIntegrityException("Data integrity breached");
         }
 
-        // publish event
+        // publish events
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
                 userInfo.userId(), true);
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 AuthorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
+
+        var teamId = team.getId();
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                teamStatusColumnRoutingKey,
+                teamId);
 
         return true;
     }

@@ -1,6 +1,9 @@
 package com.example.teamStatusColumn;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.teamStatusColumn.model.StatusColumn;
@@ -18,6 +21,10 @@ public class TeamStatusColumnService {
     public Boolean createStatusColumn(StatusColumn statusColumn) {
         // statusColumnRepository.save(statusColumn);
         return true;
+    }
+
+    public List<TeamStatusColumn> getTeamStatusColumn(Integer teamId) {
+        return teamStatusColumnRepository.findAllByTeamId(teamId);
     }
 
     public Boolean initDefaultTeamStatusColumn(Integer teamId) {
