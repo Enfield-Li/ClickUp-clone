@@ -84,7 +84,7 @@ function initStatusColumnAndSelectedSpaceId(
   if (list.id === selectedListId) {
     draftState.activeTeamState.selectedSpaceId = spaceId;
 
-    const statusColumnCategory = team.teamStatusColumn!.find(
+    const statusColumnCategory = team.teamStatusColumns?.find(
       (category) => category.id === list.statusColumnsCategoryId
     );
     if (!statusColumnCategory) throw new Error(errorMsg);

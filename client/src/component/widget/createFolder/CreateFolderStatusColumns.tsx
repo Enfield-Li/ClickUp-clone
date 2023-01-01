@@ -1,5 +1,7 @@
+import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
+import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
 type Props = {
@@ -18,7 +20,9 @@ export default function CreateFolderStatusColumns({
       currentStep={CreateFolderStep.ENTRY}
       title="What task statuses do you want?"
     >
-      set privacy
+      <Flex height="100%">
+        <StatusColumnsDisplay setCreateFolder={setCreateFolder} />
+      </Flex>
     </CreateFolderTemplate>
   );
 }

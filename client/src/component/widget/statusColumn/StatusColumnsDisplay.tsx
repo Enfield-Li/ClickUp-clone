@@ -2,12 +2,17 @@ import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { defaultTeamStatusColumns } from "../../../hook/mockData";
-import { CreateSpaceState, TeamStatusColumns } from "../../../types";
+import {
+  CreateFolderState,
+  CreateSpaceState,
+  TeamStatusColumns,
+} from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
   setCreateSpace?: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
+  setCreateFolder?: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export interface StatusCategoriesSelected {
@@ -16,7 +21,7 @@ export interface StatusCategoriesSelected {
 }
 
 export default memo(StatusColumnsDisplay);
-function StatusColumnsDisplay({ setCreateSpace }: Props) {
+function StatusColumnsDisplay({ setCreateSpace, setCreateFolder }: Props) {
   const [statusCategories, setStatusCategories] =
     useState<StatusCategoriesSelected>({
       selectedCategoryName: "Custom",
@@ -34,12 +39,19 @@ function StatusColumnsDisplay({ setCreateSpace }: Props) {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory && setCreateSpace) {
-      setCreateSpace((prev) =>
-        produce(prev, (draftState) => {
-          draftState.selectedStatusColumns = selectedCategory.statusColumns;
-        })
-      );
+    if (selectedCategory) {
+      setCreateSpace &&
+        setCreateSpace((prev) =>
+          produce(prev, (draftState) => {
+            draftState.selectedStatusColumns = selectedCategory.statusColumns;
+          })
+        );
+      setCreateFolder &&
+        setCreateFolder((prev) =>
+          produce(prev, (draftState) => {
+            draftState.selectedStatusColumns = selectedCategory.statusColumns;
+          })
+        );
     }
   }, [selectedCategory]);
 
@@ -47,7 +59,7 @@ function StatusColumnsDisplay({ setCreateSpace }: Props) {
     <>
       <Box height="100%" width="50%" pr="4">
         <StatusTemplate
-          statusCategoriesSelected={statusCategories}
+          statusCategories={statusCategories}
           setStatusCategories={setStatusCategories}
         />
       </Box>

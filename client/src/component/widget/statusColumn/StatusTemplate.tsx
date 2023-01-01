@@ -1,21 +1,18 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
-import CategoryList from "./CategoryList";
+import StatusCategory from "./StatusCategory";
 import produce from "immer";
 
 type Props = {
-  statusCategoriesSelected: StatusCategoriesSelected;
+  statusCategories: StatusCategoriesSelected;
   setStatusCategories: React.Dispatch<
     React.SetStateAction<StatusCategoriesSelected>
   >;
 };
 
 export default memo(StatusTemplate);
-function StatusTemplate({
-  statusCategoriesSelected: statusCategories,
-  setStatusCategories,
-}: Props) {
+function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
   const [createCategory, setCreateCategory] = useState(false);
   const [createCategoryName, setCreateCategoryName] = useState("");
 
@@ -30,8 +27,9 @@ function StatusTemplate({
         const duplicateCategory = draftState.statusCategories.find(
           (category) => category.name === draftState.selectedCategoryName
         );
-        if (!duplicateCategory)
+        if (!duplicateCategory) {
           throw new Error("Cannot find existing category WTF?");
+        }
         duplicateCategory.name = createCategoryName;
 
         draftState.statusCategories.push(duplicateCategory);
@@ -75,7 +73,7 @@ function StatusTemplate({
 
         {statusCategories?.statusCategories.map((currentCategory, index) => (
           <Box key={index}>
-            <CategoryList
+            <StatusCategory
               currentCategory={currentCategory}
               statusCategoriesSelected={statusCategories}
               setStatusCategories={setStatusCategories}

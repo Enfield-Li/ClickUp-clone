@@ -24,7 +24,7 @@ function CreateSpaceStatusColumns({
       sectionName="What task statuses do you want?"
       nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
     >
-      <Flex pt="6" height="100%" alignItems="center">
+      <Flex pt="6" height="100%">
         <StatusColumnsDisplay setCreateSpace={setCreateSpace} />
       </Flex>
     </CreateSpaceModalTemplate>

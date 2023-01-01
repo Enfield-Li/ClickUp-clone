@@ -88,17 +88,11 @@ export const scrum: StatusColumns = [
 ];
 
 export const defaultTeamStatusColumns: TeamStatusColumns = [
-  { id: 1, defaultId: 1, teamId: 1, name: "Custom", statusColumns: custom },
-  { id: 2, defaultId: 2, teamId: 1, name: "Normal", statusColumns: normal },
-  { id: 3, defaultId: 3, teamId: 1, name: "Kanban", statusColumns: kanban },
-  {
-    id: 4,
-    defaultId: 4,
-    teamId: 1,
-    name: "Marketing",
-    statusColumns: marketing,
-  },
-  { id: 5, defaultId: 5, teamId: 1, name: "Scrum", statusColumns: scrum },
+  { id: 1, teamId: 1, name: "Custom", statusColumns: custom },
+  { id: 2, teamId: 1, name: "Normal", statusColumns: normal },
+  { id: 3, teamId: 1, name: "Kanban", statusColumns: kanban },
+  { id: 4, teamId: 1, name: "Marketing", statusColumns: marketing },
+  { id: 5, teamId: 1, name: "Scrum", statusColumns: scrum },
 ];
 
 const userInfo: UserInfo = { userId: 1, username: "mockUser", email: "" };
@@ -319,7 +313,7 @@ export const teams: Team[] = [
   {
     id: 1,
     spaces: initialSpaceListForTeam1,
-    teamStatusColumn: defaultTeamStatusColumns,
+    teamStatusColumns: defaultTeamStatusColumns,
     color: getRandomTeamColor(),
     owner: userInfo,
     isPrivate: false,
@@ -331,7 +325,7 @@ export const teams: Team[] = [
     spaces: initialSpaceList2ForTeam2,
     color: getRandomTeamColor(),
     owner: userInfo,
-    teamStatusColumn: defaultTeamStatusColumns,
+    teamStatusColumns: defaultTeamStatusColumns,
     isPrivate: false,
     name: "2workspace",
     members: [userInfo, guestUserInfo],
@@ -341,7 +335,7 @@ export const teams: Team[] = [
     spaces: [],
     color: getRandomSpaceColor(),
     owner: guestUserInfo,
-    teamStatusColumn: defaultTeamStatusColumns,
+    teamStatusColumns: defaultTeamStatusColumns,
     isPrivate: false,
     name: "3workspace",
     members: [userInfo, guestUserInfo],

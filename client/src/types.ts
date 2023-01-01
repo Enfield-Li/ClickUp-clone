@@ -296,7 +296,6 @@ export interface TeamStatusColumn {
   id: number;
   name: string;
   teamId: number;
-  defaultId: number;
   statusColumns: StatusColumns;
 }
 export type TeamStatusColumns = TeamStatusColumn[];
@@ -310,7 +309,7 @@ export type Team = {
   owner?: UserInfo;
   isPrivate: boolean;
   members: UserInfo[];
-  teamStatusColumn?: TeamStatusColumns;
+  teamStatusColumns?: TeamStatusColumns;
 };
 
 export interface User {

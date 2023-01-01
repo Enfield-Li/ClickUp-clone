@@ -13,8 +13,8 @@ type Props = {
   >;
 };
 
-export default memo(CategoryList);
-function CategoryList({
+export default memo(StatusCategory);
+function StatusCategory({
   currentCategory,
   statusCategoriesSelected: statusCategories,
   setStatusCategories,
@@ -57,20 +57,22 @@ function CategoryList({
     );
   }
 
+  function handleSelectCategory() {
+    setStatusCategories(
+      produce(statusCategories, (draftState) => {
+        draftState.selectedCategoryName = currentCategory.name;
+      })
+    );
+  }
+
   return (
     <Flex
       my="2"
       cursor="pointer"
       justifyContent="space-between"
+      onClick={handleSelectCategory}
       onMouseLeave={() => setHover(false)}
       onMouseOverCapture={() => setHover(true)}
-      onClick={() => {
-        setStatusCategories(
-          produce(statusCategories, (draftState) => {
-            draftState.selectedCategoryName = currentCategory.name;
-          })
-        );
-      }}
     >
       {editing ? (
         <Input
