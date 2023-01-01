@@ -20,7 +20,7 @@ public class TeamStatusColumnService {
         return true;
     }
 
-    public Boolean initTeamStatusColumn(Integer teamId) {
+    public Boolean initDefaultTeamStatusColumn(Integer teamId) {
         var defaultTeamStatusColumn = TeamStatusColumn
                 .initDefaultTeamStatusColumn(teamId);
         teamStatusColumnRepository.saveAll(defaultTeamStatusColumn);

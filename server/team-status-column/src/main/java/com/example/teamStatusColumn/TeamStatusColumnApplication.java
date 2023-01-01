@@ -9,11 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EnableEurekaClient
 // @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(scanBasePackages = {
-        // "com.example.amqp",
+        "com.example.amqp",
         "com.example.clients",
-        "service-config",
         "com.example.statusColumn",
-        // "com.example.serviceSecurityConfig",
+        "com.example.serviceConfig",
+        "com.example.serviceSecurityConfig",
+        "com.example.serviceExceptionHandling",
 })
 public class TeamStatusColumnApplication {
 
