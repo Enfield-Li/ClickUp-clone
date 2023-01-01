@@ -32,6 +32,7 @@ export default function CreateFolderEntry({
 
   return (
     <CreateFolderTemplate
+      title="Create folder"
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
       currentStep={CreateFolderStep.ENTRY}

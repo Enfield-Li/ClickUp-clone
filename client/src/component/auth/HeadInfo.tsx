@@ -28,7 +28,6 @@ function HeadInfo({ isLogin }: Props) {
     >
       <Center cursor="pointer">
         <Center boxSize="120px">
-          {/* <LogoSVG /> */}
           <img src={logo} />
         </Center>
         <Flex ml="2" alignItems="center">

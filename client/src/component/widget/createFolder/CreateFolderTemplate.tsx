@@ -5,11 +5,13 @@ import {
   Center,
   Divider,
   ModalCloseButton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 
 type Props = {
+  title: string;
   children: React.ReactNode;
   currentStep: CreateFolderStep;
   createFolder: CreateFolderState;
@@ -17,11 +19,14 @@ type Props = {
 };
 
 export default function CreateFolderTemplate({
+  title,
   children,
   currentStep,
   createFolder,
   setCreateFolder,
 }: Props) {
+  const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
+
   function handleGoBackToEntry() {
     setCreateFolder(
       produce(createFolder, (draftState) => {
@@ -58,7 +63,7 @@ export default function CreateFolderTemplate({
         )}
 
         <Box fontSize="2xl" fontWeight="semibold">
-          Create Folder
+          {title}
         </Box>
 
         <ModalCloseButton
@@ -74,8 +79,10 @@ export default function CreateFolderTemplate({
 
       <Divider borderColor="blackAlpha.500" opacity="100%" />
 
-      <Box px="50px" py="6" mt="4">
-        <Box height="fit-content">{children}</Box>
+      <Box px="50px" py="6" mt="1">
+        <Box height="fit-content" color={fontColor}>
+          {children}
+        </Box>
 
         <Button
           mt="30px"

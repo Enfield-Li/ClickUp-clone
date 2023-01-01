@@ -1,11 +1,11 @@
-import { ACCESS_TOKEN } from "./constant";
-import { teams, initPanelActivity } from "./hook/mockData";
+import { ACCESS_TOKEN } from "../constant";
+import { teams, initPanelActivity } from "../hook/mockData";
 
 export function fetchTeamListLocal() {
   return { teams, initPanelActivity };
 }
 
-import { RegisterUserDTO, AuthActionType, AUTH_ACTION } from "./types";
+import { RegisterUserDTO, AuthActionType, AUTH_ACTION } from "../types";
 
 export async function registerUserLocal(
   registerCredentials: RegisterUserDTO,

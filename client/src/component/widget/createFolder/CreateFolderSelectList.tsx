@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
   Input,
@@ -81,6 +80,7 @@ export default function CreateFolderSelectList({
   return (
     <CreateFolderTemplate
       createFolder={createFolder}
+      title="Your tasks live in Lists"
       setCreateFolder={setCreateFolder}
       currentStep={CreateFolderStep.ENTRY}
     >

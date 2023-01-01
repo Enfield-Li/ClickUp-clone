@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
@@ -17,8 +16,8 @@ export default function CreateFolderSelectStatus({
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
       currentStep={CreateFolderStep.ENTRY}
+      title="What task statuses do you want?"
     >
-      <Link replace={true} to="" />
       set privacy
     </CreateFolderTemplate>
   );

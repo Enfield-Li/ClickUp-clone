@@ -306,10 +306,10 @@ export type Team = {
   name: string;
   color: string;
   avatar?: string;
-  owner?: UserInfo;
-  member: UserInfo[];
-  isPrivate: boolean;
   spaces: Space[];
+  owner?: UserInfo;
+  isPrivate: boolean;
+  members: UserInfo[];
   teamStatusColumn?: TeamStatusColumns;
 };
 

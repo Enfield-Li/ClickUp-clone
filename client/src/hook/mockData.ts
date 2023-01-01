@@ -324,7 +324,7 @@ export const teams: Team[] = [
     owner: userInfo,
     isPrivate: false,
     name: "1",
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
   },
   {
     id: 2,
@@ -334,7 +334,7 @@ export const teams: Team[] = [
     teamStatusColumn: defaultTeamStatusColumns,
     isPrivate: false,
     name: "2workspace",
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
   },
   {
     id: 3,
@@ -344,7 +344,7 @@ export const teams: Team[] = [
     teamStatusColumn: defaultTeamStatusColumns,
     isPrivate: false,
     name: "3workspace",
-    member: [userInfo, guestUserInfo],
+    members: [userInfo, guestUserInfo],
   },
 ];
 
