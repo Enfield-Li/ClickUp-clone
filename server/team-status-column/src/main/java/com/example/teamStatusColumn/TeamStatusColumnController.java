@@ -17,9 +17,9 @@ import com.example.teamStatusColumn.model.StatusColumn;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(TEAM_API_VERSION)
-class StatusColumnController {
+class TeamStatusColumnController {
 
-    private final StatusColumnService statusColumnService;
+    private final TeamStatusColumnService statusColumnService;
 
     @GetMapping
     String test() {

@@ -21,12 +21,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class TeamStatusColumn {
+public class TeamStatusColumn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
     private String name;
 
     @NotNull
@@ -36,8 +37,8 @@ class TeamStatusColumn {
     @OneToMany
     private Set<StatusColumn> statusColumns;
 
-    public TeamStatusColumn(String name, Set<StatusColumn> statusColumns,
-            @NotNull Integer teamId) {
+    public TeamStatusColumn(@NotNull String name,
+            Set<StatusColumn> statusColumns, @NotNull Integer teamId) {
         this.name = name;
         this.teamId = teamId;
         this.statusColumns = statusColumns;
@@ -51,16 +52,11 @@ class TeamStatusColumn {
         var kanbanStatusColumns = StatusColumn.initKanbanStatusColumns();
         var marketingStatusColumns = StatusColumn.initMarketingStatusColumns();
 
-        var scrum = new TeamStatusColumn(
-                "Scrum", scrumStatusColumns, teamId);
-        var custom = new TeamStatusColumn(
-                "Custom", customStatusColumns, teamId);
-        var normal = new TeamStatusColumn(
-                "Normal", normalStatusColumns, teamId);
-        var kanban = new TeamStatusColumn(
-                "Kanban", kanbanStatusColumns, teamId);
-        var marketing = new TeamStatusColumn(
-                "Marketing", marketingStatusColumns, teamId);
+        var scrum = new TeamStatusColumn("Scrum", scrumStatusColumns, teamId);
+        var custom = new TeamStatusColumn("Custom", customStatusColumns, teamId);
+        var normal = new TeamStatusColumn("Normal", normalStatusColumns, teamId);
+        var kanban = new TeamStatusColumn("Kanban", kanbanStatusColumns, teamId);
+        var marketing = new TeamStatusColumn("Marketing", marketingStatusColumns, teamId);
 
         bindTeamStatusColumn(scrum, scrumStatusColumns);
         bindTeamStatusColumn(custom, customStatusColumns);

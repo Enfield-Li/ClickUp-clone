@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.teamStatusColumn.model.StatusColumn;
+import com.example.teamStatusColumn.model.TeamStatusColumn;
+import com.example.teamStatusColumn.repository.StatusColumnRepository;
+import com.example.teamStatusColumn.repository.TeamStatusColumnRepository;
 
 @Service
 @RequiredArgsConstructor
-public class StatusColumnService {
+public class TeamStatusColumnService {
 
     private final StatusColumnRepository statusColumnRepository;
+    private final TeamStatusColumnRepository teamStatusColumnRepository;
 
     public Boolean createStatusColumn(StatusColumn statusColumn) {
         // statusColumnRepository.save(statusColumn);
@@ -17,7 +21,9 @@ public class StatusColumnService {
     }
 
     public Boolean initTeamStatusColumn(Integer teamId) {
-        // statusColumnRepository.save(statusColumn);
+        var defaultTeamStatusColumn = TeamStatusColumn
+                .initDefaultTeamStatusColumn(teamId);
+        teamStatusColumnRepository.saveAll(defaultTeamStatusColumn);
         return true;
     }
 }

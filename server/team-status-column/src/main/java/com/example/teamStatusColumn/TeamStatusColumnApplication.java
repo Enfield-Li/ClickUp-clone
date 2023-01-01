@@ -15,9 +15,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.example.statusColumn",
         // "com.example.serviceSecurityConfig",
 })
-public class StatusColumnApplication {
+public class TeamStatusColumnApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StatusColumnApplication.class, args);
+        SpringApplication.run(TeamStatusColumnApplication.class, args);
     }
 }
