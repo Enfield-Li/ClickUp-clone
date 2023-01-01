@@ -10,8 +10,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
-export default memo(SpacePrivateSetting);
-function SpacePrivateSetting({
+export default memo(CreateSpaceSetPrivacy);
+function CreateSpaceSetPrivacy({
   createSpace,
   setCreateSpace,
   redirectToReview,

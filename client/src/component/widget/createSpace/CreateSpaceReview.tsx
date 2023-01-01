@@ -19,8 +19,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
-export default memo(ReviewCreateSpace);
-function ReviewCreateSpace({ createSpace, setCreateSpace }: Props) {
+export default memo(CreateSpaceReview);
+function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
   const { color, isPrivate, name } = createSpace.createSpaceDTO;
   const itemBgColor = useColorModeValue("white", "darkMain.100");
   const itemHoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");

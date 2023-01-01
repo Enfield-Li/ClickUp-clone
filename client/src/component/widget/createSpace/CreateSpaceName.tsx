@@ -18,8 +18,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
-export default memo(EnterSpaceName);
-function EnterSpaceName({ createSpace, setCreateSpace }: Props) {
+export default memo(CreateSpaceName);
+function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   const inputBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {

@@ -10,11 +10,11 @@ import {
   CreateSpaceDTO,
   CreateSpaceStep,
 } from "../../../types";
-import EnterSpaceName from "./EnterSpaceName";
-import ReviewCreateSpace from "./ReviewCreateSpace";
-import SpaceColorSetting from "./SpaceColorSetting";
-import SpaceColumnsSetting from "./SpaceColumnsSetting";
-import SpacePrivateSetting from "./SpacePrivateSetting";
+import CreateSpaceName from "./CreateSpaceName";
+import CreateSpaceReview from "./CreateSpaceReview";
+import CreateSpaceColor from "./CreateSpaceColor";
+import CreateSpaceStatusColumns from "./CreateSpaceStatusColumns";
+import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
 
 type Props = { isOpen: boolean; onClose: () => void };
 
@@ -55,7 +55,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
     switch (createSpace.step) {
       case CreateSpaceStep.NAME: {
         return (
-          <EnterSpaceName
+          <CreateSpaceName
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
           />
@@ -63,7 +63,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.COLOR: {
         return (
-          <SpaceColorSetting
+          <CreateSpaceColor
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
             redirectToReview={redirectToReview}
@@ -72,7 +72,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.IS_PRIVATE: {
         return (
-          <SpacePrivateSetting
+          <CreateSpaceSetPrivacy
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
             redirectToReview={redirectToReview}
@@ -81,7 +81,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.STATUS_COLUMNS: {
         return (
-          <SpaceColumnsSetting
+          <CreateSpaceStatusColumns
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
             redirectToReview={redirectToReview}
@@ -90,7 +90,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
       }
       case CreateSpaceStep.CONFIRM: {
         return (
-          <ReviewCreateSpace
+          <CreateSpaceReview
             createSpace={createSpace}
             setCreateSpace={setCreateSpace}
           />

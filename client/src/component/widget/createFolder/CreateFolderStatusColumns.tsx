@@ -7,7 +7,7 @@ type Props = {
   setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
-export default function CreateFolderSelectStatus({
+export default function CreateFolderStatusColumns({
   createFolder,
   setCreateFolder,
 }: Props) {

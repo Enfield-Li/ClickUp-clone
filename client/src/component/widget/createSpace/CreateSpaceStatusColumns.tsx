@@ -10,8 +10,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
-export default memo(SpaceColumnsSetting);
-function SpaceColumnsSetting({
+export default memo(CreateSpaceStatusColumns);
+function CreateSpaceStatusColumns({
   createSpace,
   setCreateSpace,
   redirectToReview,

@@ -12,8 +12,8 @@ type Props = {
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
-export default memo(SpaceColorSetting);
-function SpaceColorSetting({
+export default memo(CreateSpaceColor);
+function CreateSpaceColor({
   createSpace,
   setCreateSpace,
   redirectToReview,

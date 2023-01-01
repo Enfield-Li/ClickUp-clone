@@ -10,7 +10,7 @@ import useTeamStateContext from "../../../context/team/useTeamContext";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderEntry from "./CreateFolderEntry";
 import CreateFolderSelectList from "./CreateFolderSelectList";
-import CreateFolderSelectStatus from "./CreateFolderSelectStatus";
+import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
 import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 
 type Props = {};
@@ -94,7 +94,7 @@ function CreateFolderModal({}: Props) {
 
       case CreateFolderStep.STATUS: {
         return (
-          <CreateFolderSelectStatus
+          <CreateFolderStatusColumns
             createFolder={createFolder}
             setCreateFolder={setCreateFolder}
           />
