@@ -42,7 +42,7 @@ public class StatusCategory {
     @NotNull
     private Integer teamId;
 
-    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<StatusColumn> statusColumns;
 
     public StatusCategory(@NotNull String name,
@@ -86,6 +86,8 @@ public class StatusCategory {
     public static StatusCategory convertCreateStatusCategoryDTO(
             CreateStatusCategoryDTO dto) {
         var statusColumns = dto.statusColumns();
+        statusColumns.forEach(statusColumn -> statusColumn.setId(null));
+
         var statusCategory = StatusCategory.builder()
                 .name(dto.name())
                 .teamId(dto.teamId())
