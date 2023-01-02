@@ -1,7 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { defaultStatusCategories } from "../../../hook/mockData";
 import {
   CreateFolderState,
   CreateSpaceState,
@@ -30,7 +29,6 @@ function StatusColumnsDisplay({
   );
 
   useEffect(() => {
-    // setStatusCategories(defaultStatusCategories);
     setStatusCategories(statusCategoriesData);
   }, []);
 

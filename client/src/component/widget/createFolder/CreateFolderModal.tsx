@@ -42,7 +42,6 @@ function CreateFolderModal({}: Props) {
   const {
     modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
   } = useTeamStateContext();
-  console.log(createFolder);
 
   useEffect(() => {
     if (isCreateFolderModalOpen && teamId) {

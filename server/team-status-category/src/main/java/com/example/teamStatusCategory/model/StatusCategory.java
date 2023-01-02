@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
@@ -25,6 +27,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "name", "teamId" })
+})
 public class StatusCategory {
 
     @Id
@@ -37,7 +42,7 @@ public class StatusCategory {
     @NotNull
     private Integer teamId;
 
-    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<StatusColumn> statusColumns;
 
     public StatusCategory(@NotNull String name,

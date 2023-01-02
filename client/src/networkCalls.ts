@@ -13,6 +13,7 @@ import {
   LoginUserDTO,
   RegisterUserDTO,
   StatusCategories,
+  StatusCategory,
   Task,
   TaskEvents,
   TaskList,
@@ -37,6 +38,27 @@ export async function fetchTeamStatusCategories(
     const response =
       await axiosStatusCategoryServiceInstance.get<StatusCategories>(
         API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
+      );
+
+    response.data[0].isSelected = true;
+    onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+  }
+}
+
+export async function createStatusCategory(
+  statusCategory: StatusCategory,
+  onSuccess: (data: StatusCategory) => void
+  //   onFailure?: (msg: string) => void
+) {
+  try {
+    const response =
+      await axiosStatusCategoryServiceInstance.post<StatusCategory>(
+        API_ENDPOINT.STATUS_CATEGORY,
+        statusCategory
       );
 
     onSuccess(response.data);

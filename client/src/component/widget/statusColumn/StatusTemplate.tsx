@@ -2,8 +2,9 @@ import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import StatusCategoryItem from "./StatusCategory";
 import produce from "immer";
-import { StatusCategories } from "../../../types";
+import { StatusCategories, StatusCategory } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
+import { createStatusCategory } from "../../../networkCalls";
 
 type Props = {
   statusCategories: StatusCategories;
@@ -28,15 +29,16 @@ function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
       throw new Error("Cannot find existing category");
     }
 
-    const newCategory = deepCopy(selectedCategory);
+    const newCategory = deepCopy(selectedCategory) as StatusCategory;
     newCategory.name = createCategoryName;
-    // network calls
 
-    setStatusCategories(
-      produce(statusCategories, (draftState) => {
-        draftState.push(newCategory);
-      })
-    );
+    createStatusCategory(newCategory, (data) => {
+      setStatusCategories(
+        produce(statusCategories, (draftState) => {
+          draftState.push(data);
+        })
+      );
+    });
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void {
