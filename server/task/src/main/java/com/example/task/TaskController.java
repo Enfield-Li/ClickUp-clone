@@ -44,21 +44,22 @@ class TaskController {
     }
 
     @GetMapping("/{listId}")
-    ResponseEntity<List<Task>> getAllTasks(@RequestParam("listId") Integer listId) {
+    ResponseEntity<List<Task>> getAllTasks(
+            @PathVariable("listId") Integer listId) {
         var allTasks = taskService.getAllTasks(listId);
         return ResponseEntity.ok(allTasks);
     }
 
     @PostMapping
     ResponseEntity<Task> createTask(
-            @Valid @RequestBody CreateTaskDTO createTaskDTO) {
+            @RequestBody CreateTaskDTO createTaskDTO) {
         var task = taskService.createTask(createTaskDTO);
         return ResponseEntity.ok(task);
     }
 
     @PutMapping
     ResponseEntity<Boolean> updateTasksPosition(
-            @Valid @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO) {
+            @RequestBody UpdateTasksPositionDTO updateTasksPositionDTO) {
         var updatedTasks = taskService.updateTasksPosition(
                 updateTasksPositionDTO);
         return ResponseEntity.ok(updatedTasks);
@@ -74,14 +75,14 @@ class TaskController {
 
     @PutMapping("/update_title")
     ResponseEntity<Boolean> updateTaskTitle(
-            @Valid @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO) {
+            @RequestBody UpdateTaskTitleDTO updateTaskTitleDTO) {
         var updated = taskService.updateTaskTitle(updateTaskTitleDTO);
         return ResponseEntity.ok(updated);
     }
 
     @PutMapping("/update_desc")
     ResponseEntity<Boolean> updateTasksDesc(
-            @Valid @RequestBody UpdateTaskDescDTO updateTaskDescDTO) {
+            @RequestBody UpdateTaskDescDTO updateTaskDescDTO) {
         var updated = taskService.updateTaskDesc(updateTaskDescDTO);
         return ResponseEntity.ok(updated);
     }
