@@ -15,6 +15,7 @@ import { StatusColumn } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
 import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
+import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 
 type Props = {
   statusAmount: number | undefined;
@@ -39,6 +40,8 @@ function AddStatus({
   function handleSelectColor(selectedColor: string) {
     setColor(selectedColor);
   }
+  const errMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
+  // <i className="bi bi-exclamation-triangle-fill"></i>;
 
   function resetAll() {
     setTitle("");
@@ -57,26 +60,34 @@ function AddStatus({
     if (!title && !e.currentTarget.contains(e.relatedTarget)) {
       resetAll();
     } else if (title) {
-      handleAddCategory();
-      resetAll();
+      setTitle("");
+      handleAddStatus();
+      setColor(getRandomSpaceColor);
     }
   }
 
-  async function handleAddCategory() {
-    // const newColumn: StatusColumn = {
-    //   color,
-    //   orderIndex: statusAmount ? statusAmount + 1 : 1,
-    //   title,
-    // };
-    // setStatusCategories((prev) =>
-    //   produce(prev, (draftState) => {
-    //     draftState.statusCategories.forEach((category) => {
-    //       if (category.name === selectedCategoryName) {
-    //         // category.statusColumns.push(newColumn);
-    //       }
-    //     });
-    //   })
-    // );
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.code === "NumpadEnter") {
+      handleAddStatus();
+    }
+  }
+
+  async function handleAddStatus() {
+    const newColumn: StatusColumn = {
+      id: getRandomNumberNoLimit(),
+      color,
+      orderIndex: statusAmount ? statusAmount + 1 : 1,
+      title,
+    };
+    setStatusCategories((prev) =>
+      produce(prev, (draftState) => {
+        draftState.statusCategories.forEach((category) => {
+          if (category.name === selectedCategoryName) {
+            category.statusColumns.push(newColumn);
+          }
+        });
+      })
+    );
   }
 
   return (
@@ -171,8 +182,15 @@ function AddStatus({
             rounded={undefined}
             fontWeight="semibold"
             textTransform="uppercase"
+            onKeyPress={handleKeyPress}
             onChange={(e) => setTitle(e.target.value)}
           />
+
+          {title && (
+            <Box fontSize="10px" opacity="60%">
+              <i className="bi bi-arrow-return-left"></i>
+            </Box>
+          )}
         </Flex>
       ) : (
         <Button

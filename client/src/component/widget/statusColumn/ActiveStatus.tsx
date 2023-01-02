@@ -18,9 +18,9 @@ function ActiveStatus({
   selectedCategoryName,
   setStatusCategories,
 }: Props) {
+  const [title, setTitle] = useState("");
   const [hover, setHover] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState("");
 
   useEffect(() => {
     setTitle(currentStatusColumn.title);
@@ -55,6 +55,10 @@ function ActiveStatus({
         });
       })
     );
+  }
+
+  function handleEdit(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.stopPropagation();
   }
 
   return (
@@ -114,7 +118,7 @@ function ActiveStatus({
       </Flex>
 
       {/* Options */}
-      <Center _hover={{ color: "purple.500" }}>
+      <Center _hover={{ color: "purple.500" }} onClick={handleEdit}>
         <i className="bi bi-three-dots"></i>
       </Center>
     </Flex>

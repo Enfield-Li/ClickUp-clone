@@ -48,7 +48,7 @@ function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
 
   return (
     <Box height="80%">
-      <Box ml="3" maxHeight="200px" overflow="auto">
+      <Box ml="3" maxHeight="235px" overflow="auto">
         <Flex alignItems="center">
           <Box
             opacity="50%"
