@@ -11,21 +11,23 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
-import { StatusCategories, StatusColumn } from "../../../types";
 import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
+import { StatusCategoryState, StatusColumn } from "../../../types";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 
 type Props = {
-  statusAmount: number | undefined;
   selectedCategoryName: string | undefined;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  statusCategoriesAmount: number | undefined;
+  setStatusCategoryState: React.Dispatch<
+    React.SetStateAction<StatusCategoryState>
+  >;
 };
 
 export default memo(AddStatus);
 function AddStatus({
-  setStatusCategories,
   selectedCategoryName,
-  statusAmount,
+  setStatusCategoryState,
+  statusCategoriesAmount,
 }: Props) {
   const [title, setTitle] = useState("");
   const [adding, setAdding] = useState(false);
@@ -69,16 +71,25 @@ function AddStatus({
   }
 
   async function handleAddStatus() {
+    const orderIndex = statusCategoriesAmount ? statusCategoriesAmount + 1 : 1;
     const newColumn: StatusColumn = {
       id: getRandomNumberNoLimit(),
       color,
-      orderIndex: statusAmount ? statusAmount + 1 : 1,
+      orderIndex,
       title,
     };
-    setStatusCategories((prev) =>
+    setStatusCategoryState((prev) =>
       produce(prev, (draftState) => {
-        draftState.forEach((category) => {
+        draftState.categories.forEach((category) => {
           if (category.name === selectedCategoryName) {
+            const isTitleExist = category.statusColumns.some(
+              (column) => column.title.toLowerCase() === title.toLowerCase()
+            );
+            if (isTitleExist) {
+              draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
+              return;
+            }
+
             category.statusColumns.push(newColumn);
           }
         });

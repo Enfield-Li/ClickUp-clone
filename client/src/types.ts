@@ -310,7 +310,7 @@ export type Team = {
   owner?: UserInfo;
   isPrivate: boolean;
   members: UserInfo[];
-  statusCategories?: StatusCategories;
+  statusCategoryState?: StatusCategories;
 };
 
 export interface User {
@@ -556,4 +556,9 @@ export type ModalControlContextType = {
   isCreateSpaceModalOpen: boolean;
   onCreateSpaceModalOpen: () => void;
   onCreateSpaceModalClose: () => void;
+};
+
+export type StatusCategoryState = {
+  categories: StatusCategories;
+  errorMsg: string;
 };

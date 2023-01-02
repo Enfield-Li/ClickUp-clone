@@ -1,19 +1,21 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { StatusCategories, StatusColumn } from "../../../types";
+import { StatusCategoryState, StatusColumn } from "../../../types";
 
 type Props = {
   currentStatusColumn: StatusColumn;
   selectedCategoryName: string | undefined;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  setStatusCategoryState: React.Dispatch<
+    React.SetStateAction<StatusCategoryState>
+  >;
 };
 
 export default memo(ActiveStatus);
 function ActiveStatus({
   currentStatusColumn,
   selectedCategoryName,
-  setStatusCategories,
+  setStatusCategoryState,
 }: Props) {
   const [title, setTitle] = useState("");
   const [hover, setHover] = useState(false);
@@ -39,9 +41,9 @@ function ActiveStatus({
   }
 
   function updateStatusTitle() {
-    setStatusCategories((prev) =>
+    setStatusCategoryState((prev) =>
       produce(prev, (draftState) => {
-        draftState.forEach((category) => {
+        draftState.categories.forEach((category) => {
           if (category.name === selectedCategoryName) {
             category.statusColumns.forEach((column) => {
               if (column.id === currentStatusColumn.id) {

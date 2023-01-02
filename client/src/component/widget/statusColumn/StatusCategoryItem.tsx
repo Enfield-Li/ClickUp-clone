@@ -2,31 +2,28 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
-import { StatusCategories, StatusCategory } from "../../../types";
+import { StatusCategory, StatusCategoryState } from "../../../types";
 
 type Props = {
   currentCategory: StatusCategory;
-  statusCategoriesSelected: StatusCategories;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  statusCategoriesSelected: StatusCategoryState;
+  setStatusCategoryState: React.Dispatch<
+    React.SetStateAction<StatusCategoryState>
+  >;
 };
 
 export default memo(StatusCategoryItem);
 function StatusCategoryItem({
   currentCategory,
-  statusCategoriesSelected: statusCategories,
-  setStatusCategories,
+  statusCategoriesSelected: statusCategoryState,
+  setStatusCategoryState,
 }: Props) {
   const [hover, setHover] = useState(false);
   const [editing, setEditing] = useState(false);
-  const fontColor = useColorModeValue("black", "lightMain.200");
   const [title, setTitle] = useState(currentCategory.name);
 
+  const fontColor = useColorModeValue("black", "lightMain.200");
   const color = currentCategory.isSelected ? "purple.500" : fontColor;
-
-  function handleFinishedEdit() {
-    setEditing(false);
-    updateStatusCategories();
-  }
 
   function handleKeyPress(e: KeyboardEvent<HTMLInputElement>): void {
     e.stopPropagation();
@@ -38,13 +35,22 @@ function StatusCategoryItem({
     }
   }
 
-  function updateStatusCategories() {
-    setStatusCategories(
-      produce(statusCategories, (draftState) => {
-        draftState.forEach((category) => {
+  function handleFinishedEdit() {
+    setStatusCategoryState(
+      produce(statusCategoryState, (draftState) => {
+        draftState.categories.forEach((category) => {
           const isCurrentCategory = category.name === currentCategory.name;
+          const isCategoryNameExist = statusCategoryState.categories.some(
+            (category) => category.name.toLowerCase() === title.toLowerCase()
+          );
+
           if (isCurrentCategory) {
+            if (isCategoryNameExist) {
+              draftState.errorMsg = "WHOOPS! THIS TEMPLATE NAME ALREADY EXISTS";
+              return;
+            }
             category.name = title;
+            setEditing(false);
           }
         });
       })
@@ -52,9 +58,9 @@ function StatusCategoryItem({
   }
 
   function handleSelectCategory() {
-    setStatusCategories(
-      produce(statusCategories, (draftState) => {
-        draftState.forEach((category) => {
+    setStatusCategoryState(
+      produce(statusCategoryState, (draftState) => {
+        draftState.categories.forEach((category) => {
           if (category.isSelected) {
             category.isSelected = undefined;
           } else if (category.id === currentCategory.id) {

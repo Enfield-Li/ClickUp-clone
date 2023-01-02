@@ -6,17 +6,19 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import { StatusCategories, StatusCategory } from "../../../types";
+import { StatusCategory, StatusCategoryState } from "../../../types";
 import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
 
 type Props = {
   selectedCategory: StatusCategory | undefined;
-  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
+  setStatusCategoryState: React.Dispatch<
+    React.SetStateAction<StatusCategoryState>
+  >;
 };
 
 export default memo(ActiveStatuses);
-function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
+function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
   const questionMarkColor = useColorModeValue("white", "darkMain.200");
   const selectedCategoryName = selectedCategory?.name;
   const finishedStatus = selectedCategory?.statusColumns.find(
@@ -73,7 +75,7 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
                 <Box key={currentStatusColumn.id}>
                   <ActiveStatus
                     currentStatusColumn={currentStatusColumn}
-                    setStatusCategories={setStatusCategories}
+                    setStatusCategoryState={setStatusCategoryState}
                     selectedCategoryName={selectedCategoryName}
                   />
                 </Box>
@@ -82,9 +84,9 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
         </Box>
 
         <AddStatus
-          setStatusCategories={setStatusCategories}
           selectedCategoryName={selectedCategoryName}
-          statusAmount={selectedCategory?.statusColumns.length}
+          setStatusCategoryState={setStatusCategoryState}
+          statusCategoriesAmount={selectedCategory?.statusColumns.length}
         />
       </Box>
 
@@ -132,7 +134,7 @@ function ActiveStatuses({ selectedCategory, setStatusCategories }: Props) {
         {finishedStatus && (
           <ActiveStatus
             currentStatusColumn={finishedStatus}
-            setStatusCategories={setStatusCategories}
+            setStatusCategoryState={setStatusCategoryState}
             selectedCategoryName={selectedCategoryName}
           />
         )}

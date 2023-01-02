@@ -5,6 +5,7 @@ import {
   CreateFolderState,
   CreateSpaceState,
   StatusCategories,
+  StatusCategoryState,
 } from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
@@ -21,16 +22,26 @@ function StatusColumnsDisplay({
   setCreateFolder,
   statusCategoriesData,
 }: Props) {
-  const [statusCategories, setStatusCategories] = useState<StatusCategories>(
-    []
-  );
-  const selectedCategory = statusCategories.find(
+  const [statusCategoryState, setStatusCategoryState] =
+    useState<StatusCategoryState>({
+      errorMsg: "",
+      categories: statusCategoriesData,
+    });
+  const selectedCategory = statusCategoryState.categories.find(
     (category) => category.isSelected
   );
 
   useEffect(() => {
-    setStatusCategories(statusCategoriesData);
-  }, []);
+    if (statusCategoryState.errorMsg) {
+      setTimeout(() => {
+        setStatusCategoryState((prev) =>
+          produce(prev, (draftState) => {
+            draftState.errorMsg = "";
+          })
+        );
+      }, 5000);
+    }
+  }, [statusCategoryState.errorMsg]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -53,15 +64,15 @@ function StatusColumnsDisplay({
     <>
       <Box height="100%" width="50%" pr="4">
         <StatusTemplate
-          statusCategories={statusCategories}
-          setStatusCategories={setStatusCategories}
+          statusCategoryState={statusCategoryState}
+          setStatusCategoryState={setStatusCategoryState}
         />
       </Box>
 
       <Box height="100%" width="50%">
         <ActiveStatuses
           selectedCategory={selectedCategory}
-          setStatusCategories={setStatusCategories}
+          setStatusCategoryState={setStatusCategoryState}
         />
       </Box>
     </>
