@@ -39,7 +39,7 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
   const [createSpace, setCreateSpace] =
     useState<CreateSpaceState>(initialCreateSpace);
   const isAllSet = createSpace.isAllSet;
-  console.log(createSpace);
+  //   console.log(createSpace);
 
   function redirectToReview(createSpaceStep: CreateSpaceStep) {
     return isAllSet ? CreateSpaceStep.CONFIRM : createSpaceStep;

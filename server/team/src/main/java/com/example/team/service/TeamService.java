@@ -2,7 +2,7 @@ package com.example.team.service;
 
 import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamStatusColumnRoutingKey;
+import static com.example.amqp.ExchangeKey.statusCategoryRoutingKey;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,7 +88,7 @@ public class TeamService {
         var teamId = team.getId();
         rabbitMQMessageProducer.publish(
                 internalExchange,
-                teamStatusColumnRoutingKey,
+                statusCategoryRoutingKey,
                 teamId);
 
         return true;

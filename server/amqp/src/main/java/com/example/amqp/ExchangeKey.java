@@ -16,6 +16,6 @@ public class ExchangeKey {
     public static final String AuthorizationQueue = "authorizationQueue.queue";
     public static final String AuthorizationRoutingKey = "internal.Authorization.routing-key";
 
-    public static final String teamStatusColumnQueue = "teamStatusColumn.queue";
-    public static final String teamStatusColumnRoutingKey = "internal.teamStatusColumn.routing-key";
+    public static final String statusCategoryQueue = "statusCategory.queue";
+    public static final String statusCategoryRoutingKey = "internal.statusCategory.routing-key";
 }

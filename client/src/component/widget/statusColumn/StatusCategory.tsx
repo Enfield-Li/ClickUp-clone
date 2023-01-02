@@ -2,19 +2,16 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
-import { TeamStatusColumn } from "../../../types";
-import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
+import { StatusCategories, StatusCategory } from "../../../types";
 
 type Props = {
-  currentCategory: TeamStatusColumn;
-  statusCategoriesSelected: StatusCategoriesSelected;
-  setStatusCategories: React.Dispatch<
-    React.SetStateAction<StatusCategoriesSelected>
-  >;
+  currentCategory: StatusCategory;
+  statusCategoriesSelected: StatusCategories;
+  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
-export default memo(StatusCategory);
-function StatusCategory({
+export default memo(StatusCategoryItem);
+function StatusCategoryItem({
   currentCategory,
   statusCategoriesSelected: statusCategories,
   setStatusCategories,
@@ -24,10 +21,7 @@ function StatusCategory({
   const fontColor = useColorModeValue("black", "lightMain.200");
   const [title, setTitle] = useState(currentCategory.name);
 
-  const color =
-    statusCategories?.selectedCategoryName === currentCategory.name
-      ? "purple.500"
-      : fontColor;
+  const color = currentCategory.isSelected ? "purple.500" : fontColor;
 
   function handleFinishedEdit() {
     setEditing(false);
@@ -47,7 +41,7 @@ function StatusCategory({
   function updateStatusCategories() {
     setStatusCategories(
       produce(statusCategories, (draftState) => {
-        draftState.statusCategories.forEach((category) => {
+        draftState.forEach((category) => {
           const isCurrentCategory = category.name === currentCategory.name;
           if (isCurrentCategory) {
             category.name = title;
@@ -60,7 +54,13 @@ function StatusCategory({
   function handleSelectCategory() {
     setStatusCategories(
       produce(statusCategories, (draftState) => {
-        draftState.selectedCategoryName = currentCategory.name;
+        draftState.forEach((category) => {
+          if (category.isSelected) {
+            category.isSelected = undefined;
+          } else if (category.id === currentCategory.id) {
+            category.isSelected = true;
+          }
+        });
       })
     );
   }

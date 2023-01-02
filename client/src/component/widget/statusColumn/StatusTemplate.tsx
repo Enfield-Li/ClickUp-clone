@@ -1,14 +1,13 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
-import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
-import StatusCategory from "./StatusCategory";
+import StatusCategoryItem from "./StatusCategory";
 import produce from "immer";
+import { StatusCategories } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 
 type Props = {
-  statusCategories: StatusCategoriesSelected;
-  setStatusCategories: React.Dispatch<
-    React.SetStateAction<StatusCategoriesSelected>
-  >;
+  statusCategories: StatusCategories;
+  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
 export default memo(StatusTemplate);
@@ -22,17 +21,21 @@ function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
   }
 
   function handleFinishedEdit() {
+    const selectedCategory = statusCategories.find(
+      (category) => category.isSelected
+    );
+    if (!selectedCategory) {
+      throw new Error("Cannot find existing category");
+    }
+
+    const newCategory = deepCopy(selectedCategory);
+    newCategory.name = createCategoryName;
+    // network calls
+      // teamId 
+
     setStatusCategories(
       produce(statusCategories, (draftState) => {
-        const duplicateCategory = draftState.statusCategories.find(
-          (category) => category.name === draftState.selectedCategoryName
-        );
-        if (!duplicateCategory) {
-          throw new Error("Cannot find existing category WTF?");
-        }
-        duplicateCategory.name = createCategoryName;
-
-        draftState.statusCategories.push(duplicateCategory);
+        draftState.push(newCategory);
       })
     );
   }
@@ -67,13 +70,13 @@ function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
             fontSize="10px"
             fontWeight="semibold"
           >
-            ({statusCategories.statusCategories.length})
+            ({statusCategories.length})
           </Center>
         </Flex>
 
-        {statusCategories?.statusCategories.map((currentCategory, index) => (
-          <Box key={index}>
-            <StatusCategory
+        {statusCategories?.map((currentCategory, index) => (
+          <Box key={currentCategory.id}>
+            <StatusCategoryItem
               currentCategory={currentCategory}
               statusCategoriesSelected={statusCategories}
               setStatusCategories={setStatusCategories}

@@ -1,4 +1,4 @@
-package com.example.teamStatusColumn;
+package com.example.teamStatusCategory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // @EnableEurekaClient
 // @EnableFeignClients(basePackages = "com.example.clients")
 @SpringBootApplication(scanBasePackages = {
-        "com.example.teamStatusColumn",
+        "com.example.teamStatusCategory",
         "com.example.amqp",
         "com.example.clients",
         "com.example.statusColumn",
@@ -17,9 +17,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.example.serviceSecurityConfig",
         "com.example.serviceExceptionHandling",
 })
-public class TeamStatusColumnApplication {
+public class StatusCategoryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TeamStatusColumnApplication.class, args);
+        SpringApplication.run(StatusCategoryApplication.class, args);
     }
 }

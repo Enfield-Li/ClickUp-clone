@@ -11,18 +11,14 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
-import { StatusColumn } from "../../../types";
-import { useFocus } from "../../../utils/useFocus";
+import { StatusCategories, StatusColumn } from "../../../types";
 import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
-import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
 
 type Props = {
   statusAmount: number | undefined;
   selectedCategoryName: string | undefined;
-  setStatusCategories: React.Dispatch<
-    React.SetStateAction<StatusCategoriesSelected>
-  >;
+  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
 export default memo(AddStatus);
@@ -81,7 +77,7 @@ function AddStatus({
     };
     setStatusCategories((prev) =>
       produce(prev, (draftState) => {
-        draftState.statusCategories.forEach((category) => {
+        draftState.forEach((category) => {
           if (category.name === selectedCategoryName) {
             category.statusColumns.push(newColumn);
           }

@@ -1,22 +1,18 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import { TeamStatusColumn } from "../../../types";
+import { StatusCategories, StatusCategory } from "../../../types";
 import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
-import { StatusCategoriesSelected } from "./StatusColumnsDisplay";
 
 type Props = {
-  selectedCategory: TeamStatusColumn | undefined;
-  setStatusCategories: React.Dispatch<
-    React.SetStateAction<StatusCategoriesSelected>
-  >;
+  selectedCategory: StatusCategory | undefined;
+  setStatusCategories: React.Dispatch<React.SetStateAction<StatusCategories>>;
 };
 
 export default memo(ActiveStatuses);

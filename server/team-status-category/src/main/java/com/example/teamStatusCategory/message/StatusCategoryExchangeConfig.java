@@ -1,4 +1,4 @@
-package com.example.teamStatusColumn.message;
+package com.example.teamStatusCategory.message;
 
 import static com.example.amqp.ExchangeKey.*;
 
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TeamStatusColumnExchangeConfig {
+public class StatusCategoryExchangeConfig {
 
     @Bean
     public TopicExchange internalTopicExchange() {
@@ -18,15 +18,15 @@ public class TeamStatusColumnExchangeConfig {
     }
 
     @Bean
-    public Queue teamStatusColumnQueue() {
-        return new Queue(teamStatusColumnQueue);
+    public Queue statusCategoryQueue() {
+        return new Queue(statusCategoryQueue);
     }
 
     @Bean
     public Binding internalToTaskEventBinding() {
         return BindingBuilder
-                .bind(teamStatusColumnQueue())
+                .bind(statusCategoryQueue())
                 .to(internalTopicExchange())
-                .with(teamStatusColumnRoutingKey);
+                .with(statusCategoryRoutingKey);
     }
 }

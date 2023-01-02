@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { defaultTeamStatusColumns } from "../../../hook/mockData";
+import { defaultStatusCategories } from "../../../hook/mockData";
 import {
   CreateFolderState,
   CreateSpaceState,
-  TeamStatusColumns,
+  StatusCategories,
 } from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
@@ -15,27 +15,17 @@ type Props = {
   setCreateFolder?: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
-export interface StatusCategoriesSelected {
-  selectedCategoryName: string;
-  statusCategories: TeamStatusColumns;
-}
-
 export default memo(StatusColumnsDisplay);
 function StatusColumnsDisplay({ setCreateSpace, setCreateFolder }: Props) {
-  const [statusCategories, setStatusCategories] =
-    useState<StatusCategoriesSelected>({
-      selectedCategoryName: "Custom",
-      statusCategories: defaultTeamStatusColumns,
-    });
-  const selectedCategory = statusCategories.statusCategories.find(
-    (category) => category.name === statusCategories.selectedCategoryName
+  const [statusCategories, setStatusCategories] = useState<StatusCategories>(
+    []
+  );
+  const selectedCategory = statusCategories.find(
+    (category) => category.isSelected
   );
 
   useEffect(() => {
-    setStatusCategories({
-      selectedCategoryName: "Custom",
-      statusCategories: defaultTeamStatusColumns,
-    });
+    setStatusCategories(defaultStatusCategories);
   }, []);
 
   useEffect(() => {

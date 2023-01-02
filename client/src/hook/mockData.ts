@@ -16,7 +16,7 @@ import {
 } from "../types";
 import { getDaysBefore, getNextNWeekDay } from "../utils/getWeekDays";
 
-import { TeamStatusColumns } from "../types";
+import { StatusCategories } from "../types";
 
 export const custom: StatusColumns = [
   { id: 1, title: "TO DO", color: "rgb(211, 211, 211)", orderIndex: 1 },
@@ -87,8 +87,8 @@ export const scrum: StatusColumns = [
   },
 ];
 
-export const defaultTeamStatusColumns: TeamStatusColumns = [
-  { id: 1, teamId: 1, name: "Custom", statusColumns: custom },
+export const defaultStatusCategories: StatusCategories = [
+  { id: 1, teamId: 1, name: "Custom", statusColumns: custom, isSelected: true },
   { id: 2, teamId: 1, name: "Normal", statusColumns: normal },
   { id: 3, teamId: 1, name: "Kanban", statusColumns: kanban },
   { id: 4, teamId: 1, name: "Marketing", statusColumns: marketing },
@@ -313,7 +313,7 @@ export const teams: Team[] = [
   {
     id: 1,
     spaces: initialSpaceListForTeam1,
-    teamStatusColumns: defaultTeamStatusColumns,
+    statusCategories: defaultStatusCategories,
     color: getRandomTeamColor(),
     owner: userInfo,
     isPrivate: false,
@@ -325,7 +325,7 @@ export const teams: Team[] = [
     spaces: initialSpaceList2ForTeam2,
     color: getRandomTeamColor(),
     owner: userInfo,
-    teamStatusColumns: defaultTeamStatusColumns,
+    statusCategories: defaultStatusCategories,
     isPrivate: false,
     name: "2workspace",
     members: [userInfo, guestUserInfo],
@@ -335,7 +335,7 @@ export const teams: Team[] = [
     spaces: [],
     color: getRandomSpaceColor(),
     owner: guestUserInfo,
-    teamStatusColumns: defaultTeamStatusColumns,
+    statusCategories: defaultStatusCategories,
     isPrivate: false,
     name: "3workspace",
     members: [userInfo, guestUserInfo],

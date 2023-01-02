@@ -1,4 +1,4 @@
-package com.example.teamStatusColumn.model;
+package com.example.teamStatusCategory.model;
 
 import java.util.Set;
 
@@ -43,12 +43,12 @@ public class StatusColumn {
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
-    private Integer teamStatusColumnId;
+    private Integer statusCategoryId;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "teamStatusColumnId")
-    private TeamStatusColumn teamStatusColumn;
+    @JoinColumn(name = "statusCategoryId")
+    private StatusCategory statusCategory;
 
     public StatusColumn(@NotNull String title, String color,
             @NotNull Integer orderIndex) {

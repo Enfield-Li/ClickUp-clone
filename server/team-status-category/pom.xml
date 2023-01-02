@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>team-status-column</artifactId>
+    <artifactId>team-status-category</artifactId>
 
     <name>statusColumn service</name>
 

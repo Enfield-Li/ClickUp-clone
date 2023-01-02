@@ -292,13 +292,14 @@ export interface Space {
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
-export interface TeamStatusColumn {
+export interface StatusCategory {
   id: number;
   name: string;
   teamId: number;
   statusColumns: StatusColumns;
+  isSelected?: boolean; // client side
 }
-export type TeamStatusColumns = TeamStatusColumn[];
+export type StatusCategories = StatusCategory[];
 
 export type Team = {
   id?: number;
@@ -309,7 +310,7 @@ export type Team = {
   owner?: UserInfo;
   isPrivate: boolean;
   members: UserInfo[];
-  teamStatusColumns?: TeamStatusColumns;
+  statusCategories?: StatusCategories;
 };
 
 export interface User {
