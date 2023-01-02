@@ -21,7 +21,10 @@ export default function CreateFolderStatusColumns({
       title="What task statuses do you want?"
     >
       <Flex height="100%">
-        <StatusColumnsDisplay setCreateFolder={setCreateFolder} />
+        <StatusColumnsDisplay
+          setCreateFolder={setCreateFolder}
+          statusCategoriesData={createFolder.statusCategoriesData}
+        />
       </Flex>
     </CreateFolderTemplate>
   );

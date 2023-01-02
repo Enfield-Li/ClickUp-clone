@@ -14,32 +14,49 @@ export const SERVICE_ENDPOINT = {
   TASK: "http://localhost:8084",
   TEAM: "http://localhost:8088",
   AUTHORIZATION: "http://localhost:8085",
+  TEAM_STATUS_CATEGORY: "http://localhost:8089",
+  PANEL_ACTIVITY: "http://localhost:8090",
 };
 
 const ALL_TASKS = "/all_tasks";
-const TASK_API_VERSION = "/api/v1/task";
 const UPDATE_TASK_TITLE = "/update_title";
-
-const AUTH_API_VERSION = "/authorization/v1/user";
-const TASK_EVENT_API_VERSION = "/api/v1/task_event";
+const TASK_API_VERSION = "/api/v1/task";
 const TEAM_API_VERSION = "/api/v1/team";
 const SPACE_API_VERSION = "/api/v1/space";
+const AUTH_API_VERSION = "/authorization/v1/user";
+const TASK_EVENT_API_VERSION = "/api/v1/task_event";
+const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
+const STATUS_COLUMN_API_VERSION = "/api/v1/status_column";
+const STATUS_CATEGORY_API_VERSION = "/api/v1/status_category";
 
 export const API_ENDPOINT = {
+  // auth
   AUTH_LOGIN: AUTH_API_VERSION + LOGIN,
   AUTH_LOGOUT: AUTH_API_VERSION + LOGOUT,
   AUTH_REGISTER: AUTH_API_VERSION + REGISTER,
   AUTH_REFRESH_TOKEN: AUTH_API_VERSION + REFRESH_TOKEN,
 
+  // team
   TEAM: TEAM_API_VERSION,
   SPACE_API_VERSION: SPACE_API_VERSION,
 
+  // task
   TASK: TASK_API_VERSION,
   TASK_ALL_TASKS: TASK_API_VERSION + ALL_TASKS,
   TASK_UPDATE_TITLE: TASK_API_VERSION + UPDATE_TASK_TITLE,
   TASK_UPDATE_DESC: TASK_API_VERSION + UPDATE_TASK_DESC,
 
+  // task event
   TASK_EVENT: TASK_EVENT_API_VERSION,
+
+  // panel activity
+  PANEL_ACTIVITY: PANEL_ACTIVITY_API_VERSION,
+
+  // status category
+  STATUS_CATEGORY: STATUS_CATEGORY_API_VERSION,
+
+  // status column
+  STATUS_COLUMN: STATUS_COLUMN_API_VERSION,
 };
 
 export const TASK_PARAM = "taskId";

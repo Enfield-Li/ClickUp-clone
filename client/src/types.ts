@@ -496,6 +496,7 @@ export interface CreateSpaceState {
   step: CreateSpaceStep | null;
   createSpaceDTO: CreateSpaceDTO;
   selectedStatusColumns: StatusColumns;
+  statusCategoriesData: StatusCategories;
 }
 
 export interface CreateFolderDTO {
@@ -514,6 +515,7 @@ export interface CreateFolderState {
   step: CreateFolderStep;
   createFolderDTO: CreateFolderDTO;
   selectedStatusColumns: StatusColumns;
+  statusCategoriesData: StatusCategories;
 }
 
 export type InitTeamDTO = {

@@ -29,4 +29,11 @@ class StatusColumnController {
 
     private final StatusColumnService statusColumnService;
 
+    @PostMapping
+    ResponseEntity<Boolean> createStatusColumn(
+            @RequestBody StatusColumn statusColumn) {
+        var created = statusColumnService.createStatusColumn(statusColumn);
+        return ResponseEntity.ok(created);
+    }
+
 }

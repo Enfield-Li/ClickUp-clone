@@ -25,7 +25,10 @@ function CreateSpaceStatusColumns({
       nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
     >
       <Flex pt="6" height="100%">
-        <StatusColumnsDisplay setCreateSpace={setCreateSpace} />
+        <StatusColumnsDisplay
+          setCreateSpace={setCreateSpace}
+          statusCategoriesData={createSpace.statusCategoriesData}
+        />
       </Flex>
     </CreateSpaceModalTemplate>
   );

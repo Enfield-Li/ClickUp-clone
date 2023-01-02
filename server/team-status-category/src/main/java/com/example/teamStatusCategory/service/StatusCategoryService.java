@@ -16,26 +16,23 @@ import com.example.teamStatusCategory.repository.StatusColumnRepository;
 @RequiredArgsConstructor
 public class StatusCategoryService {
 
-    private final StatusColumnRepository statusColumnRepository;
-    private final StatusCategoryRepository statusCategoryRepository;
-
-    public Boolean createStatusColumn(StatusColumn statusColumn) {
-        // statusColumnRepository.save(statusColumn);
-        return true;
-    }
+    private final StatusCategoryRepository repository;
 
     public List<StatusCategory> getStatusCategoryForTeam(Integer teamId) {
-        return statusCategoryRepository.findAllByTeamId(teamId);
+        return repository.findAllByTeamId(teamId);
     }
 
     public Boolean initDefaultStatusCategory(Integer teamId) {
         var defaultStatusCategories = StatusCategory
                 .initDefaultStatusCategories(teamId);
-        statusCategoryRepository.saveAll(defaultStatusCategories);
+        repository.saveAll(defaultStatusCategories);
         return true;
     }
 
-    public StatusCategory createStatusCategory(CreateStatusCategoryDTO createStatusCategoryDTO) {
-        return null;
+    public StatusCategory createStatusCategory(
+            CreateStatusCategoryDTO createStatusCategoryDTO) {
+        var createStatusCategory = StatusCategory
+                .convertCreateStatusCategoryDTO(createStatusCategoryDTO);
+        return repository.save(createStatusCategory);
     }
 }

@@ -5,13 +5,14 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderEntry from "./CreateFolderEntry";
 import CreateFolderSelectList from "./CreateFolderSelectList";
 import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
 import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
+import { fetchTeamStatusCategories } from "../../../networkCalls";
 
 type Props = {};
 
@@ -23,6 +24,7 @@ const iniCreateFolderDTO = {
 };
 
 const initCreateFolderState: CreateFolderState = {
+  statusCategoriesData: [],
   selectedStatusColumns: [],
   step: CreateFolderStep.ENTRY,
   createFolderDTO: iniCreateFolderDTO,
@@ -30,9 +32,20 @@ const initCreateFolderState: CreateFolderState = {
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
+  const { teamState } = useTeamStateContext();
+
   const [createFolder, setCreateFolder] = useState<CreateFolderState>(
     initCreateFolderState
   );
+
+  useEffect(() => {
+    fetchStatusCategoriesData();
+
+    async function fetchStatusCategoriesData() {
+      const teamId = teamState.activeTeamState.selectedTeamId;
+      const data = await fetchTeamStatusCategories(teamId);
+    }
+  }, []);
 
   const bgColor = useColorModeValue("white", "darkMain.100");
   const {

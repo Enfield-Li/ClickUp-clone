@@ -16,6 +16,10 @@ import com.example.teamStatusCategory.repository.StatusColumnRepository;
 @RequiredArgsConstructor
 public class StatusColumnService {
 
-    private final StatusColumnRepository repository;
+    private final StatusColumnRepository statusColumnRepository;
+
+    public Boolean createStatusColumn(StatusColumn statusColumn) {
+        return null;
+    }
 
 }

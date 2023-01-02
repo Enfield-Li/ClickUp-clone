@@ -31,7 +31,6 @@ function StatusTemplate({ statusCategories, setStatusCategories }: Props) {
     const newCategory = deepCopy(selectedCategory);
     newCategory.name = createCategoryName;
     // network calls
-      // teamId 
 
     setStatusCategories(
       produce(statusCategories, (draftState) => {

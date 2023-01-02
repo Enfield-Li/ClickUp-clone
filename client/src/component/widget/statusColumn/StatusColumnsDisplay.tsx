@@ -11,12 +11,17 @@ import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
+  statusCategoriesData: StatusCategories;
   setCreateSpace?: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
   setCreateFolder?: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default memo(StatusColumnsDisplay);
-function StatusColumnsDisplay({ setCreateSpace, setCreateFolder }: Props) {
+function StatusColumnsDisplay({
+  setCreateSpace,
+  setCreateFolder,
+  statusCategoriesData,
+}: Props) {
   const [statusCategories, setStatusCategories] = useState<StatusCategories>(
     []
   );
@@ -25,7 +30,8 @@ function StatusColumnsDisplay({ setCreateSpace, setCreateFolder }: Props) {
   );
 
   useEffect(() => {
-    setStatusCategories(defaultStatusCategories);
+    // setStatusCategories(defaultStatusCategories);
+    setStatusCategories(statusCategoriesData);
   }, []);
 
   useEffect(() => {

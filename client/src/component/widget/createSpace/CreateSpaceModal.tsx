@@ -27,10 +27,11 @@ const initCreateSpaceDTO: CreateSpaceDTO = {
 };
 
 const initialCreateSpace: CreateSpaceState = {
-  createSpaceDTO: initCreateSpaceDTO,
   isAllSet: false,
+  statusCategoriesData: [],
   selectedStatusColumns: [],
   step: CreateSpaceStep.NAME,
+  createSpaceDTO: initCreateSpaceDTO,
 };
 
 export default memo(CreateSpaceModal);

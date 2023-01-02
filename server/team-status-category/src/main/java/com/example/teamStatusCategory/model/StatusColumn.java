@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "teamStatusColumn")
+@EqualsAndHashCode(exclude = "statusCategory")
 public class StatusColumn {
 
     @Id

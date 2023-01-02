@@ -34,13 +34,6 @@ class StatusCategoryController {
         return "Got it";
     }
 
-    @PostMapping
-    ResponseEntity<Boolean> createStatusColumn(
-            @RequestBody StatusColumn statusColumn) {
-        var created = statusCategoryService.createStatusColumn(statusColumn);
-        return ResponseEntity.ok(created);
-    }
-
     @GetMapping("/{teamId}")
     ResponseEntity<List<StatusCategory>> getStatusCategoryForTeam(
             @RequestParam("teamId") Integer teamId) {

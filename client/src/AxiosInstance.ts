@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ACCESS_TOKEN, BEARER, SERVICE_ENDPOINT } from "../constant";
+import { ACCESS_TOKEN, BEARER, SERVICE_ENDPOINT } from "./constant";
 
 export function createDevAxiosInstance(baseURL: string) {
   const axiosInstance = axios.create({ baseURL });
@@ -31,4 +31,12 @@ export const axiosTaskServiceInstance = createDevAxiosInstance(
 
 export const axiosTeamServiceInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.TEAM
+);
+
+export const axiosPanelActivityServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.PANEL_ACTIVITY
+);
+
+export const axiosStatusCategoryServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TEAM_STATUS_CATEGORY
 );

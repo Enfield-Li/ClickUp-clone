@@ -6,7 +6,7 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import LogoSVG from "../../media/LogoSVG";
 import { createTeam } from "../../networkCalls";
 import { Team, AUTH_ACTION } from "../../types";
-import { axiosTeamServiceInstance } from "../../utils/AxiosInterceptor";
+import { axiosTeamServiceInstance } from "../../AxiosInstance";
 import { CreateTeamDTO } from "./CreateTeam";
 
 type Props = {

@@ -12,6 +12,7 @@ import {
   InitTeamDTO,
   LoginUserDTO,
   RegisterUserDTO,
+  StatusCategories,
   Task,
   TaskEvents,
   TaskList,
@@ -22,9 +23,25 @@ import {
 import {
   axiosAuthServiceInstance,
   axiosGatewayInstance,
+  axiosStatusCategoryServiceInstance,
   axiosTeamServiceInstance,
-} from "./utils/AxiosInterceptor";
+} from "./AxiosInstance";
 import { deepCopy } from "./utils/deepCopy";
+
+export async function fetchTeamStatusCategories(teamId: number) {
+  try {
+    const response =
+      await axiosStatusCategoryServiceInstance.get<StatusCategories>(
+        API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
+      );
+
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+  }
+}
 
 export async function fetchTeamList(
   onSuccess: (data: InitTeamDTO) => void,
