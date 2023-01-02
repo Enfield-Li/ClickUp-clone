@@ -8,8 +8,6 @@ import {
 import { memo, MouseEvent, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { Space, TEAM_STATE_ACTION } from "../../../types";
-import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
-import CreateListModal from "../../widget/createList/CreateListModal";
 import AddFolderOrListPopover from "./AddFolderOrListPopover";
 import SpaceContent from "./folderAndList/SpaceContent";
 
@@ -143,9 +141,6 @@ function SpaceComponent({ space }: Props) {
       </Flex>
 
       {space.isOpen && <SpaceContent space={space} />}
-
-      <CreateListModal />
-      <CreateFolderModal />
     </Box>
   );
 }

@@ -39,7 +39,7 @@ function CreateListModal({}: Props) {
   return (
     <Modal
       size="2xl"
-      closeOnOverlayClick={false}
+      closeOnOverlayClick={true}
       isOpen={isCreateListModalOpen}
       onClose={onCreateListModalClose}
     >

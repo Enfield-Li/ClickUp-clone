@@ -15,8 +15,11 @@ import CreateSpaceReview from "./CreateSpaceReview";
 import CreateSpaceColor from "./CreateSpaceColor";
 import CreateSpaceStatusColumns from "./CreateSpaceStatusColumns";
 import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
+import useTeamStateContext from "../../../context/team/useTeamContext";
+import { fetchTeamStatusCategories } from "../../../networkCalls";
+import produce from "immer";
 
-type Props = { isOpen: boolean; onClose: () => void };
+type Props = {};
 
 const initCreateSpaceDTO: CreateSpaceDTO = {
   name: "",
@@ -35,7 +38,12 @@ const initialCreateSpace: CreateSpaceState = {
 };
 
 export default memo(CreateSpaceModal);
-function CreateSpaceModal({ isOpen, onClose }: Props) {
+function CreateSpaceModal({}: Props) {
+  const {
+    teamState,
+    modalControls: { isCreateSpaceModalOpen, onCreateSpaceModalClose },
+  } = useTeamStateContext();
+  const teamId = teamState.activeTeamState.selectedTeamId;
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] =
     useState<CreateSpaceState>(initialCreateSpace);
@@ -47,11 +55,21 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
   }
 
   useEffect(() => {
-    if (!isOpen) {
-      onClose();
-      setCreateSpace(initialCreateSpace);
+    if (isCreateSpaceModalOpen && teamId) {
+      fetchTeamStatusCategories(teamId, (data) => {
+        setCreateSpace(
+          produce(createSpace, (draftState) => {
+            draftState.statusCategoriesData = data;
+          })
+        );
+      });
     }
-  }, [isOpen]);
+  }, [isCreateSpaceModalOpen, teamId]);
+
+  function handleCloseModal() {
+    onCreateSpaceModalClose();
+    setCreateSpace(initialCreateSpace);
+  }
 
   function renderStepComponent() {
     switch (createSpace.step) {
@@ -108,9 +126,8 @@ function CreateSpaceModal({ isOpen, onClose }: Props) {
   return (
     <Modal
       size="2xl"
-      isOpen={isOpen}
-      onClose={onClose}
-      blockScrollOnMount={false}
+      onClose={handleCloseModal}
+      isOpen={isCreateSpaceModalOpen}
     >
       <ModalOverlay />
       <ModalContent bgColor={contentBgColor} height="530px">

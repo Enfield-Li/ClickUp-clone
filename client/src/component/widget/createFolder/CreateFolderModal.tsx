@@ -33,24 +33,28 @@ const initCreateFolderState: CreateFolderState = {
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
   const { teamState } = useTeamStateContext();
+  const teamId = teamState.activeTeamState.selectedTeamId;
+  const bgColor = useColorModeValue("white", "darkMain.100");
 
   const [createFolder, setCreateFolder] = useState<CreateFolderState>(
     initCreateFolderState
   );
-
-  useEffect(() => {
-    fetchStatusCategoriesData();
-
-    async function fetchStatusCategoriesData() {
-      const teamId = teamState.activeTeamState.selectedTeamId;
-      const data = await fetchTeamStatusCategories(teamId);
-    }
-  }, []);
-
-  const bgColor = useColorModeValue("white", "darkMain.100");
   const {
     modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
   } = useTeamStateContext();
+  console.log(createFolder);
+
+  useEffect(() => {
+    if (isCreateFolderModalOpen && teamId) {
+      fetchTeamStatusCategories(teamId, (data) => {
+        setCreateFolder(
+          produce(createFolder, (draftState) => {
+            draftState.statusCategoriesData = data;
+          })
+        );
+      });
+    }
+  }, [isCreateFolderModalOpen, teamId]);
 
   function handleCreateFolder(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -58,14 +62,9 @@ function CreateFolderModal({}: Props) {
     throw new Error("Function not implemented.");
   }
 
-  function handleCancel() {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
-        draftState.step = CreateFolderStep.ENTRY;
-        draftState.createFolderDTO = iniCreateFolderDTO;
-      })
-    );
+  function handleCloseModal() {
     onCreateFolderModalClose();
+    setCreateFolder(initCreateFolderState);
   }
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -123,7 +122,7 @@ function CreateFolderModal({}: Props) {
   return (
     <Modal
       size="4xl"
-      onClose={handleCancel}
+      onClose={handleCloseModal}
       closeOnOverlayClick={true}
       isOpen={isCreateFolderModalOpen}
     >

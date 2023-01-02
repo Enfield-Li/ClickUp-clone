@@ -2,6 +2,9 @@ import { Box, Flex } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import Header from "./component/layout/Header";
 import NavBar from "./component/layout/NavBar";
+import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
+import CreateListModal from "./component/widget/createList/CreateListModal";
+import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
 import TeamStateProvider from "./context/team/TeamContext";
 import MainContentRoute from "./routes/MainContentRoute";
 
@@ -46,6 +49,10 @@ function ApplicationEntry({}: Props) {
           </Box>
         </Flex>
       </Flex>
+
+      <CreateListModal />
+      <CreateSpaceModal />
+      <CreateFolderModal />
     </TeamStateProvider>
   );
 }

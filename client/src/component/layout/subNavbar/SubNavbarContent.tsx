@@ -2,6 +2,8 @@ import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useEffect } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { Team } from "../../../types";
+import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
+import CreateListModal from "../../widget/createList/CreateListModal";
 import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
 import SpaceComponent from "./SpaceComponent";
 
@@ -11,11 +13,7 @@ export default memo(SubNavbarContent);
 function SubNavbarContent({ currentTeam }: Props) {
   const { colorMode } = useColorMode();
   const {
-    modalControls: {
-      isCreateSpaceModalOpen,
-      onCreateSpaceModalOpen,
-      onCreateSpaceModalClose,
-    },
+    modalControls: { onCreateSpaceModalOpen },
   } = useTeamStateContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
@@ -74,10 +72,10 @@ function SubNavbarContent({ currentTeam }: Props) {
       )}
 
       <Flex
-        onClick={onCreateSpaceModalOpen}
         cursor="pointer"
         alignItems="center"
         color="lightMain.300"
+        onClick={onCreateSpaceModalOpen}
         _hover={{ color: "purple.500" }}
       >
         <Center fontWeight="bold" fontSize="xl" mx="1" pb="2px">
@@ -87,11 +85,6 @@ function SubNavbarContent({ currentTeam }: Props) {
           Add Space
         </Center>
       </Flex>
-
-      <CreateSpaceModal
-        isOpen={isCreateSpaceModalOpen}
-        onClose={onCreateSpaceModalClose}
-      />
     </Box>
   );
 }

@@ -28,14 +28,18 @@ import {
 } from "./AxiosInstance";
 import { deepCopy } from "./utils/deepCopy";
 
-export async function fetchTeamStatusCategories(teamId: number) {
+export async function fetchTeamStatusCategories(
+  teamId: number,
+  onSuccess: (data: StatusCategories) => void
+  //   onFailure?: (msg: string) => void
+) {
   try {
     const response =
       await axiosStatusCategoryServiceInstance.get<StatusCategories>(
         API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
       );
 
-    return response.data;
+    onSuccess(response.data);
   } catch (error) {
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
