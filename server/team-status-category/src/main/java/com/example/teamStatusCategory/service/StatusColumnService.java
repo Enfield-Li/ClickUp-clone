@@ -22,4 +22,8 @@ public class StatusColumnService {
         return null;
     }
 
+    public Boolean updateStatusColumnTitle(Integer id) {
+        return true;
+    }
+
 }

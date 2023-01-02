@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,13 @@ class StatusColumnController {
     ResponseEntity<Boolean> createStatusColumn(
             @RequestBody StatusColumn statusColumn) {
         var created = statusColumnService.createStatusColumn(statusColumn);
+        return ResponseEntity.ok(created);
+    }
+
+    @PutMapping("id")
+    ResponseEntity<Boolean> updateStatusColumnTitle(
+            @PathVariable("id") Integer id) {
+        var created = statusColumnService.updateStatusColumnTitle(id);
         return ResponseEntity.ok(created);
     }
 
