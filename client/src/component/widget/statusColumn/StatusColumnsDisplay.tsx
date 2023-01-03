@@ -30,7 +30,6 @@ function StatusColumnsDisplay({
   const selectedCategory = statusCategoryState.categories.find(
     (category) => category.isSelected
   );
-  if (!selectedCategory) throw new Error("selectedCategory not found");
 
   useEffect(() => {
     if (statusCategoryState.errorMsg) {

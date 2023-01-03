@@ -64,9 +64,49 @@ export async function CreateStatusColumnForCategory(
       API_ENDPOINT.STATUS_COLUMN,
       dto
     );
-    if (!response.data) throw new Error();
+    if (!response.data) throw new Error("CreateStatusColumnForCategory failed");
 
     onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function deleteStatusCategories(
+  statusCategoryId: number,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.delete<boolean>(
+      API_ENDPOINT.STATUS_CATEGORY + `/${statusCategoryId}`
+    );
+    if (!response.data) throw new Error("deleteStatusCategories failed");
+
+    onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function deleteStatusColumn(
+  statusColumnId: number,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.delete<boolean>(
+      API_ENDPOINT.STATUS_COLUMN + `/${statusColumnId}`
+    );
+    if (!response.data) throw new Error("deleteStatusCategories failed");
+
+    onSuccess();
   } catch (error) {
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
@@ -85,7 +125,7 @@ export async function updateStatusColumnColor(
       API_ENDPOINT.STATUS_COLUMN + "/color",
       dto
     );
-    if (!response.data) throw new Error();
+    if (!response.data) throw new Error("updateStatusColumnColor failed");
 
     onSuccess();
   } catch (error) {
@@ -106,7 +146,7 @@ export async function updateStatusColumnTitle(
       API_ENDPOINT.STATUS_COLUMN + "/title",
       dto
     );
-    if (!response.data) throw new Error();
+    if (!response.data) throw new Error("updateStatusColumnTitle failed");
 
     onSuccess();
   } catch (error) {
@@ -127,7 +167,7 @@ export async function updateStatusCategoryName(
       API_ENDPOINT.STATUS_CATEGORY + "/name",
       dto
     );
-    if (!response.data) throw new Error();
+    if (!response.data) throw new Error("updateStatusCategoryName failed");
 
     onSuccess();
   } catch (error) {

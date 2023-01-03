@@ -34,12 +34,12 @@ export default function StatusColorPallet({
   return (
     <Popover
       isLazy
-      autoFocus={updateColor ? undefined : false}
-      closeOnBlur={updateColor ? true : false}
       placement="top-start"
       returnFocusOnClose={false}
       isOpen={isColorPalletOpen}
-      onClose={onColorPalletClose}
+      closeOnBlur={updateColor ? true : false}
+      autoFocus={updateColor ? undefined : false}
+      onClose={updateColor ? onColorPalletClose : undefined}
     >
       <PopoverTrigger>{children}</PopoverTrigger>
 

@@ -9,7 +9,10 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { KeyboardEvent, memo, useState } from "react";
-import { updateStatusCategoryName } from "../../../networkCalls";
+import {
+  deleteStatusCategories,
+  updateStatusCategoryName,
+} from "../../../networkCalls";
 import {
   StatusCategory,
   StatusCategoryState,
@@ -59,35 +62,40 @@ function StatusCategoryItem({
       return;
     }
 
+    const isCategoryNameExist = statusCategoriesSelected.categories.some(
+      (category) => category.name.toLowerCase() === title.toLowerCase()
+    );
+    if (isCategoryNameExist) {
+      setStatusCategoryState(
+        produce(statusCategoriesSelected, (draftState) => {
+          draftState.categories.forEach(
+            (category) =>
+              category.id === currentCategory.id &&
+              (draftState.errorMsg =
+                "WHOOPS! THIS TEMPLATE NAME ALREADY EXISTS")
+          );
+        })
+      );
+      return;
+    }
+
     const dto: UpdateStatusCategoryNameDTO = {
       id: currentCategory.id,
       name: title,
     };
 
-    updateStatusCategoryName(dto, () =>
+    updateStatusCategoryName(dto, () => {
       setStatusCategoryState(
         produce(statusCategoriesSelected, (draftState) => {
           draftState.categories.forEach((category) => {
-            const isCurrentCategory = category.name === currentCategory.name;
-            const isCategoryNameExist =
-              statusCategoriesSelected.categories.some(
-                (category) =>
-                  category.name.toLowerCase() === title.toLowerCase()
-              );
-
-            if (isCurrentCategory) {
-              if (isCategoryNameExist) {
-                draftState.errorMsg =
-                  "WHOOPS! THIS TEMPLATE NAME ALREADY EXISTS";
-                return;
-              }
+            if (category.id === currentCategory.id) {
               category.name = title;
               setEditing(false);
             }
           });
         })
-      )
-    );
+      );
+    });
   }
 
   function handleOnBlur() {
@@ -122,7 +130,21 @@ function StatusCategoryItem({
     setEditing(true);
   }
 
-  function handleDeleteCategory() {}
+  function handleDeleteCategory(e: React.MouseEvent<SVGElement, MouseEvent>) {
+    e.stopPropagation();
+
+    deleteStatusCategories(currentCategory.id, () => {
+      setStatusCategoryState(
+        produce(statusCategoriesSelected, (draftState) => {
+          draftState.categories.forEach((category, index, arr) => {
+            if (category.id === currentCategory.id) {
+              arr.splice(index, 1);
+            }
+          });
+        })
+      );
+    });
+  }
 
   return (
     <Flex
@@ -167,7 +189,7 @@ function StatusCategoryItem({
           {/* Close */}
           {!editing && (
             <Center fontSize="10px" _hover={{ color: "purple.500" }}>
-              <CloseIcon onClick={() => handleDeleteCategory()} />
+              <CloseIcon onClick={(e) => handleDeleteCategory(e)} />
             </Center>
           )}
         </Flex>

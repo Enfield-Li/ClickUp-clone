@@ -17,6 +17,7 @@ public class StatusColumnService {
 
     private final StatusColumnRepository repository;
 
+    @Transactional
     public Integer createStatusColumnForCategory(
             CreateStatusColumnForCategoryDTO dto) {
         var title = dto.title();
@@ -24,8 +25,9 @@ public class StatusColumnService {
         var orderIndex = dto.orderIndex();
         var categoryId = dto.categoryId();
 
-        return repository.createStatusColumnForCategory(
+        repository.createStatusColumnForCategory(
                 title, color, orderIndex, categoryId);
+        return repository.getLastInsertedStatusColumnId();
     }
 
     @Transactional

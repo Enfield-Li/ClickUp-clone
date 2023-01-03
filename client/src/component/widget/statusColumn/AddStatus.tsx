@@ -2,6 +2,7 @@ import { Box, Button, Flex, Input, useDisclosure } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
 import { getRandomSpaceColor } from "../../../media/colors";
+import { CreateStatusColumnForCategory } from "../../../networkCalls";
 import {
   CreateStatusColumnForCategoryDTO,
   StatusCategory,
@@ -11,7 +12,7 @@ import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
 
 type Props = {
-  selectedCategory: StatusCategory;
+  selectedCategory?: StatusCategory;
   statusCategoriesAmount: number | undefined;
   setStatusCategoryState: React.Dispatch<
     React.SetStateAction<StatusCategoryState>
@@ -70,32 +71,50 @@ function AddStatus({
   }
 
   async function addStatus() {
+    const isTitleExist = selectedCategory?.statusColumns.some(
+      (column) => column.title.toLowerCase() === title.toLowerCase()
+    );
+    if (isTitleExist) {
+      setStatusCategoryState((prev) =>
+        produce(prev, (draftState) => {
+          draftState.categories.forEach((category) => {
+            if (category.id === selectedCategory?.id) {
+              const isTitleExist = category.statusColumns.some(
+                (column) => column.title.toLowerCase() === title.toLowerCase()
+              );
+              if (isTitleExist) {
+                draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
+                return;
+              }
+            }
+          });
+        })
+      );
+      return;
+    }
+
+    if (!selectedCategory) throw new Error("Cannot find original category");
+
     const orderIndex = statusCategoriesAmount ? statusCategoriesAmount + 1 : 1;
     const dto: CreateStatusColumnForCategoryDTO = {
-      color: selectedColor,
-      orderIndex,
       title,
+      orderIndex,
+      color: selectedColor,
       categoryId: selectedCategory.id,
     };
 
-    setStatusCategoryState((prev) =>
-      produce(prev, (draftState) => {
-        draftState.categories.forEach((category) => {
-          if (category.id === selectedCategory.id) {
-            const isTitleExist = category.statusColumns.some(
-              (column) => column.title.toLowerCase() === title.toLowerCase()
-            );
-            if (isTitleExist) {
-              draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
-              return;
+    CreateStatusColumnForCategory(dto, () => {
+      setStatusCategoryState((prev) =>
+        produce(prev, (draftState) => {
+          draftState.categories.forEach((category) => {
+            if (category.id === selectedCategory.id) {
+              setTitle("");
+              category.statusColumns.push(dto);
             }
-
-            setTitle("");
-            category.statusColumns.push(dto);
-          }
-        });
-      })
-    );
+          });
+        })
+      );
+    });
   }
 
   return (

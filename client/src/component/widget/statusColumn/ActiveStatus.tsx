@@ -16,7 +16,7 @@ import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
 
 type Props = {
-  selectedCategory: StatusCategory;
+  selectedCategory?: StatusCategory;
   currentStatusColumn: StatusColumn;
   setStatusCategoryState: React.Dispatch<
     React.SetStateAction<StatusCategoryState>
@@ -66,6 +66,29 @@ function ActiveStatus({
     if (title === currentStatusColumn.title) {
       return;
     }
+
+    const isTitleExist = selectedCategory?.statusColumns.some(
+      (column) => column.title.toLowerCase() === title.toLowerCase()
+    );
+    if (isTitleExist) {
+      setStatusCategoryState((prev) =>
+        produce(prev, (draftState) => {
+          draftState.categories.forEach((category) => {
+            if (category.id === selectedCategory?.id) {
+              const isTitleExist = category.statusColumns.some(
+                (column) => column.title.toLowerCase() === title.toLowerCase()
+              );
+              if (isTitleExist) {
+                draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
+                return;
+              }
+            }
+          });
+        })
+      );
+      return;
+    }
+
     const dto: UpdateStatusColumnTitleDTO = {
       id: currentStatusColumn.id!,
       title,
@@ -75,7 +98,7 @@ function ActiveStatus({
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
           draftState.categories.forEach((category) => {
-            if (category.id === selectedCategory.id) {
+            if (category.id === selectedCategory?.id) {
               category.statusColumns.forEach((column) => {
                 if (column.id === currentStatusColumn.id) {
                   column.title = title;
@@ -94,11 +117,11 @@ function ActiveStatus({
       color: selectedColor,
     };
 
-    updateStatusColumnColor(dto, () =>
+    updateStatusColumnColor(dto, () => {
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
           draftState.categories.forEach((category) => {
-            if (category.id === selectedCategory.id) {
+            if (category.id === selectedCategory?.id) {
               category.statusColumns.forEach((column) => {
                 if (column.id === currentStatusColumn.id) {
                   column.color = selectedColor;
@@ -107,9 +130,12 @@ function ActiveStatus({
             }
           });
         })
-      )
-    );
+      );
+    });
   }
+
+  // TODO
+  function handleDelete() {}
 
   function handleOpenOption(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
