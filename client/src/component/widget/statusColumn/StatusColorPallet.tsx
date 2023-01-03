@@ -50,6 +50,7 @@ export default function StatusColorPallet({
         height="100px"
         borderWidth="1px"
         borderColor="blackAlpha.500"
+        onClick={(e) => e.stopPropagation()}
       >
         <Flex flexDir="column" alignItems="center" justifyContent="">
           {spaceColors3D.map((colors, index) => (

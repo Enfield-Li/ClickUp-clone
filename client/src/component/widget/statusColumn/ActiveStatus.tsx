@@ -1,7 +1,15 @@
-import { Box, Center, Flex, Input, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Input,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import {
+  deleteStatusColumn,
   updateStatusColumnColor,
   updateStatusColumnTitle,
 } from "../../../networkCalls";
@@ -14,6 +22,8 @@ import {
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
+import StatusColumnOption from "./StatusColumnOption";
+import StatusColumnOptionPopover from "./StatusColumnOptionPopover";
 
 type Props = {
   selectedCategory?: StatusCategory;
@@ -44,7 +54,6 @@ function ActiveStatus({
 
   function handleFinishedEdit() {
     setEditing(false);
-    onColorPalletClose();
     if (!title) return;
     updateStatusTitle();
   }
@@ -134,11 +143,17 @@ function ActiveStatus({
     });
   }
 
-  // TODO
-  function handleDelete() {}
-
-  function handleOpenOption(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleOpenColorPallet(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) {
     e.stopPropagation();
+    onColorPalletOpen();
+  }
+
+  // TODO
+  function handleDelete() {
+    console.log("delete");
+    // deleteStatusColumn(1, () => {})
   }
 
   return (
@@ -170,10 +185,7 @@ function ActiveStatus({
             width="10px"
             rounded="sm"
             height="10px"
-            onClick={(e) => {
-              e.stopPropagation();
-              onColorPalletOpen();
-            }}
+            onClick={handleOpenColorPallet}
             bgColor={currentStatusColumn.color}
             onBlurCapture={(e) => console.log("blur")}
           ></Box>
@@ -181,20 +193,18 @@ function ActiveStatus({
 
         {/* Title */}
         {editing ? (
-          <Box>
-            <Input
-              autoFocus
-              color="gray"
-              height="20px"
-              value={title}
-              fontSize="13px"
-              variant="unstyled"
-              textTransform="uppercase"
-              onKeyDown={handleKeyPress}
-              onBlur={handleFinishedEdit}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </Box>
+          <Input
+            autoFocus
+            color="gray"
+            height="20px"
+            value={title}
+            fontSize="13px"
+            variant="unstyled"
+            textTransform="uppercase"
+            onKeyDown={handleKeyPress}
+            onBlur={handleFinishedEdit}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         ) : (
           <Box color={currentStatusColumn.color}>
             {currentStatusColumn.title.toUpperCase()}
@@ -210,9 +220,20 @@ function ActiveStatus({
       </Flex>
 
       {/* Options */}
-      <Center _hover={{ color: "purple.500" }} onClick={handleOpenOption}>
-        <i className="bi bi-three-dots"></i>
-      </Center>
+      <StatusColumnOptionPopover>
+        <StatusColumnOption onClickHandler={() => setEditing(true)}>
+          <i className="bi bi-pen"></i>
+          <Box ml="10px">Rename</Box>
+        </StatusColumnOption>
+        <StatusColumnOption onClickHandler={handleOpenColorPallet}>
+          <i className="bi bi-palette-fill"></i>
+          <Box ml="10px">Change Color</Box>
+        </StatusColumnOption>
+        <StatusColumnOption onClickHandler={handleDelete}>
+          <i className="bi bi-trash"></i>
+          <Box ml="10px">Delete Status</Box>
+        </StatusColumnOption>
+      </StatusColumnOptionPopover>
     </Flex>
   );
 }
