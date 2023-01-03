@@ -13,7 +13,8 @@ import produce from "immer";
 import React, { memo, useState } from "react";
 import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
 import { StatusCategoryState, StatusColumn } from "../../../types";
-import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
+import StatusColorPallet from "./StatusColorPallet";
 
 type Props = {
   selectedCategoryName: string | undefined;
@@ -30,26 +31,28 @@ function AddStatus({
   statusCategoriesAmount,
 }: Props) {
   const [title, setTitle] = useState("");
-  const [adding, setAdding] = useState(false);
+  const [creating, setCreating] = useState(false);
   // https://beta.reactjs.org/apis/react/useState#avoiding-recreating-the-initial-state
-  const [color, setColor] = useState(getRandomSpaceColor);
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [selectedColor, setSelectedColor] = useState(getRandomSpaceColor);
+  const {
+    isOpen: isColorPalletOpen,
+    onOpen: onColorPalletOpen,
+    onClose: onColorPalletClose,
+  } = useDisclosure();
 
   function handleSelectColor(selectedColor: string) {
-    setColor(selectedColor);
+    setSelectedColor(selectedColor);
   }
-  const errMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
-  // <i className="bi bi-exclamation-triangle-fill"></i>;
 
   function resetAll() {
     setTitle("");
-    setAdding(false);
-    setColor(getRandomSpaceColor);
+    setCreating(false);
+    setSelectedColor(getRandomSpaceColor);
   }
 
   function handleOpenEdit() {
-    onOpen();
-    setAdding(true);
+    onColorPalletOpen();
+    setCreating(true);
   }
 
   function handleOnBlur(e: React.FocusEvent<HTMLDivElement, Element>) {
@@ -58,23 +61,24 @@ function AddStatus({
     if (!title && !e.currentTarget.contains(e.relatedTarget)) {
       resetAll();
     } else if (title) {
-      setTitle("");
-      handleAddStatus();
-      setColor(getRandomSpaceColor);
+      addStatus();
+      setSelectedColor(getRandomSpaceColor);
     }
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter" || e.code === "NumpadEnter") {
-      handleAddStatus();
-    }
+    handleInputKeyPress({
+      e,
+      value: title,
+      handleOnEsc: resetAll,
+      handleOnEnter: addStatus,
+    });
   }
 
-  async function handleAddStatus() {
+  async function addStatus() {
     const orderIndex = statusCategoriesAmount ? statusCategoriesAmount + 1 : 1;
     const newColumn: StatusColumn = {
-      id: getRandomNumberNoLimit(),
-      color,
+      color: selectedColor,
       orderIndex,
       title,
     };
@@ -90,6 +94,7 @@ function AddStatus({
               return;
             }
 
+            setTitle("");
             category.statusColumns.push(newColumn);
           }
         });
@@ -99,7 +104,7 @@ function AddStatus({
 
   return (
     <Box>
-      {adding ? (
+      {creating ? (
         <Flex
           my="1"
           px="2"
@@ -113,70 +118,20 @@ function AddStatus({
           borderColor="blackAlpha.500"
           onBlur={handleOnBlur}
         >
-          {/* Square */}
-          <Popover
-            isOpen={isOpen}
-            autoFocus={false}
-            onClose={onClose}
-            closeOnBlur={false}
-            placement="top-start"
-            returnFocusOnClose={false}
+          {/* Color */}
+          <StatusColorPallet
+            isColorPalletOpen={isColorPalletOpen}
+            handleSelectColor={handleSelectColor}
+            onColorPalletClose={onColorPalletClose}
           >
-            <PopoverTrigger>
-              <Box
-                mr="6px"
-                width="10px"
-                rounded="sm"
-                height="10px"
-                bgColor={color}
-                // bgColor={color}
-              ></Box>
-            </PopoverTrigger>
-
-            <PopoverContent
-              p="3"
-              shadow="xl"
-              width="230px"
-              height="100px"
-              borderWidth="1px"
-              borderColor="blackAlpha.500"
-            >
-              <Flex flexDir="column" alignItems="center" justifyContent="">
-                {spaceColors3D.map((colors, index) => (
-                  <Flex key={index} my="6px">
-                    {colors.map((currentColor, index) =>
-                      currentColor ? (
-                        <Box
-                          mx="6px"
-                          shadow="md"
-                          key={index}
-                          width="13px"
-                          rounded="sm"
-                          height="13px"
-                          bgColor={currentColor}
-                          onClick={() => handleSelectColor(currentColor)}
-                        ></Box>
-                      ) : (
-                        <Center
-                          mx="6px"
-                          key={index}
-                          shadow="md"
-                          width="13px"
-                          rounded="sm"
-                          height="13px"
-                          opacity="60%"
-                          fontSize="13px"
-                          _hover={{ bgColor: "blackAlpha.500", color: "white" }}
-                        >
-                          <i className="bi bi-eyedropper"></i>
-                        </Center>
-                      )
-                    )}
-                  </Flex>
-                ))}
-              </Flex>
-            </PopoverContent>
-          </Popover>
+            <Box
+              mr="6px"
+              width="10px"
+              rounded="sm"
+              height="10px"
+              bgColor={selectedColor}
+            ></Box>
+          </StatusColorPallet>
 
           {/* Title */}
           <Input
@@ -189,7 +144,7 @@ function AddStatus({
             rounded={undefined}
             fontWeight="semibold"
             textTransform="uppercase"
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
             onChange={(e) => setTitle(e.target.value)}
           />
 

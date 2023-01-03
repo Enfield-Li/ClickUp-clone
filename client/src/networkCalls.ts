@@ -17,6 +17,7 @@ import {
   Task,
   TaskEvents,
   TaskList,
+  UpdateStatusColumnTitleDTO,
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
@@ -31,8 +32,8 @@ import { deepCopy } from "./utils/deepCopy";
 
 export async function fetchTeamStatusCategories(
   teamId: number,
-  onSuccess: (data: StatusCategories) => void
-  //   onFailure?: (msg: string) => void
+  onSuccess: (data: StatusCategories) => void,
+  onFailure?: () => void
 ) {
   try {
     const response =
@@ -46,6 +47,27 @@ export async function fetchTeamStatusCategories(
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
     console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function updateStatusColumnTitle(
+  dto: UpdateStatusColumnTitleDTO,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.put<boolean>(
+      API_ENDPOINT.STATUS_COLUMN + "/title",
+      dto
+    );
+
+    if (response.data) onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
   }
 }
 

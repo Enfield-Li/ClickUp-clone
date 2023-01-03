@@ -1,23 +1,21 @@
 package com.example.teamStatusCategory.controller;
 
 import static com.example.clients.UrlConstants.STATUS_COLUMN_API_VERSION;
-
-import java.util.List;
+import static com.example.teamStatusCategory.UrlConstants.COLOR;
+import static com.example.teamStatusCategory.UrlConstants.ORDER_INDEX;
+import static com.example.teamStatusCategory.UrlConstants.TITLE;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
-import com.example.teamStatusCategory.model.StatusCategory;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnTitleDTO;
 import com.example.teamStatusCategory.model.StatusColumn;
-import com.example.teamStatusCategory.service.StatusCategoryService;
 import com.example.teamStatusCategory.service.StatusColumnService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,11 +36,25 @@ class StatusColumnController {
         return ResponseEntity.ok(created);
     }
 
-    @PutMapping("id")
+    @PutMapping(TITLE)
     ResponseEntity<Boolean> updateStatusColumnTitle(
-            @PathVariable("id") Integer id) {
-        var created = statusColumnService.updateStatusColumnTitle(id);
-        return ResponseEntity.ok(created);
+            @RequestBody UpdateStatusColumnTitleDTO dto) {
+        var updated = statusColumnService.updateStatusColumnTitle(dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping(COLOR)
+    ResponseEntity<Boolean> updateStatusColumnColor(
+            @RequestBody UpdateStatusColumnColorDTO dto) {
+        var updated = statusColumnService.updateStatusColumnColor(dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping(ORDER_INDEX)
+    ResponseEntity<Boolean> updateStatusColumnOrderIndex(
+            @RequestBody UpdateStatusColumnOrderIndexDTO dto) {
+        var updated = statusColumnService.updateStatusColumnOrderIndex(dto);
+        return ResponseEntity.ok(updated);
     }
 
 }

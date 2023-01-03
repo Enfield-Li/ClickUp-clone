@@ -19,8 +19,9 @@ type Props = {
 
 export default memo(ActiveStatuses);
 function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
-  const questionMarkColor = useColorModeValue("white", "darkMain.200");
   const selectedCategoryName = selectedCategory?.name;
+  const questionMarkColor = useColorModeValue("white", "darkMain.200");
+
   const finishedStatus = selectedCategory?.statusColumns.find(
     (statusColumn) => statusColumn.markAsClosed
   );

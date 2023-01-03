@@ -562,3 +562,8 @@ export type StatusCategoryState = {
   categories: StatusCategories;
   errorMsg: string;
 };
+
+export type UpdateStatusColumnTitleDTO = {
+  id: number;
+  title: string;
+};

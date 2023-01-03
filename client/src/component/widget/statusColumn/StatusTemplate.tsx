@@ -5,6 +5,7 @@ import produce from "immer";
 import { StatusCategoryState, StatusCategory } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { createStatusCategory } from "../../../networkCalls";
+import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 
 type Props = {
   statusCategoryState: StatusCategoryState;
@@ -18,15 +19,15 @@ function StatusTemplate({
   statusCategoryState,
   setStatusCategoryState,
 }: Props) {
-  const [createCategory, setCreateCategory] = useState(false);
+  const [creating, setCreating] = useState(false);
   const [createCategoryName, setCreateCategoryName] = useState("");
 
   function resetAll() {
-    setCreateCategory(false);
+    setCreating(false);
     setCreateCategoryName("");
   }
 
-  function handleFinishedEdit() {
+  function handleCreateCategoryItem() {
     const selectedCategory = statusCategoryState.categories.find(
       (category) => category.isSelected
     );
@@ -60,13 +61,21 @@ function StatusTemplate({
     });
   }
 
-  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void {
-    e.stopPropagation();
-    if (e.key === "Enter" && createCategoryName) {
-      handleFinishedEdit();
-    } else if (e.key === "Escape") {
+  function handleOnBlur() {
+    if (createCategoryName) {
+      handleCreateCategoryItem();
+    } else {
       resetAll();
     }
+  }
+
+  function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void {
+    handleInputKeyPress({
+      e,
+      handleOnEsc: resetAll,
+      value: createCategoryName,
+      handleOnEnter: handleCreateCategoryItem,
+    });
   }
 
   return (
@@ -105,16 +114,16 @@ function StatusTemplate({
         ))}
       </Box>
 
-      {createCategory ? (
+      {creating ? (
         <Input
           autoFocus
           size="15px"
           fontSize="16px"
           variant="flushed"
+          onBlur={handleOnBlur}
           value={createCategoryName}
           placeholder="Template name"
           onKeyDown={handleKeyPress}
-          onBlur={() => !createCategoryName && resetAll()}
           onChange={(e) => setCreateCategoryName(e.target.value)}
         />
       ) : (
@@ -123,7 +132,7 @@ function StatusTemplate({
           cursor="pointer"
           color="purple.500"
           _hover={{ color: "purple.300" }}
-          onClick={() => setCreateCategory(true)}
+          onClick={() => setCreating(true)}
         >
           + New template
         </Box>
