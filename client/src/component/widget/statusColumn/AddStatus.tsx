@@ -1,23 +1,17 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useDisclosure } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
-import { getRandomSpaceColor, spaceColors3D } from "../../../media/colors";
-import { StatusCategoryState, StatusColumn } from "../../../types";
+import { getRandomSpaceColor } from "../../../media/colors";
+import {
+  CreateStatusColumnForCategoryDTO,
+  StatusCategory,
+  StatusCategoryState,
+} from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
 
 type Props = {
-  selectedCategoryName: string | undefined;
+  selectedCategory: StatusCategory;
   statusCategoriesAmount: number | undefined;
   setStatusCategoryState: React.Dispatch<
     React.SetStateAction<StatusCategoryState>
@@ -26,7 +20,7 @@ type Props = {
 
 export default memo(AddStatus);
 function AddStatus({
-  selectedCategoryName,
+  selectedCategory,
   setStatusCategoryState,
   statusCategoriesAmount,
 }: Props) {
@@ -60,7 +54,7 @@ function AddStatus({
     // blur event.relatedTarget returns null: https://stackoverflow.com/a/42764495/16648127
     if (!title && !e.currentTarget.contains(e.relatedTarget)) {
       resetAll();
-    } else if (title) {
+    } else if (title && !e.currentTarget.contains(e.relatedTarget)) {
       addStatus();
       setSelectedColor(getRandomSpaceColor);
     }
@@ -77,15 +71,17 @@ function AddStatus({
 
   async function addStatus() {
     const orderIndex = statusCategoriesAmount ? statusCategoriesAmount + 1 : 1;
-    const newColumn: StatusColumn = {
+    const dto: CreateStatusColumnForCategoryDTO = {
       color: selectedColor,
       orderIndex,
       title,
+      categoryId: selectedCategory.id,
     };
+
     setStatusCategoryState((prev) =>
       produce(prev, (draftState) => {
         draftState.categories.forEach((category) => {
-          if (category.name === selectedCategoryName) {
+          if (category.id === selectedCategory.id) {
             const isTitleExist = category.statusColumns.some(
               (column) => column.title.toLowerCase() === title.toLowerCase()
             );
@@ -95,7 +91,7 @@ function AddStatus({
             }
 
             setTitle("");
-            category.statusColumns.push(newColumn);
+            category.statusColumns.push(dto);
           }
         });
       })

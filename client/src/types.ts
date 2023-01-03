@@ -567,3 +567,20 @@ export type UpdateStatusColumnTitleDTO = {
   id: number;
   title: string;
 };
+
+export type UpdateStatusColumnColorDTO = {
+  id: number;
+  color: string;
+};
+
+export type UpdateStatusCategoryNameDTO = {
+  id: number;
+  name: string;
+};
+
+export type CreateStatusColumnForCategoryDTO = {
+  title: string;
+  color: string;
+  categoryId: number;
+  orderIndex: number;
+};

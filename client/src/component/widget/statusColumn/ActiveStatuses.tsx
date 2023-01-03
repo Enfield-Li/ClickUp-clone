@@ -11,7 +11,7 @@ import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
 
 type Props = {
-  selectedCategory: StatusCategory | undefined;
+  selectedCategory: StatusCategory;
   setStatusCategoryState: React.Dispatch<
     React.SetStateAction<StatusCategoryState>
   >;
@@ -19,10 +19,9 @@ type Props = {
 
 export default memo(ActiveStatuses);
 function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
-  const selectedCategoryName = selectedCategory?.name;
   const questionMarkColor = useColorModeValue("white", "darkMain.200");
 
-  const finishedStatus = selectedCategory?.statusColumns.find(
+  const finishedStatus = selectedCategory.statusColumns.find(
     (statusColumn) => statusColumn.markAsClosed
   );
 
@@ -70,14 +69,14 @@ function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
 
       <Box height="205px">
         <Box maxHeight="170px" overflow="auto">
-          {selectedCategory?.statusColumns.map(
+          {selectedCategory.statusColumns.map(
             (currentStatusColumn) =>
               !currentStatusColumn.markAsClosed && (
                 <Box key={currentStatusColumn.id}>
                   <ActiveStatus
+                    selectedCategory={selectedCategory}
                     currentStatusColumn={currentStatusColumn}
                     setStatusCategoryState={setStatusCategoryState}
-                    selectedCategoryName={selectedCategoryName}
                   />
                 </Box>
               )
@@ -85,9 +84,9 @@ function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
         </Box>
 
         <AddStatus
-          selectedCategoryName={selectedCategoryName}
+          selectedCategory={selectedCategory}
           setStatusCategoryState={setStatusCategoryState}
-          statusCategoriesAmount={selectedCategory?.statusColumns.length}
+          statusCategoriesAmount={selectedCategory.statusColumns.length}
         />
       </Box>
 
@@ -134,9 +133,9 @@ function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
 
         {finishedStatus && (
           <ActiveStatus
+            selectedCategory={selectedCategory}
             currentStatusColumn={finishedStatus}
             setStatusCategoryState={setStatusCategoryState}
-            selectedCategoryName={selectedCategoryName}
           />
         )}
       </Box>

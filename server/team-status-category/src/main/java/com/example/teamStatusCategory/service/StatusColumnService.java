@@ -3,10 +3,10 @@ package com.example.teamStatusCategory.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnTitleDTO;
-import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusColumnRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,15 @@ public class StatusColumnService {
 
     private final StatusColumnRepository repository;
 
-    public Boolean createStatusColumn(StatusColumn statusColumn) {
-        return null;
+    public Integer createStatusColumnForCategory(
+            CreateStatusColumnForCategoryDTO dto) {
+        var title = dto.title();
+        var color = dto.color();
+        var orderIndex = dto.orderIndex();
+        var categoryId = dto.categoryId();
+
+        return repository.createStatusColumnForCategory(
+                title, color, orderIndex, categoryId);
     }
 
     @Transactional

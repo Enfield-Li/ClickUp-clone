@@ -1,18 +1,23 @@
 import { Box, Center, Flex, Input, useDisclosure } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { updateStatusColumnTitle } from "../../../networkCalls";
 import {
+  updateStatusColumnColor,
+  updateStatusColumnTitle,
+} from "../../../networkCalls";
+import {
+  StatusCategory,
   StatusCategoryState,
   StatusColumn,
+  UpdateStatusColumnColorDTO,
   UpdateStatusColumnTitleDTO,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
 
 type Props = {
+  selectedCategory: StatusCategory;
   currentStatusColumn: StatusColumn;
-  selectedCategoryName: string | undefined;
   setStatusCategoryState: React.Dispatch<
     React.SetStateAction<StatusCategoryState>
   >;
@@ -20,8 +25,8 @@ type Props = {
 
 export default memo(ActiveStatus);
 function ActiveStatus({
+  selectedCategory,
   currentStatusColumn,
-  selectedCategoryName,
   setStatusCategoryState,
 }: Props) {
   const [title, setTitle] = useState("");
@@ -70,7 +75,7 @@ function ActiveStatus({
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
           draftState.categories.forEach((category) => {
-            if (category.name === selectedCategoryName) {
+            if (category.id === selectedCategory.id) {
               category.statusColumns.forEach((column) => {
                 if (column.id === currentStatusColumn.id) {
                   column.title = title;
@@ -84,18 +89,25 @@ function ActiveStatus({
   }
 
   function handleSelectColor(selectedColor: string) {
-    setStatusCategoryState((prev) =>
-      produce(prev, (draftState) => {
-        draftState.categories.forEach((category) => {
-          if (category.name === selectedCategoryName) {
-            category.statusColumns.forEach((column) => {
-              if (column.id === currentStatusColumn.id) {
-                column.color = selectedColor;
-              }
-            });
-          }
-        });
-      })
+    const dto: UpdateStatusColumnColorDTO = {
+      id: currentStatusColumn.id!,
+      color: selectedColor,
+    };
+
+    updateStatusColumnColor(dto, () =>
+      setStatusCategoryState((prev) =>
+        produce(prev, (draftState) => {
+          draftState.categories.forEach((category) => {
+            if (category.id === selectedCategory.id) {
+              category.statusColumns.forEach((column) => {
+                if (column.id === currentStatusColumn.id) {
+                  column.color = selectedColor;
+                }
+              });
+            }
+          });
+        })
+      )
     );
   }
 
@@ -113,19 +125,16 @@ function ActiveStatus({
       cursor="pointer"
       borderWidth="1px"
       fontWeight="semibold"
-      onClick={() => {
-        setEditing(true);
-        onColorPalletOpen();
-      }}
       borderColor="blackAlpha.500"
       justifyContent="space-between"
+      onClick={() => setEditing(true)}
       onMouseLeave={() => setHover(false)}
       onMouseOverCapture={() => setHover(true)}
     >
       <Flex alignItems="center">
         {/* Color */}
-
         <StatusColorPallet
+          updateColor={!editing && true}
           isColorPalletOpen={isColorPalletOpen}
           handleSelectColor={handleSelectColor}
           onColorPalletClose={onColorPalletClose}
@@ -135,12 +144,12 @@ function ActiveStatus({
             width="10px"
             rounded="sm"
             height="10px"
-            bgColor={currentStatusColumn.color}
-            onBlurCapture={(e) => console.log("blur")}
             onClick={(e) => {
               e.stopPropagation();
               onColorPalletOpen();
             }}
+            bgColor={currentStatusColumn.color}
+            onBlurCapture={(e) => console.log("blur")}
           ></Box>
         </StatusColorPallet>
 
@@ -162,7 +171,7 @@ function ActiveStatus({
           </Box>
         ) : (
           <Box color={currentStatusColumn.color}>
-            {currentStatusColumn.title.replaceAll("_", " ").toUpperCase()}
+            {currentStatusColumn.title.toUpperCase()}
           </Box>
         )}
 

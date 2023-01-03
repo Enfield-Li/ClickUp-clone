@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnTitleDTO;
@@ -32,10 +33,10 @@ class StatusColumnController {
     private final StatusColumnService service;
 
     @PostMapping
-    ResponseEntity<Boolean> createStatusColumn(
-            @RequestBody StatusColumn statusColumn) {
-        var created = service.createStatusColumn(statusColumn);
-        return ResponseEntity.ok(created);
+    ResponseEntity<Integer> createStatusColumnForCategory(
+            @RequestBody CreateStatusColumnForCategoryDTO dto) {
+        var id = service.createStatusColumnForCategory(dto);
+        return ResponseEntity.ok(id);
     }
 
     @PutMapping(TITLE)

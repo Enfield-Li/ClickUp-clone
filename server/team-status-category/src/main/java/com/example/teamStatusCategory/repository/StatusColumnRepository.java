@@ -17,7 +17,8 @@ public interface StatusColumnRepository
             + " SET title = :title"
             + " WHERE id = :id")
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    Integer updateStatusColumnTitle(@Param("id") Integer id,
+    Integer updateStatusColumnTitle(
+            @Param("id") Integer id,
             @Param("title") String title);
 
     @Query(nativeQuery = true, value = ""
@@ -25,7 +26,8 @@ public interface StatusColumnRepository
             + " SET color = :color"
             + " WHERE id = :id")
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    Integer updateStatusColumnColor(@Param("id") Integer id,
+    Integer updateStatusColumnColor(
+            @Param("id") Integer id,
             @Param("color") String color);
 
     @Query(nativeQuery = true, value = ""
@@ -33,6 +35,19 @@ public interface StatusColumnRepository
             + " SET order_index = :orderIndex"
             + " WHERE id = :id")
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    Integer updateStatusColumnOrderIndex(@Param("id") Integer id,
+    Integer updateStatusColumnOrderIndex(
+            @Param("id") Integer id,
             @Param("orderIndex") Integer orderIndex);
+
+    @Query(nativeQuery = true, value = ""
+            + "INSERT INTO status_column"
+            + " (title, color, order_index, status_category_id)"
+            + " VALUES (:title, :color, :orderIndex, :categoryId);"
+            + " SELECT LAST_INSERT_ID();")
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    Integer createStatusColumnForCategory(
+            @Param("title") String title,
+            @Param("color") String color,
+            @Param("orderIndex") Integer orderIndex,
+            @Param("categoryId") Integer categoryId);
 }

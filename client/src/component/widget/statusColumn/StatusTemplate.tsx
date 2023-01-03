@@ -55,7 +55,7 @@ function StatusTemplate({
     createStatusCategory(newCategory, (data) => {
       setStatusCategoryState(
         produce(statusCategoryState, (draftState) => {
-          draftState.categories.push(data);
+          draftState.categories.unshift(data);
         })
       );
     });

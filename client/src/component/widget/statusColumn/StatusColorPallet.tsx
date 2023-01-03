@@ -8,24 +8,34 @@ import {
 } from "@chakra-ui/react";
 import { spaceColors3D } from "../../../media/colors";
 
-type Props = { 
+type Props = {
   children: React.ReactNode;
   isColorPalletOpen: boolean;
   onColorPalletClose: () => void;
   handleSelectColor: (color: string) => void;
+  updateColor?: boolean;
 };
 
 export default function StatusColorPallet({
-  children, 
+  children,
+  updateColor,
   isColorPalletOpen,
   onColorPalletClose,
   handleSelectColor,
 }: Props) {
+  function handleOnClick(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    currentColor: string
+  ) {
+    e.stopPropagation();
+    handleSelectColor(currentColor);
+  }
+
   return (
     <Popover
       isLazy
-      autoFocus={false}
-      closeOnBlur={false}
+      autoFocus={updateColor ? undefined : false}
+      closeOnBlur={updateColor ? true : false}
       placement="top-start"
       returnFocusOnClose={false}
       isOpen={isColorPalletOpen}
@@ -54,7 +64,7 @@ export default function StatusColorPallet({
                     rounded="sm"
                     height="13px"
                     bgColor={currentColor}
-                    onClick={() => handleSelectColor(currentColor)}
+                    onClick={(e) => handleOnClick(e, currentColor)}
                   ></Box>
                 ) : (
                   <Center

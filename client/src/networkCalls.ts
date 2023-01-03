@@ -7,6 +7,7 @@ import {
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
+  CreateStatusColumnForCategoryDTO,
   ErrorResponse,
   FieldErrors,
   InitTeamDTO,
@@ -17,6 +18,8 @@ import {
   Task,
   TaskEvents,
   TaskList,
+  UpdateStatusCategoryNameDTO,
+  UpdateStatusColumnColorDTO,
   UpdateStatusColumnTitleDTO,
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
@@ -51,6 +54,48 @@ export async function fetchTeamStatusCategories(
   }
 }
 
+export async function CreateStatusColumnForCategory(
+  dto: CreateStatusColumnForCategoryDTO,
+  onSuccess: (id: number) => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.post<number>(
+      API_ENDPOINT.STATUS_COLUMN,
+      dto
+    );
+    if (!response.data) throw new Error();
+
+    onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function updateStatusColumnColor(
+  dto: UpdateStatusColumnColorDTO,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.put<boolean>(
+      API_ENDPOINT.STATUS_COLUMN + "/color",
+      dto
+    );
+    if (!response.data) throw new Error();
+
+    onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
 export async function updateStatusColumnTitle(
   dto: UpdateStatusColumnTitleDTO,
   onSuccess: () => void,
@@ -61,8 +106,30 @@ export async function updateStatusColumnTitle(
       API_ENDPOINT.STATUS_COLUMN + "/title",
       dto
     );
+    if (!response.data) throw new Error();
 
-    if (response.data) onSuccess();
+    onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function updateStatusCategoryName(
+  dto: UpdateStatusCategoryNameDTO,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.put<boolean>(
+      API_ENDPOINT.STATUS_CATEGORY + "/name",
+      dto
+    );
+    if (!response.data) throw new Error();
+
+    onSuccess();
   } catch (error) {
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
