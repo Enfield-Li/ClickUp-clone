@@ -3,8 +3,10 @@ package com.example.teamStatusCategory.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.repository.StatusCategoryRepository;
 
@@ -32,5 +34,20 @@ public class StatusCategoryService {
         var createStatusCategory = StatusCategory
                 .convertCreateStatusCategoryDTO(createStatusCategoryDTO);
         return repository.save(createStatusCategory);
+    }
+
+    @Transactional
+    public Boolean updateStatusCategoryName(UpdateStatusCategoryNameDTO dto) {
+        var id = dto.id();
+        var name = dto.name();
+
+        var rowsAffected = repository
+                .updateStatusCategoryName(id, name);
+        return rowsAffected > 0;
+    }
+
+    public Boolean deleteStatusCategory(Integer id) {
+        repository.deleteById(id);
+        return true;
     }
 }
