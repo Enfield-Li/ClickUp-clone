@@ -206,21 +206,20 @@ function ActiveStatus({
 
         {/* Title */}
         {editing ? (
-          <Input
-            autoFocus
-            left="16px"
-            color="gray"
-            height="20px"
-            value={title}
-            width="200px"
-            fontSize="13px"
-            variant="unstyled"
-            position="absolute"
-            textTransform="uppercase"
-            onKeyDown={handleKeyPress}
-            onBlur={handleFinishedEdit}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Box position="relative" height="20px" width="200px">
+            <Input
+              autoFocus
+              color="gray"
+              value={title}
+              fontSize="13px"
+              variant="unstyled"
+              position="absolute"
+              textTransform="uppercase"
+              onKeyDown={handleKeyPress}
+              onBlur={handleFinishedEdit}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </Box>
         ) : (
           <Box color={currentStatusColumn.color}>
             {currentStatusColumn.title.toUpperCase()}
