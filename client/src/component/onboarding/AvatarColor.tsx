@@ -87,7 +87,7 @@ export default function AvatarColor({
           onClose={handleCloseModal}
           onCancel={handleCancelEdit}
           originalImg={originalImgStr}
-          onImgSelect={(img) => setTeam({ ...team, avatar: img })}
+          onImgSelect={(imgOutput) => setTeam({ ...team, avatar: imgOutput })}
         />
 
         <Flex flexDir="column" alignItems="center" mx="30px" opacity="40%">

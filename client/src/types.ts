@@ -481,6 +481,7 @@ export interface CreateSpaceDTO {
   name: string;
   color: string;
   teamId: number;
+  avatar: string;
   isPrivate: boolean;
   orderIndex: number;
   statusColumnsCategoryId: number;

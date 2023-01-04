@@ -14,6 +14,7 @@ import { spaceColors2D } from "../../../media/colors";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import { FileUploader } from "react-drag-drop-files";
 import { imgFileToBase64String } from "../../../utils/imgFileToBase64String";
+import EditAvatarModal from "../../onboarding/EditAvatar";
 
 type Props = {
   createSpace: CreateSpaceState;
@@ -29,6 +30,8 @@ function CreateSpaceColor({
 }: Props) {
   const mx = "6.8px";
   const fileTypes = ["JPEG", "PNG", "GIF"];
+  const avatar = createSpace.createSpaceDTO.avatar;
+
   const [originalImgStr, setOriginalImgStr] = useState("");
   const borderColor = useColorModeValue("lightMain.200", "darkMain.400");
   const {
@@ -53,6 +56,7 @@ function CreateSpaceColor({
   function handlePickColor(color: string) {
     setCreateSpace(
       produce(createSpace, (draftState) => {
+        draftState.createSpaceDTO.avatar = "";
         draftState.createSpaceDTO.color = color;
       })
     );
@@ -65,7 +69,11 @@ function CreateSpaceColor({
 
   function handleCancelEdit() {
     setOriginalImgStr("");
-    // setTeam({ ...team, avatar: "" });
+    setCreateSpace(
+      produce(createSpace, (draftState) => {
+        draftState.createSpaceDTO.avatar = "";
+      })
+    );
   }
 
   return (
@@ -84,9 +92,11 @@ function CreateSpaceColor({
           rounded="35px"
           height="140px"
           fontSize="35px"
-          bgColor={createSpace.createSpaceDTO.color}
+          backgroundSize="contain"
+          backgroundImage={avatar}
+          bgColor={!avatar ? createSpace.createSpaceDTO.color : ""}
         >
-          {createSpace.createSpaceDTO.name[0].toUpperCase()}
+          {!avatar ? createSpace.createSpaceDTO.name[0].toUpperCase() : ""}
         </Center>
 
         <Box flexGrow="1" pl="6">
@@ -126,6 +136,21 @@ function CreateSpaceColor({
                 + Upload
               </Center>
             </FileUploader>
+
+            <EditAvatarModal
+              updatedImg={avatar}
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              onCancel={handleCancelEdit}
+              originalImg={originalImgStr}
+              onImgSelect={(imgOutput) =>
+                setCreateSpace(
+                  produce(createSpace, (draftState) => {
+                    draftState.createSpaceDTO.avatar = imgOutput;
+                  })
+                )
+              }
+            />
           </Flex>
 
           {spaceColors2D.map((colorGroup, index) => (

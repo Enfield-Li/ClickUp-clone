@@ -42,7 +42,6 @@ export default function EditAvatarModal({
         .getImageScaledToCanvas()
         .toDataURL("image/png");
       onImgSelect(imgOutput);
-      setZoomScale(100);
     }
   }
 
@@ -51,12 +50,22 @@ export default function EditAvatarModal({
     setZoomScale(zoomValue);
   }
 
+  function onModalClose() {
+    onClose();
+    setZoomScale(100);
+  }
+
+  function onModalCancel() {
+    onCancel();
+    setZoomScale(100);
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+    <Modal isOpen={isOpen} onClose={onModalClose} size="2xl">
       <ModalOverlay />
 
       <ModalContent>
-        <ModalCloseButton onClick={onCancel} />
+        <ModalCloseButton onClick={onModalCancel} />
 
         {originalImg && (
           <Flex>
@@ -110,7 +119,7 @@ export default function EditAvatarModal({
                 _active={{}}
                 rounded="sm"
                 color="white"
-                onClick={onClose}
+                onClick={onModalClose}
                 bgColor="customBlue.200"
                 _hover={{ bgColor: "customBlue.100" }}
               >
