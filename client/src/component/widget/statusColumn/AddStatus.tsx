@@ -7,6 +7,7 @@ import {
   CreateStatusColumnForCategoryDTO,
   StatusCategory,
   StatusCategoryState,
+  StatusColumn,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPallet from "./StatusColorPallet";
@@ -103,13 +104,14 @@ function AddStatus({
       categoryId: selectedCategory.id,
     };
 
-    CreateStatusColumnForCategory(dto, () => {
+    CreateStatusColumnForCategory(dto, (id) => {
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
           draftState.categories.forEach((category) => {
             if (category.id === selectedCategory.id) {
               setTitle("");
-              category.statusColumns.push(dto);
+              const newColumn: StatusColumn = { ...dto, id };
+              category.statusColumns.push(newColumn);
             }
           });
         })
@@ -150,6 +152,7 @@ function AddStatus({
 
           {/* Title */}
           <Input
+            mb="1px"
             autoFocus
             width="100%"
             height="25px"
@@ -160,6 +163,7 @@ function AddStatus({
             fontWeight="semibold"
             textTransform="uppercase"
             onKeyDown={handleKeyPress}
+            placeholder="ENTER A STATUS"
             onChange={(e) => setTitle(e.target.value)}
           />
 

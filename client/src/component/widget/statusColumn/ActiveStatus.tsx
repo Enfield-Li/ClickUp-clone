@@ -198,15 +198,18 @@ function ActiveStatus({
             width="10px"
             rounded="sm"
             height="10px"
-            onClick={handleOpenColorPallet}
             bgColor={currentStatusColumn.color}
-            onBlurCapture={(e) => console.log("blur")}
+            onClick={
+              !currentStatusColumn.markAsClosed
+                ? handleOpenColorPallet
+                : undefined
+            }
           ></Box>
         </StatusColorPallet>
 
         {/* Title */}
         {editing ? (
-          <Box position="relative" height="20px" width="200px">
+          <Box position="relative" height="20px" width="200px" mb="1px">
             <Input
               autoFocus
               color="gray"
@@ -221,7 +224,7 @@ function ActiveStatus({
             />
           </Box>
         ) : (
-          <Box color={currentStatusColumn.color}>
+          <Box color={currentStatusColumn.color} mb="2px">
             {currentStatusColumn.title.toUpperCase()}
           </Box>
         )}
@@ -236,18 +239,28 @@ function ActiveStatus({
 
       {/* Options */}
       <StatusColumnOptionPopover>
+        {/* Rename */}
         <StatusColumnOption onClickHandler={() => setEditing(true)}>
           <i className="bi bi-pen"></i>
           <Box ml="10px">Rename</Box>
         </StatusColumnOption>
-        <StatusColumnOption onClickHandler={handleOpenColorPallet}>
-          <i className="bi bi-palette-fill"></i>
-          <Box ml="10px">Change Color</Box>
-        </StatusColumnOption>
-        <StatusColumnOption onClickHandler={handleDelete}>
-          <i className="bi bi-trash"></i>
-          <Box ml="10px">Delete Status</Box>
-        </StatusColumnOption>
+
+        {/* Change color */}
+        {!currentStatusColumn.markAsClosed && (
+          <StatusColumnOption onClickHandler={handleOpenColorPallet}>
+            <i className="bi bi-palette-fill"></i>
+            <Box ml="10px">Change Color</Box>
+          </StatusColumnOption>
+        )}
+
+        {/* Delete */}
+        {!currentStatusColumn.isDefaultStatus &&
+          !currentStatusColumn.markAsClosed && (
+            <StatusColumnOption onClickHandler={handleDelete}>
+              <i className="bi bi-trash"></i>
+              <Box ml="10px">Delete Status</Box>
+            </StatusColumnOption>
+          )}
       </StatusColumnOptionPopover>
     </Flex>
   );

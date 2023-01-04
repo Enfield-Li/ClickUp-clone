@@ -48,6 +48,7 @@ export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
   orderIndex: number;
   markAsClosed?: boolean;
+  isDefaultStatus?: boolean;
 }
 export interface DueDateColumn extends Column<DueDate> {
   localDateStr?: string; // Format: 10/10/2022
