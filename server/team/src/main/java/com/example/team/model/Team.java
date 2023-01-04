@@ -64,6 +64,10 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
+    public void addSpace(Space space) {
+        spaces.add(space);
+    }
+
     public static Team initTeamCreation(CreateTeamDTO createTeamDTO,
             UserCredentials userCredentials) {
         var defaultSpaceName = "space";

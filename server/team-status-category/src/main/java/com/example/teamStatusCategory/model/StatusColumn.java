@@ -53,8 +53,8 @@ public class StatusColumn {
     @Column(updatable = false, insertable = false)
     private Integer statusCategoryId;
 
-    @ManyToOne
     @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusCategoryId")
     private StatusCategory statusCategory;
 

@@ -2,7 +2,6 @@ package com.example.team.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import static javax.persistence.FetchType.LAZY;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.example.team.dto.CreateSpaceDTO;
@@ -30,6 +31,9 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "name", "teamId" })
+})
 public class Space {
 
     @Id
@@ -47,31 +51,30 @@ public class Space {
     @Builder.Default
     private Boolean isPrivate = false;
 
-    private Integer defaultStatusColumnId;
-
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer teamId;
 
     @JsonIgnore
     @ToString.Exclude
-    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "teamId")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
     @Builder.Default
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> allListOrFolder = new HashSet<>();
 
-    public static Space convertFromCreateSpaceDTO(CreateSpaceDTO createSpaceDTO) {
+    public static Space convertFromCreateSpaceDTO(
+            CreateSpaceDTO createSpaceDTO,
+            Team team) {
         return Space.builder()
+                .team(team)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
-                .defaultStatusColumnId(createSpaceDTO.defaultStatusColumnId())
                 .build();
     }
-
 }

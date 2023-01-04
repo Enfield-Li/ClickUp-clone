@@ -1,8 +1,8 @@
 package com.example.team.service;
 
-import java.util.Set;
+import javax.persistence.EntityManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateSpaceDTO;
@@ -17,10 +17,20 @@ import lombok.RequiredArgsConstructor;
 public class SpaceService {
 
     private final SpaceRepository repository;
+    private final EntityManager entityManager;
 
-    public Space createSpace(CreateSpaceDTO createSpaceDTO) {
+  @Transactional
+  public Space createSpace(CreateSpaceDTO createSpaceDTO) {
+        var teamReference = findTeamReference(createSpaceDTO.teamId());
+        var space = Space.convertFromCreateSpaceDTO(
+                createSpaceDTO, teamReference);
+        teamReference.addSpace(space);
 
-        return null;
+        return repository.save(space);
+    }
+
+    private Team findTeamReference(Integer teamId) {
+        return entityManager.getReference(Team.class, teamId);
     }
 
 }

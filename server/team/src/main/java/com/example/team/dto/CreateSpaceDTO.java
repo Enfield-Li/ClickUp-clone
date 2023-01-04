@@ -7,6 +7,5 @@ public record CreateSpaceDTO(
         Boolean isPrivate,
         @NotNull String name,
         @NotNull Integer teamId,
-        @NotNull Integer orderIndex,
-        Integer defaultStatusColumnId) {
+        @NotNull Integer orderIndex) {
 }

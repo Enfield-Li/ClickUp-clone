@@ -10,6 +10,7 @@ import {
 import produce from "immer";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
+import { createSpaceForTeam } from "../../../networkCalls";
 import {
   CreateSpaceStep,
   CreateSpaceState,
@@ -18,8 +19,8 @@ import {
 
 type Props = {
   sectionName: string;
-  createSpace: CreateSpaceState;
   children: React.ReactNode;
+  createSpace: CreateSpaceState;
   previousSection: CreateSpaceStep;
   nextSection: CreateSpaceStep | null;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
@@ -49,11 +50,15 @@ function CreateSpaceModalTemplate({
   }
 
   function handleCreateSpace() {
+    // TODO: validate team name
+
     const createSpaceDTO: CreateSpaceDTO = {
       ...createSpace.createSpaceDTO,
       teamId: teamState.activeTeamState.selectedTeamId,
     };
-    console.log(createSpaceDTO);
+    createSpaceForTeam(createSpaceDTO, (createdTeam) => {
+      console.log(createdTeam);
+    });
   }
 
   return (

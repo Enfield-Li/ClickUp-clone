@@ -13,6 +13,7 @@ import {
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
+  CreateSpaceDTO,
   CreateStatusCategoryDTO,
   CreateStatusColumnForCategoryDTO,
   ErrorResponse,
@@ -20,6 +21,7 @@ import {
   InitTeamDTO,
   LoginUserDTO,
   RegisterUserDTO,
+  Space,
   StatusCategories,
   StatusCategory,
   Task,
@@ -42,6 +44,26 @@ function initOrderedStatusCategories(StatusCategories: StatusCategories) {
   );
 
   return StatusCategories;
+}
+
+export async function createSpaceForTeam(
+  dto: CreateSpaceDTO,
+  onSuccess: (data: Space) => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosTeamServiceInstance.post<Space>(
+      API_ENDPOINT.SPACE_API_VERSION,
+      dto
+    );
+
+    onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
 }
 
 export async function fetchTeamStatusCategories(

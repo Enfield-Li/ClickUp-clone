@@ -36,22 +36,18 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
 
   const lookUpStep: Record<keyof CreateSpaceDTO, CreateSpaceStep | null> = {
     teamId: null,
-    color: CreateSpaceStep.COLOR,
     orderIndex: null,
     name: CreateSpaceStep.NAME,
+    color: CreateSpaceStep.COLOR,
     isPrivate: CreateSpaceStep.IS_PRIVATE,
     statusColumnsCategoryId: CreateSpaceStep.STATUS_COLUMNS,
   };
 
-  function handleRedirect(createSpaceStep: CreateSpaceStep | null): void {
-    setCreateSpace(
-      produce(createSpace, (draftState) => {
-        draftState.step = createSpaceStep;
-      })
-    );
-  }
-
-  const lookUpContent: Record<keyof CreateSpaceDTO, JSX.Element> = {
+  const lookUpContent: Record<keyof CreateSpaceDTO, JSX.Element | null> = {
+    teamId: null,
+    orderIndex: null,
+    name: <Box>{name}</Box>,
+    isPrivate: isPrivate ? <Box>Private</Box> : <Box>Public</Box>,
     color: (
       <Center
         width="20px"
@@ -64,10 +60,6 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
         {name[0]}
       </Center>
     ),
-    orderIndex: <></>,
-    teamId: <></>,
-    name: <Box>{name}</Box>,
-    isPrivate: isPrivate ? <Box>Private</Box> : <Box>Public</Box>,
     statusColumnsCategoryId: (
       <>
         {createSpace.selectedStatusColumns.map((column) => (
@@ -94,6 +86,14 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
     ),
   };
 
+  function handleRedirect(createSpaceStep: CreateSpaceStep | null): void {
+    setCreateSpace(
+      produce(createSpace, (draftState) => {
+        draftState.step = createSpaceStep;
+      })
+    );
+  }
+
   return (
     <CreateSpaceModalTemplate
       nextSection={null}
@@ -105,9 +105,12 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
       <Flex pt="6" height="100%" flexDir="column" justifyContent="center">
         {Object.entries(createSpace.createSpaceDTO).map((kvPair, index) => {
           const key = kvPair[0] as keyof CreateSpaceDTO;
+          const step = lookUpStep[key];
+          const title = lookUpTitle[key];
+          const content = lookUpContent[key];
 
           return (
-            key !== "orderIndex" && (
+            content && (
               <Flex
                 px="3"
                 key={index}
@@ -117,15 +120,15 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
                 bgColor={itemBgColor}
                 borderColor="blackAlpha.400"
                 justifyContent="space-between"
+                onClick={() => handleRedirect(step)}
                 _hover={{ bgColor: itemHoverBgColor }}
                 borderTopRadius={key === "name" ? "sm" : ""}
-                onClick={() => handleRedirect(lookUpStep[key])}
                 borderBottomRadius={key === "isPrivate" ? "sm" : ""}
               >
-                <Center fontWeight="semibold">{lookUpTitle[key]}</Center>
+                <Center fontWeight="semibold">{title}</Center>
 
                 <Flex alignItems="center" fontSize="12px" fontWeight="semibold">
-                  {lookUpContent[key]}
+                  {content}
                 </Flex>
               </Flex>
             )
