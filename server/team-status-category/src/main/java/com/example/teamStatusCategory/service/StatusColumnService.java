@@ -61,8 +61,9 @@ public class StatusColumnService {
         return rowsAffected > 0;
     }
 
+    @Transactional
     public Boolean deleteStatusColumn(Integer id) {
-        repository.deleteById(id);
-        return true;
+        var rowsAffected = repository.deleteStatusColumnById(id);
+        return rowsAffected > 0;
     }
 }

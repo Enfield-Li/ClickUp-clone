@@ -16,7 +16,10 @@ export default function StatusColumnOption({
       px="2"
       py="7px"
       rounded="md"
-      onClick={onClickHandler}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClickHandler(e);
+      }}
       _hover={{ bgColor: hoverBgColor }}
     >
       {children}

@@ -68,12 +68,11 @@ function StatusCategoryItem({
     if (isCategoryNameExist) {
       setStatusCategoryState(
         produce(statusCategoriesSelected, (draftState) => {
-          draftState.categories.forEach(
-            (category) =>
-              category.id === currentCategory.id &&
-              (draftState.errorMsg =
-                "WHOOPS! THIS TEMPLATE NAME ALREADY EXISTS")
-          );
+          draftState.categories.forEach((category) => {
+            if (category.id === currentCategory.id) {
+              draftState.errorMsg = "WHOOPS! THIS TEMPLATE NAME ALREADY EXISTS";
+            }
+          });
         })
       );
       return;

@@ -152,8 +152,21 @@ function ActiveStatus({
 
   // TODO
   function handleDelete() {
-    console.log("delete");
-    // deleteStatusColumn(1, () => {})
+    deleteStatusColumn(currentStatusColumn.id!, () => {
+      setStatusCategoryState((prev) =>
+        produce(prev, (draftState) => {
+          draftState.categories.forEach((category, index, arr) => {
+            if (category.id === selectedCategory?.id) {
+              category.statusColumns.forEach((statusColumn, index, arr) => {
+                if (statusColumn.id === currentStatusColumn.id) {
+                  arr.splice(index, 1);
+                }
+              });
+            }
+          });
+        })
+      );
+    });
   }
 
   return (
@@ -195,11 +208,14 @@ function ActiveStatus({
         {editing ? (
           <Input
             autoFocus
+            left="16px"
             color="gray"
             height="20px"
             value={title}
+            width="200px"
             fontSize="13px"
             variant="unstyled"
+            position="absolute"
             textTransform="uppercase"
             onKeyDown={handleKeyPress}
             onBlur={handleFinishedEdit}

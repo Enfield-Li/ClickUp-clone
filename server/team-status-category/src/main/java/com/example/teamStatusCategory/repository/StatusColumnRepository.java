@@ -56,4 +56,11 @@ public interface StatusColumnRepository
             + " ORDER BY LAST_INSERT_ID(id)"
             + " DESC LIMIT 1")
     Integer getLastInsertedStatusColumnId();
+
+    @Query(nativeQuery = true, value = ""
+            + "DELETE FROM status_column"
+            + " WHERE id = :id")
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    Integer deleteStatusColumnById(
+            @Param("id") Integer id);
 }
