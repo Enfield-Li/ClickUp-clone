@@ -50,6 +50,7 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
     isPrivate: isPrivate ? <Box>Private</Box> : <Box>Public</Box>,
     color: (
       <Center
+        pb="3px"
         width="20px"
         rounded="md"
         height="20px"

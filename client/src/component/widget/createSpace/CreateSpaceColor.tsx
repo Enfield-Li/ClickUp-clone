@@ -1,10 +1,19 @@
 import { NotAllowedIcon } from "@chakra-ui/icons";
-import { Box, Center, Flex, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import produce from "immer";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import { spaceColors2D } from "../../../media/colors";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
+import { FileUploader } from "react-drag-drop-files";
+import { imgFileToBase64String } from "../../../utils/imgFileToBase64String";
 
 type Props = {
   createSpace: CreateSpaceState;
@@ -19,6 +28,20 @@ function CreateSpaceColor({
   redirectToReview,
 }: Props) {
   const mx = "6.8px";
+  const fileTypes = ["JPEG", "PNG", "GIF"];
+  const [originalImgStr, setOriginalImgStr] = useState("");
+  const borderColor = useColorModeValue("lightMain.200", "darkMain.400");
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
+
+  async function handleUploadImg(file: File) {
+    onModalOpen();
+    setOriginalImgStr(await imgFileToBase64String(file));
+  }
+
   function handleCancelColor() {
     setCreateSpace(
       produce(createSpace, (draftState) => {
@@ -33,6 +56,16 @@ function CreateSpaceColor({
         draftState.createSpaceDTO.color = color;
       })
     );
+  }
+
+  function handleCloseModal() {
+    onModalClose();
+    setOriginalImgStr("");
+  }
+
+  function handleCancelEdit() {
+    setOriginalImgStr("");
+    // setTeam({ ...team, avatar: "" });
   }
 
   return (
@@ -57,14 +90,43 @@ function CreateSpaceColor({
         </Center>
 
         <Box flexGrow="1" pl="6">
-          <Text
-            opacity="50%"
-            fontSize="12px"
-            letterSpacing="wide"
-            fontWeight="semibold"
+          <Flex
+            height="20px"
+            alignItems="center"
+            justifyContent="space-between"
           >
-            SPACE COLOR
-          </Text>
+            <Text
+              opacity="50%"
+              fontSize="12px"
+              letterSpacing="wide"
+              fontWeight="semibold"
+            >
+              SPACE COLOR
+            </Text>
+
+            <FileUploader
+              name="file"
+              multiple={false}
+              types={fileTypes}
+              handleChange={handleUploadImg}
+            >
+              <Center
+                px="4"
+                pt="2px"
+                pb="3px"
+                mr="30px"
+                rounded="full"
+                fontSize="13px"
+                cursor="pointer"
+                borderWidth="1px"
+                color="purple.400"
+                borderColor={borderColor}
+                _hover={{ bgColor: "customBlue.200", color: "white" }}
+              >
+                + Upload
+              </Center>
+            </FileUploader>
+          </Flex>
 
           {spaceColors2D.map((colorGroup, index) => (
             <Flex my="6" key={index}>

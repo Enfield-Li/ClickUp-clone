@@ -18,64 +18,74 @@ import { CreateTeamDTO } from "./CreateTeam";
 
 type Props = {
   isOpen: boolean;
-  imgString: string;
+  updatedImg: string;
+  originalImg: string;
   onClose: () => void;
-  team: CreateTeamDTO;
-  setTeam: React.Dispatch<React.SetStateAction<CreateTeamDTO>>;
+  onCancel: () => void;
+  onImgSelect: (imgOutput: string) => void;
 };
 
 export default function EditAvatarModal({
-  team,
   isOpen,
   onClose,
-  setTeam,
-  imgString,
+  onCancel,
+  updatedImg,
+  originalImg,
+  onImgSelect,
 }: Props) {
   const editor = useRef<AvatarEditor>(null);
-  const [scale, setScale] = useState(100);
+  const [zoomScale, setZoomScale] = useState(100);
 
-  function handleUpdateAvatar() {
+  function handleOutputImg() {
     if (editor.current) {
-      const canvasScaled = editor.current.getImageScaledToCanvas();
-      setTeam({
-        ...team,
-        avatar: canvasScaled.toDataURL("image/png"),
-      });
+      const imgOutput = editor.current
+        .getImageScaledToCanvas()
+        .toDataURL("image/png");
+      onImgSelect(imgOutput);
+      setZoomScale(100);
     }
+  }
+
+  function handleDragSlider(zoomValue: number) {
+    handleOutputImg();
+    setZoomScale(zoomValue);
   }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl">
       <ModalOverlay />
-      <ModalContent>
-        <ModalCloseButton onClick={() => setTeam({ ...team, avatar: "" })} />
 
-        {imgString && (
+      <ModalContent>
+        <ModalCloseButton onClick={onCancel} />
+
+        {originalImg && (
           <Flex>
+            {/* Img editor */}
             <AvatarEditor
               rotate={0}
               border={50}
               width={250}
               ref={editor}
               height={250}
-              image={imgString}
               borderRadius={200}
-              scale={scale / 100}
+              image={originalImg}
               color={[0, 0, 0, 0.4]}
+              scale={zoomScale / 100}
               backgroundColor="black"
-              onMouseMove={handleUpdateAvatar}
-              onImageReady={handleUpdateAvatar}
+              onMouseMove={handleOutputImg}
+              onImageReady={handleOutputImg}
             />
+
             <Slider
               mx="2"
               mb="5"
               min={100}
               max={200}
               minH="32"
-              value={scale}
               alignSelf="end"
-              onChange={setScale}
+              value={zoomScale}
               orientation="vertical"
+              onChange={handleDragSlider}
             >
               <SliderTrack>
                 <SliderFilledTrack />
@@ -83,13 +93,16 @@ export default function EditAvatarModal({
               <SliderThumb />
             </Slider>
 
+            {/* Img output */}
             <Center flexDir="column" flexGrow="1">
               <Image
                 width="140px"
                 height="140px"
                 rounded="full"
-                src={team.avatar}
+                src={updatedImg}
               />
+
+              {/* Confirm button */}
               <Button
                 mt="3"
                 size="sm"

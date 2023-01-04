@@ -5,6 +5,7 @@ import { teamColors2D } from "../../media/colors";
 import EditAvatarModal from "./EditAvatar";
 import { CreateTeamDTO } from "./CreateTeam";
 import OnBoardingTemplate from "./OnBoardingTemplate";
+import { imgFileToBase64String } from "../../utils/imgFileToBase64String";
 
 type Props = {
   team: CreateTeamDTO;
@@ -20,30 +21,26 @@ export default function AvatarColor({
   handleNextStage,
 }: Props) {
   const fileTypes = ["JPEG", "PNG", "GIF"];
-  const [imgString, setImageString] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [originalImgStr, setOriginalImgStr] = useState("");
+  const {
+    isOpen: isModalOpen,
+    onOpen: onModalOpen,
+    onClose: onModalClose,
+  } = useDisclosure();
 
-  useEffect(() => {
-    if (imgString) {
-      onOpen();
-    }
-  }, [imgString]);
-
-  useEffect(() => {
-    if (!isOpen) setImageString("");
-  }, [isOpen]);
-
-  async function toBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
+  async function handleUploadImg(file: File) {
+    onModalOpen();
+    setOriginalImgStr(await imgFileToBase64String(file));
   }
 
-  async function handleChange(file: File) {
-    setImageString(await toBase64(file));
+  function handleCloseModal() {
+    onModalClose();
+    setOriginalImgStr("");
+  }
+
+  function handleCancelEdit() {
+    setOriginalImgStr("");
+    setTeam({ ...team, avatar: "" });
   }
 
   return (
@@ -59,7 +56,7 @@ export default function AvatarColor({
           name="file"
           multiple={false}
           types={fileTypes}
-          handleChange={handleChange}
+          handleChange={handleUploadImg}
         >
           <Center
             width="140px"
@@ -85,24 +82,25 @@ export default function AvatarColor({
         </FileUploader>
 
         <EditAvatarModal
-          team={team}
-          isOpen={isOpen}
-          onClose={onClose}
-          setTeam={setTeam}
-          imgString={imgString}
+          isOpen={isModalOpen}
+          updatedImg={team.avatar}
+          onClose={handleCloseModal}
+          onCancel={handleCancelEdit}
+          originalImg={originalImgStr}
+          onImgSelect={(img) => setTeam({ ...team, avatar: img })}
         />
 
         <Flex flexDir="column" alignItems="center" mx="30px" opacity="40%">
           <Divider
             opacity="35%"
-            borderColor="blackAlpha.600"
             orientation="vertical"
+            borderColor="blackAlpha.600"
           />
           <Box py="3">or</Box>
           <Divider
             opacity="35%"
-            borderColor="blackAlpha.600"
             orientation="vertical"
+            borderColor="blackAlpha.600"
           />
         </Flex>
 
@@ -114,9 +112,6 @@ export default function AvatarColor({
           fontSize="30px"
           flexDir="column"
           fontWeight="bold"
-          borderWidth="1px"
-          borderStyle="dashed"
-          borderColor="gray.400"
           backgroundSize="contain"
           backgroundImage={team.avatar}
           bgColor={!team.avatar ? team.color : ""}
