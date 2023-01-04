@@ -45,6 +45,8 @@ public class Space {
 
     private String color;
 
+    private String avatar;
+
     @NotNull
     private Integer orderIndex;
 
@@ -72,6 +74,7 @@ public class Space {
                 .team(team)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
+                .avatar(createSpaceDTO.avatar())
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
