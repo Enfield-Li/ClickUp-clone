@@ -45,6 +45,7 @@ public class Space {
 
     private String color;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @NotNull
@@ -79,5 +80,10 @@ public class Space {
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
                 .build();
+    }
+
+    public static Space initSpace(Team team) {
+        return Space.builder().team(team).name("space")
+                .color("gray").orderIndex(1).isPrivate(false).build();
     }
 }

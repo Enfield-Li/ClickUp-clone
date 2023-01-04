@@ -68,8 +68,10 @@ function JoinedTeamList({ onClose }: Props) {
               height="26px"
               rounded="full"
               bgColor={team.color}
+              backgroundSize="contain"
+              backgroundImage={team.avatar}
             >
-              {team.name[0].toUpperCase()}
+              {!team.avatar ? team.name[0].toUpperCase() : ""}
             </Center>
           </Center>
         ))}

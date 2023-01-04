@@ -66,9 +66,13 @@ function ApplicationSettings({}: Props) {
                   width="30px"
                   height="30px"
                   rounded="full"
+                  backgroundSize="contain"
                   bgColor={currentTeam?.color}
+                  backgroundImage={currentTeam?.avatar}
                 >
-                  {currentTeam?.name[0].toUpperCase()}
+                  {!currentTeam?.avatar
+                    ? currentTeam?.name[0].toUpperCase()
+                    : ""}
                 </Center>
               </Center>
             </Center>

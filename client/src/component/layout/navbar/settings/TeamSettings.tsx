@@ -45,8 +45,10 @@ function TeamSettings({ currentTeam }: Props) {
           rounded="full"
           bgColor="green"
           color="lightMain.200"
+          backgroundSize="contain"
+          backgroundImage={currentTeam?.avatar}
         >
-          {currentTeam?.name[0].toUpperCase()}
+          {!currentTeam?.avatar ? currentTeam?.name[0].toUpperCase() : ""}
         </Center>
 
         <Center ml="2" fontSize="12px" fontWeight="semibold">
