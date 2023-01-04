@@ -3,15 +3,17 @@ import {
   Button,
   Center,
   Divider,
+  Flex,
   FormLabel,
   Input,
   ModalCloseButton,
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
-import { ChangeEvent, memo } from "react";
-import { CreateSpaceState, CreateSpaceStep } from "../../../types";
+import { ChangeEvent, memo, useEffect, useState } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import NewSpaceSVG from "../../../media/NewSpaceSVG";
+import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 
 type Props = {
   createSpace: CreateSpaceState;
@@ -20,7 +22,13 @@ type Props = {
 
 export default memo(CreateSpaceName);
 function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
+  const [error, setError] = useState(false);
+  const { teamState } = useTeamStateContext();
   const inputBgColor = useColorModeValue("lightMain.50", "darkMain.200");
+
+  useEffect(() => {
+    if (error) setTimeout(() => setError(false), 3000);
+  }, [error]);
 
   function handleInput(e: ChangeEvent<HTMLInputElement>) {
     setCreateSpace(
@@ -31,6 +39,18 @@ function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   }
 
   function handleNextStep() {
+    const isTeamNameExist = teamState.teams.some(
+      (team) =>
+        team.id === teamState.activeTeamState.selectedTeamId &&
+        team.spaces.some(
+          (space) => space.name === createSpace.createSpaceDTO.name
+        )
+    );
+    if (isTeamNameExist) {
+      setError(true);
+      return;
+    }
+
     setCreateSpace(
       produce(createSpace, (draftState) => {
         draftState.step = createSpace.isAllSet
@@ -69,19 +89,25 @@ function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
         flexDir="column"
         bgColor={inputBgColor}
       >
-        <Box width="100%">
+        <Box width="100%" mb="5">
           <FormLabel fontSize="small" fontWeight="semibold" opacity="90%">
             Space name
           </FormLabel>
 
           <Input
-            mb="5"
             autoFocus
             variant="flushed"
             onChange={handleInput}
             value={createSpace.createSpaceDTO.name}
             placeholder="Enter Space Name"
           />
+
+          {error && (
+            <Flex mt="2" fontSize="12px" color="red.500">
+              <i className="bi bi-exclamation-triangle-fill"></i>
+              <Box ml="2">Space name already exists!</Box>
+            </Flex>
+          )}
         </Box>
 
         <Button
