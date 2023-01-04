@@ -19,7 +19,6 @@ import {
   UpdateStatusCategoryNameDTO,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
-import { handleDeleteTask } from "../../task/actions/deleteTask";
 
 type Props = {
   currentCategory: StatusCategory;
@@ -84,12 +83,12 @@ function StatusCategoryItem({
     };
 
     updateStatusCategoryName(dto, () => {
+      setEditing(false);
       setStatusCategoryState(
         produce(statusCategoriesSelected, (draftState) => {
           draftState.categories.forEach((category) => {
             if (category.id === currentCategory.id) {
               category.name = title;
-              setEditing(false);
             }
           });
         })

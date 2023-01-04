@@ -5,7 +5,7 @@ import {
   Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { StatusCategory, StatusCategoryState } from "../../../types";
 import ActiveStatus from "./ActiveStatus";
 import AddStatus from "./AddStatus";
@@ -21,8 +21,12 @@ export default memo(ActiveStatuses);
 function ActiveStatuses({ selectedCategory, setStatusCategoryState }: Props) {
   const questionMarkColor = useColorModeValue("white", "darkMain.200");
 
-  const finishedStatus = selectedCategory?.statusColumns.find(
-    (statusColumn) => statusColumn.markAsClosed
+  const finishedStatus = useMemo(
+    () =>
+      selectedCategory?.statusColumns.find(
+        (statusColumn) => statusColumn.markAsClosed
+      ),
+    [selectedCategory]
   );
 
   return (

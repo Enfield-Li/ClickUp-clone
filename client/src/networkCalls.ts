@@ -1,12 +1,19 @@
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { NavigateFunction } from "react-router-dom";
+import {
+  axiosAuthServiceInstance,
+  axiosGatewayInstance,
+  axiosStatusCategoryServiceInstance,
+  axiosTeamServiceInstance,
+} from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/onboarding/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
+  CreateStatusCategoryDTO,
   CreateStatusColumnForCategoryDTO,
   ErrorResponse,
   FieldErrors,
@@ -25,13 +32,17 @@ import {
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
 } from "./types";
-import {
-  axiosAuthServiceInstance,
-  axiosGatewayInstance,
-  axiosStatusCategoryServiceInstance,
-  axiosTeamServiceInstance,
-} from "./AxiosInstance";
 import { deepCopy } from "./utils/deepCopy";
+
+function initOrderedStatusCategories(StatusCategories: StatusCategories) {
+  StatusCategories[0].isSelected = true;
+
+  StatusCategories.forEach((category) =>
+    category.statusColumns.sort((a, b) => a.orderIndex - b.orderIndex)
+  );
+
+  return StatusCategories;
+}
 
 export async function fetchTeamStatusCategories(
   teamId: number,
@@ -44,8 +55,7 @@ export async function fetchTeamStatusCategories(
         API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
       );
 
-    response.data[0].isSelected = true;
-    onSuccess(response.data);
+    onSuccess(initOrderedStatusCategories(response.data));
   } catch (error) {
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
@@ -179,15 +189,15 @@ export async function updateStatusCategoryName(
 }
 
 export async function createStatusCategory(
-  statusCategory: StatusCategory,
-  onSuccess: (data: StatusCategory) => void
-  //   onFailure?: (msg: string) => void
+  dto: CreateStatusCategoryDTO,
+  onSuccess: (data: StatusCategory) => void,
+  onFailure?: () => void
 ) {
   try {
     const response =
       await axiosStatusCategoryServiceInstance.post<StatusCategory>(
         API_ENDPOINT.STATUS_CATEGORY,
-        statusCategory
+        dto
       );
 
     onSuccess(response.data);
@@ -195,6 +205,7 @@ export async function createStatusCategory(
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
     console.log(response);
+    onFailure && onFailure();
   }
 }
 

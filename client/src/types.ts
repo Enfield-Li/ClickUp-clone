@@ -585,3 +585,9 @@ export type CreateStatusColumnForCategoryDTO = {
   categoryId: number;
   orderIndex: number;
 };
+
+export type CreateStatusCategoryDTO = {
+  name: string;
+  teamId: number;
+  statusColumns: StatusColumns
+};

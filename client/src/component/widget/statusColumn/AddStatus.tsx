@@ -105,11 +105,11 @@ function AddStatus({
     };
 
     CreateStatusColumnForCategory(dto, (id) => {
+      setTitle("");
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
           draftState.categories.forEach((category) => {
             if (category.id === selectedCategory.id) {
-              setTitle("");
               const newColumn: StatusColumn = { ...dto, id };
               category.statusColumns.push(newColumn);
             }

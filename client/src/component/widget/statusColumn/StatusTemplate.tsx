@@ -2,7 +2,11 @@ import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import React, { Fragment, memo, useState } from "react";
 import StatusCategoryItem from "./StatusCategoryItem";
 import produce from "immer";
-import { StatusCategoryState, StatusCategory } from "../../../types";
+import {
+  StatusCategoryState,
+  StatusCategory,
+  CreateStatusCategoryDTO,
+} from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { createStatusCategory } from "../../../networkCalls";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
@@ -35,9 +39,6 @@ function StatusTemplate({
       throw new Error("Cannot find existing category");
     }
 
-    const newCategory = deepCopy(selectedCategory) as StatusCategory;
-    newCategory.name = createCategoryName;
-
     const isCategoryNameExist = statusCategoryState.categories.some(
       (category) =>
         category.name.toLowerCase() === createCategoryName.toLowerCase()
@@ -52,10 +53,16 @@ function StatusTemplate({
       return;
     }
 
-    createStatusCategory(newCategory, (data) => {
+    const dto: CreateStatusCategoryDTO = {
+      name: createCategoryName,
+      teamId: selectedCategory.teamId,
+      statusColumns: selectedCategory.statusColumns,
+    };
+
+    createStatusCategory(dto, (newCategory) => {
       setStatusCategoryState(
         produce(statusCategoryState, (draftState) => {
-          draftState.categories.unshift(data);
+          draftState.categories.unshift(newCategory);
         })
       );
     });
