@@ -103,9 +103,11 @@ function SpaceComponent({ space }: Props) {
               fontSize="15px"
               fontWeight="bold"
               color="lightMain.200"
-              bgColor={space.color ? space.color : "gray"}
+              backgroundSize="contain"
+              backgroundImage={space.avatar}
+              bgColor={!space.avatar ? space.color : ""}
             >
-              {space.name[0]}
+              {!space.avatar ? space.name[0] : ""}
             </Center>
 
             <Center pb="3px" fontSize="15px">

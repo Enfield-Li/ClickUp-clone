@@ -285,10 +285,11 @@ export interface ListCategory extends Category {
 export interface Space {
   id: number;
   name: string;
+  color: string;
+  avatar: string;
   teamId: number;
   orderIndex: number;
   isPrivate: boolean;
-  color: string | null;
   isOpen: boolean | null; // client side
   allListOrFolder: (FolderCategory | ListCategory)[];
 }

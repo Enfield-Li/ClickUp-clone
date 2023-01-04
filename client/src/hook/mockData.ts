@@ -236,6 +236,7 @@ export const initialSpaceListForTeam1: Space[] = [
     id: 1,
     teamId: 1,
     name: "space1-team1",
+    avatar: "",
     orderIndex: 1,
     color: getRandomSpaceColor(),
     isOpen: null,
@@ -247,6 +248,7 @@ export const initialSpaceListForTeam1: Space[] = [
     teamId: 1,
     name: "space2-team1",
     orderIndex: 2,
+    avatar: "",
     isOpen: null,
     color: getRandomSpaceColor(),
     isPrivate: true,
@@ -258,6 +260,7 @@ const initialSpaceList2ForTeam2: Space[] = [
   {
     id: 100,
     teamId: 2,
+    avatar: "",
     name: "space2",
     isOpen: null,
     orderIndex: 2,
