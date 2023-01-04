@@ -143,7 +143,6 @@ function ActiveStatus({
     onColorPalletOpen();
   }
 
-  // TODO
   function handleDelete() {
     deleteStatusColumn(currentStatusColumn.id!, () => {
       setStatusCategoryState((prev) =>

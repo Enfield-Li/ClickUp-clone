@@ -478,9 +478,9 @@ export const TEAM_STATE_ACTION = {
 } as const;
 
 export interface CreateSpaceDTO {
-  teamId?: number;
   name: string;
   color: string;
+  teamId: number;
   isPrivate: boolean;
   orderIndex: number;
   statusColumnsCategoryId: number;
@@ -589,5 +589,5 @@ export type CreateStatusColumnForCategoryDTO = {
 export type CreateStatusCategoryDTO = {
   name: string;
   teamId: number;
-  statusColumns: StatusColumns
+  statusColumns: StatusColumns;
 };

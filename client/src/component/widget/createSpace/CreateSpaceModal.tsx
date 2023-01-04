@@ -23,6 +23,7 @@ type Props = {};
 
 const initCreateSpaceDTO: CreateSpaceDTO = {
   name: "",
+  teamId: 0,
   color: "gray",
   orderIndex: 0,
   isPrivate: false,

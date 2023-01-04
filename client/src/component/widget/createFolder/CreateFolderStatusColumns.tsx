@@ -15,9 +15,9 @@ export default function CreateFolderStatusColumns({
 }: Props) {
   return (
     <CreateFolderTemplate
+      isCurrentStepEntry={false}
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
-      currentStep={CreateFolderStep.ENTRY}
       title="What task statuses do you want?"
     >
       <Flex height="100%">

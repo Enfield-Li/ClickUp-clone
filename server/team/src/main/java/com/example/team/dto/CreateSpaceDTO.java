@@ -1,9 +1,12 @@
 package com.example.team.dto;
 
+import javax.validation.constraints.NotNull;
+
 public record CreateSpaceDTO(
-        String name,
         String color,
         Boolean isPrivate,
-        Integer orderIndex,
+        @NotNull String name,
+        @NotNull Integer teamId,
+        @NotNull Integer orderIndex,
         Integer defaultStatusColumnId) {
 }

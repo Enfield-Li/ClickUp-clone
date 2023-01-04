@@ -13,7 +13,7 @@ import { CreateFolderState, CreateFolderStep } from "../../../types";
 type Props = {
   title: string;
   children: React.ReactNode;
-  currentStep: CreateFolderStep;
+  isCurrentStepEntry: boolean;
   createFolder: CreateFolderState;
   setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
@@ -21,9 +21,9 @@ type Props = {
 export default function CreateFolderTemplate({
   title,
   children,
-  currentStep,
   createFolder,
   setCreateFolder,
+  isCurrentStepEntry,
 }: Props) {
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
 
@@ -36,9 +36,13 @@ export default function CreateFolderTemplate({
   }
 
   function handleOnClick() {
-    if (currentStep === CreateFolderStep.ENTRY) {
+    // create folder
+    if (isCurrentStepEntry) {
+      // TODO: create folder
       return;
     }
+
+    // return to entry
     setCreateFolder(
       produce(createFolder, (draftState) => {
         draftState.step = CreateFolderStep.ENTRY;
@@ -98,7 +102,7 @@ export default function CreateFolderTemplate({
           onClick={handleOnClick}
           _hover={{ bgColor: "customBlue.100" }}
         >
-          Create Folder
+          {isCurrentStepEntry ? "Create Folder" : "Save"}
         </Button>
       </Box>
     </>

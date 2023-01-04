@@ -1,4 +1,4 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
@@ -30,12 +30,16 @@ export default function CreateFolderEntry({
     );
   }
 
+  function isLastElement(index: number, arr: any[]) {
+    return index === arr.length - 1;
+  }
+
   return (
     <CreateFolderTemplate
       title="Create folder"
+      isCurrentStepEntry={true}
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
-      currentStep={CreateFolderStep.ENTRY}
     >
       <Box fontWeight="semibold" fontSize="sm" mb="1">
         Folder name
@@ -58,13 +62,41 @@ export default function CreateFolderEntry({
         borderColor="blackAlpha.500"
       >
         <Box onClick={() => handleOnClick(CreateFolderStep.LISTS)}>
-          <CreateFolderItem left="Lists" right="List" />
+          <CreateFolderItem left="Lists">
+            <Flex alignItems="center" justifyContent="flex-end" width="500px">
+              {createFolder.createFolderDTO.allLists.map((list, index, arr) => (
+                <Center
+                  key={list}
+                  rounded="sm"
+                  height="10px"
+                  width="fit-content"
+                  mr={isLastElement(index, arr) ? "" : "9px"}
+                >
+                  {list}
+                  {isLastElement(index, arr) ? "" : ","}
+                </Center>
+              ))}
+            </Flex>
+          </CreateFolderItem>
         </Box>
         <Box onClick={() => handleOnClick(CreateFolderStep.SHARE)}>
-          <CreateFolderItem left="Share Folder with" right="people" />
+          <CreateFolderItem left="Share Folder with">abc</CreateFolderItem>
         </Box>
         <Box onClick={() => handleOnClick(CreateFolderStep.STATUS)}>
-          <CreateFolderItem left="Task statuses" right="User Space statuses" />
+          <CreateFolderItem left="Task statuses">
+            <Flex alignItems="center" justifyContent="flex-end" width="500px">
+              {createFolder.selectedStatusColumns.map((column, index, arr) => (
+                <Box
+                  width="10px"
+                  height="10px"
+                  rounded="sm"
+                  key={column.id}
+                  bgColor={column.color}
+                  mr={isLastElement(index, arr) ? "" : "10px"}
+                ></Box>
+              ))}
+            </Flex>
+          </CreateFolderItem>
         </Box>
       </Box>
     </CreateFolderTemplate>

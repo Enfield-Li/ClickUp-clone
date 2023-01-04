@@ -12,16 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.service.SpaceService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(SPACE_API_VERSION)
 class SpaceController {
 
-    @Autowired
-    SpaceService spaceService;
+    private final SpaceService service;
 
     @PostMapping
-    public ResponseEntity<String> getAll(
+    public ResponseEntity<String> createSpace(
             @RequestBody CreateSpaceDTO createSpaceDTO) {
+                service.createSpace(createSpaceDTO);
+
         return ResponseEntity.ok("");
     }
 

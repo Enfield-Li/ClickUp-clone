@@ -79,10 +79,10 @@ export default function CreateFolderSelectList({
 
   return (
     <CreateFolderTemplate
+      isCurrentStepEntry={false}
       createFolder={createFolder}
       title="Your tasks live in Lists"
       setCreateFolder={setCreateFolder}
-      currentStep={CreateFolderStep.ENTRY}
     >
       <Box fontWeight="semibold" fontSize="sm" mb="1">
         List name
@@ -128,6 +128,7 @@ export default function CreateFolderSelectList({
             rounded="3px"
             height="40px"
             color="white"
+            key={listName}
             fontSize="15px"
             width="fit-content"
             fontWeight="semibold"

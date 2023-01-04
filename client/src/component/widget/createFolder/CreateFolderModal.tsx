@@ -45,21 +45,17 @@ function CreateFolderModal({}: Props) {
 
   useEffect(() => {
     if (isCreateFolderModalOpen && teamId) {
-      fetchTeamStatusCategories(teamId, (data) => {
+      fetchTeamStatusCategories(teamId, (StatusCategories) => {
         setCreateFolder(
           produce(createFolder, (draftState) => {
-            draftState.statusCategoriesData = data;
+            draftState.statusCategoriesData = StatusCategories;
+            draftState.selectedStatusColumns =
+              StatusCategories[0].statusColumns;
           })
         );
       });
     }
   }, [isCreateFolderModalOpen, teamId]);
-
-  function handleCreateFolder(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ): void {
-    throw new Error("Function not implemented.");
-  }
 
   function handleCloseModal() {
     onCreateFolderModalClose();

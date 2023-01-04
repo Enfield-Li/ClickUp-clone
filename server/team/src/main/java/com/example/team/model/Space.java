@@ -39,12 +39,11 @@ public class Space {
     @NotNull
     private String name;
 
-    @NotNull
-    private Integer orderIndex;
-
     private String color;
 
     @NotNull
+    private Integer orderIndex;
+
     @Builder.Default
     private Boolean isPrivate = false;
 
@@ -65,10 +64,10 @@ public class Space {
     private Set<Category> allListOrFolder = new HashSet<>();
 
     public static Space convertFromCreateSpaceDTO(CreateSpaceDTO createSpaceDTO) {
-        return Space
-                .builder()
+        return Space.builder()
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
+                .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
                 .defaultStatusColumnId(createSpaceDTO.defaultStatusColumnId())

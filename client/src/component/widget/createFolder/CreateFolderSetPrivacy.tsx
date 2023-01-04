@@ -36,10 +36,10 @@ export default function CreateFolderSetPrivacy({
 
   return (
     <CreateFolderTemplate
+      isCurrentStepEntry={false}
       createFolder={createFolder}
       title="Who is this Folder for?"
       setCreateFolder={setCreateFolder}
-      currentStep={CreateFolderStep.ENTRY}
     >
       <InputGroup onClick={() => setIsAddingUser(true)} fontWeight="semibold">
         {isAddingUser && (
