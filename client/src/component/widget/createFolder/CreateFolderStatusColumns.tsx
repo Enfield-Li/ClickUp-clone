@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import produce from "immer";
 import React from "react";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
@@ -22,8 +23,17 @@ export default function CreateFolderStatusColumns({
     >
       <Flex height="100%">
         <StatusColumnsDisplay
-          setCreateFolder={setCreateFolder}
-          statusCategoriesData={createFolder.teamStatusCategories}
+          teamStatusCategories={createFolder.teamStatusCategories}
+          handleSelectCategory={(selectedCategory) =>
+            setCreateFolder((prev) =>
+              produce(prev, (draftState) => {
+                draftState.selectedStatusColumns =
+                  selectedCategory.statusColumns;
+                draftState.createFolderDTO.statusCategoryId =
+                  selectedCategory.id;
+              })
+            )
+          }
         />
       </Flex>
     </CreateFolderTemplate>

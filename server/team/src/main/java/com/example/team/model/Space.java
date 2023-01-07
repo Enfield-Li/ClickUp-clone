@@ -54,6 +54,9 @@ public class Space {
     @Builder.Default
     private Boolean isPrivate = false;
 
+    @NotNull
+    private Integer statusCategoryId;
+
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer teamId;
@@ -79,11 +82,13 @@ public class Space {
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
+                .statusCategoryId(createSpaceDTO.statusCategoryId())
                 .build();
     }
 
-    public static Space initSpace(Team team) {
+    public static Space initSpace(Integer defaultStatusCategoryId, Team team) {
         return Space.builder().team(team).name("space")
+                .statusCategoryId(defaultStatusCategoryId)
                 .color("gray").orderIndex(1).isPrivate(false).build();
     }
 }

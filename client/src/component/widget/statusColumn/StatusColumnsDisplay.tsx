@@ -5,27 +5,26 @@ import {
   CreateFolderState,
   CreateSpaceState,
   StatusCategories,
+  StatusCategory,
   StatusCategoryState,
 } from "../../../types";
 import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
-  statusCategoriesData: StatusCategories;
-  setCreateSpace?: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
-  setCreateFolder?: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  teamStatusCategories: StatusCategories;
+  handleSelectCategory: (selectedCategory: StatusCategory) => void;
 };
 
 export default memo(StatusColumnsDisplay);
 function StatusColumnsDisplay({
-  setCreateSpace,
-  setCreateFolder,
-  statusCategoriesData,
+  teamStatusCategories,
+  handleSelectCategory,
 }: Props) {
   const [statusCategoryState, setStatusCategoryState] =
     useState<StatusCategoryState>({
       errorMsg: "",
-      categories: statusCategoriesData,
+      categories: teamStatusCategories,
     });
   const selectedCategory = statusCategoryState.categories.find(
     (category) => category.isSelected
@@ -45,18 +44,7 @@ function StatusColumnsDisplay({
 
   useEffect(() => {
     if (selectedCategory) {
-      setCreateSpace &&
-        setCreateSpace((prev) =>
-          produce(prev, (draftState) => {
-            draftState.selectedStatusColumns = selectedCategory.statusColumns;
-          })
-        );
-      setCreateFolder &&
-        setCreateFolder((prev) =>
-          produce(prev, (draftState) => {
-            draftState.selectedStatusColumns = selectedCategory.statusColumns;
-          })
-        );
+      handleSelectCategory(selectedCategory);
     }
   }, [selectedCategory]);
 

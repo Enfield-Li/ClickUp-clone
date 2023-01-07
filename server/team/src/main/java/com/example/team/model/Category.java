@@ -46,6 +46,9 @@ abstract class Category {
 
     private Boolean isPrivate;
 
+    @NotNull
+    private Integer statusCategoryId;
+
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer spaceId;

@@ -85,10 +85,7 @@ public class Team {
                 .avatar(createTeamDTO.avatar())
                 .build();
 
-        var space = Space.initSpace(team);
-
         userInfo.setTeam(team);
-        team.setSpaces(Set.of(space));
         return team;
     }
 

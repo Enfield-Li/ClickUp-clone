@@ -50,8 +50,6 @@ function CreateSpaceModalTemplate({
   }
 
   function handleCreateSpace() {
-    // TODO: validate team name
-
     const createSpaceDTO: CreateSpaceDTO = {
       ...createSpace.createSpaceDTO,
       teamId: teamState.activeTeamState.selectedTeamId,

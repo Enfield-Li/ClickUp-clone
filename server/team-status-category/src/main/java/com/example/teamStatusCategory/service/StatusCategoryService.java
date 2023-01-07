@@ -22,11 +22,11 @@ public class StatusCategoryService {
         return repository.findAllByTeamId(teamId);
     }
 
-    public Boolean initDefaultStatusCategory(Integer teamId) {
+    public Integer initDefaultStatusCategory(Integer teamId) {
         var defaultStatusCategories = StatusCategory
                 .initDefaultStatusCategories(teamId);
-        repository.saveAll(defaultStatusCategories);
-        return true;
+        var statusCategories = repository.saveAll(defaultStatusCategories);
+        return statusCategories.get(0).getId();
     }
 
     public StatusCategory createStatusCategory(

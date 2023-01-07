@@ -485,6 +485,7 @@ export interface CreateSpaceDTO {
   avatar: string;
   isPrivate: boolean;
   orderIndex: number;
+  statusCategoryId: number;
 }
 export enum CreateSpaceStep {
   NAME = "name",
@@ -506,6 +507,7 @@ export interface CreateFolderDTO {
   allLists: string[];
   isPrivate: boolean;
   members: UserInfo[];
+  statusCategoryId: number;
 }
 export enum CreateFolderStep {
   ENTRY = "entry",

@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import produce from "immer";
 import { memo } from "react";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
@@ -26,8 +27,17 @@ function CreateSpaceStatusColumns({
     >
       <Flex pt="6" height="100%">
         <StatusColumnsDisplay
-          setCreateSpace={setCreateSpace}
-          statusCategoriesData={createSpace.teamStatusCategories}
+          teamStatusCategories={createSpace.teamStatusCategories}
+          handleSelectCategory={(selectedCategory) =>
+            setCreateSpace((prev) =>
+              produce(prev, (draftState) => {
+                draftState.selectedStatusColumns =
+                  selectedCategory.statusColumns;
+                draftState.createSpaceDTO.statusCategoryId =
+                  selectedCategory.id;
+              })
+            )
+          }
         />
       </Flex>
     </CreateSpaceModalTemplate>

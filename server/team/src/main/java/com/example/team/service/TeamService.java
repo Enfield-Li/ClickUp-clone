@@ -5,10 +5,12 @@ import static com.example.amqp.ExchangeKey.internalExchange;
 import static com.example.amqp.ExchangeKey.statusCategoryRoutingKey;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
@@ -16,11 +18,14 @@ import com.example.clients.jwt.UserCredentials;
 import com.example.clients.panelActivity.PanelActivityClient;
 import com.example.clients.panelActivity.PanelActivityDTO;
 import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
+import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndPanelActivityDTO;
+import com.example.team.model.Space;
 import com.example.team.model.Team;
+import com.example.team.repository.SpaceRepository;
 import com.example.team.repository.TeamRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -31,9 +36,10 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final SpaceService spaceService;
     private final TeamRepository teamRepository;
+    private final SpaceRepository spaceRepository;
     private final PanelActivityClient panelActivityClient;
+    private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     String logErrorMsg = "InternalDataIntegrityException, This really shouldn't have happened...";
@@ -59,39 +65,44 @@ public class TeamService {
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
-        var userInfo = getCurrentUserInfo();
+        try {
+            var userInfo = getCurrentUserInfo();
 
-        var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
+            // Init team
+            var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
+            var team = teamRepository.save(initTeam);
 
-        var team = teamRepository.save(initTeam);
-        var space = team.getSpaces().stream().findFirst().get();
+            // Init space
+            var teamId = team.getId();
+            var defaultStatusCategoryId = (Integer) statusCategoryClient
+                    .initStatusCategoryForTeam(teamId);
+            var initSpace = Space.initSpace(defaultStatusCategoryId, team);
+            team.setSpaces(Set.of(initSpace));
+            var space = spaceRepository.save(initSpace);
 
-        // update panel activity
-        var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
-                team.getId(), space.getId());
-        var response = panelActivityClient.updateDefaultTeamInCreation(
-                updateDefaultTeamInCreationDTO);
-        if (!response) {
-            log.error(logErrorMsg);
+            // update panel activity
+            var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
+                    team.getId(), space.getId());
+            var response = panelActivityClient.updateDefaultTeamInCreation(
+                    updateDefaultTeamInCreationDTO);
+            if (!response || !(defaultStatusCategoryId > 0)) {
+                throw new Error("Invalid response!");
+            }
+
+            // publish user teamAmount + 1
+            var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
+                    userInfo.userId(), true);
+            rabbitMQMessageProducer.publish(
+                    internalExchange,
+                    AuthorizationRoutingKey,
+                    updateUserJoinedTeamsDTO);
+
+            return true;
+        } catch (Exception e) {
             throw new InternalDataIntegrityException("Data integrity breached");
         }
-
-        // publish events
-        var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userInfo.userId(), true);
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                AuthorizationRoutingKey,
-                updateUserJoinedTeamsDTO);
-
-        var teamId = team.getId();
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                statusCategoryRoutingKey,
-                teamId);
-
-        return true;
     }
 
     private void validateTeamsAndPanelActivity(

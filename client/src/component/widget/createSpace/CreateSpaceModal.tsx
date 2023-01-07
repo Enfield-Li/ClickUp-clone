@@ -28,6 +28,7 @@ const initCreateSpaceDTO: CreateSpaceDTO = {
   color: "gray",
   orderIndex: 0,
   isPrivate: false,
+  statusCategoryId: 0,
 };
 
 const initialCreateSpace: CreateSpaceState = {

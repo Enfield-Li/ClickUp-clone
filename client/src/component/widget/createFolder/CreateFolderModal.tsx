@@ -7,7 +7,11 @@ import {
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { CreateFolderState, CreateFolderStep } from "../../../types";
+import {
+  CreateFolderDTO,
+  CreateFolderState,
+  CreateFolderStep,
+} from "../../../types";
 import CreateFolderEntry from "./CreateFolderEntry";
 import CreateFolderSelectList from "./CreateFolderSelectList";
 import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
@@ -16,11 +20,12 @@ import { fetchTeamStatusCategories } from "../../../networkCalls";
 
 type Props = {};
 
-const iniCreateFolderDTO = {
+const iniCreateFolderDTO: CreateFolderDTO = {
   name: "",
   members: [],
   isPrivate: false,
   allLists: ["list"],
+  statusCategoryId: 0,
 };
 
 const initCreateFolderState: CreateFolderState = {
