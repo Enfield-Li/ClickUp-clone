@@ -2,13 +2,6 @@
 export const BEARER = "Bearer ";
 export const ACCESS_TOKEN = "access token";
 
-// API endpoints
-const LOGIN = "/login";
-const LOGOUT = "/logout";
-const REGISTER = "/register";
-const REFRESH_TOKEN = "/refresh_token";
-const UPDATE_TASK_DESC = "/update_desc";
-
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost:8083",
   TASK: "http://localhost:8084",
@@ -16,7 +9,7 @@ export const SERVICE_ENDPOINT = {
   AUTHORIZATION: "http://localhost:8085",
   TEAM_STATUS_CATEGORY: "http://localhost:8089",
   PANEL_ACTIVITY: "http://localhost:8090",
-};
+} as const;
 
 const ALL_TASKS = "/all_tasks";
 const UPDATE_TASK_TITLE = "/update_title";
@@ -28,6 +21,13 @@ const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
 const STATUS_COLUMN_API_VERSION = "/api/v1/status_column";
 const STATUS_CATEGORY_API_VERSION = "/api/v1/status_category";
+
+// API endpoints
+const LOGIN = "/login";
+const LOGOUT = "/logout";
+const REGISTER = "/register";
+const REFRESH_TOKEN = "/refresh_token";
+const UPDATE_TASK_DESC = "/update_desc";
 
 export const API_ENDPOINT = {
   // auth
@@ -57,18 +57,21 @@ export const API_ENDPOINT = {
 
   // status column
   STATUS_COLUMN: STATUS_COLUMN_API_VERSION,
-};
+} as const;
 
 export const TASK_PARAM = "taskId";
 export const TASK_BOARD_PARAM = "listId";
 
 // Client route
 export const CLIENT_ROUTE = {
-  HOME: "/",
+  ENTRY: "/",
+  HOME: "/home",
   TASK: "/task",
   ABOUT: "/about",
-  LOGIN: "/login",
-  REGISTER: "/register",
   TEST_DEV: "/test_dev",
   TASK_BOARD: "/task_board",
-};
+
+  LOGIN: "/login",
+  REGISTER: "/register",
+  ON_BOARDING: "/on_boarding",
+} as const;

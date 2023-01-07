@@ -29,7 +29,8 @@ function AuthTemplate({ isLogin, children }: Props) {
       bgColor="lightMain.50"
       backgroundPosition="bottom"
       backgroundRepeat="no-repeat"
-      style={{ backgroundImage: `url("data:image/svg+xml,${svgString}")` }}
+      backgroundImage={`url("data:image/svg+xml,${svgString}")`}
+      //   style={{ backgroundImage: `url("data:image/svg+xml,${svgString}")` }}
     >
       <HeadInfo isLogin={isLogin} />
 

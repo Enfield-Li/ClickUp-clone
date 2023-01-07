@@ -1,19 +1,19 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { memo, useState } from "react";
+import { Outlet } from "react-router-dom";
 import Header from "./component/layout/Header";
 import NavBar from "./component/layout/NavBar";
 import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
 import CreateListModal from "./component/widget/createList/CreateListModal";
 import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
 import TeamStateProvider from "./context/team/TeamContext";
-import MainContentRoute from "./routes/MainContentRoute";
 
 type Props = {};
 
 export enum Section {
+  DEV = "dev",
   HOME = "home",
   TASKS = "tasks",
-  DEV = "dev",
 }
 
 export default memo(ApplicationEntry);
@@ -45,7 +45,7 @@ function ApplicationEntry({}: Props) {
 
           {/* Main content */}
           <Box role="main" flexGrow="1">
-            <MainContentRoute />
+            <Outlet />
           </Box>
         </Flex>
       </Flex>

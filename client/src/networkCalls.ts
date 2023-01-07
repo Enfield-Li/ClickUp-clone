@@ -326,6 +326,7 @@ export async function refreshUserToken(
       type: AUTH_ACTION.LOGIN_USER,
       payload: { user: response.data },
     });
+    navigate(CLIENT_ROUTE.HOME);
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);

@@ -12,9 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
 import { memo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { ACCESS_TOKEN } from "../../constant";
+import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { getRandomSpaceColor } from "../../media/colors";
 import { registerUser } from "../../networkCalls";
@@ -25,6 +25,7 @@ type Props = {};
 
 export default memo(Register);
 function Register({}: Props) {
+  const navigate = useNavigate();
   const location = useLocation();
   const [show, setShow] = useState(false);
   const { authDispatch } = useAuthContext();
@@ -78,6 +79,7 @@ function Register({}: Props) {
                   type: AUTH_ACTION.REGISTER_USER,
                   payload: { user: data },
                 });
+                navigate(CLIENT_ROUTE.ON_BOARDING);
               },
               (errors) => {
                 localStorage.removeItem(ACCESS_TOKEN);

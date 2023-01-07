@@ -63,16 +63,20 @@ function Login({}: Props) {
           onSubmit={async (loginUserDTO, { setErrors }) => {
             await loginUser(
               loginUserDTO,
-              (data) => {
+              (authResponse) => {
                 // store accessToken to localStorage
-                localStorage.setItem(ACCESS_TOKEN, data.accessToken);
+                localStorage.setItem(ACCESS_TOKEN, authResponse.accessToken);
 
                 // update auth taskState
                 authDispatch({
                   type: AUTH_ACTION.LOGIN_USER,
-                  payload: { user: data },
+                  payload: { user: authResponse },
                 });
-                navigate(CLIENT_ROUTE.HOME);
+                navigate(
+                  authResponse.joinedTeamCount > 0
+                    ? CLIENT_ROUTE.HOME
+                    : CLIENT_ROUTE.ON_BOARDING
+                );
               },
               (errors) => {
                 // clear local auth taskState and accessToken
