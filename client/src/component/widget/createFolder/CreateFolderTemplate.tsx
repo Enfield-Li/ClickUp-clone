@@ -38,7 +38,7 @@ export default function CreateFolderTemplate({
   function handleOnClick() {
     // create folder
     if (isCurrentStepEntry) {
-      // TODO: create folder
+      // TODO: create folder network
       return;
     }
 

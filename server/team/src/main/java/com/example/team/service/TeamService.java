@@ -65,44 +65,43 @@ public class TeamService {
         return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = {
+            Exception.class, InternalDataIntegrityException.class })
     public Boolean createTeam(CreateTeamDTO createTeamDTO) {
-        try {
-            var userInfo = getCurrentUserInfo();
+        var userInfo = getCurrentUserInfo();
 
-            // Init team
-            var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
-            var team = teamRepository.save(initTeam);
+        // Init team
+        var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
+        var team = teamRepository.save(initTeam);
 
-            // Init space
-            var teamId = team.getId();
-            var defaultStatusCategoryId = (Integer) statusCategoryClient
-                    .initStatusCategoryForTeam(teamId);
-            var initSpace = Space.initSpace(defaultStatusCategoryId, team);
-            team.setSpaces(Set.of(initSpace));
-            var space = spaceRepository.save(initSpace);
+        // Init space
+        var teamId = team.getId();
+        var defaultStatusCategoryId = (Integer) statusCategoryClient
+                .initStatusCategoryForTeam(teamId);
+        var initSpace = Space.initSpace(defaultStatusCategoryId, team);
+        team.setSpaces(Set.of(initSpace));
+        var space = spaceRepository.save(initSpace);
 
-            // update panel activity
-            var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
-                    team.getId(), space.getId());
-            var response = panelActivityClient.updateDefaultTeamInCreation(
-                    updateDefaultTeamInCreationDTO);
-            if (!response || !(defaultStatusCategoryId > 0)) {
-                throw new Error("Invalid response!");
-            }
-
-            // publish user teamAmount + 1
-            var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                    userInfo.userId(), true);
-            rabbitMQMessageProducer.publish(
-                    internalExchange,
-                    AuthorizationRoutingKey,
-                    updateUserJoinedTeamsDTO);
-
-            return true;
-        } catch (Exception e) {
-            throw new InternalDataIntegrityException("Data integrity breached");
+        // update panel activity
+        var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
+                team.getId(), space.getId());
+        var response = panelActivityClient.updateDefaultTeamInCreation(
+                updateDefaultTeamInCreationDTO);
+        if (!response || !(defaultStatusCategoryId > 0)) {
+            log.error("Create team failed");
+            throw new InternalDataIntegrityException("Cannot create team");
         }
+
+        // publish user teamAmount + 1
+        var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
+                userInfo.userId(), true);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                AuthorizationRoutingKey,
+                updateUserJoinedTeamsDTO);
+
+        return true;
+
     }
 
     private void validateTeamsAndPanelActivity(
