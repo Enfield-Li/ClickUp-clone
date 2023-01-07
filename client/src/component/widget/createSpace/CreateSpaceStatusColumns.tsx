@@ -27,7 +27,7 @@ function CreateSpaceStatusColumns({
       <Flex pt="6" height="100%">
         <StatusColumnsDisplay
           setCreateSpace={setCreateSpace}
-          statusCategoriesData={createSpace.statusCategoriesData}
+          statusCategoriesData={createSpace.teamStatusCategories}
         />
       </Flex>
     </CreateSpaceModalTemplate>

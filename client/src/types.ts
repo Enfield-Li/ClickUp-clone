@@ -269,7 +269,7 @@ export interface Category {
   members: UserInfo[];
   isPrivate: boolean;
   color: string | null;
-  statusColumnsCategoryId: number;
+  statusColumnsCategoryId: number; // TODO: delete
 }
 export interface FolderCategory extends Category {
   isOpen: boolean | null; // client side
@@ -485,7 +485,6 @@ export interface CreateSpaceDTO {
   avatar: string;
   isPrivate: boolean;
   orderIndex: number;
-  statusColumnsCategoryId: number;
 }
 export enum CreateSpaceStep {
   NAME = "name",
@@ -499,7 +498,7 @@ export interface CreateSpaceState {
   step: CreateSpaceStep | null;
   createSpaceDTO: CreateSpaceDTO;
   selectedStatusColumns: StatusColumns;
-  statusCategoriesData: StatusCategories;
+  teamStatusCategories: StatusCategories;
 }
 
 export interface CreateFolderDTO {
@@ -518,7 +517,7 @@ export interface CreateFolderState {
   step: CreateFolderStep;
   createFolderDTO: CreateFolderDTO;
   selectedStatusColumns: StatusColumns;
-  statusCategoriesData: StatusCategories;
+  teamStatusCategories: StatusCategories;
 }
 
 export type InitTeamDTO = {

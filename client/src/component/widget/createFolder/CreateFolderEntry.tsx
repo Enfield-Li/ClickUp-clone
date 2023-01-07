@@ -2,7 +2,7 @@ import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
-import CreateFolderItem from "./CreateFolderItem";
+import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
 type Props = {
@@ -23,8 +23,8 @@ export default function CreateFolderEntry({
   }
 
   function handleOnClick(targetStep: CreateFolderStep) {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
+    setCreateFolder((prev) =>
+      produce(prev, (draftState) => {
         draftState.step = targetStep;
       })
     );
@@ -61,43 +61,53 @@ export default function CreateFolderEntry({
         borderBottomWidth="0px"
         borderColor="blackAlpha.500"
       >
-        <Box onClick={() => handleOnClick(CreateFolderStep.LISTS)}>
-          <CreateFolderItem left="Lists">
-            <Flex alignItems="center" justifyContent="flex-end" width="500px">
-              {createFolder.createFolderDTO.allLists.map((list, index, arr) => (
-                <Center
-                  key={list}
-                  rounded="sm"
-                  height="10px"
-                  width="fit-content"
-                  mr={isLastElement(index, arr) ? "" : "9px"}
-                >
-                  {list}
-                  {isLastElement(index, arr) ? "" : ","}
-                </Center>
-              ))}
-            </Flex>
-          </CreateFolderItem>
-        </Box>
-        <Box onClick={() => handleOnClick(CreateFolderStep.SHARE)}>
-          <CreateFolderItem left="Share Folder with">abc</CreateFolderItem>
-        </Box>
-        <Box onClick={() => handleOnClick(CreateFolderStep.STATUS)}>
-          <CreateFolderItem left="Task statuses">
-            <Flex alignItems="center" justifyContent="flex-end" width="500px">
-              {createFolder.selectedStatusColumns.map((column, index, arr) => (
-                <Box
-                  width="10px"
-                  height="10px"
-                  rounded="sm"
-                  key={column.id}
-                  bgColor={column.color}
-                  mr={isLastElement(index, arr) ? "" : "10px"}
-                ></Box>
-              ))}
-            </Flex>
-          </CreateFolderItem>
-        </Box>
+        {/* List */}
+        <ReviewCreateFolderItem
+          title="Lists"
+          handleClick={() => handleOnClick(CreateFolderStep.LISTS)}
+        >
+          <Flex alignItems="center" justifyContent="flex-end" width="500px">
+            {createFolder.createFolderDTO.allLists.map((list, index, arr) => (
+              <Center
+                key={list}
+                rounded="sm"
+                height="10px"
+                width="fit-content"
+                mr={isLastElement(index, arr) ? "" : "9px"}
+              >
+                {list}
+                {isLastElement(index, arr) ? "" : ","}
+              </Center>
+            ))}
+          </Flex>
+        </ReviewCreateFolderItem>
+
+        {/* Share */}
+        <ReviewCreateFolderItem
+          title="Share Folder with"
+          handleClick={() => handleOnClick(CreateFolderStep.SHARE)}
+        >
+          abc
+        </ReviewCreateFolderItem>
+
+        {/* Status */}
+        <ReviewCreateFolderItem
+          title="Task statuses"
+          handleClick={() => handleOnClick(CreateFolderStep.STATUS)}
+        >
+          <Flex alignItems="center" justifyContent="flex-end" width="500px">
+            {createFolder.selectedStatusColumns.map((column, index, arr) => (
+              <Box
+                width="10px"
+                height="10px"
+                rounded="sm"
+                key={column.id}
+                bgColor={column.color}
+                mr={isLastElement(index, arr) ? "" : "10px"}
+              ></Box>
+            ))}
+          </Flex>
+        </ReviewCreateFolderItem>
       </Box>
     </CreateFolderTemplate>
   );

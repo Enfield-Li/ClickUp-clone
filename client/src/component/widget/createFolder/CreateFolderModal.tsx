@@ -24,7 +24,7 @@ const iniCreateFolderDTO = {
 };
 
 const initCreateFolderState: CreateFolderState = {
-  statusCategoriesData: [],
+  teamStatusCategories: [],
   selectedStatusColumns: [],
   step: CreateFolderStep.ENTRY,
   createFolderDTO: iniCreateFolderDTO,
@@ -48,7 +48,7 @@ function CreateFolderModal({}: Props) {
       fetchTeamStatusCategories(teamId, (StatusCategories) => {
         setCreateFolder(
           produce(createFolder, (draftState) => {
-            draftState.statusCategoriesData = StatusCategories;
+            draftState.teamStatusCategories = StatusCategories;
             draftState.selectedStatusColumns =
               StatusCategories[0].statusColumns;
           })

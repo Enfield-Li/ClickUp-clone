@@ -1,11 +1,14 @@
 import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { useLocation } from "react-router-dom";
 
-type Props = { left: string; children: React.ReactNode };
+type Props = {
+  title: string;
+  handleClick: () => void;
+  children: React.ReactNode;
+};
 
-export default memo(CreateFolderItem);
-function CreateFolderItem({ left, children }: Props) {
+export default memo(ReviewCreateFolderItem);
+function ReviewCreateFolderItem({ title, children, handleClick }: Props) {
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.200");
 
   return (
@@ -14,12 +17,13 @@ function CreateFolderItem({ left, children }: Props) {
       height="60px"
       fontSize="small"
       alignItems="center"
+      onClick={handleClick}
       borderBottomWidth="1px"
       borderColor="blackAlpha.500"
       justifyContent="space-between"
       _hover={{ bgColor: hoverBgColor }}
     >
-      <Box>{left}</Box>
+      <Box>{title}</Box>
       <Center flexDir="row">
         {children}
 

@@ -40,7 +40,6 @@ export default function OnBoardingTemplate({
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
       createTeam(createTeamDTO, () => {
         navigate(CLIENT_ROUTE.TASK_BOARD);
-        authDispatch({ type: AUTH_ACTION.CLOSE_ONBOARDING });
       });
     }
   }

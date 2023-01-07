@@ -33,7 +33,4 @@ class ListCategory extends Category {
     @ManyToOne
     @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
-
-    private Integer statusColumnsCategoryId;
-
 }

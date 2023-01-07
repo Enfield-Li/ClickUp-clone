@@ -23,7 +23,7 @@ export default function CreateFolderStatusColumns({
       <Flex height="100%">
         <StatusColumnsDisplay
           setCreateFolder={setCreateFolder}
-          statusCategoriesData={createFolder.statusCategoriesData}
+          statusCategoriesData={createFolder.teamStatusCategories}
         />
       </Flex>
     </CreateFolderTemplate>

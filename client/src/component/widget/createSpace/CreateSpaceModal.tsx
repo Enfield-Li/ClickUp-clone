@@ -28,12 +28,11 @@ const initCreateSpaceDTO: CreateSpaceDTO = {
   color: "gray",
   orderIndex: 0,
   isPrivate: false,
-  statusColumnsCategoryId: 0,
 };
 
 const initialCreateSpace: CreateSpaceState = {
   isAllSet: false,
-  statusCategoriesData: [],
+  teamStatusCategories: [],
   selectedStatusColumns: [],
   step: CreateSpaceStep.NAME,
   createSpaceDTO: initCreateSpaceDTO,
@@ -61,7 +60,7 @@ function CreateSpaceModal({}: Props) {
       fetchTeamStatusCategories(teamId, (data) => {
         setCreateSpace(
           produce(createSpace, (draftState) => {
-            draftState.statusCategoriesData = data;
+            draftState.teamStatusCategories = data;
           })
         );
       });
