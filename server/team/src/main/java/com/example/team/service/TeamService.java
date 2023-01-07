@@ -42,8 +42,6 @@ public class TeamService {
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
-    String logErrorMsg = "InternalDataIntegrityException, This really shouldn't have happened...";
-
     public UserCredentials getCurrentUserInfo() {
         // return new UserCredentials(1, "username");
         return (UserCredentials) SecurityContextHolder.getContext()
@@ -117,7 +115,8 @@ public class TeamService {
                 throw new Error();
             }
         } catch (Exception e) {
-            log.error(logErrorMsg);
+            log.error(
+                    "InternalDataIntegrityException, This really shouldn't have happened...");
             throw new InternalDataIntegrityException("Data integrity breached");
         }
     }
