@@ -1,9 +1,9 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useEffect, useState } from "react";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
-import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
 import CreateFolderTemplate from "./CreateFolderTemplate";
+import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
 
 type Props = {
   createFolder: CreateFolderState;
@@ -14,7 +14,10 @@ export default function CreateFolderEntry({
   createFolder,
   setCreateFolder,
 }: Props) {
+  const [showError, setShowError] = useState(false);
+
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (showError) setShowError(false);
     setCreateFolder(
       produce(createFolder, (draftState) => {
         draftState.createFolderDTO.name = e.target.value;
@@ -40,18 +43,32 @@ export default function CreateFolderEntry({
       isCurrentStepEntry={true}
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
+      showError={() => setShowError(true)}
     >
-      <Box fontWeight="semibold" fontSize="sm" mb="1">
+      <Box
+        mb="1"
+        fontSize="sm"
+        fontWeight="semibold"
+        color={showError ? "red.500" : ""}
+      >
         Folder name
       </Box>
 
       <Input
         autoFocus
-        variant="unstyled"
         onChange={handleInputOnChange}
         placeholder="Enter folder name"
+        borderColor={showError ? "red.500" : ""}
         value={createFolder.createFolderDTO.name}
+        variant={showError ? "flushed" : "unstyled"}
       />
+      {showError && (
+        <Box mt="4px" color="red.500" height="10px" fontSize="12px">
+          <i className="bi bi-exclamation-triangle-fill"></i>
+          <span>&nbsp;</span>
+          Folder name is required!
+        </Box>
+      )}
 
       <Box
         mt="55px"

@@ -12,6 +12,7 @@ import { CreateFolderState, CreateFolderStep } from "../../../types";
 
 type Props = {
   title: string;
+  showError?: () => void;
   children: React.ReactNode;
   isCurrentStepEntry: boolean;
   createFolder: CreateFolderState;
@@ -21,6 +22,7 @@ type Props = {
 export default function CreateFolderTemplate({
   title,
   children,
+  showError,
   createFolder,
   setCreateFolder,
   isCurrentStepEntry,
@@ -38,7 +40,14 @@ export default function CreateFolderTemplate({
   function handleOnClick() {
     // create folder
     if (isCurrentStepEntry) {
+      if (!createFolder.createFolderDTO.name) {
+        showError && showError();
+        return;
+      }
+
       // TODO: create folder network
+      console.log(createFolder.createFolderDTO);
+
       return;
     }
 

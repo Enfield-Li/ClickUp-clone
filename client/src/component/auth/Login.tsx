@@ -101,7 +101,7 @@ function Login({}: Props) {
 
                       {/* Input */}
                       <InputGroup
-                        border={errors.email && touched.email ? "red" : ""}
+                        border={errors.email && touched.email ? "red.500" : ""}
                       >
                         <InputLeftElement
                           pointerEvents="none"
@@ -118,7 +118,7 @@ function Login({}: Props) {
                       {/* Error */}
                       <Box
                         ml="2"
-                        color="red"
+                        color="red.500"
                         height="10px"
                         fontSize="12px"
                         cursor="pointer"
@@ -150,7 +150,7 @@ function Login({}: Props) {
                       {/* Input */}
                       <InputGroup
                         border={
-                          errors.password && touched.password ? "red" : ""
+                          errors.password && touched.password ? "red.500" : ""
                         }
                       >
                         <InputLeftElement
@@ -181,7 +181,7 @@ function Login({}: Props) {
                       </InputGroup>
 
                       {/* Error */}
-                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                      <Box height="10px" fontSize="12px" color="red.500" ml="2">
                         {errors.password && touched.password && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>

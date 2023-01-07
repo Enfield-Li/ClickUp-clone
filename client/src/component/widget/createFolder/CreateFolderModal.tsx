@@ -67,14 +67,6 @@ function CreateFolderModal({}: Props) {
     setCreateFolder(initCreateFolderState);
   }
 
-  function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
-        draftState.createFolderDTO.name = e.target.value;
-      })
-    );
-  }
-
   function renderStepComponent() {
     switch (createFolder.step) {
       case CreateFolderStep.ENTRY: {

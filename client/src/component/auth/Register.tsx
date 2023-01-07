@@ -104,7 +104,7 @@ function Register({}: Props) {
                       {/* Input */}
                       <InputGroup
                         border={
-                          errors.username && touched.username ? "red" : ""
+                          errors.username && touched.username ? "red.500" : ""
                         }
                       >
                         <InputLeftElement
@@ -125,7 +125,7 @@ function Register({}: Props) {
                       </InputGroup>
 
                       {/* Error */}
-                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                      <Box height="10px" fontSize="12px" color="red.500" ml="2">
                         {errors.username && touched.username && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
@@ -148,7 +148,7 @@ function Register({}: Props) {
 
                       {/* Input */}
                       <InputGroup
-                        border={errors.email && touched.email ? "red" : ""}
+                        border={errors.email && touched.email ? "red.500" : ""}
                       >
                         <InputLeftElement
                           pointerEvents="none"
@@ -164,7 +164,7 @@ function Register({}: Props) {
                       </InputGroup>
 
                       {/* Error */}
-                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                      <Box height="10px" fontSize="12px" color="red.500" ml="2">
                         {errors.email && touched.email && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
@@ -188,7 +188,7 @@ function Register({}: Props) {
                       {/* Input */}
                       <InputGroup
                         border={
-                          errors.password && touched.password ? "red" : ""
+                          errors.password && touched.password ? "red.500" : ""
                         }
                       >
                         <InputLeftElement
@@ -222,7 +222,7 @@ function Register({}: Props) {
                       </InputGroup>
 
                       {/* Error */}
-                      <Box height="10px" fontSize="12px" color="red" ml="2">
+                      <Box height="10px" fontSize="12px" color="red.500" ml="2">
                         {errors.password && touched.password && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
