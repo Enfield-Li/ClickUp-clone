@@ -1,7 +1,7 @@
 import { Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { CreateTeamDTO } from "./CreateTeam";
-import OnBoardingTemplate from "./OnBoardingTemplate";
+import CreateTeamTemplate from "./CreateTeamTemplate";
 
 type Props = {
   step: number;
@@ -38,7 +38,7 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
   }
 
   return (
-    <OnBoardingTemplate
+    <CreateTeamTemplate
       step={step}
       stageNumber={2}
       title="How many people will you be working with?"
@@ -85,6 +85,6 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
       >
         I don't know
       </Center>
-    </OnBoardingTemplate>
+    </CreateTeamTemplate>
   );
 }

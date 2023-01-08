@@ -6,7 +6,7 @@ import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
 import About from "./component/layout/About";
 import Home from "./component/layout/Home";
-import CreateTeam from "./component/onboarding/CreateTeam";
+import CreateTeam from "./component/createTeam/CreateTeam";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
@@ -44,14 +44,13 @@ function App() {
       <Route path={CLIENT_ROUTE.REGISTER} element={<Register />} />
       <Route path={CLIENT_ROUTE.ON_BOARDING} element={<CreateTeam />} />
 
-      <Route element={<ApplicationEntry />}>
+      <Route path=":/teamId" element={<ApplicationEntry />}>
         <Route path={CLIENT_ROUTE.HOME} element={<Home />} />
-        <Route path={CLIENT_ROUTE.ABOUT} element={<About />} />
         <Route path={CLIENT_ROUTE.TEST_DEV} element={<TestDev />} />
 
         {/* https://stackoverflow.com/questions/70005601/alternate-way-for-optional-parameters-in-v6 */}
         <Route
-          path={CLIENT_ROUTE.TASK_BOARD + "/:teamId?/:spaceId?/:listId?"}
+          path={CLIENT_ROUTE.TASK_BOARD + "/:spaceId?/:listId?"}
           element={<TaskView />}
         />
       </Route>

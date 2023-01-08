@@ -4,7 +4,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { teamColors2D } from "../../media/colors";
 import EditAvatarModal from "./EditAvatar";
 import { CreateTeamDTO } from "./CreateTeam";
-import OnBoardingTemplate from "./OnBoardingTemplate";
+import CreateTeamTemplate from "./CreateTeamTemplate";
 import { imgFileToBase64String } from "../../utils/imgFileToBase64String";
 
 type Props = {
@@ -44,7 +44,7 @@ export default function AvatarColor({
   }
 
   return (
-    <OnBoardingTemplate
+    <CreateTeamTemplate
       step={step}
       stageNumber={1}
       buttonTitle="I'm happy so far"
@@ -138,6 +138,6 @@ export default function AvatarColor({
           ))}
         </Box>
       </Flex>
-    </OnBoardingTemplate>
+    </CreateTeamTemplate>
   );
 }

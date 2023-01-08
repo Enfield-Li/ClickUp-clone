@@ -11,7 +11,7 @@ import useAuthContext from "../../context/auth/useAuthContext";
 import { getRandomTeamColor } from "../../media/colors";
 import pic from "../../media/onboarding.png";
 import AvatarColor from "./AvatarColor";
-import OnBoardingTemplate from "./OnBoardingTemplate";
+import CreateTeamTemplate from "./CreateTeamTemplate";
 import TeamSize from "./TeamSize";
 
 type Props = {};
@@ -77,7 +77,7 @@ export default function CreateTeam({}: Props) {
 
         {/* Name */}
         <Box ref={(element) => element && (ref.current[0] = element)}>
-          <OnBoardingTemplate
+          <CreateTeamTemplate
             step={step}
             stageNumber={0}
             buttonTitle="Next"
@@ -101,7 +101,7 @@ export default function CreateTeam({}: Props) {
             <Box color="customBlue.200" mt="4" fontSize="sm">
               You can also use the name of your company or organization
             </Box>
-          </OnBoardingTemplate>
+          </CreateTeamTemplate>
         </Box>
 
         {/* Avatar and color */}
@@ -125,7 +125,7 @@ export default function CreateTeam({}: Props) {
 
         {/* Member email */}
         <Box ref={(element) => element && (ref.current[3] = element)}>
-          <OnBoardingTemplate
+          <CreateTeamTemplate
             step={step}
             stageNumber={3}
             buttonTitle="I'm done"
@@ -147,12 +147,12 @@ export default function CreateTeam({}: Props) {
                 setTeam({ ...team, memberEmails: e.target.value })
               }
             />
-          </OnBoardingTemplate>
+          </CreateTeamTemplate>
         </Box>
 
         {/* Apps */}
         <Box ref={(element) => element && (ref.current[4] = element)}>
-          <OnBoardingTemplate
+          <CreateTeamTemplate
             step={step}
             stageNumber={4}
             buttonTitle="No, thanks"
@@ -160,12 +160,12 @@ export default function CreateTeam({}: Props) {
             title="Do you use any of these apps?"
           >
             <Box opacity="70%">(some icons and stuff...)</Box>
-          </OnBoardingTemplate>
+          </CreateTeamTemplate>
         </Box>
 
         {/* Import tasks */}
         <Box ref={(element) => element && (ref.current[5] = element)}>
-          <OnBoardingTemplate
+          <CreateTeamTemplate
             step={step}
             stageNumber={5}
             buttonTitle="No, thanks"
@@ -173,12 +173,12 @@ export default function CreateTeam({}: Props) {
             title="Do you want to import tasks?"
           >
             <Box opacity="70%">(some more icons and stuff...)</Box>
-          </OnBoardingTemplate>
+          </CreateTeamTemplate>
         </Box>
 
         {/* Done */}
         <Box ref={(element) => element && (ref.current[6] = element)} mb="65px">
-          <OnBoardingTemplate
+          <CreateTeamTemplate
             step={step}
             stageNumber={6}
             createTeamDTO={team}
@@ -188,7 +188,7 @@ export default function CreateTeam({}: Props) {
             <Box mt="-40px" fontSize="25px">
               And don't forget to have fun 🙌
             </Box>
-          </OnBoardingTemplate>
+          </CreateTeamTemplate>
         </Box>
       </Box>
 

@@ -65,13 +65,14 @@ export const TASK_BOARD_PARAM = "listId";
 // Client route
 export const CLIENT_ROUTE = {
   ENTRY: "/",
-  HOME: "/home",
   TASK: "/task",
   ABOUT: "/about",
-  TEST_DEV: "/test_dev",
-  TASK_BOARD: "/task_board",
 
   LOGIN: "/login",
   REGISTER: "/register",
   ON_BOARDING: "/on_boarding",
+
+  HOME: "home",
+  TEST_DEV: "test_dev",
+  TASK_BOARD: "task_board",
 } as const;

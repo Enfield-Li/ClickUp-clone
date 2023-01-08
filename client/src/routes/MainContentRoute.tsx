@@ -5,7 +5,7 @@ import Login from "../component/auth/Login";
 import Register from "../component/auth/Register";
 import About from "../component/layout/About";
 import Home from "../component/layout/Home";
-import CreateTeam from "../component/onboarding/CreateTeam";
+import CreateTeam from "../component/createTeam/CreateTeam";
 import TaskView from "../component/task/TaskView";
 import TestDev from "../component/test-dev/TestDev";
 import { CLIENT_ROUTE } from "../constant";

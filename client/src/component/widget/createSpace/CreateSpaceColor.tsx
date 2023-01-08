@@ -14,7 +14,7 @@ import { spaceColors2D } from "../../../media/colors";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import { FileUploader } from "react-drag-drop-files";
 import { imgFileToBase64String } from "../../../utils/imgFileToBase64String";
-import EditAvatarModal from "../../onboarding/EditAvatar";
+import EditAvatarModal from "../../createTeam/EditAvatar";
 
 type Props = {
   createSpace: CreateSpaceState;

@@ -19,7 +19,7 @@ type Props = {
   handleNextStage?: (stage: number) => void;
 };
 
-export default function OnBoardingTemplate({
+export default function CreateTeamTemplate({
   step,
   title,
   children,

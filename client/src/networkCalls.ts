@@ -7,7 +7,7 @@ import {
   axiosStatusCategoryServiceInstance,
   axiosTeamServiceInstance,
 } from "./AxiosInstance";
-import { CreateTeamDTO } from "./component/onboarding/CreateTeam";
+import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
   AuthActionType,
