@@ -1,6 +1,6 @@
 package com.example.clients.teamActivity;
 
-public record UpdateDefaultTeamInCreationDTO(
+public record CreateTeamActivityDTO(
         Integer teamId,
         Integer spaceId) {
 }

@@ -30,7 +30,7 @@ import com.example.clients.jwt.UserCredentials;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.TeamActivityClient;
 import com.example.clients.teamActivity.TeamActivityDTO;
-import com.example.clients.teamActivity.UpdateDefaultTeamInCreationDTO;
+import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
@@ -79,7 +79,7 @@ public class TeamServiceTest implements WithAssertions {
     ArgumentCaptor<UpdateUserJoinedTeamsDTO> updateUserJoinedTeamsDTOCaptor;
 
     @Captor
-    ArgumentCaptor<UpdateDefaultTeamInCreationDTO> updateDefaultTeamInCreationDTOCaptor;
+    ArgumentCaptor<CreateTeamActivityDTO> updateDefaultTeamInCreationDTOCaptor;
 
     UserCredentials userCredentials = new UserCredentials(1, "mockUser");
 
@@ -111,13 +111,13 @@ public class TeamServiceTest implements WithAssertions {
         var space = Space.builder().id(spaceId).build();
         var createTeamDTO = new CreateTeamDTO(teamName, teamColor, teamAvatar);
 
-        var expectedUpdateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
+        var expectedUpdateDefaultTeamInCreationDTO = new CreateTeamActivityDTO(
                 teamId, spaceId);
         var expectedUpdateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
                 userCredentials.userId(), teamId, true);
 
         given(teamRepository.save(any())).willReturn(team);
-        given(teamActivityClient.updateDefaultTeamInCreation(any()))
+        given(teamActivityClient.createTeamActivity(any()))
                 .willReturn(expectedTeamActivityClientUpdateResult);
 
         given(spaceRepository.save(any())).willReturn(space);
@@ -131,7 +131,7 @@ public class TeamServiceTest implements WithAssertions {
         assertThat(actualResult).isEqualTo(true);
 
         //      assert param
-        verify(teamActivityClient).updateDefaultTeamInCreation(
+        verify(teamActivityClient).createTeamActivity(
                 updateDefaultTeamInCreationDTOCaptor.capture());
         var capturedUpdateDefaultTeamInCreationDTOValue = updateDefaultTeamInCreationDTOCaptor
                 .getValue();
@@ -183,7 +183,7 @@ public class TeamServiceTest implements WithAssertions {
 
         given(statusCategoryClient.initStatusCategoryForTeam(any()))
                 .willReturn(expectedDefaultStatusCategoryId);
-        given(teamActivityClient.updateDefaultTeamInCreation(any()))
+        given(teamActivityClient.createTeamActivity(any()))
                 .willReturn(expectedTeamActivityClientUpdateResult);
 
         // when

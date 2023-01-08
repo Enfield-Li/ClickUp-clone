@@ -14,10 +14,11 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.clients.teamActivity.UpdateDefaultTeamInCreationDTO;
+import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
+import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.TeamAndActivityDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
@@ -54,14 +55,14 @@ public class TeamService {
                     "Let's create or join a Workspace first!");
         }
 
-        var teamActivityDTO = teamActivityClient.getTeamActivity();
+        var teamActivity = teamActivityClient.getTeamActivity();
         // validateTeamsAndPanelActivity(panelActivityDTO, teams);
-        return new TeamAndActivityDTO(teams, teamActivityDTO);
+        return new TeamAndActivityDTO(teams, teamActivity);
     }
 
     @Transactional(rollbackFor = {
             Exception.class, InternalDataIntegrityException.class })
-    public Boolean createTeam(CreateTeamDTO createTeamDTO) {
+    public CreateTeamResponseDTO createTeam(CreateTeamDTO createTeamDTO) {
         var userInfo = getCurrentUserInfo();
 
         // Init team
@@ -76,15 +77,11 @@ public class TeamService {
         team.setSpaces(Set.of(initSpace));
         var space = spaceRepository.save(initSpace);
 
-        // update panel activity
-        var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
+        // update team activity
+        var createTeamActivityDTO = new CreateTeamActivityDTO(
                 team.getId(), space.getId());
-        var response = teamActivityClient.updateDefaultTeamInCreation(
-                updateDefaultTeamInCreationDTO);
-        if (!response || !(defaultStatusCategoryId > 0)) {
-            log.error("Create team failed");
-            throw new InternalDataIntegrityException("Cannot create team");
-        }
+        var teamActivityDTO = teamActivityClient.createTeamActivity(
+                createTeamActivityDTO);
 
         // publish user teamAmount + 1
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
@@ -94,7 +91,7 @@ public class TeamService {
                 AuthorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
-        return true;
+        return new CreateTeamResponseDTO(team, teamActivityDTO);
     }
 
     // private void validateTeamsAndPanelActivity(

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateTeamDTO;
+import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.TeamAndActivityDTO;
 import com.example.team.service.TeamService;
 
@@ -35,10 +36,10 @@ class TeamController {
     }
 
     @PostMapping
-    ResponseEntity<Boolean> createTeam(
+    ResponseEntity<CreateTeamResponseDTO> createTeam(
             @RequestBody CreateTeamDTO createTeamDTO) {
-        var created = teamService.createTeam(createTeamDTO);
-        return ResponseEntity.ok(created);
+        var createTeamResponseDTO = teamService.createTeam(createTeamDTO);
+        return ResponseEntity.ok(createTeamResponseDTO);
     }
 
     // @PostMapping("/init_team")

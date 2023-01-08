@@ -14,7 +14,7 @@ public interface TeamActivityClient {
     TeamActivityDTO getTeamActivity();
 
     @PostMapping(path = TEAM_ACTIVITY_API_VERSION)
-    Boolean updateDefaultTeamInCreation(
-            @RequestBody UpdateDefaultTeamInCreationDTO updateDefaultTeamInCreationDTO);
+    TeamActivityDTO createTeamActivity(
+            @RequestBody CreateTeamActivityDTO updateDefaultTeamInCreationDTO);
 
 }

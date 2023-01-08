@@ -26,7 +26,9 @@ public class StatusCategoryService {
         var defaultStatusCategories = StatusCategory
                 .initDefaultStatusCategories(teamId);
         var statusCategories = repository.saveAll(defaultStatusCategories);
-        return statusCategories.get(0).getId();
+
+        var defaultStatusCategoryId = statusCategories.get(0).getId();
+        return defaultStatusCategoryId;
     }
 
     public StatusCategory createStatusCategory(
