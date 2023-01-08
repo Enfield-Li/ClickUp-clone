@@ -2,20 +2,17 @@ package com.example.team.controller;
 
 import static com.example.clients.UrlConstants.TEAM_API_VERSION;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
-import com.example.team.dto.TeamAndActivityDTO;
+import com.example.team.dto.InitTeamListDTO;
 import com.example.team.service.TeamService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,10 +26,11 @@ class TeamController {
 
     private final TeamService teamService;
 
-    @GetMapping
-    ResponseEntity<TeamAndActivityDTO> getAllTeams() {
-        var teamAndActivityDTO = teamService.getAllTeams();
-        return ResponseEntity.ok(teamAndActivityDTO);
+    @GetMapping("/{teamId}")
+    ResponseEntity<InitTeamListDTO> getAllTeams(
+            @PathVariable("teamId") Integer teamId) {
+        var teamResponseDTO = teamService.getTeam(teamId);
+        return ResponseEntity.ok(teamResponseDTO);
     }
 
     @PostMapping

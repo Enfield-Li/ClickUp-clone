@@ -16,6 +16,7 @@ import {
   CreateSpaceDTO,
   CreateStatusCategoryDTO,
   CreateStatusColumnForCategoryDTO,
+  CreateTeamResponseDTO,
   ErrorResponse,
   FieldErrors,
   InitTeamListDTO,
@@ -232,12 +233,13 @@ export async function createStatusCategory(
 }
 
 export async function fetchTeamList(
-  onSuccess: (data: InitTeamListDTO) => void,
+  teamId: string,
+  onSuccess: (initTeamListDTO: InitTeamListDTO) => void,
   onFailure: (msg: string) => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.get<InitTeamListDTO>(
-      API_ENDPOINT.TEAM
+      API_ENDPOINT.TEAM + teamId
     );
 
     onSuccess(response.data);
@@ -463,15 +465,15 @@ export async function createTask(createTaskDTO: Task) {
 
 export async function createTeam(
   createTeamDTO: CreateTeamDTO,
-  onSuccess: () => void
+  onSuccess: (responseDTO: CreateTeamResponseDTO) => void
 ) {
   try {
-    const response = await axiosTeamServiceInstance.post<boolean>(
+    const response = await axiosTeamServiceInstance.post<CreateTeamResponseDTO>(
       API_ENDPOINT.TEAM,
       createTeamDTO
     );
 
-    onSuccess();
+    onSuccess(response.data);
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);

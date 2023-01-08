@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.clients.jwt.UserCredentials;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
+import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,11 +41,11 @@ public class TeamActivityService {
 
     public TeamActivity getTeamActivity(Integer teamId) {
         var userId = getCurrentUserInfo().userId();
-
         return repository.findByTeamIdAndUserId(teamId, userId)
-                .orElseThrow(() -> new InvalidRequestException(
-                        "Invalid request, because either"
-                                + " 1. User's workspace activity has yet been initialized, or"
-                                + " 2. User record no longer exists."));
+                .orElseThrow(() -> {
+                    log.error("User's teamActivity somehow disappeared");
+                    return new InternalDataIntegrityException(
+                            "User's teamActivity somehow disappeared");
+                });
     }
 }

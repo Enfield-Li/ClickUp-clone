@@ -17,9 +17,11 @@ import com.example.clients.teamActivity.TeamActivityClient;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
+import com.example.serviceExceptionHandling.exception.ItemNotFoundException;
 import com.example.team.dto.CreateTeamDTO;
-import com.example.team.dto.CreateTeamResponseDTO;
+import com.example.team.dto.InitTeamListDTO;
 import com.example.team.dto.TeamAndActivityDTO;
+import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
@@ -33,7 +35,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final TeamRepository teamRepository;
+    private final TeamRepository repository;
     private final SpaceRepository spaceRepository;
     private final TeamActivityClient teamActivityClient;
     private final StatusCategoryClient statusCategoryClient;
@@ -46,28 +48,27 @@ public class TeamService {
                 .getPrincipal();
     }
 
-    public TeamAndActivityDTO getAllTeams() {
+    public InitTeamListDTO getAllTeams(Integer teamId) {
         var userId = getCurrentUserInfo().userId();
+        var teamSet = repository.findByMembersUserId(userId);
 
-        var teams = teamRepository.findByMembersUserId(userId);
-        if (teams.isEmpty()) {
+        var isVerified = verifyTeamIdIsInTeamSet(teamSet, userId);
+        if (!isVerified) {
             throw new InvalidRequestException(
-                    "Let's create or join a Workspace first!");
+                    "You don't have access to this team");
         }
+        var teamActivity = teamActivityClient.getTeamActivity(teamId);
 
-        var teamActivity = teamActivityClient.getTeamActivity();
-        // validateTeamsAndPanelActivity(panelActivityDTO, teams);
-        return new TeamAndActivityDTO(teams, teamActivity);
+        return new InitTeamListDTO(teamSet, teamActivity);
     }
 
-    @Transactional(rollbackFor = {
-            Exception.class, InternalDataIntegrityException.class })
+    @Transactional
     public CreateTeamResponseDTO createTeam(CreateTeamDTO createTeamDTO) {
         var userInfo = getCurrentUserInfo();
 
         // Init team
         var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
-        var team = teamRepository.save(initTeam);
+        var team = repository.save(initTeam);
 
         // Init space
         var teamId = team.getId();
@@ -94,22 +95,28 @@ public class TeamService {
         return new CreateTeamResponseDTO(team, teamActivityDTO);
     }
 
-    // private void validateTeamsAndPanelActivity(
-    //         PanelActivityDTO panelActivityDTO, List<Team> teams) {
-    //     try {
-    //         var ids = teams.stream().map(Team::getId).collect(
-    //                 Collectors.toList());
-    //         var validateResult = panelActivityDTO.teamActivities().stream()
-    //                 .allMatch(teamActivity -> ids
-    //                         .contains(teamActivity.teamId()));
+    private Boolean verifyTeamIdIsInTeamSet(
+            Set<Team> teamSet, Integer teamId) {
+        return teamSet.stream().filter(team -> team.getId() == teamId)
+                .findAny().isPresent();
+    }
 
-    //         if (!validateResult) {
-    //             throw new Error();
-    //         }
-    //     } catch (Exception e) {
-    //         log.error(
-    //                 "InternalDataIntegrityException, This really shouldn't have happened...");
-    //         throw new InternalDataIntegrityException("Data integrity breached");
-    //     }
-    // }
+    public InitTeamListDTO getTeam(Integer teamId) {
+        // var userId = getCurrentUserInfo().userId();
+
+        // var team = repository.findById(teamId)
+        //         .orElseThrow(() -> new ItemNotFoundException(
+        //                 String.format("Team with id: %d does not exist.", teamId)));
+
+        // var isMember = team.isUserMemberOfTeam(userId);
+        // if (!isMember) {
+        //     throw new InvalidRequestException(
+        //             "User don't have access to this resource");
+        // }
+
+        // var teamActivityDTO = teamActivityClient.getTeamActivity(teamId);
+
+        // return new TeamResponseDTO(team, teamActivityDTO);
+        return null;
+    }
 }

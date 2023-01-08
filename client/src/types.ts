@@ -418,7 +418,7 @@ type InitTeamState = {
   type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
   payload: {
     teams: Team[];
-    panelActivity: PanelActivity;
+    teamActivity: TeamActivity;
   };
 };
 
@@ -526,11 +526,6 @@ export interface CreateFolderState {
 
 export type InitTeamListDTO = {
   teams: Team[];
-  panelActivity: PanelActivity;
-};
-
-export type InitTeamDTO = {
-  team: Team;
   teamActivity: TeamActivity;
 };
 
@@ -600,4 +595,14 @@ export type CreateStatusCategoryDTO = {
   name: string;
   teamId: number;
   statusColumns: StatusColumns;
+};
+
+export type TeamsResponseDTO = {
+  teams: Team[];
+  teamActivity: TeamActivity;
+};
+
+export type CreateTeamResponseDTO = {
+  team: Team;
+  teamActivity: TeamActivity;
 };

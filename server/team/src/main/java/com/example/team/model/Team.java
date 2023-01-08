@@ -104,4 +104,11 @@ public class Team {
         teamList.forEach(team -> bindTeamSpace(team));
         return teamList;
     }
+
+    public Boolean isUserMemberOfTeam(Integer userId) {
+        var isMember = this.getMembers().stream()
+                .filter(member -> member.getId() == userId)
+                .findAny().isPresent();
+        return isMember;
+    }
 }

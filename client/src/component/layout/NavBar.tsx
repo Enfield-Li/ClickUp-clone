@@ -6,7 +6,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../ApplicationEntry";
@@ -22,8 +22,9 @@ type Props = {
 
 export default memo(NavBar);
 function NavBar({ selectedSection, setSelectedSection }: Props) {
-  const location = useLocation();
   const toast = useToast();
+  const location = useLocation();
+  const { teamId } = useParams();
   const { authState, authDispatch } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
 
@@ -46,19 +47,19 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
 
   // init spaceListState
   useEffect(() => {
-    if (authState.user) {
+    if (authState.user && teamId) {
       fetchTeamList(
-        (data) => {
+        teamId,
+        (initTeamListDTO) => {
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
             payload: {
-              teams: data.teams,
-              panelActivity: data.panelActivity,
+              teams: initTeamListDTO.teams,
+              teamActivity: initTeamListDTO.teamActivity,
             },
           });
         },
         (msg) => {
-          authDispatch({ type: AUTH_ACTION.OPEN_ONBOARDING });
           toast({ description: msg });
         }
       );

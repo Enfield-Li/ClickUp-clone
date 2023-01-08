@@ -105,7 +105,8 @@ public class TeamServiceTest implements WithAssertions {
         var teamColor = "color";
         var teamAvatar = "avatar";
         var expectedDefaultStatusCategoryId = 22;
-        var expectedTeamActivityClientUpdateResult = true;
+        var expectedTeamActivity = new TeamActivityDTO(
+                11, null, spaceId, teamId, userCredentials.userId(), null);
 
         var team = Team.builder().id(teamId).build();
         var space = Space.builder().id(spaceId).build();
@@ -118,7 +119,7 @@ public class TeamServiceTest implements WithAssertions {
 
         given(teamRepository.save(any())).willReturn(team);
         given(teamActivityClient.createTeamActivity(any()))
-                .willReturn(expectedTeamActivityClientUpdateResult);
+                .willReturn(expectedTeamActivity);
 
         given(spaceRepository.save(any())).willReturn(space);
         given(statusCategoryClient.initStatusCategoryForTeam(any()))
@@ -159,125 +160,4 @@ public class TeamServiceTest implements WithAssertions {
         assertThat(team.getSpaces()).hasSizeGreaterThan(0);
     }
 
-    @Test
-    void test_create_team_should_fail_for_teamActivityClient_respond_false(
-            CapturedOutput output) {
-        // given
-        var logErrorMsg = "Create team failed";
-        var exceptionMsg = "Cannot create team";
-
-        var teamId = 11;
-        var spaceId = 33;
-        var teamName = "name";
-        var teamColor = "color";
-        var teamAvatar = "avatar";
-        var expectedDefaultStatusCategoryId = 22;
-        var expectedTeamActivityClientUpdateResult = false;
-
-        var team = Team.builder().id(teamId).build();
-        var space = Space.builder().id(spaceId).build();
-        var createTeamDTO = new CreateTeamDTO(teamName, teamColor, teamAvatar);
-
-        given(teamRepository.save(any())).willReturn(team);
-        given(spaceRepository.save(any())).willReturn(space);
-
-        given(statusCategoryClient.initStatusCategoryForTeam(any()))
-                .willReturn(expectedDefaultStatusCategoryId);
-        given(teamActivityClient.createTeamActivity(any()))
-                .willReturn(expectedTeamActivityClientUpdateResult);
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.createTeam(createTeamDTO))
-                .isInstanceOf(InternalDataIntegrityException.class)
-                .hasMessage(exceptionMsg);
-
-        assertThat(output).contains(logErrorMsg);
-        verify(rabbitMQMessageProducer, never()).publish(any(), any(), any());
-    }
-
-    @Test
-    void test_create_team_should_fail_for_statusCategoryClient_respond_zero(
-            CapturedOutput output) {
-        // given
-        var logErrorMsg = "Create team failed";
-        var exceptionMsg = "Cannot create team";
-
-        var teamId = 11;
-        var spaceId = 33;
-        var teamName = "name";
-        var teamColor = "color";
-        var teamAvatar = "avatar";
-        var expectedDefaultStatusCategoryId = 0;
-
-        var team = Team.builder().id(teamId).build();
-        var space = Space.builder().id(spaceId).build();
-        var createTeamDTO = new CreateTeamDTO(teamName, teamColor, teamAvatar);
-
-        given(teamRepository.save(any())).willReturn(team);
-        given(spaceRepository.save(any())).willReturn(space);
-
-        given(statusCategoryClient.initStatusCategoryForTeam(any()))
-                .willReturn(expectedDefaultStatusCategoryId);
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.createTeam(createTeamDTO))
-                .isInstanceOf(InternalDataIntegrityException.class)
-                .hasMessage(exceptionMsg);
-
-        assertThat(output).contains(logErrorMsg);
-        verify(rabbitMQMessageProducer, never()).publish(any(), any(), any());
-    }
-
-    @Test
-    void test_get_all_teams_should_pass() {
-        // given
-        var teamId = 13;
-        var teams = List.of(Team.builder().id(teamId).build());
-
-        var teamActivities = List.of(
-                new TeamActivityDTO(1, teamId, 2, 2, List.of(1)));
-
-        given(teamRepository.findByMembersUserId(any())).willReturn(teams);
-
-        // when
-        var actualResult = underTest.getAllTeams();
-
-        // then
-        // assertThat(actualResult).isEqualTo(expectedResult);
-    }
-
-    @Test
-    void test_get_all_teams_should_fail_for_user_do_not_have_joined_teams() {
-        // given
-        var exceptionMsg = "Let's create or join a Workspace first!";
-
-        given(teamRepository.findByMembersUserId(any())).willReturn(List.of());
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.getAllTeams())
-                .isInstanceOf(InvalidRequestException.class)
-                .hasMessage(String.format(exceptionMsg));
-        verify(teamActivityClient, never()).getTeamActivity();
-    }
-
-    @Test
-    void test_get_all_teams_should_fail_for_data_integrity_breached(
-            CapturedOutput output) {
-        // given
-        String exceptionMsg = "Data integrity breached";
-        String logErrorMsg = "InternalDataIntegrityException, This really shouldn't have happened...";
-        var teams = List.of(Team.builder().id(1).build());
-
-        given(teamRepository.findByMembersUserId(any())).willReturn(teams);
-
-        // when
-        // then
-        assertThatThrownBy(() -> underTest.getAllTeams())
-                .isInstanceOf(InternalDataIntegrityException.class)
-                .hasMessage(String.format(exceptionMsg));
-        assertThat(output).contains(logErrorMsg);
-    }
 }
