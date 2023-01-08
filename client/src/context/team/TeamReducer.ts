@@ -1,13 +1,11 @@
 import produce from "immer";
-import { WritableDraft } from "immer/dist/internal";
 import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
-  TeamStateType,
   TeamStateActionType,
+  TeamStateType,
   TEAM_STATE_ACTION,
 } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
-import { updateActiveTeamState } from "./updateCurrentTeam";
 
 export const errorMsg = "Failed to init teamState ";
 
@@ -19,80 +17,51 @@ export default function teamReducer(
     // Init
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
       return produce(spaceListState, (draftState) => {
-        const { teams, panelActivity } = action.payload;
-        const { defaultTeamId } = panelActivity;
-
-        draftState.teams = deepCopy(teams); // hack
-        draftState.panelActivity = panelActivity;
-
-        updateActiveTeamState({
-          draftState,
-          teamId: defaultTeamId,
-        });
-      });
-    }
-
-    // Select
-    case TEAM_STATE_ACTION.SELECT_TEAM: {
-      return produce(spaceListState, (draftState) => {
-        const { teamId } = action.payload;
-        draftState.panelActivity!.defaultTeamId = teamId;
-
-        updateActiveTeamState({
-          draftState,
-          teamId,
-        });
-      });
-    }
-
-    case TEAM_STATE_ACTION.SELECT_LIST: {
-      return produce(spaceListState, (draftState) => {
-        const { spaceId, listId } = action.payload;
-
-        draftState.activeTeamState.selectedListId = listId;
-        draftState.activeTeamState.selectedSpaceId = spaceId;
-      });
-    }
-
-    case TEAM_STATE_ACTION.OPEN_SPACE: {
-      return produce(spaceListState, (draftState) => {
-        const { spaceId } = action.payload;
-
+        const { teams, teamActivity } = action.payload;
+        const { folderIds, spaceId, teamId, listId } = teamActivity;
+        draftState.teams = deepCopy(teams);
         draftState.teams.forEach((team) => {
-          if (team.id === draftState.activeTeamState.selectedTeamId) {
-            team.spaces?.forEach((space) => {
-              // update previous space.isOpen to false
-              if (space.isOpen && space.id !== spaceId) {
-                space.isOpen = false;
-              }
+          if (team.id === teamId) {
+            team.isSelected = true;
+            team.spaces.forEach((space) => {
               if (space.id === spaceId) {
-                space.isOpen = !space.isOpen;
+                space.isChildListSelected = true;
               }
-            });
-          }
-        });
-      });
-    }
 
-    case TEAM_STATE_ACTION.OPEN_FOLDER: {
-      return produce(spaceListState, (draftState) => {
-        const { folderId } = action.payload;
-
-        draftState.teams.forEach((team) => {
-          if (team.id === draftState.activeTeamState.selectedTeamId) {
-            team.spaces?.forEach((space) => {
               space.allListOrFolder.forEach((listOrFolder) => {
                 const isFolder = determineFolderType(listOrFolder);
-                const isCurrentFolder = listOrFolder.id === folderId;
-
-                if (isFolder && isCurrentFolder) {
-                  listOrFolder.isOpen = !listOrFolder.isOpen;
+                if (folderIds.includes(listOrFolder.id) && isFolder) {
+                  listOrFolder.isOpen = true;
+                  listOrFolder.allLists.forEach((list) => {
+                    if (list.id === listId) {
+                      list.isSelected = true;
+                    }
+                  });
+                } else if (!isFolder && listOrFolder.id === listId) {
+                  listOrFolder.isSelected = true;
                 }
               });
             });
           }
         });
       });
+    }
+
+    // Select
+    case TEAM_STATE_ACTION.SELECT_TEAM: {
+      return produce(spaceListState, (draftState) => {});
+    }
+
+    case TEAM_STATE_ACTION.SELECT_LIST: {
+      return produce(spaceListState, (draftState) => {});
+    }
+
+    case TEAM_STATE_ACTION.OPEN_SPACE: {
+      return produce(spaceListState, (draftState) => {});
+    }
+
+    case TEAM_STATE_ACTION.OPEN_FOLDER: {
+      return produce(spaceListState, (draftState) => {});
     }
 
     default: {

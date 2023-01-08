@@ -2,6 +2,8 @@ package com.example.teamActivity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserCredentials;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;

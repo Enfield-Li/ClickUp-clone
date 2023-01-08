@@ -6,7 +6,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { Section } from "../../ApplicationEntry";
@@ -14,6 +19,8 @@ import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
 import { fetchTeamList } from "../../networkCalls";
+import { determineFolderType } from "./subNavbar/folderAndList/determineList";
+import { CLIENT_ROUTE } from "../../constant";
 
 type Props = {
   selectedSection: Section;
@@ -25,6 +32,7 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
   const toast = useToast();
   const location = useLocation();
   const { teamId } = useParams();
+  const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
 
@@ -51,30 +59,24 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
       fetchTeamList(
         teamId,
         (initTeamListDTO) => {
+          const { listId, teamId, spaceId } = initTeamListDTO.teamActivity;
+          const listIdParam = listId ? `/${listId}` : "";
+          const spaceIdParam = spaceId ? `/${spaceId}` : "";
+          navigate(
+            `/${teamId}/${CLIENT_ROUTE.TASK_BOARD}${spaceIdParam}${listIdParam}`
+          );
+
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: {
-              teams: initTeamListDTO.teams,
-              teamActivity: initTeamListDTO.teamActivity,
-            },
+            payload: initTeamListDTO,
           });
         },
         (msg) => {
           toast({ description: msg });
         }
       );
-
-      // local
-      //   const { teams, initPanelActivity } = fetchTeamListLocal();
-      //   teamStateDispatch({
-      //     type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-      //     payload: {
-      //       teams,
-      //       panelActivity: initPanelActivity,
-      //     },
-      //   });
     }
-  }, [authState.user]);
+  }, [authState.user, teamId]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>

@@ -6,8 +6,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { memo, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { memo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import SubNavbarContent from "./SubNavbarContent";
@@ -28,41 +28,16 @@ function SubNavbar({
   setIsExpanded,
   getDisclosureProps,
 }: Props) {
-  const location = useLocation();
   const navigate = useNavigate();
   const { teamState } = useTeamStateContext();
   const [hidden, setHidden] = useState(!isOpen);
+  const currentTeam = teamState.teams.find((team) => team.isSelected);
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
   const subNavBGColor = useColorModeValue("darkMain.400", "darkMain.200");
   const collapseIconBorder = useColorModeValue("gray.300", "darkMain.300");
   const collapseIconArrow = useColorModeValue("darkMain.300", "lightMain.100");
-
-  const currentTeam = teamState.teams.find(
-    (team) => team.id === teamState.activeTeamState.selectedTeamId
-  );
-  //   console.log(currentTeam);
-
-  const selectedListId = teamState.activeTeamState.selectedListId
-    ? teamState.activeTeamState.selectedListId
-    : currentTeam?.spaces.length
-    ? 0
-    : -1;
-
-  // sync up url with openedListId
-  useEffect(() => {
-    if (teamState.teams.length) {
-      navigate(CLIENT_ROUTE.TASK_BOARD, {
-        replace: true,
-        state: selectedListId
-          ? {
-              statusColumns: teamState.activeTeamState.currentStatusColumns,
-            }
-          : null,
-      });
-    }
-  }, [teamState]);
 
   function handleCloseSubNavbar() {
     onClose();

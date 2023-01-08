@@ -239,7 +239,7 @@ export async function fetchTeamList(
 ) {
   try {
     const response = await axiosTeamServiceInstance.get<InitTeamListDTO>(
-      API_ENDPOINT.TEAM + teamId
+      API_ENDPOINT.TEAM + `/${teamId}`
     );
 
     onSuccess(response.data);
@@ -331,23 +331,33 @@ export async function loginUser(
 export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
   toast: (options?: UseToastOptions | undefined) => ToastId,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  isAuthPage: boolean,
+  setInitializing: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   try {
     const response =
       await axiosAuthServiceInstance.post<AuthenticationResponse>(
         API_ENDPOINT.AUTH_REFRESH_TOKEN
       );
+    const { defaultTeamId, joinedTeamCount, accessToken } = response.data;
 
     // store accessToken to localStorage
-    localStorage.setItem(ACCESS_TOKEN, response.data.accessToken);
+    localStorage.setItem(ACCESS_TOKEN, accessToken);
 
     // update auth taskState
     dispatch({
       type: AUTH_ACTION.LOGIN_USER,
       payload: { user: response.data },
     });
-    navigate(CLIENT_ROUTE.HOME);
+
+    if (isAuthPage) {
+      navigate(
+        joinedTeamCount > 0 && defaultTeamId
+          ? `/${defaultTeamId}` + CLIENT_ROUTE.TASK_BOARD
+          : CLIENT_ROUTE.ON_BOARDING
+      );
+    }
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);
@@ -357,12 +367,14 @@ export async function refreshUserToken(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
     const response = err.response?.data as ErrorResponse;
 
-    navigate(CLIENT_ROUTE.LOGIN);
+    if (!isAuthPage) navigate(CLIENT_ROUTE.LOGIN);
     toast({
       title: "Error!",
       description: response.message,
       status: "error",
     });
+  } finally {
+    setInitializing(false);
   }
 }
 
@@ -465,7 +477,7 @@ export async function createTask(createTaskDTO: Task) {
 
 export async function createTeam(
   createTeamDTO: CreateTeamDTO,
-  onSuccess: (responseDTO: CreateTeamResponseDTO) => void
+  onSuccess: (createTeamResponseDTO: CreateTeamResponseDTO) => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.post<CreateTeamResponseDTO>(

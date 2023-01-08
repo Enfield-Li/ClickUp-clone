@@ -11,13 +11,6 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
-  panelActivity: null,
-  activeTeamState: {
-    selectedTeamId: 0,
-    selectedListId: null,
-    selectedSpaceId: null,
-    currentStatusColumns: [],
-  },
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {

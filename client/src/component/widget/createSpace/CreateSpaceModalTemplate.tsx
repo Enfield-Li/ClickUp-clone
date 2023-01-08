@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo } from "react";
+import { useParams } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createSpaceForTeam } from "../../../networkCalls";
 import {
@@ -35,6 +36,7 @@ function CreateSpaceModalTemplate({
   setCreateSpace,
   previousSection,
 }: Props) {
+  const { teamId, listId } = useParams();
   const { teamState } = useTeamStateContext();
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
@@ -52,7 +54,7 @@ function CreateSpaceModalTemplate({
   function handleCreateSpace() {
     const createSpaceDTO: CreateSpaceDTO = {
       ...createSpace.createSpaceDTO,
-      teamId: teamState.activeTeamState.selectedTeamId,
+      teamId: Number(teamId),
     };
     createSpaceForTeam(createSpaceDTO, (createdTeam) => {
       console.log(createdTeam);

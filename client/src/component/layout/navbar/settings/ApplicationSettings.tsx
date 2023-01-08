@@ -1,5 +1,4 @@
 import {
-  Box,
   Center,
   Flex,
   Popover,
@@ -11,7 +10,6 @@ import {
 import { memo } from "react";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { getRandomSpaceColor } from "../../../../media/colors";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
 import JoinedTeamList from "./JoinedTeamList";
@@ -27,8 +25,7 @@ function ApplicationSettings({}: Props) {
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
-  const currentTeamId = teamState.activeTeamState.selectedTeamId;
-  const currentTeam = teamState.teams.find((team) => team.id === currentTeamId);
+  const currentTeam = teamState.teams.find((team) => team.isSelected);
   const isTeamOwner = currentTeam?.owner?.userId === authState.user?.id;
 
   return (

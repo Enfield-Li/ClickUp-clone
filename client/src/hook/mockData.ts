@@ -5,7 +5,6 @@ import {
   DueDateRange,
   FolderCategory,
   ListCategory,
-  PanelActivity,
   Priority,
   Space,
   StatusColumns,
@@ -281,35 +280,6 @@ const guestUser: User = {
   color: getRandomSpaceColor(),
   username: "guestUser",
   email: "",
-};
-
-export const initPanelActivity: PanelActivity = {
-  id: 1,
-  userId: 1,
-  defaultTeamId: 1,
-  teamActivities: [
-    {
-      id: 11,
-      teamId: 1,
-      spaceId: 1,
-      folderIds: [1, 2],
-      listId: 3,
-    },
-    {
-      id: 22,
-      teamId: 2,
-      spaceId: 100,
-      folderIds: [50],
-      listId: 60,
-    },
-    {
-      id: 33,
-      teamId: 3,
-      listId: null,
-      folderIds: [],
-      spaceId: null,
-    },
-  ],
 };
 
 export const teams: Team[] = [

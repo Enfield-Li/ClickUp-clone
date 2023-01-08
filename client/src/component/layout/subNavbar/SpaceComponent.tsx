@@ -24,8 +24,7 @@ function SpaceComponent({ space }: Props) {
   } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
-  const isCurrentSpaceSelected =
-    teamState.activeTeamState.selectedSpaceId === space.id;
+  const isCurrentSpaceSelected = space.isChildListSelected;
 
   const {
     isOpen: isPopoverOpen,

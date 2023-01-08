@@ -278,6 +278,7 @@ export interface FolderCategory extends Category {
 export interface ListCategory extends Category {
   taskAmount: number | null;
   parentFolderId: number | null;
+  isSelected: boolean;
   //   boardViewSetting?: unknown
   //   listViewSetting?: unknown
 }
@@ -291,6 +292,7 @@ export interface Space {
   orderIndex: number;
   isPrivate: boolean;
   isOpen: boolean | null; // client side
+  isChildListSelected: boolean;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
@@ -311,6 +313,7 @@ export type Team = {
   spaces: Space[];
   owner?: UserInfo;
   isPrivate: boolean;
+  isSelected: boolean; // client side
   members: UserInfo[];
   statusCategoryState?: StatusCategories;
 };
@@ -367,23 +370,9 @@ export type TeamActivity = {
   listId: number | null;
   spaceId: number | null;
 };
-export type PanelActivity = {
-  id: number;
-  userId: number;
-  defaultTeamId: number;
-  teamActivities: TeamActivity[];
-};
-type ActiveTeamState = {
-  selectedTeamId: number;
-  selectedListId: number | null;
-  selectedSpaceId: number | null;
-  currentStatusColumns: StatusColumns | null;
-};
 
 export type TeamStateType = {
   teams: Team[]; // server
-  activeTeamState: ActiveTeamState; // client
-  panelActivity: PanelActivity | null;
 };
 export type TeamContextType = {
   teamState: TeamStateType;
@@ -410,16 +399,19 @@ export type TeamStateActionType =
   | InitTeamState
   | UpdateOpenedSpace
   | UpdateOpenedFolder
+  | CreateTeam
   | SelectList
   | SelectSpace
   | SelectFolder;
 
 type InitTeamState = {
   type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
-  payload: {
-    teams: Team[];
-    teamActivity: TeamActivity;
-  };
+  payload: TeamsResponseDTO;
+};
+
+type CreateTeam = {
+  type: typeof TEAM_STATE_ACTION.CREATE_TEAM;
+  payload: CreateTeamResponseDTO;
 };
 
 // Add
@@ -466,6 +458,7 @@ type UpdateOpenedFolder = {
 
 export const TEAM_STATE_ACTION = {
   INIT_TEAM_STATE: "init_team_state",
+  CREATE_TEAM: "create_team",
 
   ADD_LIST: "add_list",
   ADD_SPACE: "add_space",

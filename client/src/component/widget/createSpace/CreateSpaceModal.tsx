@@ -18,6 +18,7 @@ import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import produce from "immer";
+import { useParams } from "react-router-dom";
 
 type Props = {};
 
@@ -41,11 +42,11 @@ const initialCreateSpace: CreateSpaceState = {
 
 export default memo(CreateSpaceModal);
 function CreateSpaceModal({}: Props) {
+  const { teamId } = useParams();
   const {
     teamState,
     modalControls: { isCreateSpaceModalOpen, onCreateSpaceModalClose },
   } = useTeamStateContext();
-  const teamId = teamState.activeTeamState.selectedTeamId;
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] =
     useState<CreateSpaceState>(initialCreateSpace);
@@ -58,7 +59,7 @@ function CreateSpaceModal({}: Props) {
 
   useEffect(() => {
     if (isCreateSpaceModalOpen && teamId) {
-      fetchTeamStatusCategories(teamId, (data) => {
+      fetchTeamStatusCategories(Number(teamId), (data) => {
         setCreateSpace(
           produce(createSpace, (draftState) => {
             draftState.teamStatusCategories = data;

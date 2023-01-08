@@ -16,7 +16,7 @@ function List({ space, folder, list }: Props) {
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
-  const isListSelected = list.id === teamState.activeTeamState.selectedListId;
+  const isListSelected = list.isSelected;
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     teamStateDispatch({

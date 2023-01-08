@@ -29,7 +29,7 @@ class TeamController {
     @GetMapping("/{teamId}")
     ResponseEntity<InitTeamListDTO> getAllTeams(
             @PathVariable("teamId") Integer teamId) {
-        var teamResponseDTO = teamService.getTeam(teamId);
+        var teamResponseDTO = teamService.getAllTeams(teamId);
         return ResponseEntity.ok(teamResponseDTO);
     }
 

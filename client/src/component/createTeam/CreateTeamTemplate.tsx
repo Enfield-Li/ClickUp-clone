@@ -5,9 +5,10 @@ import { API_ENDPOINT, CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import LogoSVG from "../../media/LogoSVG";
 import { createTeam } from "../../networkCalls";
-import { Team, AUTH_ACTION } from "../../types";
+import { Team, AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
 import { axiosTeamServiceInstance } from "../../AxiosInstance";
 import { CreateTeamDTO } from "./CreateTeam";
+import useTeamStateContext from "../../context/team/useTeamContext";
 
 type Props = {
   step: number;
@@ -30,6 +31,7 @@ export default function CreateTeamTemplate({
 }: Props) {
   const navigate = useNavigate();
   const { authDispatch } = useAuthContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
 
   function handleClickButton() {
     if (handleNextStage) {
@@ -38,8 +40,18 @@ export default function CreateTeamTemplate({
     }
 
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
-      createTeam(createTeamDTO, () => {
-        navigate(CLIENT_ROUTE.TASK_BOARD);
+      createTeam(createTeamDTO, (createTeamResponseDTO) => {
+        const { listId, teamId, spaceId } = createTeamResponseDTO.teamActivity;
+        const listIdParam = listId ? `/${listId}` : "";
+        const spaceIdParam = spaceId ? `/${spaceId}` : "";
+        navigate(
+          `/${teamId}/${CLIENT_ROUTE.TASK_BOARD}${spaceIdParam}${listIdParam}`
+        );
+
+        teamStateDispatch({
+          type: TEAM_STATE_ACTION.CREATE_TEAM,
+          payload: createTeamResponseDTO,
+        });
       });
     }
   }

@@ -36,28 +36,22 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
-  const param = useParams();
-  const selectedListId = Number(param[TASK_BOARD_PARAM]);
+  const { teamId, listId, spaceId } = useParams();
   const { teamState } = useTeamStateContext();
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
-    selectedListId,
+    selectedListId: Number(listId),
   });
+
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   //   console.log(taskState);
 
   const currentTeam = useMemo(
-    () =>
-      teamState.teams.find(
-        (team) => team.id === teamState.activeTeamState.selectedTeamId
-      ),
+    () => teamState.teams.find((team) => team.id === teamId),
     [teamState]
   );
   const currentSpace = useMemo(
-    () =>
-      currentTeam?.spaces.find(
-        (space) => space.id === teamState.activeTeamState.selectedSpaceId
-      ),
+    () => currentTeam?.spaces.find((space) => space.id === Number(spaceId)),
     [teamState]
   );
 

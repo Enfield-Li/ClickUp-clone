@@ -59,9 +59,7 @@ function JoinedTeamList({ onClose }: Props) {
             color="lightMain.200"
             borderColor="purple.500"
             onClick={() => handleSelectTeam(team.id!)}
-            borderWidth={
-              team.id === teamState.activeTeamState.selectedTeamId ? "1px" : ""
-            }
+            borderWidth={team.isSelected ? "1px" : ""}
           >
             <Center
               width="26px"

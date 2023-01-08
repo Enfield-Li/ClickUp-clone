@@ -17,6 +17,7 @@ import CreateFolderSelectList from "./CreateFolderSelectList";
 import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
 import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
+import { useParams } from "react-router-dom";
 
 type Props = {};
 
@@ -37,8 +38,7 @@ const initCreateFolderState: CreateFolderState = {
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
-  const { teamState } = useTeamStateContext();
-  const teamId = teamState.activeTeamState.selectedTeamId;
+  const { teamId } = useParams();
   const bgColor = useColorModeValue("white", "darkMain.100");
 
   const [createFolder, setCreateFolder] = useState<CreateFolderState>(
@@ -50,7 +50,7 @@ function CreateFolderModal({}: Props) {
 
   useEffect(() => {
     if (isCreateFolderModalOpen && teamId) {
-      fetchTeamStatusCategories(teamId, (StatusCategories) => {
+      fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
         setCreateFolder(
           produce(createFolder, (draftState) => {
             draftState.teamStatusCategories = StatusCategories;
