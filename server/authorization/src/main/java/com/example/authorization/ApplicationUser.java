@@ -25,6 +25,8 @@ public class ApplicationUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String color;
+
     @NotNull
     private String email;
 
@@ -35,11 +37,11 @@ public class ApplicationUser {
     @NotNull
     private String username;
 
-    private String color;
+    private Integer defaultTeamId;
 
     @NotNull
     @Builder.Default
-    private Integer joinedTeamCount = 0; 
+    private Integer joinedTeamCount = 0;
 
     @NotNull
     @Builder.Default

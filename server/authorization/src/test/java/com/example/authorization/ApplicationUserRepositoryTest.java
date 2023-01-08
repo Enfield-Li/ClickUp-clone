@@ -33,27 +33,31 @@ public class ApplicationUserRepositoryTest implements WithAssertions {
     @Test
     void test_update_user_joined_team_count_plus_one_should_pass() {
         // given
+        var teamId = 22;
         var updateTeamCount = 1;
 
         // when
         var actualResult = underTest.updateUserJoinedTeamCount(
-                userId, updateTeamCount);
+                userId, teamId, updateTeamCount);
 
         // then
         assertThat(actualResult).isEqualTo(1);
         var applicationUser = underTest.findById(userId).orElseThrow();
         assertThat(applicationUser.getJoinedTeamCount())
                 .isEqualTo(joinedTeamCount + updateTeamCount);
+        assertThat(applicationUser.getDefaultTeamId())
+                .isEqualTo(teamId);
     }
 
     @Test
     void test_update_user_joined_team_count_minus_one_should_pass() {
         // given
+        var teamId = 22;
         var updateTeamCount = -1;
 
         // when
         var actualResult = underTest.updateUserJoinedTeamCount(
-                userId, updateTeamCount);
+                userId, teamId, updateTeamCount);
 
         // then
         assertThat(actualResult).isEqualTo(1);
@@ -65,12 +69,13 @@ public class ApplicationUserRepositoryTest implements WithAssertions {
     @Test
     void test_update_user_joined_team_count_should_fail() {
         // given
+        var teamId = 22;
         var userIdNotExist = 10;
         var updateTeamCount = -1;
 
         // when
         var actualResult = underTest.updateUserJoinedTeamCount(
-                userIdNotExist, updateTeamCount);
+                userIdNotExist, teamId, updateTeamCount);
 
         // then
         assertThat(actualResult).isEqualTo(0);

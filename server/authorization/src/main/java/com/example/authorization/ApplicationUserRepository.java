@@ -23,7 +23,10 @@ public interface ApplicationUserRepository
     @Query(nativeQuery = true, value = ""
             + "UPDATE application_user"
             + " SET joined_team_count = joined_team_count + :updateTeamCount"
+            + ",default_team_id = :teamId"
             + " WHERE id = :userId")
-    Integer updateUserJoinedTeamCount(@Param("userId") Integer userId,
+    Integer updateUserJoinedTeamCount(
+            @Param("userId") Integer userId,
+            @Param("teamId") Integer teamId,
             @Param("updateTeamCount") Integer updateTeamCount);
 }

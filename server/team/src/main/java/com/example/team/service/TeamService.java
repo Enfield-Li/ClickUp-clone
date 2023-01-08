@@ -92,14 +92,13 @@ public class TeamService {
 
         // publish user teamAmount + 1
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userInfo.userId(), true);
+                userInfo.userId(), teamId, true);
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 AuthorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
         return true;
-
     }
 
     private void validateTeamsAndPanelActivity(

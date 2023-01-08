@@ -77,9 +77,6 @@ public class AuthorizationServiceTest implements WithAssertions {
         underTest = new AuthorizationService(
                 httpSession, httpServletRequest, jwtUtils,
                 passwordEncoder, repository);
-        // SecurityContextHolder.setContext(securityContext);
-        // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
-        // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
     }
 
     @Test
@@ -430,11 +427,12 @@ public class AuthorizationServiceTest implements WithAssertions {
     void test_update_user_joined_team_should_pass() {
         // given
         var userId = 11;
+        var teamId = 22;
         var isJoinTeam = false;
 
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userId, isJoinTeam);
-        given(repository.updateUserJoinedTeamCount(any(), any()))
+                userId, teamId, isJoinTeam);
+        given(repository.updateUserJoinedTeamCount(any(), any(), any()))
                 .willReturn(1);
 
         // when 
@@ -443,10 +441,12 @@ public class AuthorizationServiceTest implements WithAssertions {
 
         // then
         verify(repository).updateUserJoinedTeamCount(
-                integerArgCaptor.capture(), integerArgCaptor.capture());
+                integerArgCaptor.capture(),
+                integerArgCaptor.capture(),
+                integerArgCaptor.capture());
         var integerListArg = integerArgCaptor.getAllValues();
 
-        assertThat(integerListArg).isEqualTo(List.of(userId, -1));
+        assertThat(integerListArg).isEqualTo(List.of(userId, teamId, -1));
         assertThat(actualResult).isEqualTo(true);
     }
 
@@ -454,11 +454,12 @@ public class AuthorizationServiceTest implements WithAssertions {
     void test_update_user_leave_team_should_pass() {
         // given
         var userId = 11;
+        var teamId = 22;
         var isJoinTeam = true;
 
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userId, isJoinTeam);
-        given(repository.updateUserJoinedTeamCount(any(), any()))
+                userId, teamId, isJoinTeam);
+        given(repository.updateUserJoinedTeamCount(any(), any(), any()))
                 .willReturn(1);
 
         // when 
@@ -467,10 +468,12 @@ public class AuthorizationServiceTest implements WithAssertions {
 
         // then
         verify(repository).updateUserJoinedTeamCount(
-                integerArgCaptor.capture(), integerArgCaptor.capture());
+                integerArgCaptor.capture(),
+                integerArgCaptor.capture(),
+                integerArgCaptor.capture());
         var integerListArg = integerArgCaptor.getAllValues();
 
-        assertThat(integerListArg).isEqualTo(List.of(userId, 1));
+        assertThat(integerListArg).isEqualTo(List.of(userId, teamId, 1));
         assertThat(actualResult).isEqualTo(true);
     }
 

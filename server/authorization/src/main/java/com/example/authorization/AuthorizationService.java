@@ -57,8 +57,8 @@ public class AuthorizationService {
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(user,
-                INITIAL_TOKEN_VERSION);
+        var userResponse = generateResponseAndToken(
+                user, INITIAL_TOKEN_VERSION);
         return userResponse;
     }
 
@@ -83,8 +83,8 @@ public class AuthorizationService {
         // 3. generate refresh token and save to session
         //    generate access token & response
         var tokenVersion = applicationUser.getRefreshTokenVersion();
-        var userResponse = generateResponseAndToken(applicationUser,
-                tokenVersion);
+        var userResponse = generateResponseAndToken(
+                applicationUser, tokenVersion);
 
         // 4. send access token
         return userResponse;
@@ -118,8 +118,8 @@ public class AuthorizationService {
 
         // 4. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(applicationUser,
-                tokenVersion);
+        var userResponse = generateResponseAndToken(
+                applicationUser, tokenVersion);
         return userResponse;
     }
 
@@ -127,10 +127,11 @@ public class AuthorizationService {
     public Boolean updateUserJoinedTeam(
             UpdateUserJoinedTeamsDTO updateUserJoinedTeamsDTO) {
         var userId = updateUserJoinedTeamsDTO.userId();
+        var teamId = updateUserJoinedTeamsDTO.teamId();
         var isJoinTeam = updateUserJoinedTeamsDTO.isJoinTeam();
 
         var rowsAffected = repository
-                .updateUserJoinedTeamCount(userId, isJoinTeam ? 1 : -1);
+                .updateUserJoinedTeamCount(userId, teamId, isJoinTeam ? 1 : -1);
         return rowsAffected > 0;
     }
 

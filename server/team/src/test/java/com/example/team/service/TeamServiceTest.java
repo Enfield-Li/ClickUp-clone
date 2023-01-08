@@ -115,7 +115,7 @@ public class TeamServiceTest implements WithAssertions {
         var expectedUpdateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
                 teamId, spaceId);
         var expectedUpdateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userCredentials.userId(), true);
+                userCredentials.userId(), teamId, true);
 
         given(teamRepository.save(any())).willReturn(team);
         given(panelActivityClient.updateDefaultTeamInCreation(any()))

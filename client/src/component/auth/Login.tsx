@@ -65,7 +65,9 @@ function Login({}: Props) {
               loginUserDTO,
               (authResponse) => {
                 // store accessToken to localStorage
-                localStorage.setItem(ACCESS_TOKEN, authResponse.accessToken);
+                const { defaultTeamId, joinedTeamCount, accessToken } =
+                  authResponse;
+                localStorage.setItem(ACCESS_TOKEN, accessToken);
 
                 // update auth taskState
                 authDispatch({
@@ -73,8 +75,8 @@ function Login({}: Props) {
                   payload: { user: authResponse },
                 });
                 navigate(
-                  authResponse.joinedTeamCount > 0
-                    ? CLIENT_ROUTE.HOME
+                  joinedTeamCount > 0
+                    ? `/${defaultTeamId}` + CLIENT_ROUTE.TASK_BOARD
                     : CLIENT_ROUTE.ON_BOARDING
                 );
               },

@@ -328,6 +328,7 @@ export interface AuthenticationResponse {
   email: string;
   username: string;
   accessToken: string;
+  defaultTeamId: number;
   joinedTeamCount: number;
 }
 
