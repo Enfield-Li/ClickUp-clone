@@ -7,7 +7,7 @@ public class UrlConstants {
     public static final String SPACE_API_VERSION = "/api/v1/space";
     public static final String CUSTOMER_API_VERSION = "/api/v1/customers";
     public static final String TASK_EVENT_API_VERSION = "/api/v1/task_event";
-    public static final String PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
+    public static final String TEAM_ACTIVITY_API_VERSION = "/api/v1/team_activity";
     public static final String STATUS_COLUMN_API_VERSION = "/api/v1/status_column";
     public static final String STATUS_CATEGORY_API_VERSION = "/api/v1/status_category";
 

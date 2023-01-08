@@ -23,7 +23,7 @@
         <module>task-comment</module>
         <module>team</module>
         <module>dev-test </module>
-        <module>panel-activity</module>
+        <module>team-activity</module>
         <module>team-status-category</module>
         <module>service-security-config</module>
         <module>service-exception-handling</module>

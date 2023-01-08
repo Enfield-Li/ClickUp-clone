@@ -27,13 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
-import com.example.clients.panelActivity.PanelActivityClient;
-import com.example.clients.panelActivity.PanelActivityDTO;
-import com.example.clients.panelActivity.TeamActivityDTO;
-import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-
 
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 public class TeamStatusColumnServiceTest {

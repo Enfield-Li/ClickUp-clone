@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateTeamDTO;
-import com.example.team.dto.TeamAndPanelActivityDTO;
+import com.example.team.dto.TeamAndActivityDTO;
 import com.example.team.service.TeamService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,9 +29,9 @@ class TeamController {
     private final TeamService teamService;
 
     @GetMapping
-    ResponseEntity<TeamAndPanelActivityDTO> getAllTeams() {
-        var teamAndPanelActivityDTO = teamService.getAllTeams();
-        return ResponseEntity.ok(teamAndPanelActivityDTO);
+    ResponseEntity<TeamAndActivityDTO> getAllTeams() {
+        var teamAndActivityDTO = teamService.getAllTeams();
+        return ResponseEntity.ok(teamAndActivityDTO);
     }
 
     @PostMapping

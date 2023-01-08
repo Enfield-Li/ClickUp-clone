@@ -362,6 +362,7 @@ export const AUTH_ACTION = {
 export type TeamActivity = {
   id: number;
   teamId: number;
+  userId: number;
   folderIds: number[];
   listId: number | null;
   spaceId: number | null;
@@ -523,9 +524,14 @@ export interface CreateFolderState {
   teamStatusCategories: StatusCategories;
 }
 
-export type InitTeamDTO = {
+export type InitTeamListDTO = {
   teams: Team[];
   panelActivity: PanelActivity;
+};
+
+export type InitTeamDTO = {
+  team: Team;
+  teamActivity: TeamActivity;
 };
 
 export type TaskDetailContextType = {

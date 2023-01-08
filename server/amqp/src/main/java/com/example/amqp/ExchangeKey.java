@@ -10,8 +10,8 @@ public class ExchangeKey {
     public static final String notificationQueue = "notification.queue";
     public static final String notificationRoutingKey = "internal.notification.routing-key";
 
-    public static final String panelActivityQueue = "panelActivity.queue";
-    public static final String panelActivityRoutingKey = "internal.panelActivity.routing-key";
+    public static final String teamActivityQueue = "teamActivity.queue";
+    public static final String teamActivityRoutingKey = "internal.teamActivity.routing-key";
 
     public static final String AuthorizationQueue = "authorizationQueue.queue";
     public static final String AuthorizationRoutingKey = "internal.Authorization.routing-key";

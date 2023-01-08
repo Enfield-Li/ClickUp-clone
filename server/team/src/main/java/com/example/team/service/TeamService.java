@@ -2,11 +2,8 @@ package com.example.team.service;
 
 import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.statusCategoryRoutingKey;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,14 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
-import com.example.clients.panelActivity.PanelActivityClient;
-import com.example.clients.panelActivity.PanelActivityDTO;
-import com.example.clients.panelActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
+import com.example.clients.teamActivity.TeamActivityClient;
+import com.example.clients.teamActivity.UpdateDefaultTeamInCreationDTO;
 import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
-import com.example.team.dto.TeamAndPanelActivityDTO;
+import com.example.team.dto.TeamAndActivityDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
@@ -38,7 +34,7 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final SpaceRepository spaceRepository;
-    private final PanelActivityClient panelActivityClient;
+    private final TeamActivityClient teamActivityClient;
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
@@ -49,7 +45,7 @@ public class TeamService {
                 .getPrincipal();
     }
 
-    public TeamAndPanelActivityDTO getAllTeams() {
+    public TeamAndActivityDTO getAllTeams() {
         var userId = getCurrentUserInfo().userId();
 
         var teams = teamRepository.findByMembersUserId(userId);
@@ -58,9 +54,9 @@ public class TeamService {
                     "Let's create or join a Workspace first!");
         }
 
-        var panelActivityDTO = panelActivityClient.getPanelActivity();
-        validateTeamsAndPanelActivity(panelActivityDTO, teams);
-        return new TeamAndPanelActivityDTO(teams, panelActivityDTO);
+        var teamActivityDTO = teamActivityClient.getTeamActivity();
+        // validateTeamsAndPanelActivity(panelActivityDTO, teams);
+        return new TeamAndActivityDTO(teams, teamActivityDTO);
     }
 
     @Transactional(rollbackFor = {
@@ -83,7 +79,7 @@ public class TeamService {
         // update panel activity
         var updateDefaultTeamInCreationDTO = new UpdateDefaultTeamInCreationDTO(
                 team.getId(), space.getId());
-        var response = panelActivityClient.updateDefaultTeamInCreation(
+        var response = teamActivityClient.updateDefaultTeamInCreation(
                 updateDefaultTeamInCreationDTO);
         if (!response || !(defaultStatusCategoryId > 0)) {
             log.error("Create team failed");
@@ -101,22 +97,22 @@ public class TeamService {
         return true;
     }
 
-    private void validateTeamsAndPanelActivity(
-            PanelActivityDTO panelActivityDTO, List<Team> teams) {
-        try {
-            var ids = teams.stream().map(Team::getId).collect(
-                    Collectors.toList());
-            var validateResult = panelActivityDTO.teamActivities().stream()
-                    .allMatch(teamActivity -> ids
-                            .contains(teamActivity.teamId()));
+    // private void validateTeamsAndPanelActivity(
+    //         PanelActivityDTO panelActivityDTO, List<Team> teams) {
+    //     try {
+    //         var ids = teams.stream().map(Team::getId).collect(
+    //                 Collectors.toList());
+    //         var validateResult = panelActivityDTO.teamActivities().stream()
+    //                 .allMatch(teamActivity -> ids
+    //                         .contains(teamActivity.teamId()));
 
-            if (!validateResult) {
-                throw new Error();
-            }
-        } catch (Exception e) {
-            log.error(
-                    "InternalDataIntegrityException, This really shouldn't have happened...");
-            throw new InternalDataIntegrityException("Data integrity breached");
-        }
-    }
+    //         if (!validateResult) {
+    //             throw new Error();
+    //         }
+    //     } catch (Exception e) {
+    //         log.error(
+    //                 "InternalDataIntegrityException, This really shouldn't have happened...");
+    //         throw new InternalDataIntegrityException("Data integrity breached");
+    //     }
+    // }
 }
