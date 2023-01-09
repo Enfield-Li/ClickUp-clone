@@ -6,21 +6,15 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
-import { Section } from "../../ApplicationEntry";
-import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
+import { fetchTeamList } from "../../networkCalls";
+import { TEAM_STATE_ACTION } from "../../types";
+import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
-import { fetchTeamList } from "../../networkCalls";
-import { determineFolderType } from "./subNavbar/folderAndList/determineList";
-import { CLIENT_ROUTE } from "../../constant";
 
 type Props = {};
 
@@ -29,11 +23,9 @@ function NavBar({}: Props) {
   const toast = useToast();
   const { teamId } = useParams();
   const navigate = useNavigate();
-  const pathname = useLocation().pathname;
   const { authState, authDispatch } = useAuthContext();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamStateDispatch } = useTeamStateContext();
 
-  const fixedNavbarWidth = "55px";
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -48,11 +40,7 @@ function NavBar({}: Props) {
         teamId,
         (initTeamListDTO) => {
           const { listId, teamId, spaceId } = initTeamListDTO.teamActivity;
-          const listIdParam = listId ? `/${listId}` : "";
-          const spaceIdParam = spaceId ? `/${spaceId}` : "";
-          navigate(
-            `/${teamId}/${CLIENT_ROUTE.TASK_BOARD}${spaceIdParam}${listIdParam}`
-          );
+          navigate(getTaskBoardURL({ teamId, spaceId, listId }));
 
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
@@ -73,28 +61,30 @@ function NavBar({}: Props) {
         onOpen={onOpen}
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
-        fixedNavbarWidth={fixedNavbarWidth}
       />
 
       {/* Sub navbar */}
-      {pathname.includes(CLIENT_ROUTE.TASK_BOARD) && (
-        <Box
-          zIndex="2"
-          opacity="100%"
-          onMouseOverCapture={onOpen}
-          backgroundColor={collapsibleBG}
-          ml={isExpanded ? undefined : fixedNavbarWidth}
-          position={isExpanded ? undefined : "absolute"}
-        >
-          <SubNavbar
-            isOpen={isOpen}
-            onClose={onClose}
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-            getDisclosureProps={getDisclosureProps}
-          />
-        </Box>
-      )}
+      <NavLink to={CLIENT_ROUTE.TASK_BOARD}>
+        {({ isActive }) =>
+          isActive && (
+            <Box
+              zIndex="2"
+              opacity="100%"
+              onMouseOverCapture={onOpen}
+              backgroundColor={collapsibleBG}
+              position={isExpanded ? undefined : "absolute"}
+            >
+              <SubNavbar
+                isOpen={isOpen}
+                onClose={onClose}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+                getDisclosureProps={getDisclosureProps}
+              />
+            </Box>
+          )
+        }
+      </NavLink>
     </Flex>
   );
 }

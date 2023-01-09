@@ -5,6 +5,7 @@ type Props = {};
 
 export default function CreateSpacePanel({}: Props) {
   const {
+    teamState,
     modalControls: { onCreateSpaceModalOpen },
   } = useTeamStateContext();
 

@@ -1,18 +1,10 @@
-import { Box, useColorModeValue, useToast } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import useAuthContext from "../../context/auth/useAuthContext";
-import { Section } from "../../ApplicationEntry";
 
 type Props = {};
 
 export default memo(Header);
 function Header({}: Props) {
-  const toast = useToast({ duration: 4000, isClosable: true });
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { authState, authDispatch } = useAuthContext();
-
   const headerBG = useColorModeValue("white", "darkMain.200");
 
   return (

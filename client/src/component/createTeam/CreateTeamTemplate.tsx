@@ -9,6 +9,7 @@ import { Team, AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
 import { axiosTeamServiceInstance } from "../../AxiosInstance";
 import { CreateTeamDTO } from "./CreateTeam";
 import useTeamStateContext from "../../context/team/useTeamContext";
+import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 
 type Props = {
   step: number;
@@ -42,11 +43,7 @@ export default function CreateTeamTemplate({
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
       createTeam(createTeamDTO, (createTeamResponseDTO) => {
         const { listId, teamId, spaceId } = createTeamResponseDTO.teamActivity;
-        const listIdParam = listId ? `/${listId}` : "";
-        const spaceIdParam = spaceId ? `/${spaceId}` : "";
-        navigate(
-          `/${teamId}/${CLIENT_ROUTE.TASK_BOARD}${spaceIdParam}${listIdParam}`
-        );
+        navigate(getTaskBoardURL({ teamId, spaceId, listId }));
 
         teamStateDispatch({
           type: TEAM_STATE_ACTION.CREATE_TEAM,

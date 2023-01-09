@@ -29,6 +29,7 @@ import CreateListPanel from "./panel/CreateListPanel";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
 import CreateSpacePanel from "./panel/CreateSpacePanel";
 import useTeamStateContext from "../../context/team/useTeamContext";
+import TeamStateProvider from "../../context/team/TeamContext";
 
 type Props = {
   sortBy: SortBy;
@@ -37,7 +38,6 @@ type Props = {
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
   const { teamId, listId, spaceId } = useParams();
-  const { teamState } = useTeamStateContext();
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
     selectedListId: Number(listId),
@@ -46,15 +46,6 @@ function TaskBoardView({ sortBy }: Props) {
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   //   console.log(taskState);
 
-  const currentTeam = useMemo(
-    () => teamState.teams.find((team) => team.id === teamId),
-    [teamState]
-  );
-  const currentSpace = useMemo(
-    () => currentTeam?.spaces.find((space) => space.id === Number(spaceId)),
-    [teamState]
-  );
-
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {
       handleDragEnd(result, taskState, setTaskState, sortBy);
@@ -62,7 +53,7 @@ function TaskBoardView({ sortBy }: Props) {
     [taskState, sortBy]
   );
 
-  if (!currentTeam?.spaces.length) {
+  if (!spaceId) {
     return (
       <Center height="50vh">
         <CreateSpacePanel />
@@ -70,7 +61,7 @@ function TaskBoardView({ sortBy }: Props) {
     );
   }
 
-  if (!currentSpace?.allListOrFolder.length) {
+  if (!listId) {
     return (
       <Center flexGrow={1} mt="-60px">
         <CreateListPanel />

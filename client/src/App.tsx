@@ -4,9 +4,9 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
 import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
-import About from "./component/layout/About";
-import Home from "./component/layout/Home";
 import CreateTeam from "./component/createTeam/CreateTeam";
+import Home from "./component/layout/Home";
+import UnderConstruction from "./component/layout/UnderConstruction";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
@@ -35,15 +35,15 @@ function App() {
         isAuthPage,
         setInitializing
       );
-      //   setInterval(() => {
-      //     refreshUserToken(
-      //       authDispatch,
-      //       toast,
-      //       navigate,
-      //       isAuthPage,
-      //       setInitializing
-      //     );
-      //   }, 1790000); // 29 min and 50 sec
+      setInterval(() => {
+        refreshUserToken(
+          authDispatch,
+          toast,
+          navigate,
+          isAuthPage,
+          setInitializing
+        );
+      }, 1790000); // 29 min and 50 sec
     } else {
       if (!isAuthPage) {
         navigate(CLIENT_ROUTE.LOGIN);
@@ -61,6 +61,7 @@ function App() {
       <Route path={CLIENT_ROUTE.ON_BOARDING} element={<CreateTeam />} />
 
       <Route path="/:teamId" element={<ApplicationEntry />}>
+        <Route path="*" element={<UnderConstruction />} />
         <Route path={CLIENT_ROUTE.HOME} element={<Home />} />
         <Route path={CLIENT_ROUTE.TEST_DEV} element={<TestDev />} />
 

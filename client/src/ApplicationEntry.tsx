@@ -10,16 +10,8 @@ import TeamStateProvider from "./context/team/TeamContext";
 
 type Props = {};
 
-export enum Section {
-  DEV = "dev",
-  HOME = "home",
-  TASKS = "tasks",
-}
-
 export default memo(ApplicationEntry);
 function ApplicationEntry({}: Props) {
-  //   const [selectedSection, setSelectedSection] = useState<Section>(Section.HOME);
-
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
   return (
     <TeamStateProvider>
