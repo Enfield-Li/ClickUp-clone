@@ -12,10 +12,8 @@ function AppProvider({ children }: Props) {
   return (
     <BrowserRouter>
       <AuthStateProvider>
-        <TaskDetailProvider>
-          <ColorModeScript />
-          <ChakraProvider theme={globalTheme}>{children}</ChakraProvider>
-        </TaskDetailProvider>
+        <ColorModeScript />
+        <ChakraProvider theme={globalTheme}>{children}</ChakraProvider>
       </AuthStateProvider>
     </BrowserRouter>
   );

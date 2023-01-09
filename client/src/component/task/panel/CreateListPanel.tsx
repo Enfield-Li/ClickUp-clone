@@ -1,15 +1,14 @@
 import { Box, Button, Center, Img } from "@chakra-ui/react";
 import { memo } from "react";
-import useTeamStateContext from "../../../context/team/useTeamContext";
 import { emptySpaceImgDisplayDataUrl } from "../../../media/imgDataUrl";
 
 type Props = {};
 
 export default memo(CreateListPanel);
 function CreateListPanel({}: Props) {
-  const {
-    modalControls: { onCreateListModalOpen },
-  } = useTeamStateContext();
+  //   const {
+  //     modalControls: { onCreateListModalOpen },
+  //   } = useTeamStateContext();
 
   return (
     <Center flexDir="column">
@@ -28,7 +27,7 @@ function CreateListPanel({}: Props) {
         color="lightMain.100"
         fontWeight="semibold"
         bgColor="customBlue.200"
-        onClick={onCreateListModalOpen}
+        // onClick={onCreateListModalOpen}
         _hover={{ bgColor: "customBlue.100" }}
         _active={{}}
         _focus={{}}

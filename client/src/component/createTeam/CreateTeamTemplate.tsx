@@ -2,10 +2,8 @@ import { Box, Button, Center, Flex, Image } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
-import useTeamStateContext from "../../context/team/useTeamContext";
 import { logoDataUrl } from "../../media/imgDataUrl";
 import { createTeam } from "../../networkCalls";
-import { TEAM_STATE_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import { CreateTeamDTO } from "./CreateTeam";
 
@@ -30,7 +28,6 @@ export default function CreateTeamTemplate({
 }: Props) {
   const navigate = useNavigate();
   const { authDispatch } = useAuthContext();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
 
   function handleClickButton() {
     if (handleNextStage) {
@@ -42,11 +39,6 @@ export default function CreateTeamTemplate({
       createTeam(createTeamDTO, (createTeamResponseDTO) => {
         const { listId, teamId, spaceId } = createTeamResponseDTO.teamActivity;
         navigate(getTaskBoardURL({ teamId, spaceId, listId }));
-
-        teamStateDispatch({
-          type: TEAM_STATE_ACTION.CREATE_TEAM,
-          payload: createTeamResponseDTO,
-        });
       });
     }
   }

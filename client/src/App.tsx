@@ -18,7 +18,10 @@ export default memo(App);
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authDispatch } = useAuthContext();
+  const { authState, authDispatch } = useAuthContext();
+  const accessToken = localStorage.getItem(ACCESS_TOKEN);
+  console.log(authState);
+
   const [initializing, setInitializing] = useState(true);
   const toast = useToast({ duration: 3000, isClosable: true });
   const isAuthPath =
@@ -26,8 +29,6 @@ function App() {
     location.pathname === CLIENT_ROUTE.LOGIN;
 
   useEffect(() => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN);
-
     if (accessToken) {
       refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       setInterval(() => {
@@ -44,7 +45,7 @@ function App() {
     }, 3500);
   }, []);
 
-  if (initializing && !isAuthPath) return <LoadingSpinner />;
+//   if (initializing && !isAuthPath && accessToken) return <LoadingSpinner />;
 
   return (
     <Routes>

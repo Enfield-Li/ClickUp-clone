@@ -233,7 +233,7 @@ export async function createStatusCategory(
 }
 
 export async function fetchTeamList(
-  teamId: string,
+  teamId: number,
   onSuccess: (initTeamListDTO: InitTeamListDTO) => void,
   onFailure: (msg: string) => void
 ) {

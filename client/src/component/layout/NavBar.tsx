@@ -37,7 +37,7 @@ function NavBar({}: Props) {
   useEffect(() => {
     if (authState.user && teamId) {
       fetchTeamList(
-        teamId,
+        Number(teamId),
         (initTeamListDTO) => {
           const { listId, teamId, spaceId } = initTeamListDTO.teamActivity;
           navigate(getTaskBoardURL({ teamId, spaceId, listId }));

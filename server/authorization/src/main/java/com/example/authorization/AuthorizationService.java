@@ -152,6 +152,7 @@ public class AuthorizationService {
         var color = applicationUser.getColor();
         var email = applicationUser.getEmail();
         var username = applicationUser.getUsername();
+        var defaultTeamId = applicationUser.getDefaultTeamId();
         var joinedTeamCount = applicationUser.getJoinedTeamCount();
 
         // store refreshToken in session
@@ -168,6 +169,7 @@ public class AuthorizationService {
                 .email(email)
                 .username(username)
                 .accessToken(accessToken)
+                .defaultTeamId(defaultTeamId)
                 .joinedTeamCount(joinedTeamCount)
                 .build();
     }
