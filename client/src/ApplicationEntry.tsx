@@ -18,16 +18,13 @@ export enum Section {
 
 export default memo(ApplicationEntry);
 function ApplicationEntry({}: Props) {
-  const [selectedSection, setSelectedSection] = useState<Section>(Section.HOME);
+  //   const [selectedSection, setSelectedSection] = useState<Section>(Section.HOME);
 
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
   return (
     <TeamStateProvider>
       <Flex height="100vh" position="relative" overflow="hidden">
-        <NavBar
-          selectedSection={selectedSection}
-          setSelectedSection={setSelectedSection}
-        />
+        <NavBar />
 
         {/* Header && Main */}
         <Flex
@@ -37,10 +34,7 @@ function ApplicationEntry({}: Props) {
           overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
         >
           <Box role="heading">
-            <Header
-              selectedSection={selectedSection}
-              setSelectedSection={setSelectedSection}
-            />
+            <Header />
           </Box>
 
           {/* Main content */}

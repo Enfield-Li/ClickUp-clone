@@ -1,18 +1,19 @@
 import { Center, Tooltip } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Section } from "../../../ApplicationEntry";
 
 type Props = {
-  url?: string;
-  name?: string;
-  isSelected?: boolean;
+  url: string;
+  name: string;
   children: React.ReactNode;
 };
 
 export default memo(NavIcon);
-function NavIcon({ url, name, isSelected, children }: Props) {
+function NavIcon({ url, name, children }: Props) {
   const navigate = useNavigate();
+  const pathname = useLocation().pathname;
+  const isSelected = pathname.includes(url);
 
   return (
     <Tooltip

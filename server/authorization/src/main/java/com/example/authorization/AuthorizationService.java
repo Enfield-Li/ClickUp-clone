@@ -33,6 +33,7 @@ public class AuthorizationService {
     private final String REFRESH_TOKEN = "refresh_token";
 
     AuthorizationResponseDTO register(RegisterUserDTO registerUserDTO) {
+        var color = registerUserDTO.color();
         var email = registerUserDTO.email();
         var username = registerUserDTO.username();
         var password = registerUserDTO.password();
@@ -50,6 +51,7 @@ public class AuthorizationService {
         var applicationUser = ApplicationUser
                 .builder()
                 .email(email)
+                .color(color)
                 .username(username)
                 .password(encodedPassword)
                 .build();
@@ -147,6 +149,7 @@ public class AuthorizationService {
     private AuthorizationResponseDTO generateResponseAndToken(
             ApplicationUser applicationUser, Integer tokenVersion) {
         var userId = applicationUser.getId();
+        var color = applicationUser.getColor();
         var email = applicationUser.getEmail();
         var username = applicationUser.getUsername();
         var joinedTeamCount = applicationUser.getJoinedTeamCount();
@@ -161,6 +164,7 @@ public class AuthorizationService {
         // response dto
         return AuthorizationResponseDTO.builder()
                 .id(userId)
+                .color(color)
                 .email(email)
                 .username(username)
                 .accessToken(accessToken)

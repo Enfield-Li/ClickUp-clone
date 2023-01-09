@@ -11,6 +11,7 @@ public class AuthorizationResponseDTO {
 
     private Integer id;
     private String email;
+    private String color;
     private String username;
     private String accessToken;
     private Integer defaultTeamId;

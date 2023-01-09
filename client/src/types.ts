@@ -276,11 +276,9 @@ export interface FolderCategory extends Category {
   allLists: ListCategory[];
 }
 export interface ListCategory extends Category {
+  isSelected: boolean;
   taskAmount: number | null;
   parentFolderId: number | null;
-  isSelected: boolean;
-  //   boardViewSetting?: unknown
-  //   listViewSetting?: unknown
 }
 
 export interface Space {
@@ -292,7 +290,6 @@ export interface Space {
   orderIndex: number;
   isPrivate: boolean;
   isOpen: boolean | null; // client side
-  isChildListSelected: boolean;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
@@ -364,15 +361,20 @@ export const AUTH_ACTION = {
 
 export type TeamActivity = {
   id: number;
-  teamId: number;
   userId: number;
-  folderIds: number[];
-  listId: number | null;
-  spaceId: number | null;
+  teamId: number; // selected team
+  folderIds: number[]; // opened folder
+  listId: number; // selected list
+  spaceId: number; // opened space
 };
 
 export type TeamStateType = {
-  teams: Team[]; // server
+  teams: Team[];
+  teamActivity: {
+    teamId: number;
+    spaceId: number;
+    listId: number;
+  };
 };
 export type TeamContextType = {
   teamState: TeamStateType;
@@ -443,7 +445,7 @@ type SelectFolder = {
 };
 type SelectList = {
   type: typeof TEAM_STATE_ACTION.SELECT_LIST;
-  payload: { spaceId: number; listId: number };
+  payload: { spaceId: number; listId: number; folderId?: number };
 };
 
 // Open
@@ -453,7 +455,7 @@ type UpdateOpenedSpace = {
 };
 type UpdateOpenedFolder = {
   type: typeof TEAM_STATE_ACTION.OPEN_FOLDER;
-  payload: { folderId: number };
+  payload: { folderId: number; spaceId: number };
 };
 
 export const TEAM_STATE_ACTION = {

@@ -11,6 +11,11 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
+  teamActivity: {
+    teamId: 0,
+    spaceId: 0,
+    listId: 0,
+  },
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {

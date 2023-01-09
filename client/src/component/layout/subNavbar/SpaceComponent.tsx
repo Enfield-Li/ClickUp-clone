@@ -24,7 +24,6 @@ function SpaceComponent({ space }: Props) {
   } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
-  const isCurrentSpaceSelected = space.isChildListSelected;
 
   const {
     isOpen: isPopoverOpen,
@@ -88,7 +87,7 @@ function SpaceComponent({ space }: Props) {
           alignItems="center"
           justifyContent="space-between"
           _hover={{ bgColor: hoverBgColor }}
-          bgColor={isCurrentSpaceSelected ? hoverBgColor : ""}
+        //   bgColor={isCurrentSpaceSelected ? hoverBgColor : ""}
         >
           <Flex alignItems="center">
             {/* Square */}

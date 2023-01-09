@@ -1,6 +1,6 @@
 import { Box, Center, Divider, Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import LogoSVG from "../../../media/LogoSVG";
 import { Section } from "../../../ApplicationEntry";
@@ -10,10 +10,8 @@ import ApplicationSettings from "./settings/ApplicationSettings";
 type Props = {
   onOpen: () => void;
   isExpanded: boolean;
-  selectedSection: Section;
   fixedNavbarWidth: string;
   setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
 };
 
 export default memo(FixedNavBar);
@@ -21,11 +19,10 @@ function FixedNavBar({
   onOpen,
   isExpanded,
   setIsExpanded,
-  selectedSection,
   fixedNavbarWidth,
-  setSelectedSection,
 }: Props) {
   const navigate = useNavigate();
+  const pathname = useLocation().pathname;
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -33,7 +30,6 @@ function FixedNavBar({
   }
 
   function handleGoHome() {
-    setSelectedSection(Section.HOME);
     navigate(CLIENT_ROUTE.HOME);
   }
 
@@ -48,7 +44,7 @@ function FixedNavBar({
       <Flex flexDir="column" height="100%" justifyContent="space-between">
         <Box>
           {/* Expand icon -- absolute position */}
-          {!isExpanded && selectedSection === Section.TASKS && (
+          {!isExpanded && pathname.includes(CLIENT_ROUTE.ON_BOARDING) && (
             <Center cursor="pointer" onClick={handleOpenSubNavbar}>
               <Center
                 mt="76px"
@@ -89,42 +85,28 @@ function FixedNavBar({
 
           {/* Task icon */}
           <Center flexDir="column" mt={6}>
-            <Box onClick={() => setSelectedSection(Section.HOME)}>
-              <NavIcon
-                name="Home"
-                url={CLIENT_ROUTE.HOME}
-                isSelected={selectedSection === Section.HOME}
-              >
-                {selectedSection === Section.HOME ? (
-                  <i className="bi bi-house-door-fill"></i>
-                ) : (
-                  <i className="bi bi-house-door"></i>
-                )}
-              </NavIcon>
-            </Box>
+            <NavIcon name="Home" url={CLIENT_ROUTE.HOME}>
+              {pathname.includes(CLIENT_ROUTE.HOME) ? (
+                <i className="bi bi-house-door-fill"></i>
+              ) : (
+                <i className="bi bi-house-door"></i>
+              )}
+            </NavIcon>
+
+            <NavIcon name="Search" url="not-found">
+              <i className="bi bi-search"></i>
+            </NavIcon>
+
+            <NavIcon name="Task" url={CLIENT_ROUTE.TASK_BOARD}>
+              {pathname.includes(CLIENT_ROUTE.TASK_BOARD) ? (
+                <i className="bi bi-check-square-fill"></i>
+              ) : (
+                <i className="bi bi-check-square"></i>
+              )}
+            </NavIcon>
 
             <Box>
-              <NavIcon name="Search">
-                <i className="bi bi-search"></i>
-              </NavIcon>
-            </Box>
-
-            <Box onClick={() => setSelectedSection(Section.TASKS)}>
-              <NavIcon
-                name="Task"
-                url={CLIENT_ROUTE.TASK_BOARD}
-                isSelected={selectedSection === Section.TASKS}
-              >
-                {selectedSection === Section.TASKS ? (
-                  <i className="bi bi-check-square-fill"></i>
-                ) : (
-                  <i className="bi bi-check-square"></i>
-                )}
-              </NavIcon>
-            </Box>
-
-            <Box>
-              <NavIcon name="Notifications">
+              <NavIcon name="Notifications" url="not-found">
                 <i className="bi bi-bell"></i>
                 {/* <i className="bi bi-bell-fill"></i> */}
               </NavIcon>
@@ -135,58 +117,52 @@ function FixedNavBar({
             </Box>
 
             <Box>
-              <NavIcon name="Dashboards">
+              <NavIcon name="Dashboards" url="not-found">
                 <i className="bi bi-grid-1x2"></i>
                 {/* <i className="bi bi-grid-1x2-fill"></i> */}
               </NavIcon>
             </Box>
 
             {/* Dev test */}
-            <Box onClick={() => setSelectedSection(Section.DEV)}>
-              <NavIcon
-                name="test"
-                url={CLIENT_ROUTE.TEST_DEV}
-                isSelected={selectedSection === Section.DEV}
-              >
-                {selectedSection === Section.DEV ? (
-                  <i className="bi bi-question-circle-fill"></i>
-                ) : (
-                  <i className="bi bi-question-circle"></i>
-                )}
-              </NavIcon>
-            </Box>
+            <NavIcon name="test" url={CLIENT_ROUTE.TEST_DEV}>
+              {pathname.includes(CLIENT_ROUTE.TEST_DEV) ? (
+                <i className="bi bi-question-circle-fill"></i>
+              ) : (
+                <i className="bi bi-question-circle"></i>
+              )}
+            </NavIcon>
           </Center>
         </Box>
 
         <Center flexDir="column">
           <Box>
-            <NavIcon name="Docs">
+            <NavIcon name="Docs" url="not-found">
               <i className="bi bi-file-earmark-text"></i>
               {/* <i className="bi bi-file-earmark-text-fill"></i> */}
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon name="Pulse">
+            <NavIcon name="Pulse" url="not-found">
               <i className="bi bi-broadcast"></i>
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon name="Goals">
+            <NavIcon name="Goals" url="not-found">
               <i className="bi bi-trophy"></i>
               {/* <i className="bi bi-trophy-fill"></i> */}
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon name="Help">
+            <NavIcon name="Help" url="not-found">
               <i className="bi bi-question-lg"></i>
             </NavIcon>
           </Box>
 
           <Box>
-            <NavIcon>
+            <NavIcon name="" url="not-found">
               <i className="bi bi-three-dots-vertical"></i>
             </NavIcon>
           </Box>

@@ -4,13 +4,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { Section } from "../../ApplicationEntry";
 
-type Props = {
-  selectedSection: Section;
-  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
-};
+type Props = {};
 
 export default memo(Header);
-function Header({ selectedSection, setSelectedSection }: Props) {
+function Header({}: Props) {
   const toast = useToast({ duration: 4000, isClosable: true });
   const location = useLocation();
   const navigate = useNavigate();

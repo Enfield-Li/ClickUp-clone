@@ -20,7 +20,6 @@ function App() {
   const { authDispatch } = useAuthContext();
   const [initializing, setInitializing] = useState(true);
   const toast = useToast({ duration: 3000, isClosable: true });
-//   console.log(initializing);
 
   useEffect(() => {
     const isAuthPage =
@@ -48,12 +47,12 @@ function App() {
     } else {
       if (!isAuthPage) {
         navigate(CLIENT_ROUTE.LOGIN);
-        setInitializing(false);
       }
+      setInitializing(false);
     }
   }, []);
 
-  //   if (initializing) return <Center height="100vh">Loading application</Center>;
+  if (initializing) return <Center height="100vh">Loading application</Center>;
 
   return (
     <Routes>

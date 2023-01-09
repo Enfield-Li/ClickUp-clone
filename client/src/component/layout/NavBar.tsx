@@ -22,17 +22,14 @@ import { fetchTeamList } from "../../networkCalls";
 import { determineFolderType } from "./subNavbar/folderAndList/determineList";
 import { CLIENT_ROUTE } from "../../constant";
 
-type Props = {
-  selectedSection: Section;
-  setSelectedSection: React.Dispatch<React.SetStateAction<Section>>;
-};
+type Props = {};
 
 export default memo(NavBar);
-function NavBar({ selectedSection, setSelectedSection }: Props) {
+function NavBar({}: Props) {
   const toast = useToast();
-  const location = useLocation();
   const { teamId } = useParams();
   const navigate = useNavigate();
+  const pathname = useLocation().pathname;
   const { authState, authDispatch } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
 
@@ -43,15 +40,6 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
   const { getDisclosureProps, isOpen, onClose, onOpen } = useDisclosure({
     defaultIsOpen: false,
   });
-
-  // Sync up url with selectedSection taskState after user refresh page
-  useEffect(() => {
-    if (location.pathname.includes("task")) {
-      setSelectedSection(Section.TASKS);
-    } else if (location.pathname.includes("test_dev")) {
-      setSelectedSection(Section.DEV);
-    }
-  }, []);
 
   // init spaceListState
   useEffect(() => {
@@ -85,13 +73,11 @@ function NavBar({ selectedSection, setSelectedSection }: Props) {
         onOpen={onOpen}
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
-        selectedSection={selectedSection}
         fixedNavbarWidth={fixedNavbarWidth}
-        setSelectedSection={setSelectedSection}
       />
 
       {/* Sub navbar */}
-      {selectedSection === Section.TASKS && (
+      {pathname.includes(CLIENT_ROUTE.TASK_BOARD) && (
         <Box
           zIndex="2"
           opacity="100%"

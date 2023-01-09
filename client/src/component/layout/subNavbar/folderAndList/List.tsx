@@ -21,7 +21,7 @@ function List({ space, folder, list }: Props) {
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     teamStateDispatch({
       type: TEAM_STATE_ACTION.SELECT_LIST,
-      payload: { listId: list.id, spaceId: space.id },
+      payload: { listId: list.id, spaceId: space.id, folderId: folder?.id },
     });
   }
 
