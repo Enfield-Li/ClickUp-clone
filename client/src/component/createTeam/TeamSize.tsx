@@ -1,7 +1,6 @@
 import { Center, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { CreateTeamDTO } from "./CreateTeam";
-import CreateTeamTemplate from "./CreateTeamTemplate";
 
 type Props = {
   step: number;
@@ -38,11 +37,7 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
   }
 
   return (
-    <CreateTeamTemplate
-      step={step}
-      stageNumber={2}
-      title="How many people will you be working with?"
-    >
+    <>
       <Flex pt="3">
         {sizeState.sizes.map((size, index) => (
           <Center
@@ -85,6 +80,6 @@ export default function TeamSize({ step, handleNextStage, setTeam }: Props) {
       >
         I don't know
       </Center>
-    </CreateTeamTemplate>
+    </>
   );
 }

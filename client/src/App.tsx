@@ -1,4 +1,4 @@
-import { Center, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
@@ -6,6 +6,7 @@ import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
 import CreateTeam from "./component/createTeam/CreateTeam";
 import Home from "./component/layout/Home";
+import LoadingSpinner from "./component/layout/LoadingSpinner";
 import UnderConstruction from "./component/layout/UnderConstruction";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";
@@ -20,39 +21,30 @@ function App() {
   const { authDispatch } = useAuthContext();
   const [initializing, setInitializing] = useState(true);
   const toast = useToast({ duration: 3000, isClosable: true });
+  const isAuthPath =
+    location.pathname === CLIENT_ROUTE.REGISTER ||
+    location.pathname === CLIENT_ROUTE.LOGIN;
 
   useEffect(() => {
-    const isAuthPage =
-      location.pathname === CLIENT_ROUTE.REGISTER ||
-      location.pathname === CLIENT_ROUTE.LOGIN;
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
 
     if (accessToken) {
-      refreshUserToken(
-        authDispatch,
-        toast,
-        navigate,
-        isAuthPage,
-        setInitializing
-      );
+      refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       setInterval(() => {
-        refreshUserToken(
-          authDispatch,
-          toast,
-          navigate,
-          isAuthPage,
-          setInitializing
-        );
+        refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       }, 1790000); // 29 min and 50 sec
     } else {
-      if (!isAuthPage) {
+      if (!isAuthPath) {
         navigate(CLIENT_ROUTE.LOGIN);
       }
-      setInitializing(false);
     }
+
+    setTimeout(() => {
+      setInitializing(false);
+    }, 3500);
   }, []);
 
-  if (initializing) return <Center height="100vh">Loading application</Center>;
+  if (initializing && !isAuthPath) return <LoadingSpinner />;
 
   return (
     <Routes>

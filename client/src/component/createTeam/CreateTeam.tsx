@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import useAuthContext from "../../context/auth/useAuthContext";
 import TeamStateProvider from "../../context/team/TeamContext";
 import { getRandomTeamColor } from "../../media/colors";
-import pic from "../../media/onboarding.png";
+import pic from "../../media/onboardingImg.png";
 import AvatarColor from "./AvatarColor";
 import CreateTeamTemplate from "./CreateTeamTemplate";
 import TeamSize from "./TeamSize";
@@ -69,13 +69,14 @@ export default function CreateTeam({}: Props) {
     <TeamStateProvider>
       <Flex height="100vh" color={color} bgColor={bgColor} position="relative">
         <Box
-          px="150px"
+          pr="90px"
+          pl="150px"
           flexGrow="1"
           width="100%"
           overflowY="auto"
           onScroll={setCurrentStep}
         >
-          <Box height="200px"></Box>
+          <Box height="200px" />
 
           {/* Name */}
           <Box ref={(element) => element && (ref.current[0] = element)}>
@@ -111,21 +112,35 @@ export default function CreateTeam({}: Props) {
             ref={(element) => element && (ref.current[1] = element)}
             mb="50px"
           >
-            <AvatarColor
-              team={team}
+            <CreateTeamTemplate
               step={step}
-              setTeam={setTeam}
+              stageNumber={1}
+              buttonTitle="I'm happy so far"
               handleNextStage={handleNextStage}
-            />
+              title="Customize your Workspace's avatar:"
+            >
+              <AvatarColor
+                team={team}
+                step={step}
+                setTeam={setTeam}
+                handleNextStage={handleNextStage}
+              />
+            </CreateTeamTemplate>
           </Box>
 
           {/* TeamSize */}
           <Box ref={(element) => element && (ref.current[2] = element)}>
-            <TeamSize
+            <CreateTeamTemplate
               step={step}
-              setTeam={setTeam}
-              handleNextStage={handleNextStage}
-            />
+              stageNumber={2}
+              title="How many people will you be working with?"
+            >
+              <TeamSize
+                step={step}
+                setTeam={setTeam}
+                handleNextStage={handleNextStage}
+              />
+            </CreateTeamTemplate>
           </Box>
 
           {/* Member email */}

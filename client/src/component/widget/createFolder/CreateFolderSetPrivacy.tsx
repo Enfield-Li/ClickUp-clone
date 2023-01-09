@@ -1,21 +1,21 @@
 import {
   Box,
-  InputGroup,
-  Input,
-  InputRightAddon,
   Button,
-  InputLeftElement,
-  InputRightElement,
   Center,
   Flex,
-  useColorModeValue,
+  Img,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
   Tooltip,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { CreateFolderState, CreateFolderStep } from "../../../types";
+import { shareLinkDataUrl } from "../../../media/imgDataUrl";
+import { CreateFolderState } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
-// import logo from "../../media/clickup_logo.png";
-import shareLink from "../../../media/share-link.png";
 
 type Props = {
   createFolder: CreateFolderState;
@@ -109,7 +109,7 @@ export default function CreateFolderSetPrivacy({
             <Tooltip
               label={
                 <Box>
-                  <img src={shareLink} />
+                  <Img src={shareLinkDataUrl} />
                   <Box fontWeight="semibold" fontSize="13px" mt="1">
                     Only those with permissions can access with this link.
                   </Box>

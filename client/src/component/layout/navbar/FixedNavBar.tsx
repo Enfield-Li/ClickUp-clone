@@ -1,9 +1,9 @@
-import { Box, Center, Divider, Flex } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, Image } from "@chakra-ui/react";
 import { memo } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import LogoSVG from "../../../media/LogoSVG";
+import { logoDataUrl } from "../../../media/imgDataUrl";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import NavIcon from "./NavIcon";
 import ApplicationSettings from "./settings/ApplicationSettings";
@@ -63,26 +63,12 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
           </NavLink>
 
           {/* Logo */}
-          <Center
-            mt="22px"
-            ml="22px"
-            boxSize="10px"
-            role="menuitem"
-            cursor="pointer"
-            aria-label="logo"
-            onClick={() => navigate(CLIENT_ROUTE.HOME)}
-          >
-            <Center
-              width="fit-content"
-              height="fit-content"
-              transform="scale(0.2)"
-            >
-              <LogoSVG />
-            </Center>
+          <Center onClick={() => navigate(CLIENT_ROUTE.HOME)}>
+            <Image height="30px" mt="3" src={logoDataUrl} />
           </Center>
 
           {/* Task icon */}
-          <Center flexDir="column" mt={6}>
+          <Center flexDir="column" mt={1}>
             <NavIcon name="Home" url={CLIENT_ROUTE.HOME}>
               {({ isActive }) => (
                 <>

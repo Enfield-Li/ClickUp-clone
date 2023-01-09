@@ -1,15 +1,13 @@
-import { Flex, Center, Box, Button } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Image } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API_ENDPOINT, CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
-import LogoSVG from "../../media/LogoSVG";
-import { createTeam } from "../../networkCalls";
-import { Team, AUTH_ACTION, TEAM_STATE_ACTION } from "../../types";
-import { axiosTeamServiceInstance } from "../../AxiosInstance";
-import { CreateTeamDTO } from "./CreateTeam";
 import useTeamStateContext from "../../context/team/useTeamContext";
+import { logoDataUrl } from "../../media/imgDataUrl";
+import { createTeam } from "../../networkCalls";
+import { TEAM_STATE_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
+import { CreateTeamDTO } from "./CreateTeam";
 
 type Props = {
   step: number;
@@ -65,13 +63,7 @@ export default function CreateTeamTemplate({
           boxShadow="lg"
           bgColor="white"
         >
-          <Center
-            width="fit-content"
-            height="fit-content"
-            transform="scale(0.25)"
-          >
-            <LogoSVG />
-          </Center>
+          <Image height="36px" src={logoDataUrl} />
         </Center>
 
         <Box flexGrow="1">

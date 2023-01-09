@@ -1,8 +1,8 @@
-import { Box, Button, Center, Flex } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Img } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
-import logo from "../../media/clickup_logo.png";
+import { loginLogoDataUrl } from "../../media/imgDataUrl";
 
 type Props = {
   isLogin: boolean;
@@ -26,10 +26,12 @@ function HeadInfo({ isLogin }: Props) {
       height="fit-content"
       justifyContent="space-between"
     >
+      {/* Logo */}
       <Center cursor="pointer">
         <Center boxSize="120px">
-          <img src={logo} />
+          <Img src={loginLogoDataUrl} />
         </Center>
+
         <Flex ml="2" alignItems="center">
           <span>&nbsp;</span>
           <Box fontWeight="light" fontSize="small">
@@ -38,6 +40,7 @@ function HeadInfo({ isLogin }: Props) {
         </Flex>
       </Center>
 
+      {/* Sign up */}
       <Flex alignItems="center">
         <Box fontSize="smaller" mr="3">
           {isLogin ? "Don't have an account?" : "Already playing with ClickUp?"}

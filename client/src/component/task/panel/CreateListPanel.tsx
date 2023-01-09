@@ -1,7 +1,7 @@
-import { Box, Button, Center } from "@chakra-ui/react";
+import { Box, Button, Center, Img } from "@chakra-ui/react";
 import { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import EmptySpaceSVG from "../../../media/EmptySpaceSVG";
+import { emptySpaceImgDisplayDataUrl } from "../../../media/imgDataUrl";
 
 type Props = {};
 
@@ -14,7 +14,7 @@ function CreateListPanel({}: Props) {
   return (
     <Center flexDir="column">
       <Box opacity="80%">
-        <EmptySpaceSVG />
+        <Img src={emptySpaceImgDisplayDataUrl} />
       </Box>
 
       <Box mt="3" mb="4" color="lightMain.300">

@@ -332,8 +332,7 @@ export async function refreshUserToken(
   dispatch: React.Dispatch<AuthActionType>,
   toast: (options?: UseToastOptions | undefined) => ToastId,
   navigate: NavigateFunction,
-  isAuthPage: boolean,
-  setInitializing: React.Dispatch<React.SetStateAction<boolean>>
+  isAuthPath: boolean
 ) {
   try {
     const response =
@@ -351,7 +350,7 @@ export async function refreshUserToken(
       payload: { user: response.data },
     });
 
-    if (isAuthPage) {
+    if (isAuthPath) {
       navigate(
         joinedTeamCount > 0 && defaultTeamId
           ? `/${defaultTeamId}` + CLIENT_ROUTE.TASK_BOARD
@@ -367,14 +366,12 @@ export async function refreshUserToken(
     dispatch({ type: AUTH_ACTION.LOGOUT_USER });
     const response = err.response?.data as ErrorResponse;
 
-    if (!isAuthPage) navigate(CLIENT_ROUTE.LOGIN);
+    if (!isAuthPath) navigate(CLIENT_ROUTE.LOGIN);
     toast({
       title: "Error!",
       description: response.message,
       status: "error",
     });
-  } finally {
-    setInitializing(false);
   }
 }
 

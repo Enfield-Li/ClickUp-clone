@@ -6,6 +6,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE } from "../../../../constant";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { AUTH_ACTION, TEAM_STATE_ACTION } from "../../../../types";
@@ -15,6 +17,7 @@ type Props = { onClose: () => void };
 export default memo(JoinedTeamList);
 function JoinedTeamList({ onClose }: Props) {
   const { authDispatch } = useAuthContext();
+  const navigate = useNavigate();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
@@ -30,10 +33,6 @@ function JoinedTeamList({ onClose }: Props) {
         payload: { teamId },
       });
     }, 100);
-  }
-
-  function handleAddTeam() {
-    authDispatch({ type: AUTH_ACTION.OPEN_ONBOARDING });
   }
 
   return (
@@ -97,7 +96,7 @@ function JoinedTeamList({ onClose }: Props) {
             borderStyle="dashed"
             fontWeight="extrabold"
             borderColor="purple.400"
-            onClick={() => handleAddTeam()}
+            onClick={() => navigate(CLIENT_ROUTE.ON_BOARDING)}
           >
             +
           </Center>
