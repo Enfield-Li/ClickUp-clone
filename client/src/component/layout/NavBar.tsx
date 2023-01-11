@@ -64,7 +64,7 @@ function NavBar({}: Props) {
       />
 
       {/* Sub navbar */}
-      <NavLink to={CLIENT_ROUTE.TASK_BOARD}>
+      <NavLink to={CLIENT_ROUTE.TASK_BOARD} onClick={(e) => e.preventDefault()}>
         {({ isActive }) =>
           isActive && (
             <Box

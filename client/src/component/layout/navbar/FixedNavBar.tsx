@@ -37,7 +37,10 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
       <Flex flexDir="column" height="100%" justifyContent="space-between">
         <Box>
           {/* Expand icon -- absolute position */}
-          <NavLink to={CLIENT_ROUTE.TASK_BOARD}>
+          <NavLink
+            to={CLIENT_ROUTE.TASK_BOARD}
+            onClick={(e) => e.preventDefault()}
+          >
             {({ isActive }) =>
               !isExpanded &&
               isActive && (
@@ -85,10 +88,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
               {({ isActive }) => <i className="bi bi-search"></i>}
             </NavIcon>
 
-            <NavIcon
-              name="Home"
-              url={getTaskBoardURL({ teamId, spaceId, listId })}
-            >
+            <NavIcon name="Home" url={getTaskBoardURL({ teamId })}>
               {({ isActive }) => (
                 <>
                   {isActive ? (
