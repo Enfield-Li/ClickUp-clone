@@ -7,6 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { getRandomTeamColor } from "../../media/colors";
 import pic from "../../media/onboardingImg.png";
@@ -24,6 +25,7 @@ export type CreateTeamDTO = {
 };
 
 export default function CreateTeam({}: Props) {
+  const navigate = useNavigate();
   const { authState } = useAuthContext();
   const initTeam: CreateTeamDTO = {
     avatar: "",
@@ -74,6 +76,20 @@ export default function CreateTeam({}: Props) {
         overflowY="auto"
         onScroll={setCurrentStep}
       >
+        {authState.user?.joinedTeamCount && (
+          <Box
+            top="20px"
+            right="360px"
+            cursor="pointer"
+            color="purple.500"
+            position="absolute"
+            fontWeight="semibold"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
+          </Box>
+        )}
+
         <Box height="200px" />
 
         {/* Name */}

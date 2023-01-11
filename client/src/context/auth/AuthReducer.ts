@@ -13,17 +13,25 @@ export default function authReducer(
       return produce(authState, (draftState) => {
         const { user } = authAction.payload;
         draftState.user = user;
+      });
+    }
 
-        if (!user.joinedTeamCount) {
-          draftState.onboarding = true;
+    case AUTH_ACTION.UPDATE_TEAM_COUNT: {
+      return produce(authState, (draftState) => {
+        const { isAddTeam, teamId } = authAction.payload;
+
+        if (!draftState.user) {
+          throw new Error("User is not initialized");
         }
+
+        draftState.user.defaultTeamId = teamId;
+        draftState.user.joinedTeamCount += isAddTeam ? 1 : -1;
       });
     }
 
     case AUTH_ACTION.REGISTER_USER: {
       return produce(authState, (draftState) => {
         draftState.user = authAction.payload.user;
-        draftState.onboarding = true;
       });
     }
 
@@ -34,15 +42,11 @@ export default function authReducer(
     }
 
     case AUTH_ACTION.OPEN_ONBOARDING: {
-      return produce(authState, (draftState) => {
-        draftState.onboarding = true;
-      });
+      return produce(authState, (draftState) => {});
     }
 
     case AUTH_ACTION.CLOSE_ONBOARDING: {
-      return produce(authState, (draftState) => {
-        draftState.onboarding = false;
-      });
+      return produce(authState, (draftState) => {});
     }
 
     default: {

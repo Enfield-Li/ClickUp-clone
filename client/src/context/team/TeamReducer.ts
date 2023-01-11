@@ -1,6 +1,8 @@
 import produce from "immer";
+import { WritableDraft } from "immer/dist/internal";
 import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
+  TeamActivity,
   TeamStateActionType,
   TeamStateType,
   TEAM_STATE_ACTION,
@@ -8,157 +10,126 @@ import {
 import { deepCopy } from "../../utils/deepCopy";
 
 export default function teamReducer(
-  spaceListState: TeamStateType,
+  teamState: TeamStateType,
   action: TeamStateActionType
 ) {
+  function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
+    const { spaceId, teamId, listId } = draftState.teamActiveStatus;
+
+    draftState.teams = deepCopy(draftState.originalTeams);
+    draftState.teams.forEach((team) => {
+      if (team.id === teamId) {
+        team.isSelected = true;
+        team.spaces.forEach((space) => {
+          if (space.id === spaceId) {
+            space.isOpen = true;
+          }
+
+          space.allListOrFolder.forEach((listOrFolder) => {
+            const isFolder = determineFolderType(listOrFolder);
+            if (isFolder) {
+              listOrFolder.isOpen = true;
+              listOrFolder.allLists.forEach((list) => {
+                if (list.id === listId) {
+                  list.isSelected = true;
+                }
+              });
+            } else if (!isFolder && listOrFolder.id === listId) {
+              listOrFolder.isSelected = true;
+            }
+          });
+        });
+      }
+    });
+  }
+
   switch (action.type) {
     // Init
     case TEAM_STATE_ACTION.INIT_TEAM_STATE: {
-      return produce(spaceListState, (draftState) => {
+      return produce(teamState, (draftState) => {
         const { teams, teamActivity } = action.payload;
-        const { folderIds, spaceId, teamId, listId } = teamActivity;
 
         draftState.teams = deepCopy(teams);
-        draftState.teamActivity = teamActivity;
+        draftState.originalTeams = deepCopy(teams);
+        draftState.teamActiveStatus = teamActivity;
 
-        draftState.teams.forEach((team) => {
-          if (team.id === teamId) {
-            team.isSelected = true;
-            team.spaces.forEach((space) => {
-              if (space.id === spaceId) {
-                space.isOpen = true;
-              }
-
-              space.allListOrFolder.forEach((listOrFolder) => {
-                const isFolder = determineFolderType(listOrFolder);
-                if (folderIds.includes(listOrFolder.id) && isFolder) {
-                  listOrFolder.isOpen = true;
-                  listOrFolder.allLists.forEach((list) => {
-                    if (list.id === listId) {
-                      list.isSelected = true;
-                    }
-                  });
-                } else if (!isFolder && listOrFolder.id === listId) {
-                  listOrFolder.isSelected = true;
-                }
-              });
-            });
-          }
-        });
+        syncTeamStateActivity(draftState);
       });
     }
 
     // Select
     case TEAM_STATE_ACTION.SELECT_TEAM: {
-      return produce(spaceListState, (draftState) => {
+      return produce(teamState, (draftState) => {
         const { teamId } = action.payload;
 
-        draftState.teamActivity.teamId = teamId;
-
-        draftState.teams.forEach((team) => {
-          if (team.id === teamId && team.isSelected) {
-            return;
-          }
-
-          if (team.id !== teamId && team.isSelected) {
-            team.isSelected = false;
-          }
-          if (team.id === teamId) {
-            team.isSelected = true;
-          }
-        });
+        draftState.teamActiveStatus.teamId = teamId;
+        syncTeamStateActivity(draftState);
       });
     }
 
     case TEAM_STATE_ACTION.SELECT_LIST: {
-      return produce(spaceListState, (draftState) => {
-        const { spaceId, folderId, listId } = action.payload;
+      return produce(teamState, (draftState) => {
+        const { listId } = action.payload;
 
-        draftState.teamActivity.listId = listId;
-
-        draftState.teams.forEach(
-          (team) =>
-            team.isSelected &&
-            team.spaces.forEach(
-              (space) =>
-                space.id === spaceId &&
-                space.allListOrFolder.forEach((listOrFolder) => {
-                  const isFolder = determineFolderType(listOrFolder);
-
-                  if (isFolder && listOrFolder.id === folderId) {
-                    listOrFolder.allLists.forEach((list) => {
-                      if (list.id !== listId && list.isSelected) {
-                        list.isSelected = false;
-                      }
-                      if (list.id === listId) {
-                        list.isSelected = true;
-                      }
-                    });
-                  }
-
-                  if (!isFolder && listOrFolder.id === listId) {
-                    listOrFolder.isSelected = true;
-                  }
-
-                  if (
-                    !isFolder &&
-                    listOrFolder.id !== listId &&
-                    listOrFolder.isSelected
-                  ) {
-                    listOrFolder.isSelected = false;
-                  }
-                })
-            )
-        );
+        draftState.teamActiveStatus.listId = listId;
+        syncTeamStateActivity(draftState);
       });
     }
 
     case TEAM_STATE_ACTION.OPEN_SPACE: {
-      return produce(spaceListState, (draftState) => {
+      return produce(teamState, (draftState) => {
         const { spaceId } = action.payload;
 
-        draftState.teamActivity.spaceId = spaceId;
-
-        draftState.teams.forEach(
-          (team) =>
-            team.isSelected &&
-            team.spaces.forEach((space) => {
-              if (space.id === spaceId && space.isOpen) {
-                space.isOpen = !space.isOpen;
-                return;
-              }
-
-              if (space.id === spaceId && !space.isOpen) {
-                space.isOpen = true;
-              }
-            })
-        );
+        draftState.teamActiveStatus.spaceId =
+          draftState.teamActiveStatus.spaceId === spaceId ? null : spaceId;
+        syncTeamStateActivity(draftState);
       });
     }
 
     case TEAM_STATE_ACTION.OPEN_FOLDER: {
-      return produce(spaceListState, (draftState) => {
-        const { folderId, spaceId } = action.payload;
+      return produce(teamState, (draftState) => {
+        const { folderId } = action.payload;
 
         draftState.teams.forEach(
           (team) =>
             team.isSelected &&
-            team.spaces.forEach(
-              (space) =>
-                space.id === spaceId &&
-                space.allListOrFolder.forEach((listOrFolder) => {
-                  const isFolder = determineFolderType(listOrFolder);
-                  if (isFolder && listOrFolder.id === folderId) {
-                    listOrFolder.isOpen = !listOrFolder.isOpen;
-                  }
-                })
+            team.spaces.forEach((space) =>
+              space.allListOrFolder.forEach((listOrFolder) => {
+                const isFolder = determineFolderType(listOrFolder);
+                if (isFolder && listOrFolder.id === folderId) {
+                  listOrFolder.isOpen = !listOrFolder.isOpen;
+                }
+              })
             )
         );
       });
     }
 
+    case TEAM_STATE_ACTION.CREATE_SPACE: {
+      return produce(teamState, (draftState) => {
+        const space = action.payload;
+
+        draftState.teamActiveStatus.spaceId = space.id;
+        draftState.teams.forEach(
+          (team) => team.isSelected && team.spaces.push(space)
+        );
+      });
+    }
+
+    case TEAM_STATE_ACTION.CREATE_Folder: {
+      return produce(teamState, (draftState) => {
+        const newFolder = action.payload;
+      });
+    }
+
+    // case TEAM_STATE_ACTION.CREATE_SPACE: {
+    //   return produce(teamState, (draftState) => {
+    //     const {} = action.payload;
+    //   });
+    // }
+
     default: {
-      return spaceListState;
+      return teamState;
     }
   }
 }

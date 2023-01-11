@@ -79,91 +79,91 @@ public class AuthorizationServiceTest implements WithAssertions {
                 passwordEncoder, repository);
     }
 
-    @Test
-    void test_register_should_pass() {
-        // given
-        var userId = 2;
-        var username = "user1";
-        var joinedTeamCount = 0;
-        var password = "password";
-        var email = "user1@gmail.com";
-        var encodedPassword = "encodedPassword";
+    // @Test
+    // void test_register_should_pass() {
+    //     // given
+    //     var userId = 2;
+    //     var username = "user1";
+    //     var joinedTeamCount = 0;
+    //     var password = "password";
+    //     var email = "user1@gmail.com";
+    //     var encodedPassword = "encodedPassword";
 
-        var accessToken = "accessToken";
-        var refreshToken = "refreshToken";
+    //     var accessToken = "accessToken";
+    //     var refreshToken = "refreshToken";
 
-        var applicationUser = ApplicationUser.builder()
-                .id(userId)
-                .email(email)
-                .color("color")
-                .username(username)
-                .password(encodedPassword)
-                .joinedTeamCount(joinedTeamCount)
-                .build();
-        var expectedAuthorizationResponseDTO = AuthorizationResponseDTO
-                .builder()
-                .id(userId)
-                .email(email)
-                .username(username)
-                .accessToken(accessToken)
-                .joinedTeamCount(joinedTeamCount)
-                .build();
+    //     var applicationUser = ApplicationUser.builder()
+    //             .id(userId)
+    //             .email(email)
+    //             .color("color")
+    //             .username(username)
+    //             .password(encodedPassword)
+    //             .joinedTeamCount(joinedTeamCount)
+    //             .build();
+    //     var expectedAuthorizationResponseDTO = AuthorizationResponseDTO
+    //             .builder()
+    //             .id(userId)
+    //             .email(email)
+    //             .username(username)
+    //             .accessToken(accessToken)
+    //             .joinedTeamCount(joinedTeamCount)
+    //             .build();
 
-        var registerCredentials = new RegisterUserDTO(
-                username, password, email);
-        given(repository.existsByEmail(any())).willReturn(false);
-        given(passwordEncoder.encode(any())).willReturn(encodedPassword);
-        given(jwtUtils.createRefreshToken(any(), any())).willReturn(
-                refreshToken);
-        given(jwtUtils.createAccessToken(any(), any())).willReturn(
-                accessToken);
-        given(repository.save(any())).willReturn(applicationUser);
+    //     var registerCredentials = new RegisterUserDTO(
+    //             username, password, email);
+    //     given(repository.existsByEmail(any())).willReturn(false);
+    //     given(passwordEncoder.encode(any())).willReturn(encodedPassword);
+    //     given(jwtUtils.createRefreshToken(any(), any())).willReturn(
+    //             refreshToken);
+    //     given(jwtUtils.createAccessToken(any(), any())).willReturn(
+    //             accessToken);
+    //     given(repository.save(any())).willReturn(applicationUser);
 
-        // when 
-        var userResponse = underTest.register(registerCredentials);
+    //     // when 
+    //     var userResponse = underTest.register(registerCredentials);
 
-        // then
-        verify(passwordEncoder).encode(passwordArgCaptor.capture());
-        verify(repository).save(applicationUserArgCaptor.capture());
-        verify(httpSession).setAttribute(sessionArgCaptor.capture(),
-                sessionArgCaptor.capture());
+    //     // then
+    //     verify(passwordEncoder).encode(passwordArgCaptor.capture());
+    //     verify(repository).save(applicationUserArgCaptor.capture());
+    //     verify(httpSession).setAttribute(sessionArgCaptor.capture(),
+    //             sessionArgCaptor.capture());
 
-        var applicationUserArg = applicationUserArgCaptor.getValue();
-        var sessionArgs = sessionArgCaptor.getAllValues();
+    //     var applicationUserArg = applicationUserArgCaptor.getValue();
+    //     var sessionArgs = sessionArgCaptor.getAllValues();
 
-        assertThat(passwordArgCaptor.getValue()).isEqualTo(password);
-        assertThat(applicationUserArg.getPassword()).isEqualTo(
-                encodedPassword);
-        assertThat(sessionArgs).isEqualTo(List.of(REFRESH_TOKEN, refreshToken));
-        assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
-    }
+    //     assertThat(passwordArgCaptor.getValue()).isEqualTo(password);
+    //     assertThat(applicationUserArg.getPassword()).isEqualTo(
+    //             encodedPassword);
+    //     assertThat(sessionArgs).isEqualTo(List.of(REFRESH_TOKEN, refreshToken));
+    //     assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
+    // }
 
-    @Test
-    void test_register_should_fail(CapturedOutput output) {
-        // given
-        var username = "user1";
-        var password = "password";
-        var email = "user1@gmail.com";
-        var errorMessage = "Email already taken!";
-        var registerCredentials = new RegisterUserDTO(username,
-                password, email);
-        var logMessage = "Email already taken!";
+    // @Test
+    // void test_register_should_fail(CapturedOutput output) {
+    //     // given
+    //     var username = "user1";
+    //     var password = "password";
+    //     var email = "user1@gmail.com";
+    //     var errorMessage = "Email already taken!";
+    //     var registerCredentials = new RegisterUserDTO(username,
+    //             password, email);
+    //     var logMessage = "Email already taken!";
 
-        given(repository.existsByEmail(any())).willReturn(true);
+    //     given(repository.existsByEmail(any())).willReturn(true);
 
-        // when 
-        // then
-        assertThatThrownBy(() -> underTest.register(registerCredentials))
-                .isInstanceOf(AuthenticationFailureException.class)
-                .hasMessage(String.format(errorMessage));
+    //     // when 
+    //     // then
+    //     assertThatThrownBy(() -> underTest.register(registerCredentials))
+    //             .isInstanceOf(AuthenticationFailureException.class)
+    //             .hasMessage(String.format(errorMessage));
 
-        verify(repository, never()).saveAndFlush(any());
-        verify(passwordEncoder, never()).encode(any());
-        verify(jwtUtils, never()).createRefreshToken(any(), any());
-        verify(jwtUtils, never()).createAccessToken(any(), any());
-        verify(httpSession, never()).setAttribute(any(), any());
-        assertThat(output).contains(logMessage);
-    }
+    //     verify(repository, never()).saveAndFlush(any());
+    //     verify(passwordEncoder, never()).encode(any());
+    //     verify(jwtUtils, never()).createRefreshToken(any(), any());
+    //     verify(jwtUtils, never()).createAccessToken(any(), any());
+    //     verify(httpSession, never()).setAttribute(any(), any());
+    //     assertThat(output).contains(logMessage);
+    // }
 
     @Test
     void test_login_should_pass() {

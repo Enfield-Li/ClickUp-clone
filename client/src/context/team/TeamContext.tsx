@@ -11,7 +11,8 @@ type ProviderType = {
 
 const initialTeamContextState: TeamStateType = {
   teams: [],
-  teamActivity: {
+  originalTeams: [],
+  teamActiveStatus: {
     teamId: 0,
     spaceId: 0,
     listId: 0,

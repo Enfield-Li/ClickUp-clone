@@ -94,11 +94,11 @@ function SpaceComponent({ space }: Props) {
             <Center
               ml="1"
               mr="2"
-              pb="3.5px"
+              pb="2px"
               width="20px"
               height="20px"
               rounded="4px"
-              fontSize="15px"
+              fontSize="13px"
               fontWeight="bold"
               color="lightMain.200"
               backgroundSize="contain"

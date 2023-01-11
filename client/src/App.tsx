@@ -20,10 +20,9 @@ function App() {
   const location = useLocation();
   const { authState, authDispatch } = useAuthContext();
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  console.log(authState);
-
   const [initializing, setInitializing] = useState(true);
   const toast = useToast({ duration: 3000, isClosable: true });
+
   const isAuthPath =
     location.pathname === CLIENT_ROUTE.REGISTER ||
     location.pathname === CLIENT_ROUTE.LOGIN;
@@ -42,10 +41,10 @@ function App() {
 
     setTimeout(() => {
       setInitializing(false);
-    }, 3500);
+    }, 2600);
   }, []);
 
-//   if (initializing && !isAuthPath && accessToken) return <LoadingSpinner />;
+  //   if (initializing && !isAuthPath && accessToken) return <LoadingSpinner />;
 
   return (
     <Routes>

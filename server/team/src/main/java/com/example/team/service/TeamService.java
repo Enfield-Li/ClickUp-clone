@@ -74,7 +74,7 @@ public class TeamService {
         var teamId = team.getId();
         var defaultStatusCategoryId = (Integer) statusCategoryClient
                 .initStatusCategoryForTeam(teamId);
-        var initSpace = Space.initSpace(defaultStatusCategoryId, team);
+        var initSpace = Space.initTeamSpace(defaultStatusCategoryId, team);
         team.setSpaces(Set.of(initSpace));
         var space = spaceRepository.save(initSpace);
 

@@ -9,14 +9,16 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createSpaceForTeam } from "../../../networkCalls";
 import {
   CreateSpaceStep,
   CreateSpaceState,
   CreateSpaceDTO,
+  TEAM_STATE_ACTION,
 } from "../../../types";
+import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
 type Props = {
   sectionName: string;
@@ -36,8 +38,14 @@ function CreateSpaceModalTemplate({
   setCreateSpace,
   previousSection,
 }: Props) {
+  const navigate = useNavigate();
   const { teamId, listId } = useParams();
-  const { teamState } = useTeamStateContext();
+  const {
+    teamState,
+    teamStateDispatch,
+    modalControls: { onCreateSpaceModalClose },
+  } = useTeamStateContext();
+
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleNext() {
@@ -56,8 +64,18 @@ function CreateSpaceModalTemplate({
       ...createSpace.createSpaceDTO,
       teamId: Number(teamId),
     };
-    createSpaceForTeam(createSpaceDTO, (createdTeam) => {
-      console.log(createdTeam);
+    createSpaceForTeam(createSpaceDTO, (space) => {
+      onCreateSpaceModalClose();
+      navigate(
+        getTaskBoardURL({
+          teamId: teamState.teamActiveStatus.teamId,
+          spaceId: space.id,
+        })
+      );
+      teamStateDispatch({
+        type: TEAM_STATE_ACTION.CREATE_SPACE,
+        payload: space,
+      });
     });
   }
 

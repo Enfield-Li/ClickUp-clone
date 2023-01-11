@@ -19,7 +19,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
   const fixedNavbarWidth = "55px";
   const navigate = useNavigate();
   const { teamState } = useTeamStateContext();
-  const { listId, teamId, spaceId } = teamState.teamActivity;
+  const { listId, teamId, spaceId } = teamState.teamActiveStatus;
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -68,7 +68,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
           </Center>
 
           {/* Task icon */}
-          <Center flexDir="column" mt={1}>
+          <Center flexDir="column" mt={3}>
             <NavIcon name="Home" url={CLIENT_ROUTE.HOME}>
               {({ isActive }) => (
                 <>

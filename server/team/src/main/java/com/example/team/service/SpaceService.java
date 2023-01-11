@@ -19,8 +19,8 @@ public class SpaceService {
     private final SpaceRepository repository;
     private final EntityManager entityManager;
 
-  @Transactional
-  public Space createSpace(CreateSpaceDTO createSpaceDTO) {
+    @Transactional
+    public Space createSpace(CreateSpaceDTO createSpaceDTO) {
         var teamReference = findTeamReference(createSpaceDTO.teamId());
         var space = Space.convertFromCreateSpaceDTO(
                 createSpaceDTO, teamReference);

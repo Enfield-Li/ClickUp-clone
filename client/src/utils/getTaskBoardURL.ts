@@ -2,8 +2,8 @@ import { CLIENT_ROUTE } from "../constant";
 
 type Param = {
   teamId: string | number;
-  spaceId: string | number;
-  listId: string | number;
+  spaceId?: string | number;
+  listId?: string | number;
 };
 
 export function getTaskBoardURL({ teamId, spaceId, listId }: Param) {

@@ -21,16 +21,18 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+@Data
 @Entity
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CATEGORY_TYPE", discriminatorType = DiscriminatorType.STRING)
-abstract class Category {
+public abstract class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthContext from "../../context/auth/useAuthContext";
 import { logoDataUrl } from "../../media/imgDataUrl";
 import { createTeam } from "../../networkCalls";
+import { AUTH_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import { CreateTeamDTO } from "./CreateTeam";
 
@@ -37,8 +38,12 @@ export default function CreateTeamTemplate({
 
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
       createTeam(createTeamDTO, (createTeamResponseDTO) => {
-        const { listId, teamId, spaceId } = createTeamResponseDTO.teamActivity;
-        navigate(getTaskBoardURL({ teamId, spaceId, listId }));
+        const { teamId } = createTeamResponseDTO.teamActivity;
+        navigate(getTaskBoardURL(createTeamResponseDTO.teamActivity));
+        authDispatch({
+          type: AUTH_ACTION.UPDATE_TEAM_COUNT,
+          payload: { isAddTeam: true, teamId },
+        });
       });
     }
   }

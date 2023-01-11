@@ -74,8 +74,15 @@ public class Space {
     public static Space convertFromCreateSpaceDTO(
             CreateSpaceDTO createSpaceDTO,
             Team team) {
-        return Space.builder()
+        var list = ListCategory.builder()
+                .name("list")
+                .statusCategoryId(createSpaceDTO.statusCategoryId())
+                .build();
+        Set<Category> allListOrFolder = Set.of(list);
+
+        var space = Space.builder()
                 .team(team)
+                .allListOrFolder(allListOrFolder)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
                 .avatar(createSpaceDTO.avatar())
@@ -84,9 +91,12 @@ public class Space {
                 .orderIndex(createSpaceDTO.orderIndex())
                 .statusCategoryId(createSpaceDTO.statusCategoryId())
                 .build();
+
+        list.setSpace(space);
+        return space;
     }
 
-    public static Space initSpace(Integer defaultStatusCategoryId, Team team) {
+    public static Space initTeamSpace(Integer defaultStatusCategoryId, Team team) {
         return Space.builder().team(team).name("space")
                 .statusCategoryId(defaultStatusCategoryId)
                 .color("gray").orderIndex(1).isPrivate(false).build();

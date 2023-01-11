@@ -232,7 +232,6 @@ export type AuthContextType = {
 
 export type AuthStateType = {
   user: User | null;
-  onboarding: boolean;
 };
 
 export type RegisterUserDTO = {
@@ -317,9 +316,11 @@ export type Team = {
 
 export interface User {
   id: number;
-  color?: string;
   email: string;
+  color?: string;
   username: string;
+  defaultTeamId: number;
+  joinedTeamCount: number;
 }
 
 export interface AuthenticationResponse {
@@ -337,6 +338,7 @@ export type AuthActionType =
   | LogOutUser
   | RegisterUser
   | OpenOnboarding
+  | UpdateTeamCount
   | CloseOnboarding;
 
 type LogInUser = {
@@ -346,6 +348,10 @@ type LogInUser = {
 type RegisterUser = {
   type: typeof AUTH_ACTION.REGISTER_USER;
   payload: { user: User };
+};
+type UpdateTeamCount = {
+  type: typeof AUTH_ACTION.UPDATE_TEAM_COUNT;
+  payload: { isAddTeam: boolean; teamId: number };
 };
 type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
 type OpenOnboarding = { type: typeof AUTH_ACTION.OPEN_ONBOARDING };
@@ -357,6 +363,7 @@ export const AUTH_ACTION = {
   REGISTER_USER: "register_user",
   OPEN_ONBOARDING: "open_onboarding",
   CLOSE_ONBOARDING: "close_onboarding",
+  UPDATE_TEAM_COUNT: "update_team_count",
 } as const;
 
 export type TeamActivity = {
@@ -368,13 +375,16 @@ export type TeamActivity = {
   spaceId: number; // opened space
 };
 
+export type TeamActiveStatus = {
+  teamId: number | null;
+  spaceId: number | null;
+  listId: number | null;
+};
+
 export type TeamStateType = {
   teams: Team[];
-  teamActivity: {
-    teamId: number;
-    spaceId: number;
-    listId: number;
-  };
+  originalTeams: Team[];
+  teamActiveStatus: TeamActiveStatus;
 };
 export type TeamContextType = {
   teamState: TeamStateType;
@@ -404,6 +414,8 @@ export type TeamStateActionType =
   | CreateTeam
   | SelectList
   | SelectSpace
+  | CreateSpace
+  | CreateFolder
   | SelectFolder;
 
 type InitTeamState = {
@@ -414,6 +426,16 @@ type InitTeamState = {
 type CreateTeam = {
   type: typeof TEAM_STATE_ACTION.CREATE_TEAM;
   payload: CreateTeamResponseDTO;
+};
+
+type CreateSpace = {
+  type: typeof TEAM_STATE_ACTION.CREATE_SPACE;
+  payload: Space;
+};
+
+type CreateFolder = {
+  type: typeof TEAM_STATE_ACTION.CREATE_Folder;
+  payload: FolderCategory;
 };
 
 // Add
@@ -441,11 +463,11 @@ type SelectSpace = {
 };
 type SelectFolder = {
   type: typeof TEAM_STATE_ACTION.SELECT_FOLDER;
-  payload: { spaceId: number; folderId: number };
+  payload: { folderId: number };
 };
 type SelectList = {
   type: typeof TEAM_STATE_ACTION.SELECT_LIST;
-  payload: { spaceId: number; listId: number; folderId?: number };
+  payload: { listId: number };
 };
 
 // Open
@@ -455,12 +477,14 @@ type UpdateOpenedSpace = {
 };
 type UpdateOpenedFolder = {
   type: typeof TEAM_STATE_ACTION.OPEN_FOLDER;
-  payload: { folderId: number; spaceId: number };
+  payload: { folderId: number };
 };
 
 export const TEAM_STATE_ACTION = {
   INIT_TEAM_STATE: "init_team_state",
   CREATE_TEAM: "create_team",
+  CREATE_SPACE: "create_space",
+  CREATE_Folder: "create_folder",
 
   ADD_LIST: "add_list",
   ADD_SPACE: "add_space",
