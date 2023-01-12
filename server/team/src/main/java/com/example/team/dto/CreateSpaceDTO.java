@@ -9,5 +9,5 @@ public record CreateSpaceDTO(
         @NotNull String name,
         @NotNull Integer teamId,
         @NotNull Integer orderIndex,
-        @NotNull Integer statusCategoryId) {
+        @NotNull Integer statusColumnsCategoryId) {
 }

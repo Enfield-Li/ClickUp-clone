@@ -11,7 +11,7 @@ export const initCreateSpaceDTO: CreateSpaceDTO = {
   color: "gray",
   orderIndex: 0,
   isPrivate: false,
-  statusCategoryId: 0,
+  statusColumnsCategoryId: 0,
 };
 
 export const initialCreateSpace: CreateSpaceState = {

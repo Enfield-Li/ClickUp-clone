@@ -33,7 +33,7 @@ function CreateSpaceStatusColumns({
               produce(prev, (draftState) => {
                 draftState.selectedStatusColumns =
                   selectedCategory.statusColumns;
-                draftState.createSpaceDTO.statusCategoryId =
+                draftState.createSpaceDTO.statusColumnsCategoryId =
                   selectedCategory.id;
               })
             )

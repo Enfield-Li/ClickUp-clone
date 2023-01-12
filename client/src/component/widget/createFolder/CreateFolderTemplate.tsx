@@ -5,9 +5,11 @@ import {
   Center,
   Divider,
   ModalCloseButton,
+  space,
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
+import { createFolderForSpace } from "../../../networkCalls";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 
 type Props = {
@@ -47,6 +49,9 @@ export default function CreateFolderTemplate({
 
       // TODO: create folder network
       console.log(createFolder.createFolderDTO);
+      createFolderForSpace(createFolder.createFolderDTO, (folder) => {
+        console.log(folder);
+      });
 
       return;
     }

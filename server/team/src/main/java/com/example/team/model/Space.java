@@ -32,7 +32,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "name", "teamId" })
+        @UniqueConstraint(columnNames = { "teamId", "name" }),
+        @UniqueConstraint(columnNames = { "teamId", "orderIndex" })
 })
 public class Space {
 
@@ -55,7 +56,7 @@ public class Space {
     private Boolean isPrivate = false;
 
     @NotNull
-    private Integer statusCategoryId;
+    private Integer statusColumnsCategoryId;
 
     @JsonIgnore
     @Column(updatable = false, insertable = false)
@@ -76,7 +77,7 @@ public class Space {
             Team team) {
         var list = ListCategory.builder()
                 .name("list")
-                .statusCategoryId(createSpaceDTO.statusCategoryId())
+                .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
                 .build();
         Set<Category> allListOrFolder = Set.of(list);
 
@@ -89,7 +90,7 @@ public class Space {
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
-                .statusCategoryId(createSpaceDTO.statusCategoryId())
+                .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
                 .build();
 
         list.setSpace(space);
@@ -98,7 +99,7 @@ public class Space {
 
     public static Space initTeamSpace(Integer defaultStatusCategoryId, Team team) {
         return Space.builder().team(team).name("space")
-                .statusCategoryId(defaultStatusCategoryId)
+                .statusColumnsCategoryId(defaultStatusCategoryId)
                 .color("gray").orderIndex(1).isPrivate(false).build();
     }
 }

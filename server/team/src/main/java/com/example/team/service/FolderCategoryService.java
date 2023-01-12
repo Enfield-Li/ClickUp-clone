@@ -26,8 +26,12 @@ public class FolderCategoryService {
         // return repository.save(space);
     }
 
+    public FolderCategory createFolder(CreateFolderDTO createSpaceDTO) {
+        return repository.save(
+                FolderCategory.convertFromCreateFolderDTO(createSpaceDTO));
+    }
+
     private Space findTeamReference(Integer spaceId) {
         return entityManager.getReference(Space.class, spaceId);
     }
-
 }

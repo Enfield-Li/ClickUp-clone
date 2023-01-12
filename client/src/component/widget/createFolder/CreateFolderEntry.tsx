@@ -84,18 +84,20 @@ export default function CreateFolderEntry({
           handleClick={() => handleOnClick(CreateFolderStep.LISTS)}
         >
           <Flex alignItems="center" justifyContent="flex-end" width="500px">
-            {createFolder.createFolderDTO.allLists.map((list, index, arr) => (
-              <Center
-                key={list}
-                rounded="sm"
-                height="10px"
-                width="fit-content"
-                mr={isLastElement(index, arr) ? "" : "9px"}
-              >
-                {list}
-                {isLastElement(index, arr) ? "" : ","}
-              </Center>
-            ))}
+            {createFolder.createFolderDTO.allListNames.map(
+              (list, index, arr) => (
+                <Center
+                  key={list}
+                  rounded="sm"
+                  height="10px"
+                  width="fit-content"
+                  mr={isLastElement(index, arr) ? "" : "9px"}
+                >
+                  {list}
+                  {isLastElement(index, arr) ? "" : ","}
+                </Center>
+              )
+            )}
           </Flex>
         </ReviewCreateFolderItem>
 

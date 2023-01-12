@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateListDTO;
+import com.example.team.model.FolderCategory;
 import com.example.team.model.ListCategory;
 import com.example.team.model.Space;
 import com.example.team.repository.ListCategoryRepository;
@@ -20,14 +21,23 @@ public class ListCategoryService {
     private final ListCategoryRepository repository;
 
     @Transactional
-    public ListCategory createSpace(CreateListDTO CreateListDTO) {
+    public ListCategory createList(CreateListDTO createListDTO) {
+        var folderCategory = findFolderReference(createListDTO.folderId());
+        var listCategory = ListCategory.convertFromCreateListDTO(
+                createListDTO, folderCategory);
+        folderCategory.getAllLists().add(listCategory);
 
-        return null;
-        // return repository.save(space);
+        return repository.save(listCategory);
     }
 
-    private Space findTeamReference(Integer spaceId) {
-        return entityManager.getReference(Space.class, spaceId);
+    private FolderCategory findFolderReference(Integer FolderCategoryId) {
+        return entityManager.getReference(
+                FolderCategory.class, FolderCategoryId);
+    }
+
+    private Space findSpaceReference(Integer spaceId) {
+        return entityManager.getReference(
+                Space.class, spaceId);
     }
 
 }

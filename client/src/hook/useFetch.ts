@@ -2,19 +2,14 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
-    collectAllTasks,
-    groupTaskListOnSortBy,
-    processTaskList
+  collectAllTasks,
+  groupTaskListOnSortBy,
+  processTaskList,
 } from "../component/task/actions/taskProcessing";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { fetchAllTasks } from "../networkCalls";
-import {
-    ColumnOptions,
-    SortBy,
-    StatusColumns, TaskState
-} from "../types";
+import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
-import { defaultColumnOptions } from "./mockData";
 
 interface UseFetchTasksParam {
   sortBy: SortBy;
@@ -49,8 +44,8 @@ export function useFetchTasks({ sortBy, selectedListId }: UseFetchTasksParam) {
           location.state.statusColumns;
 
         const allColumns: ColumnOptions = {
-          dueDateColumns: defaultColumnOptions.dueDateColumns,
-          priorityColumns: defaultColumnOptions.priorityColumns,
+          dueDateColumns: [],
+          priorityColumns: [],
           statusColumns: statusColumnFromRouter,
         };
 

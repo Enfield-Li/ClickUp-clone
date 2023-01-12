@@ -69,7 +69,7 @@ export async function createSpaceForTeam(
   }
 }
 
-export async function createFOlderForSpace(
+export async function createFolderForSpace(
   dto: CreateFolderDTO,
   onSuccess: (data: FolderCategory) => void,
   onFailure?: () => void

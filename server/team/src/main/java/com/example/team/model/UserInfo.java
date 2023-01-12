@@ -46,4 +46,15 @@ public class UserInfo {
     @JoinColumn(name = "teamId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
+
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer categoryId;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @JoinColumn(name = "categoryId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+
 }

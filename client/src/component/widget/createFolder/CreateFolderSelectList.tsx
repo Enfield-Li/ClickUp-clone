@@ -23,7 +23,7 @@ export default function CreateFolderSelectList({
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
 
-  const isListNameExist = createFolder.createFolderDTO.allLists.find(
+  const isListNameExist = createFolder.createFolderDTO.allListNames.find(
     (listName) => listName === input
   );
 
@@ -42,7 +42,7 @@ export default function CreateFolderSelectList({
   }, [input]);
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const isListNameExist = createFolder.createFolderDTO.allLists.find(
+    const isListNameExist = createFolder.createFolderDTO.allListNames.find(
       (listName) => listName === e.target.value
     );
     if (isListNameExist) {
@@ -57,7 +57,7 @@ export default function CreateFolderSelectList({
     if (input && !isListNameExist) {
       setCreateFolder(
         produce(createFolder, (draftState) => {
-          draftState.createFolderDTO.allLists.push(input);
+          draftState.createFolderDTO.allListNames.push(input);
         })
       );
       setInput("");
@@ -69,8 +69,8 @@ export default function CreateFolderSelectList({
   function handleDeleteList(name: string) {
     setCreateFolder(
       produce(createFolder, (draftState) => {
-        draftState.createFolderDTO.allLists =
-          draftState.createFolderDTO.allLists.filter(
+        draftState.createFolderDTO.allListNames =
+          draftState.createFolderDTO.allListNames.filter(
             (listName) => listName !== name
           );
       })
@@ -120,7 +120,7 @@ export default function CreateFolderSelectList({
       )}
 
       <Flex flexWrap="wrap">
-        {createFolder.createFolderDTO.allLists.map((listName) => (
+        {createFolder.createFolderDTO.allListNames.map((listName) => (
           <Center
             px="3"
             mr="7px"

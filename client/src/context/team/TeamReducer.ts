@@ -48,6 +48,15 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { teams, teamActivity } = action.payload;
 
+        // reorder
+        teams.forEach((team) =>
+          team.spaces
+            .sort((a, b) => a.orderIndex - b.orderIndex)
+            .forEach((space) =>
+              space.allListOrFolder.sort((a, b) => a.orderIndex - b.orderIndex)
+            )
+        );
+
         draftState.teams = teams;
         draftState.originalTeams = teams;
         draftState.teamActiveStatus = teamActivity;

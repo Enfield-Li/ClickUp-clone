@@ -6,7 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.example.team.dto.CreateListDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.sym.Name;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +35,13 @@ public class ListCategory extends Category {
     @ManyToOne
     @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
+
+    public static ListCategory convertFromCreateListDTO(
+        CreateListDTO dto, FolderCategory folderCategory) {
+        return ListCategory.builder()
+                .name(dto.name())
+                .folderCategory(folderCategory)
+                .statusColumnsCategoryId(dto.statusCategoryId())
+                .build();
+    }
 }

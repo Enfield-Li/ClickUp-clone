@@ -290,6 +290,7 @@ export interface Space {
   orderIndex: number;
   isPrivate: boolean;
   isOpen: boolean | null; // client side
+  statusColumnsCategoryId: number;
   allListOrFolder: (FolderCategory | ListCategory)[];
 }
 
@@ -507,7 +508,7 @@ export interface CreateSpaceDTO {
   avatar: string;
   isPrivate: boolean;
   orderIndex: number;
-  statusCategoryId: number;
+  statusColumnsCategoryId: number;
 }
 export enum CreateSpaceStep {
   NAME = "name",
@@ -526,10 +527,10 @@ export interface CreateSpaceState {
 
 export interface CreateFolderDTO {
   name: string;
-  allLists: string[];
+  orderIndex: number;
   isPrivate: boolean;
-  members: UserInfo[];
-  statusCategoryId: number;
+  allListNames: string[];
+  statusColumnsCategoryId: number;
 }
 export enum CreateFolderStep {
   ENTRY = "entry",

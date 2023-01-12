@@ -23,10 +23,10 @@ type Props = {};
 
 const iniCreateFolderDTO: CreateFolderDTO = {
   name: "",
-  members: [],
+  orderIndex: 0,
   isPrivate: false,
-  allLists: ["list"],
-  statusCategoryId: 0,
+  allListNames: ["list"],
+  statusColumnsCategoryId: 0,
 };
 
 const initCreateFolderState: CreateFolderState = {
@@ -38,31 +38,39 @@ const initCreateFolderState: CreateFolderState = {
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
-  const { teamId } = useParams();
   const bgColor = useColorModeValue("white", "darkMain.100");
+
+  const {
+    teamState,
+    modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
+  } = useTeamStateContext();
 
   const [createFolder, setCreateFolder] = useState<CreateFolderState>(
     initCreateFolderState
   );
-  const {
-    modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
-  } = useTeamStateContext();
 
   useEffect(() => {
-    if (isCreateFolderModalOpen && teamId) {
+    if (isCreateFolderModalOpen) {
+      const team = teamState.teams.find((team) => team.isSelected);
+      if (!team) throw new Error("Can not find team when create folder");
+
+      const teamId = team.id;
+      const lastOrderIndex = team.spaces[team.spaces.length - 1].orderIndex;
+
       fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
         setCreateFolder(
           produce(createFolder, (draftState) => {
+            draftState.createFolderDTO.orderIndex = lastOrderIndex + 1;
             draftState.teamStatusCategories = StatusCategories;
             draftState.selectedStatusColumns =
               StatusCategories[0].statusColumns;
-            draftState.createFolderDTO.statusCategoryId =
+            draftState.createFolderDTO.statusColumnsCategoryId =
               StatusCategories[0].id!;
           })
         );
       });
     }
-  }, [isCreateFolderModalOpen, teamId]);
+  }, [isCreateFolderModalOpen, teamState]);
 
   function handleCloseModal() {
     onCreateFolderModalClose();
