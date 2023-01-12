@@ -7,12 +7,14 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { memo } from "react";
+import React, { memo, useRef } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 
 type Props = {
   isPopoverOpen: boolean;
   children: React.ReactNode;
   onPopoverClose: () => void;
+  onPopoverOpen: () => void;
 };
 
 export default memo(AddFolderOrListPopover);
@@ -20,16 +22,25 @@ function AddFolderOrListPopover({
   children,
   isPopoverOpen,
   onPopoverClose,
+  onPopoverOpen,
 }: Props) {
+  const initialFocusRef = useRef(null);
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
   );
+  const {
+    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
+  } = useTeamStateContext();
 
-  function clicked(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleOpenModal(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    onModalOpen: () => void
+  ) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("click");
+    onPopoverClose();
+    onModalOpen();
   }
 
   return (
@@ -38,8 +49,10 @@ function AddFolderOrListPopover({
       arrowSize={0}
       closeOnBlur={false}
       isOpen={isPopoverOpen}
+      onOpen={onPopoverOpen}
       placement="bottom-start"
       onClose={onPopoverClose}
+      initialFocusRef={initialFocusRef}
     >
       <PopoverTrigger>{children}</PopoverTrigger>
 
@@ -56,8 +69,9 @@ function AddFolderOrListPopover({
           py="1"
           px="2"
           rounded="md"
-          onClick={clicked}
+          ref={initialFocusRef}
           _hover={{ backgroundColor: popoverContentHoverBgColor }}
+          onClick={(e) => handleOpenModal(e, onCreateListModalOpen)}
         >
           <Box mr="2" opacity="70%">
             <i className="bi bi-list-ul"></i>
@@ -73,8 +87,8 @@ function AddFolderOrListPopover({
           py="1"
           my="1"
           rounded="md"
-          onClick={clicked}
           _hover={{ backgroundColor: popoverContentHoverBgColor }}
+          onClick={(e) => handleOpenModal(e, onCreateFolderModalOpen)}
         >
           <Box mr="2" opacity="70%">
             <i className="bi bi-folder-plus"></i>

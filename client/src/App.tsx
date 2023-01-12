@@ -1,4 +1,13 @@
-import { useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
@@ -28,6 +37,8 @@ function App() {
     location.pathname === CLIENT_ROUTE.LOGIN;
 
   useEffect(() => {
+    console.log("callede");
+
     if (accessToken) {
       refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       setInterval(() => {

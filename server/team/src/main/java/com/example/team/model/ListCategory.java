@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @DiscriminatorValue(value = "LIST_CATEGORY")
-class ListCategory extends Category {
+public class ListCategory extends Category {
 
     @Builder.Default
     private Integer taskAmount = 0;

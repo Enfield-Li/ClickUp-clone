@@ -56,6 +56,8 @@ function CreateFolderModal({}: Props) {
             draftState.teamStatusCategories = StatusCategories;
             draftState.selectedStatusColumns =
               StatusCategories[0].statusColumns;
+            draftState.createFolderDTO.statusCategoryId =
+              StatusCategories[0].id!;
           })
         );
       });

@@ -265,8 +265,9 @@ export interface Category {
   spaceId: number;
   createdAt: Date;
   creator: UserInfo;
-  members: UserInfo[];
+  orderIndex: number;
   isPrivate: boolean;
+  members: UserInfo[];
   color: string | null;
   statusColumnsCategoryId: number; // TODO: delete
 }

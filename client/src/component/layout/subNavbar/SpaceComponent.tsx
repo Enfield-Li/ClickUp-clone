@@ -40,15 +40,12 @@ function SpaceComponent({ space }: Props) {
     });
   }
 
-  function handleAddCategory(
+  function handleOpenPopover(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) {
     e.preventDefault();
     e.stopPropagation();
     onPopoverOpen();
-
-    // return false;
-    // throw new Error("Function not implemented.");
   }
 
   return (
@@ -115,6 +112,7 @@ function SpaceComponent({ space }: Props) {
 
           {hover && (
             <AddFolderOrListPopover
+              onPopoverOpen={onPopoverOpen}
               isPopoverOpen={isPopoverOpen}
               onPopoverClose={onPopoverClose}
             >
@@ -128,7 +126,7 @@ function SpaceComponent({ space }: Props) {
                 color="darkMain.200"
                 fontWeight="extrabold"
                 bgColor="lightMain.400"
-                onClick={handleAddCategory}
+                onClick={handleOpenPopover}
                 _hover={{ bgColor: "purple.500" }}
               >
                 +

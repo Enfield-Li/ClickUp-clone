@@ -13,12 +13,14 @@ import {
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
+  CreateFolderDTO,
   CreateSpaceDTO,
   CreateStatusCategoryDTO,
   CreateStatusColumnForCategoryDTO,
   CreateTeamResponseDTO,
   ErrorResponse,
   FieldErrors,
+  FolderCategory,
   InitTeamListDTO,
   LoginUserDTO,
   RegisterUserDTO,
@@ -54,6 +56,26 @@ export async function createSpaceForTeam(
 ) {
   try {
     const response = await axiosTeamServiceInstance.post<Space>(
+      API_ENDPOINT.SPACE_API_VERSION,
+      dto
+    );
+
+    onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function createFOlderForSpace(
+  dto: CreateFolderDTO,
+  onSuccess: (data: FolderCategory) => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosTeamServiceInstance.post<FolderCategory>(
       API_ENDPOINT.SPACE_API_VERSION,
       dto
     );

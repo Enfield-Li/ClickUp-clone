@@ -22,14 +22,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @DiscriminatorValue(value = "FOLDER_CATEGORY")
-class FolderCategory extends Category {
+public class FolderCategory extends Category {
 
-    private Boolean isOpen;
-
-    @OneToMany(
-        mappedBy = "folderCategory", 
-        cascade = CascadeType.ALL, 
-        fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "folderCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ListCategory> allLists = new HashSet<>();
 
 }
