@@ -11,9 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.example.clients.jwt.UserCredentials;
 import com.example.team.dto.CreateFolderDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,17 +30,48 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue(value = "FOLDER_CATEGORY")
 public class FolderCategory extends Category {
 
+    @Builder.Default
     @OneToMany(mappedBy = "folderCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ListCategory> allLists = new HashSet<>();
 
+    public void addListCategory(ListCategory listCategory) {
+        allLists.add(listCategory);
+        listCategory.setFolderCategory(this);
+    }
+
+    public void removeListCategory(ListCategory listCategory) {
+        allLists.remove(listCategory);
+        listCategory.setFolderCategory(null);
+    }
+
     public static FolderCategory convertFromCreateFolderDTO(
-            CreateFolderDTO dto) {
-        var folderCategory = FolderCategory.builder().build();
+            CreateFolderDTO dto, UserCredentials userCredentials) {
+        var userInfo = UserInfo.builder()
+                .userId(userCredentials.userId())
+                .username(userCredentials.username())
+                .build();
+
+        var folderCategory = FolderCategory.builder()
+                .name(dto.name())
+                .creator(userInfo)
+                .members(Set.of(userInfo))
+                .isPrivate(dto.isPrivate())
+                .orderIndex(dto.orderIndex())
+                .statusColumnsCategoryId(dto.statusColumnsCategoryId())
+                .build();
+
         Set<ListCategory> allListCategory = dto.allListNames().stream()
                 .map(name -> ListCategory.builder()
-                        .folderCategory(folderCategory).name(name).build())
+                        .name(name)
+                        .orderIndex(1)
+                        .creator(userInfo)
+                        .members(Set.of(userInfo))
+                        .folderCategory(folderCategory)
+                        .statusColumnsCategoryId(dto.statusColumnsCategoryId())
+                        .build())
                 .collect(Collectors.toSet());
 
+        userInfo.setCategory(folderCategory);
         folderCategory.setAllLists(allListCategory);
         return folderCategory;
     }

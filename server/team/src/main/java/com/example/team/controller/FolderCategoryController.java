@@ -25,8 +25,7 @@ class FolderCategoryController {
     @PostMapping
     public ResponseEntity<FolderCategory> createFolder(
             @RequestBody CreateFolderDTO createSpaceDTO) {
-        var folder = service.createFolder(createSpaceDTO);
-        return null;
+        var folderCategory = service.createFolder(createSpaceDTO);
+        return ResponseEntity.ok(folderCategory);
     }
-
 }

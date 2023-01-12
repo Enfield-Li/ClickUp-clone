@@ -23,6 +23,7 @@ type Props = {};
 
 const iniCreateFolderDTO: CreateFolderDTO = {
   name: "",
+  spaceId: 0,
   orderIndex: 0,
   isPrivate: false,
   allListNames: ["list"],
@@ -52,7 +53,10 @@ function CreateFolderModal({}: Props) {
   useEffect(() => {
     if (isCreateFolderModalOpen) {
       const team = teamState.teams.find((team) => team.isSelected);
-      if (!team) throw new Error("Can not find team when create folder");
+      const space = team?.spaces.find((space) => space.isOpen);
+      if (!team || !space) {
+        throw new Error("Can not find team when create folder");
+      }
 
       const teamId = team.id;
       const lastOrderIndex = team.spaces[team.spaces.length - 1].orderIndex;
@@ -60,10 +64,12 @@ function CreateFolderModal({}: Props) {
       fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
         setCreateFolder(
           produce(createFolder, (draftState) => {
-            draftState.createFolderDTO.orderIndex = lastOrderIndex + 1;
             draftState.teamStatusCategories = StatusCategories;
             draftState.selectedStatusColumns =
               StatusCategories[0].statusColumns;
+
+            draftState.createFolderDTO.spaceId = space.id;
+            draftState.createFolderDTO.orderIndex = lastOrderIndex + 1;
             draftState.createFolderDTO.statusColumnsCategoryId =
               StatusCategories[0].id!;
           })

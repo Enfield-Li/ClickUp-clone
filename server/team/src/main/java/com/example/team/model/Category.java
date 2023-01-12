@@ -84,4 +84,14 @@ public abstract class Category {
     @JoinColumn(name = "spaceId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Space space;
+
+    public void addMember(UserInfo userInfo) {
+        members.add(userInfo);
+        userInfo.setCategory(this);
+    }
+
+    public void removeMember(UserInfo userInfo) {
+        members.remove(userInfo);
+        userInfo.setCategory(null);
+    }
 }

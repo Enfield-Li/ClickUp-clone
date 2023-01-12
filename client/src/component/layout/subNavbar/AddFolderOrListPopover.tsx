@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { memo, useRef } from "react";
+import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 
 type Props = {
@@ -24,7 +24,6 @@ function AddFolderOrListPopover({
   onPopoverClose,
   onPopoverOpen,
 }: Props) {
-  const initialFocusRef = useRef(null);
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
@@ -52,7 +51,6 @@ function AddFolderOrListPopover({
       onOpen={onPopoverOpen}
       placement="bottom-start"
       onClose={onPopoverClose}
-      initialFocusRef={initialFocusRef}
     >
       <PopoverTrigger>{children}</PopoverTrigger>
 
@@ -69,7 +67,6 @@ function AddFolderOrListPopover({
           py="1"
           px="2"
           rounded="md"
-          ref={initialFocusRef}
           _hover={{ backgroundColor: popoverContentHoverBgColor }}
           onClick={(e) => handleOpenModal(e, onCreateListModalOpen)}
         >

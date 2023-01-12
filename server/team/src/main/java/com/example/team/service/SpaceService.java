@@ -21,9 +21,10 @@ public class SpaceService {
 
     @Transactional
     public Space createSpace(CreateSpaceDTO createSpaceDTO) {
+        var space = Space.convertFromCreateSpaceDTO(createSpaceDTO);
+
+        // bind team
         var teamReference = findTeamReference(createSpaceDTO.teamId());
-        var space = Space.convertFromCreateSpaceDTO(
-                createSpaceDTO, teamReference);
         teamReference.addSpace(space);
 
         return repository.save(space);

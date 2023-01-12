@@ -22,10 +22,16 @@ public class ListCategoryService {
 
     @Transactional
     public ListCategory createList(CreateListDTO createListDTO) {
-        var folderCategory = findFolderReference(createListDTO.folderId());
         var listCategory = ListCategory.convertFromCreateListDTO(
-                createListDTO, folderCategory);
-        folderCategory.getAllLists().add(listCategory);
+                createListDTO);
+
+        // bind folder
+        var folderCategory = findFolderReference(createListDTO.folderId());
+        folderCategory.addListCategory(listCategory);
+
+        // bind space
+        var space = findSpaceReference(createListDTO.spaceId());
+        space.addCategory(listCategory);
 
         return repository.save(listCategory);
     }
@@ -36,8 +42,7 @@ public class ListCategoryService {
     }
 
     private Space findSpaceReference(Integer spaceId) {
-        return entityManager.getReference(
-                Space.class, spaceId);
+        return entityManager.getReference(Space.class, spaceId);
     }
 
 }

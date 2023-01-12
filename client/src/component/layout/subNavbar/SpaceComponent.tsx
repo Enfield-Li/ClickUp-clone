@@ -43,7 +43,6 @@ function SpaceComponent({ space }: Props) {
   function handleOpenPopover(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) {
-    e.preventDefault();
     e.stopPropagation();
     onPopoverOpen();
   }

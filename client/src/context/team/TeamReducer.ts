@@ -49,13 +49,13 @@ export default function teamReducer(
         const { teams, teamActivity } = action.payload;
 
         // reorder
-        teams.forEach((team) =>
-          team.spaces
-            .sort((a, b) => a.orderIndex - b.orderIndex)
-            .forEach((space) =>
-              space.allListOrFolder.sort((a, b) => a.orderIndex - b.orderIndex)
-            )
-        );
+        // teams.forEach((team) =>
+        //   team.spaces
+        //     .sort((a, b) => a.orderIndex - b.orderIndex)
+        //     .forEach((space) =>
+        //       space.allListOrFolder.sort((a, b) => a.orderIndex - b.orderIndex)
+        //     )
+        // );
 
         draftState.teams = teams;
         draftState.originalTeams = teams;

@@ -16,6 +16,8 @@ const UPDATE_TASK_TITLE = "/update_title";
 const TASK_API_VERSION = "/api/v1/task";
 const TEAM_API_VERSION = "/api/v1/team";
 const SPACE_API_VERSION = "/api/v1/space";
+const Folder_API_VERSION = "/api/v1/folder";
+const List_API_VERSION = "/api/v1/list";
 const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
@@ -38,7 +40,9 @@ export const API_ENDPOINT = {
 
   // team
   TEAM: TEAM_API_VERSION,
-  SPACE_API_VERSION: SPACE_API_VERSION,
+  SPACE: SPACE_API_VERSION,
+  FOLDER: Folder_API_VERSION,
+  LIST: List_API_VERSION,
 
   // task
   TASK: TASK_API_VERSION,

@@ -501,11 +501,19 @@ export const TEAM_STATE_ACTION = {
   OPEN_SPACE: "open_space",
 } as const;
 
+export type CreateListDTO = {
+  name: string;
+  spaceId: number;
+  folderId: number;
+  statusColumnsCategoryId: number;
+};
+
 export interface CreateSpaceDTO {
   name: string;
   color: string;
   teamId: number;
   avatar: string;
+  spaceId: number;
   isPrivate: boolean;
   orderIndex: number;
   statusColumnsCategoryId: number;
@@ -527,6 +535,7 @@ export interface CreateSpaceState {
 
 export interface CreateFolderDTO {
   name: string;
+  spaceId: number;
   orderIndex: number;
   isPrivate: boolean;
   allListNames: string[];

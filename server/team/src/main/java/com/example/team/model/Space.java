@@ -72,9 +72,22 @@ public class Space {
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> allListOrFolder = new HashSet<>();
 
+    public void addCategory(Category category) {
+        allListOrFolder.add(category);
+        category.setSpace(this);
+    }
+
+    public void removeCategory(Category category) {
+        allListOrFolder.remove(category);
+        category.setSpace(null);
+    }
+
+    public void addListCategory(Set<ListCategory> listCategories) {
+        listCategories.forEach(listCategory -> addCategory(listCategory));
+    }
+
     public static Space convertFromCreateSpaceDTO(
-            CreateSpaceDTO createSpaceDTO,
-            Team team) {
+            CreateSpaceDTO createSpaceDTO) {
         var list = ListCategory.builder()
                 .name("list")
                 .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
@@ -82,7 +95,6 @@ public class Space {
         Set<Category> allListOrFolder = Set.of(list);
 
         var space = Space.builder()
-                .team(team)
                 .allListOrFolder(allListOrFolder)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())

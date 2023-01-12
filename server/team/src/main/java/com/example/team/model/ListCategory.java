@@ -22,8 +22,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
 @DiscriminatorValue(value = "LIST_CATEGORY")
+@EqualsAndHashCode(callSuper = false, exclude = "folderCategory")
 public class ListCategory extends Category {
 
     @Builder.Default
@@ -33,15 +33,15 @@ public class ListCategory extends Category {
     private Integer parentFolderId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
 
     public static ListCategory convertFromCreateListDTO(
-        CreateListDTO dto, FolderCategory folderCategory) {
+            CreateListDTO dto) {
         return ListCategory.builder()
                 .name(dto.name())
-                .folderCategory(folderCategory)
-                .statusColumnsCategoryId(dto.statusCategoryId())
+                .statusColumnsCategoryId(dto.statusColumnsCategoryId())
                 .build();
     }
 }

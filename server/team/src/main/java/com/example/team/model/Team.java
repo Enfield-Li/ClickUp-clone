@@ -66,8 +66,24 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
+    public void addMember(UserInfo userInfo) {
+        members.add(userInfo);
+        userInfo.setTeam(this);
+    }
+
+    public void removeMember(UserInfo userInfo) {
+        members.remove(userInfo);
+        userInfo.setTeam(null);
+    }
+
     public void addSpace(Space space) {
         spaces.add(space);
+        space.setTeam(this);
+    }
+
+    public void removeSpace(Space space) {
+        spaces.remove(space);
+        space.setTeam(null);
     }
 
     public static Team initTeamCreation(CreateTeamDTO createTeamDTO,
@@ -87,22 +103,6 @@ public class Team {
 
         userInfo.setTeam(team);
         return team;
-    }
-
-    public static Team bindTeamSpace(Team team) {
-        team.getSpaces().forEach(space -> {
-            if (team.getId() != null) {
-                space.setTeamId(team.getId());
-            }
-            space.setTeam(team);
-        });
-
-        return team;
-    }
-
-    public static List<Team> bindSpace(List<Team> teamList) {
-        teamList.forEach(team -> bindTeamSpace(team));
-        return teamList;
     }
 
     public Boolean isUserMemberOfTeam(Integer userId) {

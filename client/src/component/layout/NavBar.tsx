@@ -6,7 +6,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
@@ -22,6 +22,7 @@ export default memo(NavBar);
 function NavBar({}: Props) {
   const toast = useToast();
   const { teamId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
   const { teamStateDispatch } = useTeamStateContext();
@@ -64,27 +65,24 @@ function NavBar({}: Props) {
       />
 
       {/* Sub navbar */}
-      <NavLink to={CLIENT_ROUTE.TASK_BOARD} onClick={(e) => e.preventDefault()}>
-        {({ isActive }) =>
-          isActive && (
-            <Box
-              zIndex="2"
-              opacity="100%"
-              onMouseOverCapture={onOpen}
-              backgroundColor={collapsibleBG}
-              position={isExpanded ? undefined : "absolute"}
-            >
-              <SubNavbar
-                isOpen={isOpen}
-                onClose={onClose}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-                getDisclosureProps={getDisclosureProps}
-              />
-            </Box>
-          )
-        }
-      </NavLink>
+      {location.pathname.includes(CLIENT_ROUTE.TASK_BOARD) && (
+        <Box
+          zIndex="2"
+          left="55px"
+          opacity="100%"
+          onMouseOverCapture={onOpen}
+          backgroundColor={collapsibleBG}
+          position={isExpanded ? undefined : "absolute"}
+        >
+          <SubNavbar
+            isOpen={isOpen}
+            onClose={onClose}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+            getDisclosureProps={getDisclosureProps}
+          />
+        </Box>
+      )}
     </Flex>
   );
 }
