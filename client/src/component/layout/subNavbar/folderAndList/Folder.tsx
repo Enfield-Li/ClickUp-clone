@@ -20,7 +20,7 @@ function Folder({ space, folder }: Props) {
   ) {
     e.stopPropagation();
     teamStateDispatch({
-      payload: { folderId, spaceId: space.id },
+      payload: { folderId },
       type: TEAM_STATE_ACTION.OPEN_FOLDER,
     });
   }

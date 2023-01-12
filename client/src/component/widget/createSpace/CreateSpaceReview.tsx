@@ -45,7 +45,6 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
             handleClick={() => handleClick(CreateSpaceStep.COLOR)}
           >
             <Center
-              pb="2px"
               width="20px"
               rounded="md"
               height="20px"
@@ -55,7 +54,7 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
               backgroundSize="cover"
               backgroundImage={avatar}
             >
-              {!avatar ? name[0] : ""}
+              {!avatar ? name[0].toUpperCase() : ""}
             </Center>
           </ReviewCreateSpaceItem>
 

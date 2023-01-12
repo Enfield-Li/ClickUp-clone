@@ -18,7 +18,6 @@ function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
   const {
-    teamState,
     teamStateDispatch,
     modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
   } = useTeamStateContext();
@@ -43,9 +42,12 @@ function SpaceComponent({ space }: Props) {
 
   function handleAddCategory(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-  ): void {
+  ) {
+    e.preventDefault();
     e.stopPropagation();
     onPopoverOpen();
+
+    // return false;
     // throw new Error("Function not implemented.");
   }
 
@@ -53,7 +55,6 @@ function SpaceComponent({ space }: Props) {
     <Box>
       <Flex
         cursor="pointer"
-        position="relative"
         alignItems="center"
         onMouseOverCapture={() => setHover(true)}
         onClick={(e) => handleOpenSpace(e, space.id)}
@@ -87,7 +88,6 @@ function SpaceComponent({ space }: Props) {
           alignItems="center"
           justifyContent="space-between"
           _hover={{ bgColor: hoverBgColor }}
-        //   bgColor={isCurrentSpaceSelected ? hoverBgColor : ""}
         >
           <Flex alignItems="center">
             {/* Square */}
@@ -105,7 +105,7 @@ function SpaceComponent({ space }: Props) {
               backgroundImage={space.avatar}
               bgColor={!space.avatar ? space.color : ""}
             >
-              {!space.avatar ? space.name[0] : ""}
+              {!space.avatar ? space.name[0].toUpperCase() : ""}
             </Center>
 
             <Center pb="3px" fontSize="15px">
@@ -113,12 +113,10 @@ function SpaceComponent({ space }: Props) {
             </Center>
           </Flex>
 
-          {(hover || isPopoverOpen) && (
+          {hover && (
             <AddFolderOrListPopover
               isPopoverOpen={isPopoverOpen}
               onPopoverClose={onPopoverClose}
-              onCreateListModalOpen={onCreateListModalOpen}
-              onCreateFolderModalOpen={onCreateFolderModalOpen}
             >
               <Center
                 pb="1"
@@ -130,8 +128,8 @@ function SpaceComponent({ space }: Props) {
                 color="darkMain.200"
                 fontWeight="extrabold"
                 bgColor="lightMain.400"
+                onClick={handleAddCategory}
                 _hover={{ bgColor: "purple.500" }}
-                onClick={(e) => handleAddCategory(e)}
               >
                 +
               </Center>

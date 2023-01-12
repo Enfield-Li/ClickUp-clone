@@ -19,6 +19,7 @@ import {
   TEAM_STATE_ACTION,
 } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
+import { initialCreateSpace } from "./createSpaceInit";
 
 type Props = {
   sectionName: string;
@@ -66,6 +67,7 @@ function CreateSpaceModalTemplate({
     };
     createSpaceForTeam(createSpaceDTO, (space) => {
       onCreateSpaceModalClose();
+      setCreateSpace(initialCreateSpace);
       navigate(
         getTaskBoardURL({
           teamId: teamState.teamActiveStatus.teamId,

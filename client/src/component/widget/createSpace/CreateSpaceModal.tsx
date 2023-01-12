@@ -4,41 +4,20 @@ import {
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
+import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import {
-  CreateSpaceState,
-  CreateSpaceDTO,
-  CreateSpaceStep,
-} from "../../../types";
-import CreateSpaceName from "./CreateSpaceName";
-import CreateSpaceReview from "./CreateSpaceReview";
-import CreateSpaceColor from "./CreateSpaceColor";
-import CreateSpaceStatusColumns from "./CreateSpaceStatusColumns";
-import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
+import { useParams } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
-import produce from "immer";
-import { useParams } from "react-router-dom";
+import { CreateSpaceState, CreateSpaceStep } from "../../../types";
+import CreateSpaceColor from "./CreateSpaceColor";
+import { initialCreateSpace } from "./createSpaceInit";
+import CreateSpaceName from "./CreateSpaceName";
+import CreateSpaceReview from "./CreateSpaceReview";
+import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
+import CreateSpaceStatusColumns from "./CreateSpaceStatusColumns";
 
 type Props = {};
-
-const initCreateSpaceDTO: CreateSpaceDTO = {
-  name: "",
-  teamId: 0,
-  avatar: "",
-  color: "gray",
-  orderIndex: 0,
-  isPrivate: false,
-  statusCategoryId: 0,
-};
-
-const initialCreateSpace: CreateSpaceState = {
-  isAllSet: false,
-  teamStatusCategories: [],
-  selectedStatusColumns: [],
-  step: CreateSpaceStep.NAME,
-  createSpaceDTO: initCreateSpaceDTO,
-};
 
 export default memo(CreateSpaceModal);
 function CreateSpaceModal({}: Props) {

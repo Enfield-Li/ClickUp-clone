@@ -2,7 +2,6 @@ import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
-  TeamActivity,
   TeamStateActionType,
   TeamStateType,
   TEAM_STATE_ACTION,
@@ -15,11 +14,11 @@ export default function teamReducer(
 ) {
   function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
     const { spaceId, teamId, listId } = draftState.teamActiveStatus;
-
     draftState.teams = deepCopy(draftState.originalTeams);
+
     draftState.teams.forEach((team) => {
       if (team.id === teamId) {
-        team.isSelected = true;
+        team["isSelected"] = true;
         team.spaces.forEach((space) => {
           if (space.id === spaceId) {
             space.isOpen = true;
@@ -28,14 +27,14 @@ export default function teamReducer(
           space.allListOrFolder.forEach((listOrFolder) => {
             const isFolder = determineFolderType(listOrFolder);
             if (isFolder) {
-              listOrFolder.isOpen = true;
+              listOrFolder["isOpen"] = true;
               listOrFolder.allLists.forEach((list) => {
                 if (list.id === listId) {
-                  list.isSelected = true;
+                  list["isSelected"] = true;
                 }
               });
             } else if (!isFolder && listOrFolder.id === listId) {
-              listOrFolder.isSelected = true;
+              listOrFolder["isSelected"] = true;
             }
           });
         });
@@ -49,8 +48,8 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { teams, teamActivity } = action.payload;
 
-        draftState.teams = deepCopy(teams);
-        draftState.originalTeams = deepCopy(teams);
+        draftState.teams = teams;
+        draftState.originalTeams = teams;
         draftState.teamActiveStatus = teamActivity;
 
         syncTeamStateActivity(draftState);
@@ -110,9 +109,14 @@ export default function teamReducer(
         const space = action.payload;
 
         draftState.teamActiveStatus.spaceId = space.id;
-        draftState.teams.forEach(
-          (team) => team.isSelected && team.spaces.push(space)
+        draftState.teamActiveStatus.listId = space.allListOrFolder[0].id;
+        draftState.originalTeams.forEach(
+          (team) =>
+            team.id === draftState.teamActiveStatus.teamId &&
+            team.spaces.push(space)
         );
+
+        syncTeamStateActivity(draftState);
       });
     }
 
