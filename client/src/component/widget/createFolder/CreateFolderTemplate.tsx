@@ -9,8 +9,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createFolderForSpace } from "../../../networkCalls";
-import { CreateFolderState, CreateFolderStep } from "../../../types";
+import {
+  CreateFolderState,
+  CreateFolderStep,
+  TEAM_STATE_ACTION,
+} from "../../../types";
 
 type Props = {
   title: string;
@@ -30,6 +35,7 @@ export default function CreateFolderTemplate({
   isCurrentStepEntry,
 }: Props) {
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
+  const { teamStateDispatch } = useTeamStateContext();
 
   function handleGoBackToEntry() {
     setCreateFolder(
@@ -47,10 +53,11 @@ export default function CreateFolderTemplate({
         return;
       }
 
-      // TODO: create folder network
-      console.log(createFolder.createFolderDTO);
       createFolderForSpace(createFolder.createFolderDTO, (folder) => {
-        console.log(folder);
+        teamStateDispatch({
+          type: TEAM_STATE_ACTION.CREATE_Folder,
+          payload: folder,
+        });
       });
 
       return;

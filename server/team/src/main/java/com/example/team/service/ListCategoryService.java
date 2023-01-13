@@ -2,8 +2,8 @@ package com.example.team.service;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
@@ -12,18 +12,22 @@ import com.example.team.model.Space;
 import com.example.team.repository.ListCategoryRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
-@RestController
+@Log4j2
+@Service
 @RequiredArgsConstructor
 public class ListCategoryService {
 
     private final EntityManager entityManager;
+    private final UserInfoService userInfoService;
     private final ListCategoryRepository repository;
 
     @Transactional
     public ListCategory createList(CreateListDTO createListDTO) {
+        var userInfo = userInfoService.getCurrentUserInfo();
         var listCategory = ListCategory.convertFromCreateListDTO(
-                createListDTO);
+                createListDTO, userInfo);
 
         // bind folder
         var folderCategory = findFolderReference(createListDTO.folderId());

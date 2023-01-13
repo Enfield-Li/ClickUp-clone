@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -63,17 +64,17 @@ public class Team {
     private Set<Space> spaces = new HashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.setTeam(this);
+        userInfo.getTeams().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.setTeam(null);
+        userInfo.getTeams().remove(this);
     }
 
     public void addSpace(Space space) {
@@ -87,21 +88,15 @@ public class Team {
     }
 
     public static Team initTeamCreation(CreateTeamDTO createTeamDTO,
-            UserCredentials userCredentials) {
-        var userInfo = UserInfo.builder()
-                .userId(userCredentials.userId())
-                .username(userCredentials.username())
-                .build();
-
+            UserInfo userInfo) {
         var team = Team.builder()
                 .owner(userInfo)
-                .members(Set.of(userInfo))
                 .name(createTeamDTO.name())
                 .color(createTeamDTO.color())
                 .avatar(createTeamDTO.avatar())
                 .build();
 
-        userInfo.setTeam(team);
+        team.addMember(userInfo);
         return team;
     }
 

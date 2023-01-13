@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -58,6 +59,10 @@ public class Space {
     @NotNull
     private Integer statusColumnsCategoryId;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "spaces", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<UserInfo> members = new HashSet<>();
+
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer teamId;
@@ -71,6 +76,16 @@ public class Space {
     @Builder.Default
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Category> allListOrFolder = new HashSet<>();
+
+    public void addMember(UserInfo userInfo) {
+        members.add(userInfo);
+        userInfo.getSpaces().add(this);
+    }
+
+    public void removeMember(UserInfo userInfo) {
+        members.remove(userInfo);
+        userInfo.getSpaces().remove(this);
+    }
 
     public void addCategory(Category category) {
         allListOrFolder.add(category);
@@ -87,12 +102,15 @@ public class Space {
     }
 
     public static Space convertFromCreateSpaceDTO(
-            CreateSpaceDTO createSpaceDTO) {
-        var list = ListCategory.builder()
+            CreateSpaceDTO createSpaceDTO, UserInfo userInfo) {
+        var listCategory = ListCategory.builder()
                 .name("list")
+                .orderIndex(1)
+                .creator(userInfo)
                 .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
                 .build();
-        Set<Category> allListOrFolder = Set.of(list);
+        listCategory.addMember(userInfo);
+        Set<Category> allListOrFolder = Set.of(listCategory);
 
         var space = Space.builder()
                 .allListOrFolder(allListOrFolder)
@@ -104,14 +122,20 @@ public class Space {
                 .orderIndex(createSpaceDTO.orderIndex())
                 .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
                 .build();
+        space.addMember(userInfo);
 
-        list.setSpace(space);
+        listCategory.setSpace(space);
         return space;
     }
 
     public static Space initTeamSpace(Integer defaultStatusCategoryId, Team team) {
-        return Space.builder().team(team).name("space")
+        return Space.builder()
+                .team(team)
+                .name("space")
+                .color("gray")
+                .orderIndex(1)
+                .isPrivate(false)
                 .statusColumnsCategoryId(defaultStatusCategoryId)
-                .color("gray").orderIndex(1).isPrivate(false).build();
+                .build();
     }
 }

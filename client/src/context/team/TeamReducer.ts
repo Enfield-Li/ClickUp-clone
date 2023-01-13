@@ -13,7 +13,7 @@ export default function teamReducer(
   action: TeamStateActionType
 ) {
   function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
-    const { spaceId, teamId, listId } = draftState.teamActiveStatus;
+    const { spaceId, teamId, listId, folderIds } = draftState.teamActiveStatus;
     draftState.teams = deepCopy(draftState.originalTeams);
 
     draftState.teams.forEach((team) => {
@@ -27,7 +27,10 @@ export default function teamReducer(
           space.allListOrFolder.forEach((listOrFolder) => {
             const isFolder = determineFolderType(listOrFolder);
             if (isFolder) {
-              listOrFolder["isOpen"] = true;
+              if (folderIds.includes(listOrFolder.id)) {
+                listOrFolder["isOpen"] = true;
+              }
+
               listOrFolder.allLists.forEach((list) => {
                 if (list.id === listId) {
                   list["isSelected"] = true;
@@ -131,7 +134,12 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.CREATE_Folder: {
       return produce(teamState, (draftState) => {
-        const newFolder = action.payload;
+        const folder = action.payload;
+
+        draftState.teamActiveStatus.listId = null;
+        draftState.teamActiveStatus.folderIds.push(folder.id);
+
+        syncTeamStateActivity(draftState);
       });
     }
 

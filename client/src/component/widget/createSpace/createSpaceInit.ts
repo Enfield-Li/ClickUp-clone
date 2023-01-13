@@ -8,7 +8,6 @@ export const initCreateSpaceDTO: CreateSpaceDTO = {
   name: "",
   teamId: 0,
   avatar: "",
-  spaceId: 0,
   color: "gray",
   orderIndex: 0,
   isPrivate: false,

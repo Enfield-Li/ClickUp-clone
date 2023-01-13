@@ -45,33 +45,32 @@ public class FolderCategory extends Category {
     }
 
     public static FolderCategory convertFromCreateFolderDTO(
-            CreateFolderDTO dto, UserCredentials userCredentials) {
-        var userInfo = UserInfo.builder()
-                .userId(userCredentials.userId())
-                .username(userCredentials.username())
-                .build();
-
+            CreateFolderDTO dto, UserInfo userInfo) {
         var folderCategory = FolderCategory.builder()
                 .name(dto.name())
                 .creator(userInfo)
-                .members(Set.of(userInfo))
                 .isPrivate(dto.isPrivate())
                 .orderIndex(dto.orderIndex())
                 .statusColumnsCategoryId(dto.statusColumnsCategoryId())
                 .build();
 
         Set<ListCategory> allListCategory = dto.allListNames().stream()
-                .map(name -> ListCategory.builder()
-                        .name(name)
-                        .orderIndex(1)
-                        .creator(userInfo)
-                        .members(Set.of(userInfo))
-                        .folderCategory(folderCategory)
-                        .statusColumnsCategoryId(dto.statusColumnsCategoryId())
-                        .build())
+                .map(name -> {
+                    var listCategory = ListCategory.builder()
+                            .name(name)
+                            .orderIndex(1)
+                            .creator(userInfo)
+                            .folderCategory(folderCategory)
+                            .statusColumnsCategoryId(
+                                    dto.statusColumnsCategoryId())
+                            .build();
+
+                    listCategory.addMember(userInfo);
+                    return listCategory;
+                })
                 .collect(Collectors.toSet());
 
-        userInfo.setCategory(folderCategory);
+        folderCategory.addMember(userInfo);
         folderCategory.setAllLists(allListCategory);
         return folderCategory;
     }

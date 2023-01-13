@@ -21,7 +21,6 @@ type Props = {};
 
 export default memo(CreateSpaceModal);
 function CreateSpaceModal({}: Props) {
-  const { teamId } = useParams();
   const {
     teamState,
     modalControls: { isCreateSpaceModalOpen, onCreateSpaceModalClose },
@@ -37,16 +36,28 @@ function CreateSpaceModal({}: Props) {
   }
 
   useEffect(() => {
-    if (isCreateSpaceModalOpen && teamId) {
-      fetchTeamStatusCategories(Number(teamId), (data) => {
+    if (isCreateSpaceModalOpen) {
+      const team = teamState.teams.find((team) => team.isSelected);
+      if (!team) {
+        throw new Error("Can not find team when create folder");
+      }
+
+      const teamId = team.id;
+      const lastOrderIndex = team.spaces[team.spaces.length - 1].orderIndex;
+
+      fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
         setCreateSpace(
           produce(createSpace, (draftState) => {
-            draftState.teamStatusCategories = data;
+            draftState.teamStatusCategories = StatusCategories;
+
+            draftState.createSpaceDTO.orderIndex = lastOrderIndex + 1;
+            draftState.createSpaceDTO.statusColumnsCategoryId =
+              StatusCategories[0].id!;
           })
         );
       });
     }
-  }, [isCreateSpaceModalOpen, teamId]);
+  }, [isCreateSpaceModalOpen, teamState]);
 
   function handleCloseModal() {
     onCreateSpaceModalClose();

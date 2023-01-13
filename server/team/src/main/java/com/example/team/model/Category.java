@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -70,9 +71,8 @@ public abstract class Category {
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo creator;
 
-    @NotNull
     @Builder.Default
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
 
     @JsonIgnore
@@ -87,11 +87,11 @@ public abstract class Category {
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.setCategory(this);
+        userInfo.getCategories().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.setCategory(null);
+        userInfo.getCategories().remove(this);
     }
 }

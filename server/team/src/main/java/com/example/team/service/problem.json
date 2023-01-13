@@ -1,0 +1,74 @@
+{
+  "teams": [
+    {
+      "id": 1,
+      "createdAt": "2023-01-12T19:25:01.160+00:00",
+      "name": "user1's Workspace",
+      "color": "rgb(0, 215, 23)",
+      "avatar": "",
+      "owner": { "id": 1, "userId": 1, "username": "user1" },
+      "isPrivate": false,
+      "spaces": [
+        {
+          "id": 1,
+          "name": "space",
+          "color": "gray",
+          "avatar": null,
+          "orderIndex": 1,
+          "isPrivate": false,
+          "statusColumnsCategoryId": 1,
+          "allListOrFolder": [
+            {
+              "id": 1,
+              "name": "1",
+              "color": null,
+              "createdAt": "2023-01-12T19:25:07.031+00:00",
+              "isPrivate": false,
+              "orderIndex": 2,
+              "statusColumnsCategoryId": 1,
+              "creator": { "id": 2, "userId": 1, "username": "user1" },
+              "members": [{ "id": 2, "userId": 1, "username": "user1" }],
+              "allLists": [
+                {
+                  "id": 2,
+                  "name": "list",
+                  "color": null,
+                  "createdAt": "2023-01-12T19:25:07.033+00:00",
+                  "isPrivate": null,
+                  "orderIndex": 1,
+                  "statusColumnsCategoryId": 1,
+                  "creator": { "id": 2, "userId": 1, "username": "user1" },
+                  "members": [],
+                  "taskAmount": 0,
+                  "parentFolderId": 1
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "list",
+              "color": null,
+              "createdAt": "2023-01-12T19:25:07.033+00:00",
+              "isPrivate": null,
+              "orderIndex": 1,
+              "statusColumnsCategoryId": 1,
+              "creator": { "id": 2, "userId": 1, "username": "user1" },
+              "members": [],
+              "taskAmount": 0,
+              "parentFolderId": 1
+            }
+          ]
+        }
+      ],
+      "members": [{ "id": 1, "userId": 1, "username": "user1" }]
+    }
+  ],
+  "teamActivity": {
+    "id": 1,
+    "listId": null,
+    "spaceId": 1,
+    "teamId": 1,
+    "userId": 1,
+    "folderIds": []
+  }
+}

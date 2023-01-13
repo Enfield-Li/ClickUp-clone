@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.example.clients.jwt.UserCredentials;
 import com.example.team.dto.CreateListDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.sym.Name;
@@ -38,10 +39,15 @@ public class ListCategory extends Category {
     private FolderCategory folderCategory;
 
     public static ListCategory convertFromCreateListDTO(
-            CreateListDTO dto) {
-        return ListCategory.builder()
+            CreateListDTO dto, UserInfo userInfo) {
+        var listCategory = ListCategory.builder()
                 .name(dto.name())
+                .creator(userInfo)
+                .orderIndex(dto.orderIndex())
                 .statusColumnsCategoryId(dto.statusColumnsCategoryId())
                 .build();
+
+        listCategory.addMember(userInfo);
+        return listCategory;
     }
 }

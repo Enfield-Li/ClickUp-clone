@@ -372,15 +372,16 @@ export type TeamActivity = {
   id: number;
   userId: number;
   teamId: number; // selected team
-  folderIds: number[]; // opened folder
   listId: number; // selected list
   spaceId: number; // opened space
+  folderIds: number[]; // opened folder
 };
 
 export type TeamActiveStatus = {
   teamId: number;
-  spaceId: number | null;
+  folderIds: number[];
   listId: number | null;
+  spaceId: number | null;
 };
 
 export type TeamStateType = {
@@ -513,7 +514,6 @@ export interface CreateSpaceDTO {
   color: string;
   teamId: number;
   avatar: string;
-  spaceId: number;
   isPrivate: boolean;
   orderIndex: number;
   statusColumnsCategoryId: number;
