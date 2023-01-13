@@ -40,9 +40,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" })
-})
 @DiscriminatorColumn(name = "CATEGORY_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class Category {
 

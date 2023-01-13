@@ -10,6 +10,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.example.clients.jwt.UserCredentials;
 import com.example.team.dto.CreateFolderDTO;
@@ -28,6 +30,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @DiscriminatorValue(value = "FOLDER_CATEGORY")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "spaceId",
+                "orderIndex",
+                "CATEGORY_TYPE" })
+})
 public class FolderCategory extends Category {
 
     @Builder.Default

@@ -2,6 +2,7 @@ import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
+    Team,
   TeamStateActionType,
   TeamStateType,
   TEAM_STATE_ACTION,
@@ -52,16 +53,17 @@ export default function teamReducer(
         const { teams, teamActivity } = action.payload;
 
         // reorder
-        // teams.forEach((team) =>
-        //   team.spaces
-        //     .sort((a, b) => a.orderIndex - b.orderIndex)
-        //     .forEach((space) =>
-        //       space.allListOrFolder.sort((a, b) => a.orderIndex - b.orderIndex)
-        //     )
-        // );
+        const copied = deepCopy(teams) as Team[]
+        copied.forEach((team) =>
+          team.spaces
+            .sort((a, b) => a.orderIndex - b.orderIndex)
+            .forEach((space) =>
+              space.allListOrFolder.sort((a, b) => a.orderIndex - b.orderIndex)
+            )
+        );
 
-        draftState.teams = teams;
-        draftState.originalTeams = teams;
+        draftState.teams = copied;
+        draftState.originalTeams = copied;
         draftState.teamActiveStatus = teamActivity;
 
         syncTeamStateActivity(draftState);

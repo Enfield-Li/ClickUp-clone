@@ -5,6 +5,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.example.clients.jwt.UserCredentials;
 import com.example.team.dto.CreateListDTO;
@@ -25,6 +27,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @DiscriminatorValue(value = "LIST_CATEGORY")
 @EqualsAndHashCode(callSuper = false, exclude = "folderCategory")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "spaceId",
+                "orderIndex",
+                "CATEGORY_TYPE",
+                "parent_folder_id" })
+})
 public class ListCategory extends Category {
 
     @Builder.Default
