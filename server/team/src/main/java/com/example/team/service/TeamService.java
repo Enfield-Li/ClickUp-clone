@@ -64,8 +64,9 @@ public class TeamService {
         var teamId = team.getId();
         var defaultStatusCategoryId = (Integer) statusCategoryClient
                 .initStatusCategoryForTeam(teamId);
-        var initSpace = Space.initTeamSpace(defaultStatusCategoryId, team);
-        team.setSpaces(Set.of(initSpace));
+
+        var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
+        team.addSpace(initSpace);
         var space = spaceRepository.save(initSpace);
 
         // update team activity

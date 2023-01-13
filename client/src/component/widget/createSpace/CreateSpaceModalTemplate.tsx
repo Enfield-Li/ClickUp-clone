@@ -19,7 +19,7 @@ import {
   TEAM_STATE_ACTION,
 } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
-import { initialCreateSpace } from "./createSpaceInit";
+import { initialCreateSpace } from "./createSpaceInitialState";
 
 type Props = {
   sectionName: string;

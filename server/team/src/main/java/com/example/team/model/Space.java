@@ -60,7 +60,7 @@ public class Space {
     private Integer statusColumnsCategoryId;
 
     @Builder.Default
-    @OneToMany(mappedBy = "spaces", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "spaces", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
     @JsonIgnore
@@ -128,14 +128,17 @@ public class Space {
         return space;
     }
 
-    public static Space initTeamSpace(Integer defaultStatusCategoryId, Team team) {
-        return Space.builder()
-                .team(team)
+    public static Space initTeamSpace(Integer defaultStatusCategoryId,
+            UserInfo userInfo) {
+        var space = Space.builder()
                 .name("space")
                 .color("gray")
                 .orderIndex(1)
                 .isPrivate(false)
                 .statusColumnsCategoryId(defaultStatusCategoryId)
                 .build();
+
+        space.addMember(userInfo);
+        return space;
     }
 }

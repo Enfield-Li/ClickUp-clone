@@ -11,7 +11,7 @@ import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import CreateSpaceColor from "./CreateSpaceColor";
-import { initialCreateSpace } from "./createSpaceInit";
+import { initialCreateSpace } from "./createSpaceInitialState";
 import CreateSpaceName from "./CreateSpaceName";
 import CreateSpaceReview from "./CreateSpaceReview";
 import CreateSpaceSetPrivacy from "./CreateSpaceSetPrivacy";
