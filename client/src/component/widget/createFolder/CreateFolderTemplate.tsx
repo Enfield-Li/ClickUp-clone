@@ -5,7 +5,6 @@ import {
   Center,
   Divider,
   ModalCloseButton,
-  space,
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
@@ -16,6 +15,7 @@ import {
   CreateFolderStep,
   TEAM_STATE_ACTION,
 } from "../../../types";
+import { initCreateFolderState } from "./createfolderInitialState";
 
 type Props = {
   title: string;
@@ -34,8 +34,11 @@ export default function CreateFolderTemplate({
   setCreateFolder,
   isCurrentStepEntry,
 }: Props) {
+  const {
+    teamStateDispatch,
+    modalControls: { onCreateFolderModalClose },
+  } = useTeamStateContext();
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
-  const { teamStateDispatch } = useTeamStateContext();
 
   function handleGoBackToEntry() {
     setCreateFolder(
@@ -54,6 +57,9 @@ export default function CreateFolderTemplate({
       }
 
       createFolderForSpace(createFolder.createFolderDTO, (folder) => {
+        onCreateFolderModalClose();
+        setCreateFolder(initCreateFolderState);
+
         teamStateDispatch({
           type: TEAM_STATE_ACTION.CREATE_Folder,
           payload: folder,

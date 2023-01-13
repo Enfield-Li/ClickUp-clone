@@ -7,35 +7,15 @@ import {
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import {
-  CreateFolderDTO,
-  CreateFolderState,
-  CreateFolderStep,
-} from "../../../types";
-import CreateFolderEntry from "./CreateFolderEntry";
-import CreateFolderSelectList from "./CreateFolderSelectList";
-import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
-import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
-import { useParams } from "react-router-dom";
+import { CreateFolderState, CreateFolderStep } from "../../../types";
+import CreateFolderEntry from "./CreateFolderEntry";
+import { initCreateFolderState } from "./createfolderInitialState";
+import CreateFolderSelectList from "./CreateFolderSelectList";
+import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
+import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
 
 type Props = {};
-
-const iniCreateFolderDTO: CreateFolderDTO = {
-  name: "",
-  spaceId: 0,
-  orderIndex: 0,
-  isPrivate: false,
-  allListNames: ["list"],
-  statusColumnsCategoryId: 0,
-};
-
-const initCreateFolderState: CreateFolderState = {
-  teamStatusCategories: [],
-  selectedStatusColumns: [],
-  step: CreateFolderStep.ENTRY,
-  createFolderDTO: iniCreateFolderDTO,
-};
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {

@@ -24,106 +24,106 @@ export function useFetchTasks({ sortBy, selectedListId }: UseFetchTasksParam) {
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
-  useEffect(() => {
-    initTaskState();
+//   useEffect(() => {
+//     initTaskState();
 
-    async function initTaskState() {
-      if (!selectedListId && !location.state) {
-        setTaskState(undefined);
-        setTaskStateContext(null);
-        return;
-      }
+//     async function initTaskState() {
+//       if (!selectedListId && !location.state) {
+//         setTaskState(undefined);
+//         setTaskStateContext(null);
+//         return;
+//       }
 
-      setLoading(true);
+//       setLoading(true);
 
-      // Task data
-      const tasksData = await fetchAllTasks(selectedListId);
+//       // Task data
+//       const tasksData = await fetchAllTasks(selectedListId);
 
-      if (tasksData) {
-        const statusColumnFromRouter: StatusColumns =
-          location.state.statusColumns;
+//       if (tasksData) {
+//         const statusColumnFromRouter: StatusColumns =
+//           location.state.statusColumns;
 
-        const allColumns: ColumnOptions = {
-          dueDateColumns: [],
-          priorityColumns: [],
-          statusColumns: statusColumnFromRouter,
-        };
+//         const allColumns: ColumnOptions = {
+//           dueDateColumns: [],
+//           priorityColumns: [],
+//           statusColumns: statusColumnFromRouter,
+//         };
 
-        const { reorderedDueDateColumns, reorderedStatusColumns } =
-          initColumns(allColumns);
+//         const { reorderedDueDateColumns, reorderedStatusColumns } =
+//           initColumns(allColumns);
 
-        const columnOptions: ColumnOptions = {
-          ...allColumns,
-          dueDateColumns: reorderedDueDateColumns,
-          statusColumns: reorderedStatusColumns,
-        };
+//         const columnOptions: ColumnOptions = {
+//           ...allColumns,
+//           dueDateColumns: reorderedDueDateColumns,
+//           statusColumns: reorderedStatusColumns,
+//         };
 
-        // init taskEvents and convert expectedDueDate to dueDate columns
-        const taskList = processTaskList(reorderedDueDateColumns, tasksData);
+//         // init taskEvents and convert expectedDueDate to dueDate columns
+//         const taskList = processTaskList(reorderedDueDateColumns, tasksData);
 
-        const orderedTasks = groupTaskListOnSortBy(
-          taskList,
-          allColumns[`${sortBy}Columns`],
-          sortBy
-        );
+//         const orderedTasks = groupTaskListOnSortBy(
+//           taskList,
+//           allColumns[`${sortBy}Columns`],
+//           sortBy
+//         );
 
-        setTaskStateContext({
-          columnOptions,
-          setTaskState,
-          sortBy,
-          currentListId: selectedListId,
-        });
-        setTaskState({ orderedTasks, columnOptions });
+//         setTaskStateContext({
+//           columnOptions,
+//           setTaskState,
+//           sortBy,
+//           currentListId: selectedListId,
+//         });
+//         setTaskState({ orderedTasks, columnOptions });
 
-        setLoading(false);
-      }
-    }
-  }, [selectedListId, location.state]);
+//         setLoading(false);
+//       }
+//     }
+//   }, [selectedListId, location.state]);
 
-  // Sync up orderedTasks with columns under sortBy
-  const statusColumnCount = taskState?.columnOptions.statusColumns.length;
-  useEffect(() => {
-    updateTaskState();
+//   // Sync up orderedTasks with columns under sortBy
+//   const statusColumnCount = taskState?.columnOptions.statusColumns.length;
+//   useEffect(() => {
+//     updateTaskState();
 
-    async function updateTaskState() {
-      if (!taskState || !taskStateContext) {
-        return;
-      }
+//     async function updateTaskState() {
+//       if (!taskState || !taskStateContext) {
+//         return;
+//       }
 
-      setLoading(true);
+//       setLoading(true);
 
-      if (taskState && taskStateContext) {
-        setTaskStateContext({
-          ...taskStateContext,
-          sortBy,
-        });
+//       if (taskState && taskStateContext) {
+//         setTaskStateContext({
+//           ...taskStateContext,
+//           sortBy,
+//         });
 
-        setTaskState({
-          ...taskState,
-          orderedTasks: groupTaskListOnSortBy(
-            collectAllTasks(taskState.orderedTasks),
-            taskState.columnOptions[`${sortBy}Columns`],
-            sortBy
-          ),
-        });
+//         setTaskState({
+//           ...taskState,
+//           orderedTasks: groupTaskListOnSortBy(
+//             collectAllTasks(taskState.orderedTasks),
+//             taskState.columnOptions[`${sortBy}Columns`],
+//             sortBy
+//           ),
+//         });
 
-        await sleep(10);
-      }
+//         await sleep(10);
+//       }
 
-      setLoading(false);
-    }
-  }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
+//       setLoading(false);
+//     }
+//   }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
 
-  // sync up with modal task
-  useEffect(() => {
-    if (task && taskState) {
-      const allTasks = collectAllTasks(taskState.orderedTasks);
-      const updatedTask = allTasks.find(
-        (currentTask) => currentTask.id === task.id
-      );
-      if (updatedTask) setTask(updatedTask);
-    }
-  }, [taskState]);
+//   // sync up with modal task
+//   useEffect(() => {
+//     if (task && taskState) {
+//       const allTasks = collectAllTasks(taskState.orderedTasks);
+//       const updatedTask = allTasks.find(
+//         (currentTask) => currentTask.id === task.id
+//       );
+//       if (updatedTask) setTask(updatedTask);
+//     }
+//   }, [taskState]);
 
   return { taskState, setTaskState, loading, error };
 }

@@ -40,7 +40,6 @@ function CreateSpaceModalTemplate({
   previousSection,
 }: Props) {
   const navigate = useNavigate();
-  const { teamId, listId } = useParams();
   const {
     teamState,
     teamStateDispatch,
@@ -61,6 +60,8 @@ function CreateSpaceModalTemplate({
   }
 
   function handleCreateSpace() {
+    const teamId = teamState.teamActiveStatus.teamId;
+
     const createSpaceDTO: CreateSpaceDTO = {
       ...createSpace.createSpaceDTO,
       teamId: Number(teamId),

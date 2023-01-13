@@ -30,12 +30,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @DiscriminatorValue(value = "FOLDER_CATEGORY")
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "spaceId",
-                "orderIndex",
-                "CATEGORY_TYPE" })
-})
 public class FolderCategory extends Category {
 
     @Builder.Default
