@@ -4,7 +4,10 @@ import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
 import List from "./List";
 
-type Props = { space: Space; folder: FolderCategory };
+type Props = {
+  space: Space;
+  folder: FolderCategory;
+};
 
 export default memo(Folder);
 function Folder({ space, folder }: Props) {
@@ -29,14 +32,14 @@ function Folder({ space, folder }: Props) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void {
     e.stopPropagation();
-    throw new Error("Function not implemented.");
+    // onPopoverToggle();
   }
 
   return (
     <>
       <Flex
-        p="5px"
         pl="3"
+        p="5px"
         rounded="4px"
         fontSize="15px"
         cursor="pointer"
@@ -57,7 +60,7 @@ function Folder({ space, folder }: Props) {
 
         <Flex alignItems="center">
           {/* Folder icon */}
-          <Box mr="2" color={folder.color ? folder.color : ""}>
+          <Box mx="2" color={folder.color ? folder.color : ""}>
             {folder.isOpen ? (
               <Box>
                 <i className="bi bi-folder2-open"></i>

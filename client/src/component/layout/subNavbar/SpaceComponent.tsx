@@ -19,16 +19,10 @@ function SpaceComponent({ space }: Props) {
   const [hover, setHover] = useState(false);
   const {
     teamStateDispatch,
-    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
+    modalControls: { isPopoverOpen },
   } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
-
-  const {
-    isOpen: isPopoverOpen,
-    onClose: onPopoverClose,
-    onOpen: onPopoverOpen,
-  } = useDisclosure();
 
   function handleOpenSpace(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -40,15 +34,8 @@ function SpaceComponent({ space }: Props) {
     });
   }
 
-  function handleOpenPopover(
-    e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
-  ) {
-    e.stopPropagation();
-    onPopoverOpen();
-  }
-
   return (
-    <Box>
+    <Box my="3px">
       <Flex
         cursor="pointer"
         alignItems="center"
@@ -109,29 +96,7 @@ function SpaceComponent({ space }: Props) {
             </Center>
           </Flex>
 
-          {hover && (
-            <AddFolderOrListPopover
-              onPopoverOpen={onPopoverOpen}
-              isPopoverOpen={isPopoverOpen}
-              onPopoverClose={onPopoverClose}
-            >
-              <Center
-                pb="1"
-                mr="3"
-                width="15px"
-                height="15px"
-                rounded="full"
-                fontSize="15px"
-                color="darkMain.200"
-                fontWeight="extrabold"
-                bgColor="lightMain.400"
-                onClick={handleOpenPopover}
-                _hover={{ bgColor: "purple.500" }}
-              >
-                +
-              </Center>
-            </AddFolderOrListPopover>
-          )}
+          {hover && <AddFolderOrListPopover spaceId={space.id} />}
         </Flex>
       </Flex>
 

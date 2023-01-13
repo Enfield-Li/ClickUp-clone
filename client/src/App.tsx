@@ -37,8 +37,6 @@ function App() {
     location.pathname === CLIENT_ROUTE.LOGIN;
 
   useEffect(() => {
-    console.log("callede");
-
     if (accessToken) {
       refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       setInterval(() => {

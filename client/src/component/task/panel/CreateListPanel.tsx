@@ -1,15 +1,12 @@
 import { Box, Button, Center, Img } from "@chakra-ui/react";
 import { memo } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { emptySpaceImgDisplayDataUrl } from "../../../media/imgDataUrl";
 
 type Props = {};
 
 export default memo(CreateListPanel);
 function CreateListPanel({}: Props) {
-  //   const {
-  //     modalControls: { onCreateListModalOpen },
-  //   } = useTeamStateContext();
-
   return (
     <Center flexDir="column">
       <Box opacity="80%">

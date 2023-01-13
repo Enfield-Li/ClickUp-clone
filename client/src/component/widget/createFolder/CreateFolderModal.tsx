@@ -9,6 +9,9 @@ import { memo, useEffect, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
+import determineListType, {
+  determineFolderType,
+} from "../../layout/subNavbar/folderAndList/determineList";
 import CreateFolderEntry from "./CreateFolderEntry";
 import { initCreateFolderState } from "./createfolderInitialState";
 import CreateFolderSelectList from "./CreateFolderSelectList";
@@ -32,14 +35,20 @@ function CreateFolderModal({}: Props) {
 
   useEffect(() => {
     if (isCreateFolderModalOpen) {
+      const { createFolderInfo } = teamState;
       const team = teamState.teams.find((team) => team.isSelected);
-      const space = team?.spaces.find((space) => space.isOpen);
+      const space = team?.spaces.find(
+        (space) => space.id === createFolderInfo?.spaceId
+      );
       if (!team || !space) {
         throw new Error("Can not find team when create folder");
       }
 
       const teamId = team.id;
-      const lastOrderIndex = team.spaces[team.spaces.length - 1].orderIndex;
+      const lastFolder = space.allListOrFolder.findLast((listOrFolder) =>
+        determineFolderType(listOrFolder)
+      );
+      const lastOrderIndex = lastFolder ? lastFolder.orderIndex + 1 : 1;
 
       fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
         setCreateFolder(

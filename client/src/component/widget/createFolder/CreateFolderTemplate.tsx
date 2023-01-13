@@ -61,7 +61,7 @@ export default function CreateFolderTemplate({
         setCreateFolder(initCreateFolderState);
 
         teamStateDispatch({
-          type: TEAM_STATE_ACTION.CREATE_Folder,
+          type: TEAM_STATE_ACTION.CREATE_FOLDER,
           payload: folder,
         });
       });

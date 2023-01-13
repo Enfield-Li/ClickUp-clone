@@ -13,6 +13,7 @@ import {
 import { memo, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
+import { CreateListDTO } from "../../../types";
 
 type Props = {};
 
@@ -22,13 +23,29 @@ function CreateListModal({}: Props) {
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
   const {
+    teamState,
+    teamStateDispatch,
     modalControls: { isCreateListModalOpen, onCreateListModalClose },
   } = useTeamStateContext();
 
   function handleCreateList(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
-    throw new Error("Function not implemented.");
+    if (!teamState.createListInfo) {
+      throw new Error("createListInfo not ready yet");
+    }
+
+    const { folderId, spaceId } = teamState.createListInfo;
+
+    const dto: CreateListDTO = {
+      folderId,
+      spaceId,
+      name: value,
+      orderIndex: 0, // ?
+      statusColumnsCategoryId: 0, // ?
+    };
+
+    console.log(value);
   }
 
   function handleCancel() {

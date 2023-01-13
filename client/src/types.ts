@@ -384,32 +384,50 @@ export type TeamActiveStatus = {
   spaceId: number | null;
 };
 
+export type CreateListInfo = {
+  spaceId: number;
+  folderId?: number;
+  orderIndex?: number;
+  statusColumnsCategoryId?: number;
+};
+export type CreateFolderInfo = {
+  spaceId: number;
+  statusColumnsCategoryId?: number;
+};
+
+export type ModalControls = {
+  isCreateListModalOpen: boolean;
+  onCreateListModalOpen: () => void;
+  onCreateListModalClose: () => void;
+
+  isCreateFolderModalOpen: boolean;
+  onCreateFolderModalOpen: () => void;
+  onCreateFolderModalClose: () => void;
+
+  isCreateSpaceModalOpen: boolean;
+  onCreateSpaceModalOpen: () => void;
+  onCreateSpaceModalClose: () => void;
+
+  isPopoverOpen: boolean;
+  onPopoverClose: () => void;
+  onPopoverOpen: () => void;
+};
+
 export type TeamStateType = {
   teams: Team[];
   originalTeams: Team[];
   teamActiveStatus: TeamActiveStatus;
+  createListInfo: CreateListInfo | null;
+  createFolderInfo: CreateFolderInfo | null;
 };
+
 export type TeamContextType = {
   teamState: TeamStateType;
   teamStateDispatch: React.Dispatch<TeamStateActionType>;
-  modalControls: {
-    isCreateListModalOpen: boolean;
-    onCreateListModalOpen: () => void;
-    onCreateListModalClose: () => void;
-
-    isCreateFolderModalOpen: boolean;
-    onCreateFolderModalOpen: () => void;
-    onCreateFolderModalClose: () => void;
-
-    isCreateSpaceModalOpen: boolean;
-    onCreateSpaceModalOpen: () => void;
-    onCreateSpaceModalClose: () => void;
-  };
+  modalControls: ModalControls;
 };
 
 export type TeamStateActionType =
-  | AddList
-  | AddFolder
   | SelectTeam
   | InitTeamState
   | UpdateOpenedSpace
@@ -418,12 +436,29 @@ export type TeamStateActionType =
   | SelectList
   | SelectSpace
   | CreateSpace
+  | CreateList
   | CreateFolder
-  | SelectFolder;
+  | SelectFolder
+  | SetCreateListInfo
+  | SetCreateFolderInfo;
 
 type InitTeamState = {
   type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
   payload: TeamsResponseDTO;
+};
+
+type SetCreateListInfo = {
+  type: typeof TEAM_STATE_ACTION.SET_CREATE_LIST_INFO;
+  payload: CreateListInfo;
+};
+type SetCreateFolderInfo = {
+  type: typeof TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO;
+  payload: CreateFolderInfo;
+};
+
+type CreateList = {
+  type: typeof TEAM_STATE_ACTION.CREATE_List;
+  payload: ListCategory;
 };
 
 type CreateTeam = {
@@ -437,22 +472,8 @@ type CreateSpace = {
 };
 
 type CreateFolder = {
-  type: typeof TEAM_STATE_ACTION.CREATE_Folder;
+  type: typeof TEAM_STATE_ACTION.CREATE_FOLDER;
   payload: FolderCategory;
-};
-
-// Add
-type AddFolder = {
-  type: typeof TEAM_STATE_ACTION.ADD_FOLDER;
-  payload: { teamId: number; folderName: string };
-};
-type AddList = {
-  type: typeof TEAM_STATE_ACTION.ADD_LIST;
-  payload: { spaceId: number; folderId?: number; listName: string };
-};
-type AddSpace = {
-  type: typeof TEAM_STATE_ACTION.ADD_SPACE;
-  payload: { spaceId: number; listName: string };
 };
 
 // Select
@@ -487,11 +508,11 @@ export const TEAM_STATE_ACTION = {
   INIT_TEAM_STATE: "init_team_state",
   CREATE_TEAM: "create_team",
   CREATE_SPACE: "create_space",
-  CREATE_Folder: "create_folder",
+  CREATE_FOLDER: "create_folder",
+  CREATE_List: "create_list",
 
-  ADD_LIST: "add_list",
-  ADD_SPACE: "add_space",
-  ADD_FOLDER: "add_folder",
+  SET_CREATE_FOLDER_INFO: "set_create_folder_INFO",
+  SET_CREATE_LIST_INFO: "set_create_list_INFO",
 
   SELECT_LIST: "select_list",
   SELECT_TEAM: "select_team",
@@ -505,7 +526,8 @@ export const TEAM_STATE_ACTION = {
 export type CreateListDTO = {
   name: string;
   spaceId: number;
-  folderId: number;
+  folderId?: number;
+  orderIndex: number;
   statusColumnsCategoryId: number;
 };
 

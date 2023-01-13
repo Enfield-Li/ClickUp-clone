@@ -1,6 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { createContext, useReducer, useState } from "react";
-import { TeamContextType, TeamStateType } from "../../types";
+import { ModalControls, TeamContextType, TeamStateType } from "../../types";
 import teamReducer from "./TeamReducer";
 
 export const TeamContext = createContext<TeamContextType | null>(null);
@@ -16,7 +16,10 @@ const initialTeamContextState: TeamStateType = {
     teamId: 0,
     spaceId: 0,
     listId: 0,
+    folderIds: [],
   },
+  createListInfo: null,
+  createFolderInfo: null,
 };
 
 export default function TeamStateProvider({ children }: ProviderType) {
@@ -43,7 +46,13 @@ export default function TeamStateProvider({ children }: ProviderType) {
     onClose: onCreateSpaceModalClose,
   } = useDisclosure();
 
-  const modalControls = {
+  const {
+    isOpen: isPopoverOpen,
+    onClose: onPopoverClose,
+    onOpen: onPopoverOpen,
+  } = useDisclosure();
+
+  const modalControls: ModalControls = {
     isCreateListModalOpen,
     onCreateListModalOpen,
     onCreateListModalClose,
@@ -53,6 +62,9 @@ export default function TeamStateProvider({ children }: ProviderType) {
     isCreateSpaceModalOpen,
     onCreateSpaceModalOpen,
     onCreateSpaceModalClose,
+    isPopoverOpen,
+    onPopoverClose,
+    onPopoverOpen,
   };
 
   return (

@@ -6,7 +6,9 @@ import determineListType from "./determineList";
 import Folder from "./Folder";
 import List from "./List";
 
-type Props = { space: Space };
+type Props = {
+  space: Space;
+};
 
 export default memo(SpaceContent);
 function SpaceContent({ space }: Props) {
@@ -15,7 +17,7 @@ function SpaceContent({ space }: Props) {
   } = useTeamStateContext();
 
   return (
-    <Box>
+    <Box mb="2">
       {space.allListOrFolder.length ? (
         space.allListOrFolder.map((folder) => (
           <Box key={folder.id}>

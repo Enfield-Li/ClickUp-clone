@@ -1,3 +1,4 @@
+import { space } from "@chakra-ui/react";
 import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import determineListType, {
@@ -5,6 +6,8 @@ import determineListType, {
 } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
   Category,
+  CreateFolderInfo,
+  CreateListInfo,
   FolderCategory,
   ListCategory,
   Team,
@@ -167,26 +170,108 @@ export default function teamReducer(
       });
     }
 
-    case TEAM_STATE_ACTION.CREATE_Folder: {
+    case TEAM_STATE_ACTION.CREATE_FOLDER: {
       return produce(teamState, (draftState) => {
         const folder = action.payload;
+        const spaceId = draftState.createFolderInfo?.spaceId;
+        if (!spaceId) throw new Error("spaceId is null");
 
         draftState.teamActiveStatus.listId = null;
+        draftState.teamActiveStatus.spaceId = spaceId;
+
         draftState.teamActiveStatus.folderIds.push(folder.id);
         draftState.originalTeams.forEach(
           (team) =>
             team.id === draftState.teamActiveStatus.teamId &&
             team.spaces.forEach((space) => {
-              if (space.id === draftState.teamActiveStatus.spaceId) {
+              if (space.id === spaceId) {
                 const index = space.allListOrFolder.findIndex((i) =>
                   determineListType(i)
                 );
+
+                if (!index || index === -1) {
+                  space.allListOrFolder.push(folder);
+                  return;
+                }
                 space.allListOrFolder.splice(index, 0, folder);
               }
             })
         );
 
         syncTeamStateActivity(draftState);
+        draftState.createFolderInfo = null;
+      });
+    }
+
+    case TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO: {
+      return produce(teamState, (draftState) => {
+        const payload = deepCopy(action.payload) as CreateFolderInfo;
+        const { spaceId } = payload;
+
+        draftState.teams.forEach(
+          (team) =>
+            team.isSelected &&
+            team.spaces.forEach(
+              (space) =>
+                space.id === spaceId &&
+                (payload["statusColumnsCategoryId"] =
+                  space.statusColumnsCategoryId)
+            )
+        );
+
+        draftState.createFolderInfo = payload;
+      });
+    }
+
+    case TEAM_STATE_ACTION.SET_CREATE_LIST_INFO: {
+      return produce(teamState, (draftState) => {
+        const payload = deepCopy(action.payload) as CreateListInfo;
+        const { spaceId, folderId } = payload;
+
+        draftState.originalTeams.forEach(
+          (team) =>
+            team.isSelected &&
+            team.spaces.forEach(
+              (space) =>
+                space.id === spaceId &&
+                (payload["statusColumnsCategoryId"] =
+                  space.statusColumnsCategoryId)
+            )
+        );
+
+        const lastListOrFolder = draftState.originalTeams
+          .find((team) => team.isSelected)
+          ?.spaces.find((space) => space.id === spaceId)
+          ?.allListOrFolder.reverse()
+          .find((listOrFolder, index, arr) => {
+            const isFolder = determineFolderType(listOrFolder);
+            if (isFolder && listOrFolder.id === folderId) {
+              return;
+            }
+
+            return index === arr.length - 1;
+          });
+
+        if (!lastListOrFolder) {
+          payload["orderIndex"] = 1;
+          draftState.createListInfo = payload;
+          return;
+        }
+
+        const isFolder = determineFolderType(lastListOrFolder);
+        if (isFolder) {
+          const lastListItem =
+            lastListOrFolder.allLists[lastListOrFolder.allLists.length - 1];
+          payload["orderIndex"] = lastListItem.orderIndex + 1;
+
+          draftState.createListInfo = payload;
+          return;
+        }
+
+        const lastListItem = lastListOrFolder;
+        payload["orderIndex"] = lastListItem.orderIndex + 1;
+
+        draftState.createListInfo = payload;
       });
     }
 

@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Divider,
   Flex,
   Popover,
@@ -9,37 +10,39 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
+import { TEAM_STATE_ACTION } from "../../../types";
 
-type Props = {
-  isPopoverOpen: boolean;
-  children: React.ReactNode;
-  onPopoverClose: () => void;
-  onPopoverOpen: () => void;
-};
+type Props = { spaceId: number };
 
 export default memo(AddFolderOrListPopover);
-function AddFolderOrListPopover({
-  children,
-  isPopoverOpen,
-  onPopoverClose,
-  onPopoverOpen,
-}: Props) {
+function AddFolderOrListPopover({ spaceId }: Props) {
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
   );
   const {
-    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
+    teamStateDispatch,
+    modalControls: {
+      isPopoverOpen,
+      onPopoverClose,
+      onPopoverOpen,
+      onCreateListModalOpen,
+      onCreateFolderModalOpen,
+    },
   } = useTeamStateContext();
 
   function handleOpenModal(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    onModalOpen: () => void
+    openModal: () => void
   ) {
-    e.preventDefault();
     e.stopPropagation();
     onPopoverClose();
-    onModalOpen();
+    openModal();
+  }
+
+  function handleOpenPopover(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.stopPropagation();
+    onPopoverOpen();
   }
 
   return (
@@ -52,7 +55,23 @@ function AddFolderOrListPopover({
       placement="bottom-start"
       onClose={onPopoverClose}
     >
-      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverTrigger>
+        <Center
+          pb="1"
+          mr="3"
+          width="15px"
+          height="15px"
+          rounded="full"
+          fontSize="15px"
+          color="darkMain.200"
+          fontWeight="extrabold"
+          bgColor="lightMain.400"
+          onClick={handleOpenPopover}
+          _hover={{ bgColor: "purple.500" }}
+        >
+          +
+        </Center>
+      </PopoverTrigger>
 
       <PopoverContent
         py="1"
@@ -68,7 +87,15 @@ function AddFolderOrListPopover({
           px="2"
           rounded="md"
           _hover={{ backgroundColor: popoverContentHoverBgColor }}
-          onClick={(e) => handleOpenModal(e, onCreateListModalOpen)}
+          onClick={(e) =>
+            handleOpenModal(e, () => {
+              onCreateListModalOpen();
+              teamStateDispatch({
+                type: TEAM_STATE_ACTION.SET_CREATE_LIST_INFO,
+                payload: { spaceId },
+              });
+            })
+          }
         >
           <Box mr="2" opacity="70%">
             <i className="bi bi-list-ul"></i>
@@ -85,7 +112,15 @@ function AddFolderOrListPopover({
           my="1"
           rounded="md"
           _hover={{ backgroundColor: popoverContentHoverBgColor }}
-          onClick={(e) => handleOpenModal(e, onCreateFolderModalOpen)}
+          onClick={(e) =>
+            handleOpenModal(e, () => {
+              onCreateFolderModalOpen();
+              teamStateDispatch({
+                type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
+                payload: { spaceId },
+              });
+            })
+          }
         >
           <Box mr="2" opacity="70%">
             <i className="bi bi-folder-plus"></i>
