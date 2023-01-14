@@ -13,7 +13,8 @@ import {
 import { memo, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
-import { CreateListDTO } from "../../../types";
+import { createListForSpace } from "../../../networkCalls";
+import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
 
 type Props = {};
 
@@ -35,17 +36,23 @@ function CreateListModal({}: Props) {
       throw new Error("createListInfo not ready yet");
     }
 
-    const { folderId, spaceId } = teamState.createListInfo;
+    const { folderId, spaceId, orderIndex, statusColumnsCategoryId } =
+      teamState.createListInfo;
+    if (!orderIndex || !statusColumnsCategoryId) {
+      throw new Error("orderIndex, statusColumnsCategoryId not ready yet");
+    }
 
     const dto: CreateListDTO = {
-      folderId,
       spaceId,
+      folderId,
+      orderIndex,
       name: value,
-      orderIndex: 0, // ?
-      statusColumnsCategoryId: 0, // ?
+      statusColumnsCategoryId,
     };
 
-    console.log(value);
+    createListForSpace(dto, (list) => {
+      teamStateDispatch({ type: TEAM_STATE_ACTION.CREATE_List, payload: list });
+    });
   }
 
   function handleCancel() {

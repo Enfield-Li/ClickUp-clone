@@ -58,7 +58,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = AuthenticationFailureException.class)
-    ResponseEntity<ErrorResponse> catchLoginFailure(AuthenticationFailureException exception) {
+    ResponseEntity<ErrorResponse> catchLoginFailure(
+            AuthenticationFailureException exception) {
         log.error("AuthenticationFailureException");
 
         if (exception.getField() == null) {
@@ -84,7 +85,8 @@ public class GlobalExceptionHandler {
     /* FeignException */
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ErrorResponse> catchFeignClientException(
-            FeignException exception) throws JsonMappingException, JsonProcessingException {
+            FeignException exception)
+            throws JsonMappingException, JsonProcessingException {
         var responseBody = getErrorResponse(exception.responseBody().get());
         return buildErrorResponse(HttpStatus.valueOf(exception.status()),
                 responseBody.getMessage());
@@ -141,7 +143,8 @@ public class GlobalExceptionHandler {
 
     private ErrorResponse getErrorResponse(ByteBuffer ByteBuffer)
             throws JsonMappingException, JsonProcessingException {
-        var responseBodyJSON = StandardCharsets.UTF_8.decode(ByteBuffer).toString();
+        var responseBodyJSON = StandardCharsets.UTF_8
+                .decode(ByteBuffer).toString();
         return objectMapper.readValue(responseBodyJSON, ErrorResponse.class);
     }
 

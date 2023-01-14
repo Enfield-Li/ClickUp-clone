@@ -10,12 +10,13 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { TEAM_STATE_ACTION } from "../../../types";
+import { Space, TEAM_STATE_ACTION } from "../../../types";
 
-type Props = { spaceId: number };
+type Props = { space: Space };
 
 export default memo(AddFolderOrListPopover);
-function AddFolderOrListPopover({ spaceId }: Props) {
+function AddFolderOrListPopover({ space }: Props) {
+  const { statusColumnsCategoryId, id: spaceId } = space;
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
@@ -117,7 +118,10 @@ function AddFolderOrListPopover({ spaceId }: Props) {
               onCreateFolderModalOpen();
               teamStateDispatch({
                 type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
-                payload: { spaceId },
+                payload: {
+                  spaceId,
+                  statusColumnsCategoryId,
+                },
               });
             })
           }

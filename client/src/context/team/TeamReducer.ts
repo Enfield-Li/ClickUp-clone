@@ -242,8 +242,8 @@ export default function teamReducer(
         const lastListOrFolder = draftState.originalTeams
           .find((team) => team.isSelected)
           ?.spaces.find((space) => space.id === spaceId)
-          ?.allListOrFolder.reverse()
-          .find((listOrFolder, index, arr) => {
+          // @ts-expect-error
+          ?.allListOrFolder.findLast((listOrFolder, index, arr) => {
             const isFolder = determineFolderType(listOrFolder);
             if (isFolder && listOrFolder.id === folderId) {
               return;

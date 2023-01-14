@@ -96,7 +96,7 @@ function SpaceComponent({ space }: Props) {
             </Center>
           </Flex>
 
-          {hover && <AddFolderOrListPopover spaceId={space.id} />}
+          {hover && <AddFolderOrListPopover space={space} />}
         </Flex>
       </Flex>
 
