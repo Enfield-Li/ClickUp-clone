@@ -23,7 +23,7 @@ public class JwtUtilitiesImpl implements JwtUtilities {
 
     private final String HEADER_PREFIX = "Bearer ";
     private final String TOKEN_VERSION = "TOKEN_VERSION";
-    private final Long accessTokenExpirationTime = 30 * 60 * 1000L; // 30 min in millisecond
+    private final Long accessTokenExpirationTime = 300 * 60 * 1000L; // 300 min in millisecond
     private final Long refreshTokenExpirationTime = 60 * 60 * 24 * 7 * 1000L; // one week in millisecond
 
     @PostConstruct

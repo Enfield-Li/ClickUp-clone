@@ -15,11 +15,13 @@ import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
 import com.example.team.service.TeamService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RestController
+@Tag(name = "Team")
 @RequiredArgsConstructor
 @RequestMapping(TEAM_API_VERSION)
 class TeamController {

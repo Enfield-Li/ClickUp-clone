@@ -33,8 +33,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "teamId", "name" }),
-        @UniqueConstraint(columnNames = { "teamId", "orderIndex" })
+        @UniqueConstraint(columnNames = { "teamId", "name" }, name = "teamId_name_constraint"),
+        @UniqueConstraint(columnNames = { "teamId", "orderIndex" }, name = "teamId_orderIndex_constraint")
 })
 public class Space {
 

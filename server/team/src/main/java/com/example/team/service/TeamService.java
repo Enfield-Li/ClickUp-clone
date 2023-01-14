@@ -3,8 +3,6 @@ package com.example.team.service;
 import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
 
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +11,6 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;

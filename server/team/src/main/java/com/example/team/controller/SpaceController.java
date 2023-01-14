@@ -12,9 +12,11 @@ import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.service.SpaceService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@Tag(name = "Space")
 @RequiredArgsConstructor
 @RequestMapping(SPACE_API_VERSION)
 class SpaceController {

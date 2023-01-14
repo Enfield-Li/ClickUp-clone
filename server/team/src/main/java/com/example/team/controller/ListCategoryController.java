@@ -12,10 +12,12 @@ import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.service.ListCategoryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "ListCategory")
 @RequestMapping(List_API_VERSION)
 class ListCategoryController {
 

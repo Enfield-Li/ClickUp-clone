@@ -38,9 +38,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue(value = "LIST_CATEGORY")
-@EqualsAndHashCode(exclude = "folderCategory")
+@EqualsAndHashCode(exclude = { "folderCategory", "space" })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" })
+        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = "spaceId_name_constraint"),
+        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = "spaceId_orderIndex_constraint")
 })
 public class ListCategory {
 

@@ -10,12 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
-import com.example.team.model.Space;
 import com.example.team.service.FolderCategoryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@Tag(name = "Space")
 @RequiredArgsConstructor
 @RequestMapping(Folder_API_VERSION)
 class FolderCategoryController {

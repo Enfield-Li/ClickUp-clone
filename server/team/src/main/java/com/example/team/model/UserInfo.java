@@ -30,8 +30,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "teams", "spaces" })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@EqualsAndHashCode(exclude = { "teams", "spaces",
+        "folderCategories", "listCategories" })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = { "userId", "username" })
 })
@@ -50,40 +51,24 @@ public class UserInfo {
     @JsonIgnore
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "team_user_info",
-        joinColumns = @JoinColumn(name = "user_info_id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id")
-    )
+    @JoinTable(name = "team_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
     private Set<Team> teams = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "space_user_info",
-        joinColumns = @JoinColumn(name = "user_info_id"),
-        inverseJoinColumns = @JoinColumn(name = "space_id")
-    )
+    @JoinTable(name = "space_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "space_id"))
     private Set<Space> spaces = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "folder_category_user_info",
-        joinColumns = @JoinColumn(name = "user_info_id"),
-        inverseJoinColumns = @JoinColumn(name = "folder_category_id")
-    )
+    @JoinTable(name = "folder_category_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "folder_category_id"))
     private Set<FolderCategory> folderCategories = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "list_category_user_info",
-        joinColumns = @JoinColumn(name = "user_info_id"),
-        inverseJoinColumns = @JoinColumn(name = "list_category_id")
-    )
+    @JoinTable(name = "list_category_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "list_category_id"))
     private Set<ListCategory> listCategories = new HashSet<>();
 }

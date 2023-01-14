@@ -12,6 +12,7 @@ import com.example.team.repository.SpaceRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @Log4j2
 @Service
@@ -24,14 +25,26 @@ public class SpaceService {
 
     @Transactional
     public Space createSpace(CreateSpaceDTO createSpaceDTO) {
-        var userInfo = userInfoService.getCurrentUserInfo();
-        var space = Space.convertFromCreateSpaceDTO(createSpaceDTO, userInfo);
+        try {
 
-        // bind team
-        var teamReference = findTeamReference(createSpaceDTO.teamId());
-        teamReference.addSpace(space);
+            var userInfo = userInfoService.getCurrentUserInfo();
+            var space = Space.convertFromCreateSpaceDTO(createSpaceDTO, userInfo);
 
-        return repository.save(space);
+            // bind team
+            var teamReference = findTeamReference(createSpaceDTO.teamId());
+            teamReference.addSpace(space);
+
+            return repository.save(space);
+        } catch (DataIntegrityViolationException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getMessage().contains("name_constraint"));
+            System.out.println(e.getMessage().contains("teamId_orderIndex_constraint"));
+            System.out.println("..............");
+
+            System.out.println(e.getCause());
+            System.out.println(e.getLocalizedMessage());
+            return null;
+        }
     }
 
     private Team findTeamReference(Integer teamId) {

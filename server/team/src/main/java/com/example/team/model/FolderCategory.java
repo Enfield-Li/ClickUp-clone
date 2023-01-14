@@ -40,7 +40,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" })
+        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = "spaceId_name_constraint"),
+        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = "spaceId_orderIndex_constraint")
 })
 public class FolderCategory {
 
