@@ -24,15 +24,13 @@ public class FolderCategoryService {
 
     @Transactional
     public FolderCategory createFolder(CreateFolderDTO createSpaceDTO) {
-        checkUniqueConstraint(createSpaceDTO);
-
         var userCredentials = userInfoService.getCurrentUserInfo();
         var folderCategory = FolderCategory
                 .convertFromCreateFolderDTO(createSpaceDTO, userCredentials);
 
         // bind space
         var space = findSpaceReference(createSpaceDTO.spaceId());
-        space.addCategory(folderCategory);
+        space.addFolderCategory(folderCategory);
         space.addListCategory(folderCategory.getAllLists());
 
         return repository.save(folderCategory);
@@ -42,19 +40,4 @@ public class FolderCategoryService {
         return entityManager.getReference(Space.class, spaceId);
     }
 
-    private void checkUniqueConstraint(CreateFolderDTO createSpaceDTO) {
-        var name = createSpaceDTO.name();
-        var spaceId = createSpaceDTO.spaceId();
-        var orderIndex = createSpaceDTO.orderIndex();
-
-        var isNameExists = repository.existsByNameAndSpaceId(name, spaceId);
-        if (isNameExists)
-            throw new Error("FolderCategory name already exists");
-
-        var isOrderIndexExists = repository.existsByOrderIndexAndSpaceId(
-                orderIndex, spaceId);
-
-        if (isOrderIndexExists)
-            throw new Error("FolderCategory orderIndex already exists");
-    }
 }

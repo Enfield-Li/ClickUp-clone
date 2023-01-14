@@ -75,7 +75,11 @@ public class Space {
 
     @Builder.Default
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Category> allListOrFolder = new HashSet<>();
+    private Set<FolderCategory> folderCategories = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<ListCategory> listCategories = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
@@ -87,18 +91,28 @@ public class Space {
         userInfo.getSpaces().remove(this);
     }
 
-    public void addCategory(Category category) {
-        allListOrFolder.add(category);
-        category.setSpace(this);
+    public void addFolderCategory(FolderCategory folderCategory) {
+        folderCategories.add(folderCategory);
+        folderCategory.setSpace(this);
     }
 
-    public void removeCategory(Category category) {
-        allListOrFolder.remove(category);
-        category.setSpace(null);
+    public void removeFolderCategory(FolderCategory folderCategory) {
+        folderCategories.remove(folderCategory);
+        folderCategory.setSpace(null);
+    }
+
+    public void addListCategory(ListCategory listCategory) {
+        listCategories.add(listCategory);
+        listCategory.setSpace(this);
+    }
+
+    public void removeListCategory(ListCategory listCategory) {
+        listCategories.remove(listCategory);
+        listCategory.setSpace(null);
     }
 
     public void addListCategory(Set<ListCategory> listCategories) {
-        listCategories.forEach(listCategory -> addCategory(listCategory));
+        listCategories.forEach(listCategory -> addListCategory(listCategory));
     }
 
     public static Space convertFromCreateSpaceDTO(
@@ -107,20 +121,22 @@ public class Space {
                 .name("list")
                 .orderIndex(1)
                 .creator(userInfo)
-                .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
+                .statusColumnsCategoryId(
+                        createSpaceDTO.statusColumnsCategoryId())
                 .build();
         listCategory.addMember(userInfo);
-        Set<Category> allListOrFolder = Set.of(listCategory);
+        var listCategories = Set.of(listCategory);
 
         var space = Space.builder()
-                .allListOrFolder(allListOrFolder)
+                .listCategories(listCategories)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
                 .avatar(createSpaceDTO.avatar())
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
-                .statusColumnsCategoryId(createSpaceDTO.statusColumnsCategoryId())
+                .statusColumnsCategoryId(
+                        createSpaceDTO.statusColumnsCategoryId())
                 .build();
         space.addMember(userInfo);
 

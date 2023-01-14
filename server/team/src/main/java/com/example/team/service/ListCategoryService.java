@@ -25,8 +25,6 @@ public class ListCategoryService {
 
     @Transactional
     public ListCategory createList(CreateListDTO createListDTO) {
-        checkUniqueConstraint(createListDTO);
-
         var userInfo = userInfoService.getCurrentUserInfo();
         var listCategory = ListCategory.convertFromCreateListDTO(
                 createListDTO, userInfo);
@@ -37,7 +35,7 @@ public class ListCategoryService {
 
         // bind space
         var space = findSpaceReference(createListDTO.spaceId());
-        space.addCategory(listCategory);
+        space.addListCategory(listCategory);
 
         return repository.save(listCategory);
     }
@@ -49,22 +47,6 @@ public class ListCategoryService {
 
     private Space findSpaceReference(Integer spaceId) {
         return entityManager.getReference(Space.class, spaceId);
-    }
-
-    private void checkUniqueConstraint(CreateListDTO createSpaceDTO) {
-        var name = createSpaceDTO.name();
-        var spaceId = createSpaceDTO.spaceId();
-        var orderIndex = createSpaceDTO.orderIndex();
-
-        var isNameExists = repository.existsByNameAndSpaceId(name, spaceId);
-        if (isNameExists)
-            throw new Error("name already exists");
-
-        var isOrderIndexExists = repository.existsByOrderIndexAndSpaceId(
-                orderIndex, spaceId);
-
-        if (isOrderIndexExists)
-            throw new Error("orderIndex already exists");
     }
 
 }

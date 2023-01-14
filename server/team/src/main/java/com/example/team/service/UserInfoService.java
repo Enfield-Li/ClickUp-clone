@@ -22,7 +22,6 @@ public class UserInfoService {
     private final UserInfoRepository repository;
 
     private UserCredentials getUserCredentialsInfo() {
-        // return new UserCredentials(1, "username");
         return (UserCredentials) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();

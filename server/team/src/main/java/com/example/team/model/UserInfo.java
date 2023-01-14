@@ -30,8 +30,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = { "teams", "spaces" })
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@EqualsAndHashCode(exclude = { "teams", "spaces", "categories" })
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = { "userId", "username" })
 })
@@ -71,9 +71,19 @@ public class UserInfo {
     @Builder.Default
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "category_user_info",
+        name = "folder_category_user_info",
         joinColumns = @JoinColumn(name = "user_info_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
+        inverseJoinColumns = @JoinColumn(name = "folder_category_id")
     )
-    private Set<Category> categories = new HashSet<>();
+    private Set<FolderCategory> folderCategories = new HashSet<>();
+
+    @JsonIgnore
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "list_category_user_info",
+        joinColumns = @JoinColumn(name = "user_info_id"),
+        inverseJoinColumns = @JoinColumn(name = "list_category_id")
+    )
+    private Set<ListCategory> listCategories = new HashSet<>();
 }

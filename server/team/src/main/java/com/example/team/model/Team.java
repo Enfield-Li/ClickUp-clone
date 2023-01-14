@@ -67,16 +67,6 @@ public class Team {
     @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
-    public void addMember(UserInfo userInfo) {
-        members.add(userInfo);
-        userInfo.getTeams().add(this);
-    }
-
-    public void removeMember(UserInfo userInfo) {
-        members.remove(userInfo);
-        userInfo.getTeams().remove(this);
-    }
-
     public void addSpace(Space space) {
         spaces.add(space);
         space.setTeam(this);
@@ -85,6 +75,16 @@ public class Team {
     public void removeSpace(Space space) {
         spaces.remove(space);
         space.setTeam(null);
+    }
+
+    public void addMember(UserInfo userInfo) {
+        members.add(userInfo);
+        userInfo.getTeams().add(this);
+    }
+
+    public void removeMember(UserInfo userInfo) {
+        members.remove(userInfo);
+        userInfo.getTeams().remove(this);
     }
 
     public static Team initTeamCreation(CreateTeamDTO createTeamDTO,

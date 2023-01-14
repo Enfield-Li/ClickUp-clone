@@ -50,7 +50,7 @@ public class AccessTokenFilter extends GenericFilterBean {
 
             filterChain.doFilter(request, response);
         } catch (AuthenticationFailureException e) {
-            log.warn("User not authorized" + e);
+            log.warn("User not authorized: " + e);
             var httpResponse = (HttpServletResponse) response;
             httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
         }

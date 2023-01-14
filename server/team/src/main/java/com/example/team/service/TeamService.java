@@ -39,15 +39,10 @@ public class TeamService {
 
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {
+        var teamActivity = teamActivityClient.getTeamActivity(teamId);
+
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
-
-        var isVerified = verifyTeamIdIsInTeamSet(teamSet, userId);
-        if (!isVerified) {
-            throw new InvalidRequestException(
-                    "You don't have access to this team");
-        }
-        var teamActivity = teamActivityClient.getTeamActivity(teamId);
 
         return new InitTeamListDTO(teamSet, teamActivity);
     }
@@ -84,31 +79,5 @@ public class TeamService {
                 updateUserJoinedTeamsDTO);
 
         return new CreateTeamResponseDTO(team, teamActivityDTO);
-    }
-
-    private Boolean verifyTeamIdIsInTeamSet(
-            Set<Team> teamSet, Integer teamId) {
-        return teamSet.stream()
-                .filter(team -> team.getId() == teamId)
-                .findAny().isPresent();
-    }
-
-    public InitTeamListDTO getTeam(Integer teamId) {
-        // var userId = getCurrentUserInfo().userId();
-
-        // var team = repository.findById(teamId)
-        //         .orElseThrow(() -> new ItemNotFoundException(
-        //                 String.format("Team with id: %d does not exist.", teamId)));
-
-        // var isMember = team.isUserMemberOfTeam(userId);
-        // if (!isMember) {
-        //     throw new InvalidRequestException(
-        //             "User don't have access to this resource");
-        // }
-
-        // var teamActivityDTO = teamActivityClient.getTeamActivity(teamId);
-
-        // return new TeamResponseDTO(team, teamActivityDTO);
-        return null;
     }
 }
