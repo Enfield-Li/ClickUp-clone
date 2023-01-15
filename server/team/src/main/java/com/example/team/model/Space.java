@@ -131,7 +131,6 @@ public class Space {
                 .name("list")
                 .orderIndex(1)
                 .creator(userInfo)
-                .isInFolder(false)
                 .statusColumnsCategoryId(
                         createSpaceDTO.statusColumnsCategoryId())
                 .build();

@@ -132,7 +132,6 @@ public class FolderCategory {
                     var listCategory = ListCategory.builder()
                             .name(name)
                             .orderIndex(1)
-                            .isInFolder(true)
                             .creator(userInfo)
                             .folderCategory(folderCategory)
                             .statusColumnsCategoryId(

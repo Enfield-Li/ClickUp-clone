@@ -45,13 +45,11 @@ import lombok.experimental.SuperBuilder;
         @UniqueConstraint(columnNames = {
                 "name",
                 "spaceId",
-                "isInFolder",
                 "parentFolderId"
         }, name = LIST_NAME_CONSTRAINT),
         @UniqueConstraint(columnNames = {
                 "orderIndex",
                 "spaceId",
-                "isInFolder",
                 "parentFolderId"
         }, name = LIST_ORDER_INDEX_CONSTRAINT)
 })
@@ -73,9 +71,6 @@ public class ListCategory {
 
     @NotNull
     private Integer orderIndex;
-
-    @NotNull
-    private Boolean isInFolder;
 
     @NotNull
     private Integer statusColumnsCategoryId;
@@ -126,7 +121,6 @@ public class ListCategory {
         var listCategory = ListCategory.builder()
                 .name(dto.name())
                 .creator(userInfo)
-                .isInFolder(isInFolder)
                 .orderIndex(dto.orderIndex())
                 .statusColumnsCategoryId(dto.statusColumnsCategoryId())
                 .build();

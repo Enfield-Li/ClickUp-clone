@@ -10,7 +10,7 @@ import {
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 import { createListForSpace } from "../../../networkCalls";
@@ -29,18 +29,23 @@ function CreateListModal({}: Props) {
     modalControls: { isCreateListModalOpen, onCreateListModalClose },
   } = useTeamStateContext();
 
+  useEffect(() => {
+    if (!isCreateListModalOpen) {
+      setValue("");
+    }
+  }, [isCreateListModalOpen]);
+
   function handleCreateList(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
-    if (!teamState.createListInfo) {
+    if (
+      !teamState.createListInfo?.orderIndex ||
+      !teamState.createListInfo.statusColumnsCategoryId
+    ) {
       throw new Error("createListInfo not ready yet");
     }
-
     const { folderId, spaceId, orderIndex, statusColumnsCategoryId } =
       teamState.createListInfo;
-    if (!orderIndex || !statusColumnsCategoryId) {
-      throw new Error("createListInfo not ready yet");
-    }
 
     const dto: CreateListDTO = {
       spaceId,
@@ -51,7 +56,10 @@ function CreateListModal({}: Props) {
     };
 
     createListForSpace(dto, (list) => {
-      teamStateDispatch({ type: TEAM_STATE_ACTION.CREATE_LIST, payload: list });
+      teamStateDispatch({
+        type: TEAM_STATE_ACTION.CREATE_LIST,
+        payload: list,
+      });
       handleResetModalState();
     });
   }
@@ -121,8 +129,9 @@ function CreateListModal({}: Props) {
               rounded="3px"
               color="white"
               bgColor="customBlue.200"
-              onClick={(e) => handleCreateList(e)}
               _hover={{ bgColor: "customBlue.100" }}
+              cursor={value ? "pointer" : "not-allowed"}
+              onClick={(e) => value && handleCreateList(e)}
             >
               Create List
             </Button>

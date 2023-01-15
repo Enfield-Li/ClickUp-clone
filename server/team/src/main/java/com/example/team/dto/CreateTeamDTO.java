@@ -1,9 +1,9 @@
 package com.example.team.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public record CreateTeamDTO(
         String color,
         String avatar,
-        @NotNull String name) {
+        @Size(min = 1) String name) {
 }
