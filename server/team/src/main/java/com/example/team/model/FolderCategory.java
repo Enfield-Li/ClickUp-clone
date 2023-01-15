@@ -1,5 +1,8 @@
 package com.example.team.model;
 
+import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -40,8 +41,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = "spaceId_name_constraint"),
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = "spaceId_orderIndex_constraint")
+        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = CATEGORY_SPACE_ID_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT)
 })
 public class FolderCategory {
 

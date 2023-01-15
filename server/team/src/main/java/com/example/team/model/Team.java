@@ -101,11 +101,4 @@ public class Team {
         team.addMember(userInfo);
         return team;
     }
-
-    public Boolean isUserMemberOfTeam(Integer userId) {
-        var isMember = this.getMembers().stream()
-                .filter(member -> member.getId() == userId)
-                .findAny().isPresent();
-        return isMember;
-    }
 }

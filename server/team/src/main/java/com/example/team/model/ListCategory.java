@@ -1,5 +1,8 @@
 package com.example.team.model;
 
+import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,8 +43,8 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue(value = "LIST_CATEGORY")
 @EqualsAndHashCode(exclude = { "folderCategory", "space" })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = "spaceId_name_constraint"),
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = "spaceId_orderIndex_constraint")
+        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = CATEGORY_SPACE_ID_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT)
 })
 public class ListCategory {
 

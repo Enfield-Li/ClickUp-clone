@@ -3,6 +3,8 @@ package com.example.team.service;
 import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,7 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.TeamActivityClient;
+import com.example.clients.teamActivity.TeamActivityDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
@@ -36,7 +39,8 @@ public class TeamService {
 
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {
-        var teamActivity = teamActivityClient.getTeamActivity(teamId);
+        var teamActivity = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
+        // var teamActivity = teamActivityClient.getTeamActivity(teamId);
 
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
@@ -54,8 +58,9 @@ public class TeamService {
 
         // Init space
         var teamId = team.getId();
-        var defaultStatusCategoryId = (Integer) statusCategoryClient
-                .initStatusCategoryForTeam(teamId);
+        var defaultStatusCategoryId = 1;
+        // var defaultStatusCategoryId = (Integer) statusCategoryClient
+        //         .initStatusCategoryForTeam(teamId);
 
         var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
         team.addSpace(initSpace);
@@ -64,16 +69,17 @@ public class TeamService {
         // update team activity
         var createTeamActivityDTO = new CreateTeamActivityDTO(
                 team.getId(), space.getId());
-        var teamActivityDTO = teamActivityClient.createTeamActivity(
-                createTeamActivityDTO);
+        var teamActivityDTO = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
+        // var teamActivityDTO = teamActivityClient.createTeamActivity(
+        //         createTeamActivityDTO);
 
         // publish user teamAmount + 1
-        var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-                userInfo.getId(), teamId, true);
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                AuthorizationRoutingKey,
-                updateUserJoinedTeamsDTO);
+        // var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
+        //         userInfo.getId(), teamId, true);
+        // rabbitMQMessageProducer.publish(
+        //         internalExchange,
+        //         AuthorizationRoutingKey,
+        //         updateUserJoinedTeamsDTO);
 
         return new CreateTeamResponseDTO(team, teamActivityDTO);
     }

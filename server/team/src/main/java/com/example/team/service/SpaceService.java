@@ -4,7 +4,8 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
@@ -36,13 +37,15 @@ public class SpaceService {
 
             return repository.save(space);
         } catch (DataIntegrityViolationException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getMessage().contains("name_constraint"));
-            System.out.println(e.getMessage().contains("teamId_orderIndex_constraint"));
-            System.out.println("..............");
+            if (e.getMessage() != null &&
+                    e.getMessage().contains(SPACE_TEAM_ID_NAME_CONSTRAINT)) {
 
-            System.out.println(e.getCause());
-            System.out.println(e.getLocalizedMessage());
+            }
+
+            if (e.getMessage() != null &&
+                    e.getMessage().contains(SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT)) {
+
+            }
             return null;
         }
     }

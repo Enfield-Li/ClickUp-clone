@@ -292,6 +292,8 @@ export interface Space {
   isOpen: boolean | null; // client side
   statusColumnsCategoryId: number;
   allListOrFolder: (FolderCategory | ListCategory)[];
+  listCategories: ListCategory[];
+  folderCategories: FolderCategory[];
 }
 
 export interface StatusCategory {

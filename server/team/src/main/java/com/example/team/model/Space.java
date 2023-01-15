@@ -1,5 +1,8 @@
 package com.example.team.model;
 
+import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,8 +36,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "teamId", "name" }, name = "teamId_name_constraint"),
-        @UniqueConstraint(columnNames = { "teamId", "orderIndex" }, name = "teamId_orderIndex_constraint")
+        @UniqueConstraint(columnNames = { "teamId", "name" }, name = SPACE_TEAM_ID_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = { "teamId", "orderIndex" }, name = SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT)
 })
 public class Space {
 
