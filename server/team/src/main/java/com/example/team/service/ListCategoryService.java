@@ -30,8 +30,10 @@ public class ListCategoryService {
                 createListDTO, userInfo);
 
         // bind folder
-        var folderCategory = findFolderReference(createListDTO.folderId());
-        folderCategory.addListCategory(listCategory);
+        if (createListDTO.folderId() != null) {
+            var folderCategory = findFolderReference(createListDTO.folderId());
+            folderCategory.addListCategory(listCategory);
+        }
 
         // bind space
         var space = findSpaceReference(createListDTO.spaceId());

@@ -37,6 +37,10 @@ public class TeamService {
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
+    public List<Team> teams() {
+        return repository.findAll();
+    }
+
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {
         var teamActivity = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));

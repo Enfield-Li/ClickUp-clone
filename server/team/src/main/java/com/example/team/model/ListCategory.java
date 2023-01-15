@@ -1,7 +1,7 @@
 package com.example.team.model;
 
-import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.LIST_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.LIST_ORDER_INDEX_CONSTRAINT;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -40,11 +40,18 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue(value = "LIST_CATEGORY")
 @EqualsAndHashCode(exclude = { "folderCategory", "space" })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = CATEGORY_SPACE_ID_NAME_CONSTRAINT),
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT)
+        @UniqueConstraint(columnNames = {
+                "name",
+                "spaceId",
+                "isInFolder",
+        }, name = LIST_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = {
+                "orderIndex",
+                "spaceId",
+                "isInFolder",
+        }, name = LIST_ORDER_INDEX_CONSTRAINT)
 })
 public class ListCategory {
 
@@ -64,6 +71,9 @@ public class ListCategory {
 
     @NotNull
     private Integer orderIndex;
+
+    @NotNull
+    private Boolean isInFolder;
 
     @NotNull
     private Integer statusColumnsCategoryId;
@@ -110,9 +120,12 @@ public class ListCategory {
 
     public static ListCategory convertFromCreateListDTO(
             CreateListDTO dto, UserInfo userInfo) {
+        var isInFolder = dto.folderId() != null ? true : false;
+
         var listCategory = ListCategory.builder()
                 .name(dto.name())
                 .creator(userInfo)
+                .isInFolder(isInFolder)
                 .orderIndex(dto.orderIndex())
                 .statusColumnsCategoryId(dto.statusColumnsCategoryId())
                 .build();

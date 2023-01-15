@@ -6,7 +6,7 @@ public class UrlConstants {
     public static final String TEAM_API_VERSION = "/api/v1/team";
     public static final String SPACE_API_VERSION = "/api/v1/space";
     public static final String Folder_API_VERSION = "/api/v1/folder";
-    public static final String List_API_VERSION = "/api/v1/list";
+    public static final String LIST_API_VERSION = "/api/v1/list";
     public static final String CUSTOMER_API_VERSION = "/api/v1/customers";
     public static final String TASK_EVENT_API_VERSION = "/api/v1/task_event";
     public static final String TEAM_ACTIVITY_API_VERSION = "/api/v1/team_activity";

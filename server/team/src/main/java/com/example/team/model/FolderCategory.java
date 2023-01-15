@@ -1,7 +1,7 @@
 package com.example.team.model;
 
-import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.FOLDER_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAINT;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -40,9 +41,16 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = { "space" })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "spaceId", "name" }, name = CATEGORY_SPACE_ID_NAME_CONSTRAINT),
-        @UniqueConstraint(columnNames = { "spaceId", "orderIndex" }, name = CATEGORY_SPACE_ID_ORDER_INDEX_CONSTRAINT)
+        @UniqueConstraint(columnNames = {
+                "spaceId",
+                "name"
+        }, name = FOLDER_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = {
+                "spaceId",
+                "orderIndex"
+        }, name = FOLDER_ORDER_INDEX_CONSTRAINT)
 })
 public class FolderCategory {
 
@@ -125,6 +133,7 @@ public class FolderCategory {
                     var listCategory = ListCategory.builder()
                             .name(name)
                             .orderIndex(1)
+                            .isInFolder(true)
                             .creator(userInfo)
                             .folderCategory(folderCategory)
                             .statusColumnsCategoryId(

@@ -4,8 +4,10 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
+
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
@@ -38,15 +40,14 @@ public class SpaceService {
             return repository.save(space);
         } catch (DataIntegrityViolationException e) {
             if (e.getMessage() != null &&
-                    e.getMessage().contains(SPACE_TEAM_ID_NAME_CONSTRAINT)) {
-
+                    e.getMessage().contains(SPACE_NAME_CONSTRAINT)) {
+                throw new InvalidRequestException("Space name already exists!");
             }
-
             if (e.getMessage() != null &&
-                    e.getMessage().contains(SPACE_TEAM_ID_ORDER_INDEX_CONSTRAINT)) {
-
+                    e.getMessage().contains(SPACE_ORDER_INDEX_CONSTRAINT)) {
+                throw new InvalidRequestException("Space orderIndex already exists!");
             }
-            return null;
+            throw new InvalidRequestException("Unhandled Space constraint violation");
         }
     }
 
