@@ -3,7 +3,7 @@ import { FolderCategory, ListCategory } from "../../../../types";
 export default function determineListType(
   item: FolderCategory | ListCategory
 ): item is ListCategory {
-  return "taskAmount" in item || "parentList" in item || "allStatuses" in item;
+  return "isSelected" in item || "taskAmount" in item || "parentFolderId" in item;
 }
 
 export function determineFolderType(

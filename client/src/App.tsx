@@ -1,13 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
@@ -15,7 +6,6 @@ import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
 import CreateTeam from "./component/createTeam/CreateTeam";
 import Home from "./component/layout/Home";
-import LoadingSpinner from "./component/layout/LoadingSpinner";
 import UnderConstruction from "./component/layout/UnderConstruction";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";

@@ -17,12 +17,15 @@ export default memo(SpaceComponent);
 function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const {
-    teamStateDispatch,
-    modalControls: { isPopoverOpen },
-  } = useTeamStateContext();
+  const { teamStateDispatch } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
+
+  const {
+    isOpen: isPopoverOpen,
+    onClose: onPopoverClose,
+    onOpen: onPopoverOpen,
+  } = useDisclosure();
 
   function handleOpenSpace(
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
@@ -96,7 +99,14 @@ function SpaceComponent({ space }: Props) {
             </Center>
           </Flex>
 
-          {hover && <AddFolderOrListPopover space={space} />}
+          {(hover || isPopoverOpen) && (
+            <AddFolderOrListPopover
+              space={space}
+              isPopoverOpen={isPopoverOpen}
+              onPopoverOpen={onPopoverOpen}
+              onPopoverClose={onPopoverClose}
+            />
+          )}
         </Flex>
       </Flex>
 

@@ -10,12 +10,25 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { Space, TEAM_STATE_ACTION } from "../../../types";
+import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../types";
+import Folder from "./folderAndList/Folder";
 
-type Props = { space: Space };
+type Props = {
+  space: Space;
+  isPopoverOpen: boolean;
+  folder?: FolderCategory;
+  onPopoverClose: () => void;
+  onPopoverOpen: () => void;
+};
 
 export default memo(AddFolderOrListPopover);
-function AddFolderOrListPopover({ space }: Props) {
+function AddFolderOrListPopover({
+  space,
+  folder,
+  isPopoverOpen,
+  onPopoverClose,
+  onPopoverOpen,
+}: Props) {
   const { statusColumnsCategoryId, id: spaceId } = space;
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
@@ -23,13 +36,7 @@ function AddFolderOrListPopover({ space }: Props) {
   );
   const {
     teamStateDispatch,
-    modalControls: {
-      isPopoverOpen,
-      onPopoverClose,
-      onPopoverOpen,
-      onCreateListModalOpen,
-      onCreateFolderModalOpen,
-    },
+    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
   } = useTeamStateContext();
 
   function handleOpenModal(
@@ -93,7 +100,11 @@ function AddFolderOrListPopover({ space }: Props) {
               onCreateListModalOpen();
               teamStateDispatch({
                 type: TEAM_STATE_ACTION.SET_CREATE_LIST_INFO,
-                payload: { spaceId },
+                payload: {
+                  spaceId,
+                  folderId: folder?.id,
+                  statusColumnsCategoryId: space.statusColumnsCategoryId,
+                },
               });
             })
           }

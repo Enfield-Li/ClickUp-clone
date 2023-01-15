@@ -289,11 +289,12 @@ export interface Space {
   teamId: number;
   orderIndex: number;
   isPrivate: boolean;
-  isOpen: boolean | null; // client side
   statusColumnsCategoryId: number;
   allListOrFolder: (FolderCategory | ListCategory)[];
-  listCategories: ListCategory[];
-  folderCategories: FolderCategory[];
+
+  isOpen: boolean | null; // client side
+  listCategories: ListCategory[]; // client side
+  folderCategories: FolderCategory[]; // client side
 }
 
 export interface StatusCategory {
@@ -390,7 +391,7 @@ export type CreateListInfo = {
   spaceId: number;
   folderId?: number;
   orderIndex?: number;
-  statusColumnsCategoryId?: number;
+  statusColumnsCategoryId: number;
 };
 export type CreateFolderInfo = {
   spaceId: number;
@@ -409,10 +410,6 @@ export type ModalControls = {
   isCreateSpaceModalOpen: boolean;
   onCreateSpaceModalOpen: () => void;
   onCreateSpaceModalClose: () => void;
-
-  isPopoverOpen: boolean;
-  onPopoverClose: () => void;
-  onPopoverOpen: () => void;
 };
 
 export type TeamStateType = {
@@ -459,7 +456,7 @@ type SetCreateFolderInfo = {
 };
 
 type CreateList = {
-  type: typeof TEAM_STATE_ACTION.CREATE_List;
+  type: typeof TEAM_STATE_ACTION.CREATE_LIST;
   payload: ListCategory;
 };
 
@@ -511,7 +508,7 @@ export const TEAM_STATE_ACTION = {
   CREATE_TEAM: "create_team",
   CREATE_SPACE: "create_space",
   CREATE_FOLDER: "create_folder",
-  CREATE_List: "create_list",
+  CREATE_LIST: "create_list",
 
   SET_CREATE_FOLDER_INFO: "set_create_folder_INFO",
   SET_CREATE_LIST_INFO: "set_create_list_INFO",

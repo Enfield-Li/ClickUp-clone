@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -36,8 +37,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "teamId", "name" }, name = SPACE_NAME_CONSTRAINT),
-        @UniqueConstraint(columnNames = { "teamId", "orderIndex" }, name = SPACE_ORDER_INDEX_CONSTRAINT)
+        @UniqueConstraint(columnNames = {
+                "teamId", "name"
+        }, name = SPACE_NAME_CONSTRAINT),
+        @UniqueConstraint(columnNames = {
+                "teamId", "orderIndex",
+        }, name = SPACE_ORDER_INDEX_CONSTRAINT)
 })
 public class Space {
 
@@ -62,11 +67,13 @@ public class Space {
     @NotNull
     private Integer statusColumnsCategoryId;
 
+    @Transient
+    private final Set<Integer> allListOrFolder = new HashSet<>();
+
     @Builder.Default
     @ManyToMany(mappedBy = "spaces", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
-    @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer teamId;
 

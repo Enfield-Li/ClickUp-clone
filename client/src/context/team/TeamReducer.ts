@@ -61,48 +61,52 @@ export default function teamReducer(
         const { teams, teamActivity } = action.payload;
 
         // reorder
-        const copied = deepCopy(teams) as Team[];
-        copied.forEach((team) =>
-          team.spaces
-            .sort((a, b) => a.orderIndex - b.orderIndex)
-            .forEach((space) => {
-              space.allListOrFolder = reorderListAndFolder(
-                space.allListOrFolder
-              );
-            })
+        const copiedTeams = deepCopy(teams) as Team[];
+        copiedTeams.forEach(
+          (team) =>
+            team.id === teamActivity.teamId &&
+            team.spaces
+              .sort((a, b) => a.orderIndex - b.orderIndex)
+              .forEach((space) => {
+                space.listCategories = space.listCategories.filter(
+                  (list) => !list.parentFolderId
+                );
+                space.allListOrFolder.push(
+                  ...space.folderCategories.sort(
+                    (a, b) => a.orderIndex - b.orderIndex
+                  )
+                );
+                space.allListOrFolder.push(
+                  ...space.listCategories.sort(
+                    (a, b) => a.orderIndex - b.orderIndex
+                  )
+                );
+
+                // space.folderCategories.forEach((folder) => {
+                //   if (folder.spaceId === space.id) {
+                //     space.listCategories.forEach(
+                //       (list) =>
+                //         list.parentFolderId === folder.id &&
+                //         list.spaceId === space.id &&
+                //         folder.allLists.push(list)
+                //     );
+
+                //     space.allListOrFolder.push(folder);
+                //   }
+                // });
+
+                // space.listCategories.forEach((list) => {
+                //   if (!list.spaceId && !list.parentFolderId) {
+                //     space.allListOrFolder.push(list);
+                //   }
+                // });
+              })
         );
 
-        function reorderListAndFolder(
-          listOrFolders: (FolderCategory | ListCategory)[]
-        ) {
-          const reOrderedList: (FolderCategory | ListCategory)[] = [];
-          const orderedFolder: FolderCategory[] = [];
-          const orderedList: ListCategory[] = [];
-
-          listOrFolders
-            .sort((a, b) => a.orderIndex - b.orderIndex)
-            .forEach((listOrFolder) => {
-              const isFolder = determineFolderType(listOrFolder);
-              if (isFolder) {
-                listOrFolder.allLists.sort(
-                  (a, b) => a.orderIndex - b.orderIndex
-                );
-                orderedFolder.push(listOrFolder);
-                return;
-              }
-
-              if (!listOrFolder.parentFolderId) {
-                orderedList.push(listOrFolder);
-              }
-            });
-
-          reOrderedList.push(...orderedFolder, ...orderedList);
-          return reOrderedList;
-        }
-
-        draftState.teams = copied;
-        draftState.originalTeams = copied;
+        draftState.teams = copiedTeams;
+        draftState.originalTeams = copiedTeams;
         draftState.teamActiveStatus = teamActivity;
+        console.log("teams: ", deepCopy(draftState.teams));
 
         syncTeamStateActivity(draftState);
       });
@@ -157,13 +161,15 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.CREATE_SPACE: {
       return produce(teamState, (draftState) => {
         const space = action.payload;
+        const spaceCopy = JSON.parse(JSON.stringify(space));
 
-        draftState.teamActiveStatus.spaceId = space.id;
-        draftState.teamActiveStatus.listId = space.allListOrFolder[0].id;
+        spaceCopy.allListOrFolder.push(spaceCopy.listCategories[0]);
+        draftState.teamActiveStatus.spaceId = spaceCopy.id;
+        draftState.teamActiveStatus.listId = spaceCopy.listCategories[0].id;
         draftState.originalTeams.forEach(
           (team) =>
             team.id === draftState.teamActiveStatus.teamId &&
-            team.spaces.push(space)
+            team.spaces.push(spaceCopy)
         );
 
         syncTeamStateActivity(draftState);
@@ -178,28 +184,65 @@ export default function teamReducer(
 
         draftState.teamActiveStatus.listId = null;
         draftState.teamActiveStatus.spaceId = spaceId;
-
         draftState.teamActiveStatus.folderIds.push(folder.id);
+
         draftState.originalTeams.forEach(
           (team) =>
             team.id === draftState.teamActiveStatus.teamId &&
             team.spaces.forEach((space) => {
               if (space.id === spaceId) {
-                const index = space.allListOrFolder.findIndex((i) =>
+                // @ts-expect-error
+                const index = space.allListOrFolder.findLastIndex((i) =>
                   determineListType(i)
                 );
 
-                if (!index || index === -1) {
-                  space.allListOrFolder.push(folder);
+                if (index >= 0) {
+                  space.allListOrFolder.splice(index, 0, folder);
                   return;
                 }
-                space.allListOrFolder.splice(index, 0, folder);
+                space.allListOrFolder.push(folder);
               }
             })
         );
 
         syncTeamStateActivity(draftState);
         draftState.createFolderInfo = null;
+      });
+    }
+
+    case TEAM_STATE_ACTION.CREATE_LIST: {
+      return produce(teamState, (draftState) => {
+        const newList = action.payload;
+        if (!draftState.createListInfo)
+          throw new Error("draftState.createListInfo not initialized");
+        const { spaceId, folderId } = draftState.createListInfo;
+
+        draftState.teamActiveStatus.listId = newList.id;
+        draftState.teamActiveStatus.spaceId = spaceId;
+        if (folderId) draftState.teamActiveStatus.folderIds.push(folderId);
+
+        draftState.originalTeams.forEach(
+          (team) =>
+            team.id === draftState.teamActiveStatus.teamId &&
+            team.spaces.forEach((space) => {
+              if (space.id === spaceId) {
+                if (!folderId) {
+                  space.allListOrFolder.push(newList);
+                  return;
+                }
+
+                space.allListOrFolder.forEach(
+                  (listOrFolder) =>
+                    determineFolderType(listOrFolder) &&
+                    listOrFolder.id === folderId &&
+                    listOrFolder.allLists.push(newList)
+                );
+              }
+            })
+        );
+
+        syncTeamStateActivity(draftState);
+        draftState.createListInfo = null;
       });
     }
 
@@ -227,59 +270,38 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const payload = deepCopy(action.payload) as CreateListInfo;
         const { spaceId, folderId } = payload;
+        // orderIndex
 
         draftState.originalTeams.forEach(
           (team) =>
-            team.isSelected &&
-            team.spaces.forEach(
-              (space) =>
-                space.id === spaceId &&
-                (payload["statusColumnsCategoryId"] =
-                  space.statusColumnsCategoryId)
-            )
+            team.id === draftState.teamActiveStatus.teamId &&
+            team.spaces.forEach((space) => {
+              if (space.id === spaceId) {
+                if (folderId) {
+                  space.folderCategories.forEach((folder) => {
+                    if (folder.id === folderId) {
+                      const lists = folder.allLists;
+                      const lastListItem = lists[lists.length - 1];
+                      payload.orderIndex = lastListItem
+                        ? lastListItem.orderIndex + 1
+                        : 1;
+                    }
+                  });
+                  return;
+                }
+
+                const lists = space.listCategories;
+                const lastListItem = lists[lists.length - 1];
+                payload.orderIndex = lastListItem
+                  ? lastListItem.orderIndex + 1
+                  : 1;
+              }
+            })
         );
-
-        const lastListOrFolder = draftState.originalTeams
-          .find((team) => team.isSelected)
-          ?.spaces.find((space) => space.id === spaceId)
-          // @ts-expect-error
-          ?.allListOrFolder.findLast((listOrFolder, index, arr) => {
-            const isFolder = determineFolderType(listOrFolder);
-            if (isFolder && listOrFolder.id === folderId) {
-              return;
-            }
-
-            return index === arr.length - 1;
-          });
-
-        if (!lastListOrFolder) {
-          payload["orderIndex"] = 1;
-          draftState.createListInfo = payload;
-          return;
-        }
-
-        const isFolder = determineFolderType(lastListOrFolder);
-        if (isFolder) {
-          const lastListItem =
-            lastListOrFolder.allLists[lastListOrFolder.allLists.length - 1];
-          payload["orderIndex"] = lastListItem.orderIndex + 1;
-
-          draftState.createListInfo = payload;
-          return;
-        }
-
-        const lastListItem = lastListOrFolder;
-        payload["orderIndex"] = lastListItem.orderIndex + 1;
 
         draftState.createListInfo = payload;
       });
     }
-
-    // case TEAM_STATE_ACTION.CREATE_SPACE: {
-    //   return produce(teamState, (draftState) => {
-    //     const {} = action.payload;
-    //   });
-    // }
 
     default: {
       return teamState;

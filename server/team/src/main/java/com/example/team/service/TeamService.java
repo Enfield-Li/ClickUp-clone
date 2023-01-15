@@ -62,9 +62,9 @@ public class TeamService {
 
         // Init space
         var teamId = team.getId();
-        var defaultStatusCategoryId = 1;
-        // var defaultStatusCategoryId = (Integer) statusCategoryClient
-        //         .initStatusCategoryForTeam(teamId);
+        // var defaultStatusCategoryId = 1;
+        var defaultStatusCategoryId = (Integer) statusCategoryClient
+                .initStatusCategoryForTeam(teamId);
 
         var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
         team.addSpace(initSpace);
@@ -73,18 +73,19 @@ public class TeamService {
         // update team activity
         var createTeamActivityDTO = new CreateTeamActivityDTO(
                 team.getId(), space.getId());
-        var teamActivityDTO = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
-        // var teamActivityDTO = teamActivityClient.createTeamActivity(
-        //         createTeamActivityDTO);
+        // var teamActivityDTO = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
+        var teamActivityDTO = teamActivityClient.createTeamActivity(
+                createTeamActivityDTO);
 
         // publish user teamAmount + 1
-        // var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
-        //         userInfo.getId(), teamId, true);
-        // rabbitMQMessageProducer.publish(
-        //         internalExchange,
-        //         AuthorizationRoutingKey,
-        //         updateUserJoinedTeamsDTO);
+        var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
+                userInfo.getId(), teamId, true);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                AuthorizationRoutingKey,
+                updateUserJoinedTeamsDTO);
 
+        System.out.println(createTeamDTO);
         return new CreateTeamResponseDTO(team, teamActivityDTO);
     }
 }

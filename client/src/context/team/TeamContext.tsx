@@ -27,6 +27,8 @@ export default function TeamStateProvider({ children }: ProviderType) {
     teamReducer,
     initialTeamContextState
   );
+  const list = teamState.createListInfo;
+  const folder = teamState.createFolderInfo;
 
   const {
     isOpen: isCreateListModalOpen,
@@ -46,12 +48,6 @@ export default function TeamStateProvider({ children }: ProviderType) {
     onClose: onCreateSpaceModalClose,
   } = useDisclosure();
 
-  const {
-    isOpen: isPopoverOpen,
-    onClose: onPopoverClose,
-    onOpen: onPopoverOpen,
-  } = useDisclosure();
-
   const modalControls: ModalControls = {
     isCreateListModalOpen,
     onCreateListModalOpen,
@@ -62,9 +58,6 @@ export default function TeamStateProvider({ children }: ProviderType) {
     isCreateSpaceModalOpen,
     onCreateSpaceModalOpen,
     onCreateSpaceModalClose,
-    isPopoverOpen,
-    onPopoverClose,
-    onPopoverOpen,
   };
 
   return (

@@ -1,7 +1,14 @@
-import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  useColorMode,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
+import AddFolderOrListPopover from "../AddFolderOrListPopover";
 import List from "./List";
 
 type Props = {
@@ -16,6 +23,12 @@ function Folder({ space, folder }: Props) {
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
+
+  const {
+    isOpen: isPopoverOpen,
+    onClose: onPopoverClose,
+    onOpen: onPopoverOpen,
+  } = useDisclosure();
 
   function handleOpenFolder(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -32,7 +45,7 @@ function Folder({ space, folder }: Props) {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): void {
     e.stopPropagation();
-    // onPopoverToggle();
+    onPopoverOpen();
   }
 
   return (
@@ -82,22 +95,14 @@ function Folder({ space, folder }: Props) {
           )}
         </Flex>
 
-        {hover && (
-          <Center
-            pb="1"
-            mr="8px"
-            width="15px"
-            height="15px"
-            rounded="full"
-            fontSize="15px"
-            color="darkMain.200"
-            bgColor="lightMain.400"
-            fontWeight="extrabold"
-            _hover={{ bgColor: "purple.500" }}
-            onClick={(e) => handleAddCategory(e)}
-          >
-            +
-          </Center>
+        {(hover || isPopoverOpen) && (
+          <AddFolderOrListPopover
+            space={space}
+            folder={folder}
+            isPopoverOpen={isPopoverOpen}
+            onPopoverOpen={onPopoverOpen}
+            onPopoverClose={onPopoverClose}
+          />
         )}
       </Flex>
 

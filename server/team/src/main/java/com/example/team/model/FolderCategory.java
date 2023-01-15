@@ -83,7 +83,6 @@ public class FolderCategory {
     @ManyToMany(mappedBy = "folderCategories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
 
-    @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer spaceId;
 

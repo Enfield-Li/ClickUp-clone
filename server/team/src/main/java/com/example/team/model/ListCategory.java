@@ -46,11 +46,13 @@ import lombok.experimental.SuperBuilder;
                 "name",
                 "spaceId",
                 "isInFolder",
+                "parentFolderId"
         }, name = LIST_NAME_CONSTRAINT),
         @UniqueConstraint(columnNames = {
                 "orderIndex",
                 "spaceId",
                 "isInFolder",
+                "parentFolderId"
         }, name = LIST_ORDER_INDEX_CONSTRAINT)
 })
 public class ListCategory {
@@ -87,7 +89,6 @@ public class ListCategory {
     @ManyToMany(mappedBy = "listCategories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
 
-    @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer spaceId;
 

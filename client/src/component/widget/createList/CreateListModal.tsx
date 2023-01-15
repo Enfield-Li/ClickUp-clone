@@ -39,7 +39,7 @@ function CreateListModal({}: Props) {
     const { folderId, spaceId, orderIndex, statusColumnsCategoryId } =
       teamState.createListInfo;
     if (!orderIndex || !statusColumnsCategoryId) {
-      throw new Error("orderIndex, statusColumnsCategoryId not ready yet");
+      throw new Error("createListInfo not ready yet");
     }
 
     const dto: CreateListDTO = {
@@ -51,11 +51,12 @@ function CreateListModal({}: Props) {
     };
 
     createListForSpace(dto, (list) => {
-      teamStateDispatch({ type: TEAM_STATE_ACTION.CREATE_List, payload: list });
+      teamStateDispatch({ type: TEAM_STATE_ACTION.CREATE_LIST, payload: list });
+      handleResetModalState();
     });
   }
 
-  function handleCancel() {
+  function handleResetModalState() {
     setValue("");
     onCreateListModalClose();
   }
@@ -109,7 +110,7 @@ function CreateListModal({}: Props) {
           </Box>
 
           <Flex justifyContent="flex-end" alignItems="center" mt="65px">
-            <Button rounded="3px" onClick={handleCancel}>
+            <Button rounded="3px" onClick={handleResetModalState}>
               Cancel
             </Button>
 
