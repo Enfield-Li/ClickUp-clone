@@ -6,6 +6,5 @@ public record StatusColumnDTO(
         String color,
         Integer orderIndex,
         Boolean markAsClosed,
-        Boolean isDefaultStatus,
-        Integer statusCategoryId) {
+        Boolean isDefaultStatus) {
 }

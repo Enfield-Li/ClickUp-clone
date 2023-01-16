@@ -6,6 +6,6 @@ import com.example.clients.statusCategory.StatusCategoryDTO;
 import com.example.task.model.Task;
 
 public record TaskListStatusCategoryDTO(
-        StatusCategoryDTO statusCategoryDTO,
+        StatusCategoryDTO statusCategory,
         List<Task> taskList) {
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
@@ -32,14 +33,8 @@ class StatusCategoryController {
     private final StatusCategoryService service;
 
     @GetMapping
-    String test() {
-        System.out.println("***called***");
-        return "Got it";
-    }
-
-    @GetMapping("/{id}")
     ResponseEntity<StatusCategory> getStatusCategoryForList(
-            @PathVariable("id") Integer id) {
+            @RequestParam("id") Integer id) {
         var statusCategory = service.getStatusCategoryForList(id);
         return ResponseEntity.ok(statusCategory);
     }

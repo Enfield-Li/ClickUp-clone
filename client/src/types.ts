@@ -658,3 +658,13 @@ export type CreateTeamResponseDTO = {
   team: Team;
   teamActivity: TeamActivity;
 };
+
+export type TaskListStatusCategoryDTO = {
+  statusCategory: StatusCategory;
+  taskList: TaskList;
+};
+
+export type GetTaskListDTO = {
+  listId: number;
+  defaultStatusCategoryId: number;
+};

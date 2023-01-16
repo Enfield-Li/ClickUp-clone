@@ -32,6 +32,7 @@ import {
   Task,
   TaskEvents,
   TaskList,
+  TaskListStatusCategoryDTO,
   UpdateStatusCategoryNameDTO,
   UpdateStatusColumnColorDTO,
   UpdateStatusColumnTitleDTO,
@@ -489,11 +490,16 @@ export async function updateTasksPosition(
   }
 }
 
-export async function fetchAllTasks(listId: number) {
+export async function fetchAllTasks(
+  listId: number,
+  defaultStatusCategoryId: number
+) {
   try {
-    const response = await axiosTaskServiceInstance.get<TaskList>(
-      API_ENDPOINT.TASK + `/${listId}`
-    );
+    const response =
+      await axiosTaskServiceInstance.get<TaskListStatusCategoryDTO>(
+        API_ENDPOINT.TASK +
+          `?listId=${listId}&defaultStatusCategoryId=${defaultStatusCategoryId}`
+      );
 
     return response.data;
   } catch (error) {

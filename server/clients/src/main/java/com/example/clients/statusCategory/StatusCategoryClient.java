@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "statusCategory", url = "${clients.statusCategory.url}")
 public interface StatusCategoryClient {
@@ -14,8 +15,8 @@ public interface StatusCategoryClient {
     Integer initStatusCategoryForTeam(
             @PathVariable("teamId") Integer teamId);
 
-    @GetMapping(path = STATUS_CATEGORY_API_VERSION + "/{id}")
+    @GetMapping(path = STATUS_CATEGORY_API_VERSION)
     StatusCategoryDTO getStatusCategoryForList(
-            @PathVariable("id") Integer id);
+            @RequestParam("id") Integer id);
 
 }

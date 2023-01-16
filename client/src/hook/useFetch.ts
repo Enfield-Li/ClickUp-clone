@@ -7,7 +7,7 @@ import {
   processTaskList,
 } from "../component/task/actions/taskProcessing";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
-import { fetchAllTasks } from "../networkCalls";
+import { fetchAllTasks as fetchTasksAndStatusCategory } from "../networkCalls";
 import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 
@@ -28,7 +28,7 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
     initTaskState();
 
     async function initTaskState() {
-      if (!spaceId && !location.state) {
+      if (!spaceId && !location?.state?.defaultStatusCategoryId) {
         setTaskState(undefined);
         setTaskStateContext(null);
         return;
@@ -37,16 +37,19 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
       setLoading(true);
 
       // Task data
-      const tasksData = await fetchAllTasks(spaceId);
+      const { defaultStatusCategoryId } = location.state;
+      const networkData = await fetchTasksAndStatusCategory(
+        spaceId,
+        defaultStatusCategoryId
+      );
 
-      if (tasksData) {
-        const statusColumnFromRouter: StatusColumns =
-          location.state.statusColumns;
+      if (networkData) {
+        // const statusColumn
 
         const allColumns: ColumnOptions = {
           dueDateColumns: [],
           priorityColumns: [],
-          statusColumns: statusColumnFromRouter,
+          statusColumns: networkData.statusCategory.statusColumns,
         };
 
         const { reorderedDueDateColumns, reorderedStatusColumns } =
@@ -59,7 +62,10 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
         };
 
         // init taskEvents and convert expectedDueDate to dueDate columns
-        const taskList = processTaskList(reorderedDueDateColumns, tasksData);
+        const taskList = processTaskList(
+          reorderedDueDateColumns,
+          networkData.taskList
+        );
 
         const orderedTasks = groupTaskListOnSortBy(
           taskList,
@@ -78,7 +84,7 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
         setLoading(false);
       }
     }
-  }, [spaceId, location.state]);
+  }, [spaceId, location]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

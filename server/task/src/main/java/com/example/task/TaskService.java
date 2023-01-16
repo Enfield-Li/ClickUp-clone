@@ -44,17 +44,14 @@ public class TaskService {
                 .getPrincipal();
     }
 
-    public TaskListStatusCategoryDTO getAllTasks(GetTaskListDTO dto) {
-        var listId = dto.listId();
-        var defaultStatusCategoryId = dto.defaultStatusCategoryId();
-
+    public TaskListStatusCategoryDTO getAllTasks(
+            Integer listId, Integer defaultStatusCategoryId) {
         var statusCategoryDTO = statusCategoryClient
                 .getStatusCategoryForList(defaultStatusCategoryId);
 
         var taskList = taskRepository.findByListId(listId);
 
-         new TaskListStatusCategoryDTO(statusCategoryDTO, taskList);
-         return null;
+        return new TaskListStatusCategoryDTO(statusCategoryDTO, taskList);
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {

@@ -2,7 +2,7 @@ import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { TASK_BOARD_PARAM } from "../../constant";
 import { useFetchTasks } from "../../hook/useFetch";
 import { updateTasksPosition } from "../../networkCalls";

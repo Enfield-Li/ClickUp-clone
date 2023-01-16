@@ -22,12 +22,14 @@ function List({ space, folder, list }: Props) {
   const isListSelected = list.isSelected;
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    const { id: listId, defaultStatusCategoryId } = list;
     navigate(
       getTaskBoardURL({
         teamId: teamState.teamActiveStatus.teamId,
         spaceId: space.id,
-        listId: list.id,
-      })
+        listId,
+      }),
+      { state: { defaultStatusCategoryId } }
     );
     teamStateDispatch({
       type: TEAM_STATE_ACTION.SELECT_LIST,
