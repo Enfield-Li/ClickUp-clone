@@ -88,7 +88,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
               {({ isActive }) => <i className="bi bi-search"></i>}
             </NavIcon>
 
-            <NavIcon name="Home" url={getTaskBoardURL({ teamId })}>
+            <NavIcon name="Task" url={getTaskBoardURL({ teamId })}>
               {({ isActive }) => (
                 <>
                   {isActive ? (

@@ -43,11 +43,11 @@ public class TeamService {
 
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {
-        var teamActivity = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
-        // var teamActivity = teamActivityClient.getTeamActivity(teamId);
-
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
+
+        // var teamActivity = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
+        var teamActivity = teamActivityClient.getTeamActivity(teamId);
 
         return new InitTeamListDTO(teamSet, teamActivity);
     }
