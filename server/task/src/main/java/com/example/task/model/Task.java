@@ -121,13 +121,42 @@ public class Task {
     @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
     private Set<UserInfo> assignees = new HashSet<>();
 
+    public void addSubTask(Task task) {
+        subTasks.add(task);
+        task.setParentTask(this);
+    }
+
+    public void removeSubTask(Task task) {
+        subTasks.remove(task);
+        task.setParentTask(null);
+    }
+
+    public void addWatcher(UserInfo watcher) {
+        watchers.add(watcher);
+        watcher.setTaskWatcher(this);
+    }
+
+    public void removeWatcher(UserInfo watcher) {
+        watchers.remove(watcher);
+        watcher.setTaskWatcher(null);
+    }
+
+    public void addAssignee(UserInfo assignee) {
+        assignees.add(assignee);
+        assignee.setTaskAssignee(this);
+    }
+
+    public void removeAssignee(UserInfo assignee) {
+        assignees.remove(assignee);
+        assignee.setTaskAssignee(null);
+    }
+
     public static Task convertFromCreateTaskDto(
             CreateTaskDTO createTaskDTO,
             UserInfo creator) {
         var task = Task
                 .builder()
                 .creator(creator)
-                .watchers(Set.of(creator))
                 .title(createTaskDTO.title())
                 .listId(createTaskDTO.listId())
                 .status(createTaskDTO.status())
@@ -137,25 +166,7 @@ public class Task {
                 .expectedDueDate(createTaskDTO.expectedDueDate())
                 .build();
 
-        bindTaskWatcher(task); // Manage relationship
+        task.addWatcher(creator);
         return task;
-    }
-
-    // Manage task/watcher relationship in task
-    private static Task bindTaskWatcher(Task task) {
-        task.getWatchers().forEach(watcher -> {
-            if (task.getId() != null) {
-                watcher.setTaskWatcherId(task.getId());
-            }
-            watcher.setTaskWatcher(task);
-        });
-
-        return task;
-    }
-
-    // Manage task/watcher relationship in taskList
-    public static List<Task> bindWatcher(List<Task> taskList) {
-        taskList.forEach(task -> bindTaskWatcher(task));
-        return taskList;
     }
 }

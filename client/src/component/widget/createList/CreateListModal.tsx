@@ -16,6 +16,7 @@ import { darkNavBG } from "../../../globalTheme";
 import { createListForSpace } from "../../../networkCalls";
 import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
 import { generateDefaultListName } from "../../../utils/generateDefaultListName";
+import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
 type Props = {};
 
@@ -69,6 +70,8 @@ function CreateListModal({}: Props) {
         payload: list,
       });
       handleResetModalState();
+      const { teamId } = teamState.teamActiveStatus;
+      getTaskBoardURL({ teamId, spaceId, listId: list.id });
     });
   }
 

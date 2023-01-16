@@ -38,9 +38,8 @@ class TaskController {
     private final TaskRepository taskRepository;
 
     @GetMapping
-    void test() {
-        var sourceTask = entityManager.find(Task.class, 1);
-        System.out.println(sourceTask.getWatchers());
+    String test() {
+        return "ABC";
     }
 
     @GetMapping("/{listId}")

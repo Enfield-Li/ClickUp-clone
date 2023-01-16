@@ -3,8 +3,8 @@ import { AxiosError } from "axios";
 import { NavigateFunction } from "react-router-dom";
 import {
   axiosAuthServiceInstance,
-  axiosGatewayInstance,
   axiosStatusCategoryServiceInstance,
+  axiosTaskServiceInstance,
   axiosTeamServiceInstance,
 } from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
@@ -339,7 +339,7 @@ export function logOutUser(
   toast: (options?: UseToastOptions | undefined) => ToastId
 ) {
   // invalidate session
-  axiosGatewayInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
+  axiosTaskServiceInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
 
   // clear local auth taskState and accessToken
   localStorage.removeItem(ACCESS_TOKEN);
@@ -421,7 +421,7 @@ export async function refreshUserToken(
 
 export async function fetchTaskEvents(taskId: number) {
   try {
-    const response = await axiosGatewayInstance.get<TaskEvents>(
+    const response = await axiosTaskServiceInstance.get<TaskEvents>(
       API_ENDPOINT.TASK_EVENT + `/${taskId}`
     );
     return response.data;
@@ -433,7 +433,7 @@ export async function fetchTaskEvents(taskId: number) {
 
 export async function deleteTask(taskId: number, taskListForUpdate: TaskList) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
+    const response = await axiosTaskServiceInstance.put<boolean>(
       API_ENDPOINT.TASK + `/${taskId}`,
       deepCopy(taskListForUpdate)
     );
@@ -448,7 +448,7 @@ export async function updateTaskDescription(
   updateTaskDescDTO: UpdateTaskDescDTO
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
+    const response = await axiosTaskServiceInstance.put<boolean>(
       API_ENDPOINT.TASK_UPDATE_DESC,
       updateTaskDescDTO
     );
@@ -461,7 +461,7 @@ export async function updateTaskDescription(
 
 export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
+    const response = await axiosTaskServiceInstance.put<boolean>(
       API_ENDPOINT.TASK_UPDATE_TITLE,
       updateTaskTitleDTO
     );
@@ -476,7 +476,7 @@ export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
+    const response = await axiosTaskServiceInstance.put<boolean>(
       API_ENDPOINT.TASK,
       deepCopy(updateTasksPositionDTO)
     );
@@ -491,8 +491,8 @@ export async function updateTasksPosition(
 
 export async function fetchAllTasks(listId: number) {
   try {
-    const response = await axiosGatewayInstance.get<TaskList>(
-      API_ENDPOINT.TASK_ALL_TASKS + `/${listId}`
+    const response = await axiosTaskServiceInstance.get<TaskList>(
+      API_ENDPOINT.TASK + `/${listId}`
     );
 
     return response.data;
@@ -504,7 +504,7 @@ export async function fetchAllTasks(listId: number) {
 
 export async function createTask(createTaskDTO: Task) {
   try {
-    const res = await axiosGatewayInstance.post<Task>(
+    const res = await axiosTaskServiceInstance.post<Task>(
       API_ENDPOINT.TASK,
       createTaskDTO
     );

@@ -37,10 +37,10 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
-  const { teamId, listId, spaceId } = useParams();
+  const { listId, spaceId } = useParams();
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
-    selectedListId: Number(listId),
+    spaceId: Number(listId),
   });
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);

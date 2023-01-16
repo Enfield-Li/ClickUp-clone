@@ -49,6 +49,12 @@
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
+            <artifactId>clients</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
             <artifactId>service-config</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -61,23 +67,17 @@
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>clients</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
             <artifactId>service-security-config</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <!-- 
         <dependency>
             <groupId>com.example</groupId>
-        <artifactId>amqp</artifactId>
+            <artifactId>amqp</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        <scope>compile</scope>
+            <scope>compile</scope>
         </dependency>
+        <!-- 
         <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
