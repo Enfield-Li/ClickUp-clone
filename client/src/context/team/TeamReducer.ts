@@ -162,7 +162,7 @@ export default function teamReducer(
         const spaceId = draftState.createFolderInfo?.spaceId;
         if (!spaceId) throw new Error("spaceId is null");
 
-        draftState.teamActiveStatus.listId = null;
+        draftState.teamActiveStatus.listId = folder.allLists[0].id;
         draftState.teamActiveStatus.spaceId = spaceId;
         draftState.teamActiveStatus.folderIds.push(folder.id);
 

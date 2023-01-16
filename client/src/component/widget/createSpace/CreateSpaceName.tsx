@@ -23,7 +23,6 @@ type Props = {
 
 export default memo(CreateSpaceName);
 function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
-  const { teamId, listId } = useParams();
   const [error, setError] = useState(false);
   const { teamState } = useTeamStateContext();
   const inputBgColor = useColorModeValue("lightMain.50", "darkMain.200");
@@ -43,7 +42,7 @@ function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   function handleNextStep() {
     const isTeamNameExist = teamState.teams.some(
       (team) =>
-        team.id === teamId &&
+        team.id === teamState.teamActiveStatus.teamId &&
         team.spaces.some(
           (space) => space.name === createSpace.createSpaceDTO.name
         )

@@ -33,8 +33,6 @@ function CreateListModal({}: Props) {
 
   useEffect(() => {
     const currentLevelLists = teamState.createListInfo?.currentLevelLists;
-    console.log({ currentLevelLists });
-
     const defaultName = generateDefaultListName(currentLevelLists);
     setPlaceHolderValue(defaultName);
   }, [teamState]);
