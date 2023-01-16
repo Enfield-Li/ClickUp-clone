@@ -15,12 +15,14 @@ import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 import { createListForSpace } from "../../../networkCalls";
 import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
+import { generateDefaultListName } from "../../../utils/generateDefaultListName";
 
 type Props = {};
 
 export default memo(CreateListModal);
 function CreateListModal({}: Props) {
   const [value, setValue] = useState("");
+  const [placeHolderValue, setPlaceHolderValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
   const {
@@ -28,6 +30,14 @@ function CreateListModal({}: Props) {
     teamStateDispatch,
     modalControls: { isCreateListModalOpen, onCreateListModalClose },
   } = useTeamStateContext();
+
+  useEffect(() => {
+    const currentLevelLists = teamState.createListInfo?.currentLevelLists;
+    console.log({ currentLevelLists });
+
+    const defaultName = generateDefaultListName(currentLevelLists);
+    setPlaceHolderValue(defaultName);
+  }, [teamState]);
 
   useEffect(() => {
     if (!isCreateListModalOpen) {
@@ -51,8 +61,8 @@ function CreateListModal({}: Props) {
       spaceId,
       folderId,
       orderIndex,
-      name: value,
       statusColumnsCategoryId,
+      name: value ? value : placeHolderValue,
     };
 
     createListForSpace(dto, (list) => {
@@ -113,6 +123,7 @@ function CreateListModal({}: Props) {
               value={value}
               bgColor={darkNavBG}
               borderColor="blackAlpha.500"
+              placeholder={placeHolderValue}
               onChange={(e) => setValue(e.target.value)}
             />
           </Box>
@@ -129,9 +140,8 @@ function CreateListModal({}: Props) {
               rounded="3px"
               color="white"
               bgColor="customBlue.200"
+              onClick={(e) => handleCreateList(e)}
               _hover={{ bgColor: "customBlue.100" }}
-              cursor={value ? "pointer" : "not-allowed"}
-              onClick={(e) => value && handleCreateList(e)}
             >
               Create List
             </Button>

@@ -392,6 +392,7 @@ export type CreateListInfo = {
   folderId?: number;
   orderIndex?: number;
   statusColumnsCategoryId: number;
+  currentLevelLists?: ListCategory[];
 };
 export type CreateFolderInfo = {
   spaceId: number;

@@ -116,8 +116,6 @@ public class ListCategory {
 
     public static ListCategory convertFromCreateListDTO(
             CreateListDTO dto, UserInfo userInfo) {
-        var isInFolder = dto.folderId() != null ? true : false;
-
         var listCategory = ListCategory.builder()
                 .name(dto.name())
                 .creator(userInfo)

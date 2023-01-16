@@ -24,7 +24,7 @@ class ListCategoryController {
     private final ListCategoryService service;
 
     @PostMapping
-    public ResponseEntity<ListCategory> createSpace(
+    public ResponseEntity<ListCategory> createList(
             @RequestBody CreateListDTO createListDTO) {
         var list = service.createList(createListDTO);
         return ResponseEntity.ok(list);

@@ -81,32 +81,12 @@ export default function teamReducer(
                     (a, b) => a.orderIndex - b.orderIndex
                   )
                 );
-
-                // space.folderCategories.forEach((folder) => {
-                //   if (folder.spaceId === space.id) {
-                //     space.listCategories.forEach(
-                //       (list) =>
-                //         list.parentFolderId === folder.id &&
-                //         list.spaceId === space.id &&
-                //         folder.allLists.push(list)
-                //     );
-
-                //     space.allListOrFolder.push(folder);
-                //   }
-                // });
-
-                // space.listCategories.forEach((list) => {
-                //   if (!list.spaceId && !list.parentFolderId) {
-                //     space.allListOrFolder.push(list);
-                //   }
-                // });
               })
         );
 
         draftState.teams = copiedTeams;
         draftState.originalTeams = copiedTeams;
         draftState.teamActiveStatus = teamActivity;
-        console.log("teams: ", deepCopy(draftState.teams));
 
         syncTeamStateActivity(draftState);
       });
@@ -201,6 +181,7 @@ export default function teamReducer(
                   return;
                 }
                 space.allListOrFolder.push(folder);
+                space.folderCategories.push(folder);
               }
             })
         );
@@ -228,6 +209,7 @@ export default function teamReducer(
               if (space.id === spaceId) {
                 if (!folderId) {
                   space.allListOrFolder.push(newList);
+                  space.listCategories.push(newList);
                   return;
                 }
 
@@ -270,7 +252,6 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const payload = deepCopy(action.payload) as CreateListInfo;
         const { spaceId, folderId } = payload;
-        // orderIndex
 
         draftState.originalTeams.forEach(
           (team) =>
@@ -281,6 +262,8 @@ export default function teamReducer(
                   space.folderCategories.forEach((folder) => {
                     if (folder.id === folderId) {
                       const lists = folder.allLists;
+                      payload.currentLevelLists = lists;
+
                       const lastListItem = lists[lists.length - 1];
                       payload.orderIndex = lastListItem
                         ? lastListItem.orderIndex + 1
@@ -291,6 +274,8 @@ export default function teamReducer(
                 }
 
                 const lists = space.listCategories;
+                payload.currentLevelLists = lists;
+
                 const lastListItem = lists[lists.length - 1];
                 payload.orderIndex = lastListItem
                   ? lastListItem.orderIndex + 1

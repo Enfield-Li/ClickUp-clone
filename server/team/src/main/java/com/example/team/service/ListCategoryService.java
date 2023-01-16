@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.ListCategory;
@@ -25,6 +26,15 @@ public class ListCategoryService {
 
     @Transactional
     public ListCategory createList(CreateListDTO createListDTO) {
+        var name = createListDTO.name();
+        var spaceId = createListDTO.spaceId();
+        
+        var isListNameExists = repository
+                .existsByNameAndSpaceIdAndParentFolderId(name, spaceId, null);
+        if (isListNameExists) {
+            throw new InvalidRequestException("List name taken");
+        }
+
         var userInfo = userInfoService.getCurrentUserInfo();
         var listCategory = ListCategory.convertFromCreateListDTO(
                 createListDTO, userInfo);

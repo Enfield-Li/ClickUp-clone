@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import com.example.team.model.ListCategory;
 
 @Repository
-public interface ListCategoryRepository extends JpaRepository<ListCategory, Integer> {
+public interface ListCategoryRepository
+        extends JpaRepository<ListCategory, Integer> {
 
+    Boolean existsByNameAndSpaceIdAndParentFolderId(
+            String name, Integer spaceId, Integer parentFolderId);
 }
