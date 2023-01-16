@@ -49,7 +49,7 @@ function SpaceContent({ space }: Props) {
                 type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
                 payload: {
                   spaceId: space.id,
-                  statusColumnsCategoryId: space.statusColumnsCategoryId,
+                  defaultStatusCategoryId: space.defaultStatusCategoryId,
                 },
               });
             }}
@@ -69,7 +69,7 @@ function SpaceContent({ space }: Props) {
                 type: TEAM_STATE_ACTION.SET_CREATE_LIST_INFO,
                 payload: {
                   spaceId: space.id,
-                  statusColumnsCategoryId: space.statusColumnsCategoryId,
+                  defaultStatusCategoryId: space.defaultStatusCategoryId,
                 },
               });
             }}

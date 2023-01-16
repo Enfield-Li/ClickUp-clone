@@ -37,6 +37,13 @@ class StatusCategoryController {
         return "Got it";
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<StatusCategory> getStatusCategoryForList(
+            @PathVariable("id") Integer id) {
+        var statusCategory = service.getStatusCategoryForList(id);
+        return ResponseEntity.ok(statusCategory);
+    }
+
     @GetMapping("/{teamId}")
     ResponseEntity<List<StatusCategory>> getStatusCategoryForTeam(
             @PathVariable("teamId") Integer teamId) {

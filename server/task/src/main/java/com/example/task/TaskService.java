@@ -7,12 +7,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.clients.statusCategory.StatusCategoryClient;
+
 // import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
 // import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
 
 // import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
+import com.example.task.dto.GetTaskListDTO;
+import com.example.task.dto.TaskListStatusCategoryDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
@@ -30,6 +34,7 @@ public class TaskService {
 
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
+    private final StatusCategoryClient statusCategoryClient;
     // private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public UserInfo getCurrentUserInfo() {
@@ -39,8 +44,17 @@ public class TaskService {
                 .getPrincipal();
     }
 
-    public List<Task> getAllTasks(Integer listId) {
-        return taskRepository.findByListId(listId);
+    public TaskListStatusCategoryDTO getAllTasks(GetTaskListDTO dto) {
+        var listId = dto.listId();
+        var defaultStatusCategoryId = dto.defaultStatusCategoryId();
+
+        var statusCategoryDTO = statusCategoryClient
+                .getStatusCategoryForList(defaultStatusCategoryId);
+
+        var taskList = taskRepository.findByListId(listId);
+
+         new TaskListStatusCategoryDTO(statusCategoryDTO, taskList);
+         return null;
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {

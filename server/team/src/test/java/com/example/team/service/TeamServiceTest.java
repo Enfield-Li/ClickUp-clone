@@ -31,7 +31,7 @@ import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.TeamActivityClient;
 import com.example.clients.teamActivity.TeamActivityDTO;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.TeamAndActivityDTO;

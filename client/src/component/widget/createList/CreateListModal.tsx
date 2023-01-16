@@ -49,18 +49,18 @@ function CreateListModal({}: Props) {
   ): void {
     if (
       !teamState.createListInfo?.orderIndex ||
-      !teamState.createListInfo.statusColumnsCategoryId
+      !teamState.createListInfo.defaultStatusCategoryId
     ) {
       throw new Error("createListInfo not ready yet");
     }
-    const { folderId, spaceId, orderIndex, statusColumnsCategoryId } =
+    const { folderId, spaceId, orderIndex, defaultStatusCategoryId } =
       teamState.createListInfo;
 
     const dto: CreateListDTO = {
       spaceId,
       folderId,
       orderIndex,
-      statusColumnsCategoryId,
+      defaultStatusCategoryId,
       name: value ? value : placeHolderValue,
     };
 

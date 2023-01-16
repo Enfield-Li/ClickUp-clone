@@ -10,7 +10,7 @@ export const iniCreateFolderDTO: CreateFolderDTO = {
   orderIndex: 0,
   isPrivate: false,
   allListNames: ["list"],
-  statusColumnsCategoryId: 0,
+  defaultStatusCategoryId: 0,
 };
 
 export const initCreateFolderState: CreateFolderState = {

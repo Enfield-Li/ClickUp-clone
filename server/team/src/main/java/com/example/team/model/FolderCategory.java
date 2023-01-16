@@ -72,7 +72,7 @@ public class FolderCategory {
     private Integer orderIndex;
 
     @NotNull
-    private Integer statusColumnsCategoryId;
+    private Integer defaultStatusCategoryId;
 
     @NotNull
     @JoinColumn(name = "userInfoId")
@@ -123,7 +123,7 @@ public class FolderCategory {
                 .creator(userInfo)
                 .isPrivate(dto.isPrivate())
                 .orderIndex(dto.orderIndex())
-                .statusColumnsCategoryId(dto.statusColumnsCategoryId())
+                .defaultStatusCategoryId(dto.defaultStatusCategoryId())
                 .build();
         folderCategory.addMember(userInfo);
 
@@ -134,8 +134,8 @@ public class FolderCategory {
                             .orderIndex(1)
                             .creator(userInfo)
                             .folderCategory(folderCategory)
-                            .statusColumnsCategoryId(
-                                    dto.statusColumnsCategoryId())
+                            .defaultStatusCategoryId(
+                                    dto.defaultStatusCategoryId())
                             .build();
 
                     listCategory.addMember(userInfo);

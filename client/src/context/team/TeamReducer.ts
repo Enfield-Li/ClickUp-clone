@@ -239,8 +239,8 @@ export default function teamReducer(
             team.spaces.forEach(
               (space) =>
                 space.id === spaceId &&
-                (payload["statusColumnsCategoryId"] =
-                  space.statusColumnsCategoryId)
+                (payload["defaultStatusCategoryId"] =
+                  space.defaultStatusCategoryId)
             )
         );
 

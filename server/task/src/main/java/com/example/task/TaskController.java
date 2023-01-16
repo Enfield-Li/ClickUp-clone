@@ -3,6 +3,8 @@ package com.example.task;
 import static com.example.clients.UrlConstants.*;
 import static com.example.task.config.Constants.*;
 
+import com.example.task.dto.GetTaskListDTO;
+import com.example.task.dto.TaskListStatusCategoryDTO;
 import com.example.task.dto.TaskPositionDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
@@ -42,10 +44,10 @@ class TaskController {
         return "ABC";
     }
 
-    @GetMapping("/{listId}")
-    ResponseEntity<List<Task>> getAllTasks(
-            @PathVariable("listId") Integer listId) {
-        var allTasks = taskService.getAllTasks(listId);
+    @GetMapping
+    ResponseEntity<TaskListStatusCategoryDTO> getAllTasks(
+            @RequestBody GetTaskListDTO dto) {
+        var allTasks = taskService.getAllTasks(dto);
         return ResponseEntity.ok(allTasks);
     }
 

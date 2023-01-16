@@ -14,5 +14,5 @@ public record CategoryDTO(
         List<CategoryDTO> allLists,
         Integer taskAmount,
         Integer parentFolderId,
-        Integer statusColumnsCategoryId) {
+        Integer defaultStatusCategoryId) {
 }

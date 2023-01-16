@@ -65,7 +65,7 @@ public class Space {
     private Boolean isPrivate = false;
 
     @NotNull
-    private Integer statusColumnsCategoryId;
+    private Integer defaultStatusCategoryId;
 
     @Transient
     private final Set<Integer> allListOrFolder = new HashSet<>();
@@ -131,8 +131,8 @@ public class Space {
                 .name("list")
                 .orderIndex(1)
                 .creator(userInfo)
-                .statusColumnsCategoryId(
-                        createSpaceDTO.statusColumnsCategoryId())
+                .defaultStatusCategoryId(
+                        createSpaceDTO.defaultStatusCategoryId())
                 .build();
         listCategory.addMember(userInfo);
         var listCategories = Set.of(listCategory);
@@ -145,8 +145,8 @@ public class Space {
                 .teamId(createSpaceDTO.teamId())
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
-                .statusColumnsCategoryId(
-                        createSpaceDTO.statusColumnsCategoryId())
+                .defaultStatusCategoryId(
+                        createSpaceDTO.defaultStatusCategoryId())
                 .build();
         space.addMember(userInfo);
 
@@ -161,7 +161,7 @@ public class Space {
                 .color("gray")
                 .orderIndex(1)
                 .isPrivate(false)
-                .statusColumnsCategoryId(defaultStatusCategoryId)
+                .defaultStatusCategoryId(defaultStatusCategoryId)
                 .build();
 
         space.addMember(userInfo);

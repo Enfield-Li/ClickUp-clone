@@ -60,7 +60,7 @@ function CreateFolderModal({}: Props) {
 
             draftState.createFolderDTO.spaceId = space.id;
             draftState.createFolderDTO.orderIndex = lastOrderIndex + 1;
-            draftState.createFolderDTO.statusColumnsCategoryId =
+            draftState.createFolderDTO.defaultStatusCategoryId =
               StatusCategories[0].id!;
           })
         );

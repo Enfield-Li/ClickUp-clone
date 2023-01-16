@@ -10,5 +10,5 @@ public record CreateSpaceDTO(
         @NotNull Integer teamId,
         @Size(min = 1) String name,
         @NotNull Integer orderIndex,
-        @NotNull Integer statusColumnsCategoryId) {
+        @NotNull Integer defaultStatusCategoryId) {
 }

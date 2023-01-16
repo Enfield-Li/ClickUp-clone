@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.example.clients.jwt.AuthenticationFailureException;
-import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -50,9 +50,9 @@ public class GlobalExceptionHandler {
     }
 
     /* InternalDataIntegrityException */
-    @ExceptionHandler(InternalDataIntegrityException.class)
-    public ResponseEntity<ErrorResponse> catchInternalDataIntegrityException(
-            InternalDataIntegrityException exception) {
+    @ExceptionHandler(InternalErrorException.class)
+    public ResponseEntity<ErrorResponse> catchInternalException(
+            InternalErrorException exception) {
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                 exception.getMessage());
     }

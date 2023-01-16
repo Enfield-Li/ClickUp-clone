@@ -73,7 +73,7 @@ public class ListCategory {
     private Integer orderIndex;
 
     @NotNull
-    private Integer statusColumnsCategoryId;
+    private Integer defaultStatusCategoryId;
 
     @NotNull
     @JoinColumn(name = "userInfoId")
@@ -120,7 +120,7 @@ public class ListCategory {
                 .name(dto.name())
                 .creator(userInfo)
                 .orderIndex(dto.orderIndex())
-                .statusColumnsCategoryId(dto.statusColumnsCategoryId())
+                .defaultStatusCategoryId(dto.defaultStatusCategoryId())
                 .build();
 
         listCategory.addMember(userInfo);

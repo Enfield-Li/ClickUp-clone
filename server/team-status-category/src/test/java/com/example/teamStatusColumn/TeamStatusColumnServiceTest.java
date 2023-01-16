@@ -27,7 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
-import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })

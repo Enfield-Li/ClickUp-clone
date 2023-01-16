@@ -29,7 +29,7 @@ function AddFolderOrListPopover({
   onPopoverClose,
   onPopoverOpen,
 }: Props) {
-  const { statusColumnsCategoryId, id: spaceId } = space;
+  const { defaultStatusCategoryId, id: spaceId } = space;
   const popoverContentHoverBgColor = useColorModeValue(
     "lightMain.100",
     "darkMain.200"
@@ -103,7 +103,7 @@ function AddFolderOrListPopover({
                 payload: {
                   spaceId,
                   folderId: folder?.id,
-                  statusColumnsCategoryId: space.statusColumnsCategoryId,
+                  defaultStatusCategoryId: space.defaultStatusCategoryId,
                 },
               });
             })
@@ -131,7 +131,7 @@ function AddFolderOrListPopover({
                 type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
                 payload: {
                   spaceId,
-                  statusColumnsCategoryId,
+                  defaultStatusCategoryId,
                 },
               });
             })

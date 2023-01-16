@@ -51,7 +51,7 @@ function CreateSpaceModal({}: Props) {
             draftState.teamStatusCategories = StatusCategories;
 
             draftState.createSpaceDTO.orderIndex = lastOrderIndex + 1;
-            draftState.createSpaceDTO.statusColumnsCategoryId =
+            draftState.createSpaceDTO.defaultStatusCategoryId =
               StatusCategories[0].id!;
           })
         );

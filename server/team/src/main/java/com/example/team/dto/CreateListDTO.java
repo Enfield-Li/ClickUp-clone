@@ -8,5 +8,5 @@ public record CreateListDTO(
         @NotNull Integer spaceId,
         @Size(min = 1) String name,
         @NotNull Integer orderIndex,
-        @NotNull Integer statusColumnsCategoryId) {
+        @NotNull Integer defaultStatusCategoryId) {
 }

@@ -16,7 +16,7 @@
           "avatar": null,
           "orderIndex": 1,
           "isPrivate": false,
-          "statusColumnsCategoryId": 1,
+          "defaultStatusCategoryId": 1,
           "allListOrFolder": [
             {
               "id": 1,
@@ -25,7 +25,7 @@
               "createdAt": "2023-01-12T19:25:07.031+00:00",
               "isPrivate": false,
               "orderIndex": 2,
-              "statusColumnsCategoryId": 1,
+              "defaultStatusCategoryId": 1,
               "creator": { "id": 2, "userId": 1, "username": "user1" },
               "members": [{ "id": 2, "userId": 1, "username": "user1" }],
               "allLists": [
@@ -36,7 +36,7 @@
                   "createdAt": "2023-01-12T19:25:07.033+00:00",
                   "isPrivate": null,
                   "orderIndex": 1,
-                  "statusColumnsCategoryId": 1,
+                  "defaultStatusCategoryId": 1,
                   "creator": { "id": 2, "userId": 1, "username": "user1" },
                   "members": [],
                   "taskAmount": 0,
@@ -51,7 +51,7 @@
               "createdAt": "2023-01-12T19:25:07.033+00:00",
               "isPrivate": null,
               "orderIndex": 1,
-              "statusColumnsCategoryId": 1,
+              "defaultStatusCategoryId": 1,
               "creator": { "id": 2, "userId": 1, "username": "user1" },
               "members": [],
               "taskAmount": 0,

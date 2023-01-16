@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
@@ -51,5 +52,11 @@ public class StatusCategoryService {
     public Boolean deleteStatusCategory(Integer id) {
         repository.deleteById(id);
         return true;
+    }
+
+    public StatusCategory getStatusCategoryForList(Integer id) {
+        return repository.findById(id).orElseThrow(
+                () -> new InternalErrorException(
+                        String.format("StatusCategory with id: $s not found", id)));
     }
 }

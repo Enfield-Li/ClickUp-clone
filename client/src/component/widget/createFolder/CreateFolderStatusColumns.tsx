@@ -29,7 +29,7 @@ export default function CreateFolderStatusColumns({
               produce(prev, (draftState) => {
                 draftState.selectedStatusColumns =
                   selectedCategory.statusColumns;
-                draftState.createFolderDTO.statusColumnsCategoryId =
+                draftState.createFolderDTO.defaultStatusCategoryId =
                   selectedCategory.id;
               })
             )

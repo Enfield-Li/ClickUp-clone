@@ -55,10 +55,10 @@ public class TaskServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new TaskService(taskMapper, taskRepository);
-        SecurityContextHolder.setContext(securityContext);
-        given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
-        given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
+        // underTest = new TaskService(taskMapper, taskRepository);
+        // SecurityContextHolder.setContext(securityContext);
+        // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
+        // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
     }
 
     @Test

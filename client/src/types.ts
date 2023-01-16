@@ -269,7 +269,7 @@ export interface Category {
   isPrivate: boolean;
   members: UserInfo[];
   color: string | null;
-  statusColumnsCategoryId: number; // TODO: delete
+  defaultStatusCategoryId: number; // TODO: delete
 }
 export interface FolderCategory extends Category {
   isOpen: boolean | null; // client side
@@ -289,7 +289,7 @@ export interface Space {
   teamId: number;
   orderIndex: number;
   isPrivate: boolean;
-  statusColumnsCategoryId: number;
+  defaultStatusCategoryId: number;
   allListOrFolder: (FolderCategory | ListCategory)[];
 
   isOpen: boolean | null; // client side
@@ -391,12 +391,12 @@ export type CreateListInfo = {
   spaceId: number;
   folderId?: number;
   orderIndex?: number;
-  statusColumnsCategoryId: number;
+  defaultStatusCategoryId: number;
   currentLevelLists?: ListCategory[];
 };
 export type CreateFolderInfo = {
   spaceId: number;
-  statusColumnsCategoryId?: number;
+  defaultStatusCategoryId?: number;
 };
 
 export type ModalControls = {
@@ -528,7 +528,7 @@ export type CreateListDTO = {
   spaceId: number;
   folderId?: number;
   orderIndex: number;
-  statusColumnsCategoryId: number;
+  defaultStatusCategoryId: number;
 };
 
 export interface CreateSpaceDTO {
@@ -538,7 +538,7 @@ export interface CreateSpaceDTO {
   avatar: string;
   isPrivate: boolean;
   orderIndex: number;
-  statusColumnsCategoryId: number;
+  defaultStatusCategoryId: number;
 }
 export enum CreateSpaceStep {
   NAME = "name",
@@ -561,7 +561,7 @@ export interface CreateFolderDTO {
   orderIndex: number;
   isPrivate: boolean;
   allListNames: string[];
-  statusColumnsCategoryId: number;
+  defaultStatusCategoryId: number;
 }
 export enum CreateFolderStep {
   ENTRY = "entry",

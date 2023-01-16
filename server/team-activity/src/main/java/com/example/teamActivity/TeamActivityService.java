@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clients.jwt.UserCredentials;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InternalDataIntegrityException;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -46,7 +46,7 @@ public class TeamActivityService {
         return repository.findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> {
                     log.error("User's teamActivity somehow disappeared");
-                    return new InternalDataIntegrityException(
+                    return new InternalErrorException(
                             "User's teamActivity somehow disappeared");
                 });
     }
