@@ -73,8 +73,13 @@ function CreateSpaceModalTemplate({
         getTaskBoardURL({
           teamId: teamState.teamActiveStatus.teamId,
           spaceId: space.id,
-        })
+          listId: space.listCategories[0].id,
+        }),
+        {
+          state: { defaultStatusCategoryId: space.defaultStatusCategoryId },
+        }
       );
+
       teamStateDispatch({
         type: TEAM_STATE_ACTION.CREATE_SPACE,
         payload: space,

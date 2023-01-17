@@ -8,6 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import produce from "immer";
+import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createFolderForSpace } from "../../../networkCalls";
 import {
@@ -15,6 +16,7 @@ import {
   CreateFolderStep,
   TEAM_STATE_ACTION,
 } from "../../../types";
+import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import { initCreateFolderState } from "./createfolderInitialState";
 
 type Props = {
@@ -34,7 +36,9 @@ export default function CreateFolderTemplate({
   setCreateFolder,
   isCurrentStepEntry,
 }: Props) {
+  const navigate = useNavigate();
   const {
+    teamState,
     teamStateDispatch,
     modalControls: { onCreateFolderModalClose },
   } = useTeamStateContext();
@@ -64,6 +68,17 @@ export default function CreateFolderTemplate({
           type: TEAM_STATE_ACTION.CREATE_FOLDER,
           payload: folder,
         });
+
+        navigate(
+          getTaskBoardURL({
+            spaceId: folder.spaceId,
+            listId: folder.allLists[0].id,
+            teamId: teamState.teamActiveStatus.teamId,
+          }),
+          {
+            state: { defaultStatusCategoryId: folder.defaultStatusCategoryId },
+          }
+        );
       });
 
       return;

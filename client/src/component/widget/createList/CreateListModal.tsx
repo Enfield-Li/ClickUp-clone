@@ -11,6 +11,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 import { createListForSpace } from "../../../networkCalls";
@@ -22,6 +23,7 @@ type Props = {};
 
 export default memo(CreateListModal);
 function CreateListModal({}: Props) {
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
   const [placeHolderValue, setPlaceHolderValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
@@ -65,13 +67,15 @@ function CreateListModal({}: Props) {
     };
 
     createListForSpace(dto, (list) => {
+      handleResetModalState();
       teamStateDispatch({
         type: TEAM_STATE_ACTION.CREATE_LIST,
         payload: list,
       });
-      handleResetModalState();
       const { teamId } = teamState.teamActiveStatus;
-      getTaskBoardURL({ teamId, spaceId, listId: list.id });
+      navigate(getTaskBoardURL({ teamId, spaceId, listId: list.id }), {
+        state: { defaultStatusCategoryId },
+      });
     });
   }
 

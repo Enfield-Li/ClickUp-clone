@@ -25,28 +25,29 @@ public class ListCategoryService {
     private final ListCategoryRepository repository;
 
     @Transactional
-    public ListCategory createList(CreateListDTO createListDTO) {
-        var name = createListDTO.name();
-        var spaceId = createListDTO.spaceId();
-        
+    public ListCategory createList(CreateListDTO dto) {
+        var name = dto.name();
+        var spaceId = dto.spaceId();
+        var folderId = dto.folderId();
+
         var isListNameExists = repository
                 .existsByNameAndSpaceIdAndParentFolderId(name, spaceId, null);
-        if (isListNameExists) {
+        if (isListNameExists && folderId == null) {
             throw new InvalidRequestException("List name taken");
         }
 
         var userInfo = userInfoService.getCurrentUserInfo();
         var listCategory = ListCategory.convertFromCreateListDTO(
-                createListDTO, userInfo);
+                dto, userInfo);
 
         // bind folder
-        if (createListDTO.folderId() != null) {
-            var folderCategory = findFolderReference(createListDTO.folderId());
+        if (dto.folderId() != null) {
+            var folderCategory = findFolderReference(dto.folderId());
             folderCategory.addListCategory(listCategory);
         }
 
         // bind space
-        var space = findSpaceReference(createListDTO.spaceId());
+        var space = findSpaceReference(dto.spaceId());
         space.addListCategory(listCategory);
 
         return repository.save(listCategory);

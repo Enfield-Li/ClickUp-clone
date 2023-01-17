@@ -177,7 +177,7 @@ export default function teamReducer(
                 );
 
                 if (index >= 0) {
-                  space.allListOrFolder.splice(index, 0, folder);
+                  space.allListOrFolder.splice(index - 1, 0, folder);
                   return;
                 }
                 space.allListOrFolder.push(folder);
