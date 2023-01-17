@@ -26,7 +26,9 @@ function CreateTask({
 }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setTaskState } = taskStateContext!;
+  if (!taskStateContext) throw new Error("taskStateContext not initialized");
+  const { sortBy, setTaskState } = taskStateContext;
+
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
   const finishedStatusColumn =
@@ -66,20 +68,16 @@ function CreateTask({
         priority,
       };
 
-      const creator = newCreator({
-        userId: authState.user!.id!,
-        username: authState.user!.username,
-        email: authState.user!.email,
-      });
       createNewTask({
         sortBy,
-        creator,
         taskState,
         setTaskState,
         currentColumn,
         newTaskInput: newTask,
+        creator: newCreator(authState),
         listId: taskStateContext.currentListId,
       });
+
       continueCreateTask();
     }
   }

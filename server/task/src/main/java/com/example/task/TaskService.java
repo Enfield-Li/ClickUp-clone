@@ -3,7 +3,6 @@ package com.example.task;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +14,12 @@ import com.example.clients.statusCategory.StatusCategoryClient;
 // import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.task.dto.GetTaskListDTO;
 import com.example.task.dto.TaskListStatusCategoryDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Task;
-import com.example.task.model.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,15 +31,9 @@ public class TaskService {
 
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
+    private final UserInfoService userInfoService;
     private final StatusCategoryClient statusCategoryClient;
     // private final RabbitMqMessageProducer rabbitMQMessageProducer;
-
-    public UserInfo getCurrentUserInfo() {
-        return (UserInfo) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-    }
 
     public TaskListStatusCategoryDTO getAllTasks(
             Integer listId, Integer defaultStatusCategoryId) {
@@ -55,7 +46,7 @@ public class TaskService {
     }
 
     public Task createTask(CreateTaskDTO createTaskDTO) {
-        var userInfo = getCurrentUserInfo();
+        var userInfo = userInfoService.getCurrentUserInfo();
         var task = Task.convertFromCreateTaskDto(
                 createTaskDTO,
                 userInfo);
@@ -127,7 +118,7 @@ public class TaskService {
 
     @Transactional
     public Boolean updateTaskTitle(UpdateTaskTitleDTO updateTaskTitleDTO) {
-        var userInfo = getCurrentUserInfo();
+        var userInfo = userInfoService.getCurrentUserInfo();
         var userId = userInfo.getUserId();
         var username = userInfo.getUsername();
 

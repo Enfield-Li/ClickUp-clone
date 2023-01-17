@@ -16,6 +16,7 @@ import {
   UndeterminedColumn,
   UndeterminedColumns,
   UserInfo,
+  AuthStateType,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
@@ -155,6 +156,8 @@ export function findTheLastOrderIndexInColumn(
   columnId: number,
   taskState: TaskState
 ): OrderIndexInColumn {
+  console.log({ sortBy });
+
   const allTasks = collectAllTasks(taskState.orderedTasks);
 
   const allOrderIndex: number[] = [];
@@ -180,6 +183,7 @@ export function findTheLastOrderIndexInColumn(
   const undeterminedColumns = taskState.columnOptions[
     `${sortBy}Columns`
   ] as UndeterminedColumns;
+  console.log({ undeterminedColumns });
 
   const currentColumn = undeterminedColumns.find(
     (column) => column.id === columnId
@@ -270,15 +274,12 @@ function newTaskFactory({
   };
 }
 
-interface newCreatorParam {
-  email: string;
-  userId: number;
-  username: string;
-}
-export function newCreator({
-  userId,
-  username,
-  email,
-}: newCreatorParam): UserInfo {
-  return { userId, username, email };
+export function newCreator(authState: AuthStateType): UserInfo {
+  if (!authState.user) throw new Error("user not initialized");
+
+  return {
+    userId: authState.user.id,
+    username: authState.user.username,
+    email: authState.user.email,
+  };
 }

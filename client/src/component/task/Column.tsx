@@ -23,9 +23,9 @@ function Column({
   isCreateTaskOpen,
   setIsCreateTaskOpen,
 }: Props) {
-  const [showCreateTask, setShowCreateTask] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy } = taskStateContext!;
+  if (!taskStateContext) throw new Error("taskStateContext not initialized");
+  const { sortBy } = taskStateContext;
 
   return (
     <Box width="250px" mx={3}>

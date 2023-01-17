@@ -8,18 +8,20 @@ import {
 } from "../component/task/actions/taskProcessing";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { fetchAllTasks as fetchTasksAndStatusCategory } from "../networkCalls";
-import { ColumnOptions, SortBy, StatusColumns, TaskState } from "../types";
+import { ColumnOptions, SortBy, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
+import { defaultColumnOptions } from "../utils/staticColumnsData";
 
 interface UseFetchTasksParam {
   sortBy: SortBy;
-  spaceId: number;
+  listId: number;
 }
-export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
+export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
   const location = useLocation();
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+//   console.log({ taskState });
 
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
@@ -28,7 +30,7 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
     initTaskState();
 
     async function initTaskState() {
-      if (!spaceId && !location?.state?.defaultStatusCategoryId) {
+      if (!listId && !location?.state?.defaultStatusCategoryId) {
         setTaskState(undefined);
         setTaskStateContext(null);
         return;
@@ -39,17 +41,21 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
       // Task data
       const { defaultStatusCategoryId } = location.state;
       const networkData = await fetchTasksAndStatusCategory(
-        spaceId,
+        listId,
         defaultStatusCategoryId
       );
 
       if (networkData) {
-        // const statusColumn
+        const {
+          taskList: taskListData,
+          statusCategory: { statusColumns },
+        } = networkData;
+        const { dueDateColumns, priorityColumns } = defaultColumnOptions;
 
         const allColumns: ColumnOptions = {
-          dueDateColumns: [],
-          priorityColumns: [],
-          statusColumns: networkData.statusCategory.statusColumns,
+          dueDateColumns,
+          priorityColumns,
+          statusColumns,
         };
 
         const { reorderedDueDateColumns, reorderedStatusColumns } =
@@ -62,10 +68,7 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
         };
 
         // init taskEvents and convert expectedDueDate to dueDate columns
-        const taskList = processTaskList(
-          reorderedDueDateColumns,
-          networkData.taskList
-        );
+        const taskList = processTaskList(reorderedDueDateColumns, taskListData);
 
         const orderedTasks = groupTaskListOnSortBy(
           taskList,
@@ -77,14 +80,14 @@ export function useFetchTasks({ sortBy, spaceId }: UseFetchTasksParam) {
           columnOptions,
           setTaskState,
           sortBy,
-          currentListId: spaceId,
+          currentListId: listId,
         });
         setTaskState({ orderedTasks, columnOptions });
 
         setLoading(false);
       }
     }
-  }, [spaceId, location]);
+  }, [listId, location]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

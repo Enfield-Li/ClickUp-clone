@@ -127,7 +127,8 @@ public class FolderCategory {
                 .build();
         folderCategory.addMember(userInfo);
 
-        Set<ListCategory> allListCategory = dto.allListNames().stream()
+        Set<ListCategory> allListCategory = dto
+                .allListNames().stream()
                 .map(name -> {
                     var listCategory = ListCategory.builder()
                             .name(name)

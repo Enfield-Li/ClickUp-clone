@@ -40,7 +40,7 @@ function TaskBoardView({ sortBy }: Props) {
   const { listId, spaceId } = useParams();
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
-    spaceId: Number(listId),
+    listId: Number(listId),
   });
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);

@@ -2,9 +2,12 @@ package com.example.team.service;
 
 import javax.persistence.EntityManager;
 
+import static com.example.amqp.ExchangeKey.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.Space;
@@ -21,19 +24,33 @@ public class FolderCategoryService {
     private final EntityManager entityManager;
     private final UserInfoService userInfoService;
     private final FolderCategoryRepository repository;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Transactional
-    public FolderCategory createFolder(CreateFolderDTO createSpaceDTO) {
+    public FolderCategory createFolder(CreateFolderDTO dto) {
         var userCredentials = userInfoService.getCurrentUserInfo();
-        var folderCategory = FolderCategory
-                .convertFromCreateFolderDTO(createSpaceDTO, userCredentials);
+        var newFolderCategory = FolderCategory
+                .convertFromCreateFolderDTO(dto, userCredentials);
 
         // bind space
-        var space = findSpaceReference(createSpaceDTO.spaceId());
-        space.addFolderCategory(folderCategory);
-        space.addListCategory(folderCategory.getAllLists());
+        var space = findSpaceReference(dto.spaceId());
+        space.addFolderCategory(newFolderCategory);
+        space.addListCategory(newFolderCategory.getAllLists());
 
-        return repository.save(folderCategory);
+        var folder = repository.save(newFolderCategory);
+
+        var spaceId = dto.spaceId();
+        var teamId = space.getTeamId();
+        var listId = folder.getAllLists().stream()
+                .findFirst().get().getId();
+        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
+                teamId, spaceId, null, listId);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                TeamActivityRoutingKey,
+                UpdateTeamActivityDTO);
+
+        return folder;
     }
 
     private Space findSpaceReference(Integer spaceId) {

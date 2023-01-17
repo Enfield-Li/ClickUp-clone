@@ -2,9 +2,12 @@ package com.example.team.service;
 
 import javax.persistence.EntityManager;
 
+import static com.example.amqp.ExchangeKey.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
@@ -23,6 +26,7 @@ public class ListCategoryService {
     private final EntityManager entityManager;
     private final UserInfoService userInfoService;
     private final ListCategoryRepository repository;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Transactional
     public ListCategory createList(CreateListDTO dto) {
@@ -37,20 +41,31 @@ public class ListCategoryService {
         }
 
         var userInfo = userInfoService.getCurrentUserInfo();
-        var listCategory = ListCategory.convertFromCreateListDTO(
+        var newListCategory = ListCategory.convertFromCreateListDTO(
                 dto, userInfo);
 
         // bind folder
         if (dto.folderId() != null) {
             var folderCategory = findFolderReference(dto.folderId());
-            folderCategory.addListCategory(listCategory);
+            folderCategory.addListCategory(newListCategory);
         }
 
         // bind space
         var space = findSpaceReference(dto.spaceId());
-        space.addListCategory(listCategory);
+        space.addListCategory(newListCategory);
 
-        return repository.save(listCategory);
+        var listCategory = repository.save(newListCategory);
+
+        var teamId = space.getTeamId();
+        var listId = listCategory.getId();
+        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
+                teamId, spaceId, folderId, listId);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                TeamActivityRoutingKey,
+                UpdateTeamActivityDTO);
+
+        return listCategory;
     }
 
     private FolderCategory findFolderReference(Integer FolderCategoryId) {
