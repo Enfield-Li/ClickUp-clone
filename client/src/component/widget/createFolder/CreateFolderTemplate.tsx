@@ -71,9 +71,9 @@ export default function CreateFolderTemplate({
 
         navigate(
           getTaskBoardURL({
-            spaceId: folder.spaceId,
             listId: folder.allLists[0].id,
             teamId: teamState.teamActiveStatus.teamId,
+            spaceId: createFolder.createFolderDTO.spaceId,
           }),
           {
             state: { defaultStatusCategoryId: folder.defaultStatusCategoryId },

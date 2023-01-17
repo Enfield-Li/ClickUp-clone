@@ -87,6 +87,7 @@ function AddFolderOrListPopover({
         width="225px"
         position="absolute"
         onBlur={onPopoverClose}
+        onClick={(e) => e.stopPropagation()}
       >
         <Flex
           mx="2"

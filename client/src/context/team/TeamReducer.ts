@@ -238,21 +238,7 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO: {
       return produce(teamState, (draftState) => {
-        const payload = deepCopy(action.payload) as CreateFolderInfo;
-        const { spaceId } = payload;
-
-        draftState.teams.forEach(
-          (team) =>
-            team.isSelected &&
-            team.spaces.forEach(
-              (space) =>
-                space.id === spaceId &&
-                (payload["defaultStatusCategoryId"] =
-                  space.defaultStatusCategoryId)
-            )
-        );
-
-        draftState.createFolderInfo = payload;
+        draftState.createFolderInfo = action.payload;
       });
     }
 
@@ -266,28 +252,31 @@ export default function teamReducer(
             team.id === draftState.teamActiveStatus.teamId &&
             team.spaces.forEach((space) => {
               if (space.id === spaceId) {
-                if (folderId) {
-                  space.folderCategories.forEach((folder) => {
-                    if (folder.id === folderId) {
-                      const lists = folder.allLists;
-                      payload.currentLevelLists = lists;
+                if (!folderId) {
+                  const lists = space.listCategories;
+                  payload.currentLevelLists = lists;
 
-                      const lastListItem = lists[lists.length - 1];
-                      payload.orderIndex = lastListItem
-                        ? lastListItem.orderIndex + 1
-                        : 1;
-                    }
-                  });
+                  const lastListItem = lists[lists.length - 1];
+                  payload.orderIndex = lastListItem
+                    ? lastListItem.orderIndex + 1
+                    : 1;
                   return;
                 }
 
-                const lists = space.listCategories;
-                payload.currentLevelLists = lists;
+                space.allListOrFolder.forEach((listOrFolder) => {
+                  if (
+                    determineFolderType(listOrFolder) &&
+                    listOrFolder.id === folderId
+                  ) {
+                    const lists = listOrFolder.allLists;
+                    payload.currentLevelLists = lists;
 
-                const lastListItem = lists[lists.length - 1];
-                payload.orderIndex = lastListItem
-                  ? lastListItem.orderIndex + 1
-                  : 1;
+                    const lastListItem = lists[lists.length - 1];
+                    payload.orderIndex = lastListItem
+                      ? lastListItem.orderIndex + 1
+                      : 1;
+                  }
+                });
               }
             })
         );
