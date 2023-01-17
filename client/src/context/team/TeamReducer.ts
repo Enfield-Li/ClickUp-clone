@@ -72,9 +72,14 @@ export default function teamReducer(
                   (list) => !list.parentFolderId
                 );
                 space.allListOrFolder.push(
-                  ...space.folderCategories.sort(
-                    (a, b) => a.orderIndex - b.orderIndex
-                  )
+                  ...space.folderCategories
+                    .map((folder) => {
+                      folder.allLists.sort(
+                        (a, b) => a.orderIndex - b.orderIndex
+                      );
+                      return folder;
+                    })
+                    .sort((a, b) => a.orderIndex - b.orderIndex)
                 );
                 space.allListOrFolder.push(
                   ...space.listCategories.sort(
@@ -213,12 +218,15 @@ export default function teamReducer(
                   return;
                 }
 
-                space.allListOrFolder.forEach(
-                  (listOrFolder) =>
+                space.allListOrFolder.forEach((listOrFolder) => {
+                  if (
                     determineFolderType(listOrFolder) &&
-                    listOrFolder.id === folderId &&
-                    listOrFolder.allLists.push(newList)
-                );
+                    listOrFolder.id === folderId
+                  ) {
+                    listOrFolder.allLists.push(newList);
+                    space.listCategories.push(newList);
+                  }
+                });
               }
             })
         );

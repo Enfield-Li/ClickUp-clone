@@ -76,7 +76,7 @@ function Login({}: Props) {
                 });
                 navigate(
                   joinedTeamCount > 0 && defaultTeamId
-                    ? `/${defaultTeamId}` + CLIENT_ROUTE.TASK_BOARD
+                    ? `/${defaultTeamId}/` + CLIENT_ROUTE.TASK_BOARD
                     : CLIENT_ROUTE.ON_BOARDING
                 );
               },
