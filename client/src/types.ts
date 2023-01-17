@@ -290,11 +290,12 @@ export interface Space {
   orderIndex: number;
   isPrivate: boolean;
   defaultStatusCategoryId: number;
-  allListOrFolder: (FolderCategory | ListCategory)[];
 
   isOpen: boolean | null; // client side
-  listCategories: ListCategory[]; // client side
-  folderCategories: FolderCategory[]; // client side
+  allListOrFolder: (FolderCategory | ListCategory)[]; // client side
+
+  listCategories: ListCategory[]; // server side
+  folderCategories: FolderCategory[]; // server side
 }
 
 export interface StatusCategory {
@@ -396,6 +397,7 @@ export type CreateListInfo = {
 };
 export type CreateFolderInfo = {
   spaceId: number;
+  currentLevelFolders?: FolderCategory[];
   defaultStatusCategoryId?: number;
 };
 
@@ -414,7 +416,7 @@ export type ModalControls = {
 };
 
 export type TeamStateType = {
-  teams: Team[];
+  teamsForRender: Team[];
   originalTeams: Team[];
   teamActiveStatus: TeamActiveStatus;
   createListInfo: CreateListInfo | null;
@@ -569,10 +571,15 @@ export enum CreateFolderStep {
   SHARE = "share",
   STATUS = "status",
 }
+export type CreateFolderNameError = {
+  isError: boolean;
+  errorMsg: string;
+};
 export interface CreateFolderState {
   step: CreateFolderStep;
   createFolderDTO: CreateFolderDTO;
   selectedStatusColumns: StatusColumns;
+  folderNameError: CreateFolderNameError;
   teamStatusCategories: StatusCategories;
 }
 

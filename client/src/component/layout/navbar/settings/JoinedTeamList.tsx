@@ -47,7 +47,7 @@ function JoinedTeamList({ onClose }: Props) {
       borderColor={borderColor}
     >
       <Flex color={fontColor} flexDir="column" alignItems="center">
-        {teamState.teams.map((team) => (
+        {teamState.teamsForRender.map((team) => (
           <Center
             p="2px"
             my="1px"

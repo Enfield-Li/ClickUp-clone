@@ -10,7 +10,7 @@ type ProviderType = {
 };
 
 const initialTeamContextState: TeamStateType = {
-  teams: [],
+  teamsForRender: [],
   originalTeams: [],
   teamActiveStatus: {
     teamId: 0,

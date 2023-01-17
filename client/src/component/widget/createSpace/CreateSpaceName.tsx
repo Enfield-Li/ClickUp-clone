@@ -40,7 +40,7 @@ function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   }
 
   function handleNextStep() {
-    const isTeamNameExist = teamState.teams.some(
+    const isTeamNameExist = teamState.teamsForRender.some(
       (team) =>
         team.id === teamState.teamActiveStatus.teamId &&
         team.spaces.some(

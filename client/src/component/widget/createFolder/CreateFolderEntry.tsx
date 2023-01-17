@@ -1,6 +1,7 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
 import { useEffect, useState } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
@@ -14,13 +15,20 @@ export default function CreateFolderEntry({
   createFolder,
   setCreateFolder,
 }: Props) {
-  const [showError, setShowError] = useState(false);
+  const { teamState } = useTeamStateContext();
+  const folderNameError = createFolder.folderNameError.isError;
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (showError) setShowError(false);
     setCreateFolder(
       produce(createFolder, (draftState) => {
+        const isFolderNameExists =
+          teamState.createFolderInfo?.currentLevelFolders?.find(
+            (folder) => folder.name === e.target.value
+          );
+
         draftState.createFolderDTO.name = e.target.value;
+        draftState.folderNameError.errorMsg = "Folder name taken";
+        draftState.folderNameError.isError = isFolderNameExists ? true : false;
       })
     );
   }
@@ -43,13 +51,12 @@ export default function CreateFolderEntry({
       isCurrentStepEntry={true}
       createFolder={createFolder}
       setCreateFolder={setCreateFolder}
-      showError={() => setShowError(true)}
     >
       <Box
         mb="1"
         fontSize="sm"
         fontWeight="semibold"
-        color={showError ? "red.500" : ""}
+        color={folderNameError ? "red.500" : ""}
       >
         Folder name
       </Box>
@@ -58,16 +65,24 @@ export default function CreateFolderEntry({
         autoFocus
         onChange={handleInputOnChange}
         placeholder="Enter folder name"
-        borderColor={showError ? "red.500" : ""}
         value={createFolder.createFolderDTO.name}
-        variant={showError ? "flushed" : "unstyled"}
+        borderColor={folderNameError ? "red.500" : ""}
+        variant={folderNameError ? "flushed" : "unstyled"}
       />
-      {showError && (
-        <Box mt="4px" color="red.500" height="10px" fontSize="12px">
-          <i className="bi bi-exclamation-triangle-fill"></i>
+      {folderNameError && (
+        <Flex
+          mt="4px"
+          height="10px"
+          color="red.500"
+          fontSize="12px"
+          fontWeight="semibold"
+        >
+          <Box fontSize="11px" mr="3px">
+            <i className="bi bi-exclamation-triangle-fill"></i>
+          </Box>
           <span>&nbsp;</span>
-          Folder name is required!
-        </Box>
+          {createFolder.folderNameError.errorMsg}
+        </Flex>
       )}
 
       <Box

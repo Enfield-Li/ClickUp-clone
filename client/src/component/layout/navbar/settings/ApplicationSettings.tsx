@@ -25,7 +25,7 @@ function ApplicationSettings({}: Props) {
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
-  const currentTeam = teamState.teams.find((team) => team.isSelected);
+  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
   const isTeamOwner = currentTeam?.owner?.userId === authState.user?.id;
 
   return (

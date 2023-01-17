@@ -31,7 +31,7 @@ function SubNavbar({
   const navigate = useNavigate();
   const { teamState } = useTeamStateContext();
   const [hidden, setHidden] = useState(!isOpen);
-  const currentTeam = teamState.teams.find((team) => team.isSelected);
+  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");

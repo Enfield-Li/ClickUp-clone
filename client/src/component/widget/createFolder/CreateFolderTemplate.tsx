@@ -21,7 +21,6 @@ import { initCreateFolderState } from "./createfolderInitialState";
 
 type Props = {
   title: string;
-  showError?: () => void;
   children: React.ReactNode;
   isCurrentStepEntry: boolean;
   createFolder: CreateFolderState;
@@ -31,7 +30,6 @@ type Props = {
 export default function CreateFolderTemplate({
   title,
   children,
-  showError,
   createFolder,
   setCreateFolder,
   isCurrentStepEntry,
@@ -56,7 +54,12 @@ export default function CreateFolderTemplate({
     // create folder
     if (isCurrentStepEntry) {
       if (!createFolder.createFolderDTO.name) {
-        showError && showError();
+        setCreateFolder(
+          produce(createFolder, (draftState) => {
+            draftState.folderNameError.isError = true;
+            draftState.folderNameError.errorMsg = "Folder name is required!";
+          })
+        );
         return;
       }
 

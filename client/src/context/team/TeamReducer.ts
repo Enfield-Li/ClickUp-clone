@@ -23,9 +23,9 @@ export default function teamReducer(
 ) {
   function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
     const { spaceId, teamId, listId, folderIds } = draftState.teamActiveStatus;
-    draftState.teams = deepCopy(draftState.originalTeams);
+    draftState.teamsForRender = deepCopy(draftState.originalTeams);
 
-    draftState.teams.forEach((team) => {
+    draftState.teamsForRender.forEach((team) => {
       if (team.id === teamId) {
         team["isSelected"] = true;
         team.spaces.forEach((space) => {
@@ -89,7 +89,7 @@ export default function teamReducer(
               })
         );
 
-        draftState.teams = copiedTeams;
+        draftState.teamsForRender = copiedTeams;
         draftState.originalTeams = copiedTeams;
         draftState.teamActiveStatus = teamActivity;
 
@@ -238,7 +238,20 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO: {
       return produce(teamState, (draftState) => {
-        draftState.createFolderInfo = action.payload;
+        const payload = deepCopy(action.payload);
+        const { spaceId } = payload;
+
+        draftState.originalTeams.forEach(
+          (team) =>
+            team.id === draftState.teamActiveStatus.teamId &&
+            team.spaces.forEach(
+              (space) =>
+                space.id === spaceId &&
+                (payload.currentLevelFolders = space.folderCategories)
+            )
+        );
+
+        draftState.createFolderInfo = payload;
       });
     }
 

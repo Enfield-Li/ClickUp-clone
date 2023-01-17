@@ -18,4 +18,5 @@ export const initCreateFolderState: CreateFolderState = {
   selectedStatusColumns: [],
   step: CreateFolderStep.ENTRY,
   createFolderDTO: iniCreateFolderDTO,
+  folderNameError: { errorMsg: "", isError: false },
 };

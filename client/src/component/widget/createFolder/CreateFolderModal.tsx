@@ -36,7 +36,7 @@ function CreateFolderModal({}: Props) {
   useEffect(() => {
     if (isCreateFolderModalOpen) {
       const { createFolderInfo } = teamState;
-      const team = teamState.teams.find((team) => team.isSelected);
+      const team = teamState.teamsForRender.find((team) => team.isSelected);
       const space = team?.spaces.find(
         (space) => space.id === createFolderInfo?.spaceId
       );
