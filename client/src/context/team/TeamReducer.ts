@@ -1,15 +1,10 @@
-import { space } from "@chakra-ui/react";
 import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
 import determineListType, {
   determineFolderType,
 } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
-  Category,
-  CreateFolderInfo,
   CreateListInfo,
-  FolderCategory,
-  ListCategory,
   Team,
   TeamStateActionType,
   TeamStateType,
@@ -177,15 +172,15 @@ export default function teamReducer(
             team.spaces.forEach((space) => {
               if (space.id === spaceId) {
                 // @ts-expect-error
-                const index = space.allListOrFolder.findLastIndex((i) =>
-                  determineListType(i)
+                const lastFolderIndex = space.allListOrFolder.findLastIndex((i) =>
+                  determineFolderType(i)
                 );
 
-                if (index >= 0) {
-                  space.allListOrFolder.splice(index - 1, 0, folder);
+                if (lastFolderIndex >= 0) {
+                  space.allListOrFolder.splice(lastFolderIndex + 1, 0, folder);
                   return;
                 }
-                space.allListOrFolder.push(folder);
+                space.allListOrFolder.unshift(folder);
                 space.folderCategories.push(folder);
               }
             })
