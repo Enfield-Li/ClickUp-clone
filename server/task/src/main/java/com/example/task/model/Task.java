@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.example.task.dto.unused.CreateTaskDTO;
+import com.example.task.dto.CreateTaskDTO;
 import com.example.task.model.taskPosition.DueDatePosition;
 import com.example.task.model.taskPosition.PriorityPosition;
 import com.example.task.model.taskPosition.StatusPosition;

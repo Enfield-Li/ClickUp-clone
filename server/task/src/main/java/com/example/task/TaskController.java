@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.task.dto.CreateTaskDTO;
 import com.example.task.dto.TaskListStatusCategoryDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
-import com.example.task.dto.unused.CreateTaskDTO;
 import com.example.task.model.Task;
+import com.example.task.service.TaskService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 // import com.example.amqp.RabbitMqMessageProducer;
-import com.example.task.dto.unused.CreateTaskDTO;
+import com.example.task.dto.CreateTaskDTO;
 import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
 import com.example.task.model.taskPosition.DueDate;
@@ -31,91 +31,91 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @ExtendWith(MockitoExtension.class)
 public class TaskServiceTest implements WithAssertions {
 
-    TaskService underTest;
-
-    @Mock
-    TaskMapper taskMapper;
-
-    @Mock
-    TaskRepository taskRepository;
+    // TaskService underTest;
 
     // @Mock
-    // RabbitMqMessageProducer rabbitMQMessageProducer;
+    // TaskMapper taskMapper;
 
-    @Mock
-    Authentication authentication;
+    // @Mock
+    // TaskRepository taskRepository;
 
-    @Mock
-    SecurityContext securityContext;
+    // // @Mock
+    // // RabbitMqMessageProducer rabbitMQMessageProducer;
 
-    @Captor
-    ArgumentCaptor<Task> taskArgCaptor;
+    // @Mock
+    // Authentication authentication;
 
-    UserInfo creator = UserInfo.builder().userId(1).username("user1").build();
+    // @Mock
+    // SecurityContext securityContext;
 
-    @BeforeEach
-    void setUp() {
-        // underTest = new TaskService(taskMapper, taskRepository);
-        // SecurityContextHolder.setContext(securityContext);
-        // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
-        // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
-    }
+    // @Captor
+    // ArgumentCaptor<Task> taskArgCaptor;
 
-    @Test
-    void create_Task_should_pass() {
-        // given
-        var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
-        var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
-        var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
-        var createTaskDto = new CreateTaskDTO("desc", LocalDateTime.now(), "title", 1, status, dueDate, priority);
+    // UserInfo creator = UserInfo.builder().userId(1).username("user1").build();
 
-        given(taskRepository.save(any())).willReturn(new Task());
+    // @BeforeEach
+    // void setUp() {
+    //     // underTest = new TaskService(taskMapper, taskRepository);
+    //     // SecurityContextHolder.setContext(securityContext);
+    //     // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
+    //     // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
+    // }
 
-        // when
-        var actualTask = underTest.createTask(createTaskDto);
+    // @Test
+    // void create_Task_should_pass() {
+    //     // given
+    //     var status = StatusPosition.builder().columnId(1).orderIndex(1).name("IN_PROGRESS").build();
+    //     var priority = PriorityPosition.builder().columnId(1).orderIndex(1).name(Priority.NORMAL).build();
+    //     var dueDate = DueDatePosition.builder().columnId(1).orderIndex(1).name(DueDate.TODAY).build();
+    //     var createTaskDto = new CreateTaskDTO("desc", LocalDateTime.now(), "title", 1, status, dueDate, priority);
 
-        // then
-        verify(taskRepository).save(taskArgCaptor.capture());
-        var taskCaptured = taskArgCaptor.getValue();
+    //     given(taskRepository.save(any())).willReturn(new Task());
 
-        assertThat(actualTask).isEqualTo(new Task());
-        assertThat(taskCaptured.getCreator()).isEqualTo(creator);
-        assertThat(taskCaptured.getWatchers()).isEqualTo(Set.of(creator));
-        assertThat(taskCaptured.getWatchers())
-                .allSatisfy(userInfo -> {
-                    assertThat(userInfo.getTaskWatcher()).isEqualTo(taskCaptured);
-                });
-    }
+    //     // when
+    //     var actualTask = underTest.createTask(createTaskDto);
 
-    @Test
-    void testDeleteTask() {
-        // given
-        // when
-        // then
-    }
+    //     // then
+    //     verify(taskRepository).save(taskArgCaptor.capture());
+    //     var taskCaptured = taskArgCaptor.getValue();
 
-    @Test
-    void testGetAllTasks() {
-        // given
-        // when
-        // then
-    }
+    //     assertThat(actualTask).isEqualTo(new Task());
+    //     assertThat(taskCaptured.getCreator()).isEqualTo(creator);
+    //     assertThat(taskCaptured.getWatchers()).isEqualTo(Set.of(creator));
+    //     assertThat(taskCaptured.getWatchers())
+    //             .allSatisfy(userInfo -> {
+    //                 assertThat(userInfo.getTaskWatcher()).isEqualTo(taskCaptured);
+    //             });
+    // }
 
-    @Test
-    void testUpdateTaskDesc() {
-    }
+    // @Test
+    // void testDeleteTask() {
+    //     // given
+    //     // when
+    //     // then
+    // }
 
-    @Test
-    void testUpdateTaskTitle() {
-        // given
-        // when
-        // then
-    }
+    // @Test
+    // void testGetAllTasks() {
+    //     // given
+    //     // when
+    //     // then
+    // }
 
-    @Test
-    void testUpdateTasksPosition() {
-        // given
-        // when
-        // then
-    }
+    // @Test
+    // void testUpdateTaskDesc() {
+    // }
+
+    // @Test
+    // void testUpdateTaskTitle() {
+    //     // given
+    //     // when
+    //     // then
+    // }
+
+    // @Test
+    // void testUpdateTasksPosition() {
+    //     // given
+    //     // when
+    //     // then
+    // }
 }
