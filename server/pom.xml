@@ -10,8 +10,6 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>customer</module>
-        <module>fraud</module>
         <module>eureka-server</module>
         <module>clients</module>
         <module>apigateway</module>

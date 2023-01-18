@@ -24,17 +24,17 @@ public class RabbitMqConfig {
         rabbitTemplate.setMessageConverter(jacksonConverter());
         return rabbitTemplate;
     }
+
     //   @Bean
     //   public CachingConnectionFactory connectionFactory() {
     //     return new CachingConnectionFactory();
     //   }
-    //   @Bean
-    //   public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
-    //     ConnectionFactory connectionFactory
-    //   ) {
+    // @Bean
+    // public SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(
+    //         ConnectionFactory connectionFactory) {
     //     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
     //     factory.setConnectionFactory(connectionFactory);
     //     factory.setMessageConverter(jacksonConverter());
     //     return factory;
-    //   }
+    // }
 }
