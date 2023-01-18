@@ -1,6 +1,16 @@
 import produce from "immer";
-import { SetTaskState, SortBy, Task, UpdateEvent } from "../../../types";
+import { updateTasksPosition } from "../../../networkCalls";
+import {
+  SetTaskState,
+  SortBy,
+  Task,
+  TaskPositionDTO,
+  UpdateEvent,
+  UpdateTasksPositionDTO,
+} from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 import { getRandomNumberNoLimit } from "../../../utils/getRandomNumber";
+import { newTaskPositionDTO } from "../../../utils/newTaskPositionDTO";
 import {
   findTheLastOrderIndexInColumn,
   OrderIndexInColumn,
@@ -15,6 +25,11 @@ export function updateTaskAttribute(
   targetColumnId: number,
   expectedDueDate?: Date | null
 ) {
+  const updateTaskListDTO: UpdateTasksPositionDTO = {
+    sourceTaskId: 0,
+    taskDtoList: [],
+  };
+
   setTaskState(
     (taskState) =>
       taskState &&
@@ -47,6 +62,13 @@ export function updateTaskAttribute(
               task[targetField].orderIndex = orderIndex;
               task[targetField].columnId = targetColumnId;
 
+              const updateTaskPositionDTO: TaskPositionDTO = newTaskPositionDTO(
+                task,
+                sortBy
+              );
+              updateTaskListDTO.sourceTaskId = task.id!;
+              updateTaskListDTO.taskDtoList = [updateTaskPositionDTO];
+
               // move task to targetColumn and delete from original column
               if (sortBy === targetField) {
                 taskList.splice(index, 1);
@@ -61,6 +83,9 @@ export function updateTaskAttribute(
         })
       )
   );
+
+  console.log({ updateTaskListDTO });
+  updateTasksPosition(updateTaskListDTO);
 }
 
 export function newUpdateEvent(

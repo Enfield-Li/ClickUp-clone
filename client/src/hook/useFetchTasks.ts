@@ -19,7 +19,7 @@ interface UseFetchTasksParam {
 export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
   const location = useLocation();
   const [taskState, setTaskState] = useState<TaskState>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   //   console.log({ taskState });
 
@@ -35,8 +35,6 @@ export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
         setTaskStateContext(null);
         return;
       }
-
-      setLoading(true);
 
       // Task data
       const { defaultStatusCategoryId } = location.state;

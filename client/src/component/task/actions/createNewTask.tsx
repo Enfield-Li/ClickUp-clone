@@ -156,8 +156,6 @@ export function findTheLastOrderIndexInColumn(
   columnId: number,
   taskState: TaskState
 ): OrderIndexInColumn {
-  console.log({ sortBy });
-
   const allTasks = collectAllTasks(taskState.orderedTasks);
 
   const allOrderIndex: number[] = [];
@@ -183,7 +181,6 @@ export function findTheLastOrderIndexInColumn(
   const undeterminedColumns = taskState.columnOptions[
     `${sortBy}Columns`
   ] as UndeterminedColumns;
-  console.log({ undeterminedColumns });
 
   const currentColumn = undeterminedColumns.find(
     (column) => column.id === columnId

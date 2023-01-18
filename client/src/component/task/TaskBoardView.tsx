@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useFetchTasks } from "../../hook/useFetch";
+import { useFetchTasks } from "../../hook/useFetchTasks";
 import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
@@ -19,6 +19,7 @@ import {
 } from "../../types";
 import { newEventDTO } from "../../utils/createNewEvent";
 import { isDueDateColumns } from "../../utils/determineColumns";
+import { newTaskPositionDTO } from "../../utils/newTaskPositionDTO";
 import {
   getExpectedDueDateFromDueDateColumn,
   getLookUpReorderedColumnTable,
@@ -328,29 +329,6 @@ async function handleDragEnd(
       updateTasksPosition(updateTaskListDTO);
     })
   );
-}
-
-function newTaskPositionDTO(task: Task, sortBy: SortBy): TaskPositionDTO {
-  const lastUpdateEvent = task.taskEvents[0] as UpdateEvent;
-
-  const taskPositionDto: TaskPositionDTO = {
-    taskId: task.id!,
-    expectedDueDate: task.expectedDueDate,
-    updateEvent: lastUpdateEvent,
-  };
-
-  if (sortBy === SortBy.STATUS) {
-    taskPositionDto[sortBy] = task[sortBy];
-  }
-  if (sortBy === SortBy.DUE_DATE) {
-    taskPositionDto[sortBy] = task[sortBy];
-  }
-  if (sortBy === SortBy.PRIORITY) {
-    taskPositionDto[sortBy] = task[sortBy];
-  }
-  //   taskPositionDto[sortBy] = task[sortBy];
-
-  return taskPositionDto;
 }
 
 /* 
