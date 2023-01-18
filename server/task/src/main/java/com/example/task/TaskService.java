@@ -45,6 +45,7 @@ public class TaskService {
         return new TaskListStatusCategoryDTO(statusCategoryDTO, taskList);
     }
 
+    @Transactional
     public Task createTask(CreateTaskDTO createTaskDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
         var task = Task.convertFromCreateTaskDto(

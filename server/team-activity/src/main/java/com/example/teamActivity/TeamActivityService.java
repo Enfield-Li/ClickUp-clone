@@ -66,12 +66,16 @@ public class TeamActivityService {
             return;
         }
 
+        if (spaceId != null) {
+            repository.updateOpenedSpace(teamId, spaceId);
+        }
+
         if (folderId != null) {
             updateOpenedFolder(teamId, folderId);
         }
 
         if (listId != null) {
-            repository.updateOpenedSpace(teamId, listId);
+            repository.updateOpenedList(teamId, listId);
         }
     }
 

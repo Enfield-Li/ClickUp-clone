@@ -26,7 +26,6 @@ public class UserInfoService {
                 .getPrincipal();
     }
 
-    @Transactional
     public UserInfo getCurrentUserInfo() {
         var userCredentials = getUserCredentialsInfo();
         var userId = userCredentials.userId();

@@ -8,7 +8,7 @@ export const SERVICE_ENDPOINT = {
   TEAM: "http://localhost:8088",
   AUTHORIZATION: "http://localhost:8085",
   TEAM_STATUS_CATEGORY: "http://localhost:8089",
-  PANEL_ACTIVITY: "http://localhost:8090",
+  TEAM_ACTIVITY: "http://localhost:8090",
 } as const;
 
 const ALL_TASKS = "/all_tasks";
@@ -22,6 +22,7 @@ const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
 const STATUS_COLUMN_API_VERSION = "/api/v1/status_column";
+const TEAM_ACTIVITY_API_VERSION = "/api/v1/team_activity";
 const STATUS_CATEGORY_API_VERSION = "/api/v1/status_category";
 
 // API endpoints
@@ -60,6 +61,9 @@ export const API_ENDPOINT = {
 
   // status column
   STATUS_COLUMN: STATUS_COLUMN_API_VERSION,
+
+  // team activity
+  TEAM_ACTIVITY: TEAM_ACTIVITY_API_VERSION,
 } as const;
 
 export const TASK_PARAM = "taskId";

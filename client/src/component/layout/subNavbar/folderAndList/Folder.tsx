@@ -7,7 +7,8 @@ import {
 } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
+import { updateTeamActivity } from "../../../../networkCalls";
+import { FolderCategory, Space, TEAM_STATE_ACTION, UpdateTeamActivityDTO } from "../../../../types";
 import AddFolderOrListPopover from "../AddFolderOrListPopover";
 import List from "./List";
 
@@ -35,10 +36,18 @@ function Folder({ space, folder }: Props) {
     folderId: number
   ) {
     e.stopPropagation();
+
     teamStateDispatch({
       payload: { folderId },
       type: TEAM_STATE_ACTION.OPEN_FOLDER,
     });
+
+    const dto: UpdateTeamActivityDTO = {
+      teamId: teamState.teamActiveStatus.teamId,
+      spaceId: space.id,
+      folderId: folder.id
+    };
+    updateTeamActivity(dto);
   }
 
   function handleAddCategory(

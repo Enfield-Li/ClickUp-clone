@@ -25,8 +25,8 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value = { "id" })
 @EqualsAndHashCode(exclude = { "taskWatcher" })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class UserInfo {
 
     @Id

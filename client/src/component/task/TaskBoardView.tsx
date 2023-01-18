@@ -1,9 +1,8 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
-import { memo, useCallback, useMemo, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { TASK_BOARD_PARAM } from "../../constant";
+import { memo, useCallback, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useFetchTasks } from "../../hook/useFetch";
 import { updateTasksPosition } from "../../networkCalls";
 import {
@@ -25,11 +24,9 @@ import {
   getLookUpReorderedColumnTable,
 } from "./actions/taskProcessing";
 import Column from "./Column";
-import CreateListPanel from "./panel/CreateListPanel";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
+import CreateListPanel from "./panel/CreateListPanel";
 import CreateSpacePanel from "./panel/CreateSpacePanel";
-import useTeamStateContext from "../../context/team/useTeamContext";
-import TeamStateProvider from "../../context/team/TeamContext";
 
 type Props = {
   sortBy: SortBy;
@@ -44,7 +41,6 @@ function TaskBoardView({ sortBy }: Props) {
   });
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
-  //   console.log(taskState);
 
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {

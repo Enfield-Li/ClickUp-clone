@@ -675,3 +675,10 @@ export type GetTaskListDTO = {
   listId: number;
   defaultStatusCategoryId: number;
 };
+
+export type UpdateTeamActivityDTO = {
+  teamId: number;
+  spaceId: number;
+  folderId?: number;
+  listId?: number;
+};

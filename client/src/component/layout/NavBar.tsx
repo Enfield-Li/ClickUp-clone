@@ -14,6 +14,7 @@ import { fetchTeamList } from "../../networkCalls";
 import { TEAM_STATE_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import FixedNavBar from "./navbar/FixedNavBar";
+import { determineFolderType } from "./subNavbar/folderAndList/determineList";
 import SubNavbar from "./subNavbar/SubNavbar";
 
 type Props = {};
@@ -40,8 +41,26 @@ function NavBar({}: Props) {
       fetchTeamList(
         Number(teamId),
         (initTeamListDTO) => {
-          const { listId, teamId, spaceId } = initTeamListDTO.teamActivity;
-          navigate(getTaskBoardURL({ teamId, spaceId, listId }));
+          const { teams, teamActivity } = initTeamListDTO;
+          const { listId, teamId, spaceId } = teamActivity;
+
+          let defaultStatusCategoryId;
+          if (listId) {
+            const statusCategoryId = teams
+              .find((team) => team.id === teamId)
+              ?.spaces.find((space) => space.id === spaceId)
+              ?.listCategories.find(
+                (list) => list.id === listId
+              )?.defaultStatusCategoryId;
+
+            if (Number(statusCategoryId)) {
+              defaultStatusCategoryId = statusCategoryId;
+            }
+          }
+
+          navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
+            state: { defaultStatusCategoryId },
+          });
 
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,

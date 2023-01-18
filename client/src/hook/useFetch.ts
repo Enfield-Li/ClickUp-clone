@@ -21,7 +21,7 @@ export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
   const [taskState, setTaskState] = useState<TaskState>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-//   console.log({ taskState });
+  //   console.log({ taskState });
 
   const { task, setTask, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
@@ -30,7 +30,7 @@ export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
     initTaskState();
 
     async function initTaskState() {
-      if (!listId && !location?.state?.defaultStatusCategoryId) {
+      if (!listId || !location?.state?.defaultStatusCategoryId) {
         setTaskState(undefined);
         setTaskStateContext(null);
         return;

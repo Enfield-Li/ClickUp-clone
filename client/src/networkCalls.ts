@@ -5,6 +5,7 @@ import {
   axiosAuthServiceInstance,
   axiosStatusCategoryServiceInstance,
   axiosTaskServiceInstance,
+  axiosTeamActivityServiceInstance,
   axiosTeamServiceInstance,
 } from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
@@ -39,17 +40,25 @@ import {
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
+  UpdateTeamActivityDTO,
 } from "./types";
 import { deepCopy } from "./utils/deepCopy";
 
-function initOrderedStatusCategories(StatusCategories: StatusCategories) {
-  StatusCategories[0].isSelected = true;
+export async function updateTeamActivity(
+  dto: UpdateTeamActivityDTO,
+  onSuccess?: () => void,
+  onFailure?: () => void
+) {
+  try {
+    await axiosTeamActivityServiceInstance.put(API_ENDPOINT.TEAM_ACTIVITY, dto);
 
-  StatusCategories.forEach((category) =>
-    category.statusColumns.sort((a, b) => a.orderIndex - b.orderIndex)
-  );
-
-  return StatusCategories;
+    onSuccess && onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
 }
 
 export async function createSpaceForTeam(
@@ -122,6 +131,16 @@ export async function fetchTeamStatusCategories(
       await axiosStatusCategoryServiceInstance.get<StatusCategories>(
         API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
       );
+
+    function initOrderedStatusCategories(StatusCategories: StatusCategories) {
+      StatusCategories[0].isSelected = true;
+
+      StatusCategories.forEach((category) =>
+        category.statusColumns.sort((a, b) => a.orderIndex - b.orderIndex)
+      );
+
+      return StatusCategories;
+    }
 
     onSuccess(initOrderedStatusCategories(response.data));
   } catch (error) {

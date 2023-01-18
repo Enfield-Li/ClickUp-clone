@@ -7,7 +7,12 @@ import {
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { Space, TEAM_STATE_ACTION } from "../../../types";
+import { updateTeamActivity } from "../../../networkCalls";
+import {
+  Space,
+  TEAM_STATE_ACTION,
+  UpdateTeamActivityDTO,
+} from "../../../types";
 import AddFolderOrListPopover from "./AddFolderOrListPopover";
 import SpaceContent from "./folderAndList/SpaceContent";
 
@@ -17,7 +22,7 @@ export default memo(SpaceComponent);
 function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { teamStateDispatch } = useTeamStateContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
 
@@ -35,6 +40,12 @@ function SpaceComponent({ space }: Props) {
       type: TEAM_STATE_ACTION.OPEN_SPACE,
       payload: { spaceId },
     });
+
+    const dto: UpdateTeamActivityDTO = {
+      teamId: teamState.teamActiveStatus.teamId,
+      spaceId,
+    };
+    updateTeamActivity(dto);
   }
 
   return (
