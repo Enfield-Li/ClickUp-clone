@@ -14,13 +14,13 @@ import com.example.clients.statusCategory.StatusCategoryClient;
 // import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.task.TaskMapper;
 import com.example.task.dto.CreateTaskDTO;
 import com.example.task.dto.TaskListStatusCategoryDTO;
 import com.example.task.dto.UpdateTaskDescDTO;
 import com.example.task.dto.UpdateTaskTitleDTO;
 import com.example.task.dto.UpdateTasksPositionDTO;
 import com.example.task.model.Task;
+import com.example.task.repository.TaskMapper;
 import com.example.task.repository.TaskRepository;
 
 import lombok.RequiredArgsConstructor;

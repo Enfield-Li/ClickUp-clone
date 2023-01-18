@@ -49,6 +49,7 @@ export function updateTaskAttribute(
                 task[targetField].columnId,
                 targetColumnId
               );
+              if (!task.taskEvents) task.taskEvents = [];
               task.taskEvents.push(newTaskEvent);
 
               const { orderIndex, columnName }: OrderIndexInColumn =
@@ -64,7 +65,7 @@ export function updateTaskAttribute(
 
               const updateTaskPositionDTO: TaskPositionDTO = newTaskPositionDTO(
                 task,
-                sortBy
+                targetField
               );
               updateTaskListDTO.sourceTaskId = task.id!;
               updateTaskListDTO.taskDtoList = [updateTaskPositionDTO];
@@ -84,7 +85,6 @@ export function updateTaskAttribute(
       )
   );
 
-  console.log({ updateTaskListDTO });
   updateTasksPosition(updateTaskListDTO);
 }
 

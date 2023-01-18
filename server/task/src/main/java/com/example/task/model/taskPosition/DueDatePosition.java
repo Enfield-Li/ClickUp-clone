@@ -3,21 +3,33 @@ package com.example.task.model.taskPosition;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Data
 @Entity
 // https://stackoverflow.com/questions/31664098/lombok-builder-inheritance-workaround
-@SuperBuilder
+@Builder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class DueDatePosition extends Position {
+@AllArgsConstructor
+public class DueDatePosition {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
+    @NotNull
+    private Integer columnId;
+
+    @NotNull
+    private Integer orderIndex;
+    
     @NotNull
     @Enumerated(EnumType.STRING)
     private DueDate name;

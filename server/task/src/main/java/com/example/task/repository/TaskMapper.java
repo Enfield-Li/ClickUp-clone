@@ -1,4 +1,4 @@
-package com.example.task;
+package com.example.task.repository;
 
 import java.time.LocalDateTime;
 
