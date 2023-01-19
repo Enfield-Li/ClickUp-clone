@@ -68,7 +68,7 @@ export function updateTaskAttribute(
                 targetField
               );
               updateTaskListDTO.sourceTaskId = task.id!;
-              updateTaskListDTO.taskDtoList = [updateTaskPositionDTO];
+              updateTaskListDTO.taskDtoList = deepCopy([updateTaskPositionDTO]);
 
               // move task to targetColumn and delete from original column
               if (sortBy === targetField) {

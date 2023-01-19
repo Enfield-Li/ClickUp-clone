@@ -95,14 +95,14 @@ public class TaskService {
                         status.getId(), statusTableName, status);
             }
 
-            if (expectedDueDate != null) {
-                taskMapper.updateExpectedDueDate(
-                        taskDTO.taskId(), taskDTO.expectedDueDate());
-            }
-
             if (priority != null) {
                 taskMapper.updateTaskPosition(
                         priority.getId(), priorityTableName, priority);
+            }
+
+            if (status == null && priority == null) {
+                taskMapper.updateExpectedDueDate(
+                        taskDTO.taskId(), expectedDueDate);
             }
         });
 

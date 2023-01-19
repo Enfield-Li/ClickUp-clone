@@ -500,7 +500,6 @@ export async function updateTasksPosition(
       API_ENDPOINT.TASK,
       deepCopy(updateTasksPositionDTO)
     );
-    console.log({ data: response.data });
 
     // return response.data;
   } catch (error) {

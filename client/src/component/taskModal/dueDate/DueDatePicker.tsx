@@ -7,6 +7,7 @@ import { SortBy, Task } from "../../../types";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import MaterialTheme from "../../../utils/MaterialTheme";
+import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 
 type Props = {
   task: Task;
@@ -20,6 +21,8 @@ function DueDatePicker({ task, onClose }: Props) {
   const { sortBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
+    expectedDueDateInput = convertUTCDateToLocalDate(expectedDueDateInput);
+
     if (expectedDueDateInput) {
       const targetDueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
         columnOptions.dueDateColumns,
@@ -47,9 +50,7 @@ function DueDatePicker({ task, onClose }: Props) {
         value={task.expectedDueDate}
         displayStaticWrapperAs="desktop"
         renderInput={(params) => <TextField {...params} />}
-        onChange={(newValue) => {
-          if (newValue) handleDatePicker(newValue);
-        }}
+        onChange={(newValue) => newValue && handleDatePicker(newValue)}
       />
     </MaterialTheme>
   );
