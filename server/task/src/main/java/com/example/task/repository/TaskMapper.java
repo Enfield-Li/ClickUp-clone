@@ -11,8 +11,8 @@ public interface TaskMapper {
 
     @Update("UPDATE ${tableName}" +
             " SET order_index = #{position.orderIndex}" +
-            ", column_id = #{position.columnId}" +
-            ", name = #{position.name}" +
+            ",column_id = #{position.columnId}" +
+            ",name = #{position.name}" +
             " WHERE id = #{id}")
     <T> Integer updateTaskPosition(
             @Param("id") Integer id,

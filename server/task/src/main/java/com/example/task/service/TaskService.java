@@ -29,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TaskService {
 
-    Integer updateCount;
-
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
     private final UserInfoService userInfoService;
@@ -84,36 +82,31 @@ public class TaskService {
         // }
 
         var statusTableName = "status_position";
-        var dueDateTableName = "due_date_position";
         var priorityTableName = "priority_position";
-        System.out.println(taskDtoList.toString());
+
         // update position
         taskDtoList.forEach(taskDTO -> {
             var status = taskDTO.status();
-            var dueDate = taskDTO.dueDate();
             var priority = taskDTO.priority();
+            var expectedDueDate = taskDTO.expectedDueDate();
 
             if (status != null) {
-                System.out.println("called");
+                taskMapper.updateTaskPosition(
+                        status.getId(), statusTableName, status);
+            }
 
-                updateCount = taskMapper.updateTaskPosition(status.getId(), statusTableName, status);
+            if (expectedDueDate != null) {
+                taskMapper.updateExpectedDueDate(
+                        taskDTO.taskId(), taskDTO.expectedDueDate());
+            }
 
-            } else if (dueDate != null) {
-                var isSourceTaskExpectedDueDateUpdated = taskDTO
-                        .expectedDueDate() != null &&
-                        taskDTO.taskId() == sourceTaskId;
-                if (isSourceTaskExpectedDueDateUpdated) {
-                    taskMapper.updateExpectedDueDate(taskDTO.taskId(), taskDTO.expectedDueDate());
-                }
-
-                updateCount = taskMapper.updateTaskPosition(dueDate.getId(), dueDateTableName, dueDate);
-
-            } else if (priority != null) {
-                updateCount = taskMapper.updateTaskPosition(priority.getId(), priorityTableName, priority);
+            if (priority != null) {
+                taskMapper.updateTaskPosition(
+                        priority.getId(), priorityTableName, priority);
             }
         });
 
-        return updateCount > 0;
+        return true;
     }
 
     public Boolean deleteTask(Integer taskId, List<Task> tasksForUpdate) {

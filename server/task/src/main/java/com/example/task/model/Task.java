@@ -24,7 +24,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.example.task.dto.CreateTaskDTO;
-import com.example.task.model.taskPosition.DueDatePosition;
 import com.example.task.model.taskPosition.PriorityPosition;
 import com.example.task.model.taskPosition.StatusPosition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -74,11 +73,6 @@ public class Task {
     @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer dueDateId;
-
-    @NotNull
-    @JoinColumn(name = "dueDateId")
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private DueDatePosition dueDate;
 
     private LocalDateTime expectedDueDate;
 
@@ -160,7 +154,6 @@ public class Task {
                 .title(createTaskDTO.title())
                 .listId(createTaskDTO.listId())
                 .status(createTaskDTO.status())
-                .dueDate(createTaskDTO.dueDate())
                 .priority(createTaskDTO.priority())
                 .description(createTaskDTO.description())
                 .expectedDueDate(createTaskDTO.expectedDueDate())

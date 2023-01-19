@@ -7,8 +7,6 @@ import static org.mockito.BDDMockito.*;
 import com.example.task.dto.CreateTaskDTO;
 import com.example.task.model.UserInfo;
 import com.example.task.model.Task;
-import com.example.task.model.taskPosition.DueDate;
-import com.example.task.model.taskPosition.DueDatePosition;
 import com.example.task.model.taskPosition.Priority;
 import com.example.task.model.taskPosition.PriorityPosition;
 import com.example.task.model.taskPosition.StatusPosition;

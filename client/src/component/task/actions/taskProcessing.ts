@@ -12,6 +12,7 @@ import {
   TaskList,
   TaskState,
   UndeterminedColumns,
+  DueDate,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import { getDaysBefore, getNextNWeekDay } from "../../../utils/getWeekDays";
@@ -181,6 +182,11 @@ export function processTaskList(
     // init taskEvents
     // workaround: create and update the copy to prevent type error "dueDate" is read only
     const taskCopy = deepCopy(task) as Task;
+    taskCopy.dueDate = {
+      columnId: 0,
+      orderIndex: -1,
+      name: DueDateRange.NO_DUE_DATE,
+    };
 
     if (!task.taskEvents || task.taskEvents.length) taskCopy.taskEvents = [];
 
@@ -193,7 +199,7 @@ export function processTaskList(
     const dueDate = dueDateColumn.find((column) => column.id === columnId);
     if (!dueDate) throw new Error("Failed to init dueDate for tasks.");
 
-    // override existing dueDate data
+    // init dueDate data
     taskCopy.dueDate.columnId = columnId;
     taskCopy.dueDate.name = dueDate?.title;
 

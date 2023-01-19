@@ -90,6 +90,12 @@ export async function createNewTask({
 
           const isCurrentColumn = orderedTask.columnId === targetColumnId;
           if (isCurrentColumn && createdTask) {
+            createdTask.taskEvents = [];
+            createdTask.dueDate = {
+              columnId: 0,
+              orderIndex: -1,
+              name: DueDateRange.NO_DUE_DATE,
+            };
             orderedTask.taskList.push(createdTask);
           }
         });
