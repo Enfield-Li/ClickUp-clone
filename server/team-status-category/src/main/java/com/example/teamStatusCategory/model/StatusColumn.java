@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -49,11 +50,11 @@ public class StatusColumn {
 
     private Boolean isDefaultStatus;
 
-    @JsonIgnore
     @Column(updatable = false, insertable = false)
     private Integer statusCategoryId;
 
     @JsonIgnore
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusCategoryId")
     private StatusCategory statusCategory;

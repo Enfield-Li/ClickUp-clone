@@ -1,5 +1,6 @@
 package com.example.teamStatusCategory.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,14 +43,46 @@ public class StatusCategory {
     @NotNull
     private Integer teamId;
 
-    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<StatusColumn> statusColumns;
+    private Boolean isDefaultCategory;
 
-    public StatusCategory(@NotNull String name,
-            Set<StatusColumn> statusColumns, @NotNull Integer teamId) {
+    @Builder.Default
+    @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<StatusColumn> statusColumns = new HashSet<>();
+
+    public void addStatusColumn(StatusColumn statusColumn) {
+        statusColumns.add(statusColumn);
+        statusColumn.setStatusCategory(this);
+    }
+
+    public void removeStatusColumn(StatusColumn statusColumn) {
+        statusColumns.remove(statusColumn);
+        statusColumn.setStatusCategory(null);
+    }
+
+    public void addStatusColumns(Set<StatusColumn> statusColumnSet) {
+        statusColumnSet.forEach(
+                statusColumn -> this.addStatusColumn(statusColumn));
+    }
+
+    public void removeStatusColumns(Set<StatusColumn> statusColumnSet) {
+        statusColumnSet.forEach(
+                statusColumn -> this.removeStatusColumn(statusColumn));
+    }
+
+    public StatusCategory(
+            @NotNull String name,
+            @NotNull Integer teamId) {
         this.name = name;
         this.teamId = teamId;
-        this.statusColumns = statusColumns;
+    }
+
+    public StatusCategory(
+            @NotNull String name,
+            @NotNull Integer teamId,
+            Boolean isDefaultCategory) {
+        this.name = name;
+        this.teamId = teamId;
+        this.isDefaultCategory = isDefaultCategory;
     }
 
     public static List<StatusCategory> initDefaultStatusCategories(
@@ -60,27 +93,19 @@ public class StatusCategory {
         var kanbanStatusColumns = StatusColumn.initKanbanStatusColumns();
         var marketingStatusColumns = StatusColumn.initMarketingStatusColumns();
 
-        var scrum = new StatusCategory("Scrum", scrumStatusColumns, teamId);
-        var custom = new StatusCategory("Custom", customStatusColumns, teamId);
-        var normal = new StatusCategory("Normal", normalStatusColumns, teamId);
-        var kanban = new StatusCategory("Kanban", kanbanStatusColumns, teamId);
-        var marketing = new StatusCategory("Marketing", marketingStatusColumns, teamId);
+        var scrum = new StatusCategory("Scrum", teamId);
+        var normal = new StatusCategory("Normal", teamId);
+        var kanban = new StatusCategory("Kanban", teamId);
+        var marketing = new StatusCategory("Marketing", teamId);
+        var custom = new StatusCategory("Custom", teamId, true);
 
-        bindStatusCategory(scrum, scrumStatusColumns);
-        bindStatusCategory(custom, customStatusColumns);
-        bindStatusCategory(normal, normalStatusColumns);
-        bindStatusCategory(kanban, kanbanStatusColumns);
-        bindStatusCategory(marketing, marketingStatusColumns);
+        scrum.addStatusColumns(scrumStatusColumns);
+        custom.addStatusColumns(customStatusColumns);
+        normal.addStatusColumns(normalStatusColumns);
+        kanban.addStatusColumns(kanbanStatusColumns);
+        marketing.addStatusColumns(marketingStatusColumns);
 
         return List.of(custom, normal, kanban, scrum, marketing);
-    }
-
-    private static void bindStatusCategory(
-            StatusCategory statusCategory,
-            Set<StatusColumn> statusColumns) {
-        statusColumns.forEach(column -> {
-            column.setStatusCategory(statusCategory);
-        });
     }
 
     public static StatusCategory convertCreateStatusCategoryDTO(
@@ -91,10 +116,8 @@ public class StatusCategory {
         var statusCategory = StatusCategory.builder()
                 .name(dto.name())
                 .teamId(dto.teamId())
-                .statusColumns(statusColumns)
                 .build();
-        bindStatusCategory(statusCategory, statusColumns);
-
+        statusCategory.addStatusColumns(statusColumns);
         return statusCategory;
     }
 }

@@ -14,7 +14,7 @@ import {
   UpdateStatusColumnTitleDTO,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
-import StatusColorPallet from "./StatusColorPallet";
+import StatusColorPalletPopover from "./StatusColorPalletPopover";
 import StatusColumnOption from "./StatusColumnOption";
 import StatusColumnOptionPopover from "./StatusColumnOptionPopover";
 
@@ -179,8 +179,8 @@ function ActiveStatus({
     >
       <Flex alignItems="center">
         {/* Color */}
-        <StatusColorPallet
-          updateColor={!editing && true}
+        <StatusColorPalletPopover
+          updateColorOnChoose={!editing && true}
           isColorPalletOpen={isColorPalletOpen}
           handleSelectColor={handleSelectColor}
           onColorPalletClose={onColorPalletClose}
@@ -197,7 +197,7 @@ function ActiveStatus({
                 : undefined
             }
           ></Box>
-        </StatusColorPallet>
+        </StatusColorPalletPopover>
 
         {/* Title */}
         {editing ? (

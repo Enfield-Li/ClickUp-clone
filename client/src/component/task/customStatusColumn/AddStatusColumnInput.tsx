@@ -13,14 +13,14 @@ type Props = {
   color: string;
   setTaskState: SetTaskState;
   statusColumns: StatusColumns;
-  setShowEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  onColorPalletClose: () => void;
 };
 
 export default memo(AddStatusColumnInput);
 function AddStatusColumnInput({
   color,
   setTaskState,
-  setShowEdit,
+  onColorPalletClose,
   statusColumns,
 }: Props) {
   const [titleInput, setTitleInput] = useState("");
@@ -52,7 +52,7 @@ function AddStatusColumnInput({
     <InputGroup>
       {/* Input */}
       <Input
-        autoFocus
+        // autoFocus
         size="xs"
         width="200px"
         height="48px"
@@ -68,9 +68,9 @@ function AddStatusColumnInput({
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             createStatusColumn();
-            setShowEdit(false);
+            onColorPalletClose();
           } else if (e.key === "Escape") {
-            setShowEdit(false);
+            onColorPalletClose();
           }
         }}
       />
@@ -99,7 +99,7 @@ function AddStatusColumnInput({
               color="red.500"
               onClick={() => {
                 // Do nothing and close edit
-                setShowEdit(false);
+                onColorPalletClose();
               }}
             >
               <i className="bi bi-x"></i>

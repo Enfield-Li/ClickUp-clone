@@ -1,8 +1,13 @@
-import { Box, Center, Flex, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { memo, useState } from "react";
 import { SetTaskState, StatusColumns } from "../../../types";
+import StatusColorPalletPopover from "../../widget/statusColumn/StatusColorPalletPopover";
 import AddStatusColumnInput from "./AddStatusColumnInput";
-import { HexColorPicker } from "react-colorful";
 
 type Props = {
   setTaskState: SetTaskState;
@@ -10,31 +15,40 @@ type Props = {
 };
 
 function AddStatusColumn({ setTaskState, statusColumns }: Props) {
-  const hoverBgColor = useColorModeValue("white", "darkMain.200");
+  const {
+    isOpen: isColorPalletOpen,
+    onOpen: onColorPalletOpen,
+    onClose: onColorPalletClose,
+  } = useDisclosure();
 
-  const [showEdit, setShowEdit] = useState(false);
   const [color, setColor] = useState("#aabbcc");
+  const hoverBgColor = useColorModeValue("white", "darkMain.200");
 
   return (
     <>
-      {showEdit ? (
+      {isColorPalletOpen ? (
         <>
-          <Box>
+          <StatusColorPalletPopover
+            position="bottom"
+            isColorPalletOpen={isColorPalletOpen}
+            onColorPalletClose={onColorPalletClose}
+            handleSelectColor={(color) => setColor(color)}
+          >
             <AddStatusColumnInput
               color={color}
               setTaskState={setTaskState}
-              setShowEdit={setShowEdit}
               statusColumns={statusColumns}
+              onColorPalletClose={onColorPalletClose}
             />
-          </Box>
+          </StatusColorPalletPopover>
 
-          {showEdit && (
+          {/* {showEdit && (
             <Center mt={3}>
               <Box shadow="2xl" width="fit-content">
                 <HexColorPicker color={color} onChange={setColor} />
               </Box>
             </Center>
-          )}
+          )} */}
         </>
       ) : (
         <>
@@ -46,8 +60,8 @@ function AddStatusColumn({ setTaskState, statusColumns }: Props) {
             minWidth="250px"
             cursor="pointer"
             borderTopRadius="sm"
-            opacity={showEdit ? undefined : "70%"}
-            onClick={() => setShowEdit(true)}
+            onClick={onColorPalletOpen}
+            opacity={isColorPalletOpen ? undefined : "70%"}
             _hover={{ boxShadow: "base", bgColor: hoverBgColor }}
           >
             <Box>+ ADD STATUS</Box>

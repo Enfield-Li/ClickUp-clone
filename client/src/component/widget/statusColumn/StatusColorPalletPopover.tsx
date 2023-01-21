@@ -13,15 +13,17 @@ type Props = {
   isColorPalletOpen: boolean;
   onColorPalletClose: () => void;
   handleSelectColor: (color: string) => void;
-  updateColor?: boolean;
+  updateColorOnChoose?: boolean;
+  position?: "bottom" | "top-start";
 };
 
-export default function StatusColorPallet({
+export default function StatusColorPalletPopover({
   children,
-  updateColor,
+  position,
   isColorPalletOpen,
-  onColorPalletClose,
   handleSelectColor,
+  onColorPalletClose,
+  updateColorOnChoose,
 }: Props) {
   function handleOnClick(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -34,12 +36,12 @@ export default function StatusColorPallet({
   return (
     <Popover
       isLazy
-      placement="top-start"
       returnFocusOnClose={false}
       isOpen={isColorPalletOpen}
-      closeOnBlur={updateColor ? true : false}
-      autoFocus={updateColor ? undefined : false}
-      onClose={updateColor ? onColorPalletClose : undefined}
+      closeOnBlur={updateColorOnChoose ? true : false}
+      autoFocus={updateColorOnChoose ? undefined : false}
+      //   placement={position ? position : "top-start"}
+      onClose={updateColorOnChoose ? onColorPalletClose : undefined}
     >
       <PopoverTrigger>{children}</PopoverTrigger>
 
@@ -50,6 +52,7 @@ export default function StatusColorPallet({
         height="100px"
         borderWidth="1px"
         borderColor="blackAlpha.500"
+        mt={position === "bottom" ? 2 : ""}
         onClick={(e) => e.stopPropagation()}
       >
         <Flex flexDir="column" alignItems="center" justifyContent="">
@@ -64,6 +67,7 @@ export default function StatusColorPallet({
                     width="13px"
                     rounded="sm"
                     height="13px"
+                    cursor="pointer"
                     bgColor={currentColor}
                     onClick={(e) => handleOnClick(e, currentColor)}
                   ></Box>
@@ -77,6 +81,7 @@ export default function StatusColorPallet({
                     height="13px"
                     opacity="60%"
                     fontSize="13px"
+                    cursor="pointer"
                     _hover={{ bgColor: "blackAlpha.500", color: "white" }}
                   >
                     <i className="bi bi-eyedropper"></i>

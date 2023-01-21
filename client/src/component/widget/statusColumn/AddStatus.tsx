@@ -10,7 +10,7 @@ import {
   StatusColumn,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
-import StatusColorPallet from "./StatusColorPallet";
+import StatusColorPalletPopover from "./StatusColorPalletPopover";
 
 type Props = {
   selectedCategory?: StatusCategory;
@@ -136,7 +136,7 @@ function AddStatus({
           onBlur={handleOnBlur}
         >
           {/* Color */}
-          <StatusColorPallet
+          <StatusColorPalletPopover
             isColorPalletOpen={isColorPalletOpen}
             handleSelectColor={handleSelectColor}
             onColorPalletClose={onColorPalletClose}
@@ -148,7 +148,7 @@ function AddStatus({
               height="10px"
               bgColor={selectedColor}
             ></Box>
-          </StatusColorPallet>
+          </StatusColorPalletPopover>
 
           {/* Title */}
           <Input

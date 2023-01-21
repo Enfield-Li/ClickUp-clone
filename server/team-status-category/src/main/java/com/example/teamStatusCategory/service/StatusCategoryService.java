@@ -55,8 +55,9 @@ public class StatusCategoryService {
     }
 
     public StatusCategory getStatusCategoryForList(Integer id) {
-        return repository.findById(id).orElseThrow(
-                () -> new InternalErrorException(
-                        String.format("StatusCategory with id: $s not found", id)));
+        return repository.findById(id)
+                .orElseThrow(() -> new InternalErrorException(
+                        String.format("StatusCategory with id: $s not found",
+                                id)));
     }
 }

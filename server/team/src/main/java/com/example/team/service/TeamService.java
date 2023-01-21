@@ -46,7 +46,6 @@ public class TeamService {
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
 
-        // var teamActivity = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
         var teamActivity = teamActivityClient.getTeamActivity(teamId);
 
         return new InitTeamListDTO(teamSet, teamActivity);
@@ -60,12 +59,12 @@ public class TeamService {
         var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
         var team = repository.save(initTeam);
 
-        // Init space
+        // Init statusCategory
         var teamId = team.getId();
-        // var defaultStatusCategoryId = 1;
         var defaultStatusCategoryId = statusCategoryClient
                 .initStatusCategoryForTeam(teamId);
 
+        // Init space
         var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
         team.addSpace(initSpace);
         var space = spaceRepository.save(initSpace);
@@ -73,7 +72,6 @@ public class TeamService {
         // update team activity
         var createTeamActivityDTO = new CreateTeamActivityDTO(
                 team.getId(), space.getId());
-        // var teamActivityDTO = new TeamActivityDTO(1, 1, 1, 1, 1, List.of(1));
         var teamActivityDTO = teamActivityClient.createTeamActivity(
                 createTeamActivityDTO);
 
@@ -85,7 +83,6 @@ public class TeamService {
                 AuthorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
-        System.out.println(createTeamDTO);
         return new CreateTeamResponseDTO(team, teamActivityDTO);
     }
 }

@@ -21,7 +21,9 @@ function DueDatePicker({ task, onClose }: Props) {
   const { sortBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
-    expectedDueDateInput = convertUTCDateToLocalDate(expectedDueDateInput);
+    if (task.expectedDueDate === null) {
+      expectedDueDateInput = convertUTCDateToLocalDate(expectedDueDateInput);
+    }
 
     if (expectedDueDateInput) {
       const targetDueDateColumnId = getDueDateColumnIdFromExpectedDueDate(

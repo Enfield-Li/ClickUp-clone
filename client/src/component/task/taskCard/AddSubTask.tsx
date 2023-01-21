@@ -4,6 +4,7 @@ import { Task } from "../../../types";
 
 type Props = { task: Task; cardBgColor: "white" | "darkMain.200" };
 
+export default memo(AddSubTask);
 function AddSubTask({ task, cardBgColor }: Props) {
   const addSubTaskBgColor = useColorModeValue("lightMain.100", "darkMain.500");
 
@@ -12,7 +13,7 @@ function AddSubTask({ task, cardBgColor }: Props) {
       py="4px"
       opacity="55%"
       bgColor={cardBgColor}
-      _hover={{ borderTop: "1px solid gray", bgColor: cardBgColor }}
+      //   _hover={{ borderTop: "1px solid gray", bgColor: cardBgColor }}
     >
       <Box
         ml="2"
@@ -29,5 +30,3 @@ function AddSubTask({ task, cardBgColor }: Props) {
     </Box>
   );
 }
-
-export default memo(AddSubTask);

@@ -1,5 +1,5 @@
-import { useToast } from "@chakra-ui/react";
-import { memo, useEffect, useState } from "react";
+import { Box, useToast } from "@chakra-ui/react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
 import Login from "./component/auth/Login";
@@ -14,6 +14,7 @@ import useAuthContext from "./context/auth/useAuthContext";
 import { refreshUserToken } from "./networkCalls";
 
 export default memo(App);
+
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,3 +71,22 @@ function App() {
     </Routes>
   );
 }
+
+
+// function App() {
+//     const ref = useRef<HTMLDivElement>(null);
+  
+//     useEffect(() => {
+//       if (ref) {
+//         console.log(ref.current);
+//       }
+//     }, [ref]);
+  
+//     return (
+//       <>
+//         <div className="abc" ref={ref}>
+//           ref here
+//         </div>
+//       </>
+//     );
+//   }

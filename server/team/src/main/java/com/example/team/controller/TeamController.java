@@ -31,7 +31,7 @@ class TeamController {
 
     private final TeamService service;
 
-    @GetMapping
+    @GetMapping("test_getAllTeam")
     List<Team> teams() {
         return service.teams();
     }
