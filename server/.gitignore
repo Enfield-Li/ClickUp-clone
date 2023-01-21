@@ -8,6 +8,8 @@ target/
 ### STS ###
 .apt_generated
 .classpath
+*.class
+resources
 .factorypath
 .project
 .settings
