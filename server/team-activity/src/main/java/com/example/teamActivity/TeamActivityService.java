@@ -1,13 +1,12 @@
 package com.example.teamActivity;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.clients.jwt.UserCredentials;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
+import com.example.serviceSecurityConfig.AuthenticatedUserContext;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,19 +17,11 @@ import lombok.extern.log4j.Log4j2;
 public class TeamActivityService {
 
     private final TeamActivityRepository repository;
-
-    public UserCredentials getCurrentUserInfo() {
-        return (UserCredentials) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
-    }
-
-    private Integer getCurrentUserId() {
-        return getCurrentUserInfo().userId();
-    }
+    private final AuthenticatedUserContext authenticatedUserContext;
 
     public TeamActivity createTeamActivity(
             CreateTeamActivityDTO createTeamActivityDTO) {
-        var userId = getCurrentUserId();
+        var userId = authenticatedUserContext.getCurrentUserId();
         var teamId = createTeamActivityDTO.teamId();
         var spaceId = createTeamActivityDTO.spaceId();
 
@@ -44,7 +35,7 @@ public class TeamActivityService {
     }
 
     public TeamActivity getTeamActivity(Integer teamId) {
-        var userId = getCurrentUserId();
+        var userId = authenticatedUserContext.getCurrentUserId();
         return repository.findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> {
                     log.error("User's teamActivity somehow disappeared");
@@ -60,27 +51,7 @@ public class TeamActivityService {
         var spaceId = dto.spaceId();
         var folderId = dto.folderId();
 
-        // create space
-        if (spaceId != null && listId != null) {
-            repository.updateOpenedSpaceAndList(teamId, spaceId, listId);
-            return;
-        }
-
-        if (spaceId != null) {
-            repository.updateOpenedSpace(teamId, spaceId);
-        }
-
-        if (folderId != null) {
-            updateOpenedFolder(teamId, folderId);
-        }
-
-        if (listId != null) {
-            repository.updateOpenedList(teamId, listId);
-        }
-    }
-
-    private void updateOpenedFolder(Integer teamId, Integer folderId) {
-        var userId = getCurrentUserId();
+        var userId = authenticatedUserContext.getCurrentUserId();
 
         var teamActivity = repository
                 .findByTeamIdAndUserId(teamId, userId)
@@ -90,13 +61,25 @@ public class TeamActivityService {
                             "User's teamActivity somehow disappeared");
                 });
 
-        var isFolderIdExists = teamActivity
-                .getFolderIds().contains(folderId);
-        if (isFolderIdExists) {
-            teamActivity.getFolderIds().remove(folderId);
-        } else {
-            teamActivity.getFolderIds().add(folderId);
+        if (folderId != null) {
+            if (teamActivity.getSpaceId() == spaceId) {
+                teamActivity.setSpaceId(null);
+            } else {
+                teamActivity.setSpaceId(spaceId);
+            }
+        }
+
+        if (folderId != null) {
+            var isFolderIdExists = teamActivity.getFolderIds().contains(folderId);
+            if (isFolderIdExists) {
+                teamActivity.getFolderIds().remove(folderId);
+            } else {
+                teamActivity.getFolderIds().add(folderId);
+            }
+        }
+
+        if (listId != null) {
+            teamActivity.setListId(listId);
         }
     }
-
 }
