@@ -1,13 +1,11 @@
 package com.example.teamActivity;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.assertj.core.api.WithAssertions;
@@ -18,25 +16,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
-import com.example.clients.statusCategory.StatusCategoryClient;
-import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.clients.teamActivity.TeamActivityDTO;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.serviceSecurityConfig.AuthenticatedUserContext;
+import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
 
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 public class TeamActivityServiceTest implements WithAssertions {
@@ -47,7 +35,7 @@ public class TeamActivityServiceTest implements WithAssertions {
     Authentication authentication;
 
     @Mock
-    AuthenticatedUserContext authenticatedUserContext;
+    AuthenticatedSecurityContext authenticatedSecurityContext;
 
     @Mock
     SecurityContext securityContext;
@@ -70,11 +58,45 @@ public class TeamActivityServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new TeamActivityService(repository, authenticatedUserContext);
+        underTest = new TeamActivityService(repository, authenticatedSecurityContext);
     }
 
     @Test
-    void test_create_team_activity() {
+    void test_get_team_activity_should_pass() {
+        // given
+        var teamId = 56;
+        var userId = 4515;
+        var expectedTeamActivity = new TeamActivity();
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(expectedTeamActivity));
+        given(authenticatedSecurityContext.getCurrentUserId())
+                .willReturn(userId);
+
+        // when 
+        var actualResult = underTest.getTeamActivity(teamId);
+
+        // then
+        assertThat(actualResult).isEqualTo(expectedTeamActivity);
+    }
+
+    @Test
+    void test_get_team_activity_should_fail() {
+        // given
+        var teamId = 22;
+        var errorMessage = "User's teamActivity somehow disappeared";
+
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.empty());
+
+        // when 
+        // then
+        assertThatThrownBy(() -> underTest.getTeamActivity(teamId))
+                .isInstanceOf(InternalErrorException.class)
+                .hasMessage(errorMessage);
+    }
+
+    @Test
+    void test_create_team_activity_should_pass() {
         // given
         var teamId = 22;
         var spaceId = 33;
@@ -82,7 +104,7 @@ public class TeamActivityServiceTest implements WithAssertions {
 
         var dto = new CreateTeamActivityDTO(teamId, spaceId);
         given(repository.save(any())).willReturn(expectedResult);
-        given(authenticatedUserContext.getCurrentUserId())
+        given(authenticatedSecurityContext.getCurrentUserId())
                 .willReturn(expectedUserId);
 
         // when 
@@ -100,86 +122,130 @@ public class TeamActivityServiceTest implements WithAssertions {
     }
 
     @Test
-    void test_update_team_activity_when_create_space() {
+    void test_update_team_activity_should_pass_when_updating_space_id() {
         // given
         var teamId = 11;
-        var listId = 12;
-        var spaceId = 13;
+        var userId = 319;
+        var expectedSpaceId = 13;
+        var originalSpaceId = 45;
+        var dto = new UpdateTeamActivityDTO(
+                teamId, expectedSpaceId, null, null);
+        var originalTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(originalSpaceId).build();
+        var expectedTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(expectedSpaceId).build();
 
-        var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, listId);
+        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
 
         // when
         underTest.updateTeamActivity(dto);
 
         // then
-        verify(repository).updateOpenedSpaceAndList(
-                integerCaptor.capture(),
-                integerCaptor.capture(),
-                integerCaptor.capture());
-        var capturedValue = integerCaptor.getAllValues();
-        assertThat(capturedValue).isEqualTo(List.of(teamId, spaceId, listId));
-
-        verify(repository, never()).updateOpenedList(any(), any());
-        verify(repository, never()).updateOpenedSpace(any(), any());
-        verify(authenticatedUserContext, never()).getCurrentUserId();
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
     }
 
-    // @Test
-    // void test_update_team_activity_when_create_folder() {
-    //     var teamId = 11;
-    //     var listId = 12;
-    //     var spaceId = 13;
-    //     var folderId = 14;
-
-    //     var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, null);
-
-    //     // when
-    //     underTest.updateTeamActivity(dto);
-
-    //     // then
-    //     verify(repository).updateOpenedSpace(
-    //             integerCaptor.capture(),
-    //             integerCaptor.capture());
-    //     var capturedValue = integerCaptor.getAllValues();
-    //     assertThat(capturedValue).isEqualTo(List.of(teamId, spaceId));
-
-    //     verify(repository, never()).updateOpenedSpaceAndList(any(), any(), any());
-    //     verify(repository, never()).updateOpenedList(any(), any());
-    //     verify(authenticatedUserContext, never()).getCurrentUserId();
-    // }
-
-    // @Test
-    // void test_update_team_activity_when_create_list() {
-    //     var teamId = 11;
-    //     var listId = 12;
-    //     var spaceId = 13;
-    //     var folderId = 14;
-
-    //     var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, null);
-
-    //     // when
-    //     underTest.updateTeamActivity(dto);
-
-    //     // then
-    //     verify(repository).updateOpenedSpace(
-    //             integerCaptor.capture(),
-    //             integerCaptor.capture());
-    //     var capturedValue = integerCaptor.getAllValues();
-    //     assertThat(capturedValue).isEqualTo(List.of(teamId, spaceId));
-
-    //     verify(repository, never()).updateOpenedSpaceAndList(any(), any(), any());
-    //     verify(repository, never()).updateOpenedList(any(), any());
-    //     verify(authenticatedUserContext, never()).getCurrentUserId();
-    // }
-
     @Test
-    void testUpdateTeamActivityWhen() {
+    void test_update_team_activity_should_pass_when_adding_folder_id() {
+        // given
+        var teamId = 11;
+        var userId = 319;
+        var spaceId = 45;
+        var folderId = 515;
+        var originalFolderIds = new HashSet<Integer>(Set.of(11, 22, 33));
+        var expectedFolderIds = new HashSet<Integer>(Set.of(11, 22, 33, 515));
+
+        var dto = new UpdateTeamActivityDTO(
+                teamId, spaceId, folderId, null);
+        var originalTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).folderIds(originalFolderIds).build();
+        var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).folderIds(expectedFolderIds).build();
+
+        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
 
     }
 
     @Test
-    void test_get_team_activity() {
+    void test_update_team_activity_should_pass_when_deleting_folder_id() {
+        // given
+        var teamId = 11;
+        var userId = 319;
+        var spaceId = 45;
+        var folderId = 11;
+        var originalFolderIds = new HashSet<Integer>(Set.of(11, 22, 33));
+        var expectedFolderIds = new HashSet<Integer>(Set.of(22, 33));
+
+        var dto = new UpdateTeamActivityDTO(
+                teamId, spaceId, folderId, null);
+        var originalTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).folderIds(originalFolderIds).build();
+        var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).folderIds(expectedFolderIds).build();
+
+        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
 
     }
 
+    @Test
+    void test_update_team_activity_should_pass_when_updating_list_id() {
+        // given
+        var teamId = 11;
+        var spaceId = 51;
+        var userId = 319;
+        var expectedListId = 13;
+        var originalListId = 45;
+        var dto = new UpdateTeamActivityDTO(
+                teamId, spaceId, null, expectedListId);
+        var originalTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).listId(originalListId).build();
+        var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
+                .spaceId(spaceId).listId(expectedListId).build();
+
+        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
+
+    }
+
+    @Test
+    void test_update_team_activity_should_fail() {
+        // given
+        var teamId = 11;
+        var spaceId = 51;
+        var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, null);
+        var errorMessage = "User's teamActivity somehow disappeared";
+
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateTeamActivity(dto))
+                .isInstanceOf(InternalErrorException.class)
+                .hasMessage(errorMessage);
+    }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.clients.jwt.UserCredentials;
 
 @Service
-public class AuthenticatedUserContext {
+public class AuthenticatedSecurityContext {
 
     public UserCredentials getCurrentUserInfo() {
         return (UserCredentials) SecurityContextHolder
