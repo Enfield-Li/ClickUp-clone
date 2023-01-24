@@ -2,7 +2,9 @@ package com.example.teamStatusCategory.dto;
 
 import javax.validation.constraints.NotNull;
 
-public record UpdateStatusColumnTitleDTO(
+public record UpdateStatusColumnDTO(
         @NotNull Integer id,
-        @NotNull String title) {
+        String title,
+        String color,
+        Integer orderIndex) {
 }

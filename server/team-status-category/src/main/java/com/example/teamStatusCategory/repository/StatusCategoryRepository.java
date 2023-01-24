@@ -15,12 +15,4 @@ public interface StatusCategoryRepository
         extends JpaRepository<StatusCategory, Integer> {
 
     List<StatusCategory> findAllByTeamId(Integer teamId);
-
-    @Query(nativeQuery = true, value = ""
-            + "UPDATE status_category"
-            + " SET name = :name"
-            + " WHERE id = :id")
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    Integer updateStatusCategoryName(@Param("id") Integer id,
-            @Param("name") String name);
 }

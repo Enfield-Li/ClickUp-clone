@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnTitleDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.service.StatusColumnService;
 
@@ -39,24 +39,10 @@ class StatusColumnController {
         return ResponseEntity.ok(id);
     }
 
-    @PutMapping(TITLE)
+    @PutMapping
     ResponseEntity<Boolean> updateStatusColumnTitle(
-            @RequestBody UpdateStatusColumnTitleDTO dto) {
-        var updated = service.updateStatusColumnTitle(dto);
-        return ResponseEntity.ok(updated);
-    }
-
-    @PutMapping(COLOR)
-    ResponseEntity<Boolean> updateStatusColumnColor(
-            @RequestBody UpdateStatusColumnColorDTO dto) {
-        var updated = service.updateStatusColumnColor(dto);
-        return ResponseEntity.ok(updated);
-    }
-
-    @PutMapping(ORDER_INDEX)
-    ResponseEntity<Boolean> updateStatusColumnOrderIndex(
-            @RequestBody UpdateStatusColumnOrderIndexDTO dto) {
-        var updated = service.updateStatusColumnOrderIndex(dto);
+            @RequestBody UpdateStatusColumnDTO dto) {
+        var updated = service.updateStatusColumn(dto);
         return ResponseEntity.ok(updated);
     }
 

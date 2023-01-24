@@ -1,12 +1,16 @@
 package com.example.teamStatusCategory.service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnTitleDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
+import com.example.teamStatusCategory.model.StatusCategory;
+import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusColumnRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StatusColumnService {
 
+    private final EntityManager entityManager;
     private final StatusColumnRepository repository;
 
     @Transactional
@@ -24,46 +29,56 @@ public class StatusColumnService {
         var color = dto.color();
         var orderIndex = dto.orderIndex();
         var categoryId = dto.categoryId();
+        var statusColumn = StatusColumn.builder().title(title)
+                .color(color).orderIndex(orderIndex).build();
 
-        repository.createStatusColumnForCategory(
-                title, color, orderIndex, categoryId);
-        return repository.getLastInsertedStatusColumnId();
+        var statusCategory = getStatusCategoryReference(categoryId);
+        statusCategory.addStatusColumn(statusColumn);
+
+        return repository.save(statusColumn).getId();
     }
 
     @Transactional
-    public Boolean updateStatusColumnTitle(UpdateStatusColumnTitleDTO dto) {
+    public Boolean updateStatusColumn(UpdateStatusColumnDTO dto) {
         var id = dto.id();
         var title = dto.title();
-
-        var rowsAffected = repository
-                .updateStatusColumnTitle(id, title);
-        return rowsAffected > 0;
-    }
-
-    @Transactional
-    public Boolean updateStatusColumnColor(UpdateStatusColumnColorDTO dto) {
-        var id = dto.id();
         var color = dto.color();
-
-        var rowsAffected = repository
-                .updateStatusColumnColor(id, color);
-        return rowsAffected > 0;
-    }
-
-    @Transactional
-    public Boolean updateStatusColumnOrderIndex(
-            UpdateStatusColumnOrderIndexDTO dto) {
-        var id = dto.id();
         var orderIndex = dto.orderIndex();
 
-        var rowsAffected = repository
-                .updateStatusColumnOrderIndex(id, orderIndex);
-        return rowsAffected > 0;
+        var statusColumn = getStatusColumnReference(id);
+        statusColumn.setTitle(title);
+        statusColumn.setColor(color);
+        statusColumn.setOrderIndex(orderIndex);
+
+        return true;
     }
 
     @Transactional
     public Boolean deleteStatusColumn(Integer id) {
         var rowsAffected = repository.deleteStatusColumnById(id);
+        if (rowsAffected == 0) {
+            throw new InternalErrorException(
+                    String.format("Failed to delete StatusColumn with id: $s", id));
+        }
+
         return rowsAffected > 0;
+    }
+
+    private StatusCategory getStatusCategoryReference(Integer id) {
+        try {
+            return entityManager.getReference(StatusCategory.class, id);
+        } catch (EntityNotFoundException e) {
+            throw new InternalErrorException(
+                    String.format("StatusCategory with id: $s not found", id));
+        }
+    }
+
+    private StatusColumn getStatusColumnReference(Integer id) {
+        try {
+            return entityManager.getReference(StatusColumn.class, id);
+        } catch (EntityNotFoundException e) {
+            throw new InternalErrorException(
+                    String.format("StatusColumn with id: $s not found", id));
+        }
     }
 }

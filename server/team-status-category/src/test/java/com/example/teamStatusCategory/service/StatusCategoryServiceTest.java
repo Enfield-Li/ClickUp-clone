@@ -1,18 +1,16 @@
 package com.example.teamStatusCategory.service;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,18 +20,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
-import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
@@ -48,6 +38,9 @@ public class StatusCategoryServiceTest implements WithAssertions {
     @Mock
     StatusCategoryRepository repository;
 
+    @Mock
+    EntityManager entityManager;
+
     @Captor
     ArgumentCaptor<Integer> integerCaptor;
 
@@ -61,7 +54,7 @@ public class StatusCategoryServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new StatusCategoryService(repository);
+        underTest = new StatusCategoryService(entityManager, repository);
     }
 
     @Test
@@ -196,19 +189,19 @@ public class StatusCategoryServiceTest implements WithAssertions {
         // given
         var id = 1123;
         var name = "name";
-        var expectedResult = 1;
+        var expectedResult = true;
         var dto = new UpdateStatusCategoryNameDTO(id, name);
+        var statusCategory = new StatusCategory();
 
-        given(repository
-                .updateStatusCategoryName(any(), any()))
-                .willReturn(expectedResult);
+        given(entityManager.getReference(any(), any()))
+                .willReturn(statusCategory);
 
         // when 
         var actualResult = underTest
                 .updateStatusCategoryName(dto);
 
         // then
-        assertThat(actualResult).isEqualTo(expectedResult > 0);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
     @Test

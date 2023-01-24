@@ -2,6 +2,8 @@ package com.example.teamStatusCategory.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StatusCategoryService {
 
+    private final EntityManager entityManager;
     private final StatusCategoryRepository repository;
 
     public List<StatusCategory> getStatusCategoryForTeam(Integer teamId) {
@@ -27,8 +30,7 @@ public class StatusCategoryService {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new InternalErrorException(
-                        String.format("StatusCategory with id: $s not found",
-                                id)));
+                        String.format("StatusCategory with id: $s not found", id)));
     }
 
     public Integer initDefaultStatusCategory(Integer teamId) {
@@ -52,9 +54,10 @@ public class StatusCategoryService {
         var id = dto.id();
         var name = dto.name();
 
-        var rowsAffected = repository
-                .updateStatusCategoryName(id, name);
-        return rowsAffected > 0;
+        var statusCategory = getStatusCategoryReference(id);
+        statusCategory.setName(name);
+
+        return true;
     }
 
     public Boolean deleteStatusCategory(Integer id) {
@@ -62,4 +65,7 @@ public class StatusCategoryService {
         return true;
     }
 
+    private StatusCategory getStatusCategoryReference(Integer id) {
+        return entityManager.getReference(StatusCategory.class, id);
+    }
 }
