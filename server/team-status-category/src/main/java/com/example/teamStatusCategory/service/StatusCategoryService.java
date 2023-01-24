@@ -23,6 +23,14 @@ public class StatusCategoryService {
         return repository.findAllByTeamId(teamId);
     }
 
+    public StatusCategory getStatusCategoryForList(Integer id) {
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new InternalErrorException(
+                        String.format("StatusCategory with id: $s not found",
+                                id)));
+    }
+
     public Integer initDefaultStatusCategory(Integer teamId) {
         var defaultStatusCategories = StatusCategory
                 .initDefaultStatusCategories(teamId);
@@ -54,10 +62,4 @@ public class StatusCategoryService {
         return true;
     }
 
-    public StatusCategory getStatusCategoryForList(Integer id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new InternalErrorException(
-                        String.format("StatusCategory with id: $s not found",
-                                id)));
-    }
 }

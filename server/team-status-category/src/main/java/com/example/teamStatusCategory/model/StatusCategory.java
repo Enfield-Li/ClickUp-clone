@@ -50,8 +50,8 @@ public class StatusCategory {
     private Set<StatusColumn> statusColumns = new HashSet<>();
 
     public void addStatusColumn(StatusColumn statusColumn) {
-        statusColumns.add(statusColumn);
         statusColumn.setStatusCategory(this);
+        statusColumns.add(statusColumn);
     }
 
     public void removeStatusColumn(StatusColumn statusColumn) {
@@ -60,13 +60,11 @@ public class StatusCategory {
     }
 
     public void addStatusColumns(Set<StatusColumn> statusColumnSet) {
-        statusColumnSet.forEach(
-                statusColumn -> this.addStatusColumn(statusColumn));
-    }
-
-    public void removeStatusColumns(Set<StatusColumn> statusColumnSet) {
-        statusColumnSet.forEach(
-                statusColumn -> this.removeStatusColumn(statusColumn));
+        if (statusColumns == null) {
+            statusColumns = new HashSet<>();
+        }
+        statusColumns.addAll(statusColumnSet);
+        statusColumnSet.forEach(column -> column.setStatusCategory(this));
     }
 
     public StatusCategory(
