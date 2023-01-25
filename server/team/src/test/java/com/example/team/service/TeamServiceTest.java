@@ -62,8 +62,8 @@ public class TeamServiceTest implements WithAssertions {
 
     @Mock
     SpaceRepository spaceRepository;
-
     @Mock
+
     TeamActivityClient teamActivityClient;
 
     @Mock

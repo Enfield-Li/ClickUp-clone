@@ -143,7 +143,7 @@ public class FolderCategory {
                     return listCategory;
                 })
                 .collect(Collectors.toSet());
-
+                
         folderCategory.setAllLists(allListCategory);
         return folderCategory;
     }

@@ -45,13 +45,13 @@ public class ListCategoryService {
                 dto, userInfo);
 
         // bind folder
-        if (dto.folderId() != null) {
-            var folderCategory = findFolderReference(dto.folderId());
+        if (folderId != null) {
+            var folderCategory = findFolderReference(folderId);
             folderCategory.addListCategory(newListCategory);
         }
 
         // bind space
-        var space = findSpaceReference(dto.spaceId());
+        var space = findSpaceReference(spaceId);
         space.addListCategory(newListCategory);
 
         var listCategory = repository.save(newListCategory);

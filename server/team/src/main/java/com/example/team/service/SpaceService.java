@@ -44,7 +44,7 @@ public class SpaceService {
 
             // publish event
             var spaceId = space.getId();
-            var teamId = space.getTeamId();
+            var teamId = createSpaceDTO.teamId();
             var listId = space.getListCategories().stream()
                     .findFirst().get().getId();
             var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
@@ -56,20 +56,16 @@ public class SpaceService {
 
             return space;
         } catch (DataIntegrityViolationException e) {
-            var errorMsg = e.getMessage();
-            if (errorMsg == null) {
-                throw new InternalError("Internal error happened");
-            }
-
-            if (errorMsg.contains(SPACE_NAME_CONSTRAINT)) {
+            if (e.getMessage().contains(SPACE_NAME_CONSTRAINT)) {
                 throw new InvalidRequestException("Space name already exists!");
             }
 
-            if (errorMsg.contains(SPACE_ORDER_INDEX_CONSTRAINT)) {
+            if (e.getMessage().contains(SPACE_ORDER_INDEX_CONSTRAINT)) {
                 throw new InvalidRequestException("Space orderIndex already exists!");
             }
 
-            throw new InvalidRequestException("Unhandled Space constraint violation");
+            log.error("UnSpecified Space constraint violation");
+            throw new InvalidRequestException("UnSpecified Space constraint violation");
         }
     }
 

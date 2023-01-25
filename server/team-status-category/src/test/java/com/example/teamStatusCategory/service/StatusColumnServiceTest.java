@@ -1,14 +1,8 @@
 package com.example.teamStatusCategory.service;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-
-import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -21,23 +15,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.UserCredentials;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusColumnRepository;
-import com.example.teamStatusCategory.service.StatusColumnService;
 
 @ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
 public class StatusColumnServiceTest implements WithAssertions {

@@ -28,18 +28,18 @@ public class FolderCategoryService {
 
     @Transactional
     public FolderCategory createFolder(CreateFolderDTO dto) {
+        var spaceId = dto.spaceId();
         var userCredentials = userInfoService.getCurrentUserInfo();
         var newFolderCategory = FolderCategory
                 .convertFromCreateFolderDTO(dto, userCredentials);
 
         // bind space
-        var space = getSpaceReference(dto.spaceId());
+        var space = getSpaceReference(spaceId);
         space.addFolderCategory(newFolderCategory);
         space.addListCategory(newFolderCategory.getAllLists());
 
         var folder = repository.save(newFolderCategory);
 
-        var spaceId = dto.spaceId();
         var folderId = folder.getId();
         var teamId = space.getTeamId();
         var listId = folder.getAllLists().stream()
