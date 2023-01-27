@@ -1,15 +1,15 @@
 package com.example.teamActivity;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Log4j2
 @Service
@@ -61,7 +61,13 @@ public class TeamActivityService {
                 });
 
         if (spaceId != null) {
-            teamActivity.setSpaceId(spaceId);
+            var isCloseSpace = Objects.equals(
+                    teamActivity.getSpaceId(), spaceId);
+            if (isCloseSpace) {
+                teamActivity.setSpaceId(null);
+            } else {
+                teamActivity.setSpaceId(spaceId);
+            }
         }
 
         if (folderId != null) {

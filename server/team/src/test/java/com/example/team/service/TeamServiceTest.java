@@ -1,15 +1,20 @@
 package com.example.team.service;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-import java.util.Set;
-
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
+import com.example.clients.jwt.UserCredentials;
+import com.example.clients.statusCategory.StatusCategoryClient;
+import com.example.clients.teamActivity.CreateTeamActivityDTO;
+import com.example.clients.teamActivity.TeamActivityClient;
+import com.example.clients.teamActivity.TeamActivityDTO;
+import com.example.team.dto.CreateTeamDTO;
+import com.example.team.dto.CreateTeamResponseDTO;
+import com.example.team.dto.InitTeamListDTO;
+import com.example.team.model.Space;
+import com.example.team.model.Team;
+import com.example.team.model.UserInfo;
+import com.example.team.repository.SpaceRepository;
+import com.example.team.repository.TeamRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,32 +23,20 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
-import com.example.clients.jwt.UserCredentials;
-import com.example.clients.statusCategory.StatusCategoryClient;
-import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.clients.teamActivity.TeamActivityDTO;
-import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.team.dto.CreateTeamDTO;
-import com.example.team.dto.CreateTeamResponseDTO;
-import com.example.team.dto.InitTeamListDTO;
-import com.example.team.dto.TeamAndActivityDTO;
-import com.example.team.model.Space;
-import com.example.team.model.Team;
-import com.example.team.model.UserInfo;
-import com.example.team.repository.SpaceRepository;
-import com.example.team.repository.TeamRepository;
+import java.util.List;
+import java.util.Set;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class TeamServiceTest implements WithAssertions {
 
     TeamService underTest;
@@ -96,11 +89,6 @@ public class TeamServiceTest implements WithAssertions {
                 teamActivityClient,
                 statusCategoryClient,
                 rabbitMQMessageProducer);
-        // SecurityContextHolder.setContext(securityContext);
-        // given(SecurityContextHolder.getContext().getAuthentication())
-        //         .willReturn(authentication);
-        // given(SecurityContextHolder.getContext().getAuthentication()
-        //         .getPrincipal()).willReturn(userCredentials);
     }
 
     @Test

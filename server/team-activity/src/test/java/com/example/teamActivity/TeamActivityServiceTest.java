@@ -1,13 +1,10 @@
 package com.example.teamActivity;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
+import com.example.clients.jwt.UserCredentials;
+import com.example.clients.teamActivity.CreateTeamActivityDTO;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
+import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,13 +17,15 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 
-import com.example.clients.jwt.UserCredentials;
-import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class TeamActivityServiceTest implements WithAssertions {
 
     TeamActivityService underTest;
@@ -58,7 +57,8 @@ public class TeamActivityServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new TeamActivityService(repository, authenticatedSecurityContext);
+        underTest = new TeamActivityService(
+                repository, authenticatedSecurityContext);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class TeamActivityServiceTest implements WithAssertions {
     }
 
     @Test
-    void test_update_team_activity_should_pass_when_updating_space_id() {
+    void test_update_team_activity_should_pass_when_open_new_space_id() {
         // given
         var teamId = 11;
         var userId = 319;
@@ -135,7 +135,8 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(expectedSpaceId).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(authenticatedSecurityContext.getCurrentUserId())
+                .willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
 
@@ -147,21 +148,72 @@ public class TeamActivityServiceTest implements WithAssertions {
     }
 
     @Test
+    void test_update_team_activity_should_pass_when_open_space_id() {
+        // given
+        var teamId = 11;
+        var userId = 319;
+        var expectedSpaceId = 13;
+        var dto = new UpdateTeamActivityDTO(
+                teamId, expectedSpaceId, null, null);
+        var originalTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(null).build();
+        var expectedTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(expectedSpaceId).build();
+
+        given(authenticatedSecurityContext.getCurrentUserId())
+                .willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
+    }
+
+    @Test
+    void test_update_team_activity_should_pass_when_close_space_id() {
+        // given
+        var teamId = 11;
+        var userId = 319;
+        var spaceId = 25;
+        var dto = new UpdateTeamActivityDTO(
+                teamId, spaceId, null, null);
+        var originalTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(spaceId).build();
+        var expectedTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(null).build();
+
+        given(authenticatedSecurityContext.getCurrentUserId())
+                .willReturn(userId);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
+    }
+
+
+    @Test
     void test_update_team_activity_should_pass_when_adding_folder_id() {
         // given
         var teamId = 11;
         var userId = 319;
         var spaceId = 45;
         var folderId = 515;
-        var originalFolderIds = new HashSet<Integer>(Set.of(11, 22, 33));
-        var expectedFolderIds = new HashSet<Integer>(Set.of(11, 22, 33, 515));
+        var originalFolderIds = new HashSet<>(Set.of(11, 22, 33));
+        var expectedFolderIds = new HashSet<>(Set.of(11, 22, 33, 515));
 
         var dto = new UpdateTeamActivityDTO(
-                teamId, spaceId, folderId, null);
+                teamId, null, folderId, null);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).folderIds(originalFolderIds).build();
+                .spaceId(null).folderIds(originalFolderIds).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).folderIds(expectedFolderIds).build();
+                .spaceId(null).folderIds(expectedFolderIds).build();
 
         given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
@@ -180,17 +232,16 @@ public class TeamActivityServiceTest implements WithAssertions {
         // given
         var teamId = 11;
         var userId = 319;
-        var spaceId = 45;
         var folderId = 11;
-        var originalFolderIds = new HashSet<Integer>(Set.of(11, 22, 33));
-        var expectedFolderIds = new HashSet<Integer>(Set.of(22, 33));
+        var originalFolderIds = new HashSet<>(Set.of(11, 22, 33));
+        var expectedFolderIds = new HashSet<>(Set.of(22, 33));
 
         var dto = new UpdateTeamActivityDTO(
-                teamId, spaceId, folderId, null);
+                teamId, null, folderId, null);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).folderIds(originalFolderIds).build();
+                .spaceId(null).folderIds(originalFolderIds).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).folderIds(expectedFolderIds).build();
+                .spaceId(null).folderIds(expectedFolderIds).build();
 
         given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
@@ -208,16 +259,15 @@ public class TeamActivityServiceTest implements WithAssertions {
     void test_update_team_activity_should_pass_when_updating_list_id() {
         // given
         var teamId = 11;
-        var spaceId = 51;
         var userId = 319;
         var expectedListId = 13;
         var originalListId = 45;
         var dto = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, expectedListId);
+                teamId, null, null, expectedListId);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).listId(originalListId).build();
+                .spaceId(null).listId(originalListId).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
-                .spaceId(spaceId).listId(expectedListId).build();
+                .spaceId(null).listId(expectedListId).build();
 
         given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
@@ -228,7 +278,6 @@ public class TeamActivityServiceTest implements WithAssertions {
 
         // then
         assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
-
     }
 
     @Test
