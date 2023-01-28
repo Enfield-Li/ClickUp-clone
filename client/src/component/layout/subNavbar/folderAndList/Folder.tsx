@@ -44,7 +44,6 @@ function Folder({ space, folder }: Props) {
 
     const dto: UpdateTeamActivityDTO = {
       teamId: teamState.teamActiveStatus.teamId,
-      spaceId: space.id,
       folderId: folder.id
     };
     updateTeamActivity(dto);

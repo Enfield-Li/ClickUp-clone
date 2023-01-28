@@ -1,18 +1,14 @@
 package com.example.team.service;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
+import com.example.team.dto.CreateSpaceDTO;
+import com.example.team.model.ListCategory;
+import com.example.team.model.Space;
+import com.example.team.model.Team;
+import com.example.team.model.UserInfo;
+import com.example.team.repository.SpaceRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,17 +21,19 @@ import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.team.dto.CreateSpaceDTO;
-import com.example.team.model.ListCategory;
-import com.example.team.model.Space;
-import com.example.team.model.Team;
-import com.example.team.model.UserInfo;
-import com.example.team.repository.SpaceRepository;
+import javax.persistence.EntityManager;
+import java.util.Set;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class SpaceServiceTest implements WithAssertions {
 
     SpaceService underTest;
@@ -83,7 +81,7 @@ public class SpaceServiceTest implements WithAssertions {
                 "color", "avatar", false, teamId,
                 "spaceName", 2, defaultStatusCategoryId);
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, listId);
+                teamId, spaceId, null, listId, userInfo.getUserId());
 
         given(userInfoService.getCurrentUserInfo()).willReturn(userInfo);
         given(entityManager.getReference(any(), any())).willReturn(team);

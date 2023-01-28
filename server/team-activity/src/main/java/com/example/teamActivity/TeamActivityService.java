@@ -53,6 +53,10 @@ public class TeamActivityService {
 
         var userId = authenticatedSecurityContext.getCurrentUserId();
 
+        if (dto.userId() != null) {
+            userId = dto.userId();
+        }
+
         var teamActivity = repository
                 .findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> {
@@ -60,10 +64,12 @@ public class TeamActivityService {
                             "User's teamActivity somehow disappeared");
                 });
 
+        teamActivity.setTeamId(teamId);
+
         if (spaceId != null) {
-            var isCloseSpace = Objects.equals(
+            var isToggleSpace = Objects.equals(
                     teamActivity.getSpaceId(), spaceId);
-            if (isCloseSpace) {
+            if (isToggleSpace) {
                 teamActivity.setSpaceId(null);
             } else {
                 teamActivity.setSpaceId(spaceId);
@@ -82,5 +88,6 @@ public class TeamActivityService {
         if (listId != null) {
             teamActivity.setListId(listId);
         }
+        System.out.println(teamActivity);
     }
 }

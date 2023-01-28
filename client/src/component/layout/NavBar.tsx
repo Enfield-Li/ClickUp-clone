@@ -6,7 +6,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
@@ -14,7 +14,6 @@ import { fetchTeamList } from "../../networkCalls";
 import { TEAM_STATE_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import FixedNavBar from "./navbar/FixedNavBar";
-import { determineFolderType } from "./subNavbar/folderAndList/determineList";
 import SubNavbar from "./subNavbar/SubNavbar";
 
 type Props = {};
@@ -42,20 +41,24 @@ function NavBar({}: Props) {
         Number(teamId),
         (initTeamListDTO) => {
           const { teams, teamActivity } = initTeamListDTO;
-          const { listId, teamId, spaceId } = teamActivity;
+          let { listId, teamId, spaceId } = teamActivity;
 
           let defaultStatusCategoryId;
           if (listId) {
-            const statusCategoryId = teams
-              .find((team) => team.id === teamId)
-              ?.spaces.find((space) => space.id === spaceId)
-              ?.listCategories.find(
-                (list) => list.id === listId
-              )?.defaultStatusCategoryId;
+            teams.forEach(
+              (team) =>
+                team.id === teamId &&
+                team.spaces.forEach((space) =>
+                  space.listCategories.forEach((listCategory) => {
+                    if (listCategory.id === listId) {
+                      defaultStatusCategoryId =
+                        listCategory.defaultStatusCategoryId;
 
-            if (Number(statusCategoryId)) {
-              defaultStatusCategoryId = statusCategoryId;
-            }
+                      spaceId = listCategory.spaceId;
+                    }
+                  })
+                )
+            );
           }
 
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {

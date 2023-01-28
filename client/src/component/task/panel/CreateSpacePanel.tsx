@@ -9,8 +9,9 @@ export default function CreateSpacePanel({}: Props) {
   //   } = useTeamStateContext();
 
   return (
-    <Box
+    <Center
       opacity="60%"
+      flexDir="column"
       //   onClick={onCreateSpaceModalOpen}
     >
       <Center
@@ -30,8 +31,8 @@ export default function CreateSpacePanel({}: Props) {
       </Center>
 
       <Center flexGrow={1} fontSize="20px" fontWeight="semibold">
-        No Space
+        No Space selected
       </Center>
-    </Box>
+    </Center>
   );
 }

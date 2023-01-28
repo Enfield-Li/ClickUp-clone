@@ -1,8 +1,12 @@
 package com.example.clients.teamActivity;
 
+import javax.validation.constraints.NotNull;
+
 public record UpdateTeamActivityDTO(
-        Integer teamId,
+        @NotNull Integer teamId,
         Integer spaceId,
         Integer folderId,
-        Integer listId) {
+        Integer listId,
+        Integer userId
+) {
 }

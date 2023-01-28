@@ -1,20 +1,20 @@
 package com.example.team.service;
 
-import javax.persistence.EntityManager;
-
-import static com.example.amqp.ExchangeKey.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.Space;
 import com.example.team.repository.FolderCategoryRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+
+import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 
 @Log4j2
 @Service
@@ -29,9 +29,9 @@ public class FolderCategoryService {
     @Transactional
     public FolderCategory createFolder(CreateFolderDTO dto) {
         var spaceId = dto.spaceId();
-        var userCredentials = userInfoService.getCurrentUserInfo();
+        var userInfo = userInfoService.getCurrentUserInfo();
         var newFolderCategory = FolderCategory
-                .convertFromCreateFolderDTO(dto, userCredentials);
+                .convertFromCreateFolderDTO(dto, userInfo);
 
         // bind space
         var space = getSpaceReference(spaceId);
@@ -45,7 +45,7 @@ public class FolderCategoryService {
         var listId = folder.getAllLists().stream()
                 .findFirst().get().getId();
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, folderId, listId);
+                teamId, null, folderId, listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 TeamActivityRoutingKey,

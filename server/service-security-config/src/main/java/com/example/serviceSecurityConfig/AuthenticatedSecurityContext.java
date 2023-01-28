@@ -1,9 +1,8 @@
 package com.example.serviceSecurityConfig;
 
+import com.example.clients.jwt.UserCredentials;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import com.example.clients.jwt.UserCredentials;
 
 @Service
 public class AuthenticatedSecurityContext {
@@ -14,6 +13,10 @@ public class AuthenticatedSecurityContext {
     }
 
     public Integer getCurrentUserId() {
-        return getCurrentUserInfo().userId();
+        try {
+            return getCurrentUserInfo().userId();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

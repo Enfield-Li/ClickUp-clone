@@ -1,13 +1,5 @@
 package com.example.team.service;
 
-import javax.persistence.EntityManager;
-
-import static com.example.amqp.ExchangeKey.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
-
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
@@ -15,10 +7,18 @@ import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+
+import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 
 @Log4j2
 @Service
@@ -48,7 +48,7 @@ public class SpaceService {
             var listId = space.getListCategories().stream()
                     .findFirst().get().getId();
             var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                    teamId, spaceId, null, listId);
+                    teamId, spaceId, null, listId, userInfo.getUserId());
             rabbitMQMessageProducer.publish(
                     internalExchange,
                     TeamActivityRoutingKey,

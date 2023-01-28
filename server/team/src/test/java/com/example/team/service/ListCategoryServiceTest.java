@@ -1,14 +1,14 @@
 package com.example.team.service;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import javax.persistence.EntityManager;
-
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
+import com.example.team.dto.CreateListDTO;
+import com.example.team.model.FolderCategory;
+import com.example.team.model.ListCategory;
+import com.example.team.model.Space;
+import com.example.team.model.UserInfo;
+import com.example.team.repository.ListCategoryRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,17 +19,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.team.dto.CreateListDTO;
-import com.example.team.model.FolderCategory;
-import com.example.team.model.ListCategory;
-import com.example.team.model.Space;
-import com.example.team.model.UserInfo;
-import com.example.team.repository.ListCategoryRepository;
+import javax.persistence.EntityManager;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class ListCategoryServiceTest implements WithAssertions {
 
     ListCategoryService underTest;
@@ -75,7 +74,7 @@ public class ListCategoryServiceTest implements WithAssertions {
         var space = Space.builder().teamId(teamId).build();
         var listCategory = ListCategory.builder().id(listId).build();
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, folderId, listId);
+                teamId, spaceId, folderId, listId, null);
 
         var dto = new CreateListDTO(
                 folderId, spaceId, name, orderIndex, defaultStatusCategoryId);
@@ -127,7 +126,7 @@ public class ListCategoryServiceTest implements WithAssertions {
         var space = Space.builder().teamId(teamId).build();
         var listCategory = ListCategory.builder().id(listId).build();
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, listId);
+                teamId, spaceId, null, listId, null);
 
         var dto = new CreateListDTO(
                 null, spaceId, name, orderIndex, defaultStatusCategoryId);

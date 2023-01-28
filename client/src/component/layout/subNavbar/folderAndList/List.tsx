@@ -40,8 +40,6 @@ function List({ space, folder, list }: Props) {
 
     const dto: UpdateTeamActivityDTO = {
       teamId: teamState.teamActiveStatus.teamId,
-      spaceId: space.id,
-      folderId: folder?.id,
       listId: list.id,
     };
     updateTeamActivity(dto);

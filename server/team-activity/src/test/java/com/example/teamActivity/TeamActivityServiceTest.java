@@ -14,8 +14,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,13 +29,7 @@ public class TeamActivityServiceTest implements WithAssertions {
     TeamActivityService underTest;
 
     @Mock
-    Authentication authentication;
-
-    @Mock
     AuthenticatedSecurityContext authenticatedSecurityContext;
-
-    @Mock
-    SecurityContext securityContext;
 
     @Mock
     TeamActivityRepository repository;
@@ -129,7 +121,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedSpaceId = 13;
         var originalSpaceId = 45;
         var dto = new UpdateTeamActivityDTO(
-                teamId, expectedSpaceId, null, null);
+                teamId, expectedSpaceId, null, null, userId);
         var originalTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(originalSpaceId).build();
         var expectedTeamActivity = TeamActivity.builder()
@@ -154,7 +146,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var userId = 319;
         var expectedSpaceId = 13;
         var dto = new UpdateTeamActivityDTO(
-                teamId, expectedSpaceId, null, null);
+                teamId, expectedSpaceId, null, null, userId);
         var originalTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(null).build();
         var expectedTeamActivity = TeamActivity.builder()
@@ -179,7 +171,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var userId = 319;
         var spaceId = 25;
         var dto = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, null);
+                teamId, spaceId, null, null, userId);
         var originalTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(spaceId).build();
         var expectedTeamActivity = TeamActivity.builder()
@@ -209,7 +201,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedFolderIds = new HashSet<>(Set.of(11, 22, 33, 515));
 
         var dto = new UpdateTeamActivityDTO(
-                teamId, null, folderId, null);
+                teamId, null, folderId, null, userId);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).folderIds(originalFolderIds).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
@@ -237,7 +229,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedFolderIds = new HashSet<>(Set.of(22, 33));
 
         var dto = new UpdateTeamActivityDTO(
-                teamId, null, folderId, null);
+                teamId, null, folderId, null, userId);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).folderIds(originalFolderIds).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
@@ -263,7 +255,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedListId = 13;
         var originalListId = 45;
         var dto = new UpdateTeamActivityDTO(
-                teamId, null, null, expectedListId);
+                teamId, null, null, expectedListId, userId);
         var originalTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).listId(originalListId).build();
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
@@ -285,7 +277,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         // given
         var teamId = 11;
         var spaceId = 51;
-        var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, null);
+        var dto = new UpdateTeamActivityDTO(teamId, spaceId, null, null, null);
         var errorMessage = "User's teamActivity somehow disappeared";
 
         given(repository.findByTeamIdAndUserId(any(), any()))

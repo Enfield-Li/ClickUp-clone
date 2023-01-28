@@ -678,7 +678,7 @@ export type GetTaskListDTO = {
 
 export type UpdateTeamActivityDTO = {
   teamId: number;
-  spaceId: number;
+  spaceId?: number;
   folderId?: number;
   listId?: number;
 };
