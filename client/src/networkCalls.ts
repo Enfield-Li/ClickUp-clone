@@ -43,6 +43,7 @@ import {
   UpdateTeamActivityDTO,
 } from "./types";
 import { deepCopy } from "./utils/deepCopy";
+import { getTaskBoardURL } from "./utils/getTaskBoardURL";
 
 export async function updateTeamActivity(
   dto: UpdateTeamActivityDTO,
@@ -414,13 +415,11 @@ export async function refreshUserToken(
       payload: { user: response.data },
     });
 
-    if (isAuthPath) {
-      navigate(
-        joinedTeamCount > 0 && defaultTeamId
-          ? `/${defaultTeamId}` + CLIENT_ROUTE.TASK_BOARD
-          : CLIENT_ROUTE.ON_BOARDING
-      );
-    }
+    navigate(
+      joinedTeamCount > 0 && defaultTeamId
+        ? getTaskBoardURL({ teamId: defaultTeamId })
+        : CLIENT_ROUTE.ON_BOARDING
+    );
   } catch (error) {
     const err = error as AxiosError;
     console.log(err);

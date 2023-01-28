@@ -1,5 +1,5 @@
-import { Box, useToast } from "@chakra-ui/react";
-import { memo, useEffect, useRef, useState } from "react";
+import { useToast } from "@chakra-ui/react";
+import { memo, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
 import Login from "./component/auth/Login";
@@ -14,37 +14,42 @@ import useAuthContext from "./context/auth/useAuthContext";
 import { refreshUserToken } from "./networkCalls";
 
 export default memo(App);
-
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { authState, authDispatch } = useAuthContext();
-  const accessToken = localStorage.getItem(ACCESS_TOKEN);
-  const [initializing, setInitializing] = useState(true);
   const toast = useToast({ duration: 3000, isClosable: true });
 
-  const isAuthPath =
-    location.pathname === CLIENT_ROUTE.REGISTER ||
-    location.pathname === CLIENT_ROUTE.LOGIN;
-
   useEffect(() => {
+    let intervalId: NodeJS.Timer;
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
+
+    const isAuthPath =
+      location.pathname === CLIENT_ROUTE.REGISTER ||
+      location.pathname === CLIENT_ROUTE.LOGIN;
+
     if (accessToken) {
       refreshUserToken(authDispatch, toast, navigate, isAuthPath);
-      setInterval(() => {
+
+      intervalId = setInterval(() => {
         refreshUserToken(authDispatch, toast, navigate, isAuthPath);
       }, 1790000); // 29 min and 50 sec
-    } else {
-      if (!isAuthPath) {
-        navigate(CLIENT_ROUTE.LOGIN);
-      }
+    } else if (!isAuthPath && !accessToken) {
+      navigate(CLIENT_ROUTE.LOGIN);
     }
 
-    setTimeout(() => {
-      setInitializing(false);
-    }, 2600);
+    return () => clearInterval(intervalId);
   }, []);
 
-  //   if (initializing && !isAuthPath && accessToken) return <LoadingSpinner />;
+  useEffect(() => {
+    if (
+      authState.user &&
+      !authState.user.defaultTeamId &&
+      !authState.user.joinedTeamCount
+    ) {
+      navigate(CLIENT_ROUTE.ON_BOARDING);
+    }
+  }, [authState.user]);
 
   return (
     <Routes>
@@ -72,16 +77,15 @@ function App() {
   );
 }
 
-
 // function App() {
 //     const ref = useRef<HTMLDivElement>(null);
-  
+
 //     useEffect(() => {
 //       if (ref) {
 //         console.log(ref.current);
 //       }
 //     }, [ref]);
-  
+
 //     return (
 //       <>
 //         <div className="abc" ref={ref}>
