@@ -1,19 +1,10 @@
 package com.example.team.service;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.clients.teamActivity.TeamActivityDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
@@ -21,9 +12,13 @@ import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
 import com.example.team.repository.TeamRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 
 @Log4j2
 @Service
@@ -36,10 +31,6 @@ public class TeamService {
     private final TeamActivityClient teamActivityClient;
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
-
-    public List<Team> teams() {
-        return repository.findAll();
-    }
 
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {

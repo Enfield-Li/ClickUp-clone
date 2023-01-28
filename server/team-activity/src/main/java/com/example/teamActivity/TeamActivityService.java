@@ -3,7 +3,7 @@ package com.example.teamActivity;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
+import com.example.serviceSecurityConfig.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,11 @@ import java.util.Objects;
 public class TeamActivityService {
 
     private final TeamActivityRepository repository;
-    private final AuthenticatedSecurityContext authenticatedSecurityContext;
+    private final UserInfoService userInfoService;
 
     public TeamActivity createTeamActivity(
             CreateTeamActivityDTO createTeamActivityDTO) {
-        var userId = authenticatedSecurityContext.getCurrentUserId();
+        var userId = userInfoService.getCurrentUserId();
         var teamId = createTeamActivityDTO.teamId();
         var spaceId = createTeamActivityDTO.spaceId();
 
@@ -35,7 +35,7 @@ public class TeamActivityService {
     }
 
     public TeamActivity getTeamActivity(Integer teamId) {
-        var userId = authenticatedSecurityContext.getCurrentUserId();
+        var userId = userInfoService.getCurrentUserId();
         return repository.findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> {
                     log.error("User's teamActivity somehow disappeared");
@@ -51,9 +51,9 @@ public class TeamActivityService {
         var spaceId = dto.spaceId();
         var folderId = dto.folderId();
 
-        var userId = authenticatedSecurityContext.getCurrentUserId();
+        var userId = userInfoService.getCurrentUserId();
 
-        if (dto.userId() != null) {
+        if (dto.userId() == null) {
             userId = dto.userId();
         }
 

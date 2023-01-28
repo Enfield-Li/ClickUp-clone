@@ -4,7 +4,7 @@ import com.example.clients.jwt.UserCredentials;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
+import com.example.serviceSecurityConfig.UserInfoService;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class TeamActivityServiceTest implements WithAssertions {
     TeamActivityService underTest;
 
     @Mock
-    AuthenticatedSecurityContext authenticatedSecurityContext;
+    UserInfoService userInfoService;
 
     @Mock
     TeamActivityRepository repository;
@@ -50,7 +50,7 @@ public class TeamActivityServiceTest implements WithAssertions {
     @BeforeEach
     void setUp() {
         underTest = new TeamActivityService(
-                repository, authenticatedSecurityContext);
+                repository, userInfoService);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = new TeamActivity();
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(expectedTeamActivity));
-        given(authenticatedSecurityContext.getCurrentUserId())
+        given(userInfoService.getCurrentUserId())
                 .willReturn(userId);
 
         // when 
@@ -96,7 +96,7 @@ public class TeamActivityServiceTest implements WithAssertions {
 
         var dto = new CreateTeamActivityDTO(teamId, spaceId);
         given(repository.save(any())).willReturn(expectedResult);
-        given(authenticatedSecurityContext.getCurrentUserId())
+        given(userInfoService.getCurrentUserId())
                 .willReturn(expectedUserId);
 
         // when 
@@ -127,7 +127,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(expectedSpaceId).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId())
+        given(userInfoService.getCurrentUserId())
                 .willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
@@ -138,6 +138,33 @@ public class TeamActivityServiceTest implements WithAssertions {
         // then
         assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
     }
+
+    @Test
+    void test_update_team_activity_should_pass_when_update_from_message_queue() {
+        // given
+        var teamId = 11;
+        var userId = 319;
+        var expectedSpaceId = 13;
+        var originalSpaceId = 45;
+        var dto = new UpdateTeamActivityDTO(
+                teamId, expectedSpaceId, null, null, userId);
+        var originalTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(originalSpaceId).build();
+        var expectedTeamActivity = TeamActivity.builder()
+                .teamId(teamId).spaceId(expectedSpaceId).build();
+
+        given(userInfoService.getCurrentUserId())
+                .willReturn(null);
+        given(repository.findByTeamIdAndUserId(any(), any()))
+                .willReturn(Optional.of(originalTeamActivity));
+
+        // when
+        underTest.updateTeamActivity(dto);
+
+        // then
+        assertThat(originalTeamActivity).isEqualTo(expectedTeamActivity);
+    }
+
 
     @Test
     void test_update_team_activity_should_pass_when_open_space_id() {
@@ -152,7 +179,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(expectedSpaceId).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId())
+        given(userInfoService.getCurrentUserId())
                 .willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
@@ -177,7 +204,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder()
                 .teamId(teamId).spaceId(null).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId())
+        given(userInfoService.getCurrentUserId())
                 .willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
@@ -207,7 +234,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).folderIds(expectedFolderIds).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(userInfoService.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
 
@@ -235,7 +262,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).folderIds(expectedFolderIds).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(userInfoService.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
 
@@ -261,7 +288,7 @@ public class TeamActivityServiceTest implements WithAssertions {
         var expectedTeamActivity = TeamActivity.builder().teamId(teamId)
                 .spaceId(null).listId(expectedListId).build();
 
-        given(authenticatedSecurityContext.getCurrentUserId()).willReturn(userId);
+        given(userInfoService.getCurrentUserId()).willReturn(userId);
         given(repository.findByTeamIdAndUserId(any(), any()))
                 .willReturn(Optional.of(originalTeamActivity));
 

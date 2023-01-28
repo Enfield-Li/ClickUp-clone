@@ -1,26 +1,16 @@
 package com.example.team.controller;
 
-import static com.example.clients.UrlConstants.TEAM_API_VERSION;
-
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
-import com.example.team.model.Team;
 import com.example.team.service.TeamService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import static com.example.clients.UrlConstants.TEAM_API_VERSION;
 
 @Log4j2
 @RestController
@@ -30,11 +20,6 @@ import lombok.extern.log4j.Log4j2;
 class TeamController {
 
     private final TeamService service;
-
-    @GetMapping("test_getAllTeam")
-    List<Team> teams() {
-        return service.teams();
-    }
 
     @GetMapping("/{teamId}")
     ResponseEntity<InitTeamListDTO> getAllTeams(
