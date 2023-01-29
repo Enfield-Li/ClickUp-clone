@@ -11,12 +11,14 @@ import {
   StatusCategoryState,
   StatusColumn,
   UpdateStatusColumnColorDTO,
+  UpdateStatusColumnDTO,
   UpdateStatusColumnTitleDTO,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
 import StatusColorPalletPopover from "./StatusColorPalletPopover";
 import StatusColumnOption from "./StatusColumnOption";
 import StatusColumnOptionPopover from "./StatusColumnOptionPopover";
+import { updateStatusColumnNetworkReturns as updateStatusColumnAfterNetworkSuccess } from "./updateActions";
 
 type Props = {
   selectedCategory?: StatusCategory;
@@ -32,23 +34,30 @@ function ActiveStatus({
   currentStatusColumn,
   setStatusCategoryState,
 }: Props) {
-  const [title, setTitle] = useState("");
   const [hover, setHover] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(currentStatusColumn.title);
   const {
     isOpen: isColorPalletOpen,
     onOpen: onColorPalletOpen,
     onClose: onColorPalletClose,
   } = useDisclosure();
 
-  useEffect(() => {
-    setTitle(currentStatusColumn.title);
-  }, [currentStatusColumn]);
+  //   useEffect(() => {
+  //     setTitle(currentStatusColumn.title);
+  //   }, [currentStatusColumn]);
 
   function handleFinishedEdit() {
     setEditing(false);
     if (!title) return;
     updateStatusTitle();
+  }
+
+  function handleOpenColorPallet(
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) {
+    e.stopPropagation();
+    onColorPalletOpen();
   }
 
   function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement>): void {
@@ -65,7 +74,8 @@ function ActiveStatus({
   }
 
   function updateStatusTitle() {
-    if (title === currentStatusColumn.title) {
+    const isSettingToOriginal = title === currentStatusColumn.title;
+    if (isSettingToOriginal) {
       return;
     }
 
@@ -73,74 +83,48 @@ function ActiveStatus({
       (column) => column.title.toLowerCase() === title.toLowerCase()
     );
     if (isTitleExist) {
+      setEditing(false);
+      setTitle(currentStatusColumn.title);
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {
-          draftState.categories.forEach((category) => {
-            if (category.id === selectedCategory?.id) {
-              const isTitleExist = category.statusColumns.some(
-                (column) => column.title.toLowerCase() === title.toLowerCase()
-              );
-              if (isTitleExist) {
-                draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
-                return;
-              }
-            }
-          });
+          draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
         })
       );
       return;
     }
 
-    const dto: UpdateStatusColumnTitleDTO = {
-      id: currentStatusColumn.id!,
+    const { id, orderIndex, color } = currentStatusColumn;
+    const dto: UpdateStatusColumnDTO = {
+      id: id!,
+      orderIndex: orderIndex,
+      color,
       title,
     };
 
-    updateStatusColumnTitle(dto, () =>
-      setStatusCategoryState((prev) =>
-        produce(prev, (draftState) => {
-          draftState.categories.forEach((category) => {
-            if (category.id === selectedCategory?.id) {
-              category.statusColumns.forEach((column) => {
-                if (column.id === currentStatusColumn.id) {
-                  column.title = title;
-                }
-              });
-            }
-          });
-        })
-      )
-    );
-  }
-
-  function handleSelectColor(selectedColor: string) {
-    const dto: UpdateStatusColumnColorDTO = {
-      id: currentStatusColumn.id!,
-      color: selectedColor,
-    };
-
-    updateStatusColumnColor(dto, () => {
-      setStatusCategoryState((prev) =>
-        produce(prev, (draftState) => {
-          draftState.categories.forEach((category) => {
-            if (category.id === selectedCategory?.id) {
-              category.statusColumns.forEach((column) => {
-                if (column.id === currentStatusColumn.id) {
-                  column.color = selectedColor;
-                }
-              });
-            }
-          });
-        })
-      );
+    updateStatusColumnAfterNetworkSuccess({
+      dto,
+      selectedCategory,
+      currentStatusColumn,
+      setStatusCategoryState,
     });
   }
 
-  function handleOpenColorPallet(
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) {
-    e.stopPropagation();
-    onColorPalletOpen();
+  function handleSelectColor(selectedColor: string) {
+    const { id, orderIndex, color } = currentStatusColumn;
+
+    const dto: UpdateStatusColumnDTO = {
+      id: id!,
+      orderIndex: orderIndex,
+      color: selectedColor,
+      title,
+    };
+
+    updateStatusColumnAfterNetworkSuccess({
+      dto,
+      selectedCategory,
+      currentStatusColumn,
+      setStatusCategoryState,
+    });
   }
 
   function handleDelete() {

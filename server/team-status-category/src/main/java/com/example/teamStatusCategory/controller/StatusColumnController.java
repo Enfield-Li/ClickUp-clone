@@ -1,9 +1,6 @@
 package com.example.teamStatusCategory.controller;
 
 import static com.example.clients.UrlConstants.STATUS_COLUMN_API_VERSION;
-import static com.example.teamStatusCategory.UrlConstants.COLOR;
-import static com.example.teamStatusCategory.UrlConstants.ORDER_INDEX;
-import static com.example.teamStatusCategory.UrlConstants.TITLE;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnColorDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnOrderIndexDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
-import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.service.StatusColumnService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +34,7 @@ class StatusColumnController {
     }
 
     @PutMapping
-    ResponseEntity<Boolean> updateStatusColumnTitle(
+    ResponseEntity<Boolean> updateStatusColumn(
             @RequestBody UpdateStatusColumnDTO dto) {
         var updated = service.updateStatusColumn(dto);
         return ResponseEntity.ok(updated);

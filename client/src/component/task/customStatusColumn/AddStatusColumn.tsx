@@ -28,27 +28,27 @@ function AddStatusColumn({ setTaskState, statusColumns }: Props) {
     <>
       {isColorPalletOpen ? (
         <>
-          <StatusColorPalletPopover
-            position="bottom"
-            isColorPalletOpen={isColorPalletOpen}
+          {/* Title */}
+          <AddStatusColumnInput
+            color={color}
+            setTaskState={setTaskState}
+            statusColumns={statusColumns}
             onColorPalletClose={onColorPalletClose}
-            handleSelectColor={(color) => setColor(color)}
-          >
-            <AddStatusColumnInput
-              color={color}
-              setTaskState={setTaskState}
-              statusColumns={statusColumns}
-              onColorPalletClose={onColorPalletClose}
-            />
-          </StatusColorPalletPopover>
+          />
 
-          {/* {showEdit && (
-            <Center mt={3}>
-              <Box shadow="2xl" width="fit-content">
-                <HexColorPicker color={color} onChange={setColor} />
-              </Box>
-            </Center>
-          )} */}
+          {/* Color pallet */}
+          <Center mt={3}>
+            <Box shadow="2xl" width="fit-content">
+              <StatusColorPalletPopover
+                position="bottom"
+                handleSelectColor={setColor}
+                isColorPalletOpen={isColorPalletOpen}
+                onColorPalletClose={onColorPalletClose}
+              >
+                <Box></Box>
+              </StatusColorPalletPopover>
+            </Box>
+          </Center>
         </>
       ) : (
         <>

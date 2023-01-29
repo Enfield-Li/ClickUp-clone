@@ -36,6 +36,7 @@ import {
   TaskListStatusCategoryDTO,
   UpdateStatusCategoryNameDTO,
   UpdateStatusColumnColorDTO,
+  UpdateStatusColumnDTO,
   UpdateStatusColumnTitleDTO,
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
@@ -262,6 +263,27 @@ export async function updateStatusColumnTitle(
       dto
     );
     if (!response.data) throw new Error("updateStatusColumnTitle failed");
+
+    onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function updateStatusColumn(
+  dto: UpdateStatusColumnDTO,
+  onSuccess: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosStatusCategoryServiceInstance.put<boolean>(
+      API_ENDPOINT.STATUS_COLUMN,
+      dto
+    );
+    if (!response.data) throw new Error("updateStatusColumn failed");
 
     onSuccess();
   } catch (error) {

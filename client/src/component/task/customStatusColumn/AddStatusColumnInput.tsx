@@ -6,7 +6,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React, { memo, useState } from "react";
+import React, { forwardRef, memo, useState } from "react";
 import { SetTaskState, StatusColumn, StatusColumns } from "../../../types";
 
 type Props = {

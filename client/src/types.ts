@@ -682,3 +682,10 @@ export type UpdateTeamActivityDTO = {
   folderId?: number;
   listId?: number;
 };
+
+export type UpdateStatusColumnDTO = {
+  id: number;
+  title: string;
+  color: string;
+  orderIndex: number;
+};
