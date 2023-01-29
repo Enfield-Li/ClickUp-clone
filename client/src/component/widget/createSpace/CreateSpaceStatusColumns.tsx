@@ -27,6 +27,9 @@ function CreateSpaceStatusColumns({
     >
       <Flex pt="6" height="100%">
         <StatusColumnsDisplay
+          selectedCategoryId={
+            createSpace.createSpaceDTO.defaultStatusCategoryId
+          }
           teamStatusCategories={createSpace.teamStatusCategories}
           handleSelectCategory={(selectedCategory) =>
             setCreateSpace((prev) =>
@@ -35,6 +38,13 @@ function CreateSpaceStatusColumns({
                   selectedCategory.statusColumns;
                 draftState.createSpaceDTO.defaultStatusCategoryId =
                   selectedCategory.id;
+              })
+            )
+          }
+          handleUpdateCategories={(updatedStatusCategories) =>
+            setCreateSpace((prev) =>
+              produce(prev, (draftState) => {
+                draftState.teamStatusCategories = updatedStatusCategories;
               })
             )
           }

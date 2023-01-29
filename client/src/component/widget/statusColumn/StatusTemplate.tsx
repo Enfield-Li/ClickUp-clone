@@ -60,9 +60,10 @@ function StatusTemplate({
     };
 
     createStatusCategory(dto, (newCategory) => {
+      resetAll();
       setStatusCategoryState(
         produce(statusCategoryState, (draftState) => {
-          draftState.categories.unshift(newCategory);
+          draftState.categories.push(newCategory);
         })
       );
     });

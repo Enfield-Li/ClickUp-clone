@@ -23,6 +23,9 @@ export default function CreateFolderStatusColumns({
     >
       <Flex height="100%">
         <StatusColumnsDisplay
+          selectedCategoryId={
+            createFolder.createFolderDTO.defaultStatusCategoryId
+          }
           teamStatusCategories={createFolder.teamStatusCategories}
           handleSelectCategory={(selectedCategory) =>
             setCreateFolder((prev) =>
@@ -31,6 +34,13 @@ export default function CreateFolderStatusColumns({
                   selectedCategory.statusColumns;
                 draftState.createFolderDTO.defaultStatusCategoryId =
                   selectedCategory.id;
+              })
+            )
+          }
+          handleUpdateCategories={(updatedStatusCategories) =>
+            setCreateFolder((prev) =>
+              produce(prev, (draftState) => {
+                draftState.teamStatusCategories = updatedStatusCategories;
               })
             )
           }

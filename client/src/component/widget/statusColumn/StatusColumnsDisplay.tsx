@@ -2,8 +2,6 @@ import { Box } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import {
-  CreateFolderState,
-  CreateSpaceState,
   StatusCategories,
   StatusCategory,
   StatusCategoryState,
@@ -12,14 +10,18 @@ import ActiveStatuses from "./ActiveStatuses";
 import StatusTemplate from "./StatusTemplate";
 
 type Props = {
+  selectedCategoryId?: number;
   teamStatusCategories: StatusCategories;
   handleSelectCategory: (selectedCategory: StatusCategory) => void;
+  handleUpdateCategories: (teamStatusCategories: StatusCategories) => void;
 };
 
 export default memo(StatusColumnsDisplay);
 function StatusColumnsDisplay({
+  selectedCategoryId,
   teamStatusCategories,
   handleSelectCategory,
+  handleUpdateCategories,
 }: Props) {
   // TODO: set up context for sharing "statusCategoryState"
   const [statusCategoryState, setStatusCategoryState] =
@@ -27,9 +29,39 @@ function StatusColumnsDisplay({
       errorMsg: "",
       categories: teamStatusCategories,
     });
+
+  useEffect(() => {
+    if (selectedCategoryId) {
+      setStatusCategoryState(
+        produce(statusCategoryState, (draftState) => {
+          draftState.categories.forEach((category) => {
+            if (category.id !== selectedCategoryId && category.isSelected) {
+              category.isSelected = false;
+            }
+
+            if (category.id === selectedCategoryId) {
+              category.isSelected = true;
+            }
+          });
+        })
+      );
+    }
+  }, [selectedCategoryId]);
+
   const selectedCategory = statusCategoryState.categories.find(
     (category) => category.isSelected
   );
+  useEffect(() => {
+    if (selectedCategory) {
+      handleSelectCategory(selectedCategory);
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    if (statusCategoryState.categories) {
+      handleUpdateCategories(statusCategoryState.categories);
+    }
+  }, [statusCategoryState.categories]);
 
   useEffect(() => {
     if (statusCategoryState.errorMsg) {
@@ -42,12 +74,6 @@ function StatusColumnsDisplay({
       }, 5000);
     }
   }, [statusCategoryState.errorMsg]);
-
-  useEffect(() => {
-    if (selectedCategory) {
-      handleSelectCategory(selectedCategory);
-    }
-  }, [selectedCategory]);
 
   return (
     <>
