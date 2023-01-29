@@ -21,6 +21,7 @@ function StatusColumnsDisplay({
   teamStatusCategories,
   handleSelectCategory,
 }: Props) {
+  // TODO: set up context for sharing "statusCategoryState"
   const [statusCategoryState, setStatusCategoryState] =
     useState<StatusCategoryState>({
       errorMsg: "",

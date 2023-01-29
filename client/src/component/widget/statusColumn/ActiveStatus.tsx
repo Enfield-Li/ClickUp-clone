@@ -1,24 +1,15 @@
 import { Box, Flex, Input, useDisclosure } from "@chakra-ui/react";
-import produce from "immer";
-import { memo, useEffect, useState } from "react";
-import {
-  deleteStatusColumn,
-  updateStatusColumnColor,
-  updateStatusColumnTitle,
-} from "../../../networkCalls";
+import { memo, useState } from "react";
 import {
   StatusCategory,
   StatusCategoryState,
   StatusColumn,
-  UpdateStatusColumnColorDTO,
-  UpdateStatusColumnDTO,
-  UpdateStatusColumnTitleDTO,
 } from "../../../types";
 import { handleInputKeyPress } from "../../../utils/handleInputKeyPress";
+import { handleSelectColor } from "./actions/handleSelectColor";
+import { handleUpdateStatusTitle } from "./actions/updateStatusTitle";
+import ActiveStatusOptions from "./ActiveStatusOptions";
 import StatusColorPalletPopover from "./StatusColorPalletPopover";
-import StatusColumnOption from "./StatusColumnOption";
-import StatusColumnOptionPopover from "./StatusColumnOptionPopover";
-import { updateStatusColumnNetworkReturns as updateStatusColumnAfterNetworkSuccess } from "./updateActions";
 
 type Props = {
   selectedCategory?: StatusCategory;
@@ -74,74 +65,22 @@ function ActiveStatus({
   }
 
   function updateStatusTitle() {
-    const isSettingToOriginal = title === currentStatusColumn.title;
-    if (isSettingToOriginal) {
-      return;
-    }
-
-    const isTitleExist = selectedCategory?.statusColumns.some(
-      (column) => column.title.toLowerCase() === title.toLowerCase()
-    );
-    if (isTitleExist) {
-      setEditing(false);
-      setTitle(currentStatusColumn.title);
-      setStatusCategoryState((prev) =>
-        produce(prev, (draftState) => {
-          draftState.errorMsg = "WHOOPS! STATUS NAME IS ALREADY TAKEN";
-        })
-      );
-      return;
-    }
-
-    const { id, orderIndex, color } = currentStatusColumn;
-    const dto: UpdateStatusColumnDTO = {
-      id: id!,
-      orderIndex: orderIndex,
-      color,
+    handleUpdateStatusTitle({
       title,
-    };
-
-    updateStatusColumnAfterNetworkSuccess({
-      dto,
+      setTitle,
+      setEditing,
       selectedCategory,
       currentStatusColumn,
       setStatusCategoryState,
     });
   }
 
-  function handleSelectColor(selectedColor: string) {
-    const { id, orderIndex, color } = currentStatusColumn;
-
-    const dto: UpdateStatusColumnDTO = {
-      id: id!,
-      orderIndex: orderIndex,
-      color: selectedColor,
-      title,
-    };
-
-    updateStatusColumnAfterNetworkSuccess({
-      dto,
+  function selectColorHandler(selectedColor: string) {
+    handleSelectColor({
+      selectedColor,
       selectedCategory,
       currentStatusColumn,
       setStatusCategoryState,
-    });
-  }
-
-  function handleDelete() {
-    deleteStatusColumn(currentStatusColumn.id!, () => {
-      setStatusCategoryState((prev) =>
-        produce(prev, (draftState) => {
-          draftState.categories.forEach((category, index, arr) => {
-            if (category.id === selectedCategory?.id) {
-              category.statusColumns.forEach((statusColumn, index, arr) => {
-                if (statusColumn.id === currentStatusColumn.id) {
-                  arr.splice(index, 1);
-                }
-              });
-            }
-          });
-        })
-      );
     });
   }
 
@@ -164,9 +103,9 @@ function ActiveStatus({
       <Flex alignItems="center">
         {/* Color */}
         <StatusColorPalletPopover
-          updateColorOnChoose={!editing && true}
           isColorPalletOpen={isColorPalletOpen}
-          handleSelectColor={handleSelectColor}
+          handleSelectColor={selectColorHandler}
+          updateColorOnChoose={!editing && true}
           onColorPalletClose={onColorPalletClose}
         >
           <Box
@@ -214,30 +153,13 @@ function ActiveStatus({
       </Flex>
 
       {/* Options */}
-      <StatusColumnOptionPopover>
-        {/* Rename */}
-        <StatusColumnOption onClickHandler={() => setEditing(true)}>
-          <i className="bi bi-pen"></i>
-          <Box ml="10px">Rename</Box>
-        </StatusColumnOption>
-
-        {/* Change color */}
-        {!currentStatusColumn.markAsClosed && (
-          <StatusColumnOption onClickHandler={handleOpenColorPallet}>
-            <i className="bi bi-palette-fill"></i>
-            <Box ml="10px">Change Color</Box>
-          </StatusColumnOption>
-        )}
-
-        {/* Delete */}
-        {!currentStatusColumn.isDefaultStatus &&
-          !currentStatusColumn.markAsClosed && (
-            <StatusColumnOption onClickHandler={handleDelete}>
-              <i className="bi bi-trash"></i>
-              <Box ml="10px">Delete Status</Box>
-            </StatusColumnOption>
-          )}
-      </StatusColumnOptionPopover>
+      <ActiveStatusOptions
+        setEditing={setEditing}
+        selectedCategory={selectedCategory}
+        onColorPalletOpen={onColorPalletOpen}
+        currentStatusColumn={currentStatusColumn}
+        setStatusCategoryState={setStatusCategoryState}
+      />
     </Flex>
   );
 }

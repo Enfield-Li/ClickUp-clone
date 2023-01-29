@@ -11,10 +11,10 @@ import { spaceColors3D } from "../../../media/colors";
 type Props = {
   children: React.ReactNode;
   isColorPalletOpen: boolean;
-  onColorPalletClose: () => void;
-  handleSelectColor: (color: string) => void;
   updateColorOnChoose?: boolean;
+  onColorPalletClose: () => void;
   position?: "bottom" | "top-start";
+  handleSelectColor: (color: string) => void;
 };
 
 export default function StatusColorPalletPopover({
