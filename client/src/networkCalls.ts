@@ -62,6 +62,23 @@ export async function updateTeamActivity(
   }
 }
 
+export async function updateUserDefaultTeamId(
+  teamId: number,
+  onSuccess?: () => void,
+  onFailure?: () => void
+) {
+  try {
+    await axiosAuthServiceInstance.put(API_ENDPOINT.AUTH + `/${teamId}`);
+
+    onSuccess && onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
 export async function createSpaceForTeam(
   dto: CreateSpaceDTO,
   onSuccess: (data: Space) => void,

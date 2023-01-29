@@ -63,8 +63,6 @@ public class TeamActivityService {
                             "User's teamActivity somehow disappeared");
                 });
 
-        teamActivity.setTeamId(teamId);
-
         if (spaceId != null) {
             var isToggleSpace = Objects.equals(
                     teamActivity.getSpaceId(), spaceId);

@@ -1,55 +1,60 @@
 package com.example.authorization;
 
-import static com.example.authorization.Constants.*;
-import static com.example.clients.UrlConstants.*;
-
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginUserDTO;
 import com.example.authorization.dto.RegisterUserDTO;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import static com.example.authorization.Constants.*;
+import static com.example.clients.UrlConstants.AUTHORIZATION_API_VERSION;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(AUTHORIZATION_API_VERSION)
 class AuthorizationController {
 
-    private final AuthorizationService authorizationService;
+    private final AuthorizationService service;
 
     @PostMapping(REGISTER)
     ResponseEntity<AuthorizationResponseDTO> register(
             @Valid @RequestBody RegisterUserDTO credentials) {
-        var userResponse = authorizationService.register(credentials);
+        var userResponse = service.register(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(LOGIN)
     ResponseEntity<AuthorizationResponseDTO> login(
             @Valid @RequestBody LoginUserDTO credentials) {
-        var userResponse = authorizationService.login(credentials);
+        var userResponse = service.login(credentials);
         return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping(REFRESH_TOKEN)
     ResponseEntity<AuthorizationResponseDTO> refreshToken(
             HttpServletRequest request) {
-        var userResponse = authorizationService.refreshToken();
+        var userResponse = service.refreshToken();
         return ResponseEntity.ok(userResponse);
+    }
+
+    @PutMapping("/{teamId}")
+    ResponseEntity<Boolean> updateDefaultTeamId(
+            @PathVariable("teamId") Integer teamId) {
+        var updateResult = service.updateUserDefaultTeamId(teamId);
+        return ResponseEntity.ok(updateResult);
     }
 
     @PostMapping(LOGOUT)
     void logout() {
-        authorizationService.logout();
+        service.logout();
     }
 
     @PostMapping(CHANGE_PASSWORD)
     void changePassword() {
-        authorizationService.changePassword();
+        service.changePassword();
     }
 }

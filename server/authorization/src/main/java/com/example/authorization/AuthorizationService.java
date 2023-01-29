@@ -7,6 +7,7 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -137,6 +138,18 @@ public class AuthorizationService {
         var rowsAffected = repository
                 .updateUserJoinedTeamCount(userId, teamId, isJoinTeam ? 1 : -1);
         return rowsAffected > 0;
+    }
+
+    @Transactional
+    public Boolean updateUserDefaultTeamId(Integer teamId) {
+        var accessToken = request.getHeader(AUTHORIZATION_HEADER);
+        var userId = jwtUtils.getUserInfoFromAccessToken(accessToken).userId();
+
+        var user = repository.findById(userId).orElseThrow(() -> new InvalidRequestException(
+                "User with id " + userId + " does not exist"));
+        user.setDefaultTeamId(teamId);
+
+        return true;
     }
 
     void logout() {

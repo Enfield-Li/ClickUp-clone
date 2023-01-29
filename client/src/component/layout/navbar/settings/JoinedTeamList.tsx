@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../../constant";
 import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { updateTeamActivity } from "../../../../networkCalls";
+import { updateTeamActivity, updateUserDefaultTeamId } from "../../../../networkCalls";
 import {
   AUTH_ACTION,
   TEAM_STATE_ACTION,
@@ -32,8 +32,7 @@ function JoinedTeamList({ onClose }: Props) {
   function handleSelectTeam(teamId: number) {
     onClose();
 
-    const dto: UpdateTeamActivityDTO = { teamId };
-    updateTeamActivity(dto);
+    updateUserDefaultTeamId(teamId)
     navigate(getTaskBoardURL({ teamId}), {
       state: {},
     });
