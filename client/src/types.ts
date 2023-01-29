@@ -643,13 +643,6 @@ export type UpdateStatusCategoryNameDTO = {
   name: string;
 };
 
-export type CreateStatusColumnForCategoryDTO = {
-  title: string;
-  color: string;
-  categoryId: number;
-  orderIndex: number;
-};
-
 export type CreateStatusCategoryDTO = {
   name: string;
   teamId: number;
@@ -688,4 +681,11 @@ export type UpdateStatusColumnDTO = {
   title: string;
   color: string;
   orderIndex: number;
+};
+
+export type CreateStatusColumnDTO = {
+  title: string;
+  color: string;
+  orderIndex: number;
+  statusCategoryId: number;
 };

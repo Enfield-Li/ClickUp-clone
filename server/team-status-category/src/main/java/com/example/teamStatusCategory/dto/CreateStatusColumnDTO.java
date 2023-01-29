@@ -1,8 +1,8 @@
 package com.example.teamStatusCategory.dto;
 
 public record CreateStatusColumnDTO(
-        String name,
+        String title,
         String color,
-        Boolean isPrivate,
+        Integer statusCategoryId,
         Integer orderIndex) {
 }

@@ -18,7 +18,7 @@ import {
   CreateListDTO,
   CreateSpaceDTO,
   CreateStatusCategoryDTO,
-  CreateStatusColumnForCategoryDTO,
+  CreateStatusColumnDTO,
   CreateTeamResponseDTO,
   ErrorResponse,
   FieldErrors,
@@ -170,8 +170,8 @@ export async function fetchTeamStatusCategories(
   }
 }
 
-export async function CreateStatusColumnForCategory(
-  dto: CreateStatusColumnForCategoryDTO,
+export async function CreateStatusColumn(
+  dto: CreateStatusColumnDTO,
   onSuccess: (id: number) => void,
   onFailure?: () => void
 ) {

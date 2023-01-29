@@ -7,10 +7,18 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { forwardRef, memo, useState } from "react";
-import { SetTaskState, StatusColumn, StatusColumns } from "../../../types";
+import { CreateStatusColumn } from "../../../networkCalls";
+import {
+  CreateStatusColumnDTO,
+  SetTaskState,
+  StatusColumn,
+  StatusColumns,
+  TaskState,
+} from "../../../types";
 
 type Props = {
   color: string;
+  statusCategoryId?: number;
   setTaskState: SetTaskState;
   statusColumns: StatusColumns;
   onColorPalletClose: () => void;
@@ -20,31 +28,43 @@ export default memo(AddStatusColumnInput);
 function AddStatusColumnInput({
   color,
   setTaskState,
-  onColorPalletClose,
   statusColumns,
+  statusCategoryId,
+  onColorPalletClose,
 }: Props) {
-  const [titleInput, setTitleInput] = useState("");
+  const [title, setTitle] = useState("");
 
   function createStatusColumn() {
-    const newColumn: StatusColumn = {
+    if (!statusCategoryId) {
+      throw new Error("statusCategoryId is not initialized");
+    }
+
+    const indexBeforeTheEnd = statusColumns.length - 1;
+    // TODO: orderIndex bug
+    console.log(indexBeforeTheEnd);
+
+    const dto: CreateStatusColumnDTO = {
       color,
-      orderIndex: 3,
-      title: titleInput,
+      title,
+      statusCategoryId,
+      orderIndex: indexBeforeTheEnd,
     };
 
-    setTaskState((pre) => {
-      if (pre) {
-        return produce(pre, (draftState) => {
-          const indexBeforeTheEnd =
-            draftState.columnOptions.statusColumns.length - 1;
-          // Create new column before the last one "Done"
-          draftState.columnOptions.statusColumns.splice(
-            indexBeforeTheEnd,
-            0,
-            newColumn
-          );
-        });
-      }
+    CreateStatusColumn(dto, (id) => {
+      setTaskState((pre) => {
+        if (pre) {
+          return produce(pre, (draftState) => {
+            const newColumn: StatusColumn = { id, ...dto };
+
+            // Create new column before the last one "Done"
+            draftState.columnOptions.statusColumns.splice(
+              indexBeforeTheEnd,
+              0,
+              newColumn
+            );
+          });
+        }
+      });
     });
   }
 
@@ -52,19 +72,19 @@ function AddStatusColumnInput({
     <InputGroup>
       {/* Input */}
       <Input
-        // autoFocus
+        autoFocus
         size="xs"
+        value={title}
         width="200px"
         height="48px"
         borderTop="2px"
         boxShadow="base"
         minWidth="250px"
         cursor="pointer"
-        value={titleInput}
         borderTopRadius="sm"
         borderTopColor={color}
         textTransform="uppercase"
-        onChange={(e) => setTitleInput(e.target.value)}
+        onChange={(e) => setTitle(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             createStatusColumn();

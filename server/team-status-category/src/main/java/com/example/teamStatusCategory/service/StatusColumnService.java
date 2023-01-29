@@ -1,19 +1,17 @@
 package com.example.teamStatusCategory.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
+import com.example.teamStatusCategory.dto.CreateStatusColumnDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusColumnRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +22,11 @@ public class StatusColumnService {
 
     @Transactional
     public Integer createStatusColumnForCategory(
-            CreateStatusColumnForCategoryDTO dto) {
+            CreateStatusColumnDTO dto) {
         var title = dto.title();
         var color = dto.color();
         var orderIndex = dto.orderIndex();
-        var categoryId = dto.categoryId();
+        var categoryId = dto.statusCategoryId();
         var statusColumn = StatusColumn.builder().title(title)
                 .color(color).orderIndex(orderIndex).build();
 

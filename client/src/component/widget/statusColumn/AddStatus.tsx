@@ -2,9 +2,9 @@ import { Box, Button, Flex, Input, useDisclosure } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
 import { getRandomSpaceColor } from "../../../media/colors";
-import { CreateStatusColumnForCategory } from "../../../networkCalls";
+import { CreateStatusColumn } from "../../../networkCalls";
 import {
-  CreateStatusColumnForCategoryDTO,
+  CreateStatusColumnDTO,
   StatusCategory,
   StatusCategoryState,
   StatusColumn,
@@ -97,14 +97,14 @@ function AddStatus({
     if (!selectedCategory) throw new Error("Cannot find original category");
 
     const orderIndex = statusCategoriesAmount ? statusCategoriesAmount + 1 : 1;
-    const dto: CreateStatusColumnForCategoryDTO = {
+    const dto: CreateStatusColumnDTO = {
       title,
       orderIndex,
       color: selectedColor,
-      categoryId: selectedCategory.id,
+      statusCategoryId: selectedCategory.id,
     };
 
-    CreateStatusColumnForCategory(dto, (id) => {
+    CreateStatusColumn(dto, (id) => {
       setTitle("");
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {

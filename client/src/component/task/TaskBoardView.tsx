@@ -2,7 +2,7 @@ import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useFetchTasks } from "../../hook/useFetchTasks";
 import { updateTasksPosition } from "../../networkCalls";
 import {
@@ -35,11 +35,17 @@ type Props = {
 
 export default memo(TaskBoardView);
 function TaskBoardView({ sortBy }: Props) {
+  const location = useLocation();
   const { listId, spaceId } = useParams();
+  const statusCategoryId = location?.state?.defaultStatusCategoryId as
+    | number
+    | undefined;
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
     listId: Number(listId),
+    statusCategoryId,
   });
+  console.log(taskState);
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
 
@@ -107,6 +113,7 @@ function TaskBoardView({ sortBy }: Props) {
             <Box mx={2}>
               <AddStatusColumn
                 setTaskState={setTaskState}
+                statusCategoryId={statusCategoryId}
                 statusColumns={taskState.columnOptions.statusColumns}
               />
             </Box>

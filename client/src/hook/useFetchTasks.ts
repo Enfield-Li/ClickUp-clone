@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
@@ -15,12 +14,16 @@ import { defaultColumnOptions } from "../utils/staticColumnsData";
 interface UseFetchTasksParam {
   sortBy: SortBy;
   listId: number;
+  statusCategoryId: number | undefined;
 }
-export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
-  const location = useLocation();
-  const [taskState, setTaskState] = useState<TaskState>();
-  const [loading, setLoading] = useState(true);
+export function useFetchTasks({
+  sortBy,
+  listId,
+  statusCategoryId,
+}: UseFetchTasksParam) {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [taskState, setTaskState] = useState<TaskState>();
   //   console.log({ taskState });
 
   const { task, setTask, taskStateContext, setTaskStateContext } =
@@ -30,17 +33,16 @@ export function useFetchTasks({ sortBy, listId }: UseFetchTasksParam) {
     initTaskState();
 
     async function initTaskState() {
-      if (!listId || !location?.state?.defaultStatusCategoryId) {
+      if (!listId || !statusCategoryId) {
         setTaskState(undefined);
         setTaskStateContext(null);
         return;
       }
 
       // Task data
-      const { defaultStatusCategoryId } = location.state;
       const networkData = await fetchTasksAndStatusCategory(
         listId,
-        defaultStatusCategoryId
+        statusCategoryId
       );
 
       if (networkData) {

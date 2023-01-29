@@ -5,16 +5,22 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import { SetTaskState, StatusColumns } from "../../../types";
+import { SetTaskState, StatusColumns, TaskState } from "../../../types";
 import StatusColorPalletPopover from "../../widget/statusColumn/StatusColorPalletPopover";
 import AddStatusColumnInput from "./AddStatusColumnInput";
 
 type Props = {
+  statusCategoryId?: number;
   setTaskState: SetTaskState;
   statusColumns: StatusColumns;
 };
 
-function AddStatusColumn({ setTaskState, statusColumns }: Props) {
+export default memo(AddStatusColumn);
+function AddStatusColumn({
+  setTaskState,
+  statusColumns,
+  statusCategoryId,
+}: Props) {
   const {
     isOpen: isColorPalletOpen,
     onOpen: onColorPalletOpen,
@@ -33,6 +39,7 @@ function AddStatusColumn({ setTaskState, statusColumns }: Props) {
             color={color}
             setTaskState={setTaskState}
             statusColumns={statusColumns}
+            statusCategoryId={statusCategoryId}
             onColorPalletClose={onColorPalletClose}
           />
 
@@ -71,4 +78,3 @@ function AddStatusColumn({ setTaskState, statusColumns }: Props) {
     </>
   );
 }
-export default memo(AddStatusColumn);

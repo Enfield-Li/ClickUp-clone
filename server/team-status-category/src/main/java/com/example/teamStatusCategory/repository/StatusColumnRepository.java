@@ -1,12 +1,11 @@
 package com.example.teamStatusCategory.repository;
 
+import com.example.teamStatusCategory.model.StatusColumn;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.example.teamStatusCategory.model.StatusColumn;
 
 @Repository
 public interface StatusColumnRepository
@@ -15,13 +14,13 @@ public interface StatusColumnRepository
     // @Query(nativeQuery = true, value = ""
     //         + "INSERT INTO status_column"
     //         + " (title, color, order_index, status_category_id)"
-    //         + " VALUES (:title, :color, :orderIndex, :categoryId)")
+    //         + " VALUES (:title, :color, :orderIndex, :statusCategoryId)")
     // @Modifying(clearAutomatically = true, flushAutomatically = true)
     // Integer createStatusColumnForCategory(
     //         @Param("title") String title,
     //         @Param("color") String color,
     //         @Param("orderIndex") Integer orderIndex,
-    //         @Param("categoryId") Integer categoryId);
+    //         @Param("statusCategoryId") Integer statusCategoryId);
 
     // @Query(nativeQuery = true, value = ""
     //         + " SELECT LAST_INSERT_ID(id)"

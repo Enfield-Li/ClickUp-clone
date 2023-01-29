@@ -1,22 +1,14 @@
 package com.example.teamStatusCategory.controller;
 
-import static com.example.clients.UrlConstants.STATUS_COLUMN_API_VERSION;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
+import com.example.teamStatusCategory.dto.CreateStatusColumnDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
 import com.example.teamStatusCategory.service.StatusColumnService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import static com.example.clients.UrlConstants.STATUS_COLUMN_API_VERSION;
 
 @Log4j2
 @RestController
@@ -28,7 +20,7 @@ class StatusColumnController {
 
     @PostMapping
     ResponseEntity<Integer> createStatusColumnForCategory(
-            @RequestBody CreateStatusColumnForCategoryDTO dto) {
+            @RequestBody CreateStatusColumnDTO dto) {
         var id = service.createStatusColumnForCategory(dto);
         return ResponseEntity.ok(id);
     }
