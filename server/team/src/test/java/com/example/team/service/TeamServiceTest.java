@@ -24,8 +24,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 
 import java.util.List;
 import java.util.Set;
@@ -40,12 +38,6 @@ import static org.mockito.Mockito.verify;
 public class TeamServiceTest implements WithAssertions {
 
     TeamService underTest;
-
-    @Mock
-    Authentication authentication;
-
-    @Mock
-    SecurityContext securityContext;
 
     @Mock
     TeamRepository teamRepository;
@@ -64,9 +56,6 @@ public class TeamServiceTest implements WithAssertions {
 
     @Mock
     RabbitMqMessageProducer rabbitMQMessageProducer;
-
-    @Captor
-    ArgumentCaptor<Team> teamArgCaptor;
 
     @Captor
     ArgumentCaptor<String> stringCaptor;
@@ -172,7 +161,7 @@ public class TeamServiceTest implements WithAssertions {
 
         given(userInfoService.getCurrentUserInfo()).willReturn(userInfo);
         given(teamRepository.findByMembersUserId(any())).willReturn(teamSet);
-        given(teamActivityClient.getTeamActivity(any()))
+        given(teamActivityClient.getTeamActivity(any(), any()))
                 .willReturn(teamActivity);
 
         // when

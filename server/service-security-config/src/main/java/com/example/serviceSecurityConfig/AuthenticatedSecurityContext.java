@@ -5,7 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserInfoService {
+public class AuthenticatedSecurityContext {
 
     public UserCredentials getCurrentUserInfo() {
         return (UserCredentials) SecurityContextHolder
@@ -14,6 +14,7 @@ public class UserInfoService {
 
     public Integer getCurrentUserId() {
         try {
+            System.out.println(getCurrentUserInfo());
             return getCurrentUserInfo().userId();
         } catch (Exception e) {
             return null;

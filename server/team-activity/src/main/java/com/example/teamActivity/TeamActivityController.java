@@ -17,10 +17,11 @@ class TeamActivityController {
 
     private final TeamActivityService teamActivityService;
 
-    @GetMapping("/{teamId}")
+    @GetMapping
     ResponseEntity<TeamActivity> getTeamActivity(
-            @PathVariable("teamId") Integer teamId) {
-        var TeamActivity = teamActivityService.getTeamActivity(teamId);
+            @RequestParam("teamId") Integer teamId,
+            @RequestParam("userId") Integer userId) {
+        var TeamActivity = teamActivityService.getTeamActivity(teamId, userId);
         return ResponseEntity.ok(TeamActivity);
     }
 

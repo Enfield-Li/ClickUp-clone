@@ -37,7 +37,7 @@ public class TeamService {
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
 
-        var teamActivity = teamActivityClient.getTeamActivity(teamId);
+        var teamActivity = teamActivityClient.getTeamActivity(teamId, userId);
 
         return new InitTeamListDTO(teamSet, teamActivity);
     }

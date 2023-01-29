@@ -46,7 +46,6 @@ public class AccessTokenFilter extends GenericFilterBean {
                         null);
 
                 SecurityContextHolder.getContext().setAuthentication(authUser);
-                System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
             }
 

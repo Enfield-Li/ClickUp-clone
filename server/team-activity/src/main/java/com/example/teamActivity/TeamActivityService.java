@@ -3,7 +3,7 @@ package com.example.teamActivity;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.serviceSecurityConfig.UserInfoService;
+import com.example.serviceSecurityConfig.AuthenticatedSecurityContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,11 @@ import java.util.Objects;
 public class TeamActivityService {
 
     private final TeamActivityRepository repository;
-    private final UserInfoService userInfoService;
+    private final AuthenticatedSecurityContext authenticatedSecurityContext;
 
     public TeamActivity createTeamActivity(
             CreateTeamActivityDTO createTeamActivityDTO) {
-        var userId = userInfoService.getCurrentUserId();
+        var userId = authenticatedSecurityContext.getCurrentUserId();
         var teamId = createTeamActivityDTO.teamId();
         var spaceId = createTeamActivityDTO.spaceId();
 
@@ -34,8 +34,7 @@ public class TeamActivityService {
         return repository.save(teamActivity);
     }
 
-    public TeamActivity getTeamActivity(Integer teamId) {
-        var userId = userInfoService.getCurrentUserId();
+    public TeamActivity getTeamActivity(Integer teamId, Integer userId) {
         return repository.findByTeamIdAndUserId(teamId, userId)
                 .orElseThrow(() -> {
                     log.error("User's teamActivity somehow disappeared");
@@ -51,9 +50,9 @@ public class TeamActivityService {
         var spaceId = dto.spaceId();
         var folderId = dto.folderId();
 
-        var userId = userInfoService.getCurrentUserId();
+        var userId = authenticatedSecurityContext.getCurrentUserId();
 
-        if (dto.userId() == null) {
+        if (userId == null && dto.userId() != null) {
             userId = dto.userId();
         }
 
@@ -88,6 +87,5 @@ public class TeamActivityService {
         if (listId != null) {
             teamActivity.setListId(listId);
         }
-        System.out.println(teamActivity);
     }
 }

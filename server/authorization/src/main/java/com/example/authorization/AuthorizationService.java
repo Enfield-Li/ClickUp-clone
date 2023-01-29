@@ -1,7 +1,5 @@
 package com.example.authorization;
 
-import static com.example.clients.UrlConstants.*;
-
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginUserDTO;
 import com.example.authorization.dto.RegisterUserDTO;
@@ -9,13 +7,17 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Objects;
+
+import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
 
 @Log4j2
 @Service
@@ -108,10 +110,10 @@ public class AuthorizationService {
         // 3. check if token version is valid
         var applicationUser = repository
                 .findById(userIdInAccessToken.userId())
-                .orElseThrow(() -> new AuthenticationFailureException());
-        var isTokenNotValid = tokenVersion != applicationUser
-                .getRefreshTokenVersion() ||
-                userIdInAccessToken.userId() != userIdInRefreshToken;
+                .orElseThrow(AuthenticationFailureException::new);
+        var isTokenNotValid = !Objects.equals(tokenVersion, applicationUser
+                .getRefreshTokenVersion()) ||
+                !userIdInAccessToken.userId().equals(userIdInRefreshToken);
         if (isTokenNotValid) {
             log.error("Token version mismatch.");
             session.invalidate();
@@ -158,6 +160,7 @@ public class AuthorizationService {
         // store refreshToken in session
         var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
         session.setAttribute(REFRESH_TOKEN, refreshToken);
+        var getRefreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
         // send accessToken to client
         var accessToken = jwtUtils.createAccessToken(userId, username);
