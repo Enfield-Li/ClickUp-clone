@@ -5,6 +5,7 @@ import determineListType, {
 } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
   CreateListInfo,
+  FolderCategory,
   Team,
   TeamStateActionType,
   TeamStateType,
@@ -158,7 +159,9 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.CREATE_FOLDER: {
       return produce(teamState, (draftState) => {
-        const folder = action.payload;
+        const folder = deepCopy(action.payload) as FolderCategory;
+        folder.allLists.sort((a, b) => a.orderIndex - b.orderIndex);
+
         const spaceId = draftState.createFolderInfo?.spaceId;
         if (!spaceId) throw new Error("spaceId is null");
 
@@ -172,8 +175,9 @@ export default function teamReducer(
             team.spaces.forEach((space) => {
               if (space.id === spaceId) {
                 // @ts-expect-error
-                const lastFolderIndex = space.allListOrFolder.findLastIndex((i) =>
-                  determineFolderType(i)
+                const lastFolderIndex = space.allListOrFolder.findLastIndex(
+                  // @ts-expect-error
+                  (i) => determineFolderType(i)
                 );
 
                 if (lastFolderIndex >= 0) {

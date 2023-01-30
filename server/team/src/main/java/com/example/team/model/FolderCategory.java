@@ -1,47 +1,28 @@
 package com.example.team.model;
 
-import static com.example.team.TeamServiceConstants.FOLDER_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAINT;
+import com.example.team.dto.CreateFolderDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.example.team.dto.CreateFolderDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import static com.example.team.TeamServiceConstants.FOLDER_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAINT;
 
 @Data
 @Entity
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "space" })
+@EqualsAndHashCode(exclude = {"space"})
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "spaceId",
@@ -127,23 +108,24 @@ public class FolderCategory {
                 .build();
         folderCategory.addMember(userInfo);
 
-        Set<ListCategory> allListCategory = dto
-                .allListNames().stream()
-                .map(name -> {
-                    var listCategory = ListCategory.builder()
-                            .name(name)
-                            .orderIndex(1)
-                            .creator(userInfo)
-                            .folderCategory(folderCategory)
-                            .defaultStatusCategoryId(
-                                    dto.defaultStatusCategoryId())
-                            .build();
+        Set<ListCategory> allListCategory =
+                IntStream.range(0, dto.allListNames().size())
+                        .mapToObj(index -> {
+                            var currentListName = dto.allListNames().get(index);
+                            var listCategory = ListCategory.builder()
+                                    .creator(userInfo)
+                                    .name(currentListName)
+                                    .orderIndex(index + 1)
+                                    .folderCategory(folderCategory)
+                                    .defaultStatusCategoryId(
+                                            dto.defaultStatusCategoryId())
+                                    .build();
 
-                    listCategory.addMember(userInfo);
-                    return listCategory;
-                })
-                .collect(Collectors.toSet());
-                
+                            listCategory.addMember(userInfo);
+                            return listCategory;
+                        })
+                        .collect(Collectors.toSet());
+
         folderCategory.setAllLists(allListCategory);
         return folderCategory;
     }
