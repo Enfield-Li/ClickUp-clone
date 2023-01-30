@@ -5,6 +5,7 @@ export function generateDefaultListName(
 ) {
   let number = 0;
   const name = "list";
+
   updateDefaultNameOnExist();
 
   function updateDefaultNameOnExist() {
@@ -16,6 +17,11 @@ export function generateDefaultListName(
     });
   }
 
+  const listNames: string[] = [];
+  currentLevelLists?.forEach((listCategory) =>
+    listNames.push(listCategory.name)
+  );
+
   const defaultName = number !== 0 ? `${name}-${number}` : name;
-  return defaultName;
+  return [defaultName, listNames] as const;
 }

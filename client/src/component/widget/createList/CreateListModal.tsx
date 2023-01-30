@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 import { createListForSpace } from "../../../networkCalls";
-import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
+import { CreateListDTO, ListCategory, TEAM_STATE_ACTION } from "../../../types";
 import { generateDefaultListName } from "../../../utils/generateDefaultListName";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
@@ -25,6 +25,9 @@ export default memo(CreateListModal);
 function CreateListModal({}: Props) {
   const navigate = useNavigate();
   const [value, setValue] = useState("");
+  const [nameLists, setNameLists] = useState<string[]>();
+  const isListNameTaken = nameLists?.includes(value);
+
   const [placeHolderValue, setPlaceHolderValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
@@ -36,7 +39,9 @@ function CreateListModal({}: Props) {
 
   useEffect(() => {
     const currentLevelLists = teamState.createListInfo?.currentLevelLists;
-    const defaultName = generateDefaultListName(currentLevelLists);
+    const [defaultName, listNames] = generateDefaultListName(currentLevelLists);
+
+    setNameLists(listNames);
     setPlaceHolderValue(defaultName);
   }, [teamState]);
 
@@ -127,10 +132,16 @@ function CreateListModal({}: Props) {
               rounded="3px"
               value={value}
               bgColor={darkNavBG}
-              borderColor="blackAlpha.500"
               placeholder={placeHolderValue}
               onChange={(e) => setValue(e.target.value)}
+              borderColor={isListNameTaken ? "red.400" : "blackAlpha.500"}
             />
+
+            {isListNameTaken && (
+              <Box mt="1" color="red.400" fontSize="small">
+                List name taken
+              </Box>
+            )}
           </Box>
 
           <Flex justifyContent="flex-end" alignItems="center" mt="65px">
@@ -145,6 +156,7 @@ function CreateListModal({}: Props) {
               rounded="3px"
               color="white"
               bgColor="customBlue.200"
+              disabled={isListNameTaken}
               onClick={(e) => handleCreateList(e)}
               _hover={{ bgColor: "customBlue.100" }}
             >
