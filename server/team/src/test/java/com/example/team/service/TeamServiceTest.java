@@ -28,7 +28,7 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import java.util.List;
 import java.util.Set;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -135,7 +135,7 @@ public class TeamServiceTest implements WithAssertions {
                 updateUserJoinedTeamsDTOCaptor.capture());
         var stringValues = stringCaptor.getAllValues();
         assertThat(stringValues).isEqualTo(List.of(
-                internalExchange, AuthorizationRoutingKey));
+                internalExchange, authorizationRoutingKey));
 
         var capturedUpdateUserJoinedTeamsDTOValue = updateUserJoinedTeamsDTOCaptor
                 .getValue();

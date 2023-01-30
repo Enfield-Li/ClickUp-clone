@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.amqp.ExchangeKey.AuthorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
 
 @Log4j2
@@ -71,7 +71,7 @@ public class TeamService {
                 userInfo.getId(), teamId, true);
         rabbitMQMessageProducer.publish(
                 internalExchange,
-                AuthorizationRoutingKey,
+                authorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
         return new CreateTeamResponseDTO(team, teamActivityDTO);

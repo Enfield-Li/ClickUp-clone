@@ -24,8 +24,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import javax.persistence.EntityManager;
 import java.util.Set;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 import static org.mockito.ArgumentMatchers.any;
@@ -115,7 +115,7 @@ public class SpaceServiceTest implements WithAssertions {
 
         verify(rabbitMQMessageProducer).publish(
                 internalExchange,
-                TeamActivityRoutingKey,
+                teamActivityRoutingKey,
                 UpdateTeamActivityDTO);
     }
 

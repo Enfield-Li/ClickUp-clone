@@ -1,6 +1,7 @@
 package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateListDTO;
@@ -15,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 
 @Log4j2
 @Service
@@ -62,14 +63,27 @@ public class ListCategoryService {
                 teamId, null, null, listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
-                TeamActivityRoutingKey,
+                teamActivityRoutingKey,
                 UpdateTeamActivityDTO);
 
         return listCategory;
     }
 
-    private void updateDefaultStatusCategoryId(String i) {
+    @Transactional
+    public void updateDefaultStatusCategoryId(
+            UpdateListCategoryDefaultStatusCategoryIdDTO dto) {
+        var listCategoryId = dto.listCategoryId();
+        var statusCategoryId = dto.statusCategoryId();
 
+        var listCategory = repository.findById(listCategoryId)
+                .orElse(null);
+
+        if (listCategory != null) {
+            listCategory.setDefaultStatusCategoryId(statusCategoryId);
+            return;
+        }
+
+        log.error("update failed, cannot find listCategory");
     }
 
     private FolderCategory findFolderReference(Integer FolderCategoryId) {

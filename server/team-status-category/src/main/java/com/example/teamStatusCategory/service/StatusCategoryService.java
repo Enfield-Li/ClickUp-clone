@@ -1,5 +1,7 @@
 package com.example.teamStatusCategory.service;
 
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
 import com.example.teamStatusCategory.dto.AddStatusColumnResponseDTO;
@@ -15,12 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamRoutingKey;
+
 @Service
 @RequiredArgsConstructor
 public class StatusCategoryService {
 
     private final EntityManager entityManager;
     private final StatusCategoryRepository repository;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public List<StatusCategory> getStatusCategoryForTeam(Integer teamId) {
         return repository.findAllByTeamId(teamId);
@@ -67,7 +73,10 @@ public class StatusCategoryService {
         statusCategory.addStatusColumn(statusColumn);
         repository.saveAndFlush(statusCategory);
 
-        // TODO: push message and update listCategory defaultStatusCategoryId
+        var messageDTO = new UpdateListCategoryDefaultStatusCategoryIdDTO(
+                listId, statusCategory.getId());
+        rabbitMQMessageProducer.publish(
+                internalExchange, teamRoutingKey, messageDTO);
 
         return new AddStatusColumnResponseDTO(
                 statusCategory.getId(), statusColumn.getId());

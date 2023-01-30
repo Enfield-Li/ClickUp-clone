@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 
 @Log4j2
 @Service
@@ -48,7 +48,7 @@ public class FolderCategoryService {
                 teamId, null, folderId, listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
-                TeamActivityRoutingKey,
+                teamActivityRoutingKey,
                 UpdateTeamActivityDTO);
 
         return folder;

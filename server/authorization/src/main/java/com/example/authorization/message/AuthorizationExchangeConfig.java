@@ -1,13 +1,13 @@
 package com.example.authorization.message;
 
-import static com.example.amqp.ExchangeKey.*;
-
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static com.example.amqp.ExchangeKey.*;
 
 @Configuration
 public class AuthorizationExchangeConfig {
@@ -19,7 +19,7 @@ public class AuthorizationExchangeConfig {
 
     @Bean
     public Queue authorizationQueue() {
-        return new Queue(AuthorizationQueue);
+        return new Queue(authorizationQueue);
     }
 
     @Bean
@@ -27,6 +27,6 @@ public class AuthorizationExchangeConfig {
         return BindingBuilder
                 .bind(authorizationQueue())
                 .to(internalTopicExchange())
-                .with(AuthorizationRoutingKey);
+                .with(authorizationRoutingKey);
     }
 }

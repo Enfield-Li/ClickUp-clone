@@ -21,8 +21,8 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.TeamActivityRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -110,7 +110,7 @@ public class ListCategoryServiceTest implements WithAssertions {
         assertThat(actualResult).isEqualTo(listCategory);
         verify(rabbitMQMessageProducer).publish(
                 internalExchange,
-                TeamActivityRoutingKey,
+                teamActivityRoutingKey,
                 UpdateTeamActivityDTO);
     }
 
@@ -156,7 +156,7 @@ public class ListCategoryServiceTest implements WithAssertions {
         assertThat(actualResult).isEqualTo(listCategory);
         verify(rabbitMQMessageProducer).publish(
                 internalExchange,
-                TeamActivityRoutingKey,
+                teamActivityRoutingKey,
                 UpdateTeamActivityDTO);
     }
 

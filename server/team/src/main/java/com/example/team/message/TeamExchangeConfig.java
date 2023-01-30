@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import static com.example.amqp.ExchangeKey.*;
 
 @Configuration
-public class AuthorizationExchangeConfig {
+public class TeamExchangeConfig {
 
     @Bean
     public TopicExchange internalTopicExchange() {
@@ -18,15 +18,15 @@ public class AuthorizationExchangeConfig {
     }
 
     @Bean
-    public Queue authorizationQueue() {
-        return new Queue(AuthorizationQueue);
+    public Queue teamQueue() {
+        return new Queue(teamQueue);
     }
 
     @Bean
     public Binding internalToTaskEventBinding() {
         return BindingBuilder
-                .bind(authorizationQueue())
+                .bind(teamQueue())
                 .to(internalTopicExchange())
-                .with(AuthorizationRoutingKey);
+                .with(teamRoutingKey);
     }
 }
