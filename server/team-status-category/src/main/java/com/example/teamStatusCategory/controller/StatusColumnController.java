@@ -19,9 +19,9 @@ class StatusColumnController {
     private final StatusColumnService service;
 
     @PostMapping
-    ResponseEntity<Integer> createStatusColumnForCategory(
+    ResponseEntity<Integer> createStatusColumn(
             @RequestBody CreateStatusColumnDTO dto) {
-        var id = service.createStatusColumnForCategory(dto);
+        var id = service.createStatusColumn(dto);
         return ResponseEntity.ok(id);
     }
 

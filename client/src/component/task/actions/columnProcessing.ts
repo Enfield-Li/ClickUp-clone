@@ -27,7 +27,7 @@ export function initColumns(columnOptions: ColumnOptions) {
   return { reorderedDueDateColumns, reorderedStatusColumns };
 }
 
-// Reorder based on statusColumns.previousColumnId
+// Reorder based on statusColumns.orderIndex
 export function reorderStatusColumns(
   statusColumns: StatusColumns
 ): StatusColumns {

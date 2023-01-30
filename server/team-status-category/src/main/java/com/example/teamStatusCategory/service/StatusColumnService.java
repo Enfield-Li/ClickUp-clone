@@ -21,7 +21,7 @@ public class StatusColumnService {
     private final StatusColumnRepository repository;
 
     @Transactional
-    public Integer createStatusColumnForCategory(
+    public Integer createStatusColumn(
             CreateStatusColumnDTO dto) {
         var title = dto.title();
         var color = dto.color();
@@ -56,7 +56,7 @@ public class StatusColumnService {
         var rowsAffected = repository.deleteStatusColumnById(id);
         if (rowsAffected == 0) {
             throw new InternalErrorException(
-                    String.format("Failed to delete StatusColumn with id: $s", id));
+                    String.format("Failed to delete StatusColumn with id: %s", id));
         }
 
         return rowsAffected > 0;
@@ -67,7 +67,7 @@ public class StatusColumnService {
             return entityManager.getReference(StatusCategory.class, id);
         } catch (EntityNotFoundException e) {
             throw new InternalErrorException(
-                    String.format("StatusCategory with id: $s not found", id));
+                    String.format("StatusCategory with id: %s not found", id));
         }
     }
 
@@ -76,7 +76,7 @@ public class StatusColumnService {
             return entityManager.getReference(StatusColumn.class, id);
         } catch (EntityNotFoundException e) {
             throw new InternalErrorException(
-                    String.format("StatusColumn with id: $s not found", id));
+                    String.format("StatusColumn with id: %s not found", id));
         }
     }
 }

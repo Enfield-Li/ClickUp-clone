@@ -2,19 +2,16 @@ import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useFetchTasks } from "../../hook/useFetchTasks";
 import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
   SetTaskState,
   SortBy,
-  Task,
-  TaskPositionDTO,
   TaskPositionDTOList,
   TaskState,
   UndeterminedColumns,
-  UpdateEvent,
   UpdateTasksPositionDTO,
 } from "../../types";
 import { newEventDTO } from "../../utils/createNewEvent";
@@ -42,10 +39,10 @@ function TaskBoardView({ sortBy }: Props) {
     | undefined;
   const { taskState, loading, error, setTaskState } = useFetchTasks({
     sortBy,
-    listId: Number(listId),
     statusCategoryId,
+    listId: Number(listId),
   });
-  console.log(taskState);
+  //   console.log(taskState);
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
 

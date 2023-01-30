@@ -1,17 +1,12 @@
 package com.example.teamStatusCategory.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-
+import com.example.clients.jwt.UserCredentials;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
+import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
+import com.example.teamStatusCategory.model.StatusCategory;
+import com.example.teamStatusCategory.model.StatusColumn;
+import com.example.teamStatusCategory.repository.StatusCategoryRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +17,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
-import com.example.clients.jwt.UserCredentials;
-import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
-import com.example.teamStatusCategory.model.StatusCategory;
-import com.example.teamStatusCategory.model.StatusColumn;
-import com.example.teamStatusCategory.repository.StatusCategoryRepository;
+import javax.persistence.EntityManager;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class StatusCategoryServiceTest implements WithAssertions {
 
     StatusCategoryService underTest;
@@ -91,7 +89,7 @@ public class StatusCategoryServiceTest implements WithAssertions {
         // given
         var listId = 5523;
         var errorMessage = String.format(
-                "StatusCategory with id: $s not found", listId);
+                "StatusCategory with id: %s not found", listId);
         given(repository.findById(any())).willReturn(Optional.empty());
 
         // when 

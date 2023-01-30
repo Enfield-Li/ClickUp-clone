@@ -1,28 +1,20 @@
 package com.example.teamStatusCategory.controller;
 
-import static com.example.clients.UrlConstants.STATUS_CATEGORY_API_VERSION;
-import static com.example.teamStatusCategory.UrlConstants.NAME;
-
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
+import com.example.teamStatusCategory.dto.AddStatusColumnResponseDTO;
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.service.StatusCategoryService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.example.clients.UrlConstants.STATUS_CATEGORY_API_VERSION;
+import static com.example.teamStatusCategory.UrlConstants.NAME;
 
 @Log4j2
 @RestController
@@ -60,6 +52,14 @@ class StatusCategoryController {
                 CreateStatusCategoryDTO);
         return ResponseEntity.ok(statusCategory);
     }
+
+    @PostMapping("/add_column")
+    ResponseEntity<AddStatusColumnResponseDTO> cloneStatusCategoryForListCategory(
+            @RequestBody AddStatusColumnDTO dto) {
+        var statusCategory = service.cloneStatusCategoryForListCategory(dto);
+        return ResponseEntity.ok(statusCategory);
+    }
+
 
     @PutMapping(NAME)
     ResponseEntity<Boolean> updateStatusCategoryName(

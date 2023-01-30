@@ -11,6 +11,8 @@ import {
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
+  AddStatusColumnDTO,
+  AddStatusColumnResponseDTO,
   AuthActionType,
   AuthenticationResponse,
   AUTH_ACTION,
@@ -170,16 +172,42 @@ export async function fetchTeamStatusCategories(
   }
 }
 
-export async function CreateStatusColumn(
+export async function createStatusColumn(
   dto: CreateStatusColumnDTO,
   onSuccess: (id: number) => void,
   onFailure?: () => void
 ) {
   try {
+    console.log(dto);
+
     const response = await axiosStatusCategoryServiceInstance.post<number>(
-      API_ENDPOINT.STATUS_COLUMN,
+      API_ENDPOINT.STATUS_CATEGORY + "/add_column",
       dto
     );
+    if (!response.data) throw new Error("CreateStatusColumnForCategory failed");
+
+    onSuccess(response.data);
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function addStatusColumn(
+  dto: AddStatusColumnDTO,
+  onSuccess: (responseDTO: AddStatusColumnResponseDTO) => void,
+  onFailure?: () => void
+) {
+  try {
+    console.log(dto);
+
+    const response =
+      await axiosStatusCategoryServiceInstance.post<AddStatusColumnResponseDTO>(
+        API_ENDPOINT.STATUS_CATEGORY + "/add_column",
+        dto
+      );
     if (!response.data) throw new Error("CreateStatusColumnForCategory failed");
 
     onSuccess(response.data);

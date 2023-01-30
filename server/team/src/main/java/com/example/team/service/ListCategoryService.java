@@ -68,6 +68,10 @@ public class ListCategoryService {
         return listCategory;
     }
 
+    private void updateDefaultStatusCategoryId(String i) {
+
+    }
+
     private FolderCategory findFolderReference(Integer FolderCategoryId) {
         return entityManager.getReference(
                 FolderCategory.class, FolderCategoryId);

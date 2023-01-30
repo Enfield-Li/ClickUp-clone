@@ -175,6 +175,7 @@ export interface OrderedTask {
 }
 export type OrderedTasks = OrderedTask[];
 export interface TaskState {
+  statusCategoryId: number;
   orderedTasks: OrderedTasks;
   columnOptions: ColumnOptions;
 }
@@ -688,4 +689,17 @@ export type CreateStatusColumnDTO = {
   color: string;
   orderIndex: number;
   statusCategoryId: number;
+};
+
+export type AddStatusColumnDTO = {
+    title: string;
+    color: string;
+    listId: number;
+    orderIndex: number;
+    statusCategoryId: number;
+  };
+
+export type AddStatusColumnResponseDTO = {
+  statusCategoryId: number;
+  statusColumnId: number;
 };

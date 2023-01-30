@@ -1,12 +1,12 @@
 package com.example.teamStatusCategory.service;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-
+import com.example.clients.jwt.UserCredentials;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
+import com.example.teamStatusCategory.dto.CreateStatusColumnDTO;
+import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
+import com.example.teamStatusCategory.model.StatusCategory;
+import com.example.teamStatusCategory.model.StatusColumn;
+import com.example.teamStatusCategory.repository.StatusColumnRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,15 +17,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
-import com.example.clients.jwt.UserCredentials;
-import com.example.serviceExceptionHandling.exception.InternalErrorException;
-import com.example.teamStatusCategory.dto.CreateStatusColumnForCategoryDTO;
-import com.example.teamStatusCategory.dto.UpdateStatusColumnDTO;
-import com.example.teamStatusCategory.model.StatusCategory;
-import com.example.teamStatusCategory.model.StatusColumn;
-import com.example.teamStatusCategory.repository.StatusColumnRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class StatusColumnServiceTest implements WithAssertions {
 
     StatusColumnService underTest;
@@ -60,7 +59,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         var statusColumn = StatusColumn.builder()
                 .id(expectedId).build();
 
-        var dto = new CreateStatusColumnForCategoryDTO(
+        var dto = new CreateStatusColumnDTO(
                 title, color, categoryId, orderIndex);
         var statusCategory = new StatusCategory();
 
@@ -70,7 +69,7 @@ public class StatusColumnServiceTest implements WithAssertions {
 
         // when
         var actualResult = underTest
-                .createStatusColumnForCategory(dto);
+                .createStatusColumn(dto);
 
         // then
         verify(repository).save(statusColumnCaptor.capture());
@@ -92,7 +91,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         var errorMessage = String
                 .format("StatusCategory with id: $s not found", categoryId);
 
-        var dto = new CreateStatusColumnForCategoryDTO(
+        var dto = new CreateStatusColumnDTO(
                 title, color, categoryId, orderIndex);
 
         given(entityManager.getReference(any(), any()))
@@ -101,7 +100,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         // when
         // then
         assertThatThrownBy(() -> underTest
-                .createStatusColumnForCategory(dto))
+                .createStatusColumn(dto))
                 .isInstanceOf(InternalErrorException.class)
                 .hasMessage(errorMessage);
     }
@@ -116,7 +115,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         var dto = new UpdateStatusColumnDTO(
                 id, title, color, orderIndex);
         var errorMessage = String
-                .format("StatusColumn with id: $s not found", id);
+                .format("StatusColumn with id: %s not found", id);
         given(entityManager.getReference(any(), any()))
                 .willThrow(EntityNotFoundException.class);
 

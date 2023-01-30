@@ -1,27 +1,17 @@
 package com.example.teamStatusCategory.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -29,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "name", "teamId" })
+        @UniqueConstraint(columnNames = {"name", "teamId"})
 })
 public class StatusCategory {
 
@@ -37,10 +27,10 @@ public class StatusCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
+    //    @NotNull
     private String name;
 
-    @NotNull
+    //    @NotNull
     private Integer teamId;
 
     private Boolean isDefaultCategory;
@@ -48,6 +38,14 @@ public class StatusCategory {
     @Builder.Default
     @OneToMany(mappedBy = "statusCategory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<StatusColumn> statusColumns = new HashSet<>();
+
+    public StatusCategory(StatusCategory statusCategory) {
+        //        this.teamId = 0;
+        //        this.name = statusCategory.name + "_listCloned";
+        var clonedStatusColumn = statusCategory.statusColumns.stream().
+                map(StatusColumn::new).collect(Collectors.toSet());
+        addStatusColumns(clonedStatusColumn);
+    }
 
     public void addStatusColumn(StatusColumn statusColumn) {
         statusColumns.add(statusColumn);

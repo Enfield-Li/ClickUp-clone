@@ -2,7 +2,7 @@ import { Box, Button, Flex, Input, useDisclosure } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo, useState } from "react";
 import { getRandomSpaceColor } from "../../../media/colors";
-import { CreateStatusColumn } from "../../../networkCalls";
+import { createStatusColumn } from "../../../networkCalls";
 import {
   CreateStatusColumnDTO,
   StatusCategory,
@@ -104,7 +104,7 @@ function AddStatus({
       statusCategoryId: selectedCategory.id,
     };
 
-    CreateStatusColumn(dto, (id) => {
+    createStatusColumn(dto, (id) => {
       setTitle("");
       setStatusCategoryState((prev) =>
         produce(prev, (draftState) => {

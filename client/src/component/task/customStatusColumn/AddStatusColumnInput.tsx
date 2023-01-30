@@ -6,14 +6,14 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import produce from "immer";
-import React, { forwardRef, memo, useState } from "react";
-import { CreateStatusColumn } from "../../../networkCalls";
+import { memo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { addStatusColumn } from "../../../networkCalls";
 import {
-  CreateStatusColumnDTO,
+  AddStatusColumnDTO,
   SetTaskState,
   StatusColumn,
   StatusColumns,
-  TaskState,
 } from "../../../types";
 
 type Props = {
@@ -32,33 +32,42 @@ function AddStatusColumnInput({
   statusCategoryId,
   onColorPalletClose,
 }: Props) {
+  const { listId } = useParams();
   const [title, setTitle] = useState("");
 
   function createStatusColumn() {
     if (!statusCategoryId) {
       throw new Error("statusCategoryId is not initialized");
     }
+    if (!listId || !Number(listId)) {
+      throw new Error("listId is not initialized");
+    }
 
-    const indexBeforeTheEnd = statusColumns.length - 1;
+    const lastItemIndex = statusColumns.length - 1;
+    const indexBeforeTheEnd = statusColumns.length - 2;
+    const orderIndex = statusColumns[indexBeforeTheEnd].orderIndex + 1;
     // TODO: orderIndex bug
-    console.log(indexBeforeTheEnd);
 
-    const dto: CreateStatusColumnDTO = {
+    const dto: AddStatusColumnDTO = {
       color,
       title,
+      orderIndex,
       statusCategoryId,
-      orderIndex: indexBeforeTheEnd,
+      listId: Number(listId),
     };
 
-    CreateStatusColumn(dto, (id) => {
+    addStatusColumn(dto, (responseDTO) => {
       setTaskState((pre) => {
         if (pre) {
           return produce(pre, (draftState) => {
-            const newColumn: StatusColumn = { id, ...dto };
+            const { statusColumnId, statusCategoryId } = responseDTO;
+
+            draftState.statusCategoryId = statusCategoryId;
 
             // Create new column before the last one "Done"
+            const newColumn: StatusColumn = { id: statusColumnId, ...dto };
             draftState.columnOptions.statusColumns.splice(
-              indexBeforeTheEnd,
+              lastItemIndex,
               0,
               newColumn
             );

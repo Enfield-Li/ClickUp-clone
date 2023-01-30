@@ -82,7 +82,7 @@ export function useFetchTasks({
           sortBy,
           currentListId: listId,
         });
-        setTaskState({ orderedTasks, columnOptions });
+        setTaskState({ orderedTasks, columnOptions, statusCategoryId });
 
         setLoading(false);
       }
