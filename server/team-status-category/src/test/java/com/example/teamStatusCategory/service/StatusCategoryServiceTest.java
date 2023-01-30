@@ -8,7 +8,6 @@ import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusCategoryRepository;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -50,10 +49,10 @@ public class StatusCategoryServiceTest implements WithAssertions {
 
     UserCredentials userCredentials = new UserCredentials(1, "mockUser");
 
-    @BeforeEach
-    void setUp() {
-        underTest = new StatusCategoryService(entityManager, repository);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        underTest = new StatusCategoryService(entityManager, repository);
+//    }
 
     @Test
     void test_get_status_category_for_team() {

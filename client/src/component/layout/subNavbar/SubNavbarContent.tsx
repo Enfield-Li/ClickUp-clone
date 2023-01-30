@@ -2,9 +2,6 @@ import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useEffect } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { Team } from "../../../types";
-import CreateFolderModal from "../../widget/createFolder/CreateFolderModal";
-import CreateListModal from "../../widget/createList/CreateListModal";
-import CreateSpaceModal from "../../widget/createSpace/CreateSpaceModal";
 import SpaceComponent from "./SpaceComponent";
 
 type Props = { currentTeam: Team | undefined };

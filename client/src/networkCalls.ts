@@ -178,10 +178,8 @@ export async function createStatusColumn(
   onFailure?: () => void
 ) {
   try {
-    console.log(dto);
-
     const response = await axiosStatusCategoryServiceInstance.post<number>(
-      API_ENDPOINT.STATUS_CATEGORY + "/add_column",
+      API_ENDPOINT.STATUS_COLUMN,
       dto
     );
     if (!response.data) throw new Error("CreateStatusColumnForCategory failed");

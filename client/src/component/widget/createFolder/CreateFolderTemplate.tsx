@@ -146,6 +146,7 @@ export default function CreateFolderTemplate({
           bgColor="customBlue.200"
           onClick={handleOnClick}
           _hover={{ bgColor: "customBlue.100" }}
+          disabled={isCurrentStepEntry && createFolder.folderNameError.isError}
         >
           {isCurrentStepEntry ? "Create Folder" : "Save"}
         </Button>
