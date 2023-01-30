@@ -591,9 +591,11 @@ export type InitTeamListDTO = {
 
 export type TaskDetailContextType = {
   task: Task | null;
-  setTask: React.Dispatch<React.SetStateAction<Task | null>>;
   modalState: ModalState;
+  isCreatingTask: boolean;
   taskStateContext: TaskStateContext | null;
+  setTask: React.Dispatch<React.SetStateAction<Task | null>>;
+  setIsCreatingTask: React.Dispatch<React.SetStateAction<boolean>>;
   setTaskStateContext: React.Dispatch<
     React.SetStateAction<TaskStateContext | null>
   >;
@@ -692,12 +694,12 @@ export type CreateStatusColumnDTO = {
 };
 
 export type AddStatusColumnDTO = {
-    title: string;
-    color: string;
-    listId: number;
-    orderIndex: number;
-    statusCategoryId: number;
-  };
+  title: string;
+  color: string;
+  listId: number;
+  orderIndex: number;
+  statusCategoryId: number;
+};
 
 export type AddStatusColumnResponseDTO = {
   statusCategoryId: number;

@@ -17,17 +17,20 @@ export default function TaskDetailProvider({ children }: ProviderType) {
     onOpen: onModalOpen,
     onClose: onModalClose,
   } = useDisclosure();
-  const modalState = { isModalOpen, onModalOpen, onModalClose };
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
   const [taskStateContext, setTaskStateContext] =
     useState<TaskStateContext | null>(null);
 
+  const modalState = { isModalOpen, onModalOpen, onModalClose };
   return (
     <TaskDetailContext.Provider
       value={{
         task,
         setTask,
         modalState,
+        isCreatingTask,
         taskStateContext,
+        setIsCreatingTask,
         setTaskStateContext,
       }}
     >

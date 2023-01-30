@@ -5,7 +5,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
+import { getRandomSpaceColor, getRandomTeamColor } from "../../../media/colors";
 import { SetTaskState, StatusColumns, TaskState } from "../../../types";
+import { getRandomNumber } from "../../../utils/getRandomNumber";
 import StatusColorPalletPopover from "../../widget/statusColumn/StatusColorPalletPopover";
 import AddStatusColumnInput from "./AddStatusColumnInput";
 
@@ -27,7 +29,7 @@ function AddStatusColumn({
     onClose: onColorPalletClose,
   } = useDisclosure();
 
-  const [color, setColor] = useState("#aabbcc");
+  const [color, setColor] = useState(getRandomSpaceColor);
   const hoverBgColor = useColorModeValue("white", "darkMain.200");
 
   return (

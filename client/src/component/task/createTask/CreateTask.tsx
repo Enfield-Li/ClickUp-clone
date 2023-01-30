@@ -12,27 +12,23 @@ import SaveButton from "./SaveButton";
 
 type Props = {
   taskState: TaskState;
-  isCreateTaskOpen: boolean;
   currentColumn: UndeterminedColumn;
-  setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setHovering: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default memo(CreateTask);
-function CreateTask({
-  taskState,
-  currentColumn,
-  isCreateTaskOpen,
-  setIsCreateTaskOpen,
-}: Props) {
+function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const { authState } = useAuthContext();
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext, setIsCreatingTask, isCreatingTask } =
+    useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { sortBy, setTaskState } = taskStateContext;
-
-  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
-  const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.500");
   const finishedStatusColumn =
     sortBy === SortBy.STATUS && currentColumn.id === 3;
+
+  const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
+  const cardBgColor = useColorModeValue("white", "darkMain.200");
+  const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.200");
 
   // task name
   const [taskName, setTaskName] = useState("");
@@ -95,7 +91,8 @@ function CreateTask({
   }
 
   function resetAll() {
-    setIsCreateTaskOpen(false);
+    setHovering(false);
+    setIsCreatingTask(false);
     setShowCreateTaskForm(false);
     setPriority(initialPriority);
     setExpectedDueDate(initialDueDate);
@@ -104,22 +101,25 @@ function CreateTask({
   return (
     <Box my={3}>
       {!showCreateTaskForm ? (
-        !isCreateTaskOpen &&
+        !isCreatingTask &&
         !finishedStatusColumn && (
-          <Box
-            px={2}
+          <Center
+            px={3}
+            py={1}
             rounded="md"
-            color="gray.500"
+            fontSize="sm"
+            color="gray.400"
             cursor="pointer"
+            width="fit-content"
             _hover={{ bgColor: hoverBgColor }}
             onClick={() => {
               setFocus();
-              setIsCreateTaskOpen(true);
+              setIsCreatingTask(true);
               setShowCreateTaskForm(true);
             }}
           >
-            + NEW TASK
-          </Box>
+            + New Task
+          </Center>
         )
       ) : (
         <Box
@@ -129,6 +129,7 @@ function CreateTask({
           rounded="sm"
           width="100%"
           tabIndex={0}
+          bgColor={cardBgColor}
           onBlur={handleOnBlur}
           borderColor="rgb(123, 104, 238)"
           onKeyPress={(e) =>

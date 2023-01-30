@@ -81,6 +81,8 @@ function AddStatusColumnInput({
     <InputGroup>
       {/* Input */}
       <Input
+        _hover={{}}
+        _focusVisible={{}}
         autoFocus
         size="xs"
         value={title}

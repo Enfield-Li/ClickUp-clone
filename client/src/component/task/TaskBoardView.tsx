@@ -44,8 +44,6 @@ function TaskBoardView({ sortBy }: Props) {
   });
   //   console.log(taskState);
 
-  const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
-
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {
       handleDragEnd(result, taskState, setTaskState, sortBy);
@@ -98,8 +96,6 @@ function TaskBoardView({ sortBy }: Props) {
                   currentColumn={currentColumn}
                   // Pass down list as per column.id
                   taskList={taskListForCurrentColumn}
-                  isCreateTaskOpen={isCreateTaskOpen}
-                  setIsCreateTaskOpen={setIsCreateTaskOpen}
                 />
               </Box>
             );

@@ -8,27 +8,26 @@ import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";
 
 type Props = {
-  taskState: TaskState;
   taskList?: TaskList;
-  isCreateTaskOpen: boolean;
+  taskState: TaskState;
   currentColumn: UndeterminedColumn;
-  setIsCreateTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default memo(Column);
-function Column({
-  taskState,
-  taskList,
-  currentColumn,
-  isCreateTaskOpen,
-  setIsCreateTaskOpen,
-}: Props) {
-  const { taskStateContext } = useTaskDetailContext();
+function Column({ taskState, taskList, currentColumn }: Props) {
+  const [hovering, setHovering] = useState(false);
+  const { taskStateContext, isCreatingTask } = useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { sortBy } = taskStateContext;
 
+  function toggleHover() {
+    if (!isCreatingTask) {
+      setHovering(!hovering);
+    }
+  }
+
   return (
-    <Box width="250px" mx={3}>
+    <Box mx={3} width="250px">
       {/* Column header */}
       <ColumnHeader
         title={currentColumn.title}
@@ -47,6 +46,8 @@ function Column({
             ref={provided.innerRef}
             {...provided.droppableProps}
             _hover={{ overflowY: "auto", overflowX: "hidden" }}
+            onMouseOverCapture={() => !isCreatingTask && setHovering(true)}
+            onMouseOutCapture={() => !isCreatingTask && setHovering(false)}
           >
             {/* Task list */}
             {taskList
@@ -62,14 +63,13 @@ function Column({
             {provided.placeholder}
 
             {/* Create task popover */}
-            <Center>
+            {hovering && (
               <CreateTask
                 taskState={taskState}
+                setHovering={setHovering}
                 currentColumn={currentColumn}
-                isCreateTaskOpen={isCreateTaskOpen}
-                setIsCreateTaskOpen={setIsCreateTaskOpen}
               />
-            </Center>
+            )}
           </Box>
         )}
       </Droppable>
