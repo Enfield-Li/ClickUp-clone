@@ -11,9 +11,7 @@ type Props = { onOptionClose: () => void };
 export default memo(StatusOptions);
 function StatusOptions({ onOptionClose }: Props) {
   const { authState } = useAuthContext();
-  const { task, taskStateContext, setTaskStateContext } =
-    useTaskDetailContext();
-
+  const { task, taskStateContext } = useTaskDetailContext();
   const { setTaskState, sortBy, columnOptions } = taskStateContext!;
 
   function handleSelectStatus(task: Task, column: StatusColumn) {

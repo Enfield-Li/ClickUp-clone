@@ -23,7 +23,7 @@ function TaskEvent({}: Props) {
     async function getTaskEvents() {
       if (task?.id) {
         setLoadingTaskEvents(true);
-        const events = await fetchTaskEvents(task.id);
+        // const events = await fetchTaskEvents(task.id);
         // setTask(events);
         setLoadingTaskEvents(false);
       }

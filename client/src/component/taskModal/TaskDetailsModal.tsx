@@ -24,7 +24,7 @@ export default memo(TaskDetailModal);
 function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const bgColor = useColorModeValue("white", "darkMain.100");
-  const { modalState } = useTaskDetailContext();
+  const { modalState, task } = useTaskDetailContext();
   const { isModalOpen, onModalClose } = modalState;
 
   return (

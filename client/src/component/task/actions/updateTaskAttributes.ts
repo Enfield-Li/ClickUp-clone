@@ -39,7 +39,8 @@ export function updateTaskAttribute(
             const isNewEvent =
               targetField === SortBy.DUE_DATE ||
               task[targetField].columnId !== targetColumnId;
-
+              console.log(isNewEvent);
+              
             if (task.id === currentTask.id && isNewEvent) {
               if (expectedDueDate !== undefined) {
                 task.expectedDueDate = expectedDueDate;

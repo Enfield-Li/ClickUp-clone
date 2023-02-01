@@ -18,10 +18,8 @@ type Props = {};
 
 export default memo(TaskInfo);
 function TaskInfo({}: Props) {
-  const { task, taskStateContext, setTaskStateContext } =
-    useTaskDetailContext();
+  const { task } = useTaskDetailContext();
 
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
   return (
     <Box flexBasis={"50%"}>
       <Flex

@@ -35,14 +35,14 @@ function SelectStatusIcons({}: Props) {
       columnOptions.statusColumns.find(
         (column) => column.id === task!.status.columnId
       ),
-    [columnOptions]
+    [columnOptions, task]
   );
   const columnIndex = useMemo(
     () =>
       columnOptions.statusColumns.findIndex(
         (column) => column.id === task!.status.columnId
       ),
-    [columnOptions]
+    [columnOptions, task]
   );
   const finishedColumnId = useMemo(
     () =>
@@ -117,12 +117,12 @@ function SelectStatusIcons({}: Props) {
                   </Box>
                 </PopoverTrigger>
 
-                {/* Status option */}
                 <PopoverContent
                   shadow="lg"
                   width="200px"
                   bgColor={popoverContentBgColor}
                 >
+                  {/* Status option */}
                   <PopoverBody shadow="2xl">
                     <StatusOptions onOptionClose={onOptionClose} />
                   </PopoverBody>
@@ -162,9 +162,8 @@ function SelectStatusIcons({}: Props) {
               </Tooltip>
             </Flex>
 
-            {/* TODO */}
             {/* Set to finish */}
-            {task!.status.columnId !== 3 && (
+            {task!.status.columnId !== finishedColumnId && (
               <Box mx={2}>
                 <FinishTask>
                   <Center
