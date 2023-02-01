@@ -99,7 +99,7 @@ public class StatusCategoryService {
                 internalExchange, taskRoutingKey, updateTaskDTO);
 
         return new AddStatusColumnResponseDTO(
-                statusCategory.getId(), statusColumn.getId());
+                statusCategory.getId(), statusColumn.getId(), statusPairs);
     }
 
     @Transactional

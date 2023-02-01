@@ -701,7 +701,12 @@ export type AddStatusColumnDTO = {
   statusCategoryId: number;
 };
 
+interface OldNewStatusPairs {
+  [key: number]: number;
+}
+
 export type AddStatusColumnResponseDTO = {
-  statusCategoryId: number;
   statusColumnId: number;
+  statusCategoryId: number;
+  oldNewStatusPairs: OldNewStatusPairs;
 };

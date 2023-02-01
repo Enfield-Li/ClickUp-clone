@@ -15,6 +15,7 @@ import {
   StatusColumn,
   StatusColumns,
 } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 
 type Props = {
   color: string;
@@ -60,16 +61,29 @@ function AddStatusColumnInput({
       setTaskState((pre) => {
         if (pre) {
           return produce(pre, (draftState) => {
-            const { statusColumnId, statusCategoryId } = responseDTO;
+            const {
+              statusColumnId,
+              statusCategoryId: updatedStatusCategoryId,
+              oldNewStatusPairs,
+            } = responseDTO;
 
-            draftState.statusCategoryId = statusCategoryId;
-
+            draftState.statusCategoryId = updatedStatusCategoryId;
             // Create new column before the last one "Done"
             const newColumn: StatusColumn = { id: statusColumnId, ...dto };
             draftState.columnOptions.statusColumns.splice(
               lastItemIndex,
               0,
               newColumn
+            );
+            draftState.columnOptions.statusColumns.forEach((column) => {
+              if (column.id !== statusColumnId) {
+                column.id = oldNewStatusPairs[column.id!];
+              }
+            });
+            draftState.orderedTasks.forEach((orderedTask) =>
+              orderedTask.taskList.forEach((task) => {
+                task.status.columnId = oldNewStatusPairs[task.status.columnId];
+              })
             );
           });
         }
