@@ -1,29 +1,20 @@
 package com.example.task.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.clients.statusCategory.StatusCategoryClient;
-
-// import static com.example.amqp.exchange.TaskEventExchange.internalExchange;
-// import static com.example.amqp.exchange.TaskEventExchange.taskEventRoutingKey;
-
-// import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.task.dto.CreateTaskDTO;
-import com.example.task.dto.TaskListStatusCategoryDTO;
-import com.example.task.dto.UpdateTaskDescDTO;
-import com.example.task.dto.UpdateTaskTitleDTO;
-import com.example.task.dto.UpdateTasksPositionDTO;
+import com.example.task.dto.*;
 import com.example.task.model.Task;
 import com.example.task.repository.TaskMapper;
 import com.example.task.repository.TaskRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -63,9 +54,8 @@ public class TaskService {
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
 
         // Find sourceTask
-        var sourceTask = taskDtoList
-                .stream()
-                .filter(task -> task.taskId() == sourceTaskId)
+        var sourceTask = taskDtoList.stream()
+                .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
                 .findFirst();
 
         // Task drop into a different column
@@ -159,5 +149,20 @@ public class TaskService {
                 LocalDateTime.now());
 
         return updateCount > 0;
+    }
+
+    @Transactional
+    public void updateTaskStatusPositionOnCreateNewColumn(
+            UpdateTaskOnCreateNewColumnDTO eventDTO) {
+        var listId = eventDTO.listId();
+        var oldNewStatusPairs = eventDTO.oldNewStatusPairs();
+
+        var taskList = taskRepository.findByListId(listId);
+
+        taskList.forEach(task -> {
+            var originalColumnId = task.getStatus().getColumnId();
+            var newColumnId = oldNewStatusPairs.get(originalColumnId);
+            task.getStatus().setColumnId(newColumnId);
+        });
     }
 }

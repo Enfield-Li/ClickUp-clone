@@ -179,32 +179,39 @@ export function processTaskList(
   taskList: TaskList
 ) {
   return taskList.map((task) => {
-    // init taskEvents
-    // workaround: create and update the copy to prevent type error "dueDate" is read only
-    const taskCopy = deepCopy(task) as Task;
-    taskCopy.dueDate = {
-      columnId: 0,
-      orderIndex: -1,
-      name: DueDateRange.NO_DUE_DATE,
-    };
-
-    if (!task.taskEvents || task.taskEvents.length) taskCopy.taskEvents = [];
-
-    // if dueDate is undefined, then override it with expectedDueDate
-    // convert expectedDueDate to dueDate
-    const columnId = getDueDateColumnIdFromExpectedDueDate(
-      dueDateColumn,
-      task.expectedDueDate
-    );
-    const dueDate = dueDateColumn.find((column) => column.id === columnId);
-    if (!dueDate) throw new Error("Failed to init dueDate for tasks.");
-
-    // init dueDate data
-    taskCopy.dueDate.columnId = columnId;
-    taskCopy.dueDate.name = dueDate?.title;
-
-    return taskCopy;
+    return initTaskMissingField(task, dueDateColumn);
   });
+}
+export function initTaskMissingField(
+  task: Task,
+  dueDateColumn: DueDateColumns
+) {
+  // workaround: create and update the copy to prevent type error "dueDate" is read only
+  const taskCopy = deepCopy(task) as Task;
+
+  // init taskEvents
+  if (!taskCopy.taskEvents || taskCopy.taskEvents.length)
+    taskCopy.taskEvents = [];
+
+  // init dueDate data
+  taskCopy.dueDate = {
+    columnId: 0,
+    orderIndex: -1,
+    name: DueDateRange.NO_DUE_DATE,
+  };
+
+  // convert expectedDueDate to dueDate
+  const columnId = getDueDateColumnIdFromExpectedDueDate(
+    dueDateColumn,
+    taskCopy.expectedDueDate
+  );
+  const dueDate = dueDateColumn.find((column) => column.id === columnId);
+  if (!dueDate) throw new Error("Failed to init dueDate for tasks.");
+
+  taskCopy.dueDate.columnId = columnId;
+  taskCopy.dueDate.name = dueDate?.title;
+
+  return taskCopy;
 }
 
 // Push task to the other sortBy id === 1 column

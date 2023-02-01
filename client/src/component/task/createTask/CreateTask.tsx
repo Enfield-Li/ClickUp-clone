@@ -72,6 +72,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
         newTaskInput: newTask,
         creator: newCreator(authState),
         listId: taskStateContext.currentListId,
+        dueDateColumn: taskState.columnOptions.dueDateColumns,
       });
 
       continueCreateTask();

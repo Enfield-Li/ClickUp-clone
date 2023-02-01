@@ -17,9 +17,13 @@ import {
   UndeterminedColumns,
   UserInfo,
   AuthStateType,
+  DueDateColumns,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
-import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
+import {
+  getDueDateColumnIdFromExpectedDueDate,
+  initTaskMissingField,
+} from "./taskProcessing";
 
 export type NewTask = {
   title: string;
@@ -35,6 +39,7 @@ interface CreateNewTaskParam {
   newTaskInput: NewTask;
   taskState: TaskState;
   setTaskState: SetTaskState;
+  dueDateColumn: DueDateColumns;
   currentColumn: UndeterminedColumn;
 }
 
@@ -46,6 +51,7 @@ export async function createNewTask({
   newTaskInput,
   setTaskState,
   currentColumn,
+  dueDateColumn,
 }: CreateNewTaskParam) {
   // Prepare newTask
   const { title, expectedDueDate, priority, status } = newTaskInput;
@@ -90,13 +96,8 @@ export async function createNewTask({
 
           const isCurrentColumn = orderedTask.columnId === targetColumnId;
           if (isCurrentColumn && createdTask) {
-            createdTask.taskEvents = [];
-            createdTask.dueDate = {
-              columnId: 0,
-              orderIndex: -1,
-              name: DueDateRange.NO_DUE_DATE,
-            };
-            orderedTask.taskList.push(createdTask);
+            const task = initTaskMissingField(createdTask, dueDateColumn);
+            orderedTask.taskList.push(task);
           }
         });
       })

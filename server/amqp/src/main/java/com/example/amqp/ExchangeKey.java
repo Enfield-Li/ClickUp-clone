@@ -4,6 +4,9 @@ public class ExchangeKey {
 
     public static final String internalExchange = "internal.exchange";
 
+    public static final String taskQueue = "task.queue";
+    public static final String taskRoutingKey = "internal.task.routing-key";
+
     public static final String taskEventQueue = "taskEvent.queue";
     public static final String taskEventRoutingKey = "internal.taskEvent.routing-key";
 

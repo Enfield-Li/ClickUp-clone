@@ -1,6 +1,7 @@
 package com.example.teamStatusCategory.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
 import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
@@ -15,10 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamRoutingKey;
+import static com.example.amqp.ExchangeKey.*;
 
 @Service
 @RequiredArgsConstructor
@@ -73,10 +75,28 @@ public class StatusCategoryService {
         statusCategory.addStatusColumn(statusColumn);
         repository.saveAndFlush(statusCategory);
 
-        var messageDTO = new UpdateListCategoryDefaultStatusCategoryIdDTO(
+        var updateListCategoryDTO = new UpdateListCategoryDefaultStatusCategoryIdDTO(
                 listId, statusCategory.getId());
         rabbitMQMessageProducer.publish(
-                internalExchange, teamRoutingKey, messageDTO);
+                internalExchange, teamRoutingKey, updateListCategoryDTO);
+
+        var statusPairs = new HashMap<Integer, Integer>();
+        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(listId, statusPairs);
+        originalStatusCategory.getStatusColumns()
+                .forEach(originalStatusColumn ->
+                        statusCategory.getStatusColumns().forEach(newStatusColumn -> {
+                                    if (Objects.equals(
+                                            originalStatusColumn.getTitle(),
+                                            newStatusColumn.getTitle())) {
+                                        statusPairs.put(
+                                                originalStatusColumn.getId(),
+                                                newStatusColumn.getId()
+                                        );
+                                    }
+                                }
+                        ));
+        rabbitMQMessageProducer.publish(
+                internalExchange, taskRoutingKey, updateTaskDTO);
 
         return new AddStatusColumnResponseDTO(
                 statusCategory.getId(), statusColumn.getId());
