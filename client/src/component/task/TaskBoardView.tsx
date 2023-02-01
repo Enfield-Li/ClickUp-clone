@@ -15,6 +15,7 @@ import {
   UpdateTasksPositionDTO,
 } from "../../types";
 import { newEventDTO } from "../../utils/createNewEvent";
+import { deepCopy } from "../../utils/deepCopy";
 import { isDueDateColumns } from "../../utils/determineColumns";
 import { newTaskPositionDTO } from "../../utils/newTaskPositionDTO";
 import {
@@ -136,7 +137,7 @@ async function handleDragEnd(
   ] as UndeterminedColumns;
 
   const lookUpColumnId: LookUpReorderedColumn = {};
-  const isColumnReordered = sortBy !== SortBy.PRIORITY;
+  const isColumnReordered = sortBy === SortBy.DUE_DATE;
   if (isColumnReordered) {
     getLookUpReorderedColumnTable(
       taskState.orderedTasks,
@@ -152,22 +153,21 @@ async function handleDragEnd(
     ? lookUpColumnId[Number(destination.droppableId)]
     : Number(destination.droppableId);
 
-  const sourceTaskColumnIndex = currentColumns.findIndex(
-    (column) => column.id === sourceColumnId
-  );
   const destinationTaskColumn = currentColumns.find(
-    (column) => column.id === destinationColumnId
-  );
-  const destinationTaskColumnIndex = currentColumns.findIndex(
     (column) => column.id === destinationColumnId
   );
 
   setTaskState(
     produce(taskState, (draftState) => {
       const taskListForUpdate: TaskPositionDTOList = [];
-      const sourceTasksArr = draftState.orderedTasks[sourceTaskColumnIndex];
-      const destinationTasksArr =
-        draftState.orderedTasks[destinationTaskColumnIndex];
+      const sourceTasksArr = draftState.orderedTasks.find(
+        (orderedTask) => orderedTask.columnId === sourceColumnId
+      )!;
+
+      const destinationTasksArr = draftState.orderedTasks.find(
+        (orderedTask) => orderedTask.columnId === destinationColumnId
+      )!;
+
       const destinationTasksArrLength = destinationTasksArr?.taskList.length;
       const lastTaskInDestinationTasksArr =
         destinationTasksArr?.taskList[destinationTasksArrLength - 1];
