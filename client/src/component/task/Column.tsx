@@ -1,6 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
-import { memo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { SortBy, TaskList, TaskState, UndeterminedColumn } from "../../types";
 import CreateTask from "./createTask/CreateTask";
@@ -18,13 +18,13 @@ function Column({ taskState, taskList, currentColumn }: Props) {
   const [hovering, setHovering] = useState(false);
   const { taskStateContext, isCreatingTask } = useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
-  const { sortBy } = taskStateContext;
+  const { sortBy, columnOptions } = taskStateContext;
 
-  function toggleHover() {
-    if (!isCreatingTask) {
-      setHovering(!hovering);
-    }
-  }
+  const finishedColumnId = useMemo(
+    () =>
+      columnOptions.statusColumns.find((column) => column.markAsClosed)!.id!,
+    [columnOptions]
+  );
 
   return (
     <Box mx={3} width="250px">
@@ -53,8 +53,8 @@ function Column({ taskState, taskList, currentColumn }: Props) {
             {taskList
               // hide finished task
               ?.filter((task) => {
-                const isTaskFinished = task.status.columnId !== 3;
-                // const isTaskFinished = task.status.name !== DefaultStatus.DONE; // doesn't work ??? WTF
+                const isTaskFinished =
+                  task.status.columnId !== finishedColumnId;
                 return sortBy !== SortBy.STATUS ? isTaskFinished : true;
               })
               .map((task, index) => (

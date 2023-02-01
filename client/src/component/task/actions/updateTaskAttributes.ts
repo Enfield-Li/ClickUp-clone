@@ -16,15 +16,25 @@ import {
   OrderIndexInColumn,
 } from "./createNewTask";
 
-export function updateTaskAttribute(
-  userId: number,
-  sortBy: SortBy,
-  targetField: SortBy,
-  currentTask: Task,
-  setTaskState: SetTaskState,
-  targetColumnId: number,
-  expectedDueDate?: Date | null
-) {
+type UpdateTaskAttributeParam = {
+  userId: number;
+  sortBy: SortBy;
+  targetField: SortBy;
+  currentTask: Task;
+  setTaskState: SetTaskState;
+  targetColumnId: number;
+  expectedDueDate?: Date | null;
+};
+
+export function updateTaskAttribute({
+  userId,
+  sortBy,
+  targetField,
+  currentTask,
+  setTaskState,
+  targetColumnId,
+  expectedDueDate,
+}: UpdateTaskAttributeParam) {
   const updateTaskListDTO: UpdateTasksPositionDTO = {
     sourceTaskId: 0,
     taskDtoList: [],
@@ -39,8 +49,7 @@ export function updateTaskAttribute(
             const isNewEvent =
               targetField === SortBy.DUE_DATE ||
               task[targetField].columnId !== targetColumnId;
-              console.log(isNewEvent);
-              
+
             if (task.id === currentTask.id && isNewEvent) {
               if (expectedDueDate !== undefined) {
                 task.expectedDueDate = expectedDueDate;

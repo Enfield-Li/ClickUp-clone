@@ -58,25 +58,25 @@ function SelectStatusIcons({}: Props) {
   function handleNextStage() {
     const targetStatusColumnId = nextStatus!.id!;
 
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.STATUS,
-      task!,
       setTaskState,
-      targetStatusColumnId
-    );
+      currentTask: task!,
+      targetField: SortBy.STATUS,
+      userId: authState.user!.id!,
+      targetColumnId: finishedColumnId,
+    });
   }
 
   function handleSetToFinish() {
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.STATUS,
-      task!,
       setTaskState,
-      finishedColumnId
-    );
+      currentTask: task!,
+      targetField: SortBy.STATUS,
+      userId: authState.user!.id!,
+      targetColumnId: finishedColumnId,
+    });
   }
 
   return (

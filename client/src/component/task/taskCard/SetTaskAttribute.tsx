@@ -34,14 +34,14 @@ function SetTaskAttribute({
       (column) => column.markAsClosed
     )!.id!;
 
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.STATUS,
-      task,
       setTaskState,
-      finishedColumnId
-    );
+      currentTask: task,
+      targetField: SortBy.STATUS,
+      userId: authState.user!.id!,
+      targetColumnId: finishedColumnId,
+    });
   }
 
   return (

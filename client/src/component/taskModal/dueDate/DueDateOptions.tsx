@@ -30,15 +30,15 @@ function DueDateOptions({ task, onClose }: Props) {
     const expectedDueDate = getExpectedDueDateFromWeekString(weekString);
 
     // Update list taskState
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.DUE_DATE,
-      task!,
       setTaskState,
-      targetColumn.id!,
-      expectedDueDate
-    );
+      expectedDueDate,
+      currentTask: task!,
+      userId: authState.user!.id!,
+      targetField: SortBy.DUE_DATE,
+      targetColumnId: targetColumn.id!,
+    });
   }
 
   return (

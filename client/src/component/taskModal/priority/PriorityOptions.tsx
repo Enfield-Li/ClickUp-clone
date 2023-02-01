@@ -99,14 +99,14 @@ export function selectPriority(
   onOptionClose?: () => void
 ) {
   // Update list taskState
-  updateTaskAttribute(
+  updateTaskAttribute({
     userId,
     sortBy,
-    SortBy.PRIORITY,
-    task!,
     setTaskState,
-    targetPriorityColumnId
-  );
+    currentTask: task,
+    targetField: SortBy.PRIORITY,
+    targetColumnId: targetPriorityColumnId,
+  });
 
   if (onOptionClose) onOptionClose();
 }

@@ -17,14 +17,14 @@ function StatusOptions({ onOptionClose }: Props) {
   function handleSelectStatus(task: Task, column: StatusColumn) {
     const targetStatusColumnId = column.id!;
 
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.STATUS,
-      task,
       setTaskState,
-      targetStatusColumnId
-    );
+      currentTask: task,
+      targetField: SortBy.STATUS,
+      userId: authState.user!.id!,
+      targetColumnId: targetStatusColumnId,
+    });
   }
 
   return (

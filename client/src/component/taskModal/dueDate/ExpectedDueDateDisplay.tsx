@@ -40,15 +40,15 @@ function ExpectedDueDateDisplay({ task }: Props) {
   function clearDueDate() {
     const noDueDateColumnId = 1;
 
-    updateTaskAttribute(
-      authState.user!.id!,
+    updateTaskAttribute({
       sortBy,
-      SortBy.DUE_DATE,
-      task,
       setTaskState,
-      noDueDateColumnId, // No due date
-      null
-    );
+      currentTask: task,
+      expectedDueDate: null,
+      userId: authState.user!.id!,
+      targetField: SortBy.DUE_DATE,
+      targetColumnId: noDueDateColumnId, // No due date
+    });
   }
 
   return (
@@ -80,8 +80,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
                 <Box>
                   Time:<span>&nbsp;</span>
                   {toYYYYMMDDString(
-                      convertUTCDateToLocalDate
-                          (new Date(task?.expectedDueDate!))
+                    convertUTCDateToLocalDate(new Date(task?.expectedDueDate!))
                   )}
                 </Box>
               }
