@@ -42,7 +42,7 @@ function TaskBoardView({ sortBy }: Props) {
     statusCategoryId,
     listId: Number(listId),
   });
-  //   console.log(taskState);
+  //   console.log({ taskState });
 
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {

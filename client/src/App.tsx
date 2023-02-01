@@ -1,5 +1,7 @@
 import { useToast } from "@chakra-ui/react";
-import { memo, useEffect } from "react";
+import { TextField } from "@mui/material";
+import { StaticDatePicker } from "@mui/x-date-pickers";
+import { memo, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
 import Login from "./component/auth/Login";
@@ -12,6 +14,8 @@ import TestDev from "./component/test-dev/TestDev";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
 import useAuthContext from "./context/auth/useAuthContext";
 import { refreshUserToken } from "./networkCalls";
+import { convertUTCDateToLocalDate } from "./utils/convertUTCDateToLocalDate";
+import MaterialTheme from "./utils/MaterialTheme";
 
 export default memo(App);
 function App() {
@@ -78,19 +82,27 @@ function App() {
 }
 
 // function App() {
-//     const ref = useRef<HTMLDivElement>(null);
+//   const [value, setValue] = useState<Date | null>(null);
 
-//     useEffect(() => {
-//       if (ref) {
-//         console.log(ref.current);
-//       }
-//     }, [ref]);
+//   function handleDatePicker(newValue: Date) {
+//     if (value === null) {
+//       newValue = convertUTCDateToLocalDate(newValue);
+//     }
+//     console.log("new: ", new Date(newValue).toISOString());
+//     console.log("new: ", new Date(newValue).getDate());
 
-//     return (
-//       <>
-//         <div className="abc" ref={ref}>
-//           ref here
-//         </div>
-//       </>
-//     );
+//     setValue(newValue);
 //   }
+
+//   return (
+//     <MaterialTheme>
+//       <StaticDatePicker
+//         value={value}
+//         displayStaticWrapperAs="desktop"
+//         renderInput={(params) => <TextField {...params} />}
+//         onChange={(newValue) => newValue && handleDatePicker(newValue)}
+//       />
+//       <button onClick={() => setValue(null)}>clear</button>
+//     </MaterialTheme>
+//   );
+// }

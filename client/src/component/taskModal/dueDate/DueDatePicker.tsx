@@ -21,11 +21,7 @@ function DueDatePicker({ task, onClose }: Props) {
   const { sortBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
-    if (task.expectedDueDate === null) {
-      expectedDueDateInput = convertUTCDateToLocalDate(expectedDueDateInput);
-    }
-
-    if (expectedDueDateInput) {
+    if (expectedDueDateInput && task && authState.user?.id) {
       const targetDueDateColumnId = getDueDateColumnIdFromExpectedDueDate(
         columnOptions.dueDateColumns,
         expectedDueDateInput
@@ -33,10 +29,10 @@ function DueDatePicker({ task, onClose }: Props) {
 
       // Update list taskState
       updateTaskAttribute(
-        authState.user!.id!,
+        authState.user.id,
         sortBy,
         SortBy.DUE_DATE,
-        task!,
+        task,
         setTaskState,
         targetDueDateColumnId,
         expectedDueDateInput
@@ -49,7 +45,10 @@ function DueDatePicker({ task, onClose }: Props) {
   return (
     <MaterialTheme>
       <StaticDatePicker
-        value={task.expectedDueDate}
+        value={
+          task.expectedDueDate &&
+          convertUTCDateToLocalDate(task.expectedDueDate)
+        }
         displayStaticWrapperAs="desktop"
         renderInput={(params) => <TextField {...params} />}
         onChange={(newValue) => newValue && handleDatePicker(newValue)}

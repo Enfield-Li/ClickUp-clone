@@ -1,6 +1,7 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import { memo, useState } from "react";
+import { memo } from "react";
 import { Task } from "../../../types";
+import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 import { getMonthAndDay } from "../../../utils/getWeekDays";
 import DueDateOptions from "./DueDateOptions";
 import DueDatePicker from "./DueDatePicker";
@@ -22,7 +23,7 @@ function DueDatePanel({ task, onClose }: Props) {
         {task.expectedDueDate ? (
           <>
             <span style={{ textDecoration: "underline" }}>
-              {getMonthAndDay(task.expectedDueDate)}
+              {getMonthAndDay(convertUTCDateToLocalDate(task.expectedDueDate))}
             </span>
           </>
         ) : (

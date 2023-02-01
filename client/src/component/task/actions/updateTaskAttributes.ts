@@ -36,7 +36,10 @@ export function updateTaskAttribute(
       produce(taskState, (draftState) =>
         draftState.orderedTasks.forEach((orderedTask) => {
           orderedTask.taskList.forEach((task, index, taskList) => {
-            const isNewEvent = task[targetField].columnId !== targetColumnId;
+            const isNewEvent =
+              targetField === SortBy.DUE_DATE ||
+              task[targetField].columnId !== targetColumnId;
+
             if (task.id === currentTask.id && isNewEvent) {
               if (expectedDueDate !== undefined) {
                 task.expectedDueDate = expectedDueDate;
@@ -49,6 +52,7 @@ export function updateTaskAttribute(
                 task[targetField].columnId,
                 targetColumnId
               );
+
               if (!task.taskEvents) task.taskEvents = [];
               task.taskEvents.push(newTaskEvent);
 

@@ -13,6 +13,7 @@ import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
+import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -78,17 +79,23 @@ function ExpectedDueDateDisplay({ task }: Props) {
               label={
                 <Box>
                   Time:<span>&nbsp;</span>
-                  {toYYYYMMDDString(new Date(task?.expectedDueDate!))}
+                  {toYYYYMMDDString(
+                      convertUTCDateToLocalDate
+                          (new Date(task?.expectedDueDate!))
+                  )}
                 </Box>
               }
             >
               <Box display="inline-block">
                 <PopoverTrigger>
                   <Center opacity="65%">
-                    {getDueDateString(
-                      new Date(task?.expectedDueDate!),
-                      columnOptions.dueDateColumns
-                    )}
+                    {task.expectedDueDate &&
+                      getDueDateString(
+                        convertUTCDateToLocalDate(
+                          new Date(task?.expectedDueDate!)
+                        ),
+                        columnOptions.dueDateColumns
+                      )}
                   </Center>
                 </PopoverTrigger>
               </Box>
