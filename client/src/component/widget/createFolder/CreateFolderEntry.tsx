@@ -121,7 +121,7 @@ export default function CreateFolderEntry({
           title="Share Folder with"
           handleClick={() => handleOnClick(CreateFolderStep.SHARE)}
         >
-          abc
+          someone
         </ReviewCreateFolderItem>
 
         {/* Status */}

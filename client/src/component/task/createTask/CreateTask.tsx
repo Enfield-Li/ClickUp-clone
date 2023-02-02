@@ -9,6 +9,7 @@ import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import { createNewTask, newCreator, NewTask } from "../actions/createNewTask";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 import SaveButton from "./SaveButton";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 
 type Props = {
   taskState: TaskState;
@@ -18,6 +19,7 @@ type Props = {
 
 export default memo(CreateTask);
 function CreateTask({ taskState, currentColumn, setHovering }: Props) {
+  const toast = useUnImplementedToast();
   const { authState } = useAuthContext();
   const { taskStateContext, setIsCreatingTask, isCreatingTask } =
     useTaskDetailContext();
@@ -167,7 +169,13 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
             </Flex>
 
             {/* Assignee */}
-            <Center mr={2} opacity="75%" rounded="full" cursor="pointer">
+            <Center
+              mr={2}
+              opacity="75%"
+              rounded="full"
+              cursor="pointer"
+              onClick={() => toast()}
+            >
               <i className="bi bi-person"></i>
             </Center>
           </Flex>

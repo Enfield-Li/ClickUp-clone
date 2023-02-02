@@ -418,22 +418,9 @@ export async function registerUser(
   }
 }
 
-export function logOutUser(
-  dispatch: React.Dispatch<AuthActionType>,
-  toast: (options?: UseToastOptions | undefined) => ToastId
-) {
+export function logOutUser() {
   // invalidate session
-  axiosTaskServiceInstance.post(API_ENDPOINT.AUTH_LOGOUT, null);
-
-  // clear local auth taskState and accessToken
-  localStorage.removeItem(ACCESS_TOKEN);
-  dispatch({ type: AUTH_ACTION.LOGOUT_USER });
-
-  toast({
-    title: "Successful!",
-    description: "You've logged out.",
-    status: "success",
-  });
+  axiosTaskServiceInstance.post(API_ENDPOINT.AUTH_LOGOUT);
 }
 
 export async function loginUser(

@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
+import TaskOptions from "./TaskOptions";
 
 type Props = {
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,9 +40,8 @@ function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
           </PopoverTrigger>
         </Box>
       </Tooltip>
-      <PopoverContent>
-        <PopoverBody>content body</PopoverBody>
-      </PopoverContent>
+
+      <TaskOptions />
     </Popover>
   );
 }

@@ -63,7 +63,7 @@ function Column({ taskState, taskList, currentColumn }: Props) {
             {provided.placeholder}
 
             {/* Create task popover */}
-            {hovering && (
+            {hovering && currentColumn.id !== finishedColumnId && (
               <CreateTask
                 taskState={taskState}
                 setHovering={setHovering}

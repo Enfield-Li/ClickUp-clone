@@ -1,0 +1,26 @@
+import { Box, Flex, PopoverContent, useColorModeValue } from "@chakra-ui/react";
+import React from "react";
+
+type Props = {};
+
+export default function TaskOptions({}: Props) {
+  const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
+
+  return (
+    <PopoverContent width="270px" p="2" fontSize="sm">
+      <Flex
+        p="5px"
+        pl="10px"
+        rounded="md"
+        opacity="80%"
+        cursor="pointer"
+        _hover={{ bgColor: hoverBgColor }}
+      >
+        <Box mr={2}>
+          <i className="bi bi-trash3"></i>
+        </Box>
+        <Box>Delete</Box>
+      </Flex>
+    </PopoverContent>
+  );
+}

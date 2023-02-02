@@ -13,6 +13,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { shareLinkDataUrl } from "../../../media/imgDataUrl";
 import { CreateFolderState } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
@@ -26,11 +27,13 @@ export default function CreateFolderSetPrivacy({
   createFolder,
   setCreateFolder,
 }: Props) {
+  const toast = useUnImplementedToast();
   const [input, setInput] = useState("");
   const [isAddingUser, setIsAddingUser] = useState(false);
   const interactColor = useColorModeValue("lightMain.200", "darkMain.200");
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    toast();
     setInput(e.target.value);
   }
 
@@ -72,6 +75,7 @@ export default function CreateFolderSetPrivacy({
                 type="submit"
                 color="white"
                 borderLeftRadius="0"
+                onClick={() => toast()}
                 bgColor="customBlue.200"
                 _hover={{ bgColor: "customBlue.100" }}
               >
@@ -150,7 +154,7 @@ export default function CreateFolderSetPrivacy({
           <Box></Box>
         </Box>
       ) : (
-        <Box>
+        <Box fontSize="small" mt="2">
           <Box>All members</Box>
           <Box></Box>
         </Box>

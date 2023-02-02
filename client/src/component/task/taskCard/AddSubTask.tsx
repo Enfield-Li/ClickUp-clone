@@ -1,18 +1,21 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
+import { Box, useColorModeValue, useToast } from "@chakra-ui/react";
 import React, { memo } from "react";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { Task } from "../../../types";
 
 type Props = { task: Task; cardBgColor: "white" | "darkMain.200" };
 
 export default memo(AddSubTask);
 function AddSubTask({ task, cardBgColor }: Props) {
-  const addSubTaskBgColor = useColorModeValue("lightMain.100", "darkMain.500");
+  const toast = useUnImplementedToast();
+  const addSubTaskBgColor = useColorModeValue("lightMain.100", "darkMain.300");
 
   return (
     <Box
       py="4px"
       opacity="55%"
       bgColor={cardBgColor}
+      onClick={() => toast()}
       //   _hover={{ borderTop: "1px solid gray", bgColor: cardBgColor }}
     >
       <Box

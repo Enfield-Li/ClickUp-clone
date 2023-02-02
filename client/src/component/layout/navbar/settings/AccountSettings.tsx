@@ -5,10 +5,15 @@ import {
   Flex,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { memo } from "react";
 import ColorModeSwitcher from "./ColorModeSwitcher";
 import useAuthContext from "../../../../context/auth/useAuthContext";
+import { logOutUser } from "../../../../networkCalls";
+import { useNavigate } from "react-router";
+import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../../../constant";
+import { AUTH_ACTION } from "../../../../types";
 
 const mySettingTitles1: string[] = [
   "My Settings",
@@ -26,7 +31,6 @@ const mySettingTitles2: string[] = [
   "Apps",
   "Template Center",
   "Rewards",
-  "Log out",
 ];
 const helpTitles: string[] = ["Help", "Hotkeys", "Dark mode"];
 
@@ -34,10 +38,30 @@ type Props = { isTeamOwner: boolean };
 
 export default memo(AccountSettings);
 function AccountSettings({ isTeamOwner }: Props) {
-  const { authState } = useAuthContext();
+  const toast = useToast();
+  const navigate = useNavigate();
   const { toggleColorMode } = useColorMode();
+  const { authState, authDispatch } = useAuthContext();
   const fontColor = useColorModeValue("black", "lightMain.200");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
+  function isLogOutBtn(title: string) {
+    return title === "Log out";
+  }
+
+  function handleLogOutUser() {
+    navigate(CLIENT_ROUTE.LOGIN);
+    // clear local auth taskState and accessToken
+    localStorage.removeItem(ACCESS_TOKEN);
+    authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
+
+    toast({
+      title: "Successful!",
+      description: "You've logged out.",
+      status: "success",
+    });
+
+    logOutUser();
+  }
 
   return (
     <Box
@@ -77,8 +101,9 @@ function AccountSettings({ isTeamOwner }: Props) {
                 key={index}
                 width="100%"
                 fontSize="12px"
-                cursor="not-allowed"
                 _hover={{ color: "purple.500" }}
+                cursor={isLogOutBtn(title) ? "pointer" : "not-allowed"}
+                onClick={() => isLogOutBtn(title) && handleLogOutUser()}
               >
                 {title}
               </Box>
@@ -90,8 +115,8 @@ function AccountSettings({ isTeamOwner }: Props) {
                   key={index}
                   width="100%"
                   fontSize="12px"
-                  cursor="not-allowed"
                   _hover={{ color: "purple.500" }}
+                  cursor={isLogOutBtn(title) ? "pointer" : "not-allowed"}
                 >
                   {title}
                 </Box>

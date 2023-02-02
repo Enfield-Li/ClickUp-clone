@@ -7,6 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
+import TaskOptions from "./TaskOptions";
 
 type Props = { children: React.ReactNode };
 
@@ -32,9 +33,7 @@ function RightClickShowCardOptions({ children }: Props) {
         <Box onContextMenu={handleRightClick}>{children}</Box>
       </PopoverTrigger>
 
-      <PopoverContent>
-        <PopoverBody>content body</PopoverBody>
-      </PopoverContent>
+      <TaskOptions />
     </Popover>
   );
 }
