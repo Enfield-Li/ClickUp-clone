@@ -8,14 +8,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo, useEffect, useRef } from "react";
-import CreateNewOptions from "./CreateNewOptions";
-
-type Props = {
-  spaceId: number;
-  listId?: number;
-  folderId?: number;
-  children: React.ReactNode;
-};
+import { Space } from "../../../types";
+import AddMoreItemPopover from "./AddMoreItemPopover";
 
 export const mainOptions = [
   "Rename",
@@ -30,10 +24,17 @@ export const mainOptions = [
   "Archive",
 ];
 
+type Props = {
+  space: Space;
+  listId?: number;
+  folderId?: number;
+  children: React.ReactNode;
+};
+
 export default memo(RightClickShowSpaceOptions);
 function RightClickShowSpaceOptions({
+  space,
   listId,
-  spaceId,
   folderId,
   children,
 }: Props) {
@@ -55,15 +56,11 @@ function RightClickShowSpaceOptions({
   }
 
   function deleteCurrentItem() {
-    console.log("delete: ", { spaceId, folderId, listId });
-  }
-
-  function createNewItem() {
-    console.log("createNewItem: ", { spaceId, folderId, listId });
+    console.log("delete: ", { space, folderId, listId });
   }
 
   function renameItem() {
-    console.log("renameItem", { spaceId, folderId, listId });
+    console.log("renameItem", { space, folderId, listId });
   }
 
   return (
@@ -95,13 +92,12 @@ function RightClickShowSpaceOptions({
         }}
       >
         {/* Create new */}
-        <CreateNewOptions
-          listId={listId}
-          spaceId={spaceId}
+        <AddMoreItemPopover
+          space={space}
           folderId={folderId}
-          isChildOpen={isChildOpen}
-          onChildOpen={onChildOpen}
-          onChildClose={onChildClose}
+          isPopoverOpen={isChildOpen}
+          onPopoverOpen={onChildOpen}
+          onPopoverClose={onChildClose}
           returnRefFn={() => ref.current && ref.current.focus()}
         >
           <Flex
@@ -110,7 +106,6 @@ function RightClickShowSpaceOptions({
             opacity="80%"
             cursor="pointer"
             alignItems="center"
-            onClick={createNewItem}
             justifyContent="space-between"
             _hover={{ bgColor: !isChildOpen && hoverBgColor }}
           >
@@ -125,8 +120,9 @@ function RightClickShowSpaceOptions({
               <i className="bi bi-chevron-right"></i>
             </Box>
           </Flex>
-        </CreateNewOptions>
+        </AddMoreItemPopover>
 
+        {/* More */}
         {mainOptions.map((option, index) =>
           option === "/" ? (
             <Box
@@ -142,7 +138,7 @@ function RightClickShowSpaceOptions({
               pl="10px"
               key={index}
               rounded="md"
-              opacity="80%"
+              opacity="40%"
               onClick={renameItem}
               cursor="not-allowed"
               _hover={{ bgColor: !isChildOpen && hoverBgColor }}
@@ -155,11 +151,12 @@ function RightClickShowSpaceOptions({
           )
         )}
 
+        {/* Delete */}
         <Flex
           p="7px"
           pl="10px"
           rounded="md"
-          opacity="80%"
+          opacity="100%"
           color="red.300"
           cursor="pointer"
           onClick={deleteCurrentItem}

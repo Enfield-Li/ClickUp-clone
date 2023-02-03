@@ -13,7 +13,7 @@ import {
   TEAM_STATE_ACTION,
   UpdateTeamActivityDTO,
 } from "../../../types";
-import AddFolderOrListPopover from "./AddFolderOrListPopover";
+import AddMoreItemPopover from "./AddMoreItemPopover";
 import SpaceContent from "./folderAndList/SpaceContent";
 import RightClickShowSpaceOptions from "./RightClickShowSpaceOptions";
 
@@ -51,7 +51,7 @@ function SpaceComponent({ space }: Props) {
 
   return (
     <Box my="3px">
-      <RightClickShowSpaceOptions spaceId={space.id}>
+      <RightClickShowSpaceOptions space={space}>
         <Flex
           cursor="pointer"
           alignItems="center"
@@ -111,14 +111,29 @@ function SpaceComponent({ space }: Props) {
                 </Center>
               </Flex>
 
-              {(hover || isPopoverOpen) && (
-                <AddFolderOrListPopover
-                  space={space}
-                  isPopoverOpen={isPopoverOpen}
-                  onPopoverOpen={onPopoverOpen}
-                  onPopoverClose={onPopoverClose}
-                />
-              )}
+              <AddMoreItemPopover
+                space={space}
+                isPopoverOpen={isPopoverOpen}
+                onPopoverOpen={onPopoverOpen}
+                onPopoverClose={onPopoverClose}
+              >
+                {(hover || isPopoverOpen) && (
+                  <Center
+                    pb="1"
+                    mr="3"
+                    width="15px"
+                    height="15px"
+                    rounded="full"
+                    fontSize="15px"
+                    color="darkMain.200"
+                    fontWeight="extrabold"
+                    bgColor="lightMain.400"
+                    _hover={{ bgColor: "purple.500" }}
+                  >
+                    +
+                  </Center>
+                )}
+              </AddMoreItemPopover>
             </Flex>
           </Box>
         </Flex>

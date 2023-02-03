@@ -48,8 +48,8 @@ function List({ space, folder, list }: Props) {
 
   return (
     <RightClickShowSpaceOptions
+      space={space}
       listId={list.id}
-      spaceId={space.id}
       folderId={folder?.id}
     >
       <Flex
