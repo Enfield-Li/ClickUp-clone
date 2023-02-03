@@ -8,8 +8,14 @@ import {
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { updateTeamActivity } from "../../../../networkCalls";
-import { FolderCategory, Space, TEAM_STATE_ACTION, UpdateTeamActivityDTO } from "../../../../types";
+import {
+  FolderCategory,
+  Space,
+  TEAM_STATE_ACTION,
+  UpdateTeamActivityDTO,
+} from "../../../../types";
 import AddFolderOrListPopover from "../AddFolderOrListPopover";
+import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
 import List from "./List";
 
 type Props = {
@@ -44,7 +50,7 @@ function Folder({ space, folder }: Props) {
 
     const dto: UpdateTeamActivityDTO = {
       teamId: teamState.teamActiveStatus.teamId,
-      folderId: folder.id
+      folderId: folder.id,
     };
     updateTeamActivity(dto);
   }
@@ -58,61 +64,63 @@ function Folder({ space, folder }: Props) {
 
   return (
     <>
-      <Flex
-        pl="3"
-        p="5px"
-        rounded="4px"
-        fontSize="15px"
-        cursor="pointer"
-        position="relative"
-        alignItems="center"
-        justifyContent="space-between"
-        _hover={{ bgColor: hoverBgColor }}
-        onMouseLeave={() => setHover(false)}
-        onMouseOverCapture={() => setHover(true)}
-        onClick={(e) => handleOpenFolder(e, folder.id)}
-      >
-        {/* Drag icon */}
-        {/* {hover && (
+      <RightClickShowSpaceOptions spaceId={space.id} folderId={folder.id}>
+        <Flex
+          pl="3"
+          p="5px"
+          rounded="4px"
+          fontSize="15px"
+          cursor="pointer"
+          position="relative"
+          alignItems="center"
+          justifyContent="space-between"
+          _hover={{ bgColor: hoverBgColor }}
+          onMouseLeave={() => setHover(false)}
+          onMouseOverCapture={() => setHover(true)}
+          onClick={(e) => handleOpenFolder(e, folder.id)}
+        >
+          {/* Drag icon */}
+          {/* {hover && (
           <Box position="absolute" left="-10px" color="gray" fontSize="22px">
             <i className="bi bi-grip-vertical"></i>
           </Box>
         )} */}
 
-        <Flex alignItems="center">
-          {/* Folder icon */}
-          <Box mx="2" color={folder.color ? folder.color : ""}>
-            {folder.isOpen ? (
-              <Box>
-                <i className="bi bi-folder2-open"></i>
-              </Box>
-            ) : (
-              <Box>
-                <i className="bi bi-folder-fill"></i>
-              </Box>
+          <Flex alignItems="center">
+            {/* Folder icon */}
+            <Box mx="2" color={folder.color ? folder.color : ""}>
+              {folder.isOpen ? (
+                <Box>
+                  <i className="bi bi-folder2-open"></i>
+                </Box>
+              ) : (
+                <Box>
+                  <i className="bi bi-folder-fill"></i>
+                </Box>
+              )}
+            </Box>
+
+            {/* name */}
+            <Center fontSize="13px">{folder.name}</Center>
+
+            {folder.isPrivate && (
+              <Center fontSize="12px" color="gray" ml="1">
+                <i className="bi bi-lock"></i>
+              </Center>
             )}
-          </Box>
+          </Flex>
 
-          {/* name */}
-          <Center fontSize="13px">{folder.name}</Center>
-
-          {folder.isPrivate && (
-            <Center fontSize="12px" color="gray" ml="1">
-              <i className="bi bi-lock"></i>
-            </Center>
+          {(hover || isPopoverOpen) && (
+            <AddFolderOrListPopover
+              space={space}
+              folder={folder}
+              isPopoverOpen={isPopoverOpen}
+              onPopoverOpen={onPopoverOpen}
+              onPopoverClose={onPopoverClose}
+            />
           )}
         </Flex>
-
-        {(hover || isPopoverOpen) && (
-          <AddFolderOrListPopover
-            space={space}
-            folder={folder}
-            isPopoverOpen={isPopoverOpen}
-            onPopoverOpen={onPopoverOpen}
-            onPopoverClose={onPopoverClose}
-          />
-        )}
-      </Flex>
+      </RightClickShowSpaceOptions>
 
       {folder.isOpen && (
         <Box>

@@ -710,3 +710,8 @@ export type AddStatusColumnResponseDTO = {
   statusCategoryId: number;
   oldNewStatusPairs: OldNewStatusPairs;
 };
+
+export type createNewFolderOrListInfo = {
+  spaceId: number;
+  folderId?: number;
+};

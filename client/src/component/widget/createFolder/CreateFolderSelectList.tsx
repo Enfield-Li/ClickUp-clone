@@ -12,18 +12,18 @@ import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
 type Props = {
-  createFolder: CreateFolderState;
-  setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  createFolderState: CreateFolderState;
+  setCreateFolderState: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default function CreateFolderSelectList({
-  createFolder,
-  setCreateFolder,
+  createFolderState,
+  setCreateFolderState,
 }: Props) {
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
 
-  const isListNameExist = createFolder.createFolderDTO.allListNames.find(
+  const isListNameExist = createFolderState.createFolderDTO.allListNames.find(
     (listName) => listName === input
   );
 
@@ -42,7 +42,7 @@ export default function CreateFolderSelectList({
   }, [input]);
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const isListNameExist = createFolder.createFolderDTO.allListNames.find(
+    const isListNameExist = createFolderState.createFolderDTO.allListNames.find(
       (listName) => listName === e.target.value
     );
     if (isListNameExist) {
@@ -55,8 +55,8 @@ export default function CreateFolderSelectList({
 
   function handleCreateList() {
     if (input && !isListNameExist) {
-      setCreateFolder(
-        produce(createFolder, (draftState) => {
+      setCreateFolderState(
+        produce(createFolderState, (draftState) => {
           draftState.createFolderDTO.allListNames.push(input);
         })
       );
@@ -67,8 +67,8 @@ export default function CreateFolderSelectList({
   }
 
   function handleDeleteList(name: string) {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
+    setCreateFolderState(
+      produce(createFolderState, (draftState) => {
         draftState.createFolderDTO.allListNames =
           draftState.createFolderDTO.allListNames.filter(
             (listName) => listName !== name
@@ -80,9 +80,9 @@ export default function CreateFolderSelectList({
   return (
     <CreateFolderTemplate
       isCurrentStepEntry={false}
-      createFolder={createFolder}
+      createFolderState={createFolderState}
       title="Your tasks live in Lists"
-      setCreateFolder={setCreateFolder}
+      setCreateFolderState={setCreateFolderState}
     >
       <Box fontWeight="semibold" fontSize="sm" mb="1">
         List name
@@ -120,7 +120,7 @@ export default function CreateFolderSelectList({
       )}
 
       <Flex flexWrap="wrap">
-        {createFolder.createFolderDTO.allListNames.map((listName) => (
+        {createFolderState.createFolderDTO.allListNames.map((listName) => (
           <Center
             px="3"
             mr="7px"

@@ -4,7 +4,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Priority, SortBy, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
-import RightClickShowCardOptions from "./RightClickPopover";
+import RightClickShowCardOptions from "./RightClickShowCardOptions";
 import SetTaskAttribute from "./SetTaskAttribute";
 import SubTaskList from "./SubTaskList";
 import TaskCardAdditionalInfo from "./TaskCardAdditionalInfo";

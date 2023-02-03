@@ -13,10 +13,10 @@ import { useNavigate } from "react-router-dom";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { handleDeleteTask } from "../../task/actions/deleteTask";
 
-type Props = {};
+type Props = { taskId: number };
 
 export default memo(TaskOptions);
-function TaskOptions({}: Props) {
+function TaskOptions({ taskId }: Props) {
   const navigate = useNavigate();
   const { taskStateContext } = useTaskDetailContext();
 
@@ -42,7 +42,7 @@ function TaskOptions({}: Props) {
               opacity="80%"
               cursor="pointer"
               _hover={{ backgroundColor: "blackAlpha.300" }}
-              onClick={() => handleDeleteTask()}
+              onClick={() => handleDeleteTask(taskId, setTaskState)}
             >
               <Box mr={2}>
                 <i className="bi bi-trash3"></i>

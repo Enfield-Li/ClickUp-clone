@@ -19,13 +19,13 @@ import { CreateFolderState } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
 type Props = {
-  createFolder: CreateFolderState;
-  setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  createFolderState: CreateFolderState;
+  setCreateFolderState: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default function CreateFolderSetPrivacy({
-  createFolder,
-  setCreateFolder,
+  createFolderState,
+  setCreateFolderState,
 }: Props) {
   const toast = useUnImplementedToast();
   const [input, setInput] = useState("");
@@ -40,9 +40,9 @@ export default function CreateFolderSetPrivacy({
   return (
     <CreateFolderTemplate
       isCurrentStepEntry={false}
-      createFolder={createFolder}
+      createFolderState={createFolderState}
       title="Who is this Folder for?"
-      setCreateFolder={setCreateFolder}
+      setCreateFolderState={setCreateFolderState}
     >
       <InputGroup onClick={() => setIsAddingUser(true)} fontWeight="semibold">
         {isAddingUser && (

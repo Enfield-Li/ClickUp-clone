@@ -7,20 +7,20 @@ import CreateFolderTemplate from "./CreateFolderTemplate";
 import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
 
 type Props = {
-  createFolder: CreateFolderState;
-  setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  createFolderState: CreateFolderState;
+  setCreateFolderState: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default function CreateFolderEntry({
-  createFolder,
-  setCreateFolder,
+  createFolderState,
+  setCreateFolderState,
 }: Props) {
   const { teamState } = useTeamStateContext();
-  const folderNameError = createFolder.folderNameError.isError;
+  const folderNameError = createFolderState.folderNameError.isError;
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
+    setCreateFolderState(
+      produce(createFolderState, (draftState) => {
         const isFolderNameExists =
           teamState.createFolderInfo?.currentLevelFolders?.find(
             (folder) => folder.name === e.target.value
@@ -34,7 +34,7 @@ export default function CreateFolderEntry({
   }
 
   function handleOnClick(targetStep: CreateFolderStep) {
-    setCreateFolder((prev) =>
+    setCreateFolderState((prev) =>
       produce(prev, (draftState) => {
         draftState.step = targetStep;
       })
@@ -49,8 +49,8 @@ export default function CreateFolderEntry({
     <CreateFolderTemplate
       title="Create folder"
       isCurrentStepEntry={true}
-      createFolder={createFolder}
-      setCreateFolder={setCreateFolder}
+      createFolderState={createFolderState}
+      setCreateFolderState={setCreateFolderState}
     >
       <Box
         mb="1"
@@ -65,7 +65,7 @@ export default function CreateFolderEntry({
         autoFocus
         onChange={handleInputOnChange}
         placeholder="Enter folder name"
-        value={createFolder.createFolderDTO.name}
+        value={createFolderState.createFolderDTO.name}
         borderColor={folderNameError ? "red.500" : ""}
         variant={folderNameError ? "flushed" : "unstyled"}
       />
@@ -81,7 +81,7 @@ export default function CreateFolderEntry({
             <i className="bi bi-exclamation-triangle-fill"></i>
           </Box>
           <span>&nbsp;</span>
-          {createFolder.folderNameError.errorMsg}
+          {createFolderState.folderNameError.errorMsg}
         </Flex>
       )}
 
@@ -99,7 +99,7 @@ export default function CreateFolderEntry({
           handleClick={() => handleOnClick(CreateFolderStep.LISTS)}
         >
           <Flex alignItems="center" justifyContent="flex-end" width="500px">
-            {createFolder.createFolderDTO.allListNames.map(
+            {createFolderState.createFolderDTO.allListNames.map(
               (list, index, arr) => (
                 <Center
                   key={list}
@@ -130,16 +130,18 @@ export default function CreateFolderEntry({
           handleClick={() => handleOnClick(CreateFolderStep.STATUS)}
         >
           <Flex alignItems="center" justifyContent="flex-end" width="500px">
-            {createFolder.selectedStatusColumns.map((column, index, arr) => (
-              <Box
-                width="10px"
-                height="10px"
-                rounded="sm"
-                key={column.id}
-                bgColor={column.color}
-                mr={isLastElement(index, arr) ? "" : "10px"}
-              ></Box>
-            ))}
+            {createFolderState.selectedStatusColumns.map(
+              (column, index, arr) => (
+                <Box
+                  width="10px"
+                  height="10px"
+                  rounded="sm"
+                  key={column.id}
+                  bgColor={column.color}
+                  mr={isLastElement(index, arr) ? "" : "10px"}
+                ></Box>
+              )
+            )}
           </Flex>
         </ReviewCreateFolderItem>
       </Box>

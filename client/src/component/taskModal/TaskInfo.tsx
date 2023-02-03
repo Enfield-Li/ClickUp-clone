@@ -45,7 +45,7 @@ function TaskInfo({}: Props) {
           </Box>
         </Flex>
 
-        <TaskOptions />
+        <TaskOptions taskId={task!.id!} />
       </Flex>
 
       {/* Desc */}

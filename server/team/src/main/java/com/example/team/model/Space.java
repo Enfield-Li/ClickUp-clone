@@ -1,35 +1,16 @@
 package com.example.team.model;
 
-import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
+import com.example.team.dto.CreateSpaceDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import com.example.team.dto.CreateSpaceDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 
 @Data
 @Entity
@@ -70,9 +51,6 @@ public class Space {
     @Transient
     private final Set<Integer> allListOrFolder = new HashSet<>();
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "spaces", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<UserInfo> members = new HashSet<>();
 
     @Column(updatable = false, insertable = false)
     private Integer teamId;
@@ -84,12 +62,26 @@ public class Space {
     private Team team;
 
     @Builder.Default
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "space",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<FolderCategory> folderCategories = new HashSet<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "space",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private Set<ListCategory> listCategories = new HashSet<>();
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "spaces",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    private Set<UserInfo> members = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
@@ -155,7 +147,7 @@ public class Space {
     }
 
     public static Space initTeamSpace(Integer defaultStatusCategoryId,
-            UserInfo userInfo) {
+                                      UserInfo userInfo) {
         var space = Space.builder()
                 .name("space")
                 .color("gray")

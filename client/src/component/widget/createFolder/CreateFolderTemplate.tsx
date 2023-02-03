@@ -10,7 +10,7 @@ import {
 import produce from "immer";
 import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { createFolderForSpace } from "../../../networkCalls";
+import { createFolder } from "../../../networkCalls";
 import {
   CreateFolderState,
   CreateFolderStep,
@@ -23,15 +23,15 @@ type Props = {
   title: string;
   children: React.ReactNode;
   isCurrentStepEntry: boolean;
-  createFolder: CreateFolderState;
-  setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  createFolderState: CreateFolderState;
+  setCreateFolderState: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default function CreateFolderTemplate({
   title,
   children,
-  createFolder,
-  setCreateFolder,
+  createFolderState,
+  setCreateFolderState,
   isCurrentStepEntry,
 }: Props) {
   const navigate = useNavigate();
@@ -43,8 +43,8 @@ export default function CreateFolderTemplate({
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
 
   function handleGoBackToEntry() {
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
+    setCreateFolderState(
+      produce(createFolderState, (draftState) => {
         draftState.step = CreateFolderStep.ENTRY;
       })
     );
@@ -53,9 +53,9 @@ export default function CreateFolderTemplate({
   function handleOnClick() {
     // create folder
     if (isCurrentStepEntry) {
-      if (!createFolder.createFolderDTO.name) {
-        setCreateFolder(
-          produce(createFolder, (draftState) => {
+      if (!createFolderState.createFolderDTO.name) {
+        setCreateFolderState(
+          produce(createFolderState, (draftState) => {
             draftState.folderNameError.isError = true;
             draftState.folderNameError.errorMsg = "Folder name is required!";
           })
@@ -63,9 +63,9 @@ export default function CreateFolderTemplate({
         return;
       }
 
-      createFolderForSpace(createFolder.createFolderDTO, (folder) => {
+      createFolder(createFolderState.createFolderDTO, (folder) => {
         onCreateFolderModalClose();
-        setCreateFolder(initCreateFolderState);
+        setCreateFolderState(initCreateFolderState);
 
         teamStateDispatch({
           type: TEAM_STATE_ACTION.CREATE_FOLDER,
@@ -76,7 +76,7 @@ export default function CreateFolderTemplate({
           getTaskBoardURL({
             listId: folder.allLists[0].id,
             teamId: teamState.teamActiveStatus.teamId,
-            spaceId: createFolder.createFolderDTO.spaceId,
+            spaceId: createFolderState.createFolderDTO.spaceId,
           }),
           {
             state: { defaultStatusCategoryId: folder.defaultStatusCategoryId },
@@ -88,8 +88,8 @@ export default function CreateFolderTemplate({
     }
 
     // return to entry
-    setCreateFolder(
-      produce(createFolder, (draftState) => {
+    setCreateFolderState(
+      produce(createFolderState, (draftState) => {
         draftState.step = CreateFolderStep.ENTRY;
       })
     );
@@ -98,7 +98,7 @@ export default function CreateFolderTemplate({
   return (
     <>
       <Center px="50px" height="100px" alignItems="center" borderTopRadius="md">
-        {createFolder.step !== CreateFolderStep.ENTRY && (
+        {createFolderState.step !== CreateFolderStep.ENTRY && (
           <ChevronLeftIcon
             top="37px"
             left="45px"
@@ -146,7 +146,9 @@ export default function CreateFolderTemplate({
           bgColor="customBlue.200"
           onClick={handleOnClick}
           _hover={{ bgColor: "customBlue.100" }}
-          disabled={isCurrentStepEntry && createFolder.folderNameError.isError}
+          disabled={
+            isCurrentStepEntry && createFolderState.folderNameError.isError
+          }
         >
           {isCurrentStepEntry ? "Create Folder" : "Save"}
         </Button>

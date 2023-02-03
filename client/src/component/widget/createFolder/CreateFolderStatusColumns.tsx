@@ -6,29 +6,29 @@ import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 
 type Props = {
-  createFolder: CreateFolderState;
-  setCreateFolder: React.Dispatch<React.SetStateAction<CreateFolderState>>;
+  createFolderState: CreateFolderState;
+  setCreateFolderState: React.Dispatch<React.SetStateAction<CreateFolderState>>;
 };
 
 export default function CreateFolderStatusColumns({
-  createFolder,
-  setCreateFolder,
+  createFolderState,
+  setCreateFolderState,
 }: Props) {
   return (
     <CreateFolderTemplate
       isCurrentStepEntry={false}
-      createFolder={createFolder}
-      setCreateFolder={setCreateFolder}
+      createFolderState={createFolderState}
+      setCreateFolderState={setCreateFolderState}
       title="What task statuses do you want?"
     >
       <Flex height="100%">
         <StatusColumnsDisplay
           selectedCategoryId={
-            createFolder.createFolderDTO.defaultStatusCategoryId
+            createFolderState.createFolderDTO.defaultStatusCategoryId
           }
-          teamStatusCategories={createFolder.teamStatusCategories}
+          teamStatusCategories={createFolderState.teamStatusCategories}
           handleSelectCategory={(selectedCategory) =>
-            setCreateFolder((prev) =>
+            setCreateFolderState((prev) =>
               produce(prev, (draftState) => {
                 draftState.selectedStatusColumns =
                   selectedCategory.statusColumns;
@@ -38,7 +38,7 @@ export default function CreateFolderStatusColumns({
             )
           }
           handleUpdateCategories={(updatedStatusCategories) =>
-            setCreateFolder((prev) =>
+            setCreateFolderState((prev) =>
               produce(prev, (draftState) => {
                 draftState.teamStatusCategories = updatedStatusCategories;
               })

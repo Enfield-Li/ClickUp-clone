@@ -29,7 +29,7 @@ function CreateFolderModal({}: Props) {
     modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
   } = useTeamStateContext();
 
-  const [createFolder, setCreateFolder] = useState<CreateFolderState>(
+  const [createFolderState, setCreateFolderState] = useState<CreateFolderState>(
     initCreateFolderState
   );
 
@@ -52,8 +52,8 @@ function CreateFolderModal({}: Props) {
       const lastOrderIndex = lastFolder ? lastFolder.orderIndex + 1 : 1;
 
       fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
-        setCreateFolder(
-          produce(createFolder, (draftState) => {
+        setCreateFolderState(
+          produce(createFolderState, (draftState) => {
             draftState.teamStatusCategories = StatusCategories;
             draftState.selectedStatusColumns =
               StatusCategories[0].statusColumns;
@@ -70,16 +70,16 @@ function CreateFolderModal({}: Props) {
 
   function handleCloseModal() {
     onCreateFolderModalClose();
-    setCreateFolder(initCreateFolderState);
+    setCreateFolderState(initCreateFolderState);
   }
 
   function renderStepComponent() {
-    switch (createFolder.step) {
+    switch (createFolderState.step) {
       case CreateFolderStep.ENTRY: {
         return (
           <CreateFolderEntry
-            createFolder={createFolder}
-            setCreateFolder={setCreateFolder}
+            createFolderState={createFolderState}
+            setCreateFolderState={setCreateFolderState}
           />
         );
       }
@@ -87,8 +87,8 @@ function CreateFolderModal({}: Props) {
       case CreateFolderStep.LISTS: {
         return (
           <CreateFolderSelectList
-            createFolder={createFolder}
-            setCreateFolder={setCreateFolder}
+            createFolderState={createFolderState}
+            setCreateFolderState={setCreateFolderState}
           />
         );
       }
@@ -96,8 +96,8 @@ function CreateFolderModal({}: Props) {
       case CreateFolderStep.SHARE: {
         return (
           <CreateFolderSetPrivacy
-            createFolder={createFolder}
-            setCreateFolder={setCreateFolder}
+            createFolderState={createFolderState}
+            setCreateFolderState={setCreateFolderState}
           />
         );
       }
@@ -105,8 +105,8 @@ function CreateFolderModal({}: Props) {
       case CreateFolderStep.STATUS: {
         return (
           <CreateFolderStatusColumns
-            createFolder={createFolder}
-            setCreateFolder={setCreateFolder}
+            createFolderState={createFolderState}
+            setCreateFolderState={setCreateFolderState}
           />
         );
       }

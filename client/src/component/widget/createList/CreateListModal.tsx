@@ -14,7 +14,7 @@ import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
-import { createListForSpace } from "../../../networkCalls";
+import { createList } from "../../../networkCalls";
 import { CreateListDTO, ListCategory, TEAM_STATE_ACTION } from "../../../types";
 import { generateDefaultListName } from "../../../utils/generateDefaultListName";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
@@ -71,7 +71,7 @@ function CreateListModal({}: Props) {
       name: value ? value : placeHolderValue,
     };
 
-    createListForSpace(dto, (list) => {
+    createList(dto, (list) => {
       handleResetModalState();
       teamStateDispatch({
         type: TEAM_STATE_ACTION.CREATE_LIST,
