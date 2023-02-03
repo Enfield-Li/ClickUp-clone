@@ -63,7 +63,7 @@ function TaskCard({ task, index }: Props) {
   return (
     <Draggable draggableId={String(task.id)} index={index}>
       {(provided, snapshot) => (
-        <RightClickShowCardOptions>
+        <RightClickShowCardOptions taskId={task.id!}>
           <Flex
             mt={3}
             width="full"

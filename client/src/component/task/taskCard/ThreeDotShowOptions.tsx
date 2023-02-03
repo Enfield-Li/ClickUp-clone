@@ -11,11 +11,12 @@ import React, { memo } from "react";
 import TaskOptions from "./TaskOptions";
 
 type Props = {
+  taskId: number;
   setIsPopoverOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default memo(ThreeDotShowOptions);
-function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
+function ThreeDotShowOptions({ taskId, setIsPopoverOpen }: Props) {
   return (
     <Popover
       isLazy
@@ -41,7 +42,7 @@ function ThreeDotShowOptions({ setIsPopoverOpen }: Props) {
         </Box>
       </Tooltip>
 
-      <TaskOptions />
+      <TaskOptions taskId={taskId} />
     </Popover>
   );
 }

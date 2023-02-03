@@ -99,7 +99,10 @@ function SetTaskAttribute({
           fontWeight="bold"
           onClick={(e) => e.stopPropagation()}
         >
-          <ThreeDotShowOptions setIsPopoverOpen={setIsPopoverOpen} />
+          <ThreeDotShowOptions
+            taskId={task.id!}
+            setIsPopoverOpen={setIsPopoverOpen}
+          />
         </Center>
       </Flex>
     </Flex>

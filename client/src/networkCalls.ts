@@ -500,11 +500,10 @@ export async function fetchTaskEvents(taskId: number) {
   }
 }
 
-export async function deleteTask(taskId: number, taskListForUpdate: TaskList) {
+export async function deleteTask(taskId: number) {
   try {
-    const response = await axiosTaskServiceInstance.put<boolean>(
-      API_ENDPOINT.TASK + `/${taskId}`,
-      deepCopy(taskListForUpdate)
+    const response = await axiosTaskServiceInstance.delete<boolean>(
+      API_ENDPOINT.TASK + `/${taskId}`
     );
     return response.data;
   } catch (error) {

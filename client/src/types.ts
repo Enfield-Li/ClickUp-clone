@@ -426,8 +426,8 @@ export type TeamStateType = {
 
 export type TeamContextType = {
   teamState: TeamStateType;
-  teamStateDispatch: React.Dispatch<TeamStateActionType>;
   modalControls: ModalControls;
+  teamStateDispatch: React.Dispatch<TeamStateActionType>;
 };
 
 export type TeamStateActionType =

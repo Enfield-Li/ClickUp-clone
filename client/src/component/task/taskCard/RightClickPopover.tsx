@@ -9,10 +9,10 @@ import {
 import React, { memo } from "react";
 import TaskOptions from "./TaskOptions";
 
-type Props = { children: React.ReactNode };
+type Props = { taskId: number; children: React.ReactNode };
 
 export default memo(RightClickShowCardOptions);
-function RightClickShowCardOptions({ children }: Props) {
+function RightClickShowCardOptions({ taskId, children }: Props) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRightClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -33,7 +33,7 @@ function RightClickShowCardOptions({ children }: Props) {
         <Box onContextMenu={handleRightClick}>{children}</Box>
       </PopoverTrigger>
 
-      <TaskOptions />
+      <TaskOptions taskId={taskId} />
     </Popover>
   );
 }
