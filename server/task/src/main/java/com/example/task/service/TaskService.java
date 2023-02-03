@@ -6,12 +6,14 @@ import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.task.dto.*;
 import com.example.task.model.Task;
+import com.example.task.model.UserInfo;
 import com.example.task.repository.TaskMapper;
 import com.example.task.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -20,6 +22,7 @@ import java.util.Objects;
 public class TaskService {
 
     private final TaskMapper taskMapper;
+    private final EntityManager entityManager;
     private final TaskRepository taskRepository;
     private final UserInfoService userInfoService;
     private final StatusCategoryClient statusCategoryClient;
@@ -38,9 +41,10 @@ public class TaskService {
     @Transactional
     public Task createTask(CreateTaskDTO createTaskDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
-        var task = Task.convertFromCreateTaskDto(
-                createTaskDTO,
-                userInfo);
+        var task = Task.convertFromCreateTaskDto(createTaskDTO);
+        userInfo.addTask(task);
+        task.addWatcher(userInfo);
+        task.addAssignee(userInfo);
 
         return taskRepository.save(task);
     }
@@ -100,7 +104,16 @@ public class TaskService {
 
     @Transactional
     public Boolean deleteTask(Integer taskId) {
-        taskRepository.deleteById(taskId);
+        var task = entityManager.find(Task.class, taskId);
+        var creatorId = task.getCreatorId();
+
+        task.getWatchers().forEach(task::removeWatcher);
+        task.getAssignees().forEach(task::removeAssignee);
+
+        var creator = entityManager.find(UserInfo.class, creatorId);
+        creator.removeTask(task);
+
+        entityManager.remove(task);
         return true;
     }
 

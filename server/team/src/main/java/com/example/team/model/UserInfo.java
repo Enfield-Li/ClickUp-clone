@@ -1,41 +1,24 @@
 package com.example.team.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "teams", "spaces",
-        "folderCategories", "listCategories" })
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@EqualsAndHashCode(exclude = {"teams", "spaces",
+        "folderCategories", "listCategories"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "userId", "username" })
+        @UniqueConstraint(columnNames = {"userId", "username"})
 })
 public class UserInfo {
 
@@ -53,27 +36,35 @@ public class UserInfo {
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "team_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "team_id"))
+    @JoinTable(name = "team_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
     private Set<Team> teams = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "space_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "space_id"))
+    @JoinTable(name = "space_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "space_id"))
     private Set<Space> spaces = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "folder_category_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "folder_category_id"))
+    @JoinTable(name = "folder_category_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "folder_category_id"))
     private Set<FolderCategory> folderCategories = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "list_category_user_info", joinColumns = @JoinColumn(name = "user_info_id"), inverseJoinColumns = @JoinColumn(name = "list_category_id"))
+    @JoinTable(name = "list_category_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "list_category_id"))
     private Set<ListCategory> listCategories = new HashSet<>();
 }

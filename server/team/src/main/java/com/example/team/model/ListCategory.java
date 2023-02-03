@@ -1,46 +1,26 @@
 package com.example.team.model;
 
-import static com.example.team.TeamServiceConstants.LIST_NAME_CONSTRAINT;
-import static com.example.team.TeamServiceConstants.LIST_ORDER_INDEX_CONSTRAINT;
+import com.example.team.dto.CreateListDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.example.team.dto.CreateListDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import static com.example.team.TeamServiceConstants.LIST_NAME_CONSTRAINT;
+import static com.example.team.TeamServiceConstants.LIST_ORDER_INDEX_CONSTRAINT;
 
 @Data
 @Entity
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "folderCategory", "space" })
+@EqualsAndHashCode(exclude = {"folderCategory", "space"})
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "name",
@@ -81,7 +61,9 @@ public class ListCategory {
     private UserInfo creator;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "listCategories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "listCategories",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
 
     @Column(updatable = false, insertable = false)

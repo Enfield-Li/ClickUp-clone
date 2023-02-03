@@ -1,32 +1,22 @@
 package com.example.task.model;
 
-import static javax.persistence.FetchType.LAZY;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import lombok.*;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "taskWatcher" })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+@EqualsAndHashCode(exclude = {
+        "tasks", "assignedTasks", "watchedTasks"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserInfo {
 
     @Id
@@ -40,22 +30,38 @@ public class UserInfo {
     private String username;
 
     @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer taskWatcherId;
-
-    @JsonIgnore
+    @Builder.Default
     @ToString.Exclude
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "taskWatcherId")
-    private Task taskWatcher;
+    @OneToMany(mappedBy = "creator",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Task> tasks = new HashSet<>();
 
     @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer taskAssigneeId;
-
-    @JsonIgnore
+    @Builder.Default
     @ToString.Exclude
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "taskAssigneeId")
-    private Task taskAssignee;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "task_assignee_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_assignee_id"))
+    private Set<Task> assignedTasks = new HashSet<>();
+
+    @JsonIgnore
+    @Builder.Default
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "task_watcher_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_watcher_id"))
+    private Set<Task> watchedTasks = new HashSet<>();
+
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setCreator(this);
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setCreator(null);
+    }
 }

@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.FetchType.EAGER;
-
 @Data
 @Entity
 @Builder
@@ -64,15 +62,6 @@ public class Task {
 
     private String description;
 
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer userInfoId;
-
-    @NotNull
-    @JoinColumn(name = "userInfoId")
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserInfo creator;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -89,17 +78,32 @@ public class Task {
     private Task parentTask;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parentTask", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentTask",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     private Set<Task> subTasks = new HashSet<>();
+
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer creatorId;
+
+    @NotNull
+    @JoinColumn(name = "creatorId")
+    @ManyToOne(cascade = CascadeType.ALL)
+    private UserInfo creator;
+
+    @Builder.Default
+    @ManyToMany(mappedBy = "assignedTasks",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    private Set<UserInfo> assignees = new HashSet<>();
 
     @NotNull
     @Builder.Default
-    @OneToMany(mappedBy = "taskWatcher", fetch = EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "watchedTasks",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private Set<UserInfo> watchers = new HashSet<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "taskAssignee", fetch = EAGER, cascade = CascadeType.ALL)
-    private Set<UserInfo> assignees = new HashSet<>();
 
     public void addSubTask(Task task) {
         subTasks.add(task);
@@ -113,30 +117,28 @@ public class Task {
 
     public void addWatcher(UserInfo watcher) {
         watchers.add(watcher);
-        watcher.setTaskWatcher(this);
+        watcher.getWatchedTasks().add(this);
     }
 
     public void removeWatcher(UserInfo watcher) {
         watchers.remove(watcher);
-        watcher.setTaskWatcher(null);
+        watcher.getWatchedTasks().remove(this);
     }
 
     public void addAssignee(UserInfo assignee) {
         assignees.add(assignee);
-        assignee.setTaskAssignee(this);
+        assignee.getAssignedTasks().add(this);
     }
 
     public void removeAssignee(UserInfo assignee) {
         assignees.remove(assignee);
-        assignee.setTaskAssignee(null);
+        assignee.getAssignedTasks().remove(this);
     }
 
     public static Task convertFromCreateTaskDto(
-            CreateTaskDTO createTaskDTO,
-            UserInfo creator) {
-        var task = Task
+            CreateTaskDTO createTaskDTO) {
+        return Task
                 .builder()
-                .creator(creator)
                 .title(createTaskDTO.title())
                 .listId(createTaskDTO.listId())
                 .status(createTaskDTO.status())
@@ -144,8 +146,5 @@ public class Task {
                 .description(createTaskDTO.description())
                 .expectedDueDate(createTaskDTO.expectedDueDate())
                 .build();
-
-        task.addWatcher(creator);
-        return task;
     }
 }
