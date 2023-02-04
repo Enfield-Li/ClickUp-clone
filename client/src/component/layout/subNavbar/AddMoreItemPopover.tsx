@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { Space, TEAM_STATE_ACTION } from "../../../types";
 
 const createNewOptions = [
@@ -42,6 +43,7 @@ function AddMoreItemPopover({
   children,
   returnRefFn,
 }: Props) {
+  const toast = useUnImplementedToast();
   const { defaultStatusCategoryId, id: spaceId } = space;
   const fontColor = useColorModeValue("black", "lightMain.100");
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
@@ -143,7 +145,9 @@ function AddMoreItemPopover({
                 onClick={(e) =>
                   option === "List"
                     ? handleOpenCreateListModal(e)
-                    : option === "Folder" && handleOpenCreateFolderModal(e)
+                    : option === "Folder"
+                    ? handleOpenCreateFolderModal(e)
+                    : toast()
                 }
                 cursor={
                   option === "List" || option === "Folder"

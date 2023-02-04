@@ -8,12 +8,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo, useEffect, useRef } from "react";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { Space } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 
 export const mainOptions = [
-  "Rename",
-  "Color & Avatar",
   "Copy link",
   "Add to favorites",
   "Duplicate",
@@ -38,6 +37,7 @@ function RightClickShowSpaceOptions({
   folderId,
   children,
 }: Props) {
+  const toast = useUnImplementedToast();
   const ref = useRef<HTMLElement | null>(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
@@ -110,7 +110,7 @@ function RightClickShowSpaceOptions({
             _hover={{ bgColor: !isChildOpen && hoverBgColor }}
           >
             <Flex p="7px" pl="10px">
-              <Box mr={2}>
+              <Box mr="9px">
                 <i className="bi bi-plus-lg"></i>
               </Box>
               <Box>Create new</Box>
@@ -121,6 +121,38 @@ function RightClickShowSpaceOptions({
             </Box>
           </Flex>
         </AddMoreItemPopover>
+
+        {/* Rename */}
+        <Flex
+          p="7px"
+          pl="10px"
+          rounded="md"
+          opacity="80%"
+          cursor="pointer"
+          onClick={deleteCurrentItem}
+          _hover={{ bgColor: !isChildOpen && hoverBgColor }}
+        >
+          <Box mr="9px">
+            <i className="bi bi-pencil"></i>
+          </Box>
+          <Box>Rename</Box>
+        </Flex>
+
+        {/* Color & Avatar */}
+        <Flex
+          p="7px"
+          pl="10px"
+          rounded="md"
+          opacity="80%"
+          cursor="pointer"
+          onClick={deleteCurrentItem}
+          _hover={{ bgColor: !isChildOpen && hoverBgColor }}
+        >
+          <Box mr="9px">
+            <i className="bi bi-droplet"></i>
+          </Box>
+          <Box>Color & Avatar</Box>
+        </Flex>
 
         {/* More */}
         {mainOptions.map((option, index) =>
@@ -139,11 +171,11 @@ function RightClickShowSpaceOptions({
               key={index}
               rounded="md"
               opacity="40%"
-              onClick={renameItem}
               cursor="not-allowed"
+              onClick={() => toast()}
               _hover={{ bgColor: !isChildOpen && hoverBgColor }}
             >
-              <Box mr={2}>
+              <Box mr="9px">
                 <i className="bi bi-exclamation-diamond"></i>
               </Box>
               <Box>{option}</Box>
@@ -162,7 +194,7 @@ function RightClickShowSpaceOptions({
           onClick={deleteCurrentItem}
           _hover={{ bgColor: !isChildOpen && hoverBgColor }}
         >
-          <Box mr={2}>
+          <Box mr="9px">
             <i className="bi bi-trash3"></i>
           </Box>
           <Box>Delete</Box>

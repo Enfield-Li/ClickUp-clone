@@ -18,8 +18,6 @@ export default memo(FixedNavBar);
 function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
   const fixedNavbarWidth = "55px";
   const navigate = useNavigate();
-  const { teamState } = useTeamStateContext();
-  const { listId, teamId, spaceId } = teamState.teamActiveStatus;
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -66,7 +64,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
           </NavLink>
 
           {/* Logo */}
-          <Center onClick={() => navigate(CLIENT_ROUTE.HOME)}>
+          <Center cursor="pointer" onClick={() => navigate(CLIENT_ROUTE.HOME)}>
             <Image height="30px" mt="3" src={logoDataUrl} />
           </Center>
 

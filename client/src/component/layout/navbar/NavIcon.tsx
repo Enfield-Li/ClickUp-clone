@@ -35,6 +35,7 @@ function NavIcon({ url, name, children }: Props) {
               role="menuitem"
               fontSize="16.5px"
               aria-label={name}
+              opacity={name !== "Task" ? "40%" : undefined}
               bgColor={isActive ? "customBlue.200" : undefined}
               cursor={url !== "not-found" ? "pointer" : "not-allowed"}
               _hover={{ bgColor: isActive ? undefined : "darkMain.300" }}

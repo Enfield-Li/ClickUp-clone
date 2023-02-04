@@ -63,7 +63,7 @@ function App() {
 
       <Route path="/:teamId" element={<ApplicationEntry />}>
         <Route path="*" element={<UnderConstruction />} />
-        <Route path={CLIENT_ROUTE.HOME} element={<Home />} />
+        <Route path={CLIENT_ROUTE.HOME} element={<UnderConstruction />} />
         <Route path={CLIENT_ROUTE.TEST_DEV} element={<TestDev />} />
 
         {/* https://stackoverflow.com/questions/70005601/alternate-way-for-optional-parameters-in-v6 */}
