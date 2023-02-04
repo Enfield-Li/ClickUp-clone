@@ -48,7 +48,7 @@ public class TeamActivityService {
         var teamId = dto.teamId();
         var listId = dto.listId();
         var spaceId = dto.spaceId();
-        var folderId = dto.folderId();
+        var folderIds = dto.folderIds();
 
         var userId = authenticatedSecurityContext.getCurrentUserId();
 
@@ -73,13 +73,15 @@ public class TeamActivityService {
             }
         }
 
-        if (folderId != null) {
-            var isFolderIdExists = teamActivity.getFolderIds().contains(folderId);
-            if (isFolderIdExists) {
-                teamActivity.getFolderIds().remove(folderId);
-            } else {
-                teamActivity.getFolderIds().add(folderId);
-            }
+        if (!folderIds.isEmpty()) {
+            folderIds.forEach(folderId -> {
+                var isFolderIdExists = teamActivity.getFolderIds().contains(folderId);
+                if (isFolderIdExists) {
+                    teamActivity.getFolderIds().remove(folderId);
+                } else {
+                    teamActivity.getFolderIds().add(folderId);
+                }
+            });
         }
 
         if (listId != null) {

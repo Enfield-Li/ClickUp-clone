@@ -8,6 +8,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo, useEffect, useRef } from "react";
+import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { deleteSpace } from "../../../networkCalls";
 import { Space } from "../../../types";
@@ -39,6 +40,7 @@ function RightClickShowSpaceOptions({
   children,
 }: Props) {
   const toast = useUnImplementedToast();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
   const ref = useRef<HTMLElement | null>(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
@@ -56,8 +58,34 @@ function RightClickShowSpaceOptions({
     onOpen();
   }
 
+  /* 
+  {
+	"teamActivity": {
+		"id": 1,
+		"listId": 18,
+		"spaceId": 4,
+		"teamId": 2,
+		"userId": 1,
+		"folderIds": [
+			3,
+			4,
+			6,
+			7,
+			8
+		]
+	}
+}
+   */
   function deleteCurrentItem() {
-    deleteSpace(space.id);
+    let nextActiveSpace: Space | undefined;
+
+    teamState.originalTeams.forEach((team) => {
+      nextActiveSpace = team.spaces.find((space) => space.id !== space.id);
+    });
+
+    //   teamState.
+
+    // deleteSpace(space.id);
   }
 
   function renameItem() {

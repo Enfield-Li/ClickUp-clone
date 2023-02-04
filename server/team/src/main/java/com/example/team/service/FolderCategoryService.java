@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.internalExchange;
 import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
@@ -45,7 +46,7 @@ public class FolderCategoryService {
         var listId = folder.getAllLists().stream()
                 .findFirst().get().getId();
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, null, folderId, listId, userInfo.getUserId());
+                teamId, null, Set.of(folderId), listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 teamActivityRoutingKey,

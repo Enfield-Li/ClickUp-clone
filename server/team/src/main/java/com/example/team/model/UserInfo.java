@@ -79,16 +79,20 @@ public class UserInfo {
     public void removeJoinedTeam(Team team) {
         joinedTeams.remove(team);
         team.removeMember(this);
+        team.getSpaces().forEach(this::removeJoinedSpace);
     }
 
     public void removeJoinedSpace(Space space) {
         joinedSpaces.remove(space);
         space.removeMember(this);
+        space.getListCategories().forEach(this::removeJoinedListCategory);
+        space.getFolderCategories().forEach(this::removeJoinedFolderCategory);
     }
 
     public void removeJoinedFolderCategory(FolderCategory folderCategory) {
         joinedFolderCategories.remove(folderCategory);
         folderCategory.removeMember(this);
+        folderCategory.getAllLists().forEach(this::removeJoinedListCategory);
     }
 
     public void removeJoinedListCategory(ListCategory listCategory) {
