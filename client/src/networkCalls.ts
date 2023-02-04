@@ -82,6 +82,25 @@ export async function updateUserDefaultTeamId(
   }
 }
 
+export async function deleteSpace(
+  spaceId: number,
+  onSuccess?: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosTeamServiceInstance.delete<boolean>(
+      API_ENDPOINT.SPACE + `/${spaceId}`
+    );
+
+    onSuccess && onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
 export async function createSpaceForTeam(
   dto: CreateSpaceDTO,
   onSuccess: (data: Space) => void,

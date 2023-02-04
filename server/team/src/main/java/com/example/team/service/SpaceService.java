@@ -6,6 +6,7 @@ import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
+import com.example.team.model.UserInfo;
 import com.example.team.repository.SpaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -73,4 +74,19 @@ public class SpaceService {
         return entityManager.getReference(Team.class, teamId);
     }
 
+    @Transactional
+    public Boolean deleteSpace(Integer spaceId) {
+        var space = entityManager.find(Space.class, spaceId);
+        var teamId = space.getTeamId();
+        var userId = space.getCreatorId();
+
+        var user = entityManager.getReference(UserInfo.class, userId);
+        user.removeJoinedSpace(space);
+
+        var team = entityManager.getReference(Team.class, teamId);
+        team.removeSpace(space);
+
+        entityManager.remove(space);
+        return true;
+    }
 }

@@ -22,7 +22,6 @@ import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAIN
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"space"})
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "spaceId",
@@ -55,13 +54,18 @@ public class FolderCategory {
     @NotNull
     private Integer defaultStatusCategoryId;
 
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer creatorId;
+
     @NotNull
-    @JoinColumn(name = "userInfoId")
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creatorId")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
     private UserInfo creator;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "folderCategories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "joinedFolderCategories", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
 
     @Column(updatable = false, insertable = false)
@@ -69,22 +73,24 @@ public class FolderCategory {
 
     @NotNull
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Space space;
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "folderCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ListCategory> allLists = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.getFolderCategories().add(this);
+        userInfo.getJoinedFolderCategories().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.getFolderCategories().remove(this);
+        userInfo.getJoinedFolderCategories().remove(this);
     }
 
     public void addListCategory(ListCategory listCategory) {

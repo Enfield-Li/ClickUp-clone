@@ -14,8 +14,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"teams", "spaces",
-        "folderCategories", "listCategories"})
+@EqualsAndHashCode(exclude = {"joinedTeams", "joinedSpaces",
+        "joinedFolderCategories", "joinedListCategories"})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"userId", "username"})
@@ -32,39 +32,68 @@ public class UserInfo {
     @NotNull
     private String username;
 
-    @JsonIgnore
-    @Builder.Default
-    @ToString.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "team_user_info",
-            joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id"))
-    private Set<Team> teams = new HashSet<>();
+//    @JsonIgnore
+//    @Builder.Default
+//    @ToString.Exclude
+//    @OneToMany(mappedBy = "creator",
+//            fetch = FetchType.LAZY,
+//            cascade = CascadeType.ALL)
+//    private Set<Team> createdTeams = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "space_user_info",
+    @JoinTable(name = "joined_teams_user_info",
             joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "space_id"))
-    private Set<Space> spaces = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "joined_teams_id"))
+    private Set<Team> joinedTeams = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "folder_category_user_info",
+    @JoinTable(name = "joined_spaces_user_info",
             joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "folder_category_id"))
-    private Set<FolderCategory> folderCategories = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "joined_spaces_id"))
+    private Set<Space> joinedSpaces = new HashSet<>();
 
     @JsonIgnore
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "list_category_user_info",
+    @JoinTable(name = "joined_folder_category_user_info",
             joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "list_category_id"))
-    private Set<ListCategory> listCategories = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "joined_folder_category_id"))
+    private Set<FolderCategory> joinedFolderCategories = new HashSet<>();
+
+    @JsonIgnore
+    @Builder.Default
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "joined_list_category_user_info",
+            joinColumns = @JoinColumn(name = "user_info_id"),
+            inverseJoinColumns = @JoinColumn(name = "joined_list_category_id"))
+    private Set<ListCategory> joinedListCategories = new HashSet<>();
+
+    public void removeJoinedTeam(Team team) {
+        joinedTeams.remove(team);
+        team.removeMember(this);
+    }
+
+    public void removeJoinedSpace(Space space) {
+        joinedSpaces.remove(space);
+        space.removeMember(this);
+    }
+
+    public void removeJoinedFolderCategory(FolderCategory folderCategory) {
+        joinedFolderCategories.remove(folderCategory);
+        folderCategory.removeMember(this);
+    }
+
+    public void removeJoinedListCategory(ListCategory listCategory) {
+        joinedListCategories.remove(listCategory);
+        listCategory.removeMember(this);
+    }
+
 }

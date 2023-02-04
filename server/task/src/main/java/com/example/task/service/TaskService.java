@@ -110,7 +110,7 @@ public class TaskService {
         task.getWatchers().forEach(task::removeWatcher);
         task.getAssignees().forEach(task::removeAssignee);
 
-        var creator = entityManager.find(UserInfo.class, creatorId);
+        var creator = entityManager.getReference(UserInfo.class, creatorId);
         creator.removeTask(task);
 
         entityManager.remove(task);

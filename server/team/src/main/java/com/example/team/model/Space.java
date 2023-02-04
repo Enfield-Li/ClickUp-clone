@@ -51,17 +51,27 @@ public class Space {
     @Transient
     private final Set<Integer> allListOrFolder = new HashSet<>();
 
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer creatorId;
+
+    @NotNull
+    @JoinColumn(name = "creatorId")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
+    private UserInfo creator;
 
     @Column(updatable = false, insertable = false)
     private Integer teamId;
 
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "teamId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "space",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
@@ -70,6 +80,7 @@ public class Space {
     private Set<FolderCategory> folderCategories = new HashSet<>();
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "space",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
@@ -78,19 +89,20 @@ public class Space {
     private Set<ListCategory> listCategories = new HashSet<>();
 
     @Builder.Default
-    @ManyToMany(mappedBy = "spaces",
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "joinedSpaces",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.getSpaces().add(this);
+        userInfo.getJoinedSpaces().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.getSpaces().remove(this);
+        userInfo.getJoinedSpaces().remove(this);
     }
 
     public void addFolderCategory(FolderCategory folderCategory) {
@@ -114,7 +126,7 @@ public class Space {
     }
 
     public void addListCategory(Set<ListCategory> listCategories) {
-        listCategories.forEach(listCategory -> addListCategory(listCategory));
+        listCategories.forEach(this::addListCategory);
     }
 
     public static Space convertFromCreateSpaceDTO(
@@ -131,6 +143,7 @@ public class Space {
 
         var space = Space.builder()
                 .listCategories(listCategories)
+                .creator(userInfo)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
                 .avatar(createSpaceDTO.avatar())
@@ -146,13 +159,14 @@ public class Space {
         return space;
     }
 
-    public static Space initTeamSpace(Integer defaultStatusCategoryId,
-                                      UserInfo userInfo) {
+    public static Space initTeamSpace(
+            Integer defaultStatusCategoryId, UserInfo userInfo) {
         var space = Space.builder()
                 .name("space")
                 .color("gray")
                 .orderIndex(1)
                 .isPrivate(false)
+                .creator(userInfo)
                 .defaultStatusCategoryId(defaultStatusCategoryId)
                 .build();
 

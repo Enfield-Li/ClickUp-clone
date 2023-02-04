@@ -288,6 +288,7 @@ export interface Space {
   color: string;
   avatar: string;
   teamId: number;
+  creator: UserInfo;
   orderIndex: number;
   isPrivate: boolean;
   defaultStatusCategoryId: number;

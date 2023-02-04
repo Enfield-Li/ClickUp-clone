@@ -1,42 +1,21 @@
 package com.example.team.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
+import com.example.team.dto.CreateTeamDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.example.clients.jwt.UserCredentials;
-import com.example.team.dto.CreateTeamDTO;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = { "spaces" })
 public class Team {
 
     @Id
@@ -54,19 +33,30 @@ public class Team {
     @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer ownerId;
+
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ownerId")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
     private UserInfo owner;
 
     @Builder.Default
     private Boolean isPrivate = false;
 
     @Builder.Default
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "team",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     private Set<Space> spaces = new HashSet<>();
 
     @Builder.Default
-    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "joinedTeams",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     private Set<UserInfo> members = new HashSet<>();
 
     public void addSpace(Space space) {
@@ -81,16 +71,16 @@ public class Team {
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.getTeams().add(this);
+        userInfo.getJoinedTeams().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.getTeams().remove(this);
+        userInfo.getJoinedTeams().remove(this);
     }
 
-    public static Team initTeamCreation(CreateTeamDTO createTeamDTO,
-            UserInfo userInfo) {
+    public static Team initTeamCreation(
+            CreateTeamDTO createTeamDTO, UserInfo userInfo) {
         var team = Team.builder()
                 .owner(userInfo)
                 .name(createTeamDTO.name())

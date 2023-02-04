@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { memo, useEffect, useRef } from "react";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
+import { deleteSpace } from "../../../networkCalls";
 import { Space } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 
@@ -56,7 +57,7 @@ function RightClickShowSpaceOptions({
   }
 
   function deleteCurrentItem() {
-    console.log("delete: ", { space, folderId, listId });
+    deleteSpace(space.id);
   }
 
   function renameItem() {
@@ -129,7 +130,7 @@ function RightClickShowSpaceOptions({
           rounded="md"
           opacity="80%"
           cursor="pointer"
-          onClick={deleteCurrentItem}
+          //   onClick={deleteCurrentItem}
           _hover={{ bgColor: !isChildOpen && hoverBgColor }}
         >
           <Box mr="9px">
@@ -145,7 +146,7 @@ function RightClickShowSpaceOptions({
           rounded="md"
           opacity="80%"
           cursor="pointer"
-          onClick={deleteCurrentItem}
+          //   onClick={deleteCurrentItem}
           _hover={{ bgColor: !isChildOpen && hoverBgColor }}
         >
           <Box mr="9px">

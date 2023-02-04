@@ -20,7 +20,6 @@ import static com.example.team.TeamServiceConstants.LIST_ORDER_INDEX_CONSTRAINT;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"folderCategory", "space"})
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "name",
@@ -52,16 +51,24 @@ public class ListCategory {
     @NotNull
     private Integer orderIndex;
 
+    @Builder.Default
+    private Integer taskAmount = 0;
+
     @NotNull
     private Integer defaultStatusCategoryId;
 
+    @JsonIgnore
+    @Column(updatable = false, insertable = false)
+    private Integer creatorId;
+
     @NotNull
-    @JoinColumn(name = "userInfoId")
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creatorId")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
     private UserInfo creator;
 
     @Builder.Default
-    @ManyToMany(mappedBy = "listCategories",
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "joinedListCategories",
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     private Set<UserInfo> members = new HashSet<>();
@@ -71,29 +78,28 @@ public class ListCategory {
 
     @NotNull
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Space space;
-
-    @Builder.Default
-    private Integer taskAmount = 0;
 
     @Column(updatable = false, insertable = false)
     private Integer parentFolderId;
 
     @ManyToOne
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
 
     public void addMember(UserInfo userInfo) {
         members.add(userInfo);
-        userInfo.getListCategories().add(this);
+        userInfo.getJoinedListCategories().add(this);
     }
 
     public void removeMember(UserInfo userInfo) {
         members.remove(userInfo);
-        userInfo.getListCategories().remove(this);
+        userInfo.getJoinedListCategories().remove(this);
     }
 
     public static ListCategory convertFromCreateListDTO(

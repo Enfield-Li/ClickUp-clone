@@ -91,6 +91,11 @@ public class ListCategoryService {
                 FolderCategory.class, FolderCategoryId);
     }
 
+    public Boolean deleteList(Integer listId) {
+
+        return true;
+    }
+
     private Space findSpaceReference(Integer spaceId) {
         return entityManager.getReference(Space.class, spaceId);
     }
