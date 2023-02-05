@@ -448,7 +448,8 @@ export type TeamStateActionType =
   | DeleteSpace
   | DeleteFolder
   | DeleteTeam
-  | DeleteList;
+  | DeleteListInSpace
+  | DeleteListInFolder;
 
 type DeleteSpace = {
   type: typeof TEAM_STATE_ACTION.DELETE_SPACE;
@@ -460,11 +461,19 @@ type DeleteSpace = {
 };
 type DeleteFolder = {
   type: typeof TEAM_STATE_ACTION.DELETE_FOLDER;
-  //   payload: { deletedSpaceId: number; nextSpaceId: number; nextListId?: number };
+  payload: {
+    deletedFolderId: number;
+    // nextFolderId: number;
+    nextListId?: number;
+  };
 };
-type DeleteList = {
-  type: typeof TEAM_STATE_ACTION.DELETE_LIST;
-  //   payload: { deletedSpaceId: number; nextSpaceId: number; nextListId?: number };
+type DeleteListInFolder = {
+  type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER;
+  payload: { deletedListId: number; nextListId?: number; folderId: number };
+};
+type DeleteListInSpace = {
+  type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE;
+  payload: { deletedListId: number; nextListId?: number };
 };
 type DeleteTeam = {
   type: typeof TEAM_STATE_ACTION.DELETE_TEAM;
@@ -541,7 +550,8 @@ export const TEAM_STATE_ACTION = {
   CREATE_LIST: "create_list",
 
   DELETE_TEAM: "delete_team",
-  DELETE_LIST: "delete_list",
+  DELETE_LIST_IN_SPACE: "delete_list_in_space",
+  DELETE_LIST_IN_FOLDER: "delete_list_in_folder",
   DELETE_SPACE: "delete_space",
   DELETE_FOLDER: "delete_folder",
 

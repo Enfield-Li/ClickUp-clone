@@ -11,10 +11,10 @@ import React, { memo, useEffect, useRef } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { deleteSpace } from "../../../networkCalls";
-import { Space, UpdateTeamActivityDTO } from "../../../types";
+import { FolderCategory, Space, UpdateTeamActivityDTO } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 import { deleteItemAndUpdateTeamActivity } from "./updateTeamActivity";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import useAuthContext from "../../../context/auth/useAuthContext";
 
@@ -32,7 +32,7 @@ export const mainOptions = [
 type Props = {
   space: Space;
   listId?: number;
-  folderId?: number;
+  folder?: FolderCategory;
   children: React.ReactNode;
 };
 
@@ -40,14 +40,15 @@ export default memo(RightClickShowSpaceOptions);
 function RightClickShowSpaceOptions({
   space,
   listId,
-  folderId,
+  folder,
   children,
 }: Props) {
   const navigate = useNavigate();
   const toast = useUnImplementedToast();
   const { authState } = useAuthContext();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
   const ref = useRef<HTMLElement | null>(null);
+  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { listId: listIdUrlParam, spaceId: spaceIdUrlParam } = useParams();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
     isOpen: isChildOpen,
@@ -65,7 +66,7 @@ function RightClickShowSpaceOptions({
   }
 
   function deleteCurrentItem() {
-    const propsValue = { space, listId, folderId };
+    const propsValue = { space, listId, folder };
 
     const newUrlLocation = deleteItemAndUpdateTeamActivity({
       userId: authState.user!.id,
@@ -73,9 +74,11 @@ function RightClickShowSpaceOptions({
       teamStateDispatch,
       propsValue,
     });
+    console.log(newUrlLocation.listId);
 
     const isNewLocation =
-      newUrlLocation.spaceId !== space.id && newUrlLocation.listId !== listId;
+      newUrlLocation.spaceId !== Number(listIdUrlParam) &&
+      newUrlLocation.listId !== Number(spaceIdUrlParam);
     if (isNewLocation) {
       navigate(getTaskBoardURL(newUrlLocation), {
         state: {
@@ -86,7 +89,7 @@ function RightClickShowSpaceOptions({
   }
 
   function renameItem() {
-    console.log("renameItem", { space, folderId, listId });
+    console.log("renameItem", { space, folder, listId });
   }
 
   return (
@@ -120,7 +123,7 @@ function RightClickShowSpaceOptions({
         {/* Create new */}
         <AddMoreItemPopover
           space={space}
-          folderId={folderId}
+          folderId={folder?.id}
           isPopoverOpen={isChildOpen}
           onPopoverOpen={onChildOpen}
           onPopoverClose={onChildClose}

@@ -64,7 +64,7 @@ function Folder({ space, folder }: Props) {
 
   return (
     <>
-      <RightClickShowSpaceOptions space={space} folderId={folder.id}>
+      <RightClickShowSpaceOptions space={space} folder={folder}>
         <Flex
           pl="3"
           p="5px"

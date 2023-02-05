@@ -122,6 +122,52 @@ export default function teamReducer(
       });
     }
 
+    case TEAM_STATE_ACTION.DELETE_FOLDER: {
+      return produce(teamState, (draftState) => {
+        const { deletedFolderId, nextListId } = action.payload;
+
+        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+
+        draftState.originalTeams.forEach((team) =>
+          team.spaces.forEach((space) => {
+            space.folderCategories.forEach(
+              (folder, index, arr) =>
+                folder.id === deletedFolderId && arr.splice(index, 1)
+            );
+            space.allListOrFolder.forEach(
+              (folder, index, arr) =>
+                folder.id === deletedFolderId && arr.splice(index, 1)
+            );
+          })
+        );
+
+        syncTeamStateActivity(draftState);
+      });
+    }
+
+    case TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE: {
+      return produce(teamState, (draftState) => {
+        const { nextListId, deletedListId } = action.payload;
+
+        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+
+        // delete original
+        draftState.originalTeams.forEach((team) =>
+          team.spaces.forEach((space) => {
+            space.allListOrFolder.forEach(
+              (listOrFolder, index, arr) =>
+                listOrFolder.id === deletedListId && arr.splice(index, 1)
+            );
+            space.listCategories.forEach(
+              (listOrFolder, index, arr) =>
+                listOrFolder.id === deletedListId && arr.splice(index, 1)
+            );
+          })
+        );
+        syncTeamStateActivity(draftState);
+      });
+    }
+
     case TEAM_STATE_ACTION.DELETE_SPACE: {
       return produce(teamState, (draftState) => {
         const { nextSpaceId, nextListId, deletedSpaceId } = action.payload;
