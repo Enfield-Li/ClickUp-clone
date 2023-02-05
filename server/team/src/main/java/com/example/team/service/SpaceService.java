@@ -34,18 +34,18 @@ public class SpaceService {
     @Transactional
     public Space createSpace(CreateSpaceDTO createSpaceDTO) {
         try {
+            var teamId = createSpaceDTO.teamId();
             var userInfo = userInfoService.getCurrentUserInfo();
             var newSpace = Space.convertFromCreateSpaceDTO(createSpaceDTO, userInfo);
 
             // bind team
-            var teamReference = findTeamReference(createSpaceDTO.teamId());
+            var teamReference = entityManager.getReference(Team.class, teamId);
             teamReference.addSpace(newSpace);
 
             var space = repository.save(newSpace);
 
             // publish event
             var spaceId = space.getId();
-            var teamId = createSpaceDTO.teamId();
             var listId = space.getListCategories().stream()
                     .findFirst().get().getId();
             var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
@@ -70,13 +70,14 @@ public class SpaceService {
         }
     }
 
-    private Team findTeamReference(Integer teamId) {
-        return entityManager.getReference(Team.class, teamId);
-    }
-
     @Transactional
-    public Boolean deleteSpace(Integer spaceId) {
-        var space = entityManager.find(Space.class, spaceId);
+    public Boolean deleteSpace(Integer spaceId, UpdateTeamActivityDTO dto) {
+        var isSpaceExists = repository.existsById(spaceId);
+        if (!isSpaceExists) {
+            throw new InvalidRequestException("This space no longer exists");
+        }
+
+        var space = entityManager.getReference(Space.class, spaceId);
         var teamId = space.getTeamId();
         var userId = space.getCreatorId();
 

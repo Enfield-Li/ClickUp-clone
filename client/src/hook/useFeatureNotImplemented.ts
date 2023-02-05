@@ -3,7 +3,7 @@ import React from "react";
 
 export default function useUnImplementedToast() {
   return useToast({
-    status: "info",
+    status: "error",
     title: "Nope",
     description: "I haven't implemented this feature yet...",
   });

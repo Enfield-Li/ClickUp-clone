@@ -8,6 +8,7 @@ import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.ListCategory;
 import com.example.team.model.Space;
+import com.example.team.model.UserInfo;
 import com.example.team.repository.ListCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -60,7 +61,8 @@ public class ListCategoryService {
         var teamId = space.getTeamId();
         var listId = listCategory.getId();
         var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, null, null, listId, userInfo.getUserId());
+                teamId, null, null,
+                listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 teamActivityRoutingKey,
@@ -91,8 +93,33 @@ public class ListCategoryService {
                 FolderCategory.class, FolderCategoryId);
     }
 
-    public Boolean deleteList(Integer listId) {
+    @Transactional
+    public Boolean deleteListCategory(
+            Integer listCategoryId, UpdateTeamActivityDTO dto) {
+        var isListCategoryExists = repository.existsById(listCategoryId);
+        if (!isListCategoryExists) {
+            throw new InvalidRequestException("This list no longer exists");
+        }
 
+        var listCategory = entityManager.getReference(
+                ListCategory.class, listCategoryId);
+        var folderId = listCategory.getParentFolderId();
+        var spaceId = listCategory.getSpaceId();
+        var userId = listCategory.getCreatorId();
+
+        if (folderId != null) {
+            var folderCategory = entityManager.find(
+                    FolderCategory.class, folderId);
+            folderCategory.removeListCategory(listCategory);
+        }
+
+        var space = entityManager.getReference(Space.class, spaceId);
+        space.removeListCategory(listCategory);
+
+        var user = entityManager.getReference(UserInfo.class, userId);
+        user.removeJoinedListCategory(listCategory);
+
+        entityManager.remove(listCategory);
         return true;
     }
 

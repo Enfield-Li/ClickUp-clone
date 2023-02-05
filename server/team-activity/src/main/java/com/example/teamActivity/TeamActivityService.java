@@ -73,7 +73,7 @@ public class TeamActivityService {
             }
         }
 
-        if (!folderIds.isEmpty()) {
+        if (folderIds != null && !folderIds.isEmpty()) {
             folderIds.forEach(folderId -> {
                 var isFolderIdExists = teamActivity.getFolderIds().contains(folderId);
                 if (isFolderIdExists) {

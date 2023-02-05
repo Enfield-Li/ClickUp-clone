@@ -71,16 +71,18 @@ public class FolderCategory {
     @Column(updatable = false, insertable = false)
     private Integer spaceId;
 
-    @NotNull
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Space space;
 
     @Builder.Default
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "folderCategory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "folderCategory",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true)
     private Set<ListCategory> allLists = new HashSet<>();
 
     public void addMember(UserInfo userInfo) {
@@ -101,6 +103,10 @@ public class FolderCategory {
     public void removeListCategory(ListCategory listCategory) {
         allLists.remove(listCategory);
         listCategory.setFolderCategory(null);
+    }
+
+    public void removeAllListCategory() {
+        allLists.forEach(this::removeListCategory);
     }
 
     public static FolderCategory convertFromCreateFolderDTO(

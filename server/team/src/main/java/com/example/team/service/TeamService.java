@@ -5,17 +5,22 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.teamActivity.CreateTeamActivityDTO;
 import com.example.clients.teamActivity.TeamActivityClient;
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
+import com.example.team.model.UserInfo;
 import com.example.team.repository.SpaceRepository;
 import com.example.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
@@ -26,6 +31,7 @@ import static com.example.amqp.ExchangeKey.internalExchange;
 public class TeamService {
 
     private final TeamRepository repository;
+    private final EntityManager entityManager;
     private final SpaceRepository spaceRepository;
     private final UserInfoService userInfoService;
     private final TeamActivityClient teamActivityClient;
@@ -34,6 +40,8 @@ public class TeamService {
 
     @Transactional
     public InitTeamListDTO getAllTeams(Integer teamId) {
+        verifyTeamExist(teamId);
+
         var userId = userInfoService.getCurrentUserInfo().getUserId();
         var teamSet = repository.findByMembersUserId(userId);
 
@@ -75,5 +83,26 @@ public class TeamService {
                 updateUserJoinedTeamsDTO);
 
         return new CreateTeamResponseDTO(team, teamActivityDTO);
+    }
+
+    @Transactional
+    public Boolean deleteTeam(Integer teamId, UpdateTeamActivityDTO dto) {
+        verifyTeamExist(teamId);
+
+        var team = entityManager.getReference(Team.class, teamId);
+        var userId = team.getOwnerId();
+
+        var user = entityManager.getReference(UserInfo.class, userId);
+        user.removeJoinedTeam(team);
+
+        entityManager.remove(team);
+        return true;
+    }
+
+    private void verifyTeamExist(Integer teamId) {
+        var isTeamExist = repository.existsById(teamId);
+        if (!isTeamExist) {
+            throw new InvalidRequestException("This team no longer exists");
+        }
     }
 }

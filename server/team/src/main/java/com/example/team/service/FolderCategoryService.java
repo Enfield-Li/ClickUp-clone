@@ -2,9 +2,11 @@ package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.teamActivity.UpdateTeamActivityDTO;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.Space;
+import com.example.team.model.UserInfo;
 import com.example.team.repository.FolderCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -55,8 +57,34 @@ public class FolderCategoryService {
         return folder;
     }
 
+    @Transactional
+    public Boolean deleteFolderCategory(
+            Integer folderCategoryId, UpdateTeamActivityDTO dto) {
+        var isFolderCategoryExists = repository.existsById(folderCategoryId);
+        if (!isFolderCategoryExists) {
+            throw new InvalidRequestException("This folder no longer exists");
+        }
+
+        var folderCategory = entityManager.getReference(
+                FolderCategory.class, folderCategoryId);
+        folderCategory.removeAllListCategory();
+        
+        var spaceId = folderCategory.getSpaceId();
+        var userId = folderCategory.getCreatorId();
+
+        var space = entityManager.getReference(Space.class, spaceId);
+        space.removeFolderCategory(folderCategory);
+
+        var user = entityManager.getReference(UserInfo.class, userId);
+        user.removeJoinedFolderCategory(folderCategory);
+
+        entityManager.remove(folderCategory);
+        return true;
+    }
+
     private Space getSpaceReference(Integer spaceId) {
         return entityManager.getReference(Space.class, spaceId);
     }
+
 
 }

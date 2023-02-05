@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.ListCategory;
 import com.example.team.service.ListCategoryService;
@@ -12,7 +13,7 @@ import static com.example.clients.UrlConstants.LIST_API_VERSION;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "ListCategory")
+@Tag(name = "List")
 @RequestMapping(LIST_API_VERSION)
 class ListCategoryController {
 
@@ -25,10 +26,11 @@ class ListCategoryController {
         return ResponseEntity.ok(list);
     }
 
-    @DeleteMapping("{listId}")
-    public ResponseEntity<Boolean> deleteList(
-            @PathVariable("listId") Integer listId) {
-        var deleted = service.deleteList(listId);
+    @DeleteMapping("/{listId}")
+    public ResponseEntity<Boolean> deleteListCategory(
+            @PathVariable("listId") Integer listId,
+            @RequestBody UpdateTeamActivityDTO dto) {
+        var deleted = service.deleteListCategory(listId, dto);
         return ResponseEntity.ok(deleted);
     }
 }

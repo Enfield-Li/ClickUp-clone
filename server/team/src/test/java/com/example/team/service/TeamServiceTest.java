@@ -16,7 +16,6 @@ import com.example.team.model.UserInfo;
 import com.example.team.repository.SpaceRepository;
 import com.example.team.repository.TeamRepository;
 import org.assertj.core.api.WithAssertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -69,16 +68,16 @@ public class TeamServiceTest implements WithAssertions {
     @Captor
     ArgumentCaptor<CreateTeamActivityDTO> updateDefaultTeamInCreationDTOCaptor;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new TeamService(
-                teamRepository,
-                spaceRepository,
-                userInfoService,
-                teamActivityClient,
-                statusCategoryClient,
-                rabbitMQMessageProducer);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        underTest = new TeamService(
+//                teamRepository,
+//                spaceRepository,
+//                userInfoService,
+//                teamActivityClient,
+//                statusCategoryClient,
+//                rabbitMQMessageProducer);
+//    }
 
     @Test
     void test_create_team_should_pass() {

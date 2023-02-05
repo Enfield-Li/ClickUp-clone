@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateTeamDTO;
 import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
@@ -35,10 +36,11 @@ class TeamController {
         return ResponseEntity.ok(createTeamResponseDTO);
     }
 
-    // @PostMapping("/init_team")
-    // ResponseEntity<Boolean> initTeam(@RequestBody UserInfo userInfo) {
-
-    //     var created = teamService.initTeam(userInfo);
-    //     return ResponseEntity.ok(true);
-    // }
+    @DeleteMapping("/{teamId}")
+    ResponseEntity<Boolean> deleteTeam(
+            @PathVariable("teamId") Integer teamId,
+            @RequestBody UpdateTeamActivityDTO dto) {
+        var deleted = service.deleteTeam(teamId, dto);
+        return ResponseEntity.ok(deleted);
+    }
 }

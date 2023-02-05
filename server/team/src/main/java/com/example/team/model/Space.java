@@ -57,7 +57,7 @@ public class Space {
 
     @NotNull
     @JoinColumn(name = "creatorId")
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToOne(cascade = CascadeType.ALL)
     private UserInfo creator;
 
     @Column(updatable = false, insertable = false)
@@ -67,7 +67,7 @@ public class Space {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "teamId")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Team team;
 
     @Builder.Default

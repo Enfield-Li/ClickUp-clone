@@ -142,13 +142,14 @@ function AddMoreItemPopover({
                 opacity={
                   option === "List" || option === "Folder" ? "80%" : "40%"
                 }
-                onClick={(e) =>
+                onClick={(e) => {
+                  e.stopPropagation();
                   option === "List"
                     ? handleOpenCreateListModal(e)
                     : option === "Folder"
                     ? handleOpenCreateFolderModal(e)
-                    : toast()
-                }
+                    : toast();
+                }}
                 cursor={
                   option === "List" || option === "Folder"
                     ? "pointer"

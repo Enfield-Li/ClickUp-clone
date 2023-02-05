@@ -76,11 +76,10 @@ public class ListCategory {
     @Column(updatable = false, insertable = false)
     private Integer spaceId;
 
-    @NotNull
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Space space;
 
     @Column(updatable = false, insertable = false)
