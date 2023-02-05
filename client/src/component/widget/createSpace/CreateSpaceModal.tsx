@@ -36,8 +36,8 @@ function CreateSpaceModal({}: Props) {
   }
 
   useEffect(() => {
-    if (isCreateSpaceModalOpen) {
-      const team = teamState.teamsForRender.find((team) => team.isSelected);
+    const team = teamState.teamsForRender.find((team) => team.isSelected);
+    if (isCreateSpaceModalOpen && team?.spaces.length) {
       if (!team) {
         throw new Error("Can not find team when create folder");
       }

@@ -115,9 +115,28 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.OPEN_SPACE: {
       return produce(teamState, (draftState) => {
         const { spaceId } = action.payload;
+        console.log("open space: ", spaceId);
 
         draftState.teamActiveStatus.spaceId =
           draftState.teamActiveStatus.spaceId === spaceId ? null : spaceId;
+        syncTeamStateActivity(draftState);
+      });
+    }
+
+    case TEAM_STATE_ACTION.DELETE_SPACE: {
+      return produce(teamState, (draftState) => {
+        const { nextSpaceId, nextListId, deletedSpaceId } = action.payload;
+
+        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+        nextSpaceId && (draftState.teamActiveStatus.spaceId = nextSpaceId);
+
+        // delete original
+        draftState.originalTeams.forEach((team) =>
+          team.spaces.forEach(
+            (space, index, arr) =>
+              space.id === deletedSpaceId && arr.splice(index, 1)
+          )
+        );
         syncTeamStateActivity(draftState);
       });
     }

@@ -60,13 +60,13 @@ public class ListCategoryService {
 
         var teamId = space.getTeamId();
         var listId = listCategory.getId();
-        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
+        var updateTeamActivityDTO = new UpdateTeamActivityDTO(
                 teamId, null, null,
                 listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 teamActivityRoutingKey,
-                UpdateTeamActivityDTO);
+                updateTeamActivityDTO);
 
         return listCategory;
     }
@@ -95,7 +95,8 @@ public class ListCategoryService {
 
     @Transactional
     public Boolean deleteListCategory(
-            Integer listCategoryId, UpdateTeamActivityDTO dto) {
+            Integer listCategoryId,
+            UpdateTeamActivityDTO updateTeamActivityDTO) {
         var isListCategoryExists = repository.existsById(listCategoryId);
         if (!isListCategoryExists) {
             throw new InvalidRequestException("This list no longer exists");
@@ -120,6 +121,11 @@ public class ListCategoryService {
         user.removeJoinedListCategory(listCategory);
 
         entityManager.remove(listCategory);
+
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                teamActivityRoutingKey,
+                updateTeamActivityDTO);
         return true;
     }
 

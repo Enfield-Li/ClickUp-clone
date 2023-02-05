@@ -47,19 +47,20 @@ public class FolderCategoryService {
         var teamId = space.getTeamId();
         var listId = folder.getAllLists().stream()
                 .findFirst().get().getId();
-        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
+        var updateTeamActivityDTO = new UpdateTeamActivityDTO(
                 teamId, null, Set.of(folderId), listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 teamActivityRoutingKey,
-                UpdateTeamActivityDTO);
+                updateTeamActivityDTO);
 
         return folder;
     }
 
     @Transactional
     public Boolean deleteFolderCategory(
-            Integer folderCategoryId, UpdateTeamActivityDTO dto) {
+            Integer folderCategoryId,
+            UpdateTeamActivityDTO updateTeamActivityDTO) {
         var isFolderCategoryExists = repository.existsById(folderCategoryId);
         if (!isFolderCategoryExists) {
             throw new InvalidRequestException("This folder no longer exists");
@@ -68,7 +69,7 @@ public class FolderCategoryService {
         var folderCategory = entityManager.getReference(
                 FolderCategory.class, folderCategoryId);
         folderCategory.removeAllListCategory();
-        
+
         var spaceId = folderCategory.getSpaceId();
         var userId = folderCategory.getCreatorId();
 
@@ -79,6 +80,11 @@ public class FolderCategoryService {
         user.removeJoinedFolderCategory(folderCategory);
 
         entityManager.remove(folderCategory);
+
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                teamActivityRoutingKey,
+                updateTeamActivityDTO);
         return true;
     }
 

@@ -11,8 +11,11 @@ import React, { memo, useEffect, useRef } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { deleteSpace } from "../../../networkCalls";
-import { Space } from "../../../types";
+import { Space, UpdateTeamActivityDTO } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
+import { deleteItemAndUpdateTeamActivity } from "./updateTeamActivity";
+import { useNavigate } from "react-router";
+import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
 export const mainOptions = [
   "Copy link",
@@ -39,6 +42,7 @@ function RightClickShowSpaceOptions({
   folderId,
   children,
 }: Props) {
+  const navigate = useNavigate();
   const toast = useUnImplementedToast();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const ref = useRef<HTMLElement | null>(null);
@@ -58,34 +62,24 @@ function RightClickShowSpaceOptions({
     onOpen();
   }
 
-  /* 
-  {
-	"teamActivity": {
-		"id": 1,
-		"listId": 18,
-		"spaceId": 4,
-		"teamId": 2,
-		"userId": 1,
-		"folderIds": [
-			3,
-			4,
-			6,
-			7,
-			8
-		]
-	}
-}
-   */
   function deleteCurrentItem() {
-    let nextActiveSpace: Space | undefined;
+    const propsValue = { space, listId, folderId };
 
-    teamState.originalTeams.forEach((team) => {
-      nextActiveSpace = team.spaces.find((space) => space.id !== space.id);
+    const newUrlLocation = deleteItemAndUpdateTeamActivity({
+      teamState,
+      teamStateDispatch,
+      propsValue,
     });
 
-    //   teamState.
-
-    // deleteSpace(space.id);
+    const isNewLocation =
+      newUrlLocation.spaceId !== space.id && newUrlLocation.listId !== listId;
+    if (isNewLocation) {
+      navigate(getTaskBoardURL(newUrlLocation), {
+        state: {
+          defaultStatusCategoryId: newUrlLocation.defaultStatusCategoryId,
+        },
+      });
+    }
   }
 
   function renameItem() {

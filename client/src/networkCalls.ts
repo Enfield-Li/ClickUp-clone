@@ -84,12 +84,14 @@ export async function updateUserDefaultTeamId(
 
 export async function deleteSpace(
   spaceId: number,
+  dto: UpdateTeamActivityDTO,
   onSuccess?: () => void,
   onFailure?: () => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.delete<boolean>(
-      API_ENDPOINT.SPACE + `/${spaceId}`
+      API_ENDPOINT.SPACE + `/${spaceId}`,
+      { data: dto }
     );
 
     onSuccess && onSuccess();

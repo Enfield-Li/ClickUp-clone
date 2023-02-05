@@ -48,12 +48,12 @@ public class SpaceService {
             var spaceId = space.getId();
             var listId = space.getListCategories().stream()
                     .findFirst().get().getId();
-            var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
+            var updateTeamActivityDTO = new UpdateTeamActivityDTO(
                     teamId, spaceId, null, listId, userInfo.getUserId());
             rabbitMQMessageProducer.publish(
                     internalExchange,
                     teamActivityRoutingKey,
-                    UpdateTeamActivityDTO);
+                    updateTeamActivityDTO);
 
             return space;
         } catch (DataIntegrityViolationException e) {
@@ -71,7 +71,8 @@ public class SpaceService {
     }
 
     @Transactional
-    public Boolean deleteSpace(Integer spaceId, UpdateTeamActivityDTO dto) {
+    public Boolean deleteSpace(
+            Integer spaceId, UpdateTeamActivityDTO updateTeamActivityDTO) {
         var isSpaceExists = repository.existsById(spaceId);
         if (!isSpaceExists) {
             throw new InvalidRequestException("This space no longer exists");
@@ -88,6 +89,11 @@ public class SpaceService {
         team.removeSpace(space);
 
         entityManager.remove(space);
+
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                teamActivityRoutingKey,
+                updateTeamActivityDTO);
         return true;
     }
 }

@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.*;
 
 @Log4j2
 @Service
@@ -86,7 +85,8 @@ public class TeamService {
     }
 
     @Transactional
-    public Boolean deleteTeam(Integer teamId, UpdateTeamActivityDTO dto) {
+    public Boolean deleteTeam(
+            Integer teamId, UpdateTeamActivityDTO updateTeamActivityDTO) {
         verifyTeamExist(teamId);
 
         var team = entityManager.getReference(Team.class, teamId);
@@ -96,6 +96,11 @@ public class TeamService {
         user.removeJoinedTeam(team);
 
         entityManager.remove(team);
+
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                teamActivityRoutingKey,
+                updateTeamActivityDTO);
         return true;
     }
 
