@@ -115,7 +115,6 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.OPEN_SPACE: {
       return produce(teamState, (draftState) => {
         const { spaceId } = action.payload;
-        console.log("open space: ", spaceId);
 
         draftState.teamActiveStatus.spaceId =
           draftState.teamActiveStatus.spaceId === spaceId ? null : spaceId;

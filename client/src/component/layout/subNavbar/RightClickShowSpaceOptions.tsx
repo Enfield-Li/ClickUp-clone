@@ -16,6 +16,7 @@ import AddMoreItemPopover from "./AddMoreItemPopover";
 import { deleteItemAndUpdateTeamActivity } from "./updateTeamActivity";
 import { useNavigate } from "react-router";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
+import useAuthContext from "../../../context/auth/useAuthContext";
 
 export const mainOptions = [
   "Copy link",
@@ -44,6 +45,7 @@ function RightClickShowSpaceOptions({
 }: Props) {
   const navigate = useNavigate();
   const toast = useUnImplementedToast();
+  const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const ref = useRef<HTMLElement | null>(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -66,6 +68,7 @@ function RightClickShowSpaceOptions({
     const propsValue = { space, listId, folderId };
 
     const newUrlLocation = deleteItemAndUpdateTeamActivity({
+      userId: authState.user!.id,
       teamState,
       teamStateDispatch,
       propsValue,

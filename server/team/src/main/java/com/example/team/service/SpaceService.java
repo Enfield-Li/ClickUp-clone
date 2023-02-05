@@ -80,9 +80,9 @@ public class SpaceService {
 
         var space = entityManager.getReference(Space.class, spaceId);
         var teamId = space.getTeamId();
-        var userId = space.getCreatorId();
+        var creatorId = space.getCreatorId();
 
-        var user = entityManager.getReference(UserInfo.class, userId);
+        var user = entityManager.getReference(UserInfo.class, creatorId);
         user.removeJoinedSpace(space);
 
         var team = entityManager.getReference(Team.class, teamId);

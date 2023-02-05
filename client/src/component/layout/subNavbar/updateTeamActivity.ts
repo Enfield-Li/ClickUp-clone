@@ -6,8 +6,10 @@ import {
   TEAM_STATE_ACTION,
   UpdateTeamActivityDTO,
 } from "../../../types";
+import determineListType from "./folderAndList/determineList";
 
 type UpdateTeamActivityParam = {
+  userId: number;
   teamState: TeamStateType;
   teamStateDispatch: React.Dispatch<TeamStateActionType>;
   propsValue: {
@@ -37,8 +39,6 @@ export function deleteItemAndUpdateTeamActivity({
   const isListInFolder = Boolean(folderId && listId);
 
   if (isSpace) {
-    console.log(teamState.teamActiveStatus);
-    console.log(space.folderCategories);
     // purge current opened folder
     space.allListOrFolder.forEach((folderCategory) => {
       if (teamState.teamActiveStatus.folderIds.includes(folderCategory.id)) {
@@ -46,16 +46,15 @@ export function deleteItemAndUpdateTeamActivity({
       }
     });
 
+    // define next opened space/list
     teamState.originalTeams.forEach((team) => {
-      if (
-        team.id === space.teamId &&
-        space.id === teamState.teamActiveStatus.spaceId
-      ) {
-        // define next opened space/list
+      const isCurrentTeam = team.id === space.teamId;
+      if (isCurrentTeam) {
         const nextActiveSpace = team.spaces.find(
           (currentSpace) => currentSpace.id !== space.id
         );
-        const nextActiveList = nextActiveSpace?.listCategories.find(Boolean);
+        const nextActiveList =
+          nextActiveSpace?.allListOrFolder.find(determineListType);
 
         defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
 

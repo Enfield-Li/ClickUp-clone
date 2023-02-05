@@ -55,6 +55,7 @@ public class TeamActivityService {
         if (userId == null && dto.userId() != null) {
             userId = dto.userId();
         }
+        if (userId == null) return;
 
         var teamActivity = repository
                 .findByTeamIdAndUserId(teamId, userId)
