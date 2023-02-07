@@ -85,10 +85,8 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    // deleteSpace(space.id, dto);
-    console.log(dto);
+    deleteSpace(space.id, dto);
 
-    // deleteSpace(space.id, dto);
     return { ...dto, defaultStatusCategoryId };
   }
 
@@ -117,7 +115,7 @@ export function deleteItemAndUpdateTeamActivity({
       dto.listId = nextActiveList?.id;
       defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
     } else {
-      dto.listId = teamState.teamActiveStatus.listId;
+      dto.listId = teamState.teamActiveStatus.listId || null;
     }
 
     teamStateDispatch({
@@ -129,8 +127,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    // deleteFolder(folderId, dto);
-    console.log(dto);
+    deleteFolder(folderId, dto);
 
     return {
       ...dto,
@@ -152,7 +149,7 @@ export function deleteItemAndUpdateTeamActivity({
       dto.listId = nextActiveList?.id;
       defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
     } else {
-      dto.listId = teamState.teamActiveStatus.listId;
+      dto.listId = teamState.teamActiveStatus.listId || null;
     }
 
     teamStateDispatch({
@@ -164,8 +161,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    // deleteList(listId, dto);
-    console.log(dto);
+    deleteList(listId, dto);
 
     return {
       ...dto,
@@ -207,7 +203,7 @@ export function deleteItemAndUpdateTeamActivity({
           nextActiveListInSpace?.defaultStatusCategoryId;
       }
     } else {
-      dto.listId = teamState.teamActiveStatus.listId;
+      dto.listId = teamState.teamActiveStatus.listId || null;
     }
 
     teamStateDispatch({
@@ -220,8 +216,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    // deleteList(listId, dto);
-    console.log(dto);
+    deleteList(listId, dto);
 
     return {
       ...dto,

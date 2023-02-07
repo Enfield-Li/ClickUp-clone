@@ -386,7 +386,7 @@ export type TeamActivity = {
 export type TeamActiveStatus = {
   teamId: number;
   folderIds: number[];
-  listId: number | null;
+  listId?: number | null;
   spaceId: number | null;
 };
 

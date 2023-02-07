@@ -126,7 +126,7 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { deletedFolderId, nextListId } = action.payload;
 
-        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+        draftState.teamActiveStatus.listId = nextListId;
 
         draftState.originalTeams.forEach((team) =>
           team.spaces.forEach((space) => {
@@ -149,7 +149,7 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { nextListId, deletedListId } = action.payload;
 
-        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+        draftState.teamActiveStatus.listId = nextListId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>
@@ -172,7 +172,7 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { nextListId, deletedListId, folderId } = action.payload;
 
-        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+        draftState.teamActiveStatus.listId = nextListId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>
@@ -204,8 +204,8 @@ export default function teamReducer(
       return produce(teamState, (draftState) => {
         const { nextSpaceId, nextListId, deletedSpaceId } = action.payload;
 
-        nextListId && (draftState.teamActiveStatus.listId = nextListId);
-        nextSpaceId && (draftState.teamActiveStatus.spaceId = nextSpaceId);
+        draftState.teamActiveStatus.listId = nextListId;
+        draftState.teamActiveStatus.spaceId = nextSpaceId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>

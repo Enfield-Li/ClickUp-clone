@@ -64,16 +64,16 @@ public class TeamActivityService {
                             "User's teamActivity somehow disappeared");
                 });
 
-        if (spaceId != null) {
-            var isToggleSpace = Objects.equals(
-                    teamActivity.getSpaceId(), spaceId);
-            if (isToggleSpace) {
-                teamActivity.setSpaceId(null);
-            } else {
-                teamActivity.setSpaceId(spaceId);
-            }
+        // update spaceId
+        var isToggleSpace = Objects.equals(
+                teamActivity.getSpaceId(), spaceId);
+        if (isToggleSpace) {
+            teamActivity.setSpaceId(null);
+        } else {
+            teamActivity.setSpaceId(spaceId);
         }
 
+        // update folderIds
         if (folderIds != null && !folderIds.isEmpty()) {
             folderIds.forEach(folderId -> {
                 var isFolderIdExists = teamActivity.getFolderIds().contains(folderId);
@@ -85,8 +85,7 @@ public class TeamActivityService {
             });
         }
 
-        if (listId != null) {
-            teamActivity.setListId(listId);
-        }
+        // update listId
+        teamActivity.setListId(listId);
     }
 }
