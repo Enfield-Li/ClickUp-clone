@@ -72,9 +72,12 @@ function CreateListModal({}: Props) {
     };
 
     createList(dto, (list) => {
-      if (folderId) list.parentFolderId = folderId;
-
       handleResetModalState();
+
+      if (folderId) {
+        list.parentFolderId = folderId;
+        list.spaceId = spaceId
+      }
       teamStateDispatch({
         type: TEAM_STATE_ACTION.CREATE_LIST,
         payload: list,

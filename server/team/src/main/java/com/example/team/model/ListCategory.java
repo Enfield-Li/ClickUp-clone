@@ -3,7 +3,6 @@ package com.example.team.model;
 import com.example.team.dto.CreateListDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -17,7 +16,7 @@ import static com.example.team.TeamServiceConstants.LIST_ORDER_INDEX_CONSTRAINT;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
@@ -85,9 +84,9 @@ public class ListCategory {
     @Column(updatable = false, insertable = false)
     private Integer parentFolderId;
 
-    @ManyToOne
     @JsonIgnore
     @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentFolderId")
     private FolderCategory folderCategory;
 

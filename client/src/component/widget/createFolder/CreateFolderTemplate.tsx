@@ -67,6 +67,10 @@ export default function CreateFolderTemplate({
         onCreateFolderModalClose();
         setCreateFolderState(initCreateFolderState);
 
+        folder.allLists.forEach((list) => {
+          list.spaceId = createFolderState.createFolderDTO.spaceId;
+          list.parentFolderId = folder.id;
+        });
         teamStateDispatch({
           type: TEAM_STATE_ACTION.CREATE_FOLDER,
           payload: folder,

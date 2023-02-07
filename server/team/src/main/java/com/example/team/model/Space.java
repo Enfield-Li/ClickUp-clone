@@ -75,8 +75,7 @@ public class Space {
     @OneToMany(mappedBy = "space",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+            orphanRemoval = true)
     private Set<FolderCategory> folderCategories = new HashSet<>();
 
     @Builder.Default
@@ -84,8 +83,7 @@ public class Space {
     @OneToMany(mappedBy = "space",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+            orphanRemoval = true)
     private Set<ListCategory> listCategories = new HashSet<>();
 
     @Builder.Default

@@ -39,20 +39,23 @@ public class FolderCategoryService {
         // bind space
         var space = getSpaceReference(spaceId);
         space.addFolderCategory(newFolderCategory);
-        space.addListCategory(newFolderCategory.getAllLists());
+//        space.addListCategory(newFolderCategory.getAllLists());
 
         var folder = repository.save(newFolderCategory);
 
         var folderId = folder.getId();
         var teamId = space.getTeamId();
-        var listId = folder.getAllLists().stream()
-                .findFirst().get().getId();
-        var updateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, Set.of(folderId), listId, userInfo.getUserId());
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                updateTeamActivityDTO);
+
+        if (folder.getAllLists().stream().findFirst().isPresent()) {
+            var listId = folder.getAllLists().stream().findFirst().get().getId();
+            var updateTeamActivityDTO = new UpdateTeamActivityDTO(
+                    teamId, spaceId, Set.of(folderId),
+                    listId, userInfo.getUserId());
+            rabbitMQMessageProducer.publish(
+                    internalExchange,
+                    teamActivityRoutingKey,
+                    updateTeamActivityDTO);
+        }
 
         return folder;
     }

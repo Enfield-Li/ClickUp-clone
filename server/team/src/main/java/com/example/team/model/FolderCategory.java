@@ -2,8 +2,8 @@ package com.example.team.model;
 
 import com.example.team.dto.CreateFolderDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -19,7 +19,7 @@ import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAIN
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = {
@@ -32,6 +32,7 @@ import static com.example.team.TeamServiceConstants.FOLDER_ORDER_INDEX_CONSTRAIN
                 "orderIndex"
         }, name = FOLDER_ORDER_INDEX_CONSTRAINT)
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class FolderCategory {
 
     @Id
@@ -106,10 +107,7 @@ public class FolderCategory {
     }
 
     public void removeAllListCategory() {
-        allLists.forEach(list -> {
-            list.setFolderCategory(null);
-        });
-        allLists.clear();
+        allLists.forEach(this::removeListCategory);
     }
 
     public static FolderCategory convertFromCreateFolderDTO(
