@@ -100,6 +100,10 @@ public class ListCategory {
         userInfo.getJoinedListCategories().remove(this);
     }
 
+    public void removeAllMembers() {
+        members.forEach(this::removeMember);
+    }
+
     public static ListCategory convertFromCreateListDTO(
             CreateListDTO dto, UserInfo userInfo) {
         var listCategory = ListCategory.builder()

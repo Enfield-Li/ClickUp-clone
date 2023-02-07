@@ -103,6 +103,10 @@ public class Space {
         userInfo.getJoinedSpaces().remove(this);
     }
 
+    public void removeAllMembers() {
+        members.forEach(this::removeMember);
+    }
+
     public void addFolderCategory(FolderCategory folderCategory) {
         folderCategories.add(folderCategory);
         folderCategory.setSpace(this);
@@ -121,6 +125,13 @@ public class Space {
     public void removeListCategory(ListCategory listCategory) {
         listCategories.remove(listCategory);
         listCategory.setSpace(null);
+    }
+
+    public void removeAllListCategories() {
+        for (ListCategory listCategory : listCategories) {
+            listCategory.removeAllMembers();
+            removeListCategory(listCategory);
+        }
     }
 
     public void addListCategory(Set<ListCategory> listCategories) {

@@ -6,7 +6,6 @@ import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.Space;
-import com.example.team.model.UserInfo;
 import com.example.team.repository.FolderCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -71,16 +70,12 @@ public class FolderCategoryService {
 
         var folderCategory = entityManager.getReference(
                 FolderCategory.class, folderCategoryId);
-        folderCategory.removeAllListCategory();
+        folderCategory.removeAllListCategories();
+        folderCategory.removeAllMembers();
 
         var spaceId = folderCategory.getSpaceId();
-        var userId = folderCategory.getCreatorId();
-
         var space = entityManager.getReference(Space.class, spaceId);
         space.removeFolderCategory(folderCategory);
-
-        var user = entityManager.getReference(UserInfo.class, userId);
-        user.removeJoinedFolderCategory(folderCategory);
 
         entityManager.remove(folderCategory);
 

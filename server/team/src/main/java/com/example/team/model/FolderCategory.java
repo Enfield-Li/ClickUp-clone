@@ -106,8 +106,15 @@ public class FolderCategory {
         listCategory.setFolderCategory(null);
     }
 
-    public void removeAllListCategory() {
-        allLists.forEach(this::removeListCategory);
+    public void removeAllListCategories() {
+        for (ListCategory listCategory : allLists) {
+            listCategory.removeAllMembers();
+            removeListCategory(listCategory);
+        }
+    }
+
+    public void removeAllMembers() {
+        members.forEach(this::removeMember);
     }
 
     public static FolderCategory convertFromCreateFolderDTO(

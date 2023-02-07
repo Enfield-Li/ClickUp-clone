@@ -8,7 +8,6 @@ import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.ListCategory;
 import com.example.team.model.Space;
-import com.example.team.model.UserInfo;
 import com.example.team.repository.ListCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -104,21 +103,19 @@ public class ListCategoryService {
 
         var listCategory = entityManager.getReference(
                 ListCategory.class, listCategoryId);
-        var folderId = listCategory.getParentFolderId();
-        var spaceId = listCategory.getSpaceId();
-        var userId = listCategory.getCreatorId();
+        listCategory.removeAllMembers();
 
+        var spaceId = listCategory.getSpaceId();
+        var folderId = listCategory.getParentFolderId();
+        
         if (folderId != null) {
             var folderCategory = entityManager.find(
                     FolderCategory.class, folderId);
             folderCategory.removeListCategory(listCategory);
+        } else {
+            var space = entityManager.getReference(Space.class, spaceId);
+            space.removeListCategory(listCategory);
         }
-
-        var space = entityManager.getReference(Space.class, spaceId);
-        space.removeListCategory(listCategory);
-
-        var user = entityManager.getReference(UserInfo.class, userId);
-        user.removeJoinedListCategory(listCategory);
 
         entityManager.remove(listCategory);
 
