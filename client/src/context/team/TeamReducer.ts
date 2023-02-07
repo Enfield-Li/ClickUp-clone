@@ -168,6 +168,38 @@ export default function teamReducer(
       });
     }
 
+    case TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER: {
+      return produce(teamState, (draftState) => {
+        const { nextListId, deletedListId, folderId } = action.payload;
+
+        nextListId && (draftState.teamActiveStatus.listId = nextListId);
+
+        // delete original
+        draftState.originalTeams.forEach((team) =>
+          team.spaces.forEach((space) => {
+            space.allListOrFolder.forEach(
+              (listOrFolder) =>
+                determineFolderType(listOrFolder) &&
+                listOrFolder.allLists.forEach(
+                  (list, index, arr) =>
+                    list.id === deletedListId && arr.splice(index, 1)
+                )
+            );
+
+            space.listCategories.forEach(
+              (listOrFolder) =>
+                determineFolderType(listOrFolder) &&
+                listOrFolder.allLists.forEach(
+                  (list, index, arr) =>
+                    list.id === deletedListId && arr.splice(index, 1)
+                )
+            );
+          })
+        );
+        syncTeamStateActivity(draftState);
+      });
+    }
+
     case TEAM_STATE_ACTION.DELETE_SPACE: {
       return produce(teamState, (draftState) => {
         const { nextSpaceId, nextListId, deletedSpaceId } = action.payload;

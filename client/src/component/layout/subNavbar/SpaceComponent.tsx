@@ -2,6 +2,7 @@ import {
   Box,
   Center,
   Flex,
+  Tooltip,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,6 +15,7 @@ import {
   UpdateTeamActivityDTO,
 } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
+import CreateMorePlusButton from "./folderAndList/CreateMorePlusButton";
 import SpaceContent from "./folderAndList/SpaceContent";
 import RightClickShowSpaceOptions from "./RightClickShowSpaceOptions";
 
@@ -118,20 +120,7 @@ function SpaceComponent({ space }: Props) {
                 onPopoverClose={onPopoverClose}
               >
                 {(hover || isPopoverOpen) && (
-                  <Center
-                    pb="1"
-                    mr="3"
-                    width="15px"
-                    height="15px"
-                    rounded="full"
-                    fontSize="15px"
-                    color="darkMain.200"
-                    fontWeight="extrabold"
-                    bgColor="lightMain.400"
-                    _hover={{ bgColor: "purple.500" }}
-                  >
-                    +
-                  </Center>
+                  <CreateMorePlusButton isSpace={true} />
                 )}
               </AddMoreItemPopover>
             </Flex>

@@ -47,7 +47,7 @@ function List({ space, folder, list }: Props) {
   }
 
   return (
-    <RightClickShowSpaceOptions space={space} listId={list.id} folder={folder}>
+    <RightClickShowSpaceOptions space={space} list={list} folder={folder}>
       <Flex
         pr="2"
         px="3px"

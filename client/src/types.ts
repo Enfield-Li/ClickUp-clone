@@ -464,16 +464,20 @@ type DeleteFolder = {
   payload: {
     deletedFolderId: number;
     // nextFolderId: number;
-    nextListId?: number;
+    nextListId?: number | null;
   };
 };
 type DeleteListInFolder = {
   type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER;
-  payload: { deletedListId: number; nextListId?: number; folderId: number };
+  payload: {
+    deletedListId: number;
+    nextListId?: number | null;
+    folderId: number;
+  };
 };
 type DeleteListInSpace = {
   type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE;
-  payload: { deletedListId: number; nextListId?: number };
+  payload: { deletedListId: number; nextListId?: number | null };
 };
 type DeleteTeam = {
   type: typeof TEAM_STATE_ACTION.DELETE_TEAM;
@@ -717,7 +721,7 @@ export type UpdateTeamActivityDTO = {
   teamId: number;
   spaceId?: number;
   folderIds?: number[];
-  listId?: number;
+  listId?: number | null;
 };
 
 export type UpdateStatusColumnDTO = {

@@ -2,6 +2,7 @@ import {
   Box,
   Center,
   Flex,
+  Tooltip,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import {
 } from "../../../../types";
 import AddMoreItemPopover from "../AddMoreItemPopover";
 import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
+import CreateMorePlusButton from "./CreateMorePlusButton";
 import List from "./List";
 
 type Props = {
@@ -117,22 +119,7 @@ function Folder({ space, folder }: Props) {
             onPopoverOpen={onPopoverOpen}
             onPopoverClose={onPopoverClose}
           >
-            {(hover || isPopoverOpen) && (
-              <Center
-                pb="1"
-                mr="7px"
-                width="15px"
-                height="15px"
-                rounded="full"
-                fontSize="15px"
-                color="darkMain.200"
-                fontWeight="extrabold"
-                bgColor="lightMain.400"
-                _hover={{ bgColor: "purple.500" }}
-              >
-                +
-              </Center>
-            )}
+            {(hover || isPopoverOpen) && <CreateMorePlusButton />}
           </AddMoreItemPopover>
         </Flex>
       </RightClickShowSpaceOptions>

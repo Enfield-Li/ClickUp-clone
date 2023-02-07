@@ -11,7 +11,12 @@ import React, { memo, useEffect, useRef } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { deleteSpace } from "../../../networkCalls";
-import { FolderCategory, Space, UpdateTeamActivityDTO } from "../../../types";
+import {
+  FolderCategory,
+  ListCategory,
+  Space,
+  UpdateTeamActivityDTO,
+} from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 import { deleteItemAndUpdateTeamActivity } from "./updateTeamActivity";
 import { useNavigate, useParams } from "react-router";
@@ -31,18 +36,13 @@ export const mainOptions = [
 
 type Props = {
   space: Space;
-  listId?: number;
+  list?: ListCategory;
   folder?: FolderCategory;
   children: React.ReactNode;
 };
 
 export default memo(RightClickShowSpaceOptions);
-function RightClickShowSpaceOptions({
-  space,
-  listId,
-  folder,
-  children,
-}: Props) {
+function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
   const navigate = useNavigate();
   const toast = useUnImplementedToast();
   const { authState } = useAuthContext();
@@ -66,7 +66,7 @@ function RightClickShowSpaceOptions({
   }
 
   function deleteCurrentItem() {
-    const propsValue = { space, listId, folder };
+    const propsValue = { space, list, folder };
 
     const newUrlLocation = deleteItemAndUpdateTeamActivity({
       userId: authState.user!.id,
@@ -74,10 +74,11 @@ function RightClickShowSpaceOptions({
       teamStateDispatch,
       propsValue,
     });
-    console.log(newUrlLocation.listId);
 
     const isNewLocation =
-      newUrlLocation.spaceId !== Number(listIdUrlParam) &&
+      //   newUrlLocation.spaceId &&
+      //   newUrlLocation.spaceId !== Number(listIdUrlParam) &&
+      //   newUrlLocation.listId &&
       newUrlLocation.listId !== Number(spaceIdUrlParam);
     if (isNewLocation) {
       navigate(getTaskBoardURL(newUrlLocation), {
@@ -89,7 +90,7 @@ function RightClickShowSpaceOptions({
   }
 
   function renameItem() {
-    console.log("renameItem", { space, folder, listId });
+    console.log("renameItem", { space, folder, list });
   }
 
   return (

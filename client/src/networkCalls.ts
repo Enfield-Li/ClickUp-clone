@@ -582,10 +582,14 @@ export async function fetchAllTasks(
   defaultStatusCategoryId: number
 ) {
   try {
+    const params = new URLSearchParams({
+      listId: String(listId),
+      defaultStatusCategoryId: String(defaultStatusCategoryId),
+    });
+
     const response =
       await axiosTaskServiceInstance.get<TaskListStatusCategoryDTO>(
-        API_ENDPOINT.TASK +
-          `?listId=${listId}&defaultStatusCategoryId=${defaultStatusCategoryId}`
+        API_ENDPOINT.TASK + `?${params}`
       );
 
     return response.data;
