@@ -80,6 +80,7 @@ public class SpaceService {
         var space = entityManager.getReference(Space.class, spaceId);
         space.removeAllMembers();
         space.removeAllListCategories();
+        space.removeAllFolderCategories();
 
         var teamId = space.getTeamId();
         var team = entityManager.getReference(Team.class, teamId);

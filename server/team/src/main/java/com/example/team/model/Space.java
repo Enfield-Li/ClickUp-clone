@@ -128,10 +128,18 @@ public class Space {
     }
 
     public void removeAllListCategories() {
-        for (ListCategory listCategory : listCategories) {
+        listCategories.forEach(listCategory -> {
             listCategory.removeAllMembers();
             removeListCategory(listCategory);
-        }
+        });
+    }
+
+    public void removeAllFolderCategories() {
+        folderCategories.forEach(folderCategory -> {
+            folderCategory.removeAllMembers();
+            removeFolderCategory(folderCategory);
+            folderCategory.removeAllListCategories();
+        });
     }
 
     public void addListCategory(Set<ListCategory> listCategories) {

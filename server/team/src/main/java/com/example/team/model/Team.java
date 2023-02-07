@@ -79,6 +79,10 @@ public class Team {
         userInfo.getJoinedTeams().remove(this);
     }
 
+    public void removeAllMembers() {
+        members.forEach(this::removeMember);
+    }
+
     public static Team initTeamCreation(
             CreateTeamDTO createTeamDTO, UserInfo userInfo) {
         var team = Team.builder()

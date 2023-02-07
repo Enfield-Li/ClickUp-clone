@@ -64,9 +64,6 @@ export default function teamReducer(
             team.spaces
               .sort((a, b) => a.orderIndex - b.orderIndex)
               .forEach((space) => {
-                space.listCategories = space.listCategories.filter(
-                  (list) => !list.parentFolderId
-                );
                 space.allListOrFolder.push(
                   ...space.folderCategories
                     .map((folder) => {

@@ -107,10 +107,10 @@ public class FolderCategory {
     }
 
     public void removeAllListCategories() {
-        for (ListCategory listCategory : allLists) {
+        allLists.forEach(listCategory -> {
             listCategory.removeAllMembers();
             removeListCategory(listCategory);
-        }
+        });
     }
 
     public void removeAllMembers() {

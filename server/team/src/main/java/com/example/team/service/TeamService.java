@@ -12,7 +12,6 @@ import com.example.team.dto.CreateTeamResponseDTO;
 import com.example.team.dto.InitTeamListDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
-import com.example.team.model.UserInfo;
 import com.example.team.repository.SpaceRepository;
 import com.example.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -90,10 +89,7 @@ public class TeamService {
         verifyTeamExist(teamId);
 
         var team = entityManager.getReference(Team.class, teamId);
-        var userId = team.getOwnerId();
-
-        var user = entityManager.getReference(UserInfo.class, userId);
-        user.removeJoinedTeam(team);
+        team.removeAllMembers();
 
         entityManager.remove(team);
 
