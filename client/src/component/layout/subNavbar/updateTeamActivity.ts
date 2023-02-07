@@ -1,3 +1,4 @@
+import { deleteFolder, deleteList, deleteSpace } from "../../../networkCalls";
 import {
   FolderCategory,
   ListCategory,
@@ -25,6 +26,7 @@ type UpdateTeamActivityParam = {
 };
 
 export function deleteItemAndUpdateTeamActivity({
+  userId,
   teamState,
   propsValue,
   teamStateDispatch,
@@ -35,9 +37,10 @@ export function deleteItemAndUpdateTeamActivity({
   const listId = list?.id;
   const folderId = folder?.id;
   const dto: UpdateTeamActivityDTO = {
+    userId,
     folderIds: [],
     listId: undefined,
-    spaceId: undefined,
+    spaceId: space.id,
     teamId: space.teamId,
   };
 
@@ -81,6 +84,8 @@ export function deleteItemAndUpdateTeamActivity({
       },
     });
 
+    // network call
+    // deleteSpace(space.id, dto);
     console.log(dto);
 
     // deleteSpace(space.id, dto);
@@ -123,11 +128,12 @@ export function deleteItemAndUpdateTeamActivity({
       },
     });
 
-    // TODO network call
+    // network call
+    // deleteFolder(folderId, dto);
+    console.log(dto);
 
     return {
       ...dto,
-      spaceId: space.id,
       defaultStatusCategoryId,
     };
   }
@@ -158,10 +164,11 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
+    // deleteList(listId, dto);
+    console.log(dto);
 
     return {
       ...dto,
-      spaceId: space.id,
       defaultStatusCategoryId,
     };
   }
@@ -179,12 +186,26 @@ export function deleteItemAndUpdateTeamActivity({
     // define next opened space/list
     const isListSelected = teamState.teamActiveStatus.listId === listId;
     if (isListSelected) {
-      const nextActiveList = parentFolder.allLists.find(
+      const nextActiveListInFolder = parentFolder.allLists.find(
         (list) => list.id !== listId
       );
 
-      dto.listId = nextActiveList?.id;
-      defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
+      if (nextActiveListInFolder) {
+        dto.listId = nextActiveListInFolder?.id;
+        defaultStatusCategoryId =
+          nextActiveListInFolder?.defaultStatusCategoryId;
+      } else {
+        const nextActiveListInSpace = space.allListOrFolder.find(
+          (listOrFolder) =>
+            determineListType(listOrFolder) &&
+            listOrFolder.parentFolderId !== folderId &&
+            listOrFolder.id !== listId
+        );
+
+        dto.listId = nextActiveListInSpace?.id;
+        defaultStatusCategoryId =
+          nextActiveListInSpace?.defaultStatusCategoryId;
+      }
     } else {
       dto.listId = teamState.teamActiveStatus.listId;
     }
@@ -199,9 +220,11 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
+    // deleteList(listId, dto);
+    console.log(dto);
+
     return {
       ...dto,
-      spaceId: space.id,
       defaultStatusCategoryId,
     };
   }

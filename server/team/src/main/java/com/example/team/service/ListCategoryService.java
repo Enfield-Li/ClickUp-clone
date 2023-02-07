@@ -61,7 +61,7 @@ public class ListCategoryService {
         var teamId = space.getTeamId();
         var listId = listCategory.getId();
         var updateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, null, null,
+                teamId, spaceId, null,
                 listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,

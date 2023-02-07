@@ -103,6 +103,48 @@ export async function deleteSpace(
   }
 }
 
+export async function deleteFolder(
+  folderId: number,
+  dto: UpdateTeamActivityDTO,
+  onSuccess?: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosTeamServiceInstance.delete<boolean>(
+      API_ENDPOINT.FOLDER + `/${folderId}`,
+      { data: dto }
+    );
+
+    onSuccess && onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
+export async function deleteList(
+  listId: number,
+  dto: UpdateTeamActivityDTO,
+  onSuccess?: () => void,
+  onFailure?: () => void
+) {
+  try {
+    const response = await axiosTeamServiceInstance.delete<boolean>(
+      API_ENDPOINT.LIST + `/${listId}`,
+      { data: dto }
+    );
+
+    onSuccess && onSuccess();
+  } catch (error) {
+    const err = error as AxiosError;
+    const response = err.response?.data as ErrorResponse;
+    console.log(response);
+    onFailure && onFailure();
+  }
+}
+
 export async function createSpaceForTeam(
   dto: CreateSpaceDTO,
   onSuccess: (data: Space) => void,

@@ -48,7 +48,7 @@ public class FolderCategoryService {
         var listId = folder.getAllLists().stream()
                 .findFirst().get().getId();
         var updateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, null, Set.of(folderId), listId, userInfo.getUserId());
+                teamId, spaceId, Set.of(folderId), listId, userInfo.getUserId());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 teamActivityRoutingKey,

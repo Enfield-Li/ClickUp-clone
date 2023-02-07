@@ -722,6 +722,7 @@ export type UpdateTeamActivityDTO = {
   spaceId?: number;
   folderIds?: number[];
   listId?: number | null;
+  userId?: number;
 };
 
 export type UpdateStatusColumnDTO = {

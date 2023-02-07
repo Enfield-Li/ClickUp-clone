@@ -69,10 +69,10 @@ function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
     const propsValue = { space, list, folder };
 
     const newUrlLocation = deleteItemAndUpdateTeamActivity({
-      userId: authState.user!.id,
       teamState,
-      teamStateDispatch,
       propsValue,
+      teamStateDispatch,
+      userId: authState.user!.id,
     });
 
     const isNewLocation =
