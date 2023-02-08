@@ -29,9 +29,7 @@ function JoinedTeamList({ onClose }: Props) {
     onClose();
 
     updateUserDefaultTeamId(teamId);
-    navigate(getTaskBoardURL({ teamId }), {
-      state: {},
-    });
+    navigate(getTaskBoardURL({ teamId }));
 
     // Performance hack
     setTimeout(() => {

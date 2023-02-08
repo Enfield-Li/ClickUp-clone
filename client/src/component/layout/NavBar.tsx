@@ -45,23 +45,27 @@ function NavBar({}: Props) {
         Number(teamId),
         (teams) => {
           const initTeamActivity: TeamActiveStatus = {
-            teamId: teams[0].id!,
+            teamId: Number(teamId),
             spaceId: 0,
             listId: 0,
             folderIds: [],
           };
-          const storedUserActivity = localStorage.getItem(TEAM_ACTIVITY);
+          const storedUserActivity = localStorage.getItem(
+            `${TEAM_ACTIVITY}_${teamId}`
+          );
 
           const userActivity = storedUserActivity
             ? (JSON.parse(storedUserActivity) as TeamActiveStatus)
             : initTeamActivity;
-          let { listId, teamId, spaceId } = userActivity;
+          let { listId, spaceId } = userActivity;
 
           let defaultStatusCategoryId;
           if (listId) {
+            console.log(listId);
+
             teams.forEach(
               (team) =>
-                team.id === teamId &&
+                team.id === Number(teamId) &&
                 team.spaces.forEach((space) => {
                   space.listCategories.forEach((listCategory) => {
                     if (listCategory.id === listId) {
@@ -84,8 +88,11 @@ function NavBar({}: Props) {
             );
           }
 
+          console.log({ listId, spaceId });
+
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
             state: { defaultStatusCategoryId },
+            replace: true,
           });
 
           teamStateDispatch({

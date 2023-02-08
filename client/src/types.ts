@@ -375,7 +375,7 @@ export const AUTH_ACTION = {
 } as const;
 
 export type TeamActiveStatus = {
-  teamId: number;
+  teamId?: number;
   folderIds: number[];
   listId?: number | null;
   spaceId: number | null;

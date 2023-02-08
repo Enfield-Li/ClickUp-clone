@@ -19,7 +19,10 @@ export default function teamReducer(
   action: TeamStateActionType
 ) {
   function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
-    setTeamActiveStatusToLocalStorage(draftState.teamActiveStatus);
+    setTeamActiveStatusToLocalStorage(
+      draftState.teamActiveStatus.teamId,
+      draftState.teamActiveStatus
+    );
     const { spaceId, teamId, listId, folderIds } = draftState.teamActiveStatus;
     draftState.teamsForRender = deepCopy(draftState.originalTeams);
 
@@ -98,7 +101,6 @@ export default function teamReducer(
         const { teamId } = action.payload;
 
         draftState.teamActiveStatus.teamId = teamId;
-        syncTeamStateActivity(draftState);
       });
     }
 
