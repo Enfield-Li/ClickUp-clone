@@ -5,7 +5,7 @@ import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext
 import { SortBy } from "../../types";
 import TaskDetailsModal from "../taskModal/TaskDetailsModal";
 import TaskBoardView from "./TaskBoardView";
-import TaskSortingOptions from "./TaskSortingOptions";
+import TaskSortingOptions from "./filterOptions/TaskFilterView";
 
 type Props = {};
 

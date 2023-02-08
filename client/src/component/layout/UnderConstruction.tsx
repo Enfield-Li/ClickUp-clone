@@ -5,8 +5,18 @@ type Props = {};
 
 export default function UnderConstruction({}: Props) {
   return (
-    <Center textAlign="center" fontSize="xl" p={3} height="100vh" mt="-60px">
+    <Center
+      p={3}
+      mt="-60px"
+      fontSize="xl"
+      height="100vh"
+      flexDir="column"
+      textAlign="center"
+    >
       <Center>🛠🛠🛠 Under construction 🛠🛠🛠</Center>
+      <Center fontSize="small" opacity="55%">
+        (I'm not gonna implement this LOL)
+      </Center>
     </Center>
   );
 }

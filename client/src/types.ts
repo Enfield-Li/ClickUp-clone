@@ -270,7 +270,7 @@ export interface Category {
   isPrivate: boolean;
   members: UserInfo[];
   color: string | null;
-  defaultStatusCategoryId: number; // TODO: delete
+  defaultStatusCategoryId: number; 
 }
 export interface FolderCategory extends Category {
   isOpen: boolean | null; // client side

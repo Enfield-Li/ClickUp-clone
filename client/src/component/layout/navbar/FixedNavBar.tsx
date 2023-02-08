@@ -128,7 +128,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
             </NavIcon>
 
             {/* Dev test */}
-            <NavIcon name="test" url={CLIENT_ROUTE.TEST_DEV}>
+            {/* <NavIcon name="test" url={CLIENT_ROUTE.TEST_DEV}>
               {({ isActive }) => (
                 <>
                   {isActive ? (
@@ -138,7 +138,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
                   )}
                 </>
               )}
-            </NavIcon>
+            </NavIcon> */}
           </Center>
         </Box>
 

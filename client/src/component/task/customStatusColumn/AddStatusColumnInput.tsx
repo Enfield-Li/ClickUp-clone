@@ -34,7 +34,6 @@ function AddStatusColumnInput({
   onColorPalletClose,
 }: Props) {
   const { listId } = useParams();
-  const navigate = useNavigate();
   const [title, setTitle] = useState("");
 
   function createStatusColumn() {
@@ -48,7 +47,6 @@ function AddStatusColumnInput({
     const lastItemIndex = statusColumns.length - 1;
     const indexBeforeTheEnd = statusColumns.length - 2;
     const orderIndex = statusColumns[indexBeforeTheEnd].orderIndex + 1;
-    // TODO: orderIndex bug
 
     const dto: AddStatusColumnDTO = {
       color,

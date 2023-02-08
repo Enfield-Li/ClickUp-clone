@@ -31,13 +31,10 @@ function JoinedTeamList({ onClose }: Props) {
     updateUserDefaultTeamId(teamId);
     navigate(getTaskBoardURL({ teamId }));
 
-    // Performance hack
-    setTimeout(() => {
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.SELECT_TEAM,
-        payload: { teamId },
-      });
-    }, 100);
+    teamStateDispatch({
+      type: TEAM_STATE_ACTION.SELECT_TEAM,
+      payload: { teamId },
+    });
   }
 
   return (
