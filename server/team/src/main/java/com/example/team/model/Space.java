@@ -129,17 +129,19 @@ public class Space {
 
     public void removeAllListCategories() {
         listCategories.forEach(listCategory -> {
+            listCategory.setSpace(null);
             listCategory.removeAllMembers();
-            removeListCategory(listCategory);
         });
+        listCategories.clear();
     }
 
     public void removeAllFolderCategories() {
         folderCategories.forEach(folderCategory -> {
+            folderCategory.setSpace(null);
             folderCategory.removeAllMembers();
-            removeFolderCategory(folderCategory);
             folderCategory.removeAllListCategories();
         });
+        folderCategories.clear();
     }
 
     public void addListCategory(Set<ListCategory> listCategories) {

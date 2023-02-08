@@ -109,8 +109,9 @@ public class FolderCategory {
     public void removeAllListCategories() {
         allLists.forEach(listCategory -> {
             listCategory.removeAllMembers();
-            removeListCategory(listCategory);
+            listCategory.setFolderCategory(null);
         });
+        allLists.clear();
     }
 
     public void removeAllMembers() {

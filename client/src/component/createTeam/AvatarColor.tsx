@@ -108,7 +108,7 @@ export default function AvatarColor({
         backgroundImage={team.avatar}
         bgColor={!team.avatar ? team.color : ""}
       >
-        {!team.avatar && team.name[0].toUpperCase()}
+        {!team.avatar && (team.name ? team.name[0].toUpperCase() : "")}
       </Center>
 
       <Box ml="6" mt="6">
