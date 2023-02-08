@@ -613,10 +613,10 @@ export async function createTask(createTaskDTO: Task) {
 
 export async function createTeam(
   createTeamDTO: CreateTeamDTO,
-  onSuccess: (createTeamResponseDTO: CreateTeamResponseDTO) => void
+  onSuccess: (createTeamResponseDTO: Team) => void
 ) {
   try {
-    const response = await axiosTeamServiceInstance.post<CreateTeamResponseDTO>(
+    const response = await axiosTeamServiceInstance.post<Team>(
       API_ENDPOINT.TEAM,
       createTeamDTO
     );

@@ -37,9 +37,9 @@ export default function CreateTeamTemplate({
     }
 
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
-      createTeam(createTeamDTO, (createTeamResponseDTO) => {
-        const { teamId } = createTeamResponseDTO.teamActivity;
-        navigate(getTaskBoardURL(createTeamResponseDTO.teamActivity));
+      createTeam(createTeamDTO, (createdTeam) => {
+        const teamId = createdTeam.id!;
+        navigate(getTaskBoardURL({ teamId }));
         authDispatch({
           type: AUTH_ACTION.UPDATE_TEAM_COUNT,
           payload: { isAddTeam: true, teamId },
