@@ -11,6 +11,7 @@ import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusCategoryRepository;
+import com.example.teamStatusCategory.repository.StatusColumnRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class StatusCategoryService {
 
     private final EntityManager entityManager;
     private final StatusCategoryRepository repository;
+    private final StatusColumnRepository statusColumnRepository;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public List<StatusCategory> getStatusCategoryForTeam(Integer teamId) {
@@ -57,6 +59,7 @@ public class StatusCategoryService {
         return repository.save(createStatusCategory);
     }
 
+    @Transactional
     public AddStatusColumnResponseDTO cloneStatusCategoryForListCategory(
             AddStatusColumnDTO dto) {
         var title = dto.title();
@@ -70,6 +73,13 @@ public class StatusCategoryService {
         var originalStatusCategory = repository.findById(categoryId)
                 .orElseThrow(() -> new InternalErrorException(
                         "Error when creating statusColumn"));
+
+        if (originalStatusCategory.getTeamId() == null && originalStatusCategory.getName() == null) {
+            originalStatusCategory.addStatusColumn(statusColumn);
+            statusColumnRepository.saveAndFlush(statusColumn);
+            return new AddStatusColumnResponseDTO(
+                    originalStatusCategory.getId(), statusColumn.getId(), null);
+        }
 
         var statusCategory = new StatusCategory(originalStatusCategory);
         statusCategory.addStatusColumn(statusColumn);

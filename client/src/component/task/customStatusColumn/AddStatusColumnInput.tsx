@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { addStatusColumn } from "../../../networkCalls";
 import {
   AddStatusColumnDTO,
@@ -34,6 +34,7 @@ function AddStatusColumnInput({
   onColorPalletClose,
 }: Props) {
   const { listId } = useParams();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
 
   function createStatusColumn() {
@@ -75,16 +76,20 @@ function AddStatusColumnInput({
               0,
               newColumn
             );
-            draftState.columnOptions.statusColumns.forEach((column) => {
-              if (column.id !== statusColumnId) {
-                column.id = oldNewStatusPairs[column.id!];
-              }
-            });
-            draftState.orderedTasks.forEach((orderedTask) =>
-              orderedTask.taskList.forEach((task) => {
-                task.status.columnId = oldNewStatusPairs[task.status.columnId];
-              })
-            );
+
+            if (oldNewStatusPairs) {
+              draftState.columnOptions.statusColumns.forEach((column) => {
+                if (column.id !== statusColumnId) {
+                  column.id = oldNewStatusPairs[column.id!];
+                }
+              });
+              draftState.orderedTasks.forEach((orderedTask) =>
+                orderedTask.taskList.forEach((task) => {
+                  task.status.columnId =
+                    oldNewStatusPairs[task.status.columnId];
+                })
+              );
+            }
           });
         }
       });

@@ -3,6 +3,7 @@ export const BEARER = "Bearer ";
 export const ACCESS_TOKEN = "access token";
 export const TEAM_ACTIVITY = "team_activity";
 export const IS_SUB_NAV_OPEN = "is_sub_nav_open";
+export const CURRENT_STATUS_CATEGORY_ID = "current_status_category_id";
 
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost:8083",

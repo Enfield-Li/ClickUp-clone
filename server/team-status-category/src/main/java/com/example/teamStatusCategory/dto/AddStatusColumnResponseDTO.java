@@ -1,10 +1,11 @@
 package com.example.teamStatusCategory.dto;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 
 public record AddStatusColumnResponseDTO(
-        Integer statusCategoryId,
-        Integer statusColumnId,
+        @NotNull Integer statusCategoryId,
+        @NotNull Integer statusColumnId,
         HashMap<Integer, Integer> oldNewStatusPairs
 ) {
 }

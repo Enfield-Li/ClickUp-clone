@@ -8,7 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CLIENT_ROUTE, IS_SUB_NAV_OPEN, TEAM_ACTIVITY } from "../../constant";
+import {
+  CLIENT_ROUTE,
+  CURRENT_STATUS_CATEGORY_ID,
+  IS_SUB_NAV_OPEN,
+  TEAM_ACTIVITY,
+} from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { fetchTeamList } from "../../networkCalls";
@@ -59,10 +64,8 @@ function NavBar({}: Props) {
             : initTeamActivity;
           let { listId, spaceId } = userActivity;
 
-          let defaultStatusCategoryId;
+          let defaultStatusCategoryId: number | undefined;
           if (listId) {
-            console.log(listId);
-
             teams.forEach(
               (team) =>
                 team.id === Number(teamId) &&
@@ -87,8 +90,6 @@ function NavBar({}: Props) {
                 })
             );
           }
-
-          console.log({ listId, spaceId });
 
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
             state: { defaultStatusCategoryId },
