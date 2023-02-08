@@ -45,7 +45,11 @@ function NavBar({}: Props) {
 
   // init spaceListState
   useEffect(() => {
-    if (authState.user && teamId) {
+    if (
+      teamId &&
+      authState.user &&
+      location.pathname.includes(CLIENT_ROUTE.TASK_BOARD)
+    ) {
       fetchTeamList(
         Number(teamId),
         (teams) => {
@@ -95,7 +99,6 @@ function NavBar({}: Props) {
             state: { defaultStatusCategoryId },
             replace: true,
           });
-
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
             payload: { teams, teamActivity: userActivity },
@@ -106,7 +109,7 @@ function NavBar({}: Props) {
         }
       );
     }
-  }, [authState.user, teamId]);
+  }, [authState.user, teamId, location.pathname]);
 
   return (
     <Flex as="nav" onMouseOutCapture={isExpanded ? undefined : onClose}>
