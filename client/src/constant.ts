@@ -2,6 +2,7 @@
 export const BEARER = "Bearer ";
 export const ACCESS_TOKEN = "access token";
 export const TEAM_ACTIVITY = "team_activity";
+export const IS_SUB_NAV_OPEN = "is_sub_nav_open";
 
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost:8083",

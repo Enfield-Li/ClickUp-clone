@@ -1,7 +1,7 @@
 import { Box, Center, Divider, Flex, Image } from "@chakra-ui/react";
 import { memo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../constant";
+import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { logoDataUrl } from "../../../media/imgDataUrl";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
@@ -22,6 +22,7 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
   function handleOpenSubNavbar() {
     onOpen();
     setIsExpanded(true);
+    localStorage.setItem(IS_SUB_NAV_OPEN, JSON.stringify(true));
   }
 
   return (

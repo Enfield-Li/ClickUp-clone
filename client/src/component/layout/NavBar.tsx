@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CLIENT_ROUTE, TEAM_ACTIVITY } from "../../constant";
+import { CLIENT_ROUTE, IS_SUB_NAV_OPEN, TEAM_ACTIVITY } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { fetchTeamList } from "../../networkCalls";
@@ -27,12 +27,15 @@ function NavBar({}: Props) {
   const navigate = useNavigate();
   const { authState, authDispatch } = useAuthContext();
   const { teamStateDispatch } = useTeamStateContext();
-
   const collapsibleBG = useColorModeValue("white", "rgb(26, 32, 44)");
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const storedSubNavBarOpenState = localStorage.getItem(IS_SUB_NAV_OPEN);
+  const defaultOpenState = storedSubNavBarOpenState
+    ? JSON.parse(storedSubNavBarOpenState)
+    : false;
+  const [isExpanded, setIsExpanded] = useState(defaultOpenState);
   const { getDisclosureProps, isOpen, onClose, onOpen } = useDisclosure({
-    defaultIsOpen: false,
+    defaultIsOpen: defaultOpenState,
   });
 
   // init spaceListState
@@ -60,9 +63,9 @@ function NavBar({}: Props) {
               (team) =>
                 team.id === teamId &&
                 team.spaces.forEach((space) => {
-                  spaceId = space.id;
                   space.listCategories.forEach((listCategory) => {
                     if (listCategory.id === listId) {
+                      spaceId = space.id;
                       defaultStatusCategoryId =
                         listCategory.defaultStatusCategoryId;
                     }
@@ -71,6 +74,7 @@ function NavBar({}: Props) {
                   space.folderCategories.forEach((folderCategory) =>
                     folderCategory.allLists.forEach((listCategory) => {
                       if (listCategory.id === listId) {
+                        spaceId = space.id;
                         defaultStatusCategoryId =
                           listCategory.defaultStatusCategoryId;
                       }

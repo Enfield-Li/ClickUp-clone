@@ -8,7 +8,7 @@ import {
 import { motion } from "framer-motion";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../../constant";
+import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import SubNavbarContent from "./SubNavbarContent";
 
@@ -42,6 +42,7 @@ function SubNavbar({
   function handleCloseSubNavbar() {
     onClose();
     setIsExpanded(false);
+    localStorage.setItem(IS_SUB_NAV_OPEN, JSON.stringify(false));
   }
 
   return (
