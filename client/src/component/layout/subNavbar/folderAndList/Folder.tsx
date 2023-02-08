@@ -2,19 +2,12 @@ import {
   Box,
   Center,
   Flex,
-  Tooltip,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { updateTeamActivity } from "../../../../networkCalls";
-import {
-  FolderCategory,
-  Space,
-  TEAM_STATE_ACTION,
-  UpdateTeamActivityDTO,
-} from "../../../../types";
+import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
 import AddMoreItemPopover from "../AddMoreItemPopover";
 import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
 import CreateMorePlusButton from "./CreateMorePlusButton";
@@ -49,12 +42,6 @@ function Folder({ space, folder }: Props) {
       payload: { folderId },
       type: TEAM_STATE_ACTION.OPEN_FOLDER,
     });
-
-    const dto: UpdateTeamActivityDTO = {
-      teamId: teamState.teamActiveStatus.teamId,
-      folderIds: [folder.id],
-    };
-    updateTeamActivity(dto);
   }
 
   function handleAddCategory(

@@ -1,6 +1,5 @@
 package com.example.team.controller;
 
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.ListCategory;
 import com.example.team.service.ListCategoryService;
@@ -28,9 +27,8 @@ class ListCategoryController {
 
     @DeleteMapping("/{listId}")
     public ResponseEntity<Boolean> deleteListCategory(
-            @PathVariable("listId") Integer listId,
-            @RequestBody UpdateTeamActivityDTO dto) {
-        var deleted = service.deleteListCategory(listId, dto);
+            @PathVariable("listId") Integer listId) {
+        var deleted = service.deleteListCategory(listId);
         return ResponseEntity.ok(deleted);
     }
 }

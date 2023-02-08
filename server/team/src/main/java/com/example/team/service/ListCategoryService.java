@@ -2,7 +2,6 @@ package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.FolderCategory;
@@ -15,9 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 
 @Log4j2
 @Service
@@ -55,19 +51,7 @@ public class ListCategoryService {
         var space = findSpaceReference(spaceId);
         space.addListCategory(newListCategory);
 
-        var listCategory = repository.save(newListCategory);
-
-        var teamId = space.getTeamId();
-        var listId = listCategory.getId();
-        var updateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, null,
-                listId, userInfo.getUserId());
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                updateTeamActivityDTO);
-
-        return listCategory;
+        return repository.save(newListCategory);
     }
 
     @Transactional
@@ -76,11 +60,10 @@ public class ListCategoryService {
         var listCategoryId = dto.listCategoryId();
         var statusCategoryId = dto.statusCategoryId();
 
-        var listCategory = repository.findById(listCategoryId)
-                .orElse(null);
+        var listCategory = repository.findById(listCategoryId);
 
-        if (listCategory != null) {
-            listCategory.setDefaultStatusCategoryId(statusCategoryId);
+        if (listCategory.isPresent()) {
+            listCategory.get().setDefaultStatusCategoryId(statusCategoryId);
             return;
         }
 
@@ -93,9 +76,7 @@ public class ListCategoryService {
     }
 
     @Transactional
-    public Boolean deleteListCategory(
-            Integer listCategoryId,
-            UpdateTeamActivityDTO updateTeamActivityDTO) {
+    public Boolean deleteListCategory(Integer listCategoryId) {
         var isListCategoryExists = repository.existsById(listCategoryId);
         if (!isListCategoryExists) {
             throw new InvalidRequestException("This list no longer exists");
@@ -107,7 +88,7 @@ public class ListCategoryService {
 
         var spaceId = listCategory.getSpaceId();
         var folderId = listCategory.getParentFolderId();
-        
+
         if (folderId != null) {
             var folderCategory = entityManager.find(
                     FolderCategory.class, folderId);
@@ -118,11 +99,6 @@ public class ListCategoryService {
         }
 
         entityManager.remove(listCategory);
-
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                updateTeamActivityDTO);
         return true;
     }
 

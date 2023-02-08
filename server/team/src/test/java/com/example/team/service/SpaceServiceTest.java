@@ -1,7 +1,5 @@
 package com.example.team.service;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.ListCategory;
@@ -24,13 +22,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import javax.persistence.EntityManager;
 import java.util.Set;
 
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
@@ -47,9 +42,6 @@ public class SpaceServiceTest implements WithAssertions {
     @Mock
     SpaceRepository repository;
 
-    @Mock
-    RabbitMqMessageProducer rabbitMQMessageProducer;
-
     @Captor
     ArgumentCaptor<Space> spaceCaptor;
 
@@ -61,8 +53,8 @@ public class SpaceServiceTest implements WithAssertions {
         underTest = new SpaceService(
                 repository,
                 entityManager,
-                userInfoService,
-                rabbitMQMessageProducer);
+                userInfoService
+        );
     }
 
     @Test
@@ -80,8 +72,6 @@ public class SpaceServiceTest implements WithAssertions {
         var dto = new CreateSpaceDTO(
                 "color", "avatar", false, teamId,
                 "spaceName", 2, defaultStatusCategoryId);
-        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, listId, userInfo.getUserId());
 
         given(userInfoService.getCurrentUserInfo()).willReturn(userInfo);
         given(entityManager.getReference(any(), any())).willReturn(team);
@@ -112,11 +102,6 @@ public class SpaceServiceTest implements WithAssertions {
 
         assertThat(team.getSpaces()).contains(capturedSpaceValue);
         assertThat(actualResult).isEqualTo(space);
-
-        verify(rabbitMQMessageProducer).publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                UpdateTeamActivityDTO);
     }
 
     @Test
@@ -140,10 +125,6 @@ public class SpaceServiceTest implements WithAssertions {
                 .createSpace(dto))
                 .isInstanceOf(InvalidRequestException.class)
                 .hasMessage(errorMessage);
-
-        // then
-        verify(rabbitMQMessageProducer, never())
-                .publish(any(), any(), any());
     }
 
     @Test
@@ -167,10 +148,6 @@ public class SpaceServiceTest implements WithAssertions {
                 .createSpace(dto))
                 .isInstanceOf(InvalidRequestException.class)
                 .hasMessage(errorMessage);
-
-        // then
-        verify(rabbitMQMessageProducer, never())
-                .publish(any(), any(), any());
     }
 
     @Test
@@ -198,7 +175,5 @@ public class SpaceServiceTest implements WithAssertions {
 
         // then
         assertThat(output).contains(errorMessage);
-        verify(rabbitMQMessageProducer, never())
-                .publish(any(), any(), any());
     }
 }

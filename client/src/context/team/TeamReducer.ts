@@ -12,12 +12,14 @@ import {
   TEAM_STATE_ACTION,
 } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
+import setTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function teamReducer(
   teamState: TeamStateType,
   action: TeamStateActionType
 ) {
   function syncTeamStateActivity(draftState: WritableDraft<TeamStateType>) {
+    setTeamActiveStatusToLocalStorage(draftState.teamActiveStatus);
     const { spaceId, teamId, listId, folderIds } = draftState.teamActiveStatus;
     draftState.teamsForRender = deepCopy(draftState.originalTeams);
 

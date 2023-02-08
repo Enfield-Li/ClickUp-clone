@@ -5,7 +5,6 @@ import {
   axiosAuthServiceInstance,
   axiosStatusCategoryServiceInstance,
   axiosTaskServiceInstance,
-  axiosTeamActivityServiceInstance,
   axiosTeamServiceInstance,
 } from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
@@ -34,8 +33,8 @@ import {
   StatusCategory,
   Task,
   TaskEvents,
-  TaskList,
   TaskListStatusCategoryDTO,
+  Team,
   UpdateStatusCategoryNameDTO,
   UpdateStatusColumnColorDTO,
   UpdateStatusColumnDTO,
@@ -43,27 +42,9 @@ import {
   UpdateTaskDescDTO,
   UpdateTasksPositionDTO,
   UpdateTaskTitleDTO,
-  UpdateTeamActivityDTO,
 } from "./types";
 import { deepCopy } from "./utils/deepCopy";
 import { getTaskBoardURL } from "./utils/getTaskBoardURL";
-
-export async function updateTeamActivity(
-  dto: UpdateTeamActivityDTO,
-  onSuccess?: () => void,
-  onFailure?: () => void
-) {
-  try {
-    await axiosTeamActivityServiceInstance.put(API_ENDPOINT.TEAM_ACTIVITY, dto);
-
-    onSuccess && onSuccess();
-  } catch (error) {
-    const err = error as AxiosError;
-    const response = err.response?.data as ErrorResponse;
-    console.log(response);
-    onFailure && onFailure();
-  }
-}
 
 export async function updateUserDefaultTeamId(
   teamId: number,
@@ -84,14 +65,12 @@ export async function updateUserDefaultTeamId(
 
 export async function deleteSpace(
   spaceId: number,
-  dto: UpdateTeamActivityDTO,
   onSuccess?: () => void,
   onFailure?: () => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.delete<boolean>(
-      API_ENDPOINT.SPACE + `/${spaceId}`,
-      { data: dto }
+      API_ENDPOINT.SPACE + `/${spaceId}`
     );
 
     onSuccess && onSuccess();
@@ -105,14 +84,12 @@ export async function deleteSpace(
 
 export async function deleteFolder(
   folderId: number,
-  dto: UpdateTeamActivityDTO,
   onSuccess?: () => void,
   onFailure?: () => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.delete<boolean>(
-      API_ENDPOINT.FOLDER + `/${folderId}`,
-      { data: dto }
+      API_ENDPOINT.FOLDER + `/${folderId}`
     );
 
     onSuccess && onSuccess();
@@ -126,14 +103,12 @@ export async function deleteFolder(
 
 export async function deleteList(
   listId: number,
-  dto: UpdateTeamActivityDTO,
   onSuccess?: () => void,
   onFailure?: () => void
 ) {
   try {
     const response = await axiosTeamServiceInstance.delete<boolean>(
-      API_ENDPOINT.LIST + `/${listId}`,
-      { data: dto }
+      API_ENDPOINT.LIST + `/${listId}`
     );
 
     onSuccess && onSuccess();
@@ -425,30 +400,11 @@ export async function createStatusCategory(
 
 export async function fetchTeamList(
   teamId: number,
-  onSuccess: (initTeamListDTO: InitTeamListDTO) => void,
+  onSuccess: (initTeamListDTO: Team[]) => void,
   onFailure: (msg: string) => void
 ) {
   try {
-    const response = await axiosTeamServiceInstance.get<InitTeamListDTO>(
-      API_ENDPOINT.TEAM + `/${teamId}`
-    );
-
-    onSuccess(response.data);
-  } catch (error) {
-    const err = error as AxiosError;
-    const response = err.response?.data as ErrorResponse;
-    console.log(response);
-    onFailure(response.message);
-  }
-}
-
-export async function getCurrentTeam(
-  teamId: number,
-  onSuccess: (data: InitTeamListDTO) => void,
-  onFailure: (msg: string) => void
-) {
-  try {
-    const response = await axiosTeamServiceInstance.get<InitTeamListDTO>(
+    const response = await axiosTeamServiceInstance.get<Team[]>(
       API_ENDPOINT.TEAM + `/${teamId}`
     );
 

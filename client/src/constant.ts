@@ -1,6 +1,7 @@
 // Header config
 export const BEARER = "Bearer ";
 export const ACCESS_TOKEN = "access token";
+export const TEAM_ACTIVITY = "team_activity";
 
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost:8083",

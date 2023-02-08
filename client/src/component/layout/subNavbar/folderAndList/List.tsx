@@ -2,13 +2,11 @@ import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { updateTeamActivity } from "../../../../networkCalls";
 import {
   FolderCategory,
   ListCategory,
   Space,
   TEAM_STATE_ACTION,
-  UpdateTeamActivityDTO,
 } from "../../../../types";
 import { getTaskBoardURL } from "../../../../utils/getTaskBoardURL";
 import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
@@ -38,12 +36,6 @@ function List({ space, folder, list }: Props) {
       type: TEAM_STATE_ACTION.SELECT_LIST,
       payload: { listId: list.id },
     });
-
-    const dto: UpdateTeamActivityDTO = {
-      teamId: teamState.teamActiveStatus.teamId,
-      listId: list.id,
-    };
-    updateTeamActivity(dto);
   }
 
   return (

@@ -2,18 +2,12 @@ import {
   Box,
   Center,
   Flex,
-  Tooltip,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { updateTeamActivity } from "../../../networkCalls";
-import {
-  Space,
-  TEAM_STATE_ACTION,
-  UpdateTeamActivityDTO,
-} from "../../../types";
+import { Space, TEAM_STATE_ACTION } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 import CreateMorePlusButton from "./folderAndList/CreateMorePlusButton";
 import SpaceContent from "./folderAndList/SpaceContent";
@@ -43,12 +37,6 @@ function SpaceComponent({ space }: Props) {
       type: TEAM_STATE_ACTION.OPEN_SPACE,
       payload: { spaceId },
     });
-
-    const dto: UpdateTeamActivityDTO = {
-      teamId: teamState.teamActiveStatus.teamId,
-      spaceId,
-    };
-    updateTeamActivity(dto);
   }
 
   return (

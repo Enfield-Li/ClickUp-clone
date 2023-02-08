@@ -7,21 +7,15 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useRef } from "react";
+import { useNavigate, useParams } from "react-router";
+import useAuthContext from "../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
-import { deleteSpace } from "../../../networkCalls";
-import {
-  FolderCategory,
-  ListCategory,
-  Space,
-  UpdateTeamActivityDTO,
-} from "../../../types";
+import { FolderCategory, ListCategory, Space } from "../../../types";
+import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 import { deleteItemAndUpdateTeamActivity } from "./updateTeamActivity";
-import { useNavigate, useParams } from "react-router";
-import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
-import useAuthContext from "../../../context/auth/useAuthContext";
 
 export const mainOptions = [
   "Copy link",

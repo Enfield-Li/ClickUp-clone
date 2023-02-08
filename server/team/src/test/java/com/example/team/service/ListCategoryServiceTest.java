@@ -1,7 +1,6 @@
 package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateListDTO;
 import com.example.team.model.ListCategory;
@@ -20,8 +19,6 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -124,8 +121,6 @@ public class ListCategoryServiceTest implements WithAssertions {
         var defaultStatusCategoryId = 342;
         var space = Space.builder().teamId(teamId).build();
         var listCategory = ListCategory.builder().id(listId).build();
-        var UpdateTeamActivityDTO = new UpdateTeamActivityDTO(
-                teamId, spaceId, null, listId, null);
 
         var dto = new CreateListDTO(
                 null, spaceId, name, orderIndex, defaultStatusCategoryId);
@@ -153,10 +148,6 @@ public class ListCategoryServiceTest implements WithAssertions {
                 .contains(capturedListCategoryValue);
 
         assertThat(actualResult).isEqualTo(listCategory);
-        verify(rabbitMQMessageProducer).publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                UpdateTeamActivityDTO);
     }
 
     @Test

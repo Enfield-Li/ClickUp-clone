@@ -85,7 +85,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    deleteSpace(space.id, dto);
+    deleteSpace(space.id);
 
     return { ...dto, defaultStatusCategoryId };
   }
@@ -127,7 +127,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    deleteFolder(folderId, dto);
+    deleteFolder(folderId);
 
     return {
       ...dto,
@@ -161,7 +161,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    deleteList(listId, dto);
+    deleteList(listId);
 
     return {
       ...dto,
@@ -216,7 +216,7 @@ export function deleteItemAndUpdateTeamActivity({
     });
 
     // network call
-    deleteList(listId, dto);
+    deleteList(listId);
 
     return {
       ...dto,

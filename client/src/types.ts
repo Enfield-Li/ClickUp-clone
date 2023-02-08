@@ -374,15 +374,6 @@ export const AUTH_ACTION = {
   UPDATE_TEAM_COUNT: "update_team_count",
 } as const;
 
-export type TeamActivity = {
-  id: number;
-  userId: number;
-  teamId: number; // selected team
-  listId: number; // selected list
-  spaceId: number; // opened space
-  folderIds: number[]; // opened folder
-};
-
 export type TeamActiveStatus = {
   teamId: number;
   folderIds: number[];
@@ -631,7 +622,7 @@ export interface CreateFolderState {
 
 export type InitTeamListDTO = {
   teams: Team[];
-  teamActivity: TeamActivity;
+  //   teamActivity: TeamActivity;
 };
 
 export type TaskDetailContextType = {
@@ -699,12 +690,12 @@ export type CreateStatusCategoryDTO = {
 
 export type TeamsResponseDTO = {
   teams: Team[];
-  teamActivity: TeamActivity;
+  teamActivity: TeamActiveStatus;
 };
 
 export type CreateTeamResponseDTO = {
   team: Team;
-  teamActivity: TeamActivity;
+  teamActivity: TeamActiveStatus;
 };
 
 export type TaskListStatusCategoryDTO = {

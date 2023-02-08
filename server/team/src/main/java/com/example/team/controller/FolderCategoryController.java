@@ -1,6 +1,5 @@
 package com.example.team.controller;
 
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.service.FolderCategoryService;
@@ -28,9 +27,8 @@ class FolderCategoryController {
 
     @DeleteMapping("/{folderCategoryId}")
     ResponseEntity<Boolean> deleteFolderCategory(
-            @PathVariable("folderCategoryId") Integer folderCategoryId,
-            @RequestBody UpdateTeamActivityDTO dto) {
-        var deleted = service.deleteFolderCategory(folderCategoryId, dto);
+            @PathVariable("folderCategoryId") Integer folderCategoryId) {
+        var deleted = service.deleteFolderCategory(folderCategoryId);
         return ResponseEntity.ok(deleted);
     }
 }

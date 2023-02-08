@@ -1,7 +1,5 @@
 package com.example.team.service;
 
-import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
@@ -15,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.teamActivityRoutingKey;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 
@@ -28,7 +24,6 @@ public class SpaceService {
     private final SpaceRepository repository;
     private final EntityManager entityManager;
     private final UserInfoService userInfoService;
-    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Transactional
     public Space createSpace(CreateSpaceDTO createSpaceDTO) {
@@ -41,20 +36,7 @@ public class SpaceService {
             var teamReference = entityManager.getReference(Team.class, teamId);
             teamReference.addSpace(newSpace);
 
-            var space = repository.save(newSpace);
-
-            // publish event
-            var spaceId = space.getId();
-            var listId = space.getListCategories().stream()
-                    .findFirst().get().getId();
-            var updateTeamActivityDTO = new UpdateTeamActivityDTO(
-                    teamId, spaceId, null, listId, userInfo.getUserId());
-            rabbitMQMessageProducer.publish(
-                    internalExchange,
-                    teamActivityRoutingKey,
-                    updateTeamActivityDTO);
-
-            return space;
+            return repository.save(newSpace);
         } catch (DataIntegrityViolationException e) {
             if (e.getMessage().contains(SPACE_NAME_CONSTRAINT)) {
                 throw new InvalidRequestException("Space name already exists!");
@@ -70,8 +52,7 @@ public class SpaceService {
     }
 
     @Transactional
-    public Boolean deleteSpace(
-            Integer spaceId, UpdateTeamActivityDTO updateTeamActivityDTO) {
+    public Boolean deleteSpace(Integer spaceId) {
         var isSpaceExists = repository.existsById(spaceId);
         if (!isSpaceExists) {
             throw new InvalidRequestException("This space no longer exists");
@@ -87,11 +68,6 @@ public class SpaceService {
         team.removeSpace(space);
 
         entityManager.remove(space);
-
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                updateTeamActivityDTO);
         return true;
     }
 }

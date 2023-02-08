@@ -1,17 +1,18 @@
 import {
   Box,
   Flex,
+  space,
   useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { CLIENT_ROUTE } from "../../constant";
+import { CLIENT_ROUTE, TEAM_ACTIVITY } from "../../constant";
 import useAuthContext from "../../context/auth/useAuthContext";
 import useTeamStateContext from "../../context/team/useTeamContext";
 import { fetchTeamList } from "../../networkCalls";
-import { TEAM_STATE_ACTION } from "../../types";
+import { TeamActiveStatus, TEAM_STATE_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import FixedNavBar from "./navbar/FixedNavBar";
 import SubNavbar from "./subNavbar/SubNavbar";
@@ -39,25 +40,43 @@ function NavBar({}: Props) {
     if (authState.user && teamId) {
       fetchTeamList(
         Number(teamId),
-        (initTeamListDTO) => {
-          const { teams, teamActivity } = initTeamListDTO;
-          let { listId, teamId, spaceId } = teamActivity;
+        (teams) => {
+          const initTeamActivity: TeamActiveStatus = {
+            teamId: teams[0].id!,
+            spaceId: 0,
+            listId: 0,
+            folderIds: [],
+          };
+          const storedUserActivity = localStorage.getItem(TEAM_ACTIVITY);
+
+          const userActivity = storedUserActivity
+            ? (JSON.parse(storedUserActivity) as TeamActiveStatus)
+            : initTeamActivity;
+          let { listId, teamId, spaceId } = userActivity;
 
           let defaultStatusCategoryId;
           if (listId) {
             teams.forEach(
               (team) =>
                 team.id === teamId &&
-                team.spaces.forEach((space) =>
+                team.spaces.forEach((space) => {
+                  spaceId = space.id;
                   space.listCategories.forEach((listCategory) => {
                     if (listCategory.id === listId) {
                       defaultStatusCategoryId =
                         listCategory.defaultStatusCategoryId;
-
-                      spaceId = listCategory.spaceId;
                     }
-                  })
-                )
+                  });
+
+                  space.folderCategories.forEach((folderCategory) =>
+                    folderCategory.allLists.forEach((listCategory) => {
+                      if (listCategory.id === listId) {
+                        defaultStatusCategoryId =
+                          listCategory.defaultStatusCategoryId;
+                      }
+                    })
+                  );
+                })
             );
           }
 
@@ -67,7 +86,7 @@ function NavBar({}: Props) {
 
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: initTeamListDTO,
+            payload: { teams, teamActivity: userActivity },
           });
         },
         (msg) => {

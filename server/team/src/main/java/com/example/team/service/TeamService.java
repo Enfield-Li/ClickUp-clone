@@ -3,13 +3,8 @@ package com.example.team.service;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
-import com.example.clients.teamActivity.CreateTeamActivityDTO;
-import com.example.clients.teamActivity.TeamActivityClient;
-import com.example.clients.teamActivity.UpdateTeamActivityDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateTeamDTO;
-import com.example.team.dto.CreateTeamResponseDTO;
-import com.example.team.dto.InitTeamListDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
@@ -20,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Set;
 
-import static com.example.amqp.ExchangeKey.*;
+import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 
 @Log4j2
 @Service
@@ -32,24 +29,18 @@ public class TeamService {
     private final EntityManager entityManager;
     private final SpaceRepository spaceRepository;
     private final UserInfoService userInfoService;
-    private final TeamActivityClient teamActivityClient;
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Transactional
-    public InitTeamListDTO getAllTeams(Integer teamId) {
+    public Set<Team> getAllTeams(Integer teamId) {
         verifyTeamExist(teamId);
-
         var userId = userInfoService.getCurrentUserInfo().getUserId();
-        var teamSet = repository.findByMembersUserId(userId);
-
-        var teamActivity = teamActivityClient.getTeamActivity(teamId, userId);
-
-        return new InitTeamListDTO(teamSet, teamActivity);
+        return repository.findByMembersUserId(userId);
     }
 
     @Transactional
-    public CreateTeamResponseDTO createTeam(CreateTeamDTO createTeamDTO) {
+    public Team createTeam(CreateTeamDTO createTeamDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
 
         // Init team
@@ -64,13 +55,7 @@ public class TeamService {
         // Init space
         var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
         team.addSpace(initSpace);
-        var space = spaceRepository.save(initSpace);
-
-        // update team activity
-        var createTeamActivityDTO = new CreateTeamActivityDTO(
-                team.getId(), space.getId());
-        var teamActivityDTO = teamActivityClient.createTeamActivity(
-                createTeamActivityDTO);
+        spaceRepository.save(initSpace);
 
         // publish user teamAmount + 1
         var updateUserJoinedTeamsDTO = new UpdateUserJoinedTeamsDTO(
@@ -80,23 +65,17 @@ public class TeamService {
                 authorizationRoutingKey,
                 updateUserJoinedTeamsDTO);
 
-        return new CreateTeamResponseDTO(team, teamActivityDTO);
+        return team;
     }
 
     @Transactional
-    public Boolean deleteTeam(
-            Integer teamId, UpdateTeamActivityDTO updateTeamActivityDTO) {
+    public Boolean deleteTeam(Integer teamId) {
         verifyTeamExist(teamId);
 
         var team = entityManager.getReference(Team.class, teamId);
         team.removeAllMembers();
 
         entityManager.remove(team);
-
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                teamActivityRoutingKey,
-                updateTeamActivityDTO);
         return true;
     }
 
