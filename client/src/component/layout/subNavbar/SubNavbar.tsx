@@ -147,7 +147,7 @@ function SubNavbar({
             <Center
               zIndex="3"
               pr="1.5px"
-              mt="128px"
+              mt="123px"
               ml={subNavWidth}
               border="1px"
               width="20px"

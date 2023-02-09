@@ -31,6 +31,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const cardBgColor = useColorModeValue("white", "darkMain.200");
   const hoverBgColor = useColorModeValue("lightMain.200", "darkMain.200");
+  const fontColor = useColorModeValue("darkMain.200", "gray.400");
 
   // task name
   const [taskName, setTaskName] = useState("");
@@ -111,8 +112,8 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
             py={1}
             rounded="md"
             fontSize="sm"
-            color="gray.400"
             cursor="pointer"
+            color={fontColor}
             width="fit-content"
             _hover={{ bgColor: hoverBgColor }}
             onClick={() => {

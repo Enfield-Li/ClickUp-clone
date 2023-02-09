@@ -48,8 +48,8 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
                   <Center
                     mt="76px"
                     zIndex="3"
-                    width="18px"
-                    height="18px"
+                    width="20px"
+                    height="20px"
                     color="white"
                     rounded="full"
                     fontSize="10px"

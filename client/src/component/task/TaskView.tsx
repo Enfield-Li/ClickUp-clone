@@ -5,7 +5,7 @@ import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext
 import { SortBy } from "../../types";
 import TaskDetailsModal from "../taskModal/TaskDetailsModal";
 import TaskBoardView from "./TaskBoardView";
-import TaskSortingOptions from "./filterOptions/TaskFilterView";
+import TaskFilterTopBar from "./filterOptions/TaskFilterTopBar";
 
 type Props = {};
 
@@ -17,7 +17,7 @@ function TaskView({}: Props) {
 
   return (
     <Flex flexDir="column" height="100%">
-      <TaskSortingOptions sortBy={sortBy} setSortBy={setSortBy} />
+      <TaskFilterTopBar sortBy={sortBy} setSortBy={setSortBy} />
       <TaskBoardView sortBy={sortBy} />
 
       {isModalOpen && <TaskDetailsModal />}

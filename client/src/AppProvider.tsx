@@ -9,6 +9,10 @@ type Props = { children: React.ReactNode };
 
 export default memo(AppProvider);
 function AppProvider({ children }: Props) {
+  if (!localStorage.getItem("chakra-ui-color-mode")) {
+    localStorage.setItem("chakra-ui-color-mode", "dark");
+  }
+
   return (
     <BrowserRouter>
       <AuthStateProvider>

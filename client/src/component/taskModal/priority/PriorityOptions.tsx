@@ -49,6 +49,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
                   rounded="sm"
                   cursor="pointer"
                   alignItems="center"
+                  fontWeight="semibold"
                   onClick={() =>
                     selectPriority(
                       sortBy,
