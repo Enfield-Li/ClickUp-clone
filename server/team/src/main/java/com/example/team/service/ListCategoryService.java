@@ -45,11 +45,11 @@ public class ListCategoryService {
         if (folderId != null) {
             var folderCategory = findFolderReference(folderId);
             folderCategory.addListCategory(newListCategory);
+        } else {
+            // bind space
+            var space = findSpaceReference(spaceId);
+            space.addListCategory(newListCategory);
         }
-
-        // bind space
-        var space = findSpaceReference(spaceId);
-        space.addListCategory(newListCategory);
 
         return repository.save(newListCategory);
     }

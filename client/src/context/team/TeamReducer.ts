@@ -76,7 +76,7 @@ export default function teamReducer(
                   })
                   .sort((a, b) => a.orderIndex - b.orderIndex);
                 const reorderedListCategories = space.listCategories
-                  .filter((list) => !list.parentFolderId)
+                  //   .filter((list) => !list.parentFolderId)
                   .sort((a, b) => a.orderIndex - b.orderIndex);
 
                 space.allListOrFolder.push(
