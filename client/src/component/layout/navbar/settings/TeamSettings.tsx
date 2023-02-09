@@ -43,9 +43,9 @@ function TeamSettings({ currentTeam }: Props) {
           width="26px"
           height="26px"
           rounded="full"
-          bgColor="green"
           color="lightMain.200"
           backgroundSize="contain"
+          bgColor={currentTeam?.color}
           backgroundImage={currentTeam?.avatar}
         >
           {!currentTeam?.avatar ? currentTeam?.name[0].toUpperCase() : ""}

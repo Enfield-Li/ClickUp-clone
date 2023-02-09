@@ -1,6 +1,6 @@
 import { Box, Center, Divider, Flex, Image } from "@chakra-ui/react";
 import { memo } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { logoDataUrl } from "../../../media/imgDataUrl";
@@ -18,6 +18,7 @@ export default memo(FixedNavBar);
 function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
   const fixedNavbarWidth = "55px";
   const navigate = useNavigate();
+  const { teamId, listId, spaceId } = useParams();
 
   function handleOpenSubNavbar() {
     onOpen();
@@ -87,7 +88,10 @@ function FixedNavBar({ onOpen, isExpanded, setIsExpanded }: Props) {
               {({ isActive }) => <i className="bi bi-search"></i>}
             </NavIcon>
 
-            <NavIcon name="Task" url={CLIENT_ROUTE.TASK_BOARD}>
+            <NavIcon
+              name="Task"
+              url={getTaskBoardURL({ teamId, spaceId, listId })}
+            >
               {({ isActive }) => (
                 <>
                   {isActive ? (

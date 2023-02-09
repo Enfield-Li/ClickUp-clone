@@ -27,7 +27,6 @@ export default function TeamStateProvider({ children }: ProviderType) {
     teamReducer,
     initialTeamContextState
   );
-  console.log(teamState);
 
   const {
     isOpen: isCreateListModalOpen,

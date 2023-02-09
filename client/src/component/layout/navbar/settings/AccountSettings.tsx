@@ -82,8 +82,8 @@ function AccountSettings({ isTeamOwner }: Props) {
           width="26px"
           height="26px"
           rounded="full"
-          bgColor="green"
           color="lightMain.200"
+          bgColor={authState.user?.color}
         >
           {authState.user?.username[0].toUpperCase()}
         </Center>

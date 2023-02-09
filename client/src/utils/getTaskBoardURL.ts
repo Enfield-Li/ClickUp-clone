@@ -1,7 +1,7 @@
 import { CLIENT_ROUTE } from "../constant";
 
 export type GetTaskBoardURLParam = {
-  teamId: string | number;
+  teamId?: string | number;
   spaceId?: string | number | null;
   listId?: string | number | null;
 };
