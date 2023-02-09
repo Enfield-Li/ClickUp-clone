@@ -27,8 +27,7 @@ export default function TeamStateProvider({ children }: ProviderType) {
     teamReducer,
     initialTeamContextState
   );
-  const list = teamState.createListInfo;
-  const folder = teamState.createFolderInfo;
+  console.log(teamState);
 
   const {
     isOpen: isCreateListModalOpen,

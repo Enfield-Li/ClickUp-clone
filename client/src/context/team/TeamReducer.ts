@@ -69,26 +69,25 @@ export default function teamReducer(
             team.spaces
               .sort((a, b) => a.orderIndex - b.orderIndex)
               .forEach((space) => {
+                const reorderedFolderCategories = space.folderCategories
+                  .map((folder) => {
+                    folder.allLists.sort((a, b) => a.orderIndex - b.orderIndex);
+                    return folder;
+                  })
+                  .sort((a, b) => a.orderIndex - b.orderIndex);
+                const reorderedListCategories = space.listCategories
+                  //   .filter((list) => !list.parentFolderId)
+                  .sort((a, b) => a.orderIndex - b.orderIndex);
+
                 space.allListOrFolder.push(
-                  ...space.folderCategories
-                    .map((folder) => {
-                      folder.allLists.sort(
-                        (a, b) => a.orderIndex - b.orderIndex
-                      );
-                      return folder;
-                    })
-                    .sort((a, b) => a.orderIndex - b.orderIndex)
-                );
-                space.allListOrFolder.push(
-                  ...space.listCategories.sort(
-                    (a, b) => a.orderIndex - b.orderIndex
-                  )
+                  ...reorderedFolderCategories,
+                  ...reorderedListCategories
                 );
               })
         );
 
-        draftState.teamsForRender = copiedTeams;
         draftState.originalTeams = copiedTeams;
+        draftState.teamsForRender = copiedTeams;
         draftState.teamActiveStatus = teamActivity;
 
         syncTeamStateActivity(draftState);
@@ -126,7 +125,6 @@ export default function teamReducer(
     case TEAM_STATE_ACTION.DELETE_FOLDER: {
       return produce(teamState, (draftState) => {
         const { deletedFolderId, nextListId } = action.payload;
-
         draftState.teamActiveStatus.listId = nextListId;
 
         draftState.originalTeams.forEach((team) =>
