@@ -40,8 +40,6 @@ public class StatusCategory {
     private Set<StatusColumn> statusColumns = new HashSet<>();
 
     public StatusCategory(StatusCategory statusCategory) {
-        //        this.teamId = 0;
-        //        this.name = statusCategory.name + "_listCloned";
         var clonedStatusColumn = statusCategory.statusColumns.stream().
                 map(StatusColumn::new).collect(Collectors.toSet());
         addStatusColumns(clonedStatusColumn);

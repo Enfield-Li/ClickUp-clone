@@ -67,40 +67,46 @@ public class StatusCategoryService {
         var listId = dto.listId();
         var orderIndex = dto.orderIndex();
         var categoryId = dto.statusCategoryId();
-        var statusColumn = StatusColumn.builder().title(title)
+        var newStatusColumn = StatusColumn.builder().title(title)
                 .color(color).orderIndex(orderIndex).build();
 
         var originalStatusCategory = repository.findById(categoryId)
                 .orElseThrow(() -> new InternalErrorException(
                         "Error when creating statusColumn"));
 
-        if (originalStatusCategory.getTeamId() == null && originalStatusCategory.getName() == null) {
-            originalStatusCategory.addStatusColumn(statusColumn);
-            statusColumnRepository.saveAndFlush(statusColumn);
+        // category is already a custom category in list
+        if (originalStatusCategory.getTeamId() == null
+                && originalStatusCategory.getName() == null) {
+            originalStatusCategory.addStatusColumn(newStatusColumn);
+            var statusColumn = statusColumnRepository.save(newStatusColumn);
             return new AddStatusColumnResponseDTO(
-                    originalStatusCategory.getId(), statusColumn.getId(), null);
+                    originalStatusCategory.getId(),
+                    statusColumn.getId(), null);
         }
 
-        var statusCategory = new StatusCategory(originalStatusCategory);
-        statusCategory.addStatusColumn(statusColumn);
-        repository.saveAndFlush(statusCategory);
+        var newStatusCategory = new StatusCategory(originalStatusCategory);
+        newStatusCategory.addStatusColumn(newStatusColumn);
+        var statusCategory = repository.saveAndFlush(newStatusCategory);
 
+        // update list defaultListCategory
         var updateListCategoryDTO = new UpdateListCategoryDefaultStatusCategoryIdDTO(
                 listId, statusCategory.getId());
         rabbitMQMessageProducer.publish(
                 internalExchange, teamRoutingKey, updateListCategoryDTO);
 
+        // update task column id
         var statusPairs = new HashMap<Integer, Integer>();
-        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(listId, statusPairs);
+        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(
+                listId, statusPairs);
         originalStatusCategory.getStatusColumns()
                 .forEach(originalStatusColumn ->
-                        statusCategory.getStatusColumns().forEach(newStatusColumn -> {
+                        statusCategory.getStatusColumns().forEach(statusColumn -> {
                                     if (Objects.equals(
                                             originalStatusColumn.getTitle(),
-                                            newStatusColumn.getTitle())) {
+                                            statusColumn.getTitle())) {
                                         statusPairs.put(
                                                 originalStatusColumn.getId(),
-                                                newStatusColumn.getId()
+                                                statusColumn.getId()
                                         );
                                     }
                                 }
@@ -109,7 +115,7 @@ public class StatusCategoryService {
                 internalExchange, taskRoutingKey, updateTaskDTO);
 
         return new AddStatusColumnResponseDTO(
-                statusCategory.getId(), statusColumn.getId(), statusPairs);
+                statusCategory.getId(), newStatusColumn.getId(), statusPairs);
     }
 
     @Transactional

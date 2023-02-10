@@ -1,13 +1,20 @@
 package com.example.teamStatusCategory.service;
 
+import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.jwt.UserCredentials;
+import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
+import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
+import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
+import com.example.teamStatusCategory.dto.AddStatusColumnResponseDTO;
 import com.example.teamStatusCategory.dto.CreateStatusCategoryDTO;
 import com.example.teamStatusCategory.dto.UpdateStatusCategoryNameDTO;
 import com.example.teamStatusCategory.model.StatusCategory;
 import com.example.teamStatusCategory.model.StatusColumn;
 import com.example.teamStatusCategory.repository.StatusCategoryRepository;
+import com.example.teamStatusCategory.repository.StatusColumnRepository;
 import org.assertj.core.api.WithAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,13 +24,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.amqp.ExchangeKey.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -38,8 +44,17 @@ public class StatusCategoryServiceTest implements WithAssertions {
     @Mock
     EntityManager entityManager;
 
+    @Mock
+    StatusColumnRepository statusColumnRepository;
+
+    @Mock
+    RabbitMqMessageProducer rabbitMQMessageProducer;
+
     @Captor
     ArgumentCaptor<Integer> integerCaptor;
+
+    @Captor
+    ArgumentCaptor<StatusColumn> statusColumnCaptor;
 
     @Captor
     ArgumentCaptor<StatusCategory> statusCategoryCaptor;
@@ -49,10 +64,11 @@ public class StatusCategoryServiceTest implements WithAssertions {
 
     UserCredentials userCredentials = new UserCredentials(1, "mockUser");
 
-//    @BeforeEach
-//    void setUp() {
-//        underTest = new StatusCategoryService(entityManager, repository);
-//    }
+    @BeforeEach
+    void setUp() {
+        underTest = new StatusCategoryService(entityManager, repository,
+                statusColumnRepository, rabbitMQMessageProducer);
+    }
 
     @Test
     void test_get_status_category_for_team() {
@@ -65,6 +81,110 @@ public class StatusCategoryServiceTest implements WithAssertions {
         var actualResult = underTest.getStatusCategoryForTeam(teamId);
 
         // then
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void test_add_status_column_response_dto_when_category_is_a_custom_one() {
+        // given
+        var listId = 5;
+        var orderIndex = 5;
+        var categoryId = 66;
+        var title = "title";
+        var color = "color";
+        var statusColumnId = 46;
+        var statusColumn = new StatusColumn();
+        statusColumn.setId(statusColumnId);
+        var dto = new AddStatusColumnDTO(
+                title, color, listId, categoryId, orderIndex);
+        var originalStatusCategory = new StatusCategory();
+        originalStatusCategory.setId(categoryId);
+        var expectedResult = new AddStatusColumnResponseDTO(
+                categoryId, statusColumnId, null);
+
+        given(repository.findById(any()))
+                .willReturn(Optional.of(originalStatusCategory));
+        given(statusColumnRepository.save(any())).willReturn(statusColumn);
+
+        // when
+        var actualResult = underTest.cloneStatusCategoryForListCategory(dto);
+
+        // then
+        verify(statusColumnRepository).save(statusColumnCaptor.capture());
+        var capturedStatusColumn = statusColumnCaptor.getValue();
+        assertThat(capturedStatusColumn.getStatusCategory())
+                .isEqualTo(originalStatusCategory);
+        assertThat(originalStatusCategory.getStatusColumns())
+                .contains(capturedStatusColumn);
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void test_add_status_column_response_dto_for_creating_new_category() {
+        // given
+        var listId = 5;
+        var orderIndex = 5;
+        var title = "title";
+        var color = "color";
+        var originalCategoryId = 66;
+        var newStatusColumn = StatusColumn.builder().title(title)
+                .color(color).orderIndex(orderIndex).build();
+        var dto = new AddStatusColumnDTO(
+                title, color, listId, originalCategoryId, orderIndex);
+
+        var teamId = 70;
+        var name = "name";
+        var originalStatusColumnId = 52;
+        var originalStatusColumn = new StatusColumn();
+        originalStatusColumn.setId(originalStatusColumnId);
+        originalStatusColumn.setTitle(title);
+
+        var originalStatusCategory = new StatusCategory();
+        originalStatusCategory.setName(name);
+        originalStatusCategory.setId(originalCategoryId);
+        originalStatusCategory.setTeamId(teamId);
+        originalStatusCategory.addStatusColumn(originalStatusColumn);
+
+        var statusColumnId = 33;
+        var statusColumn = new StatusColumn();
+        statusColumn.setId(statusColumnId);
+        statusColumn.setTitle(title);
+
+        var categoryId = 66;
+        var statusCategory = new StatusCategory();
+        statusCategory.setId(categoryId);
+        statusCategory.addStatusColumn(statusColumn);
+
+        var updateListCategoryDTO = new UpdateListCategoryDefaultStatusCategoryIdDTO(
+                listId, categoryId);
+
+        var statusPairs = new HashMap<Integer, Integer>();
+        statusPairs.put(originalStatusColumnId, statusColumnId);
+
+        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(
+                listId, statusPairs);
+
+        var expectedResult = new AddStatusColumnResponseDTO(
+                statusCategory.getId(), newStatusColumn.getId(), statusPairs);
+
+        given(repository.saveAndFlush(any())).willReturn(statusCategory);
+        given(repository.findById(any()))
+                .willReturn(Optional.of(originalStatusCategory));
+
+        // when
+        var actualResult = underTest.cloneStatusCategoryForListCategory(dto);
+
+        // then
+        verify(repository).saveAndFlush(statusCategoryCaptor.capture());
+        var capturedStatusCategory = statusCategoryCaptor.getValue();
+        assertThat(capturedStatusCategory
+                .getStatusColumns()).contains(newStatusColumn);
+
+        verify(rabbitMQMessageProducer).publish(
+                eq(internalExchange), eq(teamRoutingKey), eq(updateListCategoryDTO));
+        verify(rabbitMQMessageProducer).publish(
+                eq(internalExchange), eq(taskRoutingKey), eq(updateTaskDTO));
+
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 

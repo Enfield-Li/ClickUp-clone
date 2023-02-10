@@ -89,7 +89,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         var orderIndex = 141;
         var categoryId = 15453;
         var errorMessage = String
-                .format("StatusCategory with id: $s not found", categoryId);
+                .format("StatusCategory with id: %s not found", categoryId);
 
         var dto = new CreateStatusColumnDTO(
                 title, color, categoryId, orderIndex);
@@ -167,7 +167,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         verify(repository).deleteStatusColumnById(
                 integerCaptor.capture());
         assertThat(integerCaptor.getValue()).isEqualTo(id);
-        assertThat(actualResult).isEqualTo(rowsAffected > 0);
+        assertThat(actualResult).isEqualTo(true);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class StatusColumnServiceTest implements WithAssertions {
         var id = 51;
         var rowsAffected = 0;
         var errorMessage = String
-                .format("Failed to delete StatusColumn with id: $s", id);
+                .format("Failed to delete StatusColumn with id: %s", id);
 
         given(repository.deleteStatusColumnById(any()))
                 .willReturn(rowsAffected);
