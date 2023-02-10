@@ -85,6 +85,7 @@ public class ListCategory {
     private Integer parentFolderId;
 
     @JsonIgnore
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentFolderId")

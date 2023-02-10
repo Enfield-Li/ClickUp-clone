@@ -1,6 +1,7 @@
 package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateFolderDTO;
 import com.example.team.model.FolderCategory;
 import com.example.team.model.ListCategory;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -96,4 +98,51 @@ public class FolderCategoryServiceTest implements WithAssertions {
         assertThat(expectedResult).isEqualTo(folderCategory);
     }
 
+    @Test
+    void test_delete_folder_should_pass() {
+        // given
+        var folderId = 1;
+        var space = new Space();
+        var member = new UserInfo();
+        var listCategory1 = new ListCategory();
+        var folderCategory = new FolderCategory();
+
+        folderCategory.addMember(member);
+        space.addFolderCategory(folderCategory);
+        folderCategory.addListCategory(listCategory1);
+
+        given(repository.existsById(any())).willReturn(true);
+        given(entityManager
+                .getReference(eq(FolderCategory.class), any()))
+                .willReturn(folderCategory);
+        given(entityManager.getReference(
+                eq(Space.class), any())).willReturn(space);
+
+        // when
+        var actualResult = underTest.deleteFolderCategory(folderId);
+
+        // then
+        verify(entityManager).remove(folderCategoryCaptor.capture());
+        var capturedFolderValue = folderCategoryCaptor.getValue();
+        assertThat(capturedFolderValue.getMembers()).isEmpty();
+        assertThat(capturedFolderValue.getAllLists()).isEmpty();
+        assertThat(space.getFolderCategories()).isEmpty();
+
+
+        assertThat(actualResult).isEqualTo(true);
+    }
+
+    @Test
+    void test_delete_folder_should_fail() {
+        // given
+        var folderId = 1;
+        var errorMessage = "This folder no longer exists";
+        given(repository.existsById(any())).willReturn(false);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.deleteFolderCategory(folderId))
+                .isInstanceOf(InvalidRequestException.class)
+                .hasMessage(errorMessage);
+    }
 }

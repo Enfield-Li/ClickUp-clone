@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
-public class AuthenticatedSecurityContextTest implements WithAssertions {
+public class UserInfoServiceTest implements WithAssertions {
 
     UserInfoService underTest;
 

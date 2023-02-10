@@ -2,10 +2,7 @@ package com.example.team.service;
 
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
-import com.example.team.model.ListCategory;
-import com.example.team.model.Space;
-import com.example.team.model.Team;
-import com.example.team.model.UserInfo;
+import com.example.team.model.*;
 import com.example.team.repository.SpaceRepository;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +22,7 @@ import java.util.Set;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -175,5 +173,58 @@ public class SpaceServiceTest implements WithAssertions {
 
         // then
         assertThat(output).contains(errorMessage);
+    }
+
+    @Test
+    void test_delete_space_should_pass() {
+        // given
+        var spaceId = 3;
+        var team = new Team();
+        var space1 = new Space();
+        space1.setId(spaceId);
+        var space2 = new Space();
+        var member = new UserInfo();
+        var listCategory1 = new ListCategory();
+        var listCategory2 = new ListCategory();
+        var folderCategory = new FolderCategory();
+
+        team.addSpace(space1);
+        team.addSpace(space2);
+        space1.addMember(member);
+        space1.addListCategory(listCategory1);
+        space1.addFolderCategory(folderCategory);
+        folderCategory.addListCategory(listCategory2);
+
+        given(repository.existsById(any())).willReturn(true);
+        given(entityManager.getReference(eq(Team.class), any())).willReturn(team);
+        given(entityManager.getReference(eq(Space.class), any())).willReturn(space1);
+
+        // when
+        var actualResult = underTest.deleteSpace(spaceId);
+
+        // then
+        verify(entityManager).remove(spaceCaptor.capture());
+        var capturedSpaceValue = spaceCaptor.getValue();
+        assertThat(capturedSpaceValue.getMembers()).isEmpty();
+        assertThat(capturedSpaceValue.getListCategories()).isEmpty();
+        assertThat(capturedSpaceValue.getFolderCategories()).isEmpty();
+        assertThat(folderCategory.getAllLists()).isEmpty();
+
+        assertThat(team.getSpaces()).doesNotContain(capturedSpaceValue);
+        assertThat(actualResult).isEqualTo(true);
+    }
+
+    @Test
+    void test_delete_space_should_fail() {
+        // given
+        var spaceId = 1;
+        var errorMessage = "This space no longer exists";
+        given(repository.existsById(any())).willReturn(false);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.deleteSpace(spaceId))
+                .isInstanceOf(InvalidRequestException.class)
+                .hasMessage(errorMessage);
     }
 }

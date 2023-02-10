@@ -43,11 +43,12 @@ public class ListCategoryService {
 
         // bind folder
         if (folderId != null) {
-            var folderCategory = findFolderReference(folderId);
+            var folderCategory = entityManager.getReference(
+                    FolderCategory.class, folderId);
             folderCategory.addListCategory(newListCategory);
         } else {
             // bind space
-            var space = findSpaceReference(spaceId);
+            var space = entityManager.getReference(Space.class, spaceId);
             space.addListCategory(newListCategory);
         }
 
@@ -62,17 +63,8 @@ public class ListCategoryService {
 
         var listCategory = repository.findById(listCategoryId);
 
-        if (listCategory.isPresent()) {
-            listCategory.get().setDefaultStatusCategoryId(statusCategoryId);
-            return;
-        }
-
-        log.error("update failed, cannot find listCategory");
-    }
-
-    private FolderCategory findFolderReference(Integer FolderCategoryId) {
-        return entityManager.getReference(
-                FolderCategory.class, FolderCategoryId);
+        listCategory.ifPresent(category -> category
+                .setDefaultStatusCategoryId(statusCategoryId));
     }
 
     @Transactional
@@ -89,8 +81,8 @@ public class ListCategoryService {
         var spaceId = listCategory.getSpaceId();
         var folderId = listCategory.getParentFolderId();
 
-        if (folderId != null) {
-            var folderCategory = entityManager.find(
+        if (folderId != null && spaceId == null) {
+            var folderCategory = entityManager.getReference(
                     FolderCategory.class, folderId);
             folderCategory.removeListCategory(listCategory);
         } else {
@@ -101,9 +93,4 @@ public class ListCategoryService {
         entityManager.remove(listCategory);
         return true;
     }
-
-    private Space findSpaceReference(Integer spaceId) {
-        return entityManager.getReference(Space.class, spaceId);
-    }
-
 }
