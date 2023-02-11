@@ -3,6 +3,7 @@ package com.example.authorization;
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginUserDTO;
 import com.example.authorization.dto.RegisterUserDTO;
+import com.example.authorization.dto.RegistrationResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ class AuthorizationController {
     private final AuthorizationService service;
 
     @PostMapping(REGISTER)
-    ResponseEntity<AuthorizationResponseDTO> register(
+    ResponseEntity<RegistrationResponseDTO> register(
             @Valid @RequestBody RegisterUserDTO credentials) {
         var userResponse = service.register(credentials);
         return ResponseEntity.ok(userResponse);

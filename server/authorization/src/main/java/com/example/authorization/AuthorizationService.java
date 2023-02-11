@@ -3,6 +3,7 @@ package com.example.authorization;
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginUserDTO;
 import com.example.authorization.dto.RegisterUserDTO;
+import com.example.authorization.dto.RegistrationResponseDTO;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
@@ -35,11 +36,10 @@ public class AuthorizationService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserRepository repository;
 
-    private final Integer INITIAL_TOKEN_VERSION = 0;
     private final String REFRESH_TOKEN = "refresh_token";
 
     @Transactional
-    AuthorizationResponseDTO register(RegisterUserDTO registerUserDTO) {
+    RegistrationResponseDTO register(RegisterUserDTO registerUserDTO) {
         var color = registerUserDTO.color();
         var email = registerUserDTO.email();
         var username = registerUserDTO.username();
@@ -70,16 +70,33 @@ public class AuthorizationService {
         var createTeamDTO = new CreateTeamDTO(green, null, teamName);
         var accessToken = jwtUtils.createAccessToken(user.getId(), username);
 
-        var createTeamId = teamClient.initTeamInRegistration(
+        var initTeamUIState = teamClient.initTeamInRegistration(
                 createTeamDTO, String.format("Bearer %s", accessToken));
-        user.setDefaultTeamId(createTeamId);
+        user.setDefaultTeamId(initTeamUIState.teamId());
         repository.save(user);
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userResponse = generateResponseAndToken(
-                user, INITIAL_TOKEN_VERSION);
-        return userResponse;
+        var userId = applicationUser.getId();
+        var joinedTeamCount = applicationUser.getJoinedTeamCount();
+
+        // store refreshToken in session
+        var INITIAL_TOKEN_VERSION = 0;
+        var refreshToken = jwtUtils.createRefreshToken(
+                userId, INITIAL_TOKEN_VERSION);
+        session.setAttribute(REFRESH_TOKEN, refreshToken);
+
+        // response dto
+        return RegistrationResponseDTO.builder()
+                .id(userId)
+                .color(color)
+                .email(email)
+                .username(username)
+                .accessToken(accessToken)
+                .joinedTeamCount(joinedTeamCount)
+                .initTeamUIState(initTeamUIState)
+                .defaultTeamId(initTeamUIState.teamId())
+                .build();
     }
 
     AuthorizationResponseDTO login(LoginUserDTO loginUserDTO) {

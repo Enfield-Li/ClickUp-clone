@@ -43,6 +43,7 @@ interface Column<T> {
   id?: number;
   title: T;
   color: string;
+  markAsClosed?: boolean;
 }
 export type PriorityColumn = Column<Priority>;
 export interface StatusColumn extends Column<string> {
@@ -270,7 +271,7 @@ export interface Category {
   isPrivate: boolean;
   members: UserInfo[];
   color: string | null;
-  defaultStatusCategoryId: number; 
+  defaultStatusCategoryId: number;
 }
 export interface FolderCategory extends Category {
   isOpen: boolean | null; // client side
@@ -341,6 +342,17 @@ export interface AuthenticationResponse {
   joinedTeamCount: number;
 }
 
+export interface RegistrationResponse {
+  id: number;
+  color: string;
+  email: string;
+  username: string;
+  accessToken: string;
+  defaultTeamId: number;
+  joinedTeamCount: number;
+  initTeamUIState: TeamActiveStatus;
+}
+
 export type AuthActionType =
   | LogInUser
   | LogOutUser
@@ -355,7 +367,7 @@ type LogInUser = {
 };
 type RegisterUser = {
   type: typeof AUTH_ACTION.REGISTER_USER;
-  payload: { user: User };
+  payload: { registrationResponse: RegistrationResponse };
 };
 type UpdateTeamCount = {
   type: typeof AUTH_ACTION.UPDATE_TEAM_COUNT;

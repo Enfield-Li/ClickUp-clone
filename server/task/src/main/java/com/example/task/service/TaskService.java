@@ -197,21 +197,17 @@ public class TaskService {
         var statusCategoryDTO = initTasksInRegistrationDTO.statusCategoryDTO();
 
         var userInfo = userInfoService.getCurrentUserInfo();
-        var desc = "Yep, there are definitely improvements needed for this modal component";
         var statusColumns = statusCategoryDTO.statusColumns();
 
         var status1 = StatusPosition.builder()
                 .orderIndex(1).name(statusColumns.get(1).title())
                 .columnId(statusColumns.get(1).id()).build();
-
         var status2 = StatusPosition.builder()
                 .orderIndex(1).name(statusColumns.get(0).title())
                 .columnId(statusColumns.get(0).id()).build();
-
         var status3 = StatusPosition.builder()
                 .orderIndex(2).name(statusColumns.get(0).title())
                 .columnId(statusColumns.get(0).id()).build();
-
         var status4 = StatusPosition.builder()
                 .orderIndex(1).name(statusColumns.get(2).title())
                 .columnId(statusColumns.get(2).id()).build();
@@ -219,35 +215,37 @@ public class TaskService {
         var priority1 = PriorityPosition.builder()
                 .columnId(1).orderIndex(1)
                 .name(Priority.NO_PRIORITY).build();
-
         var priority2 = PriorityPosition.builder()
                 .columnId(2).orderIndex(1)
                 .name(Priority.HIGH).build();
-
         var priority3 = PriorityPosition.builder()
                 .columnId(1).orderIndex(2)
                 .name(Priority.NO_PRIORITY).build();
+        var priority4 = PriorityPosition.builder()
+                .columnId(1).orderIndex(1)
+                .name(Priority.NORMAL).build();
 
+        var desc = "Yes, this task card component needs some extra work to do";
         var task1 = Task.builder()
                 .listId(listId)
                 .status(status1)
                 .priority(priority1)
                 .description(desc)
-                .title("Look! You made some progress")
+                .title("Look! Some progress 💪")
                 .build();
 
         var task2 = Task.builder()
                 .listId(listId)
                 .status(status2)
                 .priority(priority2)
-                .title("Try change priority 👇")
+                .title("👇 Try change priority")
                 .build();
 
         var task3 = Task.builder()
                 .listId(listId)
                 .status(status3)
                 .priority(priority3)
-                .title("Try change due date 👇")
+                .title("👇 Try change due date")
                 .expectedDueDate(LocalDateTime.now())
                 .build();
 
@@ -256,7 +254,7 @@ public class TaskService {
                 .status(status4)
                 .description("Done! This task is hidden from 'group by' priority/due date")
                 .priority(priority3)
-                .title("Finished task")
+                .title("Finished task ✔")
                 .build();
 
         var taskList = List.of(task1, task2, task3, task4);

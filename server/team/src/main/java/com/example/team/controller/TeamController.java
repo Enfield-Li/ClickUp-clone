@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import com.example.clients.authorization.InitTeamUIState;
 import com.example.clients.team.CreateTeamDTO;
 import com.example.team.model.Team;
 import com.example.team.service.TeamService;
@@ -37,7 +38,7 @@ class TeamController {
     }
 
     @PostMapping("/init_team")
-    ResponseEntity<Integer> initTeamInRegistration(
+    ResponseEntity<InitTeamUIState> initTeamInRegistration(
             @RequestBody CreateTeamDTO createTeamDTO) {
         var createdTeam = service.initTeamInRegistration(createTeamDTO);
         return ResponseEntity.ok(createdTeam);

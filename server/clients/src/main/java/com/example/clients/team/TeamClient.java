@@ -1,5 +1,6 @@
 package com.example.clients.team;
 
+import com.example.clients.authorization.InitTeamUIState;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +13,7 @@ import static com.example.clients.UrlConstants.TEAM_API_VERSION;
 public interface TeamClient {
 
     @PostMapping(path = TEAM_API_VERSION + "/init_team")
-    Integer initTeamInRegistration(
+    InitTeamUIState initTeamInRegistration(
             @RequestBody CreateTeamDTO createTeamDTO,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken
     );

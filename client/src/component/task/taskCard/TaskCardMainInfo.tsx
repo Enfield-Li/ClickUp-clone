@@ -19,7 +19,7 @@ function TaskCardMainInfo({ task }: Props) {
   return (
     <Flex mb={2}>
       {/* Task title */}
-      <Heading color={headerColor} fontSize="sm" fontFamily="heading">
+      <Heading color={headerColor} fontSize="small" fontFamily="heading">
         {task.title}
       </Heading>
 

@@ -38,6 +38,8 @@ function TaskCard({ task, index }: Props) {
     );
   }, [columnOptions.statusColumns, task.status]);
 
+  const expandedHeight = "110px";
+  const collapsedHeight = "90px";
   const hasSubTask = task.subTasks.length > 0;
   const hasDueDate = task.expectedDueDate !== null;
   const hasPriority = task.priority.name !== Priority.NO_PRIORITY;
@@ -79,9 +81,9 @@ function TaskCard({ task, index }: Props) {
             onClick={handleOpenTaskModal}
             justifyContent="space-between"
             borderLeftColor={currentStatus?.color}
-            height={expandCardHeight ? "110px" : "90px"}
-            borderLeftWidth={sortBy !== SortBy.STATUS ? "3px" : ""}
             borderBottomRadius={showSubTask ? "" : "sm"}
+            borderLeftWidth={sortBy !== SortBy.STATUS ? "3px" : ""}
+            height={expandCardHeight ? expandedHeight : collapsedHeight}
             border={colorMode === "dark" ? "1px solid darkMain.300" : ""}
             _hover={{
               bgColor:
@@ -93,11 +95,11 @@ function TaskCard({ task, index }: Props) {
               pb="2px"
               flexDir="column"
               justifyContent="space-between"
-              height={expandCardHeight ? "110px" : "80px"}
               onMouseOutCapture={() =>
                 setShowAddSubTask(isPopoverOpen ? false : true)
               }
               onMouseOverCapture={() => setShowAddSubTask(false)}
+              height={expandCardHeight ? expandedHeight : collapsedHeight}
             >
               {/* Task info */}
               <Box>

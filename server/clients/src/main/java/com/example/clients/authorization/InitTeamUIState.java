@@ -1,6 +1,6 @@
-package com.example.clients.team;
+package com.example.clients.authorization;
 
-public record TeamActivityInRegistration(
+public record InitTeamUIState(
         Integer teamId,
         Integer spaceId,
         Integer listId

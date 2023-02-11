@@ -1,11 +1,13 @@
 package com.example.team.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.authorization.InitTeamUIState;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.task.InitTasksInRegistrationDTO;
 import com.example.clients.task.TaskClient;
 import com.example.clients.team.CreateTeamDTO;
+import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
@@ -43,7 +45,7 @@ public class TeamService {
     }
 
     @Transactional
-    public Integer initTeamInRegistration(CreateTeamDTO createTeamDTO) {
+    public InitTeamUIState initTeamInRegistration(CreateTeamDTO createTeamDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
 
         // Init team
@@ -70,8 +72,12 @@ public class TeamService {
                 statusCategoryDTO);
         var isTaskCreated = taskClient
                 .initTaskInRegistration(initTasksInRegistrationDTO);
+        if (!isTaskCreated) {
+            throw new InternalErrorException("Failed to create task");
+        }
 
-        return team.getId();
+        return new InitTeamUIState(
+                team.getId(), space.getId(), listCategoryId);
     }
 
     @Transactional

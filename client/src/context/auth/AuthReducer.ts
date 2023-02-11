@@ -3,6 +3,7 @@ import determineListType, {
   determineFolderType,
 } from "../../component/layout/subNavbar/folderAndList/determineList";
 import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
+import setTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function authReducer(
   authState: AuthStateType,
@@ -31,7 +32,14 @@ export default function authReducer(
 
     case AUTH_ACTION.REGISTER_USER: {
       return produce(authState, (draftState) => {
-        draftState.user = authAction.payload.user;
+        draftState.user = authAction.payload.registrationResponse;
+
+        const teamActiveStatus =
+          authAction.payload.registrationResponse.initTeamUIState;
+        setTeamActiveStatusToLocalStorage(
+          teamActiveStatus.teamId,
+          teamActiveStatus
+        );
       });
     }
 

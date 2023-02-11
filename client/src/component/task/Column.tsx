@@ -21,8 +21,7 @@ function Column({ taskState, taskList, currentColumn }: Props) {
   const { sortBy, columnOptions } = taskStateContext;
 
   const finishedColumnId = useMemo(
-    () =>
-      columnOptions.statusColumns.find((column) => column.markAsClosed)!.id!,
+    () => columnOptions.statusColumns.find((column) => column.markAsClosed)?.id,
     [columnOptions]
   );
 
@@ -51,8 +50,8 @@ function Column({ taskState, taskList, currentColumn }: Props) {
           >
             {/* Task list */}
             {taskList
-              // hide finished task
               ?.filter((task) => {
+                // hide finished task
                 const isTaskFinished =
                   task.status.columnId !== finishedColumnId;
                 return sortBy !== SortBy.STATUS ? isTaskFinished : true;
@@ -63,7 +62,7 @@ function Column({ taskState, taskList, currentColumn }: Props) {
             {provided.placeholder}
 
             {/* Create task popover */}
-            {hovering && currentColumn.id !== finishedColumnId && (
+            {hovering && !currentColumn.markAsClosed && (
               <CreateTask
                 taskState={taskState}
                 setHovering={setHovering}

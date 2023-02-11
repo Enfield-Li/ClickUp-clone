@@ -70,16 +70,22 @@ function Register({}: Props) {
           onSubmit={async (registerUserDTO, { setErrors }) => {
             await registerUser(
               registerUserDTO,
-              (registeredUser) => {
+              (registrationResponse) => {
                 // store accessToken to localStorage
-                localStorage.setItem(ACCESS_TOKEN, registeredUser.accessToken);
+                localStorage.setItem(
+                  ACCESS_TOKEN,
+                  registrationResponse.accessToken
+                );
 
                 // update auth taskState
                 authDispatch({
                   type: AUTH_ACTION.REGISTER_USER,
-                  payload: { user: registeredUser },
+                  payload: { registrationResponse: registrationResponse },
                 });
-                navigate(`/${registeredUser.defaultTeamId}/` + CLIENT_ROUTE.TASK_BOARD);
+                navigate(
+                  `/${registrationResponse.defaultTeamId}/` +
+                    CLIENT_ROUTE.TASK_BOARD
+                );
               },
               (errors) => {
                 localStorage.removeItem(ACCESS_TOKEN);

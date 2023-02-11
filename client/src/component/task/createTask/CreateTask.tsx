@@ -25,8 +25,6 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
     useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { sortBy, setTaskState } = taskStateContext;
-  const finishedStatusColumn =
-    sortBy === SortBy.STATUS && currentColumn.id === 3;
 
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const cardBgColor = useColorModeValue("white", "darkMain.200");
@@ -105,8 +103,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   return (
     <Box my={3}>
       {!showCreateTaskForm ? (
-        !isCreatingTask &&
-        !finishedStatusColumn && (
+        !isCreatingTask && (
           <Center
             px={3}
             py={1}

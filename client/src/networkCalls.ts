@@ -28,6 +28,7 @@ import {
   ListCategory,
   LoginUserDTO,
   RegisterUserDTO,
+  RegistrationResponse,
   Space,
   StatusCategories,
   StatusCategory,
@@ -419,12 +420,12 @@ export async function fetchTeamList(
 
 export async function registerUser(
   registerCredentials: RegisterUserDTO,
-  onSuccess: (data: AuthenticationResponse) => void,
+  onSuccess: (data: RegistrationResponse) => void,
   onFailure: (msg: FieldErrors) => void
 ) {
   try {
     const response =
-      await axiosAuthServiceInstance.post<AuthenticationResponse>(
+      await axiosAuthServiceInstance.post<RegistrationResponse>(
         API_ENDPOINT.AUTH_REGISTER,
         registerCredentials
       );
