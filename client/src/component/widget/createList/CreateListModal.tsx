@@ -12,10 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { createList } from "../../../networkCalls";
-import { CreateListDTO, ListCategory, TEAM_STATE_ACTION } from "../../../types";
+import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
 import { generateDefaultListName } from "../../../utils/generateDefaultListName";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
@@ -27,15 +29,16 @@ function CreateListModal({}: Props) {
   const [value, setValue] = useState("");
   const [nameLists, setNameLists] = useState<string[]>();
   const isListNameTaken = nameLists?.includes(value);
+  const toast = useUnImplementedToast(
+    "This feature is not complete. Use the sidebar to create a list instead"
+  );
 
   const [placeHolderValue, setPlaceHolderValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
-  const {
-    teamState,
-    teamStateDispatch,
-    modalControls: { isCreateListModalOpen, onCreateListModalClose },
-  } = useTeamStateContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { isCreateListModalOpen, onCreateListModalClose } =
+    useModalControlContext();
 
   useEffect(() => {
     const currentLevelLists = teamState.createListInfo?.currentLevelLists;
@@ -58,7 +61,8 @@ function CreateListModal({}: Props) {
       !teamState.createListInfo?.orderIndex ||
       !teamState.createListInfo.defaultStatusCategoryId
     ) {
-      throw new Error("createListInfo not ready yet");
+      toast();
+      return;
     }
     const { folderId, spaceId, orderIndex, defaultStatusCategoryId } =
       teamState.createListInfo;
@@ -76,7 +80,7 @@ function CreateListModal({}: Props) {
 
       if (folderId) {
         list.parentFolderId = folderId;
-        list.spaceId = spaceId
+        list.spaceId = spaceId;
       }
       teamStateDispatch({
         type: TEAM_STATE_ACTION.CREATE_LIST,

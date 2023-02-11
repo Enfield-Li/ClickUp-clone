@@ -6,12 +6,11 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
-import determineListType, {
-  determineFolderType,
-} from "../../layout/subNavbar/folderAndList/determineList";
+import { determineFolderType } from "../../layout/subNavbar/folderAndList/determineList";
 import CreateFolderEntry from "./CreateFolderEntry";
 import { initCreateFolderState } from "./createfolderInitialState";
 import CreateFolderSelectList from "./CreateFolderSelectList";
@@ -22,13 +21,10 @@ type Props = {};
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
+  const { teamState } = useTeamStateContext();
   const bgColor = useColorModeValue("white", "darkMain.100");
-
-  const {
-    teamState,
-    modalControls: { isCreateFolderModalOpen, onCreateFolderModalClose },
-  } = useTeamStateContext();
-
+  const { isCreateFolderModalOpen, onCreateFolderModalClose } =
+    useModalControlContext();
   const [createFolderState, setCreateFolderState] = useState<CreateFolderState>(
     initCreateFolderState
   );

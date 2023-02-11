@@ -1,5 +1,6 @@
 import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
+import useModalControlContext from "../../../../context/modalControl/useModalControlContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { Space, TEAM_STATE_ACTION } from "../../../../types";
 import { determineFolderType } from "./determineList";
@@ -12,10 +13,9 @@ type Props = {
 
 export default memo(SpaceContent);
 function SpaceContent({ space }: Props) {
-  const {
-    teamStateDispatch,
-    modalControls: { onCreateListModalOpen, onCreateFolderModalOpen },
-  } = useTeamStateContext();
+  const { teamStateDispatch } = useTeamStateContext();
+  const { onCreateListModalOpen, onCreateFolderModalOpen } =
+    useModalControlContext();
 
   return (
     <Box mb="2">

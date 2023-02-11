@@ -1,6 +1,6 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo, useEffect } from "react";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import useModalControlContext from "../../../context/modalControl/useModalControlContext";
 import { Team } from "../../../types";
 import SpaceComponent from "./SpaceComponent";
 
@@ -9,9 +9,7 @@ type Props = { currentTeam: Team | undefined };
 export default memo(SubNavbarContent);
 function SubNavbarContent({ currentTeam }: Props) {
   const { colorMode } = useColorMode();
-  const {
-    modalControls: { onCreateSpaceModalOpen },
-  } = useTeamStateContext();
+  const { onCreateSpaceModalOpen } = useModalControlContext();
   const hoverBgColor = colorMode === "dark" ? "darkMain.300" : "darkMain.200";
 
   function handleClickToSeeEveryTasks(): void {

@@ -28,41 +28,10 @@ export default function TeamStateProvider({ children }: ProviderType) {
     initialTeamContextState
   );
 
-  const {
-    isOpen: isCreateListModalOpen,
-    onOpen: onCreateListModalOpen,
-    onClose: onCreateListModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isCreateFolderModalOpen,
-    onOpen: onCreateFolderModalOpen,
-    onClose: onCreateFolderModalClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isCreateSpaceModalOpen,
-    onOpen: onCreateSpaceModalOpen,
-    onClose: onCreateSpaceModalClose,
-  } = useDisclosure();
-
-  const modalControls: ModalControls = {
-    isCreateListModalOpen,
-    onCreateListModalOpen,
-    onCreateListModalClose,
-    isCreateFolderModalOpen,
-    onCreateFolderModalOpen,
-    onCreateFolderModalClose,
-    isCreateSpaceModalOpen,
-    onCreateSpaceModalOpen,
-    onCreateSpaceModalClose,
-  };
-
   return (
     <TeamContext.Provider
       value={{
         teamState,
-        modalControls,
         teamStateDispatch,
       }}
     >

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class TaskService {
 
     private final TaskMapper taskMapper;
     private final EntityManager entityManager;
-    private final TaskRepository taskRepository;
+    private final TaskRepository repository;
     private final UserInfoService userInfoService;
     private final StatusCategoryClient statusCategoryClient;
     // private final RabbitMqMessageProducer rabbitMQMessageProducer;
@@ -33,7 +34,7 @@ public class TaskService {
         var statusCategoryDTO = statusCategoryClient
                 .getStatusCategoryForList(defaultStatusCategoryId);
 
-        var taskList = taskRepository.findByListId(listId);
+        var taskList = repository.findByListId(listId);
 
         return new TaskListStatusCategoryDTO(statusCategoryDTO, taskList);
     }
@@ -46,7 +47,7 @@ public class TaskService {
         task.addWatcher(userInfo);
         task.addAssignee(userInfo);
 
-        return taskRepository.save(task);
+        return repository.save(task);
     }
 
     @Transactional
@@ -55,24 +56,6 @@ public class TaskService {
         // var userInfo = getCurrentUserInfo();
         var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
-
-        // Find sourceTask
-        var sourceTask = taskDtoList.stream()
-                .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
-                .findFirst();
-
-        // Task drop into a different column
-        // publish task update event
-        // var taskEvents = sourceTask.get().taskEvents();
-        // if (taskEvents != null) {
-        //     taskEvents.setUserId(userId);
-        //     taskEvents.setUsername(username);
-
-        //     rabbitMQMessageProducer.publish(
-        //             internalExchange,
-        //             taskEventRoutingKey,
-        //             taskEvents);
-        // }
 
         var statusTableName = "status_position";
         var priorityTableName = "priority_position";
@@ -99,12 +82,30 @@ public class TaskService {
             }
         });
 
+        // Find sourceTask
+        var sourceTask = taskDtoList.stream()
+                .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
+                .findFirst();
+
+        // Task drop into a different column
+        // publish task update event
+        // var taskEvents = sourceTask.get().taskEvents();
+        // if (taskEvents != null) {
+        //     taskEvents.setUserId(userId);
+        //     taskEvents.setUsername(username);
+
+        //     rabbitMQMessageProducer.publish(
+        //             internalExchange,
+        //             taskEventRoutingKey,
+        //             taskEvents);
+        // }
+
         return true;
     }
 
     @Transactional
     public Boolean deleteTask(Integer taskId) {
-        var task = entityManager.find(Task.class, taskId);
+        var task = entityManager.getReference(Task.class, taskId);
         var creatorId = task.getCreatorId();
 
         task.getWatchers().forEach(task::removeWatcher);
@@ -125,7 +126,7 @@ public class TaskService {
 
         var taskId = updateTaskTitleDTO.taskId();
         var newTitle = updateTaskTitleDTO.newTitle();
-        var oldTitle = taskRepository.getTaskTitle(taskId);
+        var oldTitle = repository.getTaskTitle(taskId);
 
         var updateEventDTO = UpdateEventDTO
                 .builder()
@@ -137,16 +138,16 @@ public class TaskService {
                 .taskId(taskId)
                 .build();
 
+        var updateCount = repository.updateTitle(
+                taskId,
+                newTitle,
+                LocalDateTime.now());
+
         // publish task update title event
         // rabbitMQMessageProducer.publish(
         //         internalExchange,
         //         taskEventRoutingKey,
         //         updateEventDTO);
-
-        var updateCount = taskRepository.updateTitle(
-                taskId,
-                newTitle,
-                LocalDateTime.now());
 
         return updateCount > 0;
     }
@@ -156,7 +157,7 @@ public class TaskService {
         var taskId = updateTaskDescDTO.taskId();
         var newDesc = updateTaskDescDTO.newDesc();
 
-        var updateCount = taskRepository.updateDesc(
+        var updateCount = repository.updateDesc(
                 taskId,
                 newDesc,
                 LocalDateTime.now());
@@ -170,12 +171,18 @@ public class TaskService {
         var listId = eventDTO.listId();
         var oldNewStatusPairs = eventDTO.oldNewStatusPairs();
 
-        var taskList = taskRepository.findByListId(listId);
+        var taskList = repository.findByListId(listId);
 
         taskList.forEach(task -> {
             var originalColumnId = task.getStatus().getColumnId();
             var newColumnId = oldNewStatusPairs.get(originalColumnId);
             task.getStatus().setColumnId(newColumnId);
         });
+    }
+
+    @Transactional
+    public Boolean deleteTasks(Set<Integer> ids) {
+        repository.deleteAllByListIdIn(ids);
+        return true;
     }
 }

@@ -10,12 +10,15 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
     Optional<Task> findByTitle(String title);
 
     List<Task> findByListId(Integer listId);
+
+    void deleteAllByListIdIn(Set<Integer> ids);
 
     @Query(nativeQuery = true, value = "" +
             "SELECT title FROM task WHERE id = :id")

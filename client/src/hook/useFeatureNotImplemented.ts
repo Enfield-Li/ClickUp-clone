@@ -1,10 +1,9 @@
 import { useToast } from "@chakra-ui/react";
-import React from "react";
 
-export default function useUnImplementedToast() {
+export default function useUnImplementedToast(msg?: string) {
   return useToast({
     status: "error",
     title: "Nope",
-    description: "I haven't implemented this feature yet...",
+    description: msg || "I haven't implemented this feature yet...",
   });
 }
