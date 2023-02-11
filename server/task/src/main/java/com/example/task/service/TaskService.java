@@ -254,7 +254,7 @@ public class TaskService {
                 .status(status4)
                 .description("Done! This task is hidden from 'group by' priority/due date")
                 .priority(priority3)
-                .title("Finished task ✔")
+                .title("✔ Finished task")
                 .build();
 
         var taskList = List.of(task1, task2, task3, task4);

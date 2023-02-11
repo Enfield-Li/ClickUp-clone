@@ -1,6 +1,6 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex } from "@chakra-ui/react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
@@ -27,12 +27,17 @@ function SetTaskAttribute({
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
   const { sortBy, setTaskState } = taskStateContext!;
+  if (!taskStateContext) throw new Error("taskStateContext not initialized");
+  const { columnOptions } = taskStateContext;
+
+  const finishedColumnId = useMemo(
+    () =>
+      columnOptions.statusColumns.find((column) => column.markAsClosed)!.id!,
+    [columnOptions]
+  );
 
   function handleSetToFinish(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    const finishedColumnId = taskStateContext?.columnOptions.statusColumns.find(
-      (column) => column.markAsClosed
-    )!.id!;
 
     updateTaskAttribute({
       sortBy,
@@ -78,20 +83,22 @@ function SetTaskAttribute({
 
       {/* Set to complete */}
       <Flex>
-        <Center mr={2}>
-          <FinishTask>
-            <Center
-              p={0}
-              opacity="55%"
-              fontSize="15px"
-              fontStyle="bold"
-              _hover={{ opacity: "100%", color: "green.300" }}
-              onClick={(e) => handleSetToFinish(e)}
-            >
-              <CheckIcon fontSize="md" alignSelf="center" />
-            </Center>
-          </FinishTask>
-        </Center>
+        {task.status.columnId !== finishedColumnId && (
+          <Center mr={2}>
+            <FinishTask>
+              <Center
+                p={0}
+                opacity="55%"
+                fontSize="15px"
+                fontStyle="bold"
+                _hover={{ opacity: "100%", color: "green.300" }}
+                onClick={(e) => handleSetToFinish(e)}
+              >
+                <CheckIcon fontSize="md" alignSelf="center" />
+              </Center>
+            </FinishTask>
+          </Center>
+        )}
 
         {/* More options */}
         <Center

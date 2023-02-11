@@ -69,6 +69,7 @@ function TaskCard({ task, index }: Props) {
           <Flex
             mt={3}
             width="full"
+            cursor="grab"
             boxShadow="md"
             role="listitem"
             flexDir="column"
