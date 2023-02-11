@@ -7,6 +7,8 @@ import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailedField;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
+import com.example.clients.team.CreateTeamDTO;
+import com.example.clients.team.TeamClient;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +28,7 @@ import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
 public class AuthorizationService {
 
     private final HttpSession session;
+    private final TeamClient teamClient;
     private final HttpServletRequest request;
 
     private final JwtUtilities jwtUtils;
@@ -35,6 +38,7 @@ public class AuthorizationService {
     private final Integer INITIAL_TOKEN_VERSION = 0;
     private final String REFRESH_TOKEN = "refresh_token";
 
+    @Transactional
     AuthorizationResponseDTO register(RegisterUserDTO registerUserDTO) {
         var color = registerUserDTO.color();
         var email = registerUserDTO.email();
@@ -56,9 +60,20 @@ public class AuthorizationService {
                 .email(email)
                 .color(color)
                 .username(username)
+                .joinedTeamCount(1)
                 .password(encodedPassword)
                 .build();
         var user = repository.save(applicationUser);
+
+        var green = "rgb(29, 185, 84)";
+        var teamName = String.format("%s's Workspace", username);
+        var createTeamDTO = new CreateTeamDTO(green, null, teamName);
+        var accessToken = jwtUtils.createAccessToken(user.getId(), username);
+
+        var createTeamId = teamClient.initTeamInRegistration(
+                createTeamDTO, String.format("Bearer %s", accessToken));
+        user.setDefaultTeamId(createTeamId);
+        repository.save(user);
 
         // 3. generate refresh token and save to session
         //    generate access token & response
@@ -173,7 +188,6 @@ public class AuthorizationService {
         // store refreshToken in session
         var refreshToken = jwtUtils.createRefreshToken(userId, tokenVersion);
         session.setAttribute(REFRESH_TOKEN, refreshToken);
-        var getRefreshToken = (String) session.getAttribute(REFRESH_TOKEN);
 
         // send accessToken to client
         var accessToken = jwtUtils.createAccessToken(userId, username);

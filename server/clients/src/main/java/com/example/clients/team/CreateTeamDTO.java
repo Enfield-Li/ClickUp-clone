@@ -1,4 +1,4 @@
-package com.example.team.dto;
+package com.example.clients.team;
 
 import javax.validation.constraints.Size;
 

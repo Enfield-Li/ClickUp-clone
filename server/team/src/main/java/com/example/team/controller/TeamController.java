@@ -1,6 +1,6 @@
 package com.example.team.controller;
 
-import com.example.team.dto.CreateTeamDTO;
+import com.example.clients.team.CreateTeamDTO;
 import com.example.team.model.Team;
 import com.example.team.service.TeamService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +33,13 @@ class TeamController {
     ResponseEntity<Team> createTeam(
             @RequestBody CreateTeamDTO createTeamDTO) {
         var createdTeam = service.createTeam(createTeamDTO);
+        return ResponseEntity.ok(createdTeam);
+    }
+
+    @PostMapping("/init_team")
+    ResponseEntity<Integer> initTeamInRegistration(
+            @RequestBody CreateTeamDTO createTeamDTO) {
+        var createdTeam = service.initTeamInRegistration(createTeamDTO);
         return ResponseEntity.ok(createdTeam);
     }
 

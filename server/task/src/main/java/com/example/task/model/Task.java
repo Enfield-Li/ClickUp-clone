@@ -42,7 +42,9 @@ public class Task {
 
     @NotNull
     @JoinColumn(name = "statusId")
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private StatusPosition status;
 
     @JsonIgnore
@@ -51,7 +53,9 @@ public class Task {
 
     @NotNull
     @JoinColumn(name = "priorityId")
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private PriorityPosition priority;
 
     @JsonIgnore

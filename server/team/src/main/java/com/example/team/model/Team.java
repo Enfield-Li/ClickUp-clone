@@ -1,6 +1,6 @@
 package com.example.team.model;
 
-import com.example.team.dto.CreateTeamDTO;
+import com.example.clients.team.CreateTeamDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -83,7 +83,7 @@ public class Team {
         members.forEach(this::removeMember);
     }
 
-    public static Team initTeamCreation(
+    public static Team createTeam(
             CreateTeamDTO createTeamDTO, UserInfo userInfo) {
         var team = Team.builder()
                 .owner(userInfo)

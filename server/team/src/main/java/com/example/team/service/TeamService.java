@@ -3,8 +3,10 @@ package com.example.team.service;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
+import com.example.clients.task.InitTasksInRegistrationDTO;
+import com.example.clients.task.TaskClient;
+import com.example.clients.team.CreateTeamDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.team.dto.CreateTeamDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.repository.SpaceRepository;
@@ -25,6 +27,7 @@ import static com.example.amqp.ExchangeKey.internalExchange;
 @RequiredArgsConstructor
 public class TeamService {
 
+    private final TaskClient taskClient;
     private final TeamRepository repository;
     private final EntityManager entityManager;
     private final SpaceRepository spaceRepository;
@@ -40,11 +43,43 @@ public class TeamService {
     }
 
     @Transactional
+    public Integer initTeamInRegistration(CreateTeamDTO createTeamDTO) {
+        var userInfo = userInfoService.getCurrentUserInfo();
+
+        // Init team
+        var initTeam = Team.createTeam(createTeamDTO, userInfo);
+        var team = repository.saveAndFlush(initTeam);
+
+        // Init statusCategory
+        var teamId = team.getId();
+        var statusCategoryDTO = statusCategoryClient
+                .initDefaultStatusCategoryInRegistration(teamId);
+
+        // Init space
+        var defaultStatusCategoryId = statusCategoryDTO.id();
+        var initSpace = Space.initSpaceInRegistration(
+                defaultStatusCategoryId, userInfo);
+        team.addSpace(initSpace);
+        var space = spaceRepository.saveAndFlush(initSpace);
+
+        // Init tasks for listCategory
+        var listCategoryId = space.getListCategories()
+                .stream().toList().get(0).getId();
+        var initTasksInRegistrationDTO = new InitTasksInRegistrationDTO(
+                listCategoryId,
+                statusCategoryDTO);
+        var isTaskCreated = taskClient
+                .initTaskInRegistration(initTasksInRegistrationDTO);
+
+        return team.getId();
+    }
+
+    @Transactional
     public Team createTeam(CreateTeamDTO createTeamDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
 
         // Init team
-        var initTeam = Team.initTeamCreation(createTeamDTO, userInfo);
+        var initTeam = Team.createTeam(createTeamDTO, userInfo);
         var team = repository.save(initTeam);
 
         // Init statusCategory
@@ -53,7 +88,8 @@ public class TeamService {
                 .initStatusCategoryForTeam(teamId);
 
         // Init space
-        var initSpace = Space.initTeamSpace(defaultStatusCategoryId, userInfo);
+        var initSpace = Space.initSpaceInCreateTeam(
+                defaultStatusCategoryId, userInfo);
         team.addSpace(initSpace);
         spaceRepository.save(initSpace);
 

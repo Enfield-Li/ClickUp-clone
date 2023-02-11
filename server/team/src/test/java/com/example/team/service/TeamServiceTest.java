@@ -3,8 +3,8 @@ package com.example.team.service;
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
+import com.example.clients.team.CreateTeamDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
-import com.example.team.dto.CreateTeamDTO;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
 import com.example.team.model.UserInfo;
@@ -67,13 +67,13 @@ public class TeamServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new TeamService(
-                teamRepository,
-                entityManager,
-                spaceRepository,
-                userInfoService,
-                statusCategoryClient,
-                rabbitMQMessageProducer);
+//        underTest = new TeamService(
+//                teamRepository,
+//                entityManager,
+//                spaceRepository,
+//                userInfoService,
+//                statusCategoryClient,
+//                rabbitMQMessageProducer);
     }
 
     @Test

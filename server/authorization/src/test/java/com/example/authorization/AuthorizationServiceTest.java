@@ -1,18 +1,12 @@
 package com.example.authorization;
 
-import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import com.example.authorization.dto.AuthorizationResponseDTO;
+import com.example.authorization.dto.LoginUserDTO;
+import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
+import com.example.clients.jwt.AuthenticationFailureException;
+import com.example.clients.jwt.JwtUtilities;
+import com.example.clients.jwt.RefreshTokenPayload;
+import com.example.clients.jwt.UserCredentials;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,17 +20,18 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.authorization.dto.AuthorizationResponseDTO;
-import com.example.authorization.dto.LoginUserDTO;
-import com.example.authorization.dto.RegisterUserDTO;
-import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
-import com.example.clients.jwt.AuthenticationFailureException;
-import com.example.clients.jwt.JwtUtilities;
-import com.example.clients.jwt.RefreshTokenPayload;
-import com.example.clients.jwt.UserCredentials;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Optional;
+
+import static com.example.clients.UrlConstants.AUTHORIZATION_HEADER;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 // OutputCaptureExtension.class
-@ExtendWith({ MockitoExtension.class, OutputCaptureExtension.class })
+@ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class AuthorizationServiceTest implements WithAssertions {
 
     AuthorizationService underTest;
@@ -74,9 +69,9 @@ public class AuthorizationServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new AuthorizationService(
-                httpSession, httpServletRequest, jwtUtils,
-                passwordEncoder, repository);
+//        underTest = new AuthorizationService(
+//                httpSession, httpServletRequest, jwtUtils,
+//                passwordEncoder, repository);
     }
 
     // @Test

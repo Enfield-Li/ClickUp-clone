@@ -79,7 +79,7 @@ function TaskCard({ task, index }: Props) {
             onClick={handleOpenTaskModal}
             justifyContent="space-between"
             borderLeftColor={currentStatus?.color}
-            height={expandCardHeight ? "110px" : "80px"}
+            height={expandCardHeight ? "110px" : "90px"}
             borderLeftWidth={sortBy !== SortBy.STATUS ? "3px" : ""}
             borderBottomRadius={showSubTask ? "" : "sm"}
             border={colorMode === "dark" ? "1px solid darkMain.300" : ""}

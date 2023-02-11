@@ -19,13 +19,13 @@ function TaskCardMainInfo({ task }: Props) {
   return (
     <Flex mb={2}>
       {/* Task title */}
-      <Heading color={headerColor} fontSize="xl" fontFamily="heading">
+      <Heading color={headerColor} fontSize="sm" fontFamily="heading">
         {task.title}
       </Heading>
 
       {/* Preview description */}
       {task.description && (
-        <Center ml={2} opacity="70%" onClick={(e) => e.stopPropagation()}>
+        <Box ml={2} opacity="70%" onClick={(e) => e.stopPropagation()}>
           <Tooltip
             p={3}
             width="300px"
@@ -36,14 +36,12 @@ function TaskCardMainInfo({ task }: Props) {
             <Center
               width="20px"
               height="20px"
-              _hover={{
-                bgColor: "darkMain.300",
-              }}
+              _hover={{ bgColor: "darkMain.300" }}
             >
               <i className="bi bi-justify-left"></i>
             </Center>
           </Tooltip>
-        </Center>
+        </Box>
       )}
     </Flex>
   );

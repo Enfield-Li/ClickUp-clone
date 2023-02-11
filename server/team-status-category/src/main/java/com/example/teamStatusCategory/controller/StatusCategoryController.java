@@ -45,6 +45,14 @@ class StatusCategoryController {
         return ResponseEntity.ok(defaultId);
     }
 
+    @PostMapping("/init_status_category/{teamId}")
+    ResponseEntity<StatusCategory> initDefaultStatusCategoryInRegistration(
+            @PathVariable("teamId") Integer teamId) {
+        var statusCategory = service
+                .initDefaultStatusCategoryInRegistration(teamId);
+        return ResponseEntity.ok(statusCategory);
+    }
+
     @PostMapping
     ResponseEntity<StatusCategory> createStatusCategory(
             @RequestBody CreateStatusCategoryDTO CreateStatusCategoryDTO) {

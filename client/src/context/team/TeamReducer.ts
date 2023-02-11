@@ -1,8 +1,6 @@
 import produce from "immer";
 import { WritableDraft } from "immer/dist/internal";
-import determineListType, {
-  determineFolderType,
-} from "../../component/layout/subNavbar/folderAndList/determineList";
+import { determineFolderType } from "../../component/layout/subNavbar/folderAndList/determineList";
 import {
   CreateListInfo,
   FolderCategory,

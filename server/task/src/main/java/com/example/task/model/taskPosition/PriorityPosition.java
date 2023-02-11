@@ -1,21 +1,15 @@
 package com.example.task.model.taskPosition;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 @Data
 @Entity
-// https://stackoverflow.com/questions/31664098/lombok-builder-inheritance-workaround
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

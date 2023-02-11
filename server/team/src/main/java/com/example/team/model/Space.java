@@ -158,15 +158,14 @@ public class Space {
                         createSpaceDTO.defaultStatusCategoryId())
                 .build();
         listCategory.addMember(userInfo);
-        var listCategories = Set.of(listCategory);
 
         var space = Space.builder()
-                .listCategories(listCategories)
                 .creator(userInfo)
                 .name(createSpaceDTO.name())
                 .color(createSpaceDTO.color())
                 .avatar(createSpaceDTO.avatar())
                 .teamId(createSpaceDTO.teamId())
+                .listCategories(Set.of(listCategory))
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
                 .defaultStatusCategoryId(
@@ -178,7 +177,32 @@ public class Space {
         return space;
     }
 
-    public static Space initTeamSpace(
+    public static Space initSpaceInRegistration(
+            Integer defaultStatusCategoryId, UserInfo userInfo) {
+        var listCategory = ListCategory.builder()
+                .name("list")
+                .orderIndex(1)
+                .creator(userInfo)
+                .defaultStatusCategoryId(defaultStatusCategoryId)
+                .build();
+        listCategory.addMember(userInfo);
+
+        var space = Space.builder()
+                .name("space")
+                .color("gray")
+                .orderIndex(1)
+                .isPrivate(false)
+                .creator(userInfo)
+                .listCategories(Set.of(listCategory))
+                .defaultStatusCategoryId(defaultStatusCategoryId)
+                .build();
+        space.addMember(userInfo);
+
+        listCategory.setSpace(space);
+        return space;
+    }
+
+    public static Space initSpaceInCreateTeam(
             Integer defaultStatusCategoryId, UserInfo userInfo) {
         var space = Space.builder()
                 .name("space")
