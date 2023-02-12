@@ -11,7 +11,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { Field, FieldAttributes, Form, Formik, FormikErrors } from "formik";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
@@ -26,6 +26,7 @@ export default memo(Login);
 function Login({}: Props) {
   const navigate = useNavigate();
   const { authDispatch } = useAuthContext();
+  const [emailError, setEmailError] = useState<string>();
 
   const loginSchema = Yup.object().shape({
     email: Yup.string()
@@ -40,6 +41,7 @@ function Login({}: Props) {
   ) {
     errors.forEach((error) => {
       if (error.field === "email") {
+        setEmailError(error.message);
         setErrors({ email: error.message });
       } else if (error.field === "password") {
         setErrors({ password: error.message });
@@ -56,10 +58,7 @@ function Login({}: Props) {
       <Box height="fit-content">
         <Formik<LoginUserDTO>
           validationSchema={loginSchema}
-          initialValues={{
-            email: "",
-            password: "",
-          }}
+          initialValues={{ email: "", password: "" }}
           onSubmit={async (loginUserDTO, { setErrors }) => {
             await loginUser(
               loginUserDTO,
@@ -82,9 +81,9 @@ function Login({}: Props) {
               },
               (errors) => {
                 // clear local auth taskState and accessToken
+                handleError(setErrors, errors);
                 localStorage.removeItem(ACCESS_TOKEN);
                 authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
-                handleError(setErrors, errors);
               }
             );
           }}
@@ -124,16 +123,15 @@ function Login({}: Props) {
                         height="10px"
                         fontSize="12px"
                         cursor="pointer"
-                        onClick={() =>
-                          errors.email?.includes("Email not found") &&
-                          handleRegisterWithEmail(values.email)
-                        }
+                        onClick={() => {
+                          emailError && handleRegisterWithEmail(values.email);
+                        }}
                       >
-                        {errors.email && touched.email && (
+                        {(emailError || errors.email) && touched.email && (
                           <Box>
                             <i className="bi bi-exclamation-triangle-fill"></i>
                             <span>&nbsp;</span>
-                            {errors.email}
+                            {emailError || errors.email}
                           </Box>
                         )}
                       </Box>
@@ -197,22 +195,20 @@ function Login({}: Props) {
                 </Field>
 
                 {/* Submit button */}
-                <Box pt="3">
-                  <Button
-                    mt="6"
-                    shadow="md"
-                    width="100%"
-                    type="submit"
-                    color="white"
-                    bgColor="customBlue.200"
-                    isLoading={isSubmitting}
-                    _hover={{ bgColor: "customBlue.100" }}
-                    _active={{}}
-                    _focus={{}}
-                  >
-                    Submit
-                  </Button>
-                </Box>
+                <Button
+                  mt="6"
+                  shadow="md"
+                  width="100%"
+                  type="submit"
+                  color="white"
+                  bgColor="customBlue.200"
+                  isLoading={isSubmitting}
+                  _hover={{ bgColor: "customBlue.100" }}
+                  _active={{}}
+                  _focus={{}}
+                >
+                  Submit
+                </Button>
 
                 <Center mt="4" mb="1" fontSize="small" color="linkColor">
                   <Box cursor="not-allowed">or login with SSO</Box>
