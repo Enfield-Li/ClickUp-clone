@@ -37,7 +37,7 @@ function List({ space, folder, list }: Props) {
     );
     teamStateDispatch({
       type: TEAM_STATE_ACTION.SELECT_LIST,
-      payload: { listId: list.id },
+      payload: { list },
     });
   }
 

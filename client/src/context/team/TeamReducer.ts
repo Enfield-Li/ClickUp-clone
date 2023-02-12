@@ -4,6 +4,7 @@ import { determineFolderType } from "../../component/layout/subNavbar/folderAndL
 import {
   CreateListInfo,
   FolderCategory,
+  ListCategory,
   Team,
   TeamStateActionType,
   TeamStateType,
@@ -92,6 +93,37 @@ export default function teamReducer(
       });
     }
 
+    // Update
+    case TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID: {
+      return produce(teamState, (draftState) => {
+        const { newDefaultStatusCategoryId } = action.payload;
+
+        const currentListId = draftState.teamActiveStatus.listId;
+
+        draftState.originalTeams.forEach(
+          (team) =>
+            team.id === draftState.teamActiveStatus.teamId &&
+            team.spaces.forEach((space) => {
+              space.listCategories.forEach(
+                (list) =>
+                  list.id === currentListId &&
+                  (list.defaultStatusCategoryId = newDefaultStatusCategoryId)
+              );
+              space.allListOrFolder.forEach((listOrFolder) => {
+                if (determineFolderType(listOrFolder)) {
+                  listOrFolder.allLists.forEach((list) => {
+                    list.defaultStatusCategoryId = newDefaultStatusCategoryId;
+                  });
+                } else if (listOrFolder.id === currentListId) {
+                  listOrFolder.defaultStatusCategoryId =
+                    newDefaultStatusCategoryId;
+                }
+              });
+            })
+        );
+      });
+    }
+
     // Select
     case TEAM_STATE_ACTION.SELECT_TEAM: {
       return produce(teamState, (draftState) => {
@@ -103,9 +135,11 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.SELECT_LIST: {
       return produce(teamState, (draftState) => {
-        const { listId } = action.payload;
+        const { list } = action.payload;
 
-        draftState.teamActiveStatus.listId = listId;
+        draftState.teamActiveStatus.listId = list.id;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          list.defaultStatusCategoryId;
         syncTeamStateActivity(draftState);
       });
     }
@@ -120,10 +154,15 @@ export default function teamReducer(
       });
     }
 
+    // delete
     case TEAM_STATE_ACTION.DELETE_FOLDER: {
       return produce(teamState, (draftState) => {
-        const { deletedFolderId, nextListId } = action.payload;
+        const { deletedFolderId, nextListId, defaultStatusCategoryId } =
+          action.payload;
+
         draftState.teamActiveStatus.listId = nextListId;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          defaultStatusCategoryId;
 
         draftState.originalTeams.forEach((team) =>
           team.spaces.forEach((space) => {
@@ -144,9 +183,12 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE: {
       return produce(teamState, (draftState) => {
-        const { nextListId, deletedListId } = action.payload;
+        const { nextListId, deletedListId, defaultStatusCategoryId } =
+          action.payload;
 
         draftState.teamActiveStatus.listId = nextListId;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          defaultStatusCategoryId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>
@@ -167,9 +209,12 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER: {
       return produce(teamState, (draftState) => {
-        const { nextListId, deletedListId, folderId } = action.payload;
+        const { nextListId, deletedListId, folderId, defaultStatusCategoryId } =
+          action.payload;
 
         draftState.teamActiveStatus.listId = nextListId;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          defaultStatusCategoryId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>
@@ -199,10 +244,17 @@ export default function teamReducer(
 
     case TEAM_STATE_ACTION.DELETE_SPACE: {
       return produce(teamState, (draftState) => {
-        const { nextSpaceId, nextListId, deletedSpaceId } = action.payload;
+        const {
+          nextSpaceId,
+          nextListId,
+          deletedSpaceId,
+          defaultStatusCategoryId,
+        } = action.payload;
 
         draftState.teamActiveStatus.listId = nextListId;
         draftState.teamActiveStatus.spaceId = nextSpaceId;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          defaultStatusCategoryId;
 
         // delete original
         draftState.originalTeams.forEach((team) =>
@@ -239,7 +291,11 @@ export default function teamReducer(
 
         spaceCopy.allListOrFolder.push(spaceCopy.listCategories[0]);
         draftState.teamActiveStatus.spaceId = spaceCopy.id;
-        draftState.teamActiveStatus.listId = spaceCopy.listCategories[0].id;
+        const createdSubList = spaceCopy.listCategories[0] as ListCategory;
+        draftState.teamActiveStatus.listId = createdSubList.id;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          createdSubList.defaultStatusCategoryId;
+
         draftState.originalTeams.forEach(
           (team) =>
             team.id === draftState.teamActiveStatus.teamId &&
@@ -260,8 +316,13 @@ export default function teamReducer(
 
         draftState.teamActiveStatus.spaceId = spaceId;
         draftState.teamActiveStatus.folderIds.push(folder.id);
-        folder.allLists.length &&
-          (draftState.teamActiveStatus.listId = folder.allLists[0].id);
+
+        if (folder.allLists.length) {
+          const createdSubList = folder.allLists[0] as ListCategory;
+          draftState.teamActiveStatus.listId = createdSubList.id;
+          draftState.teamActiveStatus.defaultStatusCategoryId =
+            createdSubList.defaultStatusCategoryId;
+        }
 
         draftState.originalTeams.forEach(
           (team) =>
@@ -296,8 +357,10 @@ export default function teamReducer(
           throw new Error("draftState.createListInfo not initialized");
         const { spaceId, folderId } = draftState.createListInfo;
 
-        draftState.teamActiveStatus.listId = newList.id;
         draftState.teamActiveStatus.spaceId = spaceId;
+        draftState.teamActiveStatus.listId = newList.id;
+        draftState.teamActiveStatus.defaultStatusCategoryId =
+          newList.defaultStatusCategoryId;
         if (folderId) draftState.teamActiveStatus.folderIds.push(folderId);
 
         draftState.originalTeams.forEach(

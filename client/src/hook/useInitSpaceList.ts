@@ -14,8 +14,26 @@ export default function useInitSpaceList() {
   const { teamId } = useParams();
   const navigate = useNavigate();
   const { authState } = useAuthContext();
-  const { teamStateDispatch } = useTeamStateContext();
-  const { updateDefaultCategoryId } = useCurrentListStore();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { storedDefaultCategoryId, updateDefaultCategoryId } =
+    useCurrentListStore();
+
+  // sync current list's defaultStatusCategoryId after adding new column
+  const teamActiveStatusCategoryId =
+    teamState.teamActiveStatus.defaultStatusCategoryId;
+  useEffect(() => {
+    if (
+      teamActiveStatusCategoryId &&
+      storedDefaultCategoryId &&
+      teamActiveStatusCategoryId !== storedDefaultCategoryId
+    ) {
+      console.log({ teamActiveStatusCategoryId, storedDefaultCategoryId });
+      //   teamStateDispatch({
+      //     type: TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID,
+      //     payload: { newDefaultStatusCategoryId: storedDefaultCategoryId },
+      //   });
+    }
+  }, [storedDefaultCategoryId, teamActiveStatusCategoryId]);
 
   // init spaceListState
   useEffect(() => {
@@ -24,10 +42,11 @@ export default function useInitSpaceList() {
         Number(teamId),
         (teams) => {
           const initTeamActivity: TeamActiveStatus = {
-            teamId: Number(teamId),
-            spaceId: 0,
-            listId: 0,
             folderIds: [],
+            listId: undefined,
+            spaceId: undefined,
+            teamId: Number(teamId),
+            defaultStatusCategoryId: undefined,
           };
           const storedUserActivity = localStorage.getItem(
             `${TEAM_ACTIVITY}_${teamId}`
@@ -65,14 +84,19 @@ export default function useInitSpaceList() {
             );
           }
 
-          updateDefaultCategoryId(defaultStatusCategoryId);
+          if (defaultStatusCategoryId) {
+            updateDefaultCategoryId(defaultStatusCategoryId);
+          }
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
             state: { defaultStatusCategoryId },
             replace: true,
           });
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: { teams, teamActivity: userActivity },
+            payload: {
+              teams,
+              teamActivity: { ...userActivity, defaultStatusCategoryId },
+            },
           });
         },
         (msg) => {

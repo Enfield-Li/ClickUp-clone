@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCurrentListStore } from "../../../context/newDefaultColumnIdStore/useCurrentListStore";
 import { addStatusColumn } from "../../../networkCalls";
 import {
@@ -33,6 +33,7 @@ function AddStatusColumnInput({
   statusCategoryId,
   onColorPalletClose,
 }: Props) {
+  const navigate = useNavigate();
   const { listId } = useParams();
   const [title, setTitle] = useState("");
   const { storedDefaultCategoryId, updateDefaultCategoryId } =
@@ -59,44 +60,42 @@ function AddStatusColumnInput({
     };
 
     addStatusColumn(dto, (responseDTO) => {
-      setTaskState((pre) => {
-        if (pre) {
-          return produce(pre, (draftState) => {
-            const {
-              statusColumnId,
-              statusCategoryId: updatedStatusCategoryId,
-              oldNewStatusPairs,
-            } = responseDTO;
-
-            draftState.statusCategoryId = updatedStatusCategoryId;
-            // Create new column before the last one "Done"
-            const newColumn: StatusColumn = { id: statusColumnId, ...dto };
-            draftState.columnOptions.statusColumns.splice(
-              lastItemIndex,
-              0,
-              newColumn
-            );
-
-            if (storedDefaultCategoryId !== updatedStatusCategoryId) {
-              updateDefaultCategoryId(updatedStatusCategoryId);
-            }
-
-            if (oldNewStatusPairs) {
-              draftState.columnOptions.statusColumns.forEach((column) => {
-                if (column.id !== statusColumnId) {
-                  column.id = oldNewStatusPairs[column.id!];
-                }
-              });
-              draftState.orderedTasks.forEach((orderedTask) =>
-                orderedTask.taskList.forEach((task) => {
-                  task.status.columnId =
-                    oldNewStatusPairs[task.status.columnId];
-                })
-              );
-            }
-          });
-        }
-      });
+      navigate(0);
+      //   setTaskState((pre) => {
+      //     if (pre) {
+      //       return produce(pre, (draftState) => {
+      //         const {
+      //           statusColumnId,
+      //           statusCategoryId: updatedStatusCategoryId,
+      //           oldNewStatusPairs,
+      //         } = responseDTO;
+      //         draftState.statusCategoryId = updatedStatusCategoryId;
+      //         // Create new column before the last one "Done"
+      //         const newColumn: StatusColumn = { id: statusColumnId, ...dto };
+      //         draftState.columnOptions.statusColumns.splice(
+      //           lastItemIndex,
+      //           0,
+      //           newColumn
+      //         );
+      //         if (storedDefaultCategoryId !== updatedStatusCategoryId) {
+      //           updateDefaultCategoryId(updatedStatusCategoryId);
+      //         }
+      //         if (oldNewStatusPairs) {
+      //           draftState.columnOptions.statusColumns.forEach((column) => {
+      //             if (column.id !== statusColumnId) {
+      //               column.id = oldNewStatusPairs[column.id!];
+      //             }
+      //           });
+      //           draftState.orderedTasks.forEach((orderedTask) =>
+      //             orderedTask.taskList.forEach((task) => {
+      //               task.status.columnId =
+      //                 oldNewStatusPairs[task.status.columnId];
+      //             })
+      //           );
+      //         }
+      //       });
+      //     }
+      //   });
     });
   }
 

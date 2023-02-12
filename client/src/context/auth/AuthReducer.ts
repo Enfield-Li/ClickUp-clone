@@ -1,8 +1,5 @@
 import produce from "immer";
-import determineListType, {
-  determineFolderType,
-} from "../../component/layout/subNavbar/folderAndList/determineList";
-import { AuthStateType, AuthActionType, AUTH_ACTION } from "../../types";
+import { AuthActionType, AuthStateType, AUTH_ACTION } from "../../types";
 import setTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function authReducer(

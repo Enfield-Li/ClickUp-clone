@@ -123,6 +123,7 @@ export function deleteItemAndUpdateTeamActivity({
       payload: {
         deletedFolderId: folderId,
         nextListId: dto.listId,
+        defaultStatusCategoryId,
       },
     });
 

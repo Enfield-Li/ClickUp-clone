@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
 interface CurrentListState {
-  storedDefaultCategoryId: number | undefined;
-  updateDefaultCategoryId: (newCategoryId: number | undefined) => void;
+  storedDefaultCategoryId: number;
+  updateDefaultCategoryId: (newCategoryId: number) => void;
 }
 
 export const useCurrentListStore = create<CurrentListState>()((set) => ({
-  storedDefaultCategoryId: undefined,
+  storedDefaultCategoryId: 0,
   updateDefaultCategoryId: (newCategoryId) =>
     set((state) => ({ storedDefaultCategoryId: newCategoryId })),
 }));
