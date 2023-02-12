@@ -199,65 +199,83 @@ public class TaskService {
         var userInfo = userInfoService.getCurrentUserInfo();
         var statusColumns = statusCategoryDTO.statusColumns();
 
-        var status1 = StatusPosition.builder()
+        var inProgressStatus = StatusPosition.builder()
                 .orderIndex(1).name(statusColumns.get(1).title())
                 .columnId(statusColumns.get(1).id()).build();
-        var status2 = StatusPosition.builder()
-                .orderIndex(1).name(statusColumns.get(0).title())
-                .columnId(statusColumns.get(0).id()).build();
-        var status3 = StatusPosition.builder()
-                .orderIndex(2).name(statusColumns.get(0).title())
-                .columnId(statusColumns.get(0).id()).build();
-        var status4 = StatusPosition.builder()
+
+        var finishedStatus = StatusPosition.builder()
                 .orderIndex(1).name(statusColumns.get(2).title())
                 .columnId(statusColumns.get(2).id()).build();
 
-        var priority1 = PriorityPosition.builder()
+        var todoStatus1 = StatusPosition.builder()
+                .orderIndex(1).name(statusColumns.get(0).title())
+                .columnId(statusColumns.get(0).id()).build();
+        var todoStatus2 = StatusPosition.builder()
+                .orderIndex(2).name(statusColumns.get(0).title())
+                .columnId(statusColumns.get(0).id()).build();
+        var todoStatus3 = StatusPosition.builder()
+                .orderIndex(3).name(statusColumns.get(0).title())
+                .columnId(statusColumns.get(0).id()).build();
+
+        var noPriority1 = PriorityPosition.builder()
                 .columnId(1).orderIndex(1)
                 .name(Priority.NO_PRIORITY).build();
-        var priority2 = PriorityPosition.builder()
-                .columnId(2).orderIndex(1)
-                .name(Priority.HIGH).build();
-        var priority3 = PriorityPosition.builder()
+        var noPriority2 = PriorityPosition.builder()
                 .columnId(1).orderIndex(2)
                 .name(Priority.NO_PRIORITY).build();
-        var priority4 = PriorityPosition.builder()
+        var noPriority3 = PriorityPosition.builder()
+                .columnId(1).orderIndex(3)
+                .name(Priority.NO_PRIORITY).build();
+
+        var highPriority1 = PriorityPosition.builder()
+                .columnId(2).orderIndex(1)
+                .name(Priority.HIGH).build();
+
+        var normalPriority = PriorityPosition.builder()
                 .columnId(1).orderIndex(1)
                 .name(Priority.NORMAL).build();
 
         var desc = "Yes, this task card component needs some extra work to do";
-        var task1 = Task.builder()
+        var inProgressTask = Task.builder()
                 .listId(listId)
-                .status(status1)
-                .priority(priority1)
+                .status(inProgressStatus)
+                .priority(noPriority1)
                 .description(desc)
                 .title("Look! Some progress 💪")
                 .build();
 
-        var task2 = Task.builder()
+        var todoTask1 = Task.builder()
                 .listId(listId)
-                .status(status2)
-                .priority(priority2)
+                .status(todoStatus1)
+                .priority(noPriority2)
+                .title("Try drag task 🖐➡")
+                .build();
+
+        var todoTask2 = Task.builder()
+                .listId(listId)
+                .status(todoStatus2)
+                .priority(highPriority1)
                 .title("👇 Try change priority")
                 .build();
 
-        var task3 = Task.builder()
+        var todoTask3 = Task.builder()
                 .listId(listId)
-                .status(status3)
-                .priority(priority3)
+                .status(todoStatus3)
+                .priority(noPriority3)
                 .title("👇 Try change due date")
                 .expectedDueDate(LocalDateTime.now())
                 .build();
 
-        var task4 = Task.builder()
+        var finishedTask = Task.builder()
                 .listId(listId)
-                .status(status4)
+                .status(finishedStatus)
                 .description("Done! This task is hidden from 'group by' priority/due date")
-                .priority(priority3)
+                .priority(normalPriority)
                 .title("✔ Finished task")
                 .build();
 
-        var taskList = List.of(task1, task2, task3, task4);
+        var taskList = List.of(inProgressTask,
+                todoTask1, todoTask2, todoTask3, finishedTask);
         taskList.forEach(task -> {
             task.setCreator(userInfo);
             task.addAssignee(userInfo);
