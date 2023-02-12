@@ -64,7 +64,7 @@ function SelectStatusIcons({}: Props) {
       currentTask: task!,
       targetField: SortBy.STATUS,
       userId: authState.user!.id!,
-      targetColumnId: finishedColumnId,
+      targetColumnId: targetStatusColumnId,
     });
   }
 

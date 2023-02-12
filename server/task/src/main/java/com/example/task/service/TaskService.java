@@ -232,7 +232,7 @@ public class TaskService {
                 .name(Priority.HIGH).build();
 
         var normalPriority = PriorityPosition.builder()
-                .columnId(1).orderIndex(1)
+                .columnId(4).orderIndex(1)
                 .name(Priority.NORMAL).build();
 
         var desc = "Yes, this task card component needs some extra work to do";
