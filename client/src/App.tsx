@@ -1,21 +1,16 @@
 import { useToast } from "@chakra-ui/react";
-import { TextField } from "@mui/material";
-import { StaticDatePicker } from "@mui/x-date-pickers";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ApplicationEntry from "./ApplicationEntry";
 import Login from "./component/auth/Login";
 import Register from "./component/auth/Register";
 import CreateTeam from "./component/createTeam/CreateTeam";
-import Home from "./component/layout/Home";
 import UnderConstruction from "./component/layout/UnderConstruction";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
 import useAuthContext from "./context/auth/useAuthContext";
 import { refreshUserToken } from "./networkCalls";
-import { convertUTCDateToLocalDate } from "./utils/convertUTCDateToLocalDate";
-import MaterialTheme from "./utils/MaterialTheme";
 
 export default memo(App);
 function App() {
@@ -80,29 +75,3 @@ function App() {
     </Routes>
   );
 }
-
-// function App() {
-//   const [value, setValue] = useState<Date | null>(null);
-
-//   function handleDatePicker(newValue: Date) {
-//     if (value === null) {
-//       newValue = convertUTCDateToLocalDate(newValue);
-//     }
-//     console.log("new: ", new Date(newValue).toISOString());
-//     console.log("new: ", new Date(newValue).getDate());
-
-//     setValue(newValue);
-//   }
-
-//   return (
-//     <MaterialTheme>
-//       <StaticDatePicker
-//         value={value}
-//         displayStaticWrapperAs="desktop"
-//         renderInput={(params) => <TextField {...params} />}
-//         onChange={(newValue) => newValue && handleDatePicker(newValue)}
-//       />
-//       <button onClick={() => setValue(null)}>clear</button>
-//     </MaterialTheme>
-//   );
-// }

@@ -4,21 +4,13 @@ import {
   Flex,
   Heading,
   useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { memo, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  CLIENT_ROUTE,
-  IS_SUB_NAV_OPEN,
-  TEAM_ACTIVITY,
-} from "../../../constant";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { memo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
 import useTeamStateContext from "../../../context/team/useTeamContext";
-import { fetchTeamList } from "../../../networkCalls";
-import { TeamActiveStatus, TEAM_STATE_ACTION } from "../../../types";
-import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
+import useInitSpaceList from "../../../hook/useInitSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
 type Props = {
@@ -37,15 +29,11 @@ function SubNavbar({
   setIsExpanded,
   getDisclosureProps,
 }: Props) {
-  const toast = useToast();
-  const { teamId } = useParams();
+  useInitSpaceList();
   const navigate = useNavigate();
-  const { authState } = useAuthContext();
   const { teamState } = useTeamStateContext();
-  const { teamStateDispatch } = useTeamStateContext();
-  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
-
   const [hidden, setHidden] = useState(!isOpen);
+  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");
@@ -58,70 +46,6 @@ function SubNavbar({
     setIsExpanded(false);
     localStorage.setItem(IS_SUB_NAV_OPEN, JSON.stringify(false));
   }
-
-  // init spaceListState
-  useEffect(() => {
-    if (teamId && authState.user) {
-      fetchTeamList(
-        Number(teamId),
-        (teams) => {
-          const initTeamActivity: TeamActiveStatus = {
-            teamId: Number(teamId),
-            spaceId: 0,
-            listId: 0,
-            folderIds: [],
-          };
-          const storedUserActivity = localStorage.getItem(
-            `${TEAM_ACTIVITY}_${teamId}`
-          );
-
-          const userActivity = storedUserActivity
-            ? (JSON.parse(storedUserActivity) as TeamActiveStatus)
-            : initTeamActivity;
-          let { listId, spaceId } = userActivity;
-
-          let defaultStatusCategoryId: number | undefined;
-          if (listId) {
-            teams.forEach(
-              (team) =>
-                team.id === Number(teamId) &&
-                team.spaces.forEach((space) => {
-                  space.listCategories.forEach((listCategory) => {
-                    if (listCategory.id === listId) {
-                      spaceId = space.id;
-                      defaultStatusCategoryId =
-                        listCategory.defaultStatusCategoryId;
-                    }
-                  });
-
-                  space.folderCategories.forEach((folderCategory) =>
-                    folderCategory.allLists.forEach((listCategory) => {
-                      if (listCategory.id === listId) {
-                        spaceId = space.id;
-                        defaultStatusCategoryId =
-                          listCategory.defaultStatusCategoryId;
-                      }
-                    })
-                  );
-                })
-            );
-          }
-
-          navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
-            state: { defaultStatusCategoryId },
-            replace: true,
-          });
-          teamStateDispatch({
-            type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: { teams, teamActivity: userActivity },
-          });
-        },
-        (msg) => {
-          toast({ description: msg });
-        }
-      );
-    }
-  }, [authState.user, teamId]);
 
   return (
     // https://chakra-ui.com/community/recipes/horizontal-collapse

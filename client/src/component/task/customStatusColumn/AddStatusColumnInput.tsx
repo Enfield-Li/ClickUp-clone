@@ -7,7 +7,8 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useCurrentListStore } from "../../../context/newDefaultColumnIdStore/useCurrentListStore";
 import { addStatusColumn } from "../../../networkCalls";
 import {
   AddStatusColumnDTO,
@@ -15,7 +16,6 @@ import {
   StatusColumn,
   StatusColumns,
 } from "../../../types";
-import { deepCopy } from "../../../utils/deepCopy";
 
 type Props = {
   color: string;
@@ -35,6 +35,8 @@ function AddStatusColumnInput({
 }: Props) {
   const { listId } = useParams();
   const [title, setTitle] = useState("");
+  const { storedDefaultCategoryId, updateDefaultCategoryId } =
+    useCurrentListStore();
 
   function createStatusColumn() {
     if (!statusCategoryId) {
@@ -74,6 +76,10 @@ function AddStatusColumnInput({
               0,
               newColumn
             );
+
+            if (storedDefaultCategoryId !== updatedStatusCategoryId) {
+              updateDefaultCategoryId(updatedStatusCategoryId);
+            }
 
             if (oldNewStatusPairs) {
               draftState.columnOptions.statusColumns.forEach((column) => {
