@@ -4,10 +4,9 @@ import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { SortBy, Task } from "../../../types";
+import MaterialTheme from "../../../utils/MaterialTheme";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
-import MaterialTheme from "../../../utils/MaterialTheme";
-import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 
 type Props = {
   task: Task;
@@ -45,10 +44,7 @@ function DueDatePicker({ task, onClose }: Props) {
   return (
     <MaterialTheme>
       <StaticDatePicker
-        value={
-          task.expectedDueDate &&
-          convertUTCDateToLocalDate(task.expectedDueDate)
-        }
+        value={task.expectedDueDate}
         displayStaticWrapperAs="desktop"
         renderInput={(params) => <TextField {...params} />}
         onChange={(newValue) => newValue && handleDatePicker(newValue)}
