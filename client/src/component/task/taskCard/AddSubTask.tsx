@@ -7,7 +7,9 @@ type Props = { task: Task; cardBgColor: "white" | "darkMain.200" };
 
 export default memo(AddSubTask);
 function AddSubTask({ task, cardBgColor }: Props) {
-  const toast = useUnImplementedToast();
+  const toast = useUnImplementedToast(
+    "I haven't implemented this on the server side..."
+  );
   const addSubTaskBgColor = useColorModeValue("lightMain.100", "darkMain.300");
 
   return (

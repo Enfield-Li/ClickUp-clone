@@ -35,28 +35,29 @@ public class UserInfo {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "creator",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Task> tasks = new HashSet<>();
 
-    @JsonIgnore
-    @Builder.Default
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "task_assignee_user_info",
-            joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_assignee_id"))
-    private Set<Task> assignedTasks = new HashSet<>();
-
-    @JsonIgnore
-    @Builder.Default
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "task_watcher_user_info",
-            joinColumns = @JoinColumn(name = "user_info_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_watcher_id"))
-    private Set<Task> watchedTasks = new HashSet<>();
+//    @JsonIgnore
+//    @Builder.Default
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "task_assignee_user_info",
+//            joinColumns = @JoinColumn(name = "user_info_id"),
+//            inverseJoinColumns = @JoinColumn(name = "task_assignee_id"))
+//    private Set<Task> assignedTasks = new HashSet<>();
+//
+//    @JsonIgnore
+//    @Builder.Default
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "task_watcher_user_info",
+//            joinColumns = @JoinColumn(name = "user_info_id"),
+//            inverseJoinColumns = @JoinColumn(name = "task_watcher_id"))
+//    private Set<Task> watchedTasks = new HashSet<>();
 
     public void addTask(Task task) {
         tasks.add(task);

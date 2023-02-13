@@ -55,8 +55,8 @@ public class TaskService {
         var userInfo = userInfoService.getCurrentUserInfo();
         var task = Task.convertFromCreateTaskDto(createTaskDTO);
         userInfo.addTask(task);
-        task.addWatcher(userInfo);
-        task.addAssignee(userInfo);
+//        task.addWatcher(userInfo);
+//        task.addAssignee(userInfo);
 
         return repository.save(task);
     }
@@ -190,9 +190,9 @@ public class TaskService {
     public Boolean deleteTask(Integer taskId) {
         var task = entityManager.getReference(Task.class, taskId);
         var creatorId = task.getCreatorId();
-
-        task.removeAllWatchers();
-        task.removeAllAssignees();
+//
+//        task.removeAllWatchers();
+//        task.removeAllAssignees();
 
         var creator = entityManager.getReference(UserInfo.class, creatorId);
         creator.removeTask(task);
@@ -289,8 +289,8 @@ public class TaskService {
                 todoTask1, todoTask2, todoTask3, finishedTask);
         taskList.forEach(task -> {
             userInfo.addTask(task);
-            task.addWatcher(userInfo);
-            task.addAssignee(userInfo);
+//            task.addWatcher(userInfo);
+//            task.addAssignee(userInfo);
         });
 
         repository.saveAll(taskList);

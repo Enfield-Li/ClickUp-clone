@@ -58,9 +58,9 @@ public class Task {
             orphanRemoval = true)
     private PriorityPosition priority;
 
-    @JsonIgnore
-    @Column(updatable = false, insertable = false)
-    private Integer dueDateId;
+//    @JsonIgnore
+//    @Column(updatable = false, insertable = false)
+//    private Integer dueDateId;
 
     private LocalDateTime expectedDueDate;
 
@@ -96,61 +96,61 @@ public class Task {
     @ManyToOne(cascade = CascadeType.ALL)
     private UserInfo creator;
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "assignedTasks",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private Set<UserInfo> assignees = new HashSet<>();
+//    @Builder.Default
+//    @ManyToMany(mappedBy = "assignedTasks",
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.EAGER)
+//    private Set<UserInfo> assignees = new HashSet<>();
+//
+//    @Builder.Default
+//    @ManyToMany(mappedBy = "watchedTasks",
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.EAGER)
+//    private Set<UserInfo> watchers = new HashSet<>();
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "watchedTasks",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private Set<UserInfo> watchers = new HashSet<>();
-
-    public void addSubTask(Task task) {
-        subTasks.add(task);
-        task.setParentTask(this);
-    }
-
-    public void removeSubTask(Task task) {
-        subTasks.remove(task);
-        task.setParentTask(null);
-    }
-
-    public void addWatcher(UserInfo watcher) {
-        watchers.add(watcher);
-        watcher.getWatchedTasks().add(this);
-    }
-
-    public void removeWatcher(UserInfo watcher) {
-        watchers.remove(watcher);
-        watcher.getWatchedTasks().remove(this);
-    }
-
-    public void addAssignee(UserInfo assignee) {
-        assignees.add(assignee);
-        assignee.getAssignedTasks().add(this);
-    }
-
-    public void removeAssignee(UserInfo assignee) {
-        assignees.remove(assignee);
-        assignee.getAssignedTasks().remove(this);
-    }
-
-    public void removeAllWatchers() {
-        watchers.forEach(watcher -> {
-            watcher.getWatchedTasks().remove(this);
-        });
-        watchers.clear();
-    }
-
-    public void removeAllAssignees() {
-        assignees.forEach(assignee -> {
-            assignee.getAssignedTasks().remove(this);
-        });
-        assignees.clear();
-    }
+//    public void addSubTask(Task task) {
+//        subTasks.add(task);
+//        task.setParentTask(this);
+//    }
+//
+//    public void removeSubTask(Task task) {
+//        subTasks.remove(task);
+//        task.setParentTask(null);
+//    }
+//
+//    public void addWatcher(UserInfo watcher) {
+//        watchers.add(watcher);
+//        watcher.getWatchedTasks().add(this);
+//    }
+//
+//    public void removeWatcher(UserInfo watcher) {
+//        watchers.remove(watcher);
+//        watcher.getWatchedTasks().remove(this);
+//    }
+//
+//    public void addAssignee(UserInfo assignee) {
+//        assignees.add(assignee);
+//        assignee.getAssignedTasks().add(this);
+//    }
+//
+//    public void removeAssignee(UserInfo assignee) {
+//        assignees.remove(assignee);
+//        assignee.getAssignedTasks().remove(this);
+//    }
+//
+//    public void removeAllWatchers() {
+//        watchers.forEach(watcher -> {
+//            watcher.getWatchedTasks().remove(this);
+//        });
+//        watchers.clear();
+//    }
+//
+//    public void removeAllAssignees() {
+//        assignees.forEach(assignee -> {
+//            assignee.getAssignedTasks().remove(this);
+//        });
+//        assignees.clear();
+//    }
 
     public static Task convertFromCreateTaskDto(
             CreateTaskDTO createTaskDTO) {
