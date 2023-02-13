@@ -71,12 +71,6 @@ function Register({}: Props) {
             await registerUser(
               registerUserDTO,
               (registrationResponse) => {
-                // store accessToken to localStorage
-                localStorage.setItem(
-                  ACCESS_TOKEN,
-                  registrationResponse.accessToken
-                );
-
                 // update auth taskState
                 authDispatch({
                   type: AUTH_ACTION.REGISTER_USER,

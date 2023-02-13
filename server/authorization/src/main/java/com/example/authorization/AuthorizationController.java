@@ -50,8 +50,9 @@ class AuthorizationController {
     }
 
     @PostMapping(LOGOUT)
-    void logout() {
+    Boolean logout() {
         service.logout();
+        return true;
     }
 
     @PostMapping(CHANGE_PASSWORD)

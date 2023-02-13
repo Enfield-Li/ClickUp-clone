@@ -1,5 +1,7 @@
 import produce from "immer";
+import { ACCESS_TOKEN } from "../../constant";
 import { AuthActionType, AuthStateType, AUTH_ACTION } from "../../types";
+import { deepCopy } from "../../utils/deepCopy";
 import setTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function authReducer(
@@ -31,11 +33,20 @@ export default function authReducer(
       return produce(authState, (draftState) => {
         draftState.user = authAction.payload.registrationResponse;
 
-        const teamActiveStatus =
-          authAction.payload.registrationResponse.initTeamUIState;
+        // init team activity
+        const teamActiveStatus = deepCopy(
+          authAction.payload.registrationResponse.initTeamUIState
+        );
+        teamActiveStatus["folderIds"] = [];
         setTeamActiveStatusToLocalStorage(
           teamActiveStatus.teamId,
           teamActiveStatus
+        );
+
+        // store accessToken to localStorage
+        localStorage.setItem(
+          ACCESS_TOKEN,
+          authAction.payload.registrationResponse.accessToken
         );
       });
     }
