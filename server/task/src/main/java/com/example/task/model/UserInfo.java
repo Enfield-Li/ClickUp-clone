@@ -15,6 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"userId", "username"})})
 public class UserInfo {
 
     @Id

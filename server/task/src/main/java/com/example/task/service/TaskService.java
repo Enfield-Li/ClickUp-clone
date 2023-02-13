@@ -182,6 +182,7 @@ public class TaskService {
         List<Integer> taskIds = new ArrayList<>();
         var taskIdDTOs = repository.findByListIdIn(listIds);
         taskIdDTOs.forEach(taskIdDTO -> taskIds.add(taskIdDTO.id()));
+//        System.out.println("taskIds: " + taskIds);
         repository.deleteByIdIn(taskIds);
 //        taskIds.forEach(this::deleteTask);
     }
@@ -202,6 +203,7 @@ public class TaskService {
         return true;
     }
 
+    @Transactional
     public Boolean initTasksInRegistration(
             InitTasksInRegistrationDTO initTasksInRegistrationDTO) {
         var listId = initTasksInRegistrationDTO.listCategoryId();
