@@ -84,7 +84,8 @@ public class Task {
     @Builder.Default
     @OneToMany(mappedBy = "parentTask",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<Task> subTasks = new HashSet<>();
 
     @JsonIgnore
@@ -137,10 +138,23 @@ public class Task {
         assignee.getAssignedTasks().remove(this);
     }
 
+    public void removeAllWatchers() {
+        watchers.forEach(watcher -> {
+            watcher.getWatchedTasks().remove(this);
+        });
+        watchers.clear();
+    }
+
+    public void removeAllAssignees() {
+        assignees.forEach(assignee -> {
+            assignee.getAssignedTasks().remove(this);
+        });
+        assignees.clear();
+    }
+
     public static Task convertFromCreateTaskDto(
             CreateTaskDTO createTaskDTO) {
-        return Task
-                .builder()
+        return Task.builder()
                 .title(createTaskDTO.title())
                 .listId(createTaskDTO.listId())
                 .status(createTaskDTO.status())

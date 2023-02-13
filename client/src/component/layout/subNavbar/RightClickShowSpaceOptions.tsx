@@ -73,7 +73,7 @@ function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
       //   newUrlLocation.spaceId &&
       //   newUrlLocation.spaceId !== Number(listIdUrlParam) &&
       //   newUrlLocation.listId &&
-      newUrlLocation.listId !== Number(spaceIdUrlParam);
+      newUrlLocation.listId !== Number(listIdUrlParam);
     if (isNewLocation) {
       navigate(getTaskBoardURL(newUrlLocation), {
         state: {

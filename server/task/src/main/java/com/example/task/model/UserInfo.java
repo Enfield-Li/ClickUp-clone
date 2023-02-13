@@ -35,8 +35,7 @@ public class UserInfo {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "creator",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
 
     @JsonIgnore
