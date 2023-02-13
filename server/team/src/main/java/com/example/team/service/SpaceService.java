@@ -75,8 +75,7 @@ public class SpaceService {
         entityManager.remove(space);
 
         // publish event for delete task
-        var listOfIdsToBeDeleted = new HashSet<>();
-        listOfIdsToBeDeleted.add(space.getListCategories());
+        var listOfIdsToBeDeleted = new HashSet<>(space.getListCategories());
         space.getFolderCategories().forEach(folderCategory -> {
             listOfIdsToBeDeleted.addAll(folderCategory.getAllLists());
         });
