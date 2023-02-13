@@ -9,7 +9,6 @@ import com.example.clients.taskEvent.UpdateEventDTO;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.task.dto.*;
 import com.example.task.model.Task;
-import com.example.task.model.UserInfo;
 import com.example.task.model.taskPosition.Priority;
 import com.example.task.model.taskPosition.PriorityPosition;
 import com.example.task.model.taskPosition.StatusPosition;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -178,22 +178,27 @@ public class TaskService {
     }
 
     @Transactional
-    public void deleteTasks(Set<Integer> ids) {
-        ids.forEach(this::deleteTask);
+    public void deleteTasksByListId(Set<Integer> listIds) {
+        List<Integer> taskIds = new ArrayList<>();
+        var taskIdDTOs = repository.findByListIdIn(listIds);
+        taskIdDTOs.forEach(taskIdDTO -> taskIds.add(taskIdDTO.id()));
+        repository.deleteByIdIn(taskIds);
+//        taskIds.forEach(this::deleteTask);
     }
 
     @Transactional
     public Boolean deleteTask(Integer taskId) {
-        var task = entityManager.getReference(Task.class, taskId);
-        var creatorId = task.getCreatorId();
-
-        task.getWatchers().forEach(task::removeWatcher);
-        task.getAssignees().forEach(task::removeAssignee);
-
-        var creator = entityManager.getReference(UserInfo.class, creatorId);
-        creator.removeTask(task);
-
-        entityManager.remove(task);
+        repository.deleteById(taskId);
+//        var task = entityManager.getReference(Task.class, taskId);
+//        var creatorId = task.getCreatorId();
+//
+//        task.getWatchers().forEach(task::removeWatcher);
+//        task.getAssignees().forEach(task::removeAssignee);
+//
+//        var creator = entityManager.getReference(UserInfo.class, creatorId);
+//        creator.removeTask(task);
+//
+//        entityManager.remove(task);
         return true;
     }
 
@@ -283,9 +288,9 @@ public class TaskService {
         var taskList = List.of(inProgressTask,
                 todoTask1, todoTask2, todoTask3, finishedTask);
         taskList.forEach(task -> {
-            task.setCreator(userInfo);
-            task.addAssignee(userInfo);
+            userInfo.addTask(task);
             task.addWatcher(userInfo);
+            task.addAssignee(userInfo);
         });
 
         repository.saveAll(taskList);

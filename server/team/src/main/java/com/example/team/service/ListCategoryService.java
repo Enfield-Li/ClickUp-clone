@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
@@ -78,7 +79,7 @@ public class ListCategoryService {
             throw new InvalidRequestException("This list no longer exists");
         }
 
-        var listCategory = entityManager.getReference(
+        var listCategory = entityManager.find(
                 ListCategory.class, listCategoryId);
         listCategory.removeAllMembers();
 
@@ -97,11 +98,12 @@ public class ListCategoryService {
         entityManager.remove(listCategory);
 
         // publish event for delete task
-        var listOfIdsToBeDeleted = new HashSet<>(listCategoryId);
+        Set<Integer> listIds = new HashSet<>();
+        listIds.add(listCategoryId);
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 deleteTasksRoutingKey,
-                listOfIdsToBeDeleted);
+                listIds);
         return true;
     }
 }

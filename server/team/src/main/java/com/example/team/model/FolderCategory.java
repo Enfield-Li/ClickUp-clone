@@ -73,12 +73,14 @@ public class FolderCategory {
     private Integer spaceId;
 
     @JsonIgnore
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Space space;
 
     @Builder.Default
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "folderCategory",
             cascade = CascadeType.ALL,

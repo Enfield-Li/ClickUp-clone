@@ -113,23 +113,28 @@ public class TeamService {
     @Transactional
     public Boolean deleteTeam(Integer teamId) {
         verifyTeamExist(teamId);
+        Set<Integer> listIds = new HashSet<>();
 
-        var team = entityManager.getReference(Team.class, teamId);
+        var team = entityManager.find(Team.class, teamId);
+        team.getSpaces().forEach(space -> {
+            space.getListCategories().forEach(listCategory -> {
+                listIds.add(listCategory.getId());
+            });
+            space.getFolderCategories().forEach(folderCategory -> {
+                folderCategory.getAllLists().forEach(listCategory -> {
+                    listIds.add(listCategory.getId());
+                });
+            });
+        });
+
         team.removeAllMembers();
         entityManager.remove(team);
 
         // publish event for delete task
-        var listOfIdsToBeDeleted = new HashSet<>();
-        team.getSpaces().forEach(space -> {
-            listOfIdsToBeDeleted.addAll(space.getListCategories());
-            space.getFolderCategories().forEach(folderCategory -> {
-                listOfIdsToBeDeleted.addAll(folderCategory.getAllLists());
-            });
-        });
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 deleteTasksRoutingKey,
-                listOfIdsToBeDeleted);
+                listIds);
         return true;
     }
 

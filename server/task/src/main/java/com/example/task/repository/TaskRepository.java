@@ -1,5 +1,6 @@
 package com.example.task.repository;
 
+import com.example.task.dto.TaskIdDTO;
 import com.example.task.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,7 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     List<Task> findByListId(Integer listId);
 
-    void deleteAllByListIdIn(Set<Integer> ids);
+    List<TaskIdDTO> findByListIdIn(Set<Integer> listIds);
 
     @Query(nativeQuery = true, value = "" +
             "SELECT title FROM task WHERE id = :id")
@@ -45,6 +46,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
             @Param("taskId") Integer taskId,
             @Param("description") String description,
             @Param("updatedAt") LocalDateTime updatedAt);
+
+    void deleteByIdIn(List<Integer> taskIds);
 
 //    @Query(nativeQuery = true, value = "" +
 //            "UPDATE task" +

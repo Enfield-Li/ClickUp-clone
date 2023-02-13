@@ -1,10 +1,10 @@
 package com.example.task.repository;
 
-import java.time.LocalDateTime;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
+
+import java.time.LocalDateTime;
 
 @Mapper
 public interface TaskMapper {
@@ -25,5 +25,4 @@ public interface TaskMapper {
     Integer updateExpectedDueDate(
             @Param("taskId") Integer taskId,
             @Param("expectedDueDate") LocalDateTime expectedDueDate);
-
 }

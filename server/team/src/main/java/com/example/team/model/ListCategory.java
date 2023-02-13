@@ -76,6 +76,7 @@ public class ListCategory {
     private Integer spaceId;
 
     @JsonIgnore
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "spaceId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

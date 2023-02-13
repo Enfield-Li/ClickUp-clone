@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
@@ -58,12 +59,21 @@ public class SpaceService {
 
     @Transactional
     public Boolean deleteSpace(Integer spaceId) {
+        Set<Integer> listIds = new HashSet<>();
         var isSpaceExists = repository.existsById(spaceId);
         if (!isSpaceExists) {
             throw new InvalidRequestException("This space no longer exists");
         }
 
-        var space = entityManager.getReference(Space.class, spaceId);
+        var space = entityManager.find(Space.class, spaceId);
+        space.getListCategories().forEach(listCategory -> {
+            listIds.add(listCategory.getId());
+        });
+        space.getFolderCategories().forEach(folderCategory -> {
+            folderCategory.getAllLists().forEach(listCategory -> {
+                listIds.add(listCategory.getId());
+            });
+        });
         space.removeAllMembers();
         space.removeAllListCategories();
         space.removeAllFolderCategories();
@@ -75,14 +85,10 @@ public class SpaceService {
         entityManager.remove(space);
 
         // publish event for delete task
-        var listOfIdsToBeDeleted = new HashSet<>(space.getListCategories());
-        space.getFolderCategories().forEach(folderCategory -> {
-            listOfIdsToBeDeleted.addAll(folderCategory.getAllLists());
-        });
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 deleteTasksRoutingKey,
-                listOfIdsToBeDeleted);
+                listIds);
         return true;
     }
 }

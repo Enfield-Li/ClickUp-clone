@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 import static com.example.clients.UrlConstants.TASK_API_VERSION;
 
 @RestController
@@ -47,6 +49,11 @@ class TaskController {
         var updatedTasks = service.updateTasksPosition(
                 updateTasksPositionDTO);
         return ResponseEntity.ok(updatedTasks);
+    }
+
+    @GetMapping("/{taskId}")
+    void test(@PathVariable Integer taskId) {
+        service.deleteTasksByListId(Set.of(taskId));
     }
 
     @DeleteMapping("/{taskId}")

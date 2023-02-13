@@ -36,8 +36,8 @@ public class TaskConsumer {
             exchange = @Exchange(value = internalExchange),
             value = @Queue(value = deleteTasksQueue),
             key = deleteTasksRoutingKey))
-    public void deleteTaskIds(Set<Integer> ids) {
-        log.info("Consumed {} from deleteTasks queue", ids);
-        service.deleteTasks(ids);
+    public void deleteTaskIds(Set<Integer> listIds) {
+        log.info("Consumed {} from deleteTasks queue", listIds);
+        service.deleteTasksByListId(listIds);
     }
 }

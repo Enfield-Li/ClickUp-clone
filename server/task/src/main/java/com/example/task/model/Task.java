@@ -91,7 +91,6 @@ public class Task {
     @Column(updatable = false, insertable = false)
     private Integer creatorId;
 
-    @NotNull
     @JoinColumn(name = "creatorId")
     @ManyToOne(cascade = CascadeType.ALL)
     private UserInfo creator;
@@ -102,7 +101,6 @@ public class Task {
             fetch = FetchType.EAGER)
     private Set<UserInfo> assignees = new HashSet<>();
 
-    @NotNull
     @Builder.Default
     @ManyToMany(mappedBy = "watchedTasks",
             cascade = CascadeType.ALL,

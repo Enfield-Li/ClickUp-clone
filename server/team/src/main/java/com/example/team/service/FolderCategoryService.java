@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
 import static com.example.amqp.ExchangeKey.internalExchange;
@@ -43,6 +44,7 @@ public class FolderCategoryService {
 
     @Transactional
     public Boolean deleteFolderCategory(Integer folderCategoryId) {
+        Set<Integer> listIds = new HashSet<>();
         var isFolderCategoryExists = repository.existsById(folderCategoryId);
         if (!isFolderCategoryExists) {
             throw new InvalidRequestException("This folder no longer exists");
@@ -50,6 +52,10 @@ public class FolderCategoryService {
 
         var folderCategory = entityManager.getReference(
                 FolderCategory.class, folderCategoryId);
+        folderCategory.getAllLists().forEach(listCategory -> {
+            listIds.add(listCategory.getId());
+        });
+
         folderCategory.removeAllListCategories();
         folderCategory.removeAllMembers();
 
@@ -60,11 +66,10 @@ public class FolderCategoryService {
         entityManager.remove(folderCategory);
 
         // publish event for delete task
-        var listOfIdsToBeDeleted = new HashSet<>(folderCategory.getAllLists());
         rabbitMQMessageProducer.publish(
                 internalExchange,
                 deleteTasksRoutingKey,
-                listOfIdsToBeDeleted);
+                listIds);
         return true;
     }
 
