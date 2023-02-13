@@ -1,5 +1,6 @@
 package com.example.team.service;
 
+import com.example.amqp.RabbitMqMessageProducer;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.Space;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 
+import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 
@@ -24,6 +28,7 @@ public class SpaceService {
     private final SpaceRepository repository;
     private final EntityManager entityManager;
     private final UserInfoService userInfoService;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Transactional
     public Space createSpace(CreateSpaceDTO createSpaceDTO) {
@@ -68,6 +73,17 @@ public class SpaceService {
         team.removeSpace(space);
 
         entityManager.remove(space);
+
+        // publish event for delete task
+        var listOfIdsToBeDeleted = new HashSet<>();
+        listOfIdsToBeDeleted.add(space.getListCategories());
+        space.getFolderCategories().forEach(folderCategory -> {
+            listOfIdsToBeDeleted.addAll(folderCategory.getAllLists());
+        });
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                deleteTasksRoutingKey,
+                listOfIdsToBeDeleted);
         return true;
     }
 }

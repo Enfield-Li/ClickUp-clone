@@ -2,7 +2,7 @@ package com.example.teamStatusCategory.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.jwt.UserCredentials;
-import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
+import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
 import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
@@ -161,7 +161,7 @@ public class StatusCategoryServiceTest implements WithAssertions {
         var statusPairs = new HashMap<Integer, Integer>();
         statusPairs.put(originalStatusColumnId, statusColumnId);
 
-        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(
+        var updateTaskDTO = new UpdateTaskStatusOnAddingColumnDTO(
                 listId, statusPairs);
 
         var expectedResult = new AddStatusColumnResponseDTO(
@@ -183,7 +183,7 @@ public class StatusCategoryServiceTest implements WithAssertions {
         verify(rabbitMQMessageProducer).publish(
                 eq(internalExchange), eq(teamRoutingKey), eq(updateListCategoryDTO));
         verify(rabbitMQMessageProducer).publish(
-                eq(internalExchange), eq(taskRoutingKey), eq(updateTaskDTO));
+                eq(internalExchange), eq(updateTaskStatusOnAddingNewColumnRoutingKey), eq(updateTaskDTO));
 
         assertThat(actualResult).isEqualTo(expectedResult);
     }

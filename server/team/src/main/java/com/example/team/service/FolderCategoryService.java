@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
+
+import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 
 @Log4j2
 @Service
@@ -54,6 +58,13 @@ public class FolderCategoryService {
         space.removeFolderCategory(folderCategory);
 
         entityManager.remove(folderCategory);
+
+        // publish event for delete task
+        var listOfIdsToBeDeleted = new HashSet<>(folderCategory.getAllLists());
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                deleteTasksRoutingKey,
+                listOfIdsToBeDeleted);
         return true;
     }
 

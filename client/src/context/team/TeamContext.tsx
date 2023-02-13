@@ -27,7 +27,7 @@ export default function TeamStateProvider({ children }: ProviderType) {
     teamReducer,
     initialTeamContextState
   );
-  console.log({ teamState });
+  //   console.log({ teamState });
 
   return (
     <TeamContext.Provider

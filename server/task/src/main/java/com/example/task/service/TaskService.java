@@ -1,10 +1,12 @@
 package com.example.task.service;
 
+import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.task.InitTasksInRegistrationDTO;
-import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
+import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
 import com.example.clients.taskEvent.Field;
 import com.example.clients.taskEvent.UpdateEventDTO;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.task.dto.*;
 import com.example.task.model.Task;
 import com.example.task.model.UserInfo;
@@ -23,6 +25,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.taskEventRoutingKey;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -32,7 +37,7 @@ public class TaskService {
     private final TaskRepository repository;
     private final UserInfoService userInfoService;
     private final StatusCategoryClient statusCategoryClient;
-    // private final RabbitMqMessageProducer rabbitMQMessageProducer;
+    private final RabbitMqMessageProducer rabbitMQMessageProducer;
 
     public TaskListStatusCategoryDTO getAllTasks(
             Integer listId, Integer defaultStatusCategoryId) {
@@ -58,9 +63,8 @@ public class TaskService {
     @Transactional
     public Boolean updateTasksPosition(
             UpdateTasksPositionDTO updateTasksPositionDTO) {
-        // var userInfo = getCurrentUserInfo();
-        var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
         var taskDtoList = updateTasksPositionDTO.taskDtoList();
+        var sourceTaskId = updateTasksPositionDTO.sourceTaskId();
 
         var statusTableName = "status_position";
         var priorityTableName = "priority_position";
@@ -92,34 +96,23 @@ public class TaskService {
                 .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
                 .findFirst();
 
-        // Task drop into a different column
-        // publish task update event
-        // var taskEvents = sourceTask.get().taskEvents();
-        // if (taskEvents != null) {
-        //     taskEvents.setUserId(userId);
-        //     taskEvents.setUsername(username);
+        if (sourceTask.isEmpty()) {
+            throw new InvalidRequestException("Missing source task");
+        }
 
-        //     rabbitMQMessageProducer.publish(
-        //             internalExchange,
-        //             taskEventRoutingKey,
-        //             taskEvents);
-        // }
+        // Task drop into a different column publish task update event
+        var taskEvents = sourceTask.get().taskEvents();
+        var userInfo = userInfoService.getCurrentUserInfo();
+        if (taskEvents != null) {
+            taskEvents.setUserId(userInfo.getUserId());
+            taskEvents.setUsername(userInfo.getUsername());
 
-        return true;
-    }
+            rabbitMQMessageProducer.publish(
+                    internalExchange,
+                    taskEventRoutingKey,
+                    taskEvents);
+        }
 
-    @Transactional
-    public Boolean deleteTask(Integer taskId) {
-        var task = entityManager.getReference(Task.class, taskId);
-        var creatorId = task.getCreatorId();
-
-        task.getWatchers().forEach(task::removeWatcher);
-        task.getAssignees().forEach(task::removeAssignee);
-
-        var creator = entityManager.getReference(UserInfo.class, creatorId);
-        creator.removeTask(task);
-
-        entityManager.remove(task);
         return true;
     }
 
@@ -133,8 +126,7 @@ public class TaskService {
         var newTitle = updateTaskTitleDTO.newTitle();
         var oldTitle = repository.getTaskTitle(taskId);
 
-        var updateEventDTO = UpdateEventDTO
-                .builder()
+        var updateEventDTO = UpdateEventDTO.builder()
                 .userId(userId)
                 .username(username)
                 .field(Field.title)
@@ -149,10 +141,10 @@ public class TaskService {
                 LocalDateTime.now());
 
         // publish task update title event
-        // rabbitMQMessageProducer.publish(
-        //         internalExchange,
-        //         taskEventRoutingKey,
-        //         updateEventDTO);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                taskEventRoutingKey,
+                updateEventDTO);
 
         return updateCount > 0;
     }
@@ -171,8 +163,8 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateTaskStatusPositionOnCreateNewColumn(
-            UpdateTaskOnCreateNewColumnDTO eventDTO) {
+    public void updateTaskStatusOnAddingNewColumn(
+            UpdateTaskStatusOnAddingColumnDTO eventDTO) {
         var listId = eventDTO.listId();
         var oldNewStatusPairs = eventDTO.oldNewStatusPairs();
 
@@ -186,8 +178,22 @@ public class TaskService {
     }
 
     @Transactional
-    public Boolean deleteTasks(Set<Integer> ids) {
-        repository.deleteAllByListIdIn(ids);
+    public void deleteTasks(Set<Integer> ids) {
+        ids.forEach(this::deleteTask);
+    }
+
+    @Transactional
+    public Boolean deleteTask(Integer taskId) {
+        var task = entityManager.getReference(Task.class, taskId);
+        var creatorId = task.getCreatorId();
+
+        task.getWatchers().forEach(task::removeWatcher);
+        task.getAssignees().forEach(task::removeAssignee);
+
+        var creator = entityManager.getReference(UserInfo.class, creatorId);
+        creator.removeTask(task);
+
+        entityManager.remove(task);
         return true;
     }
 
@@ -235,7 +241,7 @@ public class TaskService {
                 .columnId(4).orderIndex(1)
                 .name(Priority.NORMAL).build();
 
-        var desc = "Yes, this task card component needs some extra work to do";
+        var desc = "Write some description for the task";
         var inProgressTask = Task.builder()
                 .listId(listId)
                 .status(inProgressStatus)

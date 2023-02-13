@@ -1,7 +1,7 @@
 package com.example.teamStatusCategory.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.task.UpdateTaskOnCreateNewColumnDTO;
+import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
 import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.teamStatusCategory.dto.AddStatusColumnDTO;
@@ -104,7 +104,7 @@ public class StatusCategoryService {
 
         // update task column id
         var statusPairs = new HashMap<Integer, Integer>();
-        var updateTaskDTO = new UpdateTaskOnCreateNewColumnDTO(
+        var updateTaskDTO = new UpdateTaskStatusOnAddingColumnDTO(
                 listId, statusPairs);
         originalStatusCategory.getStatusColumns()
                 .forEach(originalStatusColumn ->
@@ -120,7 +120,9 @@ public class StatusCategoryService {
                                 }
                         ));
         rabbitMQMessageProducer.publish(
-                internalExchange, taskRoutingKey, updateTaskDTO);
+                internalExchange,
+                updateTaskStatusOnAddingNewColumnRoutingKey,
+                updateTaskDTO);
 
         return new AddStatusColumnResponseDTO(
                 statusCategory.getId(), newStatusColumn.getId(), statusPairs);

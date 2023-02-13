@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.Set;
 
-import static com.example.amqp.ExchangeKey.authorizationRoutingKey;
-import static com.example.amqp.ExchangeKey.internalExchange;
+import static com.example.amqp.ExchangeKey.*;
 
 @Log4j2
 @Service
@@ -116,8 +116,20 @@ public class TeamService {
 
         var team = entityManager.getReference(Team.class, teamId);
         team.removeAllMembers();
-
         entityManager.remove(team);
+
+        // publish event for delete task
+        var listOfIdsToBeDeleted = new HashSet<>();
+        team.getSpaces().forEach(space -> {
+            listOfIdsToBeDeleted.addAll(space.getListCategories());
+            space.getFolderCategories().forEach(folderCategory -> {
+                listOfIdsToBeDeleted.addAll(folderCategory.getAllLists());
+            });
+        });
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                deleteTasksRoutingKey,
+                listOfIdsToBeDeleted);
         return true;
     }
 

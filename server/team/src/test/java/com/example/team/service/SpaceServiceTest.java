@@ -48,11 +48,11 @@ public class SpaceServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        underTest = new SpaceService(
-                repository,
-                entityManager,
-                userInfoService
-        );
+//        underTest = new SpaceService(
+//                repository,
+//                entityManager,
+//                userInfoService
+//        );
     }
 
     @Test
