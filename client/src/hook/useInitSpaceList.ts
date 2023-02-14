@@ -31,8 +31,8 @@ export default function useInitSpaceList() {
       storedDefaultCategoryId &&
       teamActiveStatusCategoryId &&
       teamActiveStatusCategoryId !== storedDefaultCategoryId;
+
     if (isStoredDefaultCategoryIdUpdated) {
-      console.log({ teamActiveStatusCategoryId, storedDefaultCategoryId });
       teamStateDispatch({
         type: TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID,
         payload: { newDefaultStatusCategoryId: storedDefaultCategoryId },
@@ -60,7 +60,7 @@ export default function useInitSpaceList() {
           const userActivity = storedUserActivity
             ? (JSON.parse(storedUserActivity) as TeamActiveStatus)
             : initTeamActivity;
-          let { listId, spaceId, defaultStatusCategoryId } = userActivity;
+          let { listId, spaceId } = userActivity;
 
           if (listId) {
             teams.forEach(
@@ -70,7 +70,7 @@ export default function useInitSpaceList() {
                   space.listCategories.forEach((listCategory) => {
                     if (listCategory.id === listId) {
                       spaceId = space.id;
-                      defaultStatusCategoryId =
+                      userActivity.defaultStatusCategoryId =
                         listCategory.defaultStatusCategoryId;
                     }
                   });
@@ -79,7 +79,7 @@ export default function useInitSpaceList() {
                     folderCategory.allLists.forEach((listCategory) => {
                       if (listCategory.id === listId) {
                         spaceId = space.id;
-                        defaultStatusCategoryId =
+                        userActivity.defaultStatusCategoryId =
                           listCategory.defaultStatusCategoryId;
                       }
                     })
@@ -89,7 +89,9 @@ export default function useInitSpaceList() {
           }
 
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
-            state: { defaultStatusCategoryId },
+            state: {
+              defaultStatusCategoryId: userActivity.defaultStatusCategoryId,
+            },
             replace: true,
           });
           teamStateDispatch({

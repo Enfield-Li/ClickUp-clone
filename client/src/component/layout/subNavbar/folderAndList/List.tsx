@@ -24,6 +24,7 @@ function List({ space, folder, list }: Props) {
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const { id: listId, defaultStatusCategoryId } = list;
+
     navigate(
       getTaskBoardURL({
         teamId: teamState.teamActiveStatus.teamId,

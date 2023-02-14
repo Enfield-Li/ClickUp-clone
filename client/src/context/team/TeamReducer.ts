@@ -88,6 +88,7 @@ export default function teamReducer(
         draftState.originalTeams = copiedTeams;
         draftState.teamsForRender = copiedTeams;
         draftState.teamActiveStatus = teamActivity;
+        console.log("init: ", deepCopy(draftState.teamActiveStatus));
 
         syncTeamStateActivity(draftState);
       });
@@ -99,7 +100,6 @@ export default function teamReducer(
         const { newDefaultStatusCategoryId } = action.payload;
 
         const currentListId = draftState.teamActiveStatus.listId;
-
         draftState.originalTeams.forEach(
           (team) =>
             team.id === draftState.teamActiveStatus.teamId &&
@@ -121,6 +121,9 @@ export default function teamReducer(
               });
             })
         );
+
+        syncTeamStateActivity(draftState);
+        console.log("draftState: ", deepCopy(draftState));
       });
     }
 
