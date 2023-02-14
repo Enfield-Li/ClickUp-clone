@@ -16,6 +16,7 @@ import com.example.task.model.taskPosition.StatusPosition;
 import com.example.task.repository.TaskMapper;
 import com.example.task.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ import java.util.Set;
 import static com.example.amqp.ExchangeKey.internalExchange;
 import static com.example.amqp.ExchangeKey.taskEventRoutingKey;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class TaskService {
@@ -173,8 +175,13 @@ public class TaskService {
 
         taskList.forEach(task -> {
             var originalColumnId = task.getStatus().getColumnId();
-            var newColumnId = oldNewStatusPairs.get(originalColumnId);
-            task.getStatus().setColumnId(newColumnId);
+            if (oldNewStatusPairs.containsKey(originalColumnId)) {
+                var newColumnId = oldNewStatusPairs.get(originalColumnId);
+                task.getStatus().setColumnId(newColumnId);
+            } else {
+                // temporary log
+                log.error("Could not find key in oldNewStatusPairs");
+            }
         });
     }
 
