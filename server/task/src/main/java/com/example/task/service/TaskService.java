@@ -36,8 +36,8 @@ import static com.example.amqp.ExchangeKey.taskEventRoutingKey;
 public class TaskService {
 
     private final TaskMapper taskMapper;
-    private final EntityManager entityManager;
     private final TaskRepository repository;
+    private final EntityManager entityManager;
     private final UserInfoService userInfoService;
     private final StatusCategoryClient statusCategoryClient;
     private final RabbitMqMessageProducer rabbitMQMessageProducer;

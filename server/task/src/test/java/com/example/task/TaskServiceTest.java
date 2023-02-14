@@ -1,10 +1,13 @@
 package com.example.task;
 
+import com.example.amqp.RabbitMqMessageProducer;
+import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.task.model.Task;
 import com.example.task.model.UserInfo;
 import com.example.task.repository.TaskMapper;
 import com.example.task.repository.TaskRepository;
 import com.example.task.service.TaskService;
+import com.example.task.service.UserInfoService;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +16,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+
+import javax.persistence.EntityManager;
 
 @ExtendWith(MockitoExtension.class)
 public class TaskServiceTest implements WithAssertions {
@@ -25,16 +28,19 @@ public class TaskServiceTest implements WithAssertions {
     TaskMapper taskMapper;
 
     @Mock
-    TaskRepository taskRepository;
-
-    // @Mock
-    // RabbitMqMessageProducer rabbitMQMessageProducer;
+    TaskRepository repository;
 
     @Mock
-    Authentication authentication;
+    EntityManager entityManager;
 
     @Mock
-    SecurityContext securityContext;
+    UserInfoService userInfoService;
+
+    @Mock
+    StatusCategoryClient statusCategoryClient;
+
+    @Mock
+    RabbitMqMessageProducer rabbitMQMessageProducer;
 
     @Captor
     ArgumentCaptor<Task> taskArgCaptor;
@@ -43,10 +49,8 @@ public class TaskServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-        // underTest = new TaskService(taskMapper, taskRepository);
-        // SecurityContextHolder.setContext(securityContext);
-        // given(SecurityContextHolder.getContext().getAuthentication()).willReturn(authentication);
-        // given(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).willReturn(creator);
+        underTest = new TaskService(taskMapper, repository, entityManager,
+                userInfoService, statusCategoryClient, rabbitMQMessageProducer);
     }
 
     @Test
@@ -57,35 +61,66 @@ public class TaskServiceTest implements WithAssertions {
 
     }
 
-    // @Test
-    // void testDeleteTask() {
-    //     // given
-    //     // when
-    //     // then
-    // }
+    @Test
+    void get_all_tasks() {
+        // given
+        // when
+        // then
+    }
 
-    // @Test
-    // void testGetAllTasks() {
-    //     // given
-    //     // when
-    //     // then
-    // }
+    @Test
+    void create_task() {
+        // given
+        // when
+        // then
+    }
 
-    // @Test
-    // void testUpdateTaskDesc() {
-    // }
+    @Test
+    void update_tasks_position() {
+        // given
+        // when
+        // then
+    }
 
-    // @Test
-    // void testUpdateTaskTitle() {
-    //     // given
-    //     // when
-    //     // then
-    // }
+    @Test
+    void update_task_title() {
+        // given
+        // when
+        // then
+    }
 
-    // @Test
-    // void testUpdateTasksPosition() {
-    //     // given
-    //     // when
-    //     // then
-    // }
+    @Test
+    void update_task_desc() {
+        // given
+        // when
+        // then
+    }
+
+    @Test
+    void update_task_status_on_adding_new_column() {
+        // given
+        // when
+        // then
+    }
+
+    @Test
+    void delete_tasks_by_list_id() {
+        // given
+        // when
+        // then
+    }
+
+    @Test
+    void delete_task() {
+        // given
+        // when
+        // then
+    }
+
+    @Test
+    void init_tasks_in_registration() {
+        // given
+        // when
+        // then
+    }
 }

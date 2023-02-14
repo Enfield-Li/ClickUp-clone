@@ -1,7 +1,6 @@
 package com.example.teamStatusCategory.service;
 
 import com.example.amqp.RabbitMqMessageProducer;
-import com.example.clients.jwt.UserCredentials;
 import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
 import com.example.clients.team.UpdateListCategoryDefaultStatusCategoryIdDTO;
 import com.example.serviceExceptionHandling.exception.InternalErrorException;
@@ -62,8 +61,6 @@ public class StatusCategoryServiceTest implements WithAssertions {
     @Captor
     ArgumentCaptor<List<StatusCategory>> statusCategoriesCaptor;
 
-    UserCredentials userCredentials = new UserCredentials(1, "mockUser");
-
     @BeforeEach
     void setUp() {
         underTest = new StatusCategoryService(entityManager, repository,
@@ -82,6 +79,59 @@ public class StatusCategoryServiceTest implements WithAssertions {
 
         // then
         assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void test_init_default_status_category_in_registration() {
+        // given
+        var teamId = 4543;
+        var expectedStatusCategory = StatusCategory.builder().build();
+        var statusCategories = List.of(
+                new StatusCategory(), expectedStatusCategory);
+
+        given(repository.saveAll(any())).willReturn(statusCategories);
+
+        // when
+        var actualResult = underTest
+                .initDefaultStatusCategoryInRegistration(teamId);
+
+        // then
+        verify(repository).saveAll(statusCategoriesCaptor.capture());
+        var capturedValueStatusCategories = statusCategoriesCaptor.getValue();
+        assertThat(capturedValueStatusCategories).hasSize(5);
+        assertThat(capturedValueStatusCategories).allSatisfy((statusCategory) -> {
+            assertThat(statusCategory.getTeamId()).isEqualTo(teamId);
+            assertThat(statusCategory.getStatusColumns()).anySatisfy(column -> {
+                assertThat(column.getMarkAsClosed()).isTrue();
+            });
+            assertThat(statusCategory.getStatusColumns()).anySatisfy(column -> {
+                assertThat(column.getIsDefaultStatus()).isTrue();
+            });
+            assertThat(statusCategory.getStatusColumns()).allSatisfy(column -> {
+                assertThat(column.getStatusCategory()).isEqualTo(statusCategory);
+            });
+
+            assertThat(statusCategory.getTeamId()).isEqualTo(teamId);
+
+            var orderIndexSet = new HashSet<Integer>();
+            statusCategory.getStatusColumns()
+                    .forEach(column -> orderIndexSet
+                            .add(column.getOrderIndex()));
+            assertThat(orderIndexSet)
+                    .hasSize(statusCategory.getStatusColumns().size());
+        });
+
+        assertThat(capturedValueStatusCategories).anySatisfy(category -> {
+            assertThat(category.getIsDefaultCategory()).isNotNull();
+        });
+
+        var defaultCategorySize = capturedValueStatusCategories.stream()
+                .filter(category -> category.getIsDefaultCategory() != null
+                        && category.getIsDefaultCategory())
+                .collect(Collectors.toList());
+        assertThat(defaultCategorySize).hasSize(1);
+
+        assertThat(actualResult).isEqualTo(expectedStatusCategory);
     }
 
     @Test

@@ -52,12 +52,14 @@ public class StatusCategoryService {
         return defaultStatusCategoryId;
     }
 
-    public StatusCategory initDefaultStatusCategoryInRegistration(Integer teamId) {
+    public StatusCategory initDefaultStatusCategoryInRegistration(
+            Integer teamId) {
         var defaultStatusCategories = StatusCategory
                 .initDefaultStatusCategories(teamId);
         var statusCategories = repository.saveAll(defaultStatusCategories);
 
-        return statusCategories.get(1);
+        var defaultStatusCategory = statusCategories.get(1);
+        return defaultStatusCategory;
     }
 
     public StatusCategory createStatusCategory(
