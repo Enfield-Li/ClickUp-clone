@@ -16,7 +16,7 @@ interface UseFetchTasksParam {
   listId: number;
   statusCategoryId: number | undefined;
 }
-export function useFetchTasks({
+export function useColumnTaskState({
   sortBy,
   listId,
   statusCategoryId,
@@ -87,7 +87,7 @@ export function useFetchTasks({
         setLoading(false);
       }
     }
-  }, [listId, location]);
+  }, [listId, statusCategoryId]);
 
   // Sync up orderedTasks with columns under sortBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;

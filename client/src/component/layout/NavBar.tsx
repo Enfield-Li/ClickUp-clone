@@ -19,7 +19,7 @@ function NavBar({}: Props) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onClose();
-    }, 1800);
+    }, 1200);
     return () => clearTimeout(timeoutId);
   }, []);
 

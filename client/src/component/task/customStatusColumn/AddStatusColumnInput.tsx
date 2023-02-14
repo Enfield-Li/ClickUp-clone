@@ -13,9 +13,9 @@ import { addStatusColumn } from "../../../networkCalls";
 import {
   AddStatusColumnDTO,
   SetTaskState,
-  StatusColumn,
   StatusColumns,
 } from "../../../types";
+import { deepCopy } from "../../../utils/deepCopy";
 
 type Props = {
   color: string;
@@ -36,8 +36,10 @@ function AddStatusColumnInput({
   const navigate = useNavigate();
   const { listId } = useParams();
   const [title, setTitle] = useState("");
-  const { storedDefaultCategoryId, updateDefaultCategoryId } =
-    useCurrentListStore();
+  const {
+    storedDefaultCategoryId,
+    updateStoredDefaultCategoryId: updateDefaultCategoryId,
+  } = useCurrentListStore();
 
   function createStatusColumn() {
     if (!statusCategoryId) {
@@ -45,6 +47,12 @@ function AddStatusColumnInput({
     }
     if (!listId || !Number(listId)) {
       throw new Error("listId is not initialized");
+    }
+
+    const isStoredDefaultCategoryIdUpdated =
+      storedDefaultCategoryId && storedDefaultCategoryId !== statusCategoryId;
+    if (isStoredDefaultCategoryIdUpdated) {
+      statusCategoryId = storedDefaultCategoryId;
     }
 
     const lastItemIndex = statusColumns.length - 1;
@@ -60,42 +68,44 @@ function AddStatusColumnInput({
     };
 
     addStatusColumn(dto, (responseDTO) => {
-      navigate(0);
-      //   setTaskState((pre) => {
-      //     if (pre) {
-      //       return produce(pre, (draftState) => {
-      //         const {
-      //           statusColumnId,
-      //           statusCategoryId: updatedStatusCategoryId,
-      //           oldNewStatusPairs,
-      //         } = responseDTO;
-      //         draftState.statusCategoryId = updatedStatusCategoryId;
-      //         // Create new column before the last one "Done"
-      //         const newColumn: StatusColumn = { id: statusColumnId, ...dto };
-      //         draftState.columnOptions.statusColumns.splice(
-      //           lastItemIndex,
-      //           0,
-      //           newColumn
-      //         );
-      //         if (storedDefaultCategoryId !== updatedStatusCategoryId) {
-      //           updateDefaultCategoryId(updatedStatusCategoryId);
-      //         }
-      //         if (oldNewStatusPairs) {
-      //           draftState.columnOptions.statusColumns.forEach((column) => {
-      //             if (column.id !== statusColumnId) {
-      //               column.id = oldNewStatusPairs[column.id!];
-      //             }
-      //           });
-      //           draftState.orderedTasks.forEach((orderedTask) =>
-      //             orderedTask.taskList.forEach((task) => {
-      //               task.status.columnId =
-      //                 oldNewStatusPairs[task.status.columnId];
-      //             })
-      //           );
-      //         }
-      //       });
-      //     }
-      //   });
+      setTaskState((pre) => {
+        if (pre) {
+          return produce(pre, (draftState) => {
+            const {
+              statusColumnId: newStatusColumnId,
+              statusCategoryId: updatedStatusCategoryId,
+              oldNewStatusPairs,
+            } = responseDTO;
+
+            const newStatusColumn = { ...dto, id: newStatusColumnId };
+            draftState.statusCategoryId = updatedStatusCategoryId;
+            // Create new column before the last one "Done"
+            draftState.columnOptions.statusColumns.splice(
+              lastItemIndex,
+              0,
+              newStatusColumn
+            );
+
+            if (storedDefaultCategoryId !== updatedStatusCategoryId) {
+              updateDefaultCategoryId(updatedStatusCategoryId);
+            }
+            if (oldNewStatusPairs) {
+              draftState.columnOptions.statusColumns.forEach((column) => {
+                if (oldNewStatusPairs[column.id!]) {
+                  column.id = oldNewStatusPairs[column.id!];
+                }
+              });
+              draftState.orderedTasks.forEach((orderedTask) => {
+                orderedTask.columnId = oldNewStatusPairs[orderedTask.columnId];
+                orderedTask.taskList.forEach((task) => {
+                  task.status.columnId =
+                    oldNewStatusPairs[task.status.columnId];
+                });
+              });
+            }
+          });
+        }
+      });
     });
   }
 

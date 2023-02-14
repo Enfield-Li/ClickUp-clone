@@ -111,7 +111,8 @@ public class StatusCategoryService {
                         statusCategory.getStatusColumns().forEach(statusColumn -> {
                                     if (Objects.equals(
                                             originalStatusColumn.getTitle(),
-                                            statusColumn.getTitle())) {
+                                            statusColumn.getTitle())
+                                    ) {
                                         statusPairs.put(
                                                 originalStatusColumn.getId(),
                                                 statusColumn.getId()

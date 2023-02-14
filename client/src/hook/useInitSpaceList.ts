@@ -11,27 +11,32 @@ import { getTaskBoardURL } from "../utils/getTaskBoardURL";
 
 export default function useInitSpaceList() {
   const toast = useToast();
-  const { teamId } = useParams();
   const navigate = useNavigate();
+  const { teamId, listId } = useParams();
   const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const { storedDefaultCategoryId, updateDefaultCategoryId } =
+  const { storedDefaultCategoryId, updateStoredDefaultCategoryId } =
     useCurrentListStore();
+
+  // clear stored default category id when listId changes
+  useEffect(() => {
+    updateStoredDefaultCategoryId(0);
+  }, [listId]);
 
   // sync current list's defaultStatusCategoryId after adding new column
   const teamActiveStatusCategoryId =
     teamState.teamActiveStatus.defaultStatusCategoryId;
   useEffect(() => {
-    if (
-      teamActiveStatusCategoryId &&
+    const isStoredDefaultCategoryIdUpdated =
       storedDefaultCategoryId &&
-      teamActiveStatusCategoryId !== storedDefaultCategoryId
-    ) {
+      teamActiveStatusCategoryId &&
+      teamActiveStatusCategoryId !== storedDefaultCategoryId;
+    if (isStoredDefaultCategoryIdUpdated) {
       console.log({ teamActiveStatusCategoryId, storedDefaultCategoryId });
-      //   teamStateDispatch({
-      //     type: TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID,
-      //     payload: { newDefaultStatusCategoryId: storedDefaultCategoryId },
-      //   });
+      teamStateDispatch({
+        type: TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID,
+        payload: { newDefaultStatusCategoryId: storedDefaultCategoryId },
+      });
     }
   }, [storedDefaultCategoryId, teamActiveStatusCategoryId]);
 
@@ -55,9 +60,8 @@ export default function useInitSpaceList() {
           const userActivity = storedUserActivity
             ? (JSON.parse(storedUserActivity) as TeamActiveStatus)
             : initTeamActivity;
-          let { listId, spaceId } = userActivity;
+          let { listId, spaceId, defaultStatusCategoryId } = userActivity;
 
-          let defaultStatusCategoryId: number | undefined;
           if (listId) {
             teams.forEach(
               (team) =>
@@ -84,19 +88,13 @@ export default function useInitSpaceList() {
             );
           }
 
-          if (defaultStatusCategoryId) {
-            updateDefaultCategoryId(defaultStatusCategoryId);
-          }
           navigate(getTaskBoardURL({ teamId, spaceId, listId }), {
             state: { defaultStatusCategoryId },
             replace: true,
           });
           teamStateDispatch({
             type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: {
-              teams,
-              teamActivity: { ...userActivity, defaultStatusCategoryId },
-            },
+            payload: { teams, teamActivity: userActivity },
           });
         },
         (msg) => {

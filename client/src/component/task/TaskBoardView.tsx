@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import produce from "immer";
 import { memo, useCallback, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { useFetchTasks } from "../../hook/useFetchTasks";
+import { useColumnTaskState } from "../../hook/useFetchTasks";
 import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
@@ -38,7 +38,7 @@ function TaskBoardView({ sortBy }: Props) {
   const statusCategoryId = location?.state?.defaultStatusCategoryId as
     | number
     | undefined;
-  const { taskState, loading, error, setTaskState } = useFetchTasks({
+  const { taskState, loading, error, setTaskState } = useColumnTaskState({
     sortBy,
     statusCategoryId,
     listId: Number(listId),

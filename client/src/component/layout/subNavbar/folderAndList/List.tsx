@@ -1,7 +1,6 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCurrentListStore } from "../../../../context/newDefaultColumnIdStore/useCurrentListStore";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import {
   FolderCategory,
@@ -18,7 +17,6 @@ export default memo(List);
 function List({ space, folder, list }: Props) {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
-  const { updateDefaultCategoryId } = useCurrentListStore();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
@@ -26,7 +24,6 @@ function List({ space, folder, list }: Props) {
 
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const { id: listId, defaultStatusCategoryId } = list;
-    updateDefaultCategoryId(defaultStatusCategoryId);
     navigate(
       getTaskBoardURL({
         teamId: teamState.teamActiveStatus.teamId,
