@@ -33,13 +33,11 @@ function AddStatusColumnInput({
   statusCategoryId,
   onColorPalletClose,
 }: Props) {
-  const navigate = useNavigate();
   const { listId } = useParams();
   const [title, setTitle] = useState("");
-  const {
-    storedDefaultCategoryId,
-    updateStoredDefaultCategoryId: updateDefaultCategoryId,
-  } = useCurrentListStore();
+  const { storedDefaultCategoryId, updateStoredDefaultCategoryId } =
+    useCurrentListStore();
+  const isTitleTaken = statusColumns.some((column) => column.title === title);
 
   function createStatusColumn() {
     if (!statusCategoryId) {
@@ -87,7 +85,7 @@ function AddStatusColumnInput({
             );
 
             if (storedDefaultCategoryId !== updatedStatusCategoryId) {
-              updateDefaultCategoryId(updatedStatusCategoryId);
+              updateStoredDefaultCategoryId(updatedStatusCategoryId);
             }
             if (oldNewStatusPairs) {
               draftState.columnOptions.statusColumns.forEach((column) => {
@@ -110,66 +108,72 @@ function AddStatusColumnInput({
   }
 
   return (
-    <InputGroup>
-      {/* Input */}
-      <Input
-        _hover={{}}
-        _focusVisible={{}}
-        autoFocus
-        size="xs"
-        value={title}
-        width="200px"
-        height="48px"
-        borderTop="2px"
-        boxShadow="base"
-        minWidth="250px"
-        cursor="pointer"
-        borderTopRadius="sm"
-        borderTopColor={color}
-        textTransform="uppercase"
-        onChange={(e) => setTitle(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            createStatusColumn();
-            onColorPalletClose();
-          } else if (e.key === "Escape") {
-            onColorPalletClose();
+    <>
+      <InputGroup>
+        {/* Input */}
+        <Input
+          _hover={{}}
+          _focusVisible={{}}
+          autoFocus
+          size="xs"
+          value={title}
+          width="200px"
+          height="48px"
+          borderTop="2px"
+          boxShadow="base"
+          minWidth="250px"
+          cursor="pointer"
+          borderTopRadius="sm"
+          borderTopColor={color}
+          textTransform="uppercase"
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !isTitleTaken) {
+              createStatusColumn();
+              onColorPalletClose();
+            } else if (e.key === "Escape") {
+              onColorPalletClose();
+            }
+          }}
+        />
+
+        <InputRightElement
+          mr={4}
+          mt="3px"
+          cursor="pointer"
+          children={
+            <Flex justifyContent="center" alignItems="center">
+              {/* Accept change */}
+              <Box
+                fontSize="33px"
+                color="green.500"
+                onClick={!isTitleTaken ? createStatusColumn : undefined}
+              >
+                <i className="bi bi-check"></i>
+              </Box>
+
+              {/* Cancel */}
+              <Box
+                mr={2}
+                fontSize="33px"
+                color="red.500"
+                onClick={() => {
+                  // Do nothing and close edit
+                  onColorPalletClose();
+                }}
+              >
+                <i className="bi bi-x"></i>
+              </Box>
+            </Flex>
           }
-        }}
-      />
+        />
+      </InputGroup>
 
-      <InputRightElement
-        mr={4}
-        mt="3px"
-        cursor="pointer"
-        children={
-          <Flex justifyContent="center" alignItems="center">
-            {/* Accept change */}
-            <Box
-              fontSize="33px"
-              color="green.500"
-              onClick={() => {
-                createStatusColumn();
-              }}
-            >
-              <i className="bi bi-check"></i>
-            </Box>
-
-            {/* Cancel */}
-            <Box
-              mr={2}
-              fontSize="33px"
-              color="red.500"
-              onClick={() => {
-                // Do nothing and close edit
-                onColorPalletClose();
-              }}
-            >
-              <i className="bi bi-x"></i>
-            </Box>
-          </Flex>
-        }
-      />
-    </InputGroup>
+      {isTitleTaken && (
+        <Box fontSize="small" mt="1" color="red.400">
+          Title already exists
+        </Box>
+      )}
+    </>
   );
 }
