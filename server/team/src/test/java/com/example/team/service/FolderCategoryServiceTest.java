@@ -22,6 +22,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Set;
 
+import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -104,7 +106,10 @@ public class FolderCategoryServiceTest implements WithAssertions {
         var folderId = 1;
         var space = new Space();
         var member = new UserInfo();
-        var listCategory1 = new ListCategory();
+
+        var listId1 = 44;
+        var listIds = Set.of(listId1);
+        var listCategory1 = ListCategory.builder().id(listId1).build();
         var folderCategory = new FolderCategory();
 
         folderCategory.addMember(member);
@@ -122,12 +127,16 @@ public class FolderCategoryServiceTest implements WithAssertions {
         var actualResult = underTest.deleteFolderCategory(folderId);
 
         // then
+        verify(rabbitMQMessageProducer).publish(
+                eq(internalExchange),
+                eq(deleteTasksRoutingKey),
+                eq(listIds));
+
         verify(entityManager).remove(folderCategoryCaptor.capture());
         var capturedFolderValue = folderCategoryCaptor.getValue();
         assertThat(capturedFolderValue.getMembers()).isEmpty();
         assertThat(capturedFolderValue.getAllLists()).isEmpty();
         assertThat(space.getFolderCategories()).isEmpty();
-
 
         assertThat(actualResult).isEqualTo(true);
     }

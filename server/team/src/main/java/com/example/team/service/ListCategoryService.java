@@ -79,7 +79,7 @@ public class ListCategoryService {
             throw new InvalidRequestException("This list no longer exists");
         }
 
-        var listCategory = entityManager.find(
+        var listCategory = entityManager.getReference(
                 ListCategory.class, listCategoryId);
         listCategory.removeAllMembers();
 

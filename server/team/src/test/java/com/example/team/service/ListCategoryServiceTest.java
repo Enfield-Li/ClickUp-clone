@@ -20,8 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
+import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -211,7 +214,6 @@ public class ListCategoryServiceTest implements WithAssertions {
                 .getReference(eq(FolderCategory.class), any()))
                 .willReturn(folderCategory);
 
-
         // when
         var actualResult = underTest.deleteListCategory(listId);
 
@@ -252,6 +254,11 @@ public class ListCategoryServiceTest implements WithAssertions {
         var actualResult = underTest.deleteListCategory(listId);
 
         // then
+        rabbitMQMessageProducer.publish(
+                eq(internalExchange),
+                eq(deleteTasksRoutingKey),
+                eq(List.of(listId)));
+
         verify(entityManager).remove(listCategoryCaptor.capture());
         var capturedListValue = listCategoryCaptor.getValue();
         assertThat(capturedListValue).isEqualTo(listCategory);

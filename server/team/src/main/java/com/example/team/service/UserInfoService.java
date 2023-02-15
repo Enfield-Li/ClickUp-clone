@@ -9,20 +9,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
-    private final EntityManager entityManager;
     private final UserInfoRepository repository;
 
-    private UserCredentials getUserCredentialsInfo() {
-        return (UserCredentials) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
+    public UserCredentials getUserCredentialsInfo() {
+        return (UserCredentials) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
     }
 
     @Transactional
@@ -32,7 +28,6 @@ public class UserInfoService {
         var username = userCredentials.username();
 
         return repository.findByUserId(userId).orElse(
-                UserInfo.builder()
-                        .userId(userId).username(username).build());
+                UserInfo.builder().userId(userId).username(username).build());
     }
 }

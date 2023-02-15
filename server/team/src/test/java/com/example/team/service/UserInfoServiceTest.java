@@ -14,18 +14,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.persistence.EntityManager;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})
 public class UserInfoServiceTest implements WithAssertions {
 
     UserInfoService underTest;
-
-    @Mock
-    EntityManager entityManager;
 
     @Mock
     Authentication authentication;
@@ -36,13 +33,13 @@ public class UserInfoServiceTest implements WithAssertions {
     @Mock
     UserInfoRepository userInfoRepository;
 
-    UserCredentials userCredentials = new UserCredentials(1, "mockUser");
+    Integer userId = 1;
+    UserCredentials userCredentials = new UserCredentials(
+            userId, "mockUser");
 
     @BeforeEach
     void setUp() {
-        underTest = new UserInfoService(
-                entityManager,
-                userInfoRepository);
+        underTest = new UserInfoService(userInfoRepository);
         SecurityContextHolder.setContext(securityContext);
         given(SecurityContextHolder.getContext().getAuthentication())
                 .willReturn(authentication);
@@ -51,12 +48,18 @@ public class UserInfoServiceTest implements WithAssertions {
     }
 
     @Test
-    void test_get_current_user_info_should_get_reference() {
+    void test_get_user_credentials_info() {
+        var actualResult = underTest.getUserCredentialsInfo();
+        assertThat(actualResult).isEqualTo(userCredentials);
+    }
+
+    @Test
+    void test_get_current_user_info_should_pass() {
         // given
         var userInfo = UserInfo.builder().build();
 
-        given(userInfoRepository.existsById(any())).willReturn(true);
-        given(entityManager.getReference(any(), any())).willReturn(userInfo);
+        given(userInfoRepository.findByUserId(eq(userId)))
+                .willReturn(Optional.of(userInfo));
 
         // when
         var actualResult = underTest.getCurrentUserInfo();
@@ -68,15 +71,15 @@ public class UserInfoServiceTest implements WithAssertions {
     @Test
     void test_get_current_user_info_should_create_new_user_info() {
         // given 
-        given(userInfoRepository.existsById(any())).willReturn(false);
+        given(userInfoRepository.findByUserId(eq(userId)))
+                .willReturn(Optional.empty());
 
         // when
         var actualResult = underTest.getCurrentUserInfo();
 
         // then
         assertThat(actualResult.getId()).isNull();
-        assertThat(actualResult.getUserId())
-                .isEqualTo(userCredentials.userId());
+        assertThat(actualResult.getUserId()).isEqualTo(userId);
         assertThat(actualResult.getUsername())
                 .isEqualTo(userCredentials.username());
     }
