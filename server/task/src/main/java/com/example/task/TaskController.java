@@ -1,6 +1,5 @@
 package com.example.task;
 
-import com.example.clients.task.InitTasksInRegistrationDTO;
 import com.example.task.dto.*;
 import com.example.task.model.Task;
 import com.example.task.service.TaskService;
@@ -33,14 +32,6 @@ class TaskController {
             @RequestBody CreateTaskDTO createTaskDTO) {
         var task = service.createTask(createTaskDTO);
         return ResponseEntity.ok(task);
-    }
-
-    @PostMapping("/init_tasks")
-    ResponseEntity<Boolean> initTasksInRegistration(
-            @RequestBody InitTasksInRegistrationDTO initTasksInRegistrationDTO) {
-        var tasksInitialized = service
-                .initTasksInRegistration(initTasksInRegistrationDTO);
-        return ResponseEntity.ok(tasksInitialized);
     }
 
     @PutMapping

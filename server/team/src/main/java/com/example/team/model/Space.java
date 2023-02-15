@@ -165,15 +165,14 @@ public class Space {
                 .color(createSpaceDTO.color())
                 .avatar(createSpaceDTO.avatar())
                 .teamId(createSpaceDTO.teamId())
-                .listCategories(Set.of(listCategory))
                 .isPrivate(createSpaceDTO.isPrivate())
                 .orderIndex(createSpaceDTO.orderIndex())
                 .defaultStatusCategoryId(
                         createSpaceDTO.defaultStatusCategoryId())
                 .build();
         space.addMember(userInfo);
+        space.addListCategory(listCategory);
 
-        listCategory.setSpace(space);
         return space;
     }
 
@@ -193,12 +192,11 @@ public class Space {
                 .orderIndex(1)
                 .isPrivate(false)
                 .creator(userInfo)
-                .listCategories(Set.of(listCategory))
                 .defaultStatusCategoryId(defaultStatusCategoryId)
                 .build();
         space.addMember(userInfo);
+        space.addListCategory(listCategory);
 
-        listCategory.setSpace(space);
         return space;
     }
 

@@ -1,5 +1,6 @@
 package com.example.task.message;
 
+import com.example.clients.task.InitTasksInRegistrationDTO;
 import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
 import com.example.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,7 @@ public class TaskConsumer {
             key = updateTaskStatusOnAddingNewColumnRoutingKey))
     public void updateTaskStatus(
             UpdateTaskStatusOnAddingColumnDTO eventDTO) {
-        log.info("Consumed {} from UpdateTaskStatusOnAddingNewColumn queue",
-                eventDTO);
+        log.info("Consumed {} from queue", eventDTO);
         service.updateTaskStatusOnAddingNewColumn(eventDTO);
     }
 
@@ -37,7 +37,16 @@ public class TaskConsumer {
             value = @Queue(value = deleteTasksQueue),
             key = deleteTasksRoutingKey))
     public void deleteTaskIds(Set<Integer> listIds) {
-        log.info("Consumed {} from deleteTasks queue", listIds);
+        log.info("Consumed {} from queue", listIds);
         service.deleteTasksByListId(listIds);
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            exchange = @Exchange(value = internalExchange),
+            value = @Queue(value = initTasksInRegistrationQueue),
+            key = initTasksInRegistrationRoutingKey))
+    public void initTasksInRegistration(InitTasksInRegistrationDTO dto) {
+        log.info("Consumed {} from queue", dto);
+        service.initTasksInRegistration(dto);
     }
 }

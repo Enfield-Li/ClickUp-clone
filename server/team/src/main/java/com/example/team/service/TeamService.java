@@ -5,9 +5,7 @@ import com.example.clients.authorization.InitTeamUIState;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.task.InitTasksInRegistrationDTO;
-import com.example.clients.task.TaskClient;
 import com.example.clients.team.CreateTeamDTO;
-import com.example.serviceExceptionHandling.exception.InternalErrorException;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.model.Space;
 import com.example.team.model.Team;
@@ -29,7 +27,6 @@ import static com.example.amqp.ExchangeKey.*;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final TaskClient taskClient;
     private final TeamRepository repository;
     private final EntityManager entityManager;
     private final SpaceRepository spaceRepository;
@@ -47,6 +44,8 @@ public class TeamService {
     @Transactional
     public InitTeamUIState initTeamInRegistration(CreateTeamDTO createTeamDTO) {
         var userInfo = userInfoService.getCurrentUserInfo();
+        var userId = userInfo.getUserId();
+        var username = userInfo.getUsername();
 
         // Init team
         var initTeam = Team.createTeam(createTeamDTO, userInfo);
@@ -64,17 +63,15 @@ public class TeamService {
         team.addSpace(initSpace);
         var space = spaceRepository.saveAndFlush(initSpace);
 
-        // Init tasks for listCategory
+        // Init tasks for listCategory, publish events
         var listCategoryId = space.getListCategories()
                 .stream().toList().get(0).getId();
         var initTasksInRegistrationDTO = new InitTasksInRegistrationDTO(
-                listCategoryId,
-                statusCategoryDTO);
-        var isTaskCreated = taskClient
-                .initTaskInRegistration(initTasksInRegistrationDTO);
-        if (!isTaskCreated) {
-            throw new InternalErrorException("Failed to create task");
-        }
+                listCategoryId, statusCategoryDTO, userId, username);
+        rabbitMQMessageProducer.publish(
+                internalExchange,
+                initTasksInRegistrationRoutingKey,
+                initTasksInRegistrationDTO);
 
         return new InitTeamUIState(
                 team.getId(), space.getId(), listCategoryId);
@@ -115,7 +112,7 @@ public class TeamService {
         verifyTeamExist(teamId);
         Set<Integer> listIds = new HashSet<>();
 
-        var team = entityManager.find(Team.class, teamId);
+        var team = entityManager.getReference(Team.class, teamId);
         team.getSpaces().forEach(space -> {
             space.getListCategories().forEach(listCategory -> {
                 listIds.add(listCategory.getId());

@@ -65,7 +65,7 @@ public class SpaceService {
             throw new InvalidRequestException("This space no longer exists");
         }
 
-        var space = entityManager.find(Space.class, spaceId);
+        var space = entityManager.getReference(Space.class, spaceId);
         space.getListCategories().forEach(listCategory -> {
             listIds.add(listCategory.getId());
         });

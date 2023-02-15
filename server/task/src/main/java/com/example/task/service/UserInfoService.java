@@ -8,14 +8,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
-    private final EntityManager entityManager;
     private final UserInfoRepository repository;
 
     private UserCredentials getUserCredentialsInfo() {
@@ -30,7 +27,6 @@ public class UserInfoService {
         var username = userCredentials.username();
 
         return repository.findByUserId(userId).orElse(
-                UserInfo.builder()
-                        .userId(userId).username(username).build());
+                UserInfo.builder().userId(userId).username(username).build());
     }
 }

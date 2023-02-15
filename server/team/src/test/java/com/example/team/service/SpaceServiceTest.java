@@ -1,5 +1,6 @@
 package com.example.team.service;
 
+import com.example.amqp.RabbitMqMessageProducer;
 import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.team.dto.CreateSpaceDTO;
 import com.example.team.model.*;
@@ -19,6 +20,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import javax.persistence.EntityManager;
 import java.util.Set;
 
+import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
+import static com.example.amqp.ExchangeKey.internalExchange;
 import static com.example.team.TeamServiceConstants.SPACE_NAME_CONSTRAINT;
 import static com.example.team.TeamServiceConstants.SPACE_ORDER_INDEX_CONSTRAINT;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +41,9 @@ public class SpaceServiceTest implements WithAssertions {
     UserInfoService userInfoService;
 
     @Mock
+    RabbitMqMessageProducer rabbitMQMessageProducer;
+
+    @Mock
     SpaceRepository repository;
 
     @Captor
@@ -48,11 +54,12 @@ public class SpaceServiceTest implements WithAssertions {
 
     @BeforeEach
     void setUp() {
-//        underTest = new SpaceService(
-//                repository,
-//                entityManager,
-//                userInfoService
-//        );
+        underTest = new SpaceService(
+                repository,
+                entityManager,
+                userInfoService,
+                rabbitMQMessageProducer
+        );
     }
 
     @Test
@@ -180,29 +187,37 @@ public class SpaceServiceTest implements WithAssertions {
         // given
         var spaceId = 3;
         var team = new Team();
-        var space1 = new Space();
-        space1.setId(spaceId);
-        var space2 = new Space();
         var member = new UserInfo();
-        var listCategory1 = new ListCategory();
-        var listCategory2 = new ListCategory();
-        var folderCategory = new FolderCategory();
 
-        team.addSpace(space1);
-        team.addSpace(space2);
-        space1.addMember(member);
-        space1.addListCategory(listCategory1);
-        space1.addFolderCategory(folderCategory);
+        var listId1 = 44;
+        var listId2 = 45;
+        var listIds = Set.of(listId1, listId2);
+
+        var listCategory1 = ListCategory.builder().id(listId1).build();
+        var listCategory2 = ListCategory.builder().id(listId2).build();
+        var folderCategory = FolderCategory.builder().build();
+        var space = Space.builder().id(spaceId).build();
+
+        team.addSpace(space);
+        space.addMember(member);
+        space.addListCategory(listCategory1);
+        space.addFolderCategory(folderCategory);
         folderCategory.addListCategory(listCategory2);
 
         given(repository.existsById(any())).willReturn(true);
         given(entityManager.getReference(eq(Team.class), any())).willReturn(team);
-        given(entityManager.getReference(eq(Space.class), any())).willReturn(space1);
+        given(entityManager.getReference(eq(Space.class), any()))
+                .willReturn(space);
 
         // when
         var actualResult = underTest.deleteSpace(spaceId);
 
         // then
+        verify(rabbitMQMessageProducer).publish(
+                eq(internalExchange),
+                eq(deleteTasksRoutingKey),
+                eq(listIds));
+
         verify(entityManager).remove(spaceCaptor.capture());
         var capturedSpaceValue = spaceCaptor.getValue();
         assertThat(capturedSpaceValue.getMembers()).isEmpty();

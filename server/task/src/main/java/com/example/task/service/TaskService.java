@@ -209,12 +209,15 @@ public class TaskService {
     }
 
     @Transactional
-    public Boolean initTasksInRegistration(
+    public void initTasksInRegistration(
             InitTasksInRegistrationDTO initTasksInRegistrationDTO) {
+        var userId = initTasksInRegistrationDTO.userId();
+        var username = initTasksInRegistrationDTO.username();
         var listId = initTasksInRegistrationDTO.listCategoryId();
         var statusCategoryDTO = initTasksInRegistrationDTO.statusCategoryDTO();
+        var userInfo = UserInfo.builder()
+                .userId(userId).username(username).build();
 
-        var userInfo = userInfoService.getCurrentUserInfo();
         var statusColumns = statusCategoryDTO.statusColumns();
 
         var inProgressStatus = StatusPosition.builder()
@@ -301,6 +304,5 @@ public class TaskService {
         });
 
         repository.saveAll(taskList);
-        return true;
     }
 }

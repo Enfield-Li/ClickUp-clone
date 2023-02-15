@@ -9,10 +9,13 @@ public class ExchangeKey {
             "updateTaskStatusOnAddingNewColumn.queue";
     public static final String updateTaskStatusOnAddingNewColumnRoutingKey =
             "internal.updateTaskStatusOnAddingNewColumnRoutingKey.routing-key";
-    public static final String deleteTasksQueue =
-            "deleteTasks.queue";
+    public static final String deleteTasksQueue = "deleteTasks.queue";
     public static final String deleteTasksRoutingKey =
             "internal.deleteTasksRoutingKey.routing-key";
+    public static final String initTasksInRegistrationQueue =
+            "initTasksInRegistration.queue";
+    public static final String initTasksInRegistrationRoutingKey =
+            "internal.initTasksInRegistration.routing-key";
 
     // task event
     public static final String taskEventQueue = "taskEvent.queue";
