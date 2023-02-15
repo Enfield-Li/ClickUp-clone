@@ -2,11 +2,17 @@ package com.example.authorization;
 
 import com.example.authorization.dto.AuthorizationResponseDTO;
 import com.example.authorization.dto.LoginUserDTO;
+import com.example.authorization.dto.RegisterUserDTO;
+import com.example.authorization.dto.RegistrationResponseDTO;
+import com.example.clients.authorization.InitTeamUIState;
 import com.example.clients.authorization.UpdateUserJoinedTeamsDTO;
 import com.example.clients.jwt.AuthenticationFailureException;
 import com.example.clients.jwt.JwtUtilities;
 import com.example.clients.jwt.RefreshTokenPayload;
 import com.example.clients.jwt.UserCredentials;
+import com.example.clients.team.CreateTeamDTO;
+import com.example.clients.team.TeamClient;
+import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +43,13 @@ public class AuthorizationServiceTest implements WithAssertions {
     private final String REFRESH_TOKEN = "refresh_token";
 
     @Mock
-    ApplicationUserRepository repository;
+    HttpSession session;
+
+    @Mock
+    TeamClient teamClient;
+
+    @Mock
+    HttpServletRequest request;
 
     @Mock
     JwtUtilities jwtUtils;
@@ -47,123 +58,156 @@ public class AuthorizationServiceTest implements WithAssertions {
     PasswordEncoder passwordEncoder;
 
     @Mock
-    HttpSession httpSession;
-
-    @Mock
-    HttpServletRequest httpServletRequest;
-
-    @Mock
-    Authentication authentication;
-
-    @Captor
-    ArgumentCaptor<String> passwordArgCaptor;
+    ApplicationUserRepository repository;
 
     @Captor
     ArgumentCaptor<String> sessionArgCaptor;
 
     @Captor
+    ArgumentCaptor<String> passwordArgCaptor;
+
+    @Captor
+    ArgumentCaptor<String> tokenArgCaptor;
+
+    @Captor
     ArgumentCaptor<Integer> integerArgCaptor;
+
+    @Captor
+    ArgumentCaptor<CreateTeamDTO> createTeamDTOArgCaptor;
 
     @Captor
     ArgumentCaptor<ApplicationUser> applicationUserArgCaptor;
 
     @BeforeEach
     void setUp() {
-//        underTest = new AuthorizationService(
-//                httpSession, httpServletRequest, jwtUtils,
-//                passwordEncoder, repository);
+        underTest = new AuthorizationService(
+                session, teamClient, request, jwtUtils,
+                passwordEncoder, repository);
     }
 
-    // @Test
-    // void test_register_should_pass() {
-    //     // given
-    //     var userId = 2;
-    //     var username = "user1";
-    //     var joinedTeamCount = 0;
-    //     var password = "password";
-    //     var email = "user1@gmail.com";
-    //     var encodedPassword = "encodedPassword";
+    @Test
+    void test_register_should_pass() {
+        // given
+        var userId = 2;
+        var color = "green";
+        var username = "user1";
+        var joinedTeamCount = 1;
+        var password = "password";
+        var email = "user1@gmail.com";
+        var INITIAL_TOKEN_VERSION = 0;
+        var encodedPassword = "encodedPassword";
 
-    //     var accessToken = "accessToken";
-    //     var refreshToken = "refreshToken";
+        var green = "rgb(29, 185, 84)";
+        var teamName = String.format("%s's Workspace", username);
+        var createTeamDTO = new CreateTeamDTO(green, null, teamName);
 
-    //     var applicationUser = ApplicationUser.builder()
-    //             .id(userId)
-    //             .email(email)
-    //             .color("color")
-    //             .username(username)
-    //             .password(encodedPassword)
-    //             .joinedTeamCount(joinedTeamCount)
-    //             .build();
-    //     var expectedAuthorizationResponseDTO = AuthorizationResponseDTO
-    //             .builder()
-    //             .id(userId)
-    //             .email(email)
-    //             .username(username)
-    //             .accessToken(accessToken)
-    //             .joinedTeamCount(joinedTeamCount)
-    //             .build();
+        var accessToken = "accessToken";
+        var refreshToken = "refreshToken";
+        var expectedTokenArg = String.format("Bearer %s", accessToken);
 
-    //     var registerCredentials = new RegisterUserDTO(
-    //             username, password, email);
-    //     given(repository.existsByEmail(any())).willReturn(false);
-    //     given(passwordEncoder.encode(any())).willReturn(encodedPassword);
-    //     given(jwtUtils.createRefreshToken(any(), any())).willReturn(
-    //             refreshToken);
-    //     given(jwtUtils.createAccessToken(any(), any())).willReturn(
-    //             accessToken);
-    //     given(repository.save(any())).willReturn(applicationUser);
+        var listId = 55;
+        var spaceId = 13;
+        var teamId = 654;
+        var initTeamUIState = new InitTeamUIState(listId, spaceId, teamId);
 
-    //     // when 
-    //     var userResponse = underTest.register(registerCredentials);
+        var applicationUser = ApplicationUser.builder()
+                .id(userId)
+                .email(email)
+                .color(color)
+                .username(username)
+                .password(encodedPassword)
+                .joinedTeamCount(joinedTeamCount)
+                .build();
+        var expectedRegistrationResponseDTO = RegistrationResponseDTO.builder()
+                .id(userId)
+                .color(color)
+                .email(email)
+                .username(username)
+                .accessToken(accessToken)
+                .joinedTeamCount(joinedTeamCount)
+                .initTeamUIState(initTeamUIState)
+                .defaultTeamId(initTeamUIState.teamId())
+                .build();
 
-    //     // then
-    //     verify(passwordEncoder).encode(passwordArgCaptor.capture());
-    //     verify(repository).save(applicationUserArgCaptor.capture());
-    //     verify(httpSession).setAttribute(sessionArgCaptor.capture(),
-    //             sessionArgCaptor.capture());
+        var registerCredentials = new RegisterUserDTO(
+                color, username, password, email);
+        given(repository.existsByEmail(any())).willReturn(false);
+        given(passwordEncoder.encode(any())).willReturn(encodedPassword);
+        given(jwtUtils.createRefreshToken(any(), any()))
+                .willReturn(refreshToken);
+        given(jwtUtils.createAccessToken(any(), any())).willReturn(
+                accessToken);
+        given(repository.save(any())).willReturn(applicationUser);
+        given(teamClient.initTeamInRegistration(any(), any()))
+                .willReturn(initTeamUIState);
 
-    //     var applicationUserArg = applicationUserArgCaptor.getValue();
-    //     var sessionArgs = sessionArgCaptor.getAllValues();
+        // when
+        var actualResponse = underTest.register(registerCredentials);
 
-    //     assertThat(passwordArgCaptor.getValue()).isEqualTo(password);
-    //     assertThat(applicationUserArg.getPassword()).isEqualTo(
-    //             encodedPassword);
-    //     assertThat(sessionArgs).isEqualTo(List.of(REFRESH_TOKEN, refreshToken));
-    //     assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
-    // }
+        // then
+        verify(passwordEncoder).encode(passwordArgCaptor.capture());
+        verify(repository, times(2))
+                .save(applicationUserArgCaptor.capture());
+        verify(session).setAttribute(
+                sessionArgCaptor.capture(), sessionArgCaptor.capture());
+        verify(teamClient).initTeamInRegistration(
+                createTeamDTOArgCaptor.capture(), tokenArgCaptor.capture());
+        verify(jwtUtils).createRefreshToken(
+                integerArgCaptor.capture(), integerArgCaptor.capture());
 
-    // @Test
-    // void test_register_should_fail(CapturedOutput output) {
-    //     // given
-    //     var username = "user1";
-    //     var password = "password";
-    //     var email = "user1@gmail.com";
-    //     var errorMessage = "Email already taken!";
-    //     var registerCredentials = new RegisterUserDTO(username,
-    //             password, email);
-    //     var logMessage = "Email already taken!";
+        var tokenArg = tokenArgCaptor.getValue();
+        var passwordArg = passwordArgCaptor.getValue();
+        var integerArgs = integerArgCaptor.getAllValues();
+        var sessionArgs = sessionArgCaptor.getAllValues();
+        var createTeamDTOArg = createTeamDTOArgCaptor.getValue();
+        var applicationUserArg = applicationUserArgCaptor.getValue();
 
-    //     given(repository.existsByEmail(any())).willReturn(true);
+        assertThat(passwordArg).isEqualTo(password);
+        assertThat(tokenArg).isEqualTo(expectedTokenArg);
+        assertThat(createTeamDTOArg).isEqualTo(createTeamDTO);
+        assertThat(actualResponse).isEqualTo(expectedRegistrationResponseDTO);
+        assertThat(applicationUserArg.getPassword())
+                .isEqualTo(encodedPassword);
+        assertThat(sessionArgs).isEqualTo(
+                List.of(REFRESH_TOKEN, refreshToken));
+        assertThat(integerArgs).isEqualTo(
+                List.of(userId, INITIAL_TOKEN_VERSION));
+    }
 
-    //     // when 
-    //     // then
-    //     assertThatThrownBy(() -> underTest.register(registerCredentials))
-    //             .isInstanceOf(AuthenticationFailureException.class)
-    //             .hasMessage(String.format(errorMessage));
+    @Test
+    void test_register_should_fail(CapturedOutput output) {
+        // given
+        var color = "green";
+        var username = "user1";
+        var password = "password";
+        var email = "user1@gmail.com";
+        var errorMessage = "Email already taken!";
+        var registerCredentials = new RegisterUserDTO(
+                color, username, password, email);
+        var logMessage = "Email already taken!";
 
-    //     verify(repository, never()).saveAndFlush(any());
-    //     verify(passwordEncoder, never()).encode(any());
-    //     verify(jwtUtils, never()).createRefreshToken(any(), any());
-    //     verify(jwtUtils, never()).createAccessToken(any(), any());
-    //     verify(httpSession, never()).setAttribute(any(), any());
-    //     assertThat(output).contains(logMessage);
-    // }
+        given(repository.existsByEmail(any())).willReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.register(registerCredentials))
+                .isInstanceOf(AuthenticationFailureException.class)
+                .hasMessage(String.format(errorMessage));
+
+        verify(passwordEncoder, never()).encode(any());
+        verify(repository, never()).saveAndFlush(any());
+        verify(session, never()).setAttribute(any(), any());
+        verify(jwtUtils, never()).createAccessToken(any(), any());
+        verify(jwtUtils, never()).createRefreshToken(any(), any());
+        verify(teamClient, never()).initTeamInRegistration(any(), any());
+        assertThat(output).contains(logMessage);
+    }
 
     @Test
     void test_login_should_pass() {
         // given 
         var userId = 2;
+        var color = "green";
         var username = "user1";
         var joinedTeamCount = 2;
         var password = "password";
@@ -176,13 +220,14 @@ public class AuthorizationServiceTest implements WithAssertions {
         var applicationUser = ApplicationUser.builder()
                 .id(userId)
                 .email(email)
-                .color("color")
+                .color(color)
                 .username(username)
                 .password(encodedPassword)
                 .joinedTeamCount(joinedTeamCount)
                 .build();
         var expectedAuthorizationResponseDTO = AuthorizationResponseDTO
                 .builder()
+                .color(color)
                 .id(userId)
                 .email(email)
                 .username(username)
@@ -192,25 +237,25 @@ public class AuthorizationServiceTest implements WithAssertions {
 
         var loginCredentials = new LoginUserDTO(email, password);
 
-        given(repository.findByEmail(any())).willReturn(Optional.of(
-                applicationUser));
-        given(jwtUtils.createRefreshToken(any(), any())).willReturn(
-                refreshToken);
-        given(jwtUtils.createAccessToken(any(), any())).willReturn(
-                accessToken);
+        given(repository.findByEmail(any()))
+                .willReturn(Optional.of(applicationUser));
+        given(jwtUtils.createRefreshToken(any(), any()))
+                .willReturn(refreshToken);
+        given(jwtUtils.createAccessToken(any(), any()))
+                .willReturn(accessToken);
         given(passwordEncoder.matches(any(), any())).willReturn(true);
 
         // when 
         var userResponse = underTest.login(loginCredentials);
-        verify(httpSession)
-                .setAttribute(sessionArgCaptor.capture(),
-                        sessionArgCaptor.capture());
+        verify(session).setAttribute(
+                sessionArgCaptor.capture(), sessionArgCaptor.capture());
 
         // then
         var sessionArgs = sessionArgCaptor.getAllValues();
-        assertThat(sessionArgs).isEqualTo(List.of(REFRESH_TOKEN, refreshToken));
-        assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
         assertThat(userResponse.getId()).isEqualTo(applicationUser.getId());
+        assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
+        assertThat(sessionArgs).isEqualTo(
+                List.of(REFRESH_TOKEN, refreshToken));
     }
 
     @Test
@@ -232,7 +277,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         // then
         verify(jwtUtils, never()).createRefreshToken(any(), any());
         verify(jwtUtils, never()).createAccessToken(any(), any());
-        verify(httpSession, never()).setAttribute(any(), any());
+        verify(session, never()).setAttribute(any(), any());
     }
 
     @Test
@@ -269,7 +314,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         // then
         verify(jwtUtils, never()).createRefreshToken(any(), any());
         verify(jwtUtils, never()).createAccessToken(any(), any());
-        verify(httpSession, never()).setAttribute(any(), any());
+        verify(session, never()).setAttribute(any(), any());
         assertThat(output).contains(logMessage);
     }
 
@@ -277,6 +322,7 @@ public class AuthorizationServiceTest implements WithAssertions {
     void test_refresh_token_should_pass() {
         // given 
         var userId = 2;
+        var color = "green";
         var tokenVersion = 1;
         var username = "user1";
         var joinedTeamCount = 3;
@@ -291,7 +337,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var applicationUser = ApplicationUser.builder()
                 .id(userId)
                 .email(email)
-                .color("color")
+                .color(color)
                 .username(username)
                 .password(encodedPassword)
                 .joinedTeamCount(joinedTeamCount)
@@ -300,6 +346,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         var expectedAuthorizationResponseDTO = AuthorizationResponseDTO
                 .builder()
                 .id(userId)
+                .color(color)
                 .email(email)
                 .username(username)
                 .accessToken(newAccessToken)
@@ -310,8 +357,8 @@ public class AuthorizationServiceTest implements WithAssertions {
         var refreshTokenPayload = new RefreshTokenPayload(
                 userId, tokenVersion);
 
-        given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER))
+        given(session.getAttribute(any())).willReturn(refreshToken);
+        given(request.getHeader(AUTHORIZATION_HEADER))
                 .willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(userInfo);
         given(jwtUtils.getPayloadFromRefreshToken(any())).willReturn(
@@ -328,13 +375,13 @@ public class AuthorizationServiceTest implements WithAssertions {
         var userResponse = underTest.refreshToken();
 
         // then
-        verify(httpSession).setAttribute(sessionArgCaptor.capture(),
+        verify(session).setAttribute(sessionArgCaptor.capture(),
                 sessionArgCaptor.capture());
         var sessionArgs = sessionArgCaptor.getAllValues();
         assertThat(sessionArgs).isEqualTo(List.of(REFRESH_TOKEN,
                 newRefreshToken));
         assertThat(userResponse).isEqualTo(expectedAuthorizationResponseDTO);
-        verify(httpSession, never()).invalidate();
+        verify(session, never()).invalidate();
     }
 
     @Test
@@ -362,8 +409,8 @@ public class AuthorizationServiceTest implements WithAssertions {
         var refreshToken = "refreshToken";
         var logMessage = "Token version mismatch.";
 
-        given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER))
+        given(session.getAttribute(any())).willReturn(refreshToken);
+        given(request.getHeader(AUTHORIZATION_HEADER))
                 .willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(userInfo);
         given(jwtUtils.getPayloadFromRefreshToken(any())).willReturn(
@@ -378,9 +425,9 @@ public class AuthorizationServiceTest implements WithAssertions {
         // then
         verify(jwtUtils, never()).createRefreshToken(any(), any());
         verify(jwtUtils, never()).createAccessToken(any(), any());
-        verify(httpSession, never()).setAttribute(any(), any());
+        verify(session, never()).setAttribute(any(), any());
 
-        verify(httpSession, times(1)).invalidate();
+        verify(session, times(1)).invalidate();
         assertThat(output).contains(logMessage);
     }
 
@@ -398,8 +445,8 @@ public class AuthorizationServiceTest implements WithAssertions {
         var accessToken = "accessToken";
         var refreshToken = "refreshToken";
 
-        given(httpSession.getAttribute(any())).willReturn(refreshToken);
-        given(httpServletRequest.getHeader(AUTHORIZATION_HEADER))
+        given(session.getAttribute(any())).willReturn(refreshToken);
+        given(request.getHeader(AUTHORIZATION_HEADER))
                 .willReturn(accessToken);
         given(jwtUtils.getUserInfoFromAccessToken(any())).willReturn(
                 userInfo);
@@ -415,7 +462,7 @@ public class AuthorizationServiceTest implements WithAssertions {
         // then
         verify(jwtUtils, never()).createRefreshToken(any(), any());
         verify(jwtUtils, never()).createAccessToken(any(), any());
-        verify(httpSession, never()).setAttribute(any(), any());
+        verify(session, never()).setAttribute(any(), any());
     }
 
     @Test
@@ -472,18 +519,69 @@ public class AuthorizationServiceTest implements WithAssertions {
         assertThat(actualResult).isEqualTo(true);
     }
 
+//    @Test
+//    void testChangePassword() {
+//        // given
+//        // when
+//        // then
+//    }
+
     @Test
-    void testChangePassword() {
+    void test_update_user_default_team_id_should_pass() {
         // given
-        // when 
+        var userId = 54;
+        var teamId = 14;
+        var username = "name";
+        var accessToken = "accessToken";
+        var user = new ApplicationUser();
+        var userCredentials = new UserCredentials(userId, username);
+
+        given(request.getHeader(AUTHORIZATION_HEADER))
+                .willReturn(accessToken);
+        given(jwtUtils.getUserInfoFromAccessToken(any()))
+                .willReturn(userCredentials);
+        given(repository.findById(any())).willReturn(Optional.of(user));
+
+        // when
+        var actualResult = underTest.updateUserDefaultTeamId(teamId);
+
         // then
+        assertThat(actualResult).isTrue();
+        assertThat(user.getDefaultTeamId()).isEqualTo(teamId);
+    }
+
+
+    @Test
+    void test_update_user_default_team_id_should_fail() {
+        // given
+        var userId = 54;
+        var teamId = 14;
+        var username = "name";
+        var accessToken = "accessToken";
+        var user = new ApplicationUser();
+        var userCredentials = new UserCredentials(userId, username);
+        var errorResponse = "User with id " + userId + " does not exist";
+
+        given(request.getHeader(AUTHORIZATION_HEADER))
+                .willReturn(accessToken);
+        given(jwtUtils.getUserInfoFromAccessToken(any()))
+                .willReturn(userCredentials);
+        given(repository.findById(any())).willReturn(Optional.empty());
+
+        // when
+        // then
+        assertThatThrownBy(() -> underTest.updateUserDefaultTeamId(teamId))
+                .isInstanceOf(InvalidRequestException.class)
+                .hasMessage(errorResponse);
     }
 
     @Test
-    void testLogout() {
+    void test_logout() {
         // given
-        // when 
+        // when
+        underTest.logout();
         // then
+        verify(session, times(1)).invalidate();
     }
 
 }

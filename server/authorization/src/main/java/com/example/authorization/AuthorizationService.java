@@ -55,8 +55,7 @@ public class AuthorizationService {
 
         // 2. save user
         var encodedPassword = passwordEncoder.encode(password);
-        var applicationUser = ApplicationUser
-                .builder()
+        var applicationUser = ApplicationUser.builder()
                 .email(email)
                 .color(color)
                 .username(username)
@@ -77,8 +76,8 @@ public class AuthorizationService {
 
         // 3. generate refresh token and save to session
         //    generate access token & response
-        var userId = applicationUser.getId();
-        var joinedTeamCount = applicationUser.getJoinedTeamCount();
+        var userId = user.getId();
+        var joinedTeamCount = user.getJoinedTeamCount();
 
         // store refreshToken in session
         var INITIAL_TOKEN_VERSION = 0;
@@ -107,9 +106,8 @@ public class AuthorizationService {
                         AuthenticationFailedField.email,
                         "Email not found. Click here to create an account!"));
 
-        boolean matches = passwordEncoder
-                .matches(loginUserDTO.password(),
-                        applicationUser.getPassword());
+        boolean matches = passwordEncoder.matches(
+                loginUserDTO.password(), applicationUser.getPassword());
         if (!matches) {
             log.error("Invalid password");
             throw new AuthenticationFailureException(
@@ -177,8 +175,9 @@ public class AuthorizationService {
         var accessToken = request.getHeader(AUTHORIZATION_HEADER);
         var userId = jwtUtils.getUserInfoFromAccessToken(accessToken).userId();
 
-        var user = repository.findById(userId).orElseThrow(() -> new InvalidRequestException(
-                "User with id " + userId + " does not exist"));
+        var user = repository.findById(userId)
+                .orElseThrow(() -> new InvalidRequestException(
+                        "User with id " + userId + " does not exist"));
         user.setDefaultTeamId(teamId);
 
         return true;
@@ -187,10 +186,6 @@ public class AuthorizationService {
     void logout() {
         session.invalidate();
         // TODO: invalidate all related tokens
-    }
-
-    void changePassword() {
-        // TODO: increment tokenVersion by 1
     }
 
     private AuthorizationResponseDTO generateResponseAndToken(
