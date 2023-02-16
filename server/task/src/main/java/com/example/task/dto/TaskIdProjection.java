@@ -1,6 +1,6 @@
 package com.example.task.dto;
 
-public record TaskIdDTO(
+public record TaskIdProjection(
         Integer id
 ) {
 }

@@ -1,6 +1,6 @@
 package com.example.task.repository;
 
-import com.example.task.dto.TaskIdDTO;
+import com.example.task.dto.TaskIdProjection;
 import com.example.task.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,7 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
 
     List<Task> findByListId(Integer listId);
 
-    List<TaskIdDTO> findByListIdIn(Set<Integer> listIds);
+    List<TaskIdProjection> findByListIdIn(Set<Integer> listIds);
 
     @Query(nativeQuery = true, value = "" +
             "SELECT title FROM task WHERE id = :id")

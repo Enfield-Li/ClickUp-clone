@@ -15,7 +15,7 @@ public class UserInfoService {
 
     private final UserInfoRepository repository;
 
-    private UserCredentials getUserCredentialsInfo() {
+    public UserCredentials getUserCredentialsInfo() {
         return (UserCredentials) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();

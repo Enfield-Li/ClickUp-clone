@@ -4,9 +4,6 @@ import com.example.amqp.RabbitMqMessageProducer;
 import com.example.clients.statusCategory.StatusCategoryClient;
 import com.example.clients.task.InitTasksInRegistrationDTO;
 import com.example.clients.task.UpdateTaskStatusOnAddingColumnDTO;
-import com.example.clients.taskEvent.Field;
-import com.example.clients.taskEvent.UpdateEventDTO;
-import com.example.serviceExceptionHandling.exception.InvalidRequestException;
 import com.example.task.dto.*;
 import com.example.task.model.Task;
 import com.example.task.model.UserInfo;
@@ -24,11 +21,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-
-import static com.example.amqp.ExchangeKey.internalExchange;
-import static com.example.amqp.ExchangeKey.taskEventRoutingKey;
 
 @Log4j2
 @Service
@@ -95,26 +88,24 @@ public class TaskService {
         });
 
         // Find sourceTask
-        var sourceTask = taskDtoList.stream()
-                .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
-                .findFirst();
-
-        if (sourceTask.isEmpty()) {
-            throw new InvalidRequestException("Missing source task");
-        }
-
-        // Task drop into a different column publish task update event
-        var taskEvents = sourceTask.get().taskEvents();
-        var userInfo = userInfoService.getCurrentUserInfo();
-        if (taskEvents != null) {
-            taskEvents.setUserId(userInfo.getUserId());
-            taskEvents.setUsername(userInfo.getUsername());
-
-            rabbitMQMessageProducer.publish(
-                    internalExchange,
-                    taskEventRoutingKey,
-                    taskEvents);
-        }
+//        var sourceTask = taskDtoList.stream()
+//                .filter(task -> Objects.equals(task.taskId(), sourceTaskId))
+//                .findFirst();
+//
+//        if (sourceTask.isEmpty()) {
+//            throw new InvalidRequestException("Missing source task");
+//        }
+//
+//        // Task drop into a different column publish task update event
+//        var taskEvents = sourceTask.get().taskEvents();
+//        var userInfo = userInfoService.getCurrentUserInfo();
+//        if (taskEvents != null) {
+//            taskEvents.setUserId(userInfo.getUserId());
+//            taskEvents.setUsername(userInfo.getUsername());
+//
+//            rabbitMQMessageProducer.publish(
+//                    internalExchange, taskEventRoutingKey, taskEvents);
+//        }
 
         return true;
     }
@@ -129,25 +120,21 @@ public class TaskService {
         var newTitle = updateTaskTitleDTO.newTitle();
         var oldTitle = repository.getTaskTitle(taskId);
 
-        var updateEventDTO = UpdateEventDTO.builder()
-                .userId(userId)
-                .username(username)
-                .field(Field.title)
-                .beforeUpdate(oldTitle)
-                .afterUpdate(newTitle)
-                .taskId(taskId)
-                .build();
-
         var updateCount = repository.updateTitle(
-                taskId,
-                newTitle,
-                LocalDateTime.now());
+                taskId, newTitle, LocalDateTime.now());
 
-        // publish task update title event
-        rabbitMQMessageProducer.publish(
-                internalExchange,
-                taskEventRoutingKey,
-                updateEventDTO);
+//        var updateEventDTO = UpdateEventDTO.builder()
+//                .userId(userId)
+//                .username(username)
+//                .field(Field.title)
+//                .beforeUpdate(oldTitle)
+//                .afterUpdate(newTitle)
+//                .taskId(taskId)
+//                .build();
+//
+//        // publish task update title event
+//        rabbitMQMessageProducer.publish(
+//                internalExchange, taskEventRoutingKey, updateEventDTO);
 
         return updateCount > 0;
     }
@@ -188,8 +175,8 @@ public class TaskService {
     @Transactional
     public void deleteTasksByListId(Set<Integer> listIds) {
         List<Integer> taskIds = new ArrayList<>();
-        var taskIdDTOs = repository.findByListIdIn(listIds);
-        taskIdDTOs.forEach(taskIdDTO -> taskIds.add(taskIdDTO.id()));
+        var taskIdsProjection = repository.findByListIdIn(listIds);
+        taskIdsProjection.forEach(taskIdDTO -> taskIds.add(taskIdDTO.id()));
         taskIds.forEach(this::deleteTask);
     }
 
@@ -197,7 +184,6 @@ public class TaskService {
     public Boolean deleteTask(Integer taskId) {
         var task = entityManager.getReference(Task.class, taskId);
         var creatorId = task.getCreatorId();
-//
 //        task.removeAllWatchers();
 //        task.removeAllAssignees();
 
