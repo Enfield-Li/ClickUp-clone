@@ -5,9 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @EnableEurekaClient
-@SpringBootApplication(
-    scanBasePackages = { "com.example.apigateway", "com.example.clients" }
-)
+@SpringBootApplication(scanBasePackages = {
+        "com.example.apigateway",
+        "com.example.clients",
+})
 public class ApiGatewayApplication {
 
     public static void main(String[] args) {

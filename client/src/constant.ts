@@ -17,10 +17,13 @@ export const SERVICE_ENDPOINT = {
 const ALL_TASKS = "/all_tasks";
 const UPDATE_TASK_TITLE = "/update_title";
 const TASK_API_VERSION = "/api/v1/task";
+
+// team
 const TEAM_API_VERSION = "/api/v1/team";
-const SPACE_API_VERSION = "/api/v1/space";
-const Folder_API_VERSION = "/api/v1/folder";
-const List_API_VERSION = "/api/v1/list";
+const List_API_VERSION = TEAM_API_VERSION + "/list";
+const SPACE_API_VERSION = TEAM_API_VERSION + "/space";
+const Folder_API_VERSION = TASK_API_VERSION + "/folder";
+
 const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";

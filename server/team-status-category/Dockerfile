@@ -1,5 +1,5 @@
 FROM openjdk:17-alpine
 
-COPY /target/customColumn-0.0.1-SNAPSHOT.jar customColumn.jar
+COPY /target/team-status-category-0.0.1-SNAPSHOT.jar teamStatusCategory.jar
 
-ENTRYPOINT ["java","-jar","customColumn.jar"]
+ENTRYPOINT ["java","-jar","teamStatusCategory.jar"]
