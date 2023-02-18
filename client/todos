@@ -1,0 +1,5 @@
+netstat -a -n
+systemctl start docker
+docker run -p 8000:80 nginx
+curl http://localhost:8000
+http://43.136.100.229/8000

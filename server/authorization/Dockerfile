@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM openjdk:18-alpine
 
 COPY /target/authorization-0.0.1-SNAPSHOT.jar authorization.jar
 

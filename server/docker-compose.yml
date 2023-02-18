@@ -1,18 +1,12 @@
 services:
   mysql:
-    container_name: multi-module-microservices-db
+    container_name: microservices-db
     image: mysql:5.7
     volumes:
       # Creating multiple databases in one mysql container: https://stackoverflow.com/a/52899915/16648127
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: password
-
-  zipkin:
-    container_name: zipkin
-    image: openzipkin/zipkin
-    ports:
-      - 9411:9411
 
   rabbitmq:
     container_name: rabbitmq
@@ -23,115 +17,145 @@ services:
 
   eureka-server:
     container_name: eureka
-    depends_on:
-      - zipkin
     build: ./eureka-server
     ports:
       - 8761:8761
-    environment:
-      spring.zipkin.baseUrl: http://zipkin:9411
 
   api-gateway:
     container_name: api-gateway
     depends_on:
-      - zipkin
+      - rabbitmq
       - eureka-server
-      - customer
     build: ./apigateway
     ports:
       - 8083:8083
     environment:
       SPRING_APPLICATION_JSON: '{
-        "url.customer-service": "lb://customer",
-        "url.authorization-service": "lb://authorization",
-        "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
-        "spring.zipkin.baseUrl": "http://zipkin:9411",
-        "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
+          "url.task-service": "lb://task",
+          "url.team-service": "lb://team",
+          "url.authorization-service": "lb://authorization",
+          "url.teamStatusCategory-service": "lb://team-status-category",
+          "eureka.client.fetch-registry": "true",
+          "eureka.client.register-with-eureka": "true",
+          "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
+          "eureka.instance.prefer-ip-address": "true",
+          "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
         }'
   
   authorization:
     container_name: authorization
     depends_on:
       - mysql
+      - rabbitmq
       - eureka-server
-      - zipkin
-    build: ./auth
+    build: ./authorization
     expose:
       - 8085
     environment:
       MYSQL_HOST: mysql
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_authorization",
-        "spring.datasource.username": "root",
-        "spring.datasource.password": "password",
-        "spring.jpa.hibernate.ddl-auto": "update",
-        "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
-        "spring.zipkin.baseUrl": "http://zipkin:9411",
-        "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
+          "spring.rabbitmq.host": "rabbitmq",
+          "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_authorization",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "password",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "eureka.client.fetch-registry": "true",
+          "eureka.client.register-with-eureka": "true",
+          "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
+          "eureka.instance.prefer-ip-address": "true",
+          "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
         }'
 
-  customer:
-    container_name: customer
+  task:
+    container_name: task
     depends_on:
       - mysql
+      - rabbitmq
       - eureka-server
-      - zipkin
-    build: ./customer
+    build: ./task
     expose:
-      - 8080
+      - 8085
     environment:
       MYSQL_HOST: mysql
-      SPRING_PROFILES_ACTIVE: docker
-      # Different syntax
-      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_customer",
-        "spring.datasource.username": "root",
-        "spring.datasource.password": "password",
-        "spring.jpa.hibernate.ddl-auto": "update",
-        "spring.zipkin.baseUrl": "http://zipkin:9411",
-        "spring.rabbitmq.addresses": "rabbitmq:5672"
+          "spring.rabbitmq.host": "rabbitmq",
+          "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_task",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "password",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "eureka.client.fetch-registry": "true",
+          "eureka.client.register-with-eureka": "true",
+          "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
+          "eureka.instance.prefer-ip-address": "true",
+          "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
         }'
 
-  fraud:
-    container_name: fraud
+  team:
+    container_name: team
     depends_on:
       - mysql
+      - rabbitmq
       - eureka-server
-      - zipkin
-    build: ./fraud
+    build: ./team
     expose:
-      - 8081
+      - 8085
     environment:
       MYSQL_HOST: mysql
-      SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_fraud",
-        "spring.datasource.username": "root",
-        "spring.datasource.password": "password",
-        "spring.jpa.hibernate.ddl-auto": "update",
-        "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
-        "spring.zipkin.baseUrl": "http://zipkin:9411"
+          "spring.rabbitmq.host": "rabbitmq",
+          "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_team",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "password",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "eureka.client.fetch-registry": "true",
+          "eureka.client.register-with-eureka": "true",
+          "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
+          "eureka.instance.prefer-ip-address": "true",
+          "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
         }'
 
-  notification:
-    container_name: notification
+  team-status-category:
+    container_name: teamStatusCategory
     depends_on:
       - mysql
+      - rabbitmq
       - eureka-server
-      - zipkin
-    build: ./notification
+    build: ./team-status-category
     expose:
-      - 8082
+      - 8085
     environment:
       MYSQL_HOST: mysql
-      SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_notification",
-        "spring.datasource.username": "root",
-        "spring.datasource.password": "password",
-        "spring.jpa.hibernate.ddl-auto": "update",
-        "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
-        "spring.zipkin.baseUrl": "http://zipkin:9411",
-        "spring.rabbitmq.addresses": "rabbitmq:5672"
+          "spring.rabbitmq.host": "rabbitmq",
+          "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_teamStatusCategory",
+          "spring.datasource.username": "root",
+          "spring.datasource.password": "password",
+          "spring.jpa.hibernate.ddl-auto": "update",
+          "eureka.client.fetch-registry": "true",
+          "eureka.client.register-with-eureka": "true",
+          "eureka.client.service-url.defaultZone": "http://eureka-server:8761/eureka",
+          "eureka.instance.prefer-ip-address": "true",
+          "JWT_SECRET": "bc935134-948e-492d-ae2b-66c7824eacdb"
         }'
+
+# Different syntax
+#  customer:
+#    container_name: customer
+#    depends_on:
+#      - mysql
+#      - eureka-server
+#    build: ./customer
+#    expose:
+#      - 8080
+#    environment:
+#      MYSQL_HOST: mysql
+#      SPRING_PROFILES_ACTIVE: docker
+#      # Different syntax
+#      eureka.client.service-url.defaultZone: http://eureka-server:8761/eureka
+#      SPRING_APPLICATION_JSON: '{
+#          "spring.datasource.url=jdbc:mysql": "//jdbc:mysql:3306/spring_microservices_customer",
+#          "spring.datasource.username": "root",
+#          "spring.datasource.password": "password",
+#          "spring.jpa.hibernate.ddl-auto": "update",
+#          "spring.rabbitmq.addresses": "rabbitmq:5672"
+#        }'

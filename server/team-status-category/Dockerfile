@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM openjdk:18-alpine
 
 COPY /target/team-status-category-0.0.1-SNAPSHOT.jar teamStatusCategory.jar
 
