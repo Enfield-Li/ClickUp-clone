@@ -6,7 +6,7 @@ export const IS_SUB_NAV_OPEN = "is_sub_nav_open";
 export const CURRENT_STATUS_CATEGORY_ID = "current_status_category_id";
 
 export const SERVICE_ENDPOINT = {
-  GATEWAY: "http://localhost:8083",
+  GATEWAY: "http://localhost/service-gateway",
   TASK: "http://localhost:8084",
   TEAM: "http://localhost:8088",
   AUTHORIZATION: "http://localhost:8085",
