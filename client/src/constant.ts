@@ -7,11 +7,11 @@ export const CURRENT_STATUS_CATEGORY_ID = "current_status_category_id";
 
 export const SERVICE_ENDPOINT = {
   GATEWAY: "http://localhost/service-gateway",
-  TASK: "http://localhost:8084",
-  TEAM: "http://localhost:8088",
-  AUTHORIZATION: "http://localhost:8085",
-  TEAM_STATUS_CATEGORY: "http://localhost:8089",
-  TEAM_ACTIVITY: "http://localhost:8090",
+  //   TASK: "http://localhost:8084",
+  //   TEAM: "http://localhost:8088",
+  //   AUTHORIZATION: "http://localhost:8085",
+  //   TEAM_STATUS_CATEGORY: "http://localhost:8089",
+  //   TEAM_ACTIVITY: "http://localhost:8090",
 } as const;
 
 const ALL_TASKS = "/all_tasks";

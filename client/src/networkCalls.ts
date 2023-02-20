@@ -1,13 +1,7 @@
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { NavigateFunction } from "react-router-dom";
-import {
-  axiosAuthServiceInstance,
-  axiosGatewayInstance,
-  axiosStatusCategoryServiceInstance,
-  axiosTaskServiceInstance,
-  axiosTeamServiceInstance,
-} from "./AxiosInstance";
+import { axiosGatewayInstance } from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
@@ -21,11 +15,9 @@ import {
   CreateSpaceDTO,
   CreateStatusCategoryDTO,
   CreateStatusColumnDTO,
-  CreateTeamResponseDTO,
   ErrorResponse,
   FieldErrors,
   FolderCategory,
-  InitTeamListDTO,
   ListCategory,
   LoginUserDTO,
   RegisterUserDTO,
