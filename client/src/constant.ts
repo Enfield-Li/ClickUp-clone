@@ -6,7 +6,7 @@ export const IS_SUB_NAV_OPEN = "is_sub_nav_open";
 export const CURRENT_STATUS_CATEGORY_ID = "current_status_category_id";
 
 export const SERVICE_ENDPOINT = {
-  GATEWAY: "http://localhost/service-gateway",
+  GATEWAY: "http://43.139.15.98/service-gateway",
   //   TASK: "http://localhost:8084",
   //   TEAM: "http://localhost:8088",
   //   AUTHORIZATION: "http://localhost:8085",
@@ -22,7 +22,7 @@ const TASK_API_VERSION = "/api/v1/task";
 const TEAM_API_VERSION = "/api/v1/team";
 const List_API_VERSION = TEAM_API_VERSION + "/list";
 const SPACE_API_VERSION = TEAM_API_VERSION + "/space";
-const Folder_API_VERSION = TASK_API_VERSION + "/folder";
+const Folder_API_VERSION = TEAM_API_VERSION + "/folder";
 
 const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";

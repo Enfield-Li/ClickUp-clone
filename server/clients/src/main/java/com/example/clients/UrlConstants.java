@@ -9,7 +9,7 @@ public class UrlConstants {
     public static final String TEAM_API_VERSION = "/api/v1/team";
     public static final String LIST_API_VERSION = TEAM_API_VERSION + "/list";
     public static final String SPACE_API_VERSION = TEAM_API_VERSION + "/space";
-    public static final String Folder_API_VERSION = TASK_API_VERSION + "/folder";
+    public static final String Folder_API_VERSION = TEAM_API_VERSION + "/folder";
 
     // task events
     public static final String TASK_EVENT_API_VERSION = "/api/v1/task_event";
