@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -104,6 +105,24 @@ public class ListCategoryService {
                 internalExchange,
                 deleteTasksRoutingKey,
                 listIds);
+        return true;
+    }
+
+    @Transactional
+    public Boolean updateList(
+            Integer listId, Map<String, String> params) {
+        var list = entityManager.getReference(ListCategory.class, listId);
+
+        String name = params.get("name");
+        String color = params.get("color");
+
+        if (color != null) {
+            list.setColor(color);
+        }
+        if (name != null) {
+            list.setName(name);
+        }
+
         return true;
     }
 }

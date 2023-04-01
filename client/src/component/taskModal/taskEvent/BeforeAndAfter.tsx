@@ -5,7 +5,7 @@ import {
   BeforeOrAfterUpdate,
   ColumnOptions,
   Field,
-  SortBy,
+  GroupBy,
   UndeterminedColumns,
   UpdateEvent,
 } from "../../../types";
@@ -23,11 +23,11 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
   let icon: JSX.Element;
   let element: JSX.Element;
 
-  function isStatusField(field: Field): field is SortBy {
+  function isStatusField(field: Field): field is GroupBy {
     return (
-      field === SortBy.DUE_DATE ||
-      field === SortBy.STATUS ||
-      field === SortBy.PRIORITY
+      field === GroupBy.DUE_DATE ||
+      field === GroupBy.STATUS ||
+      field === GroupBy.PRIORITY
     );
   }
 
@@ -38,7 +38,7 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
   ) {
     const field = updateEvent.field;
     if (isStatusField(field)) {
-      const field = updateEvent.field as SortBy;
+      const field = updateEvent.field as GroupBy;
       return (columnOptions[`${field}Columns`] as UndeterminedColumns).find(
         (column) => column.id === Number(columnId)
       );
@@ -53,7 +53,7 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
     );
 
     // status square icon
-    if (updateEvent.field === SortBy.STATUS) {
+    if (updateEvent.field === GroupBy.STATUS) {
       icon = (
         <Box
           width="10px"
@@ -64,7 +64,7 @@ function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
       );
     }
     // priority flag icon
-    else if (updateEvent.field === SortBy.PRIORITY) {
+    else if (updateEvent.field === GroupBy.PRIORITY) {
       icon = (
         <Box color={column?.color}>
           <i className="bi bi-flag-fill"></i>

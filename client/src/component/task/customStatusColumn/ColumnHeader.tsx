@@ -1,7 +1,7 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetTaskState, SortBy, UndeterminedColumn } from "../../../types";
+import { SetTaskState, GroupBy, UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
 
@@ -28,12 +28,12 @@ function ColumnHeader({
   const [showColumnOption, setShowColumnOption] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy } = taskStateContext!;
+  const { groupBy } = taskStateContext!;
 
-  // Close edit when switching sortBy
+  // Close edit when switching groupBy
   useEffect(() => {
     setEditTitle(false);
-  }, [sortBy]);
+  }, [groupBy]);
 
   return (
     <Box minWidth="250px" mb={4}>
@@ -86,7 +86,7 @@ function ColumnHeader({
 
         {/* Column options */}
         <ColumnOptions
-          sortBy={sortBy}
+          groupBy={groupBy}
           setEditTitle={setEditTitle}
           showColumnOption={showColumnOption}
         />

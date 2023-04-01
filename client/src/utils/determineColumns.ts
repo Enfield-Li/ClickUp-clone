@@ -1,6 +1,6 @@
 import {
   UndeterminedColumn,
-  SortBy,
+  GroupBy,
   StatusColumn,
   PriorityColumn,
   DueDateColumn,
@@ -8,19 +8,19 @@ import {
 
 export function isStatusColumns(
   currentColumn: UndeterminedColumn,
-  sortBy: SortBy
+  groupBy: GroupBy
 ): currentColumn is StatusColumn {
-  return sortBy === SortBy.STATUS;
+  return groupBy === GroupBy.STATUS;
 }
 export function isPriorityColumns(
   currentColumn: UndeterminedColumn,
-  sortBy: SortBy
+  groupBy: GroupBy
 ): currentColumn is PriorityColumn {
-  return sortBy === SortBy.PRIORITY;
+  return groupBy === GroupBy.PRIORITY;
 }
 export function isDueDateColumns(
   currentColumn: UndeterminedColumn,
-  sortBy: SortBy
+  groupBy: GroupBy
 ): currentColumn is DueDateColumn {
-  return sortBy === SortBy.DUE_DATE;
+  return groupBy === GroupBy.DUE_DATE;
 }

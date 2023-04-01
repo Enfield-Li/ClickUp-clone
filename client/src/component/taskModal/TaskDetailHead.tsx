@@ -27,7 +27,7 @@ function TaskDetailHead({}: Props) {
   const { task, taskStateContext, setTaskStateContext } =
     useTaskDetailContext();
 
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   async function updateTitle(newTitle: string) {
     setTaskState((previousState) => {

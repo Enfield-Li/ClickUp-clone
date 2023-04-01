@@ -20,7 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -162,6 +164,30 @@ public class ListCategoryServiceTest implements WithAssertions {
                 .getDefaultStatusCategoryId())
                 .isEqualTo(statusCategoryId);
 
+    }
+
+    @Test
+    void update_list_should_pass() {
+        // Given
+        var listId = 1;
+        var newColor = "New Color";
+        var list = new ListCategory();
+        var newListName = "New List Name";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("color", newColor);
+        params.put("name", newListName);
+
+        given(entityManager.getReference(eq(ListCategory.class), eq(listId)))
+                .willReturn(list);
+
+        // When
+        Boolean actualResult = underTest.updateList(listId, params);
+
+        // Then
+        assertThat(actualResult).isTrue();
+        assertThat(list.getColor()).isEqualTo(newColor);
+        assertThat(list.getName()).isEqualTo(newListName);
     }
 
     @Test

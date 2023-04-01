@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.*;
@@ -105,6 +106,28 @@ public class TeamService {
                 updateUserJoinedTeamsDTO);
 
         return team;
+    }
+
+    @Transactional
+    public Boolean updateTeam(
+            Integer teamId, Map<String, String> params) {
+        var team = entityManager.getReference(Team.class, teamId);
+
+        String name = params.get("name");
+        String color = params.get("color");
+        String avatar = params.get("avatar");
+
+        if (color != null) {
+            team.setColor(color);
+        }
+        if (name != null) {
+            team.setName(name);
+        }
+        if (avatar != null) {
+            team.setAvatar(avatar);
+        }
+
+        return true;
     }
 
     @Transactional

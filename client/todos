@@ -1,3 +1,9 @@
+1. subtask
+
+2. UI update actions
+
+3. debug create task in other sortby
+
 netstat -a -n
 systemctl start docker
 docker run -p 8000:80 nginx

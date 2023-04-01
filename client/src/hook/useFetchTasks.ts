@@ -2,22 +2,22 @@ import { useEffect, useState } from "react";
 import { initColumns } from "../component/task/actions/columnProcessing";
 import {
   collectAllTasks,
-  groupTaskListOnSortBy,
+  groupTaskListOnGroupBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
 import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
 import { fetchAllTasks as fetchTasksAndStatusCategory } from "../networkCalls";
-import { ColumnOptions, SortBy, TaskState } from "../types";
+import { ColumnOptions, GroupBy, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
 import { defaultColumnOptions } from "../utils/staticColumnsData";
 
 interface UseFetchTasksParam {
-  sortBy: SortBy;
+  groupBy: GroupBy;
   listId: number;
   statusCategoryId: number | undefined;
 }
 export function useColumnTaskState({
-  sortBy,
+  groupBy,
   listId,
   statusCategoryId,
 }: UseFetchTasksParam) {
@@ -70,16 +70,16 @@ export function useColumnTaskState({
         // init taskEvents and convert expectedDueDate to dueDate columns
         const taskList = processTaskList(reorderedDueDateColumns, taskListData);
 
-        const orderedTasks = groupTaskListOnSortBy(
+        const orderedTasks = groupTaskListOnGroupBy(
           taskList,
-          allColumns[`${sortBy}Columns`],
-          sortBy
+          allColumns[`${groupBy}Columns`],
+          groupBy
         );
 
         setTaskStateContext({
           columnOptions,
           setTaskState,
-          sortBy,
+          groupBy: groupBy,
           currentListId: listId,
         });
         setTaskState({ orderedTasks, columnOptions, statusCategoryId });
@@ -89,7 +89,7 @@ export function useColumnTaskState({
     }
   }, [listId, statusCategoryId]);
 
-  // Sync up orderedTasks with columns under sortBy
+  // Sync up orderedTasks with columns under groupBy
   const statusColumnCount = taskState?.columnOptions.statusColumns.length;
   useEffect(() => {
     updateTaskState();
@@ -104,15 +104,15 @@ export function useColumnTaskState({
       if (taskState && taskStateContext) {
         setTaskStateContext({
           ...taskStateContext,
-          sortBy,
+          groupBy: groupBy,
         });
 
         setTaskState({
           ...taskState,
-          orderedTasks: groupTaskListOnSortBy(
+          orderedTasks: groupTaskListOnGroupBy(
             collectAllTasks(taskState.orderedTasks),
-            taskState.columnOptions[`${sortBy}Columns`],
-            sortBy
+            taskState.columnOptions[`${groupBy}Columns`],
+            groupBy
           ),
         });
 
@@ -121,7 +121,7 @@ export function useColumnTaskState({
 
       setLoading(false);
     }
-  }, [sortBy, statusColumnCount]); // Change of sortBy and adding status column
+  }, [groupBy, statusColumnCount]); // Change of groupBy and adding status column
 
   // sync up with modal task
   useEffect(() => {

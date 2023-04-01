@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static com.example.clients.UrlConstants.SPACE_API_VERSION;
 
 @RestController
@@ -24,6 +26,14 @@ class SpaceController {
         var space = service.createSpace(createSpaceDTO);
 
         return ResponseEntity.ok(space);
+    }
+
+    @PutMapping("{spaceId}")
+    public ResponseEntity<Boolean> updateSpace(
+            @PathVariable Integer spaceId,
+            @RequestParam Map<String, String> params) {
+        var updated = service.updateSpace(spaceId, params);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{spaceId}")

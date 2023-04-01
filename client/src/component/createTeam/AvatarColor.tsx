@@ -8,17 +8,10 @@ import EditAvatarModal from "./EditAvatar";
 
 type Props = {
   team: CreateTeamDTO;
-  step: number;
-  handleNextStage(stage: number): void;
   setTeam: React.Dispatch<React.SetStateAction<CreateTeamDTO>>;
 };
 
-export default function AvatarColor({
-  step,
-  team,
-  setTeam,
-  handleNextStage,
-}: Props) {
+export default function AvatarColor({ team, setTeam }: Props) {
   const fileTypes = ["JPEG", "PNG", "GIF"];
   const [originalImgStr, setOriginalImgStr] = useState("");
   const {

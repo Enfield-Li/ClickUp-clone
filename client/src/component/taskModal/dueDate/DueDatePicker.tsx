@@ -3,7 +3,7 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, Task } from "../../../types";
+import { GroupBy, Task } from "../../../types";
 import MaterialTheme from "../../../utils/MaterialTheme";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -17,7 +17,7 @@ export default memo(DueDatePicker);
 function DueDatePicker({ task, onClose }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setTaskState, columnOptions } = taskStateContext!;
+  const { groupBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
     if (expectedDueDateInput && task && authState.user?.id) {
@@ -28,11 +28,11 @@ function DueDatePicker({ task, onClose }: Props) {
 
       // Update list taskState
       updateTaskAttribute({
-        sortBy,
+        groupBy: groupBy,
         setTaskState,
         currentTask: task,
         userId: authState.user.id,
-        targetField: SortBy.DUE_DATE,
+        targetField: GroupBy.DUE_DATE,
         targetColumnId: targetDueDateColumnId,
         expectedDueDate: expectedDueDateInput,
       });

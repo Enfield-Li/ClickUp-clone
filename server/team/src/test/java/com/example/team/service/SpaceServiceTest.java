@@ -18,6 +18,8 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -130,6 +132,33 @@ public class SpaceServiceTest implements WithAssertions {
                 .createSpace(dto))
                 .isInstanceOf(InvalidRequestException.class)
                 .hasMessage(errorMessage);
+    }
+
+    @Test
+    void update_space_should_pass() {
+        // Given
+        var spaceId = 1;
+        var space = new Space();
+        var newColor = "New Color";
+        var newAvatar = "New Avatar";
+        var newSpaceName = "New Space Name";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("color", newColor);
+        params.put("avatar", newAvatar);
+        params.put("name", newSpaceName);
+
+        given(entityManager.getReference(eq(Space.class), eq(spaceId)))
+                .willReturn(space);
+
+        // When
+        Boolean actualResult = underTest.updateSpace(spaceId, params);
+
+        // Then
+        assertThat(actualResult).isTrue();
+        assertThat(space.getColor()).isEqualTo(newColor);
+        assertThat(space.getAvatar()).isEqualTo(newAvatar);
+        assertThat(space.getName()).isEqualTo(newSpaceName);
     }
 
     @Test

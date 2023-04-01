@@ -2,7 +2,12 @@ import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { DueDate, SortBy, TaskState, UndeterminedColumn } from "../../../types";
+import {
+  DueDate,
+  GroupBy,
+  TaskState,
+  UndeterminedColumn,
+} from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
 import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
@@ -24,7 +29,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const { taskStateContext, setIsCreatingTask, isCreatingTask } =
     useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
-  const { sortBy, setTaskState } = taskStateContext;
+  const { groupBy, setTaskState } = taskStateContext;
 
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const cardBgColor = useColorModeValue("white", "darkMain.200");
@@ -35,12 +40,12 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const [taskName, setTaskName] = useState("");
   // priority
   const initialPriority =
-    sortBy === SortBy.PRIORITY ? currentColumn.id : undefined;
+    groupBy === GroupBy.PRIORITY ? currentColumn.id : undefined;
   const [priority, setPriority] = useState<number | undefined>(initialPriority);
   // due date
   const weekString = currentColumn.title;
   const initialDueDate =
-    sortBy === SortBy.DUE_DATE
+    groupBy === GroupBy.DUE_DATE
       ? getExpectedDueDateFromWeekString(weekString as DueDate)
       : null;
   const [expectedDueDate, setExpectedDueDate] = useState<Date | null>(
@@ -66,7 +71,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
       };
 
       createNewTask({
-        sortBy,
+        groupBy: groupBy,
         taskState,
         setTaskState,
         currentColumn,

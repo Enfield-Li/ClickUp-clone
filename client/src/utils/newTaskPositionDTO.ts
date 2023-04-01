@@ -1,9 +1,9 @@
-import { Task, SortBy, TaskPositionDTO, UpdateEvent } from "../types";
+import { Task, GroupBy, TaskPositionDTO, UpdateEvent } from "../types";
 import { deepCopy } from "./deepCopy";
 
 export function newTaskPositionDTO(
   task: Task,
-  sortBy: SortBy
+  groupBy: GroupBy
 ): TaskPositionDTO {
   const lastUpdateEvent = task.taskEvents[0] as UpdateEvent;
 
@@ -13,18 +13,18 @@ export function newTaskPositionDTO(
     updateEvent: lastUpdateEvent,
   };
 
-  taskPositionDto[sortBy] = deepCopy(task[sortBy]);
+  taskPositionDto[groupBy] = deepCopy(task[groupBy]);
 
-  //   if (sortBy === SortBy.STATUS) {
-  //     taskPositionDto[sortBy] = deepCopy(task[sortBy]);
+  //   if (groupBy === GroupBy.STATUS) {
+  //     taskPositionDto[groupBy] = deepCopy(task[groupBy]);
   //   }
-  //   if (sortBy === SortBy.DUE_DATE) {
-  //     taskPositionDto[sortBy] = deepCopy(task[sortBy]);
+  //   if (groupBy === GroupBy.DUE_DATE) {
+  //     taskPositionDto[groupBy] = deepCopy(task[groupBy]);
   //   }
-  //   if (sortBy === SortBy.PRIORITY) {
-  //     taskPositionDto[sortBy] = deepCopy(task[sortBy]);
+  //   if (groupBy === GroupBy.PRIORITY) {
+  //     taskPositionDto[groupBy] = deepCopy(task[groupBy]);
   //   }
-  //   taskPositionDto[sortBy] = task[sortBy];
+  //   taskPositionDto[groupBy] = task[groupBy];
 
   return taskPositionDto;
 }

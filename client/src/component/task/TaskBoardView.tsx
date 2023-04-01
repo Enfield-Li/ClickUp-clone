@@ -8,7 +8,7 @@ import { updateTasksPosition } from "../../networkCalls";
 import {
   LookUpReorderedColumn,
   SetTaskState,
-  SortBy,
+  GroupBy,
   TaskPositionDTOList,
   TaskState,
   UndeterminedColumns,
@@ -28,18 +28,18 @@ import CreateListPanel from "./panel/CreateListPanel";
 import CreateSpacePanel from "./panel/CreateSpacePanel";
 
 type Props = {
-  sortBy: SortBy;
+  groupBy: GroupBy;
 };
 
 export default memo(TaskBoardView);
-function TaskBoardView({ sortBy }: Props) {
+function TaskBoardView({ groupBy }: Props) {
   const location = useLocation();
   const { listId, spaceId } = useParams();
   const statusCategoryId = location?.state?.defaultStatusCategoryId as
     | number
     | undefined;
   const { taskState, loading, error, setTaskState } = useColumnTaskState({
-    sortBy,
+    groupBy,
     statusCategoryId,
     listId: Number(listId),
   });
@@ -47,9 +47,9 @@ function TaskBoardView({ sortBy }: Props) {
 
   const memHandleDragEnd = useCallback(
     (result: DropResult, taskState: TaskState) => {
-      handleDragEnd(result, taskState, setTaskState, sortBy);
+      handleDragEnd(result, taskState, setTaskState, groupBy);
     },
-    [taskState, sortBy]
+    [taskState, groupBy]
   );
 
   if (!spaceId) {
@@ -76,7 +76,7 @@ function TaskBoardView({ sortBy }: Props) {
     );
   }
 
-  const selectedColumns = taskState.columnOptions[`${sortBy}Columns`];
+  const selectedColumns = taskState.columnOptions[`${groupBy}Columns`];
 
   return (
     <Box px={6} overflowY="auto" mr={3} pt="3">
@@ -103,7 +103,7 @@ function TaskBoardView({ sortBy }: Props) {
           })}
 
           {/* Add column in status */}
-          {sortBy === SortBy.STATUS && (
+          {groupBy === GroupBy.STATUS && (
             <Box mx={2}>
               <AddStatusColumn
                 setTaskState={setTaskState}
@@ -122,7 +122,7 @@ async function handleDragEnd(
   result: DropResult,
   taskState: TaskState,
   setTaskState: SetTaskState,
-  sortBy: SortBy
+  groupBy: GroupBy
 ) {
   const { destination, source } = result;
   if (
@@ -133,11 +133,11 @@ async function handleDragEnd(
     return;
   }
   const currentColumns = taskState.columnOptions[
-    `${sortBy}Columns`
+    `${groupBy}Columns`
   ] as UndeterminedColumns;
 
   const lookUpColumnId: LookUpReorderedColumn = {};
-  const isColumnReordered = sortBy === SortBy.DUE_DATE;
+  const isColumnReordered = groupBy === GroupBy.DUE_DATE;
   if (isColumnReordered) {
     getLookUpReorderedColumnTable(
       taskState.orderedTasks,
@@ -205,19 +205,19 @@ async function handleDragEnd(
         if (moveUpOneRow) {
           // swap orderIndex
           const sourceTaskBeforeOrderIndex =
-            sourceTaskBefore[sortBy].orderIndex;
-          sourceTaskBefore[sortBy].orderIndex = sourceTask[sortBy].orderIndex;
-          sourceTask[sortBy].orderIndex = sourceTaskBeforeOrderIndex;
-          taskListForUpdate.push(newTaskPositionDTO(sourceTaskBefore, sortBy));
+            sourceTaskBefore[groupBy].orderIndex;
+          sourceTaskBefore[groupBy].orderIndex = sourceTask[groupBy].orderIndex;
+          sourceTask[groupBy].orderIndex = sourceTaskBeforeOrderIndex;
+          taskListForUpdate.push(newTaskPositionDTO(sourceTaskBefore, groupBy));
         }
 
         // move down one row
         else if (moveDownOneRow) {
           // swap orderIndex
-          const sourceTaskAfterOrderIndex = sourceTaskAfter[sortBy].orderIndex;
-          sourceTaskAfter[sortBy].orderIndex = sourceTask[sortBy].orderIndex;
-          sourceTask[sortBy].orderIndex = sourceTaskAfterOrderIndex;
-          taskListForUpdate.push(newTaskPositionDTO(sourceTaskAfter, sortBy));
+          const sourceTaskAfterOrderIndex = sourceTaskAfter[groupBy].orderIndex;
+          sourceTaskAfter[groupBy].orderIndex = sourceTask[groupBy].orderIndex;
+          sourceTask[groupBy].orderIndex = sourceTaskAfterOrderIndex;
+          taskListForUpdate.push(newTaskPositionDTO(sourceTaskAfter, groupBy));
         }
 
         // move up or down multiple rows
@@ -228,22 +228,22 @@ async function handleDragEnd(
             const taskList = sourceTasksArr.taskList;
             const sourceItem = taskList[sourceTaskIndex];
             const targetItem = taskList[destinationTaskIndex];
-            const targetItemPosition = targetItem[sortBy].orderIndex;
+            const targetItemPosition = targetItem[groupBy].orderIndex;
 
             const taskListOrderIndex: number[] = [];
             for (const task of taskList) {
-              taskListOrderIndex.push(task[sortBy].orderIndex);
+              taskListOrderIndex.push(task[groupBy].orderIndex);
             }
 
             for (let i = sourceTaskIndex; i < destinationTaskIndex + 1; i++) {
               const task = taskList[i];
               const taskBeforeOrderIndex = taskListOrderIndex[i - 1];
-              task[sortBy].orderIndex = taskBeforeOrderIndex;
+              task[groupBy].orderIndex = taskBeforeOrderIndex;
               if (task.id !== sourceItem.id) {
-                taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
+                taskListForUpdate.push(newTaskPositionDTO(task, groupBy));
               }
             }
-            sourceItem[sortBy].orderIndex = targetItemPosition;
+            sourceItem[groupBy].orderIndex = targetItemPosition;
           }
 
           // move up
@@ -252,16 +252,16 @@ async function handleDragEnd(
 
             const sourceItem = taskList[sourceTaskIndex];
             const targetItem = taskList[destinationTaskIndex];
-            const targetItemPosition = targetItem[sortBy].orderIndex;
+            const targetItemPosition = targetItem[groupBy].orderIndex;
 
             // increase all tasks in between sourceTask and targetTask
             for (let i = destinationTaskIndex; i < sourceTaskIndex; i++) {
               const task = taskList[i];
               const taskAfter = taskList[i + 1];
-              task[sortBy].orderIndex = taskAfter[sortBy].orderIndex;
-              taskListForUpdate.push(newTaskPositionDTO(task, sortBy));
+              task[groupBy].orderIndex = taskAfter[groupBy].orderIndex;
+              taskListForUpdate.push(newTaskPositionDTO(task, groupBy));
             }
-            sourceItem[sortBy].orderIndex = targetItemPosition;
+            sourceItem[groupBy].orderIndex = targetItemPosition;
           }
         }
 
@@ -276,19 +276,19 @@ async function handleDragEnd(
         sourceTask.taskEvents = [
           newEventDTO(
             sourceTask.id!,
-            sortBy,
+            groupBy,
             sourceColumnId,
             destinationColumnId
           ),
         ];
         // Change column
-        sourceTask[sortBy].columnId = destinationColumnId;
-        sourceTask[sortBy].name = destinationTaskColumn!.title;
+        sourceTask[groupBy].columnId = destinationColumnId;
+        sourceTask[groupBy].name = destinationTaskColumn!.title;
 
         // Modify task.expectedDueDate
         if (
           destinationTaskColumn &&
-          isDueDateColumns(destinationTaskColumn, sortBy)
+          isDueDateColumns(destinationTaskColumn, groupBy)
         ) {
           sourceTask.expectedDueDate = getExpectedDueDateFromDueDateColumn(
             destinationTaskColumn
@@ -297,14 +297,14 @@ async function handleDragEnd(
 
         // move to an empty column or to the last position
         if (!destinationTask) {
-          sourceTask[sortBy].orderIndex = lastTaskInDestinationTasksArr
-            ? lastTaskInDestinationTasksArr[sortBy].orderIndex + 1
+          sourceTask[groupBy].orderIndex = lastTaskInDestinationTasksArr
+            ? lastTaskInDestinationTasksArr[groupBy].orderIndex + 1
             : 1;
         }
 
         // move to the middle or top of the column
         else {
-          sourceTask[sortBy].orderIndex = destinationTask[sortBy].orderIndex;
+          sourceTask[groupBy].orderIndex = destinationTask[groupBy].orderIndex;
 
           const taskList = destinationTasksArr.taskList;
           const targetIndex = destination.index;
@@ -312,8 +312,8 @@ async function handleDragEnd(
           // increase all tasks orderIndex after targetIndex position
           for (let i = targetIndex; i < destinationTasksArrLength; i++) {
             const item = taskList[i];
-            item[sortBy].orderIndex = item[sortBy].orderIndex + 1;
-            taskListForUpdate.push(newTaskPositionDTO(item, sortBy));
+            item[groupBy].orderIndex = item[groupBy].orderIndex + 1;
+            taskListForUpdate.push(newTaskPositionDTO(item, groupBy));
           }
         }
 
@@ -321,7 +321,7 @@ async function handleDragEnd(
         destinationTasksArr.taskList.splice(destination.index, 0, sourceTask); // insert original to new place
       }
 
-      taskListForUpdate.push(newTaskPositionDTO(sourceTask, sortBy));
+      taskListForUpdate.push(newTaskPositionDTO(sourceTask, groupBy));
       const updateTaskListDTO: UpdateTasksPositionDTO = {
         sourceTaskId: sourceTask.id!,
         taskDtoList: taskListForUpdate,

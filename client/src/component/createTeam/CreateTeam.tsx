@@ -130,12 +130,7 @@ export default function CreateTeam({}: Props) {
             handleNextStage={handleNextStage}
             title="Customize your Workspace's avatar:"
           >
-            <AvatarColor
-              team={team}
-              step={step}
-              setTeam={setTeam}
-              handleNextStage={handleNextStage}
-            />
+            <AvatarColor team={team} setTeam={setTeam} />
           </CreateTeamTemplate>
         </Box>
 

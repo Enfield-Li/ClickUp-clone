@@ -14,7 +14,7 @@ import {
 import { memo, useMemo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy } from "../../../types";
+import { GroupBy } from "../../../types";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
@@ -28,7 +28,7 @@ function SelectStatusIcons({}: Props) {
   const { authState } = useAuthContext();
   const { isOpen, onToggle, onClose } = useDisclosure();
   const { task, taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   const column = useMemo(
     () =>
@@ -59,10 +59,10 @@ function SelectStatusIcons({}: Props) {
     const targetStatusColumnId = nextStatus!.id!;
 
     updateTaskAttribute({
-      sortBy,
+      groupBy: groupBy,
       setTaskState,
       currentTask: task!,
-      targetField: SortBy.STATUS,
+      targetField: GroupBy.STATUS,
       userId: authState.user!.id!,
       targetColumnId: targetStatusColumnId,
     });
@@ -70,10 +70,10 @@ function SelectStatusIcons({}: Props) {
 
   function handleSetToFinish() {
     updateTaskAttribute({
-      sortBy,
+      groupBy: groupBy,
       setTaskState,
       currentTask: task!,
-      targetField: SortBy.STATUS,
+      targetField: GroupBy.STATUS,
       userId: authState.user!.id!,
       targetColumnId: finishedColumnId,
     });

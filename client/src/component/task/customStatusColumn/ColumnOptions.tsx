@@ -8,15 +8,15 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import OptionWrapper from "../optionWrapper/SelectOption";
-import { SortBy } from "../../../types";
+import { GroupBy } from "../../../types";
 
 type Props = {
-  sortBy: SortBy;
+  groupBy: GroupBy;
   showColumnOption: boolean;
   setEditTitle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
+function ColumnOptions({ groupBy, setEditTitle, showColumnOption }: Props) {
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const iconHoverBg = useColorModeValue("lightMain.100", "darkMain.300");
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.200");
@@ -55,7 +55,7 @@ function ColumnOptions({ sortBy, setEditTitle, showColumnOption }: Props) {
                 color={popoverContentColor}
               >
                 <PopoverBody shadow="2xl">
-                  {sortBy === SortBy.STATUS && (
+                  {groupBy === GroupBy.STATUS && (
                     <OptionWrapper
                       onClose={onClose}
                       optionName="Rename status"

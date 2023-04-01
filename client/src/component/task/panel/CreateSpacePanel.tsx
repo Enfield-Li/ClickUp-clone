@@ -1,10 +1,10 @@
-import { Box, Center } from "@chakra-ui/react";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import { Center } from "@chakra-ui/react";
+import { userModalControl } from "../../../context/modalControl/userModalControl";
 
 type Props = {};
 
 export default function CreateSpacePanel({}: Props) {
-  const { onCreateSpaceModalOpen } = useModalControlContext();
+  const { onCreateSpaceModalOpen } = userModalControl();
 
   return (
     <Center

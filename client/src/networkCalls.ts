@@ -1,7 +1,13 @@
 import { ToastId, UseToastOptions } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { NavigateFunction } from "react-router-dom";
-import { axiosGatewayInstance } from "./AxiosInstance";
+import {
+  axiosAuthServiceInstance,
+  axiosGatewayInstance,
+  axiosStatusCategoryServiceInstance,
+  axiosTaskServiceInstance,
+  axiosTeamServiceInstance,
+} from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
 import {
@@ -15,9 +21,11 @@ import {
   CreateSpaceDTO,
   CreateStatusCategoryDTO,
   CreateStatusColumnDTO,
+  CreateTeamResponseDTO,
   ErrorResponse,
   FieldErrors,
   FolderCategory,
+  InitTeamListDTO,
   ListCategory,
   LoginUserDTO,
   RegisterUserDTO,
@@ -46,7 +54,10 @@ export async function updateUserDefaultTeamId(
   onFailure?: () => void
 ) {
   try {
-    await axiosGatewayInstance.put(API_ENDPOINT.AUTH + `/${teamId}`);
+    await (import.meta.env.DEV
+      ? axiosAuthServiceInstance
+      : axiosGatewayInstance
+    ).put(API_ENDPOINT.AUTH + `/${teamId}`);
 
     onSuccess && onSuccess();
   } catch (error) {
@@ -63,9 +74,10 @@ export async function deleteSpace(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.SPACE + `/${spaceId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.SPACE + `/${spaceId}`);
 
     onSuccess && onSuccess();
   } catch (error) {
@@ -82,9 +94,10 @@ export async function deleteFolder(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.FOLDER + `/${folderId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.FOLDER + `/${folderId}`);
 
     onSuccess && onSuccess();
   } catch (error) {
@@ -101,9 +114,10 @@ export async function deleteList(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.LIST + `/${listId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.LIST + `/${listId}`);
 
     onSuccess && onSuccess();
   } catch (error) {
@@ -120,10 +134,10 @@ export async function createSpaceForTeam(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<Space>(
-      API_ENDPOINT.SPACE,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).post<Space>(API_ENDPOINT.SPACE, dto);
 
     onSuccess(response.data);
   } catch (error) {
@@ -140,10 +154,10 @@ export async function createFolder(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<FolderCategory>(
-      API_ENDPOINT.FOLDER,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).post<FolderCategory>(API_ENDPOINT.FOLDER, dto);
 
     onSuccess(response.data);
   } catch (error) {
@@ -160,10 +174,10 @@ export async function createList(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<ListCategory>(
-      API_ENDPOINT.LIST,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).post<ListCategory>(API_ENDPOINT.LIST, dto);
 
     onSuccess(response.data);
   } catch (error) {
@@ -180,9 +194,10 @@ export async function fetchTeamStatusCategories(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.get<StatusCategories>(
-      API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).get<StatusCategories>(API_ENDPOINT.STATUS_CATEGORY + `/${teamId}`);
 
     function initOrderedStatusCategories(StatusCategories: StatusCategories) {
       StatusCategories[0].isSelected = true;
@@ -209,10 +224,10 @@ export async function createStatusColumn(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<number>(
-      API_ENDPOINT.STATUS_COLUMN,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).post<number>(API_ENDPOINT.STATUS_COLUMN, dto);
     if (!response.data) throw new Error("CreateStatusColumnForCategory failed");
 
     onSuccess(response.data);
@@ -230,11 +245,13 @@ export async function addStatusColumn(
   onFailure?: () => void
 ) {
   try {
-    const response =
-      await axiosGatewayInstance.post<AddStatusColumnResponseDTO>(
-        API_ENDPOINT.STATUS_CATEGORY + "/add_column",
-        dto
-      );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).post<AddStatusColumnResponseDTO>(
+      API_ENDPOINT.STATUS_CATEGORY + "/add_column",
+      dto
+    );
     if (!response.data) throw new Error("CreateStatusColumnForCategory failed");
 
     onSuccess(response.data);
@@ -252,9 +269,10 @@ export async function deleteStatusCategories(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.STATUS_CATEGORY + `/${statusCategoryId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.STATUS_CATEGORY + `/${statusCategoryId}`);
     if (!response.data) throw new Error("deleteStatusCategories failed");
 
     onSuccess();
@@ -272,9 +290,10 @@ export async function deleteStatusColumn(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.STATUS_COLUMN + `/${statusColumnId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.STATUS_COLUMN + `/${statusColumnId}`);
     if (!response.data) throw new Error("deleteStatusCategories failed");
 
     onSuccess();
@@ -292,10 +311,10 @@ export async function updateStatusColumnColor(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.STATUS_COLUMN + "/color",
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.STATUS_COLUMN + "/color", dto);
     if (!response.data) throw new Error("updateStatusColumnColor failed");
 
     onSuccess();
@@ -313,10 +332,10 @@ export async function updateStatusColumnTitle(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.STATUS_COLUMN + "/title",
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.STATUS_COLUMN + "/title", dto);
     if (!response.data) throw new Error("updateStatusColumnTitle failed");
 
     onSuccess();
@@ -334,10 +353,10 @@ export async function updateStatusColumn(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.STATUS_COLUMN,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.STATUS_COLUMN, dto);
     if (!response.data) throw new Error("updateStatusColumn failed");
 
     onSuccess();
@@ -355,10 +374,10 @@ export async function updateStatusCategoryName(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.STATUS_CATEGORY + "/name",
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.STATUS_CATEGORY + "/name", dto);
     if (!response.data) throw new Error("updateStatusCategoryName failed");
 
     onSuccess();
@@ -376,10 +395,10 @@ export async function createStatusCategory(
   onFailure?: () => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<StatusCategory>(
-      API_ENDPOINT.STATUS_CATEGORY,
-      dto
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosStatusCategoryServiceInstance
+      : axiosGatewayInstance
+    ).post<StatusCategory>(API_ENDPOINT.STATUS_CATEGORY, dto);
 
     onSuccess(response.data);
   } catch (error) {
@@ -393,19 +412,20 @@ export async function createStatusCategory(
 export async function fetchTeamList(
   teamId: number,
   onSuccess: (initTeamListDTO: Team[]) => void,
-  onFailure?: (msg: string) => void
+  onFailure: (msg: string) => void
 ) {
   try {
-    const response = await axiosGatewayInstance.get<Team[]>(
-      API_ENDPOINT.TEAM + `/${teamId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).get<Team[]>(API_ENDPOINT.TEAM + `/${teamId}`);
 
     onSuccess(response.data);
   } catch (error) {
     const err = error as AxiosError;
     const response = err.response?.data as ErrorResponse;
     console.log(response);
-    onFailure && onFailure(response.message);
+    onFailure(response.message);
   }
 }
 
@@ -415,7 +435,10 @@ export async function registerUser(
   onFailure: (msg: FieldErrors) => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<RegistrationResponse>(
+    const response = await (import.meta.env.DEV
+      ? axiosAuthServiceInstance
+      : axiosGatewayInstance
+    ).post<RegistrationResponse>(
       API_ENDPOINT.AUTH_REGISTER,
       registerCredentials
     );
@@ -430,7 +453,9 @@ export async function registerUser(
 
 export function logOutUser() {
   // invalidate session
-  axiosGatewayInstance.post(API_ENDPOINT.AUTH_LOGOUT);
+  (import.meta.env.DEV ? axiosTaskServiceInstance : axiosGatewayInstance).post(
+    API_ENDPOINT.AUTH_LOGOUT
+  );
 }
 
 export async function loginUser(
@@ -438,11 +463,12 @@ export async function loginUser(
   onSuccess: (data: AuthenticationResponse) => void,
   onFailure: (msg: FieldErrors) => void
 ) {
+  console.log(axiosAuthServiceInstance.getUri());
   try {
-    const response = await axiosGatewayInstance.post<AuthenticationResponse>(
-      API_ENDPOINT.AUTH_LOGIN,
-      loginUserDTO
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosAuthServiceInstance
+      : axiosGatewayInstance
+    ).post<AuthenticationResponse>(API_ENDPOINT.AUTH_LOGIN, loginUserDTO);
 
     onSuccess(response.data);
   } catch (error) {
@@ -459,9 +485,10 @@ export async function refreshUserToken(
   isAuthPath: boolean
 ) {
   try {
-    const response = await axiosGatewayInstance.post<AuthenticationResponse>(
-      API_ENDPOINT.AUTH_REFRESH_TOKEN
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosAuthServiceInstance
+      : axiosGatewayInstance
+    ).post<AuthenticationResponse>(API_ENDPOINT.AUTH_REFRESH_TOKEN);
     const { defaultTeamId, joinedTeamCount, accessToken } = response.data;
 
     // store accessToken to localStorage
@@ -498,9 +525,10 @@ export async function refreshUserToken(
 
 export async function fetchTaskEvents(taskId: number) {
   try {
-    const response = await axiosGatewayInstance.get<TaskEvents>(
-      API_ENDPOINT.TASK_EVENT + `/${taskId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).get<TaskEvents>(API_ENDPOINT.TASK_EVENT + `/${taskId}`);
     return response.data;
   } catch (error) {
     const err = error as AxiosError;
@@ -510,9 +538,10 @@ export async function fetchTaskEvents(taskId: number) {
 
 export async function deleteTask(taskId: number) {
   try {
-    const response = await axiosGatewayInstance.delete<boolean>(
-      API_ENDPOINT.TASK + `/${taskId}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).delete<boolean>(API_ENDPOINT.TASK + `/${taskId}`);
     return response.data;
   } catch (error) {
     const err = error as AxiosError;
@@ -524,10 +553,10 @@ export async function updateTaskDescription(
   updateTaskDescDTO: UpdateTaskDescDTO
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.TASK_UPDATE_DESC,
-      updateTaskDescDTO
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.TASK_UPDATE_DESC, updateTaskDescDTO);
 
     return response.data;
   } catch (error) {
@@ -537,10 +566,10 @@ export async function updateTaskDescription(
 
 export async function updateTaskTitle(updateTaskTitleDTO: UpdateTaskTitleDTO) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.TASK_UPDATE_TITLE,
-      updateTaskTitleDTO
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.TASK_UPDATE_TITLE, updateTaskTitleDTO);
 
     return response.data;
   } catch (error) {
@@ -552,10 +581,10 @@ export async function updateTasksPosition(
   updateTasksPositionDTO: UpdateTasksPositionDTO
 ) {
   try {
-    const response = await axiosGatewayInstance.put<boolean>(
-      API_ENDPOINT.TASK,
-      deepCopy(updateTasksPositionDTO)
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).put<boolean>(API_ENDPOINT.TASK, deepCopy(updateTasksPositionDTO));
 
     // return response.data;
   } catch (error) {
@@ -574,9 +603,10 @@ export async function fetchAllTasks(
       defaultStatusCategoryId: String(defaultStatusCategoryId),
     });
 
-    const response = await axiosGatewayInstance.get<TaskListStatusCategoryDTO>(
-      API_ENDPOINT.TASK + `?${params}`
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).get<TaskListStatusCategoryDTO>(API_ENDPOINT.TASK + `?${params}`);
 
     return response.data;
   } catch (error) {
@@ -587,10 +617,10 @@ export async function fetchAllTasks(
 
 export async function createTask(createTaskDTO: Task) {
   try {
-    const res = await axiosGatewayInstance.post<Task>(
-      API_ENDPOINT.TASK,
-      createTaskDTO
-    );
+    const res = await (import.meta.env.DEV
+      ? axiosTaskServiceInstance
+      : axiosGatewayInstance
+    ).post<Task>(API_ENDPOINT.TASK, createTaskDTO);
 
     return res.data;
   } catch (error) {
@@ -604,10 +634,10 @@ export async function createTeam(
   onSuccess: (createTeamResponseDTO: Team) => void
 ) {
   try {
-    const response = await axiosGatewayInstance.post<Team>(
-      API_ENDPOINT.TEAM,
-      createTeamDTO
-    );
+    const response = await (import.meta.env.DEV
+      ? axiosTeamServiceInstance
+      : axiosGatewayInstance
+    ).post<Team>(API_ENDPOINT.TEAM, createTeamDTO);
 
     onSuccess(response.data);
   } catch (error) {

@@ -88,38 +88,6 @@ public class FolderCategory {
             orphanRemoval = true)
     private Set<ListCategory> allLists = new HashSet<>();
 
-    public void addMember(UserInfo userInfo) {
-        members.add(userInfo);
-        userInfo.getJoinedFolderCategories().add(this);
-    }
-
-    public void removeMember(UserInfo userInfo) {
-        members.remove(userInfo);
-        userInfo.getJoinedFolderCategories().remove(this);
-    }
-
-    public void addListCategory(ListCategory listCategory) {
-        allLists.add(listCategory);
-        listCategory.setFolderCategory(this);
-    }
-
-    public void removeListCategory(ListCategory listCategory) {
-        allLists.remove(listCategory);
-        listCategory.setFolderCategory(null);
-    }
-
-    public void removeAllListCategories() {
-        allLists.forEach(listCategory -> {
-            listCategory.removeAllMembers();
-            listCategory.setFolderCategory(null);
-        });
-        allLists.clear();
-    }
-
-    public void removeAllMembers() {
-        members.forEach(this::removeMember);
-    }
-
     public static FolderCategory convertFromCreateFolderDTO(
             CreateFolderDTO dto, UserInfo userInfo) {
         var folderCategory = FolderCategory.builder()
@@ -151,6 +119,38 @@ public class FolderCategory {
 
         folderCategory.setAllLists(allListCategory);
         return folderCategory;
+    }
+
+    public void addMember(UserInfo userInfo) {
+        members.add(userInfo);
+        userInfo.getJoinedFolderCategories().add(this);
+    }
+
+    public void removeMember(UserInfo userInfo) {
+        members.remove(userInfo);
+        userInfo.getJoinedFolderCategories().remove(this);
+    }
+
+    public void addListCategory(ListCategory listCategory) {
+        allLists.add(listCategory);
+        listCategory.setFolderCategory(this);
+    }
+
+    public void removeListCategory(ListCategory listCategory) {
+        allLists.remove(listCategory);
+        listCategory.setFolderCategory(null);
+    }
+
+    public void removeAllListCategories() {
+        allLists.forEach(listCategory -> {
+            listCategory.removeAllMembers();
+            listCategory.setFolderCategory(null);
+        });
+        allLists.clear();
+    }
+
+    public void removeAllMembers() {
+        members.forEach(this::removeMember);
     }
 
 }

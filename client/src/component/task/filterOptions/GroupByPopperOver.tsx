@@ -8,19 +8,19 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { SortBy } from "../../../types";
+import { GroupBy } from "../../../types";
 import GroupByItem from "./GroupByItem";
 
 type Props = {
-  sortBy: SortBy;
+  groupBy: GroupBy;
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
+  setSortBy: React.Dispatch<React.SetStateAction<GroupBy>>;
 };
 
 export default function GroupByPopperOver({
-  sortBy,
+  groupBy,
   isOpen,
   onClose,
   children,
@@ -37,9 +37,9 @@ export default function GroupByPopperOver({
 
         <GroupByItem
           onClose={onClose}
-          title={SortBy.STATUS}
+          title={GroupBy.STATUS}
           setSortBy={setSortBy}
-          currentSortBy={sortBy}
+          currentSortBy={groupBy}
         >
           <i className="bi bi-view-stacked"></i>
         </GroupByItem>
@@ -47,8 +47,8 @@ export default function GroupByPopperOver({
         <GroupByItem
           onClose={onClose}
           setSortBy={setSortBy}
-          currentSortBy={sortBy}
-          title={SortBy.PRIORITY}
+          currentSortBy={groupBy}
+          title={GroupBy.PRIORITY}
         >
           <i className="bi bi-flag"></i>
         </GroupByItem>
@@ -56,8 +56,8 @@ export default function GroupByPopperOver({
         <GroupByItem
           onClose={onClose}
           setSortBy={setSortBy}
-          currentSortBy={sortBy}
-          title={SortBy.DUE_DATE}
+          currentSortBy={groupBy}
+          title={GroupBy.DUE_DATE}
         >
           <i className="bi bi-calendar2-date"></i>
         </GroupByItem>

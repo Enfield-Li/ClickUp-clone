@@ -19,7 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -139,6 +141,30 @@ public class FolderCategoryServiceTest implements WithAssertions {
         assertThat(space.getFolderCategories()).isEmpty();
 
         assertThat(actualResult).isEqualTo(true);
+    }
+
+    @Test
+    void update_folder_should_pass() {
+        // Given
+        var folderId = 1;
+        var newColor = "New Color";
+        var folder = new FolderCategory();
+        var newFolderName = "New Folder Name";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("color", newColor);
+        params.put("name", newFolderName);
+
+        given(entityManager.getReference(eq(FolderCategory.class), eq(folderId)))
+                .willReturn(folder);
+
+        // When
+        Boolean actualResult = underTest.updateFolder(folderId, params);
+
+        // Then
+        assertThat(actualResult).isTrue();
+        assertThat(folder.getColor()).isEqualTo(newColor);
+        assertThat(folder.getName()).isEqualTo(newFolderName);
     }
 
     @Test

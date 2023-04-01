@@ -21,22 +21,22 @@ export const axiosGatewayInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.GATEWAY
 );
 
-// export const axiosAuthServiceInstance = createDevAxiosInstance(
-//   SERVICE_ENDPOINT.AUTHORIZATION
-// );
+export const axiosAuthServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.AUTHORIZATION
+);
 
-// export const axiosTaskServiceInstance = createDevAxiosInstance(
-//   SERVICE_ENDPOINT.TASK
-// );
+export const axiosTaskServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TASK
+);
 
-// export const axiosTeamServiceInstance = createDevAxiosInstance(
-//   SERVICE_ENDPOINT.TEAM
-// );
+export const axiosTeamServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TEAM
+);
 
-// export const axiosTeamActivityServiceInstance = createDevAxiosInstance(
-//   SERVICE_ENDPOINT.TEAM_ACTIVITY
-// );
+export const axiosTeamActivityServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TEAM_ACTIVITY
+);
 
-// export const axiosStatusCategoryServiceInstance = createDevAxiosInstance(
-//   SERVICE_ENDPOINT.TEAM_STATUS_CATEGORY
-// );
+export const axiosStatusCategoryServiceInstance = createDevAxiosInstance(
+  SERVICE_ENDPOINT.TEAM_STATUS_CATEGORY
+);

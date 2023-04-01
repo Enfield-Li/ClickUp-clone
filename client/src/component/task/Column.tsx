@@ -2,7 +2,7 @@ import { Box, Center } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import { memo, useMemo, useState } from "react";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { SortBy, TaskList, TaskState, UndeterminedColumn } from "../../types";
+import { GroupBy, TaskList, TaskState, UndeterminedColumn } from "../../types";
 import CreateTask from "./createTask/CreateTask";
 import ColumnHeader from "./customStatusColumn/ColumnHeader";
 import TaskCard from "./taskCard/TaskCard";
@@ -18,19 +18,28 @@ function Column({ taskState, taskList, currentColumn }: Props) {
   const [hovering, setHovering] = useState(false);
   const { taskStateContext, isCreatingTask } = useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
-  const { sortBy, columnOptions } = taskStateContext;
+  const { groupBy, columnOptions } = taskStateContext;
 
   const finishedColumnId = useMemo(
     () => columnOptions.statusColumns.find((column) => column.markAsClosed)?.id,
     [columnOptions]
   );
 
+  const taskAmount = useMemo(
+    () =>
+      groupBy !== GroupBy.STATUS
+        ? taskList?.filter((task) => task.status.columnId !== finishedColumnId)
+            .length
+        : taskList?.length,
+    [taskList, finishedColumnId, groupBy]
+  );
+
   return (
     <Box mx={3} width="250px">
       {/* Column header */}
       <ColumnHeader
+        taskAmount={taskAmount}
         title={currentColumn.title}
-        taskAmount={taskList?.length}
         currentColumn={currentColumn}
         borderTopColor={currentColumn.color}
       />
@@ -54,7 +63,7 @@ function Column({ taskState, taskList, currentColumn }: Props) {
                 // hide finished task
                 const isTaskFinished =
                   task.status.columnId !== finishedColumnId;
-                return sortBy !== SortBy.STATUS ? isTaskFinished : true;
+                return groupBy !== GroupBy.STATUS ? isTaskFinished : true;
               })
               .map((task, index) => (
                 <TaskCard task={task} key={task.id} index={index} />

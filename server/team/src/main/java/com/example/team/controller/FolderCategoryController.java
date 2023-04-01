@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static com.example.clients.UrlConstants.Folder_API_VERSION;
 
 @RestController
@@ -23,6 +25,14 @@ class FolderCategoryController {
             @RequestBody CreateFolderDTO createSpaceDTO) {
         var folderCategory = service.createFolder(createSpaceDTO);
         return ResponseEntity.ok(folderCategory);
+    }
+
+    @PutMapping("{folderId}")
+    public ResponseEntity<Boolean> updateFolder(
+            @PathVariable Integer folderId,
+            @RequestParam Map<String, String> params) {
+        var updated = service.updateFolder(folderId, params);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{folderCategoryId}")

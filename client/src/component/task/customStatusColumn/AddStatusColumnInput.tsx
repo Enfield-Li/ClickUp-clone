@@ -8,7 +8,7 @@ import {
 import produce from "immer";
 import { memo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCurrentListStore } from "../../../context/newDefaultColumnIdStore/useCurrentListStore";
+import { useCurrentListStore } from "../../../context/currentListStore/useCurrentListStore";
 import { addStatusColumn } from "../../../networkCalls";
 import {
   AddStatusColumnDTO,

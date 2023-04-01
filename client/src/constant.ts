@@ -6,12 +6,12 @@ export const IS_SUB_NAV_OPEN = "is_sub_nav_open";
 export const CURRENT_STATUS_CATEGORY_ID = "current_status_category_id";
 
 export const SERVICE_ENDPOINT = {
-  GATEWAY: "http://1.12.70.249/service-gateway",
-  //   TASK: "http://localhost:8084",
-  //   TEAM: "http://localhost:8088",
-  //   AUTHORIZATION: "http://localhost:8085",
-  //   TEAM_STATUS_CATEGORY: "http://localhost:8089",
-  //   TEAM_ACTIVITY: "http://localhost:8090",
+  TASK: import.meta.env.VITE_TASK_URL,
+  TEAM: import.meta.env.VITE_TEAM_URL,
+  GATEWAY: import.meta.env.VITE_GATEWAY_URL,
+  AUTHORIZATION: import.meta.env.VITE_AUTHORIZATION_URL,
+  TEAM_ACTIVITY: import.meta.env.VITE_TEAM_ACTIVITY_URL,
+  TEAM_STATUS_CATEGORY: import.meta.env.VITE_TEAM_STATUS_CATEGORY_URL,
 } as const;
 
 const ALL_TASKS = "/all_tasks";

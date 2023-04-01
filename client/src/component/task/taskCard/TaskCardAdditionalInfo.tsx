@@ -23,7 +23,7 @@ function TaskCardAdditionalInfo({
   setShowSubTask,
 }: Props) {
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions, sortBy } = taskStateContext!;
+  const { columnOptions, groupBy: groupBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priorityColumns.find(
@@ -46,7 +46,7 @@ function TaskCardAdditionalInfo({
           mr={1}
           color={currentTaskPriority?.color}
           onClick={(e) => e.stopPropagation()}
-          display={sortBy !== "priority" ? "block" : "none"}
+          display={groupBy !== "priority" ? "block" : "none"}
         >
           <SelectPriorityPopover
             task={task}
@@ -61,7 +61,7 @@ function TaskCardAdditionalInfo({
       {hasDueDate && (
         <Box
           onClick={(e) => e.stopPropagation()}
-          display={sortBy !== "dueDate" ? "block" : "none"}
+          display={groupBy !== "dueDate" ? "block" : "none"}
         >
           <ExpectedDueDateDisplay task={task} />
         </Box>

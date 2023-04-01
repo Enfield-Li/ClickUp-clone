@@ -9,14 +9,14 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import React, { memo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import { useNavigate } from "react-router-dom";
+import { userModalControl } from "../../../context/modalControl/userModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createSpaceForTeam } from "../../../networkCalls";
 import {
-  CreateSpaceStep,
-  CreateSpaceState,
   CreateSpaceDTO,
+  CreateSpaceState,
+  CreateSpaceStep,
   TEAM_STATE_ACTION,
 } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
@@ -41,11 +41,8 @@ function CreateSpaceModalTemplate({
   previousSection,
 }: Props) {
   const navigate = useNavigate();
-  const {
-    teamState,
-    teamStateDispatch,
-  } = useTeamStateContext();
-  const { onCreateSpaceModalClose } = useModalControlContext();
+  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { onCreateSpaceModalClose } = userModalControl();
 
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 

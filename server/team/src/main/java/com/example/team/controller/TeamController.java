@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.clients.UrlConstants.TEAM_API_VERSION;
@@ -42,6 +43,14 @@ class TeamController {
             @RequestBody CreateTeamDTO createTeamDTO) {
         var createdTeam = service.initTeamInRegistration(createTeamDTO);
         return ResponseEntity.ok(createdTeam);
+    }
+
+    @PutMapping("{spaceId}")
+    public ResponseEntity<Boolean> updateTeam(
+            @PathVariable Integer teamId,
+            @RequestParam Map<String, String> params) {
+        var updated = service.updateTeam(teamId, params);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{teamId}")

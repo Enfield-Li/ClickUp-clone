@@ -22,7 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.*;
@@ -174,6 +176,33 @@ public class TeamServiceTest implements WithAssertions {
         assertThat(actualTeamResult.getSpaces()).contains(spaceArg);
 
         assertThat(actualTeamResult).isEqualTo(team);
+    }
+
+    @Test
+    void update_space_should_pass() {
+        // Given
+        var teamId = 1;
+        var team = new Team();
+        var newColor = "New Color";
+        var newAvatar = "New Avatar";
+        var newTeamName = "New Team Name";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("color", newColor);
+        params.put("avatar", newAvatar);
+        params.put("name", newTeamName);
+
+        given(entityManager.getReference(eq(Team.class), eq(teamId)))
+                .willReturn(team);
+
+        // When
+        Boolean actualResult = underTest.updateTeam(teamId, params);
+
+        // Then
+        assertThat(actualResult).isTrue();
+        assertThat(team.getColor()).isEqualTo(newColor);
+        assertThat(team.getAvatar()).isEqualTo(newAvatar);
+        assertThat(team.getName()).isEqualTo(newTeamName);
     }
 
     @Test

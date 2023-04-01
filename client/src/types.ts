@@ -1,10 +1,10 @@
 // Sorting options
-export enum SortBy {
+export enum GroupBy {
   STATUS = "status",
   PRIORITY = "priority",
   DUE_DATE = "dueDate",
 }
-type ColumnField = SortBy;
+type ColumnField = GroupBy;
 
 // Columns
 export enum Priority {
@@ -199,7 +199,7 @@ export type TargetColumnAndId = {
   priority?: number;
   dueDate?: number;
 };
-export type TargetTasksInColumn = { updateSortBy: SortBy; columnId: number }[];
+export type TargetTasksInColumn = { updateSortBy: GroupBy; columnId: number }[];
 
 export interface TaskPositionDTO {
   taskId: number;
@@ -671,7 +671,7 @@ export type ModalState = {
 };
 
 export type TaskStateContext = {
-  sortBy: SortBy;
+  groupBy: GroupBy;
   currentListId: number;
   setTaskState: SetTaskState;
   columnOptions: ColumnOptions;

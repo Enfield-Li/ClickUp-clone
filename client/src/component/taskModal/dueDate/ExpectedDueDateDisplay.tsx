@@ -12,7 +12,7 @@ import {
 import { memo, useState } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, Task } from "../../../types";
+import { GroupBy, Task } from "../../../types";
 import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
@@ -29,7 +29,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setTaskState, columnOptions } = taskStateContext!;
+  const { groupBy, setTaskState, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -41,12 +41,12 @@ function ExpectedDueDateDisplay({ task }: Props) {
     const noDueDateColumnId = 1;
 
     updateTaskAttribute({
-      sortBy,
+      groupBy: groupBy,
       setTaskState,
       currentTask: task,
       expectedDueDate: null,
       userId: authState.user!.id!,
-      targetField: SortBy.DUE_DATE,
+      targetField: GroupBy.DUE_DATE,
       targetColumnId: noDueDateColumnId, // No due date
     });
   }

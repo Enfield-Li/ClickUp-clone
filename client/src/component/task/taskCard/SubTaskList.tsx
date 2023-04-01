@@ -19,7 +19,7 @@ function SubTaskList({ task }: Props) {
   const { colorMode } = useColorMode();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions, sortBy } = taskStateContext!;
+  const { columnOptions, groupBy } = taskStateContext!;
 
   return (
     <Box bgColor={cardBgColor}>
@@ -80,7 +80,7 @@ function SubTaskList({ task }: Props) {
 
               <Flex fontSize="12px" mb={2}>
                 {/* Priority */}
-                {sortBy !== "priority" && (
+                {groupBy !== "priority" && (
                   <Box
                     mr={2}
                     color={priorityFlagColor}
@@ -98,7 +98,7 @@ function SubTaskList({ task }: Props) {
                 )}
 
                 {/* DueDate */}
-                {sortBy !== "dueDate" && (
+                {groupBy !== "dueDate" && (
                   <Box mr={2}>
                     {hasDueDate ? (
                       <Box onClick={(e) => e.stopPropagation()}>

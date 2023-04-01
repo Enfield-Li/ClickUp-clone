@@ -20,7 +20,7 @@ function TaskOptions({ taskId }: Props) {
   const navigate = useNavigate();
   const { taskStateContext } = useTaskDetailContext();
 
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   return (
     <>

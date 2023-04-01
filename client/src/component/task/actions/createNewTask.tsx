@@ -5,7 +5,7 @@ import {
   OrderedTasks,
   Priority,
   SetTaskState,
-  SortBy,
+  GroupBy,
   TargetColumnAndId,
   Task,
   DueDatePosition,
@@ -34,7 +34,7 @@ export type NewTask = {
 
 interface CreateNewTaskParam {
   listId: number;
-  sortBy: SortBy;
+  groupBy: GroupBy;
   creator: UserInfo;
   newTaskInput: NewTask;
   taskState: TaskState;
@@ -45,7 +45,7 @@ interface CreateNewTaskParam {
 
 export async function createNewTask({
   listId,
-  sortBy,
+  groupBy,
   creator,
   taskState,
   newTaskInput,
@@ -66,15 +66,17 @@ export async function createNewTask({
     expectedDueDate
   );
 
-  // Set position under current column/sortBy
-  setCurrentTaskAttribute({ newTask, sortBy, taskState, currentColumn });
+  // Set position under current column/groupBy
+  setCurrentTaskAttribute({ newTask, groupBy, taskState, currentColumn });
 
-  // set position for other sortBys'
+  // set position for other groupBys'
+  const defaultStatusColumnId = taskState.columnOptions.statusColumns[0].id;
   const targetColumnAndId: TargetColumnAndId = newTargetStateColumnId({
-    sortBy,
+    groupBy,
     status,
     priority,
     dueDateColumnId,
+    defaultStatusColumnId,
   });
   setOtherColumnPosition({ targetColumnAndId, taskState, task: newTask });
 
@@ -88,9 +90,9 @@ export async function createNewTask({
         // update local state
         draftState.orderedTasks.forEach((orderedTask) => {
           const targetColumnId =
-            sortBy === SortBy.DUE_DATE
+            groupBy === GroupBy.DUE_DATE
               ? dueDateColumnId
-              : sortBy === SortBy.PRIORITY
+              : groupBy === GroupBy.PRIORITY
               ? priority
               : currentColumn.id;
 
@@ -106,13 +108,13 @@ export async function createNewTask({
 
 interface SetCurrentTaskAttributeParam {
   newTask: Task;
-  sortBy: SortBy;
+  groupBy: GroupBy;
   taskState: TaskState;
   currentColumn: UndeterminedColumn;
 }
 export function setCurrentTaskAttribute({
   newTask,
-  sortBy,
+  groupBy,
   taskState,
   currentColumn,
 }: SetCurrentTaskAttributeParam) {
@@ -122,10 +124,10 @@ export function setCurrentTaskAttribute({
   const lastTaskInCurrentColumn =
     currentTaskList?.taskList[currentTaskList?.taskList.length - 1];
 
-  newTask[sortBy].columnId = currentColumn.id!;
-  newTask[sortBy].name = currentColumn.title;
-  newTask[sortBy].orderIndex = lastTaskInCurrentColumn
-    ? lastTaskInCurrentColumn[sortBy].orderIndex + 1
+  newTask[groupBy].columnId = currentColumn.id!;
+  newTask[groupBy].name = currentColumn.title;
+  newTask[groupBy].orderIndex = lastTaskInCurrentColumn
+    ? lastTaskInCurrentColumn[groupBy].orderIndex + 1
     : 1;
 }
 
@@ -142,7 +144,7 @@ export function setOtherColumnPosition({
   const numOfKeys = Object.entries(targetColumnAndId).length;
   for (let i = 0; i < numOfKeys; i++) {
     const stateColumnPair = Object.entries(targetColumnAndId)[i];
-    const targetSortBy = stateColumnPair[0] as SortBy;
+    const targetSortBy = stateColumnPair[0] as GroupBy;
     const columnId = stateColumnPair[1];
 
     const { orderIndex, columnName }: OrderIndexInColumn =
@@ -159,10 +161,11 @@ export interface OrderIndexInColumn {
   columnName: string;
 }
 export function findTheLastOrderIndexInColumn(
-  sortBy: SortBy,
+  groupBy: GroupBy,
   columnId: number,
   taskState: TaskState
 ): OrderIndexInColumn {
+
   const allTasks = collectAllTasks(taskState.orderedTasks);
 
   const allOrderIndex: number[] = [];
@@ -173,9 +176,9 @@ export function findTheLastOrderIndexInColumn(
 
   // collect all tasks' orderIndex
   allTasks.forEach((task) => {
-    if (task[sortBy].columnId === columnId) {
-      allOrderIndex.push(task[sortBy].orderIndex);
-      orderIndexAndName.columnName = task[sortBy].name;
+    if (task[groupBy].columnId === columnId) {
+      allOrderIndex.push(task[groupBy].orderIndex);
+      orderIndexAndName.columnName = task[groupBy].name;
     }
   });
 
@@ -186,7 +189,7 @@ export function findTheLastOrderIndexInColumn(
 
   // override column name
   const undeterminedColumns = taskState.columnOptions[
-    `${sortBy}Columns`
+    `${groupBy}Columns`
   ] as UndeterminedColumns;
 
   const currentColumn = undeterminedColumns.find(
@@ -213,26 +216,28 @@ export function collectAllTasks(orderedTasks: OrderedTasks): TaskList {
 }
 
 interface NewTargetStateColumnIdParam {
-  sortBy: SortBy;
+  groupBy: GroupBy;
   status?: number;
   priority?: number;
   dueDateColumnId: number;
+  defaultStatusColumnId?: number;
 }
 function newTargetStateColumnId({
-  sortBy,
+  groupBy,
   status,
   priority,
   dueDateColumnId,
+  defaultStatusColumnId,
 }: NewTargetStateColumnIdParam) {
   const targetColumn: TargetColumnAndId = {};
-  if (sortBy === SortBy.STATUS) {
+  if (groupBy === GroupBy.STATUS) {
     targetColumn.dueDate = dueDateColumnId;
     targetColumn.priority = priority ? priority : 1;
-  } else if (sortBy === SortBy.PRIORITY) {
-    targetColumn.status = status ? status : 1;
+  } else if (groupBy === GroupBy.PRIORITY) {
+    targetColumn.status = status ? status : defaultStatusColumnId;
     targetColumn.dueDate = dueDateColumnId;
-  } else if (sortBy === SortBy.DUE_DATE) {
-    targetColumn.status = status ? status : 1;
+  } else if (groupBy === GroupBy.DUE_DATE) {
+    targetColumn.status = status ? status : defaultStatusColumnId;
     targetColumn.priority = priority ? priority : 1;
   }
   return targetColumn;

@@ -5,7 +5,7 @@ import {
   LookUpReorderedColumn,
   OrderedTasks,
   PriorityColumns,
-  SortBy,
+  GroupBy,
   TargetColumnAndId,
   TargetTasksInColumn,
   Task,
@@ -19,12 +19,12 @@ import { getDaysBefore, getNextNWeekDay } from "../../../utils/getWeekDays";
 import { calculateDueDateInThisWeek } from "./columnProcessing";
 
 /* 
-  Group all tasks into ordered tasks based on sortBy 
+  Group all tasks into ordered tasks based on groupBy 
   by converting unordered Task[] list and group by for example task.priorityId:
   Find all sorting occurrences,
     and, based on the id, generate respective nested list for that id, 
     for example:
-      sortBy = "priority"
+      groupBy = "priority"
 
       from:
         status column data: 
@@ -77,10 +77,10 @@ import { calculateDueDateInThisWeek } from "./columnProcessing";
           }
         ]
 */
-export function groupTaskListOnSortBy(
+export function groupTaskListOnGroupBy(
   allTasks: TaskList,
   columns: UndeterminedColumns,
-  sortBy: SortBy
+  groupBy: GroupBy
 ): OrderedTasks {
   const orderedTasks: OrderedTasks = [];
 
@@ -90,18 +90,18 @@ export function groupTaskListOnSortBy(
 
     orderedTasks[i] = { columnId, taskList: [] };
 
-    // Find all the entailing element based on sortBy
+    // Find all the entailing element based on groupBy
 
     const taskWithCurrentColumnId: TaskList = [];
     for (const task of allTasks) {
-      if (task[sortBy].columnId === columnId) {
+      if (task[groupBy].columnId === columnId) {
         taskWithCurrentColumnId.push(task);
       }
     }
 
     const orderedTaskList = reorderTasksOnOrderIndex(
       taskWithCurrentColumnId,
-      sortBy
+      groupBy
     );
     orderedTasks[i].taskList = orderedTaskList;
   }
@@ -109,9 +109,9 @@ export function groupTaskListOnSortBy(
   return orderedTasks;
 }
 
-export function reorderTasksOnOrderIndex(allTasks: TaskList, sortBy: SortBy) {
+export function reorderTasksOnOrderIndex(allTasks: TaskList, groupBy: GroupBy) {
   allTasks.sort(
-    (prev, current) => prev[sortBy].orderIndex - current[sortBy].orderIndex
+    (prev, current) => prev[groupBy].orderIndex - current[groupBy].orderIndex
   );
   return allTasks;
 }
@@ -214,7 +214,7 @@ export function initTaskMissingField(
   return taskCopy;
 }
 
-// Push task to the other sortBy id === 1 column
+// Push task to the other groupBy id === 1 column
 export function updatePreviousIdsInColumn(
   taskState: TaskState,
   targetColumn: TargetColumnAndId,
@@ -222,7 +222,7 @@ export function updatePreviousIdsInColumn(
 ) {
   const allTasks = collectAllTasks(taskState.orderedTasks);
 
-  // Updates for newTask's previousItem for other sortBy
+  // Updates for newTask's previousItem for other groupBy
   const previousTaskValues = collectPreviousTaskValues(targetColumn);
 
   updateTask(previousTaskValues, allTasks, sourceTask);
@@ -312,10 +312,10 @@ export function updateTask(
   throw new Error("not implemented");
 }
 
-// Given sortBy and columnId, find the last task id in all the tasks in the taskState
+// Given groupBy and columnId, find the last task id in all the tasks in the taskState
 export function findLastTaskId(
   allTasks: TaskList,
-  sortBy: SortBy,
+  groupBy: GroupBy,
   columnId: number
 ): number | undefined {
   throw new Error("not implemented");
@@ -326,16 +326,16 @@ export function findLastTaskId(
   //   for (let i = 0; i < allTasks.length; i++) {
   //     const task = allTasks[i];
 
-  //     if (task[sortBy] === columnId) {
+  //     if (task[groupBy] === columnId) {
   //       taskListBasedOnSortBy.push(task);
   //     }
   //   }
 
-  //   // Find all the element based on sortBy
+  //   // Find all the element based on groupBy
   //   const orderedTaskListBasedOnSortBy: TaskList = [];
 
   //   const firstTask = taskListBasedOnSortBy.find(
-  //     (task) => !task.previousTaskIds[lookUpPreviousTaskId[sortBy]]
+  //     (task) => !task.previousTaskIds[lookUpPreviousTaskId[groupBy]]
   //   );
   //   if (firstTask) orderedTaskListBasedOnSortBy[0] = firstTask;
 
@@ -344,7 +344,7 @@ export function findLastTaskId(
   //     const currentTask = orderedTaskListBasedOnSortBy[i];
   //     const entailingTask = taskListBasedOnSortBy.find(
   //       (task) =>
-  //         task.previousTaskIds[lookUpPreviousTaskId[sortBy]] === currentTask.id
+  //         task.previousTaskIds[lookUpPreviousTaskId[groupBy]] === currentTask.id
   //     );
 
   //     if (entailingTask) orderedTaskListBasedOnSortBy.push(entailingTask);

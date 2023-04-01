@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, StatusColumn, Task } from "../../../types";
+import { GroupBy, StatusColumn, Task } from "../../../types";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import OptionWrapper from "../../task/optionWrapper/SelectOption";
 
@@ -12,16 +12,16 @@ export default memo(StatusOptions);
 function StatusOptions({ onOptionClose }: Props) {
   const { authState } = useAuthContext();
   const { task, taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
 
   function handleSelectStatus(task: Task, column: StatusColumn) {
     const targetStatusColumnId = column.id!;
 
     updateTaskAttribute({
-      sortBy,
+      groupBy: groupBy,
       setTaskState,
       currentTask: task,
-      targetField: SortBy.STATUS,
+      targetField: GroupBy.STATUS,
       userId: authState.user!.id!,
       targetColumnId: targetStatusColumnId,
     });

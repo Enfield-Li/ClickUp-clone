@@ -1,13 +1,13 @@
 import { Box, useColorModeValue, Flex, Center } from "@chakra-ui/react";
 import React from "react";
-import { SortBy } from "../../../types";
+import { GroupBy } from "../../../types";
 
 type Props = {
-  title: SortBy;
+  title: GroupBy;
   onClose: () => void;
-  currentSortBy: SortBy;
+  currentSortBy: GroupBy;
   children: React.ReactNode;
-  setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
+  setSortBy: React.Dispatch<React.SetStateAction<GroupBy>>;
 };
 
 export default function GroupByItem({

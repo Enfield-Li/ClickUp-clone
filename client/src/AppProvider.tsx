@@ -9,12 +9,14 @@ type Props = { children: React.ReactNode };
 
 export default memo(AppProvider);
 function AppProvider({ children }: Props) {
-  if (localStorage.getItem("chakra-ui-color-mode") === null) {
-    localStorage.setItem("chakra-ui-color-mode", "dark");
+  const colorMode = "chakra-ui-color-mode";
+  if (localStorage.getItem(colorMode) === null) {
+    localStorage.setItem(colorMode, "dark");
   }
-  //   if (localStorage.getItem(IS_SUB_NAV_OPEN) === null) {
-  //     localStorage.setItem(IS_SUB_NAV_OPEN, JSON.stringify(true));
-  //   }
+
+  if (localStorage.getItem(IS_SUB_NAV_OPEN) === null) {
+    localStorage.setItem(IS_SUB_NAV_OPEN, JSON.stringify(true));
+  }
 
   return (
     <BrowserRouter>

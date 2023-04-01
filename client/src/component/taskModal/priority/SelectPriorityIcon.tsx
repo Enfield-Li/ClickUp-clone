@@ -13,7 +13,7 @@ function SelectPriorityIcon({ task }: Props) {
   const { authState } = useAuthContext();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
-  const { columnOptions, setTaskState, sortBy } = taskStateContext!;
+  const { columnOptions, setTaskState, groupBy: groupBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priorityColumns.find(
@@ -62,7 +62,7 @@ function SelectPriorityIcon({ task }: Props) {
             onClick={(e) => {
               e.stopPropagation();
               selectPriority(
-                sortBy,
+                groupBy,
                 task,
                 authState.user!.id!,
                 setTaskState,

@@ -24,7 +24,7 @@ function CreatePriorityOptions({
 
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   function selectPriority(priorityColumn: PriorityColumn) {
     onOptionClose();

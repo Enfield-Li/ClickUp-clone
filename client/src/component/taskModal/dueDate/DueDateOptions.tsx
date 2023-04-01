@@ -2,7 +2,7 @@ import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { DueDateColumn, DueDateRange, SortBy, Task } from "../../../types";
+import { DueDateColumn, DueDateRange, GroupBy, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -22,7 +22,7 @@ function DueDateOptions({ task, onClose }: Props) {
 
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, sortBy, columnOptions } = taskStateContext!;
+  const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
 
   function handleOnClick(targetColumn: DueDateColumn) {
     onClose();
@@ -31,12 +31,12 @@ function DueDateOptions({ task, onClose }: Props) {
 
     // Update list taskState
     updateTaskAttribute({
-      sortBy,
+      groupBy,
       setTaskState,
       expectedDueDate,
       currentTask: task!,
       userId: authState.user!.id!,
-      targetField: SortBy.DUE_DATE,
+      targetField: GroupBy.DUE_DATE,
       targetColumnId: targetColumn.id!,
     });
   }

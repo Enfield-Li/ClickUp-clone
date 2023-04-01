@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import { userModalControl } from "../../../context/modalControl/userModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
@@ -23,7 +23,7 @@ export default memo(CreateSpaceModal);
 function CreateSpaceModal({}: Props) {
   const { teamState } = useTeamStateContext();
   const { isCreateSpaceModalOpen, onCreateSpaceModalClose } =
-    useModalControlContext();
+    userModalControl();
   const contentBgColor = useColorModeValue("white", "darkMain.100");
   const [createSpace, setCreateSpace] =
     useState<CreateSpaceState>(initialCreateSpace);

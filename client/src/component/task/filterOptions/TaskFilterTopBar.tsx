@@ -11,16 +11,16 @@ import {
 } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
-import { SortBy } from "../../../types";
+import { GroupBy } from "../../../types";
 import GroupByPopperOver from "./GroupByPopperOver";
 
 type Props = {
-  sortBy: SortBy;
-  setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
+  groupBy: GroupBy;
+  setSortBy: React.Dispatch<React.SetStateAction<GroupBy>>;
 };
 
 export default memo(TaskFilterTopBar);
-function TaskFilterTopBar({ sortBy, setSortBy }: Props) {
+function TaskFilterTopBar({ groupBy, setSortBy }: Props) {
   const toast = useUnImplementedToast();
   const [hover, setHover] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,7 +78,7 @@ function TaskFilterTopBar({ sortBy, setSortBy }: Props) {
         {/* Group by */}
         <GroupByPopperOver
           isOpen={isOpen}
-          sortBy={sortBy}
+          groupBy={groupBy}
           onClose={onClose}
           setSortBy={setSortBy}
         >
@@ -93,7 +93,7 @@ function TaskFilterTopBar({ sortBy, setSortBy }: Props) {
             <Box mr="7px">Group up:</Box>
             <Flex color={hover ? "purple.400" : ""}>
               <Box opacity="70%" mr="1">
-                {sortBy}
+                {groupBy}
               </Box>
 
               {isOpen ? (
@@ -176,11 +176,11 @@ function TaskFilterTopBar({ sortBy, setSortBy }: Props) {
       {/* <Select
         border="none"
         width="125px"
-        onChange={(e) => setSortBy(e.target.value as SortBy)}
+        onChange={(e) => setSortBy(e.target.value as GroupBy)}
       >
-        <option value={SortBy.STATUS}>Status</option>
-        <option value={SortBy.PRIORITY}>Priority</option>
-        <option value={SortBy.DUE_DATE}>Due Date</option>
+        <option value={GroupBy.STATUS}>Status</option>
+        <option value={GroupBy.PRIORITY}>Priority</option>
+        <option value={GroupBy.DUE_DATE}>Due Date</option>
       </Select> */}
     </Flex>
   );

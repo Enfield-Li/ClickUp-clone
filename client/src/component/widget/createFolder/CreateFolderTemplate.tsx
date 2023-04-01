@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { useNavigate } from "react-router-dom";
-import useModalControlContext from "../../../context/modalControl/useModalControlContext";
+import { userModalControl } from "../../../context/modalControl/userModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createFolder } from "../../../networkCalls";
 import {
@@ -36,7 +36,7 @@ export default function CreateFolderTemplate({
   isCurrentStepEntry,
 }: Props) {
   const navigate = useNavigate();
-  const { onCreateFolderModalClose } = useModalControlContext();
+  const { onCreateFolderModalClose } = userModalControl();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
 

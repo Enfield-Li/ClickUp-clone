@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -40,6 +41,23 @@ public class FolderCategoryService {
         space.addFolderCategory(newFolderCategory);
 
         return repository.save(newFolderCategory);
+    }
+
+    @Transactional
+    public Boolean updateFolder(
+            Integer folderId, Map<String, String> params) {
+        var folder = entityManager.getReference(FolderCategory.class, folderId);
+        String name = params.get("name");
+        String color = params.get("color");
+
+        if (color != null) {
+            folder.setColor(color);
+        }
+        if (name != null) {
+            folder.setName(name);
+        }
+
+        return true;
     }
 
     @Transactional

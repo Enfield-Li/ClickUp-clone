@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TEAM_ACTIVITY } from "../constant";
 import useAuthContext from "../context/auth/useAuthContext";
-import { useCurrentListStore } from "../context/newDefaultColumnIdStore/useCurrentListStore";
+import { useCurrentListStore } from "../context/currentListStore/useCurrentListStore";
 import useTeamStateContext from "../context/team/useTeamContext";
 import { fetchTeamList } from "../networkCalls";
 import { TeamActiveStatus, TEAM_STATE_ACTION } from "../types";

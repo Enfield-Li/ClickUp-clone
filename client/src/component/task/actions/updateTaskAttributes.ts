@@ -2,7 +2,7 @@ import produce from "immer";
 import { updateTasksPosition } from "../../../networkCalls";
 import {
   SetTaskState,
-  SortBy,
+  GroupBy,
   Task,
   TaskPositionDTO,
   UpdateEvent,
@@ -18,8 +18,8 @@ import {
 
 type UpdateTaskAttributeParam = {
   userId: number;
-  sortBy: SortBy;
-  targetField: SortBy;
+  groupBy: GroupBy;
+  targetField: GroupBy;
   currentTask: Task;
   setTaskState: SetTaskState;
   targetColumnId: number;
@@ -28,7 +28,7 @@ type UpdateTaskAttributeParam = {
 
 export function updateTaskAttribute({
   userId,
-  sortBy,
+  groupBy,
   targetField,
   currentTask,
   setTaskState,
@@ -47,7 +47,7 @@ export function updateTaskAttribute({
         draftState.orderedTasks.forEach((orderedTask) => {
           orderedTask.taskList.forEach((task, index, taskList) => {
             const isNewEvent =
-              targetField === SortBy.DUE_DATE ||
+              targetField === GroupBy.DUE_DATE ||
               task[targetField].columnId !== targetColumnId;
 
             if (task.id === currentTask.id && isNewEvent) {
@@ -85,7 +85,7 @@ export function updateTaskAttribute({
               updateTaskListDTO.taskDtoList = deepCopy([updateTaskPositionDTO]);
 
               // move task to targetColumn and delete from original column
-              if (sortBy === targetField) {
+              if (groupBy === targetField) {
                 taskList.splice(index, 1);
                 draftState.orderedTasks.forEach((orderedTask) => {
                   if (orderedTask.columnId === targetColumnId) {
@@ -105,7 +105,7 @@ export function updateTaskAttribute({
 export function newUpdateEvent(
   userId: number,
   taskId: number,
-  field: SortBy,
+  field: GroupBy,
   beforeUpdate: number,
   afterUpdate: number
 ): UpdateEvent {

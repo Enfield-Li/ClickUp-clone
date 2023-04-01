@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.example.amqp.ExchangeKey.deleteTasksRoutingKey;
@@ -55,6 +56,28 @@ public class SpaceService {
             log.error("UnSpecified Space constraint violation");
             throw new InvalidRequestException("UnSpecified Space constraint violation");
         }
+    }
+
+    @Transactional
+    public Boolean updateSpace(
+            Integer spaceId, Map<String, String> params) {
+        var space = entityManager.getReference(Space.class, spaceId);
+
+        String name = params.get("name");
+        String color = params.get("color");
+        String avatar = params.get("avatar");
+
+        if (color != null) {
+            space.setColor(color);
+        }
+        if (name != null) {
+            space.setName(name);
+        }
+        if (avatar != null) {
+            space.setAvatar(avatar);
+        }
+
+        return true;
     }
 
     @Transactional

@@ -6,7 +6,6 @@ import NavBar from "./component/layout/NavBar";
 import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
 import CreateListModal from "./component/widget/createList/CreateListModal";
 import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
-import ModalControlStateProvider from "./context/modalControl/ModalControlContext";
 import TaskDetailProvider from "./context/task_detail/TaskDetailContext";
 import TeamStateProvider from "./context/team/TeamContext";
 
@@ -28,34 +27,32 @@ function ApplicationEntry({}: Props) {
 
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
   return (
-    <ModalControlStateProvider>
-      <Flex height="100vh" position="relative" overflow="hidden">
-        <TeamStateProvider>
-          <NavBar />
-          <CreateListModal />
-          <CreateSpaceModal />
-          <CreateFolderModal />
-        </TeamStateProvider>
+    <Flex height="100vh" position="relative" overflow="hidden">
+      <TeamStateProvider>
+        <NavBar />
+        <CreateListModal />
+        <CreateSpaceModal />
+        <CreateFolderModal />
+      </TeamStateProvider>
 
-        {/* Header && Main */}
-        <Flex
-          width="100%"
-          height="100%"
-          flexDir="column"
-          overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
-        >
-          <Box role="heading">
-            <Header />
-          </Box>
+      {/* Header && Main */}
+      <Flex
+        width="100%"
+        height="100%"
+        flexDir="column"
+        overflow="hidden" // https://stackoverflow.com/a/1767270/16648127
+      >
+        <Box role="heading">
+          <Header />
+        </Box>
 
-          {/* Main content */}
-          <Box role="main" flexGrow="1">
-            <TaskDetailProvider>
-              <Outlet />
-            </TaskDetailProvider>
-          </Box>
-        </Flex>
+        {/* Main content */}
+        <Box role="main" flexGrow="1">
+          <TaskDetailProvider>
+            <Outlet />
+          </TaskDetailProvider>
+        </Box>
       </Flex>
-    </ModalControlStateProvider>
+    </Flex>
   );
 }

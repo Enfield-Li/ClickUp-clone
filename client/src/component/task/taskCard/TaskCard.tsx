@@ -2,7 +2,7 @@ import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { memo, useEffect, useMemo, useState } from "react";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { Priority, SortBy, Task } from "../../../types";
+import { Priority, GroupBy, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
 import RightClickShowCardOptions from "./RightClickShowCardOptions";
 import SetTaskAttribute from "./SetTaskAttribute";
@@ -31,7 +31,7 @@ function TaskCard({ task, index }: Props) {
 
   const { setTask, modalState, taskStateContext } = useTaskDetailContext();
   const { onModalOpen } = modalState;
-  const { columnOptions, sortBy } = taskStateContext!;
+  const { columnOptions, groupBy } = taskStateContext!;
   const currentStatus = useMemo(() => {
     return columnOptions.statusColumns.find(
       (statusColumn) => statusColumn.id === task.status.columnId
@@ -45,11 +45,11 @@ function TaskCard({ task, index }: Props) {
   const hasPriority = task.priority.name !== Priority.NO_PRIORITY;
 
   const expandCardHeightInPriority =
-    sortBy === SortBy.PRIORITY && (hasSubTask || hasDueDate);
+    groupBy === GroupBy.PRIORITY && (hasSubTask || hasDueDate);
   const expandCardHeightInDueDate =
-    sortBy === SortBy.DUE_DATE && (hasSubTask || hasPriority);
+    groupBy === GroupBy.DUE_DATE && (hasSubTask || hasPriority);
   const expandCardHeightInStatus =
-    sortBy === SortBy.STATUS && (hasPriority || hasSubTask || hasDueDate);
+    groupBy === GroupBy.STATUS && (hasPriority || hasSubTask || hasDueDate);
   const expandCardHeight =
     expandCardHeightInStatus ||
     expandCardHeightInPriority ||
@@ -83,7 +83,7 @@ function TaskCard({ task, index }: Props) {
             justifyContent="space-between"
             borderLeftColor={currentStatus?.color}
             borderBottomRadius={showSubTask ? "" : "sm"}
-            borderLeftWidth={sortBy !== SortBy.STATUS ? "3px" : ""}
+            borderLeftWidth={groupBy !== GroupBy.STATUS ? "3px" : ""}
             height={expandCardHeight ? expandedHeight : collapsedHeight}
             border={colorMode === "dark" ? "1px solid darkMain.300" : ""}
             _hover={{

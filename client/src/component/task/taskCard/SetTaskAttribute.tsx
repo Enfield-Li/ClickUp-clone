@@ -3,7 +3,7 @@ import { Box, Center, Flex } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
 import useAuthContext from "../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SortBy, Task } from "../../../types";
+import { GroupBy, Task } from "../../../types";
 import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 import FinishTask from "../../taskModal/status/FinishTask";
@@ -26,7 +26,7 @@ function SetTaskAttribute({
 }: Props) {
   const { authState } = useAuthContext();
   const { taskStateContext } = useTaskDetailContext();
-  const { sortBy, setTaskState } = taskStateContext!;
+  const { groupBy: groupBy, setTaskState } = taskStateContext!;
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { columnOptions } = taskStateContext;
 
@@ -40,10 +40,10 @@ function SetTaskAttribute({
     e.stopPropagation();
 
     updateTaskAttribute({
-      sortBy,
+      groupBy,
       setTaskState,
       currentTask: task,
-      targetField: SortBy.STATUS,
+      targetField: GroupBy.STATUS,
       userId: authState.user!.id!,
       targetColumnId: finishedColumnId,
     });
@@ -53,7 +53,7 @@ function SetTaskAttribute({
     <Flex fontSize="small" alignItems="center" justifyContent="space-between">
       <Flex>
         {/* Priority */}
-        {!hasPriority && sortBy !== "priority" && (
+        {!hasPriority && groupBy !== "priority" && (
           <Box mr={2} onClick={(e) => e.stopPropagation()}>
             <SelectPriorityPopover
               task={task}
