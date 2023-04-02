@@ -7,7 +7,6 @@ import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal
 import CreateListModal from "./component/widget/createList/CreateListModal";
 import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
 import TaskDetailProvider from "./context/task_detail/TaskDetailContext";
-import TeamStateProvider from "./context/team/TeamContext";
 
 type Props = {};
 
@@ -28,12 +27,10 @@ function ApplicationEntry({}: Props) {
   // https://github.com/chakra-ui/chakra-ui/issues/4109#issuecomment-1306875968
   return (
     <Flex height="100vh" position="relative" overflow="hidden">
-      <TeamStateProvider>
-        <NavBar />
-        <CreateListModal />
-        <CreateSpaceModal />
-        <CreateFolderModal />
-      </TeamStateProvider>
+      <NavBar />
+      <CreateListModal />
+      <CreateSpaceModal />
+      <CreateFolderModal />
 
       {/* Header && Main */}
       <Flex
