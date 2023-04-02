@@ -1,10 +1,16 @@
+import produce from "immer";
 import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { ACCESS_TOKEN } from "../../constant";
 import {
   AuthenticationResponse,
   RegistrationResponse,
   User,
 } from "../../types";
+import { deepCopy } from "../../utils/deepCopy";
+import {
+  storeAccessTokenToLocalStorage,
+  storeTeamActiveStatusToLocalStorage,
+} from "../../utils/setTeamActiveStatusToLocalStorage";
 
 type AuthStateType = {
   user: User | null;
@@ -18,10 +24,61 @@ type AuthStateType = {
 
 export const useAuth = create<AuthStateType>()((set) => ({
   user: null,
-  loginUser: () => set((state) => ({ ...state })),
-  logoutUser: () => set((state) => ({ ...state })),
-  registerUser: () => set((state) => ({ ...state })),
-  openOnboarding: () => set((state) => ({ ...state })),
-  closeOnboarding: () => set((state) => ({ ...state })),
-  updateTeamCount: (isAddTeam, teamId) => set((state) => ({ ...state })),
+  loginUser: (user) =>
+    set((state) =>
+      produce(state, (draftState) => {
+        draftState.user = user;
+      })
+    ),
+  logoutUser: () =>
+    set((state) =>
+      produce(state, (draftState) => {
+        draftState.user = null;
+      })
+    ),
+  registerUser: (registrationResponse) =>
+    set((state) =>
+      produce(state, (draftState) => {
+        draftState.user = registrationResponse;
+
+        // init team activity
+        const teamActiveStatus = deepCopy(registrationResponse.initTeamUIState);
+        teamActiveStatus["folderIds"] = [];
+
+        // store team activity status
+        storeTeamActiveStatusToLocalStorage(
+          teamActiveStatus.teamId,
+          teamActiveStatus
+        );
+
+        // store accessToken
+        storeAccessTokenToLocalStorage(
+          ACCESS_TOKEN,
+          registrationResponse.accessToken
+        );
+      })
+    ),
+  updateTeamCount: (isAddTeam, teamId) =>
+    set((state) =>
+      produce(state, (draftState) => {
+        if (!draftState.user) {
+          throw new Error("User is not initialized");
+        }
+
+        draftState.user.defaultTeamId = teamId;
+        draftState.user.joinedTeamCount += isAddTeam ? 1 : -1;
+      })
+    ),
+  openOnboarding: () =>
+    set((state) =>
+      produce(state, (draftState) => {
+        //
+      })
+    ),
+  closeOnboarding: () =>
+    set((state) =>
+      produce(state, (draftState) => {
+        //
+      })
+    ),
 }));

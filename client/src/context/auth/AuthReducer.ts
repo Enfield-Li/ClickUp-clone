@@ -2,7 +2,7 @@ import produce from "immer";
 import { ACCESS_TOKEN } from "../../constant";
 import { AuthActionType, AuthStateType, AUTH_ACTION } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
-import setTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
+import { storeAccessTokenToLocalStorage, storeTeamActiveStatusToLocalStorage } from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function authReducer(
   authState: AuthStateType,
@@ -38,13 +38,13 @@ export default function authReducer(
           authAction.payload.registrationResponse.initTeamUIState
         );
         teamActiveStatus["folderIds"] = [];
-        setTeamActiveStatusToLocalStorage(
+        storeTeamActiveStatusToLocalStorage(
           teamActiveStatus.teamId,
           teamActiveStatus
         );
 
         // store accessToken to localStorage
-        localStorage.setItem(
+        storeAccessTokenToLocalStorage(
           ACCESS_TOKEN,
           authAction.payload.registrationResponse.accessToken
         );

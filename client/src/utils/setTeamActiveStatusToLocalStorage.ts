@@ -1,7 +1,7 @@
 import { TEAM_ACTIVITY } from "../constant";
 import { TeamActiveStatus } from "../types";
 
-export default function setTeamActiveStatusToLocalStorage(
+export function storeTeamActiveStatusToLocalStorage(
   teamId: number | undefined,
   teamActiveStatus: TeamActiveStatus
 ) {
@@ -9,4 +9,11 @@ export default function setTeamActiveStatusToLocalStorage(
     `${TEAM_ACTIVITY}_${teamId}`,
     JSON.stringify(teamActiveStatus)
   );
+}
+
+export function storeAccessTokenToLocalStorage(
+  key: string,
+  accessToken: string
+) {
+  localStorage.setItem(key, accessToken);
 }
