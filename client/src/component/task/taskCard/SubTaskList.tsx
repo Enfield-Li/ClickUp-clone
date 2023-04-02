@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDate/ExpectedDueDateDisplay";
 import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
@@ -18,7 +18,7 @@ type Props = { task: Task };
 function SubTaskList({ task }: Props) {
   const { colorMode } = useColorMode();
   const cardBgColor = useColorModeValue("white", "darkMain.200");
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions, groupBy } = taskStateContext!;
 
   return (

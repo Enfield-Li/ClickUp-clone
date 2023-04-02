@@ -1,6 +1,6 @@
 import { Center } from "@chakra-ui/react";
-import { memo, useMemo, useState } from "react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { memo, useMemo } from "react";
+import { useTaskDetail } from "../../../../context/task_detail/useTaskDetail";
 import CreateSelectPriorityPopover from "./CreateSelectPriorityPopover";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export default memo(CreateSelectPriorityIcon);
 function CreateSelectPriorityIcon({ priority, setPriority }: Props) {
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions } = taskStateContext!;
 
   const noPriority = priority === 1;

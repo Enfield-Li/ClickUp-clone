@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { handleDeleteTask } from "../../task/actions/deleteTask";
 
 type Props = { taskId: number };
@@ -18,8 +18,7 @@ type Props = { taskId: number };
 export default memo(TaskOptions);
 function TaskOptions({ taskId }: Props) {
   const navigate = useNavigate();
-  const { taskStateContext } = useTaskDetailContext();
-
+  const { taskStateContext } = useTaskDetail();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   return (

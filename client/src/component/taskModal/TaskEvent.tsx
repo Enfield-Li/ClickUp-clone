@@ -1,8 +1,7 @@
 import { Box, Center, Divider, Flex, Spinner } from "@chakra-ui/react";
-import { useRef, useEffect, useState, memo } from "react";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
-import { fetchTaskEvents } from "../../networkCalls";
-import { isCommentEvent, isAssignmentEvent } from "../../utils/determineEvent";
+import { memo, useEffect, useRef, useState } from "react";
+import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
+import { isAssignmentEvent, isCommentEvent } from "../../utils/determineEvent";
 import DueDateDetails from "./dueDate/DueDateDetails";
 import TaskCreationInfo from "./TaskCreationInfo";
 import AssignmentEvents from "./taskEvent/AssignmentEvents";
@@ -14,7 +13,7 @@ type Props = {};
 
 export default memo(TaskEvent);
 function TaskEvent({}: Props) {
-  const { task, setTask } = useTaskDetailContext();
+  const { task, setTask } = useTaskDetail();
   const [loadingTaskEvents, setLoadingTaskEvents] = useState<boolean>();
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
 import { updateTaskDescription } from "../../networkCalls";
 import SelectPriorityIcon from "./priority/SelectPriorityIcon";
 import SelectStatusIcons from "./status/SelectStatusIcons";
@@ -18,7 +18,7 @@ type Props = {};
 
 export default memo(TaskInfo);
 function TaskInfo({}: Props) {
-  const { task } = useTaskDetailContext();
+  const { task } = useTaskDetail();
 
   return (
     <Box flexBasis={"50%"}>

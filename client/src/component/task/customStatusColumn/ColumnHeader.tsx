@@ -1,7 +1,7 @@
 import { Box, Flex, Spacer, Text, useColorModeValue } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetTaskState, GroupBy, UndeterminedColumn } from "../../../types";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
+import { UndeterminedColumn } from "../../../types";
 import ColumnOptions from "./ColumnOptions";
 import EditColumnTitle from "./EditColumnTitle";
 
@@ -27,7 +27,7 @@ function ColumnHeader({
   const [editTitle, setEditTitle] = useState(false);
   const [showColumnOption, setShowColumnOption] = useState(false);
 
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { groupBy } = taskStateContext!;
 
   // Close edit when switching groupBy

@@ -1,7 +1,7 @@
 import { Box, Center, Tooltip } from "@chakra-ui/react";
 import React, { memo } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { ColumnOptions, StatusColumn, Task } from "../../../types";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
+import { ColumnOptions, Task } from "../../../types";
 
 type Props = {
   task: Task;
@@ -10,7 +10,7 @@ type Props = {
 type StatusTask = { id: number; color: string; amount: number; name: string };
 
 function SubTaskIcons({ task, setShowSubTask }: Props) {
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions } = taskStateContext!;
 
   function getStatusArr(task: Task, columnOptions: ColumnOptions) {

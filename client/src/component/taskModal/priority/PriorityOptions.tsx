@@ -1,7 +1,7 @@
 import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, Priority, SetTaskState, Task } from "../../../types";
 import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -20,7 +20,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
   );
 
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   return (

@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import {
   BeforeOrAfterUpdate,
   ColumnOptions,
@@ -17,7 +17,7 @@ type Props = {
 
 export default memo(BeforeAndAfter);
 function BeforeAndAfter({ updateEvent, beforeOrAfterUpdate }: Props) {
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions } = taskStateContext!;
 
   let icon: JSX.Element;

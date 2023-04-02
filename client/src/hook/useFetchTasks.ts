@@ -5,7 +5,7 @@ import {
   groupTaskListOnGroupBy,
   processTaskList,
 } from "../component/task/actions/taskProcessing";
-import useTaskDetailContext from "../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../context/task_detail/useTaskDetail";
 import { fetchAllTasks as fetchTasksAndStatusCategory } from "../networkCalls";
 import { ColumnOptions, GroupBy, TaskState } from "../types";
 import { sleep } from "../utils/sleep";
@@ -26,8 +26,8 @@ export function useColumnTaskState({
   const [taskState, setTaskState] = useState<TaskState>();
   //   console.log({ taskState });
 
-  const { task, setTask, taskStateContext, setTaskStateContext } =
-    useTaskDetailContext();
+  const { task, selectTask, taskStateContext, initTaskStateContext } =
+    useTaskDetail();
 
   useEffect(() => {
     initTaskState();
@@ -35,7 +35,7 @@ export function useColumnTaskState({
     async function initTaskState() {
       if (!listId || !statusCategoryId) {
         setTaskState(undefined);
-        setTaskStateContext(null);
+        initTaskStateContext(null);
         return;
       }
 
@@ -76,7 +76,7 @@ export function useColumnTaskState({
           groupBy
         );
 
-        setTaskStateContext({
+        initTaskStateContext({
           columnOptions,
           setTaskState,
           groupBy: groupBy,
@@ -102,7 +102,7 @@ export function useColumnTaskState({
       setLoading(true);
 
       if (taskState && taskStateContext) {
-        setTaskStateContext({
+        initTaskStateContext({
           ...taskStateContext,
           groupBy: groupBy,
         });
@@ -130,7 +130,7 @@ export function useColumnTaskState({
       const updatedTask = allTasks.find(
         (currentTask) => currentTask.id === task.id
       );
-      if (updatedTask) setTask(updatedTask);
+      if (updatedTask) selectTask(updatedTask);
     }
   }, [taskState]);
 

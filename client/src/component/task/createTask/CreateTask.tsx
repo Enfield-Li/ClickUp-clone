@@ -1,7 +1,7 @@
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import {
   DueDate,
@@ -26,8 +26,7 @@ export default memo(CreateTask);
 function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const toast = useUnImplementedToast();
   const { user } = useAuth();
-  const { taskStateContext, setIsCreatingTask, isCreatingTask } =
-    useTaskDetailContext();
+  const { taskStateContext, setCreatingTask, isCreatingTask } = useTaskDetail();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { groupBy, setTaskState } = taskStateContext;
 
@@ -99,7 +98,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
 
   function resetAll() {
     setHovering(false);
-    setIsCreatingTask(false);
+    setCreatingTask(false);
     setShowCreateTaskForm(false);
     setPriority(initialPriority);
     setExpectedDueDate(initialDueDate);
@@ -120,7 +119,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
             _hover={{ bgColor: hoverBgColor }}
             onClick={() => {
               setFocus();
-              setIsCreatingTask(true);
+              setCreatingTask(true);
               setShowCreateTaskForm(true);
             }}
           >

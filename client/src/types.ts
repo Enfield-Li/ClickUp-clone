@@ -654,7 +654,6 @@ export type InitTeamListDTO = {
 
 export type TaskDetailContextType = {
   task: Task | null;
-  modalState: ModalState;
   isCreatingTask: boolean;
   taskStateContext: TaskStateContext | null;
   setTask: React.Dispatch<React.SetStateAction<Task | null>>;

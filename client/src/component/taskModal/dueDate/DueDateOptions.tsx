@@ -1,7 +1,7 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { DueDateColumn, DueDateRange, GroupBy, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
@@ -21,7 +21,7 @@ function DueDateOptions({ task, onClose }: Props) {
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
 
   function handleOnClick(targetColumn: DueDateColumn) {

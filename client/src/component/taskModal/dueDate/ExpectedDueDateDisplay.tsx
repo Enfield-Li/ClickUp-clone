@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, Task } from "../../../types";
 import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
@@ -28,7 +28,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
   const { user } = useAuth();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { groupBy, setTaskState, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");

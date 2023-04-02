@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, Task } from "../../../types";
 import MaterialTheme from "../../../utils/MaterialTheme";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
@@ -16,7 +16,7 @@ type Props = {
 export default memo(DueDatePicker);
 function DueDatePicker({ task, onClose }: Props) {
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { groupBy, setTaskState, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {

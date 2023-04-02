@@ -1,7 +1,7 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = {};
@@ -9,7 +9,7 @@ type Props = {};
 export default memo(TaskCreatorInfo);
 function TaskCreatorInfo({}: Props) {
   const { user } = useAuth();
-  const { task } = useTaskDetailContext();
+  const { task } = useTaskDetail();
 
   return (
     <Flex justifyContent="space-between" fontSize="small">

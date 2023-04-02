@@ -1,14 +1,14 @@
 import {
-  InputGroup,
-  Input,
-  InputRightElement,
-  Flex,
   Box,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { SetTaskState, UndeterminedColumn } from "../../../types";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
+import { UndeterminedColumn } from "../../../types";
 
 type Props = {
   currentColumn?: UndeterminedColumn;
@@ -19,7 +19,7 @@ export default memo(EditColumnTitle);
 function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { setTaskState } = taskStateContext!;
 
   function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {

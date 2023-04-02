@@ -8,7 +8,7 @@ import {
 import produce from "immer";
 import { memo, useState } from "react";
 import { useAuth } from "../../context/auth/useAuth";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
 import { updateTaskTitle } from "../../networkCalls";
 import { UpdateTaskTitleDTO } from "../../types";
 
@@ -19,12 +19,10 @@ function TaskDetailHead({}: Props) {
   const { user } = useAuth();
   const [showEditIcon, setShowEditIcon] = useState(true);
 
-  const { task, taskStateContext, setTaskStateContext } =
-    useTaskDetailContext();
+  const { task, taskStateContext } = useTaskDetail();
+  const { setTaskState } = taskStateContext!;
 
-  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
-
-  async function updateTitle(newTitle: string) {
+  async function handleUpdateTitle(newTitle: string) {
     setTaskState((previousState) => {
       if (previousState)
         return produce(previousState, (draftState) => {
@@ -53,7 +51,7 @@ function TaskDetailHead({}: Props) {
           onBlur={(e) => {
             setShowEditIcon(true);
             if (e.target.value !== task!.title) {
-              updateTitle(e.currentTarget.value);
+              handleUpdateTitle(e.currentTarget.value);
             }
           }}
         />

@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy } from "../../../types";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
@@ -27,7 +27,7 @@ function SelectStatusIcons({}: Props) {
 
   const { user } = useAuth();
   const { isOpen, onToggle, onClose } = useDisclosure();
-  const { task, taskStateContext } = useTaskDetailContext();
+  const { task, taskStateContext } = useTaskDetail();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
   const column = useMemo(

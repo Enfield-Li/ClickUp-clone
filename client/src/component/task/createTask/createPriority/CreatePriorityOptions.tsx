@@ -1,7 +1,7 @@
 import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../../context/auth/useAuth";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../../context/task_detail/useTaskDetail";
 import { PriorityColumn } from "../../../../types";
 import { reorderPriorityColumn } from "../../actions/taskProcessing";
 
@@ -23,8 +23,8 @@ function CreatePriorityOptions({
   );
 
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetailContext();
-  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
+  const { taskStateContext } = useTaskDetail();
+  const { columnOptions } = taskStateContext!;
 
   function selectPriority(priorityColumn: PriorityColumn) {
     onOptionClose();

@@ -1,6 +1,6 @@
-import { Flex, Box, Center } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { Task } from "../../../types";
 import ExpectedDueDateDisplay from "../../taskModal/dueDate/ExpectedDueDateDisplay";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
@@ -22,7 +22,7 @@ function TaskCardAdditionalInfo({
   hasPriority,
   setShowSubTask,
 }: Props) {
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions, groupBy: groupBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {

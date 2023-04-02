@@ -1,5 +1,5 @@
 import { Box, Flex, PopoverContent, useColorModeValue } from "@chakra-ui/react";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { handleDeleteTask } from "../actions/deleteTask";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 
 export default function TaskOptions({ taskId }: Props) {
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { setTaskState } = taskStateContext!;
 
   return (

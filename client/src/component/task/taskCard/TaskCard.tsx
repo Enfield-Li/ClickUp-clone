@@ -2,7 +2,7 @@ import { Box, Flex, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, Priority, Task } from "../../../types";
 import AddSubTask from "./AddSubTask";
 import RightClickShowCardOptions from "./RightClickShowCardOptions";
@@ -31,7 +31,7 @@ function TaskCard({ task, index }: Props) {
   const cardBgColor = useColorModeValue("white", "darkMain.200");
 
   const { onTaskDetailModalOpen } = useModalControl();
-  const { setTask, taskStateContext } = useTaskDetailContext();
+  const { selectTask, taskStateContext } = useTaskDetail();
   const { columnOptions, groupBy } = taskStateContext!;
   const currentStatus = useMemo(() => {
     return columnOptions.statusColumns.find(
@@ -58,7 +58,7 @@ function TaskCard({ task, index }: Props) {
 
   function handleOpenTaskModal() {
     if (task?.id) {
-      setTask(task);
+      selectTask(task);
       onTaskDetailModalOpen();
     }
   }

@@ -1,6 +1,6 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../../../context/task_detail/useTaskDetail";
 import { DueDate, DueDateColumn, DueDateRange } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../actions/columnProcessing";
@@ -17,7 +17,7 @@ function CreateDueDateOptions({ onClose, setExpectedDueDate }: Props) {
   );
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
-  const { taskStateContext } = useTaskDetailContext();
+  const { taskStateContext } = useTaskDetail();
   const { columnOptions } = taskStateContext!;
 
   function handleSelect(targetColumn: DueDateColumn) {

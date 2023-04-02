@@ -1,13 +1,13 @@
 import { Box, Tooltip } from "@chakra-ui/react";
-import React, { memo } from "react";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { memo } from "react";
+import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
 import { toYYYYMMDDString } from "../../utils/getWeekDays";
 
 type Props = {};
 
 export default memo(TaskCreationInfo);
 function TaskCreationInfo({}: Props) {
-  const { task } = useTaskDetailContext();
+  const { task } = useTaskDetail();
 
   return (
     <Tooltip

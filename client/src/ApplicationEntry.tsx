@@ -6,7 +6,6 @@ import NavBar from "./component/layout/NavBar";
 import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
 import CreateListModal from "./component/widget/createList/CreateListModal";
 import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
-import TaskDetailProvider from "./context/task_detail/TaskDetailContext";
 
 type Props = {};
 
@@ -45,9 +44,7 @@ function ApplicationEntry({}: Props) {
 
         {/* Main content */}
         <Box role="main" flexGrow="1">
-          <TaskDetailProvider>
-            <Outlet />
-          </TaskDetailProvider>
+          <Outlet />
         </Box>
       </Flex>
     </Flex>

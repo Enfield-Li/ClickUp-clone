@@ -1,7 +1,7 @@
-import { Box, Center } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Droppable } from "@hello-pangea/dnd";
 import { memo, useMemo, useState } from "react";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
 import { GroupBy, TaskList, TaskState, UndeterminedColumn } from "../../types";
 import CreateTask from "./createTask/CreateTask";
 import ColumnHeader from "./customStatusColumn/ColumnHeader";
@@ -16,7 +16,7 @@ type Props = {
 export default memo(Column);
 function Column({ taskState, taskList, currentColumn }: Props) {
   const [hovering, setHovering] = useState(false);
-  const { taskStateContext, isCreatingTask } = useTaskDetailContext();
+  const { taskStateContext, isCreatingTask } = useTaskDetail();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { groupBy, columnOptions } = taskStateContext;
 
