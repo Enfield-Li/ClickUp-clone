@@ -10,15 +10,11 @@ import {
 import produce from "immer";
 import { useNavigate } from "react-router-dom";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { createFolder } from "../../../networkCalls";
-import {
-  CreateFolderState,
-  CreateFolderStep,
-  TEAM_STATE_ACTION,
-} from "../../../types";
+import { CreateFolderState, CreateFolderStep } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
-import { initCreateFolderState } from "./createfolderInitialState";
+import { initCreateFolderState } from "./createFolderInitialState";
 
 type Props = {
   title: string;
@@ -37,8 +33,8 @@ export default function CreateFolderTemplate({
 }: Props) {
   const navigate = useNavigate();
   const { onCreateFolderModalClose } = useModalControl();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
   const fontColor = useColorModeValue("darkMain.200", "lightMain.200");
+  const { teamActiveStatus, addFolder } = useTeam();
 
   function handleGoBackToEntry() {
     setCreateFolderState(
@@ -69,15 +65,12 @@ export default function CreateFolderTemplate({
           list.spaceId = createFolderState.createFolderDTO.spaceId;
           list.parentFolderId = folder.id;
         });
-        teamStateDispatch({
-          type: TEAM_STATE_ACTION.CREATE_FOLDER,
-          payload: folder,
-        });
 
+        addFolder(folder);
         navigate(
           getTaskBoardURL({
             listId: folder.allLists[0].id,
-            teamId: teamState.teamActiveStatus.teamId,
+            teamId: teamActiveStatus.teamId,
             spaceId: createFolderState.createFolderDTO.spaceId,
           }),
           {

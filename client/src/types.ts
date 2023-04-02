@@ -779,3 +779,29 @@ export type createNewFolderOrListInfo = {
   spaceId: number;
   folderId?: number;
 };
+
+export type DeleteSpaceArgType = {
+  deletedSpaceId: number;
+  nextListId: number | null;
+  nextSpaceId: number | null;
+  defaultStatusCategoryId?: number;
+};
+
+export type DeleteFolderArgType = {
+  deletedFolderId: number;
+  nextListId?: number | null;
+  defaultStatusCategoryId?: number;
+};
+
+export type DeleteListInFolderArgType = {
+  folderId: number;
+  deletedListId: number;
+  nextListId?: number | null;
+  defaultStatusCategoryId?: number;
+};
+
+export type DeleteListInSpaceArgType = {
+  deletedListId: number;
+  nextListId?: number | null;
+  defaultStatusCategoryId?: number;
+};

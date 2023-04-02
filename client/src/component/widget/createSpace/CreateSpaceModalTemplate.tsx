@@ -11,13 +11,12 @@ import produce from "immer";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { createSpaceForTeam } from "../../../networkCalls";
 import {
   CreateSpaceDTO,
   CreateSpaceState,
   CreateSpaceStep,
-  TEAM_STATE_ACTION,
 } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import { initialCreateSpace } from "./createSpaceInitialState";
@@ -25,8 +24,8 @@ import { initialCreateSpace } from "./createSpaceInitialState";
 type Props = {
   sectionName: string;
   children: React.ReactNode;
-  createSpace: CreateSpaceState;
   previousSection: CreateSpaceStep;
+  createSpaceState: CreateSpaceState;
   nextSection: CreateSpaceStep | null;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
@@ -36,19 +35,19 @@ function CreateSpaceModalTemplate({
   children,
   nextSection,
   sectionName,
-  createSpace,
+  createSpaceState,
   setCreateSpace,
   previousSection,
 }: Props) {
   const navigate = useNavigate();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamActiveStatus, addSpace: createSpace } = useTeam();
   const { onCreateSpaceModalClose } = useModalControl();
 
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   function handleNext() {
     setCreateSpace(
-      produce(createSpace, (draftState) => {
+      produce(createSpaceState, (draftState) => {
         draftState.step = nextSection ? nextSection : CreateSpaceStep.NAME;
         if (nextSection === CreateSpaceStep.CONFIRM) {
           draftState.isAllSet = true;
@@ -58,10 +57,10 @@ function CreateSpaceModalTemplate({
   }
 
   function handleCreateSpace() {
-    const teamId = teamState.teamActiveStatus.teamId;
+    const teamId = teamActiveStatus.teamId;
 
     const createSpaceDTO: CreateSpaceDTO = {
-      ...createSpace.createSpaceDTO,
+      ...createSpaceState.createSpaceDTO,
       teamId: Number(teamId),
     };
     createSpaceForTeam(createSpaceDTO, (space) => {
@@ -69,7 +68,7 @@ function CreateSpaceModalTemplate({
       setCreateSpace(initialCreateSpace);
       navigate(
         getTaskBoardURL({
-          teamId: teamState.teamActiveStatus.teamId,
+          teamId: teamActiveStatus.teamId,
           spaceId: space.id,
           listId: space.listCategories[0].id,
         }),
@@ -78,10 +77,7 @@ function CreateSpaceModalTemplate({
         }
       );
 
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.CREATE_SPACE,
-        payload: space,
-      });
+      createSpace(space);
     });
   }
 
@@ -99,7 +95,7 @@ function CreateSpaceModalTemplate({
           _hover={{ color: "purple.500" }}
           onClick={() => {
             setCreateSpace(
-              produce(createSpace, (draftState) => {
+              produce(createSpaceState, (draftState) => {
                 draftState.step = previousSection;
               })
             );
@@ -134,14 +130,14 @@ function CreateSpaceModalTemplate({
           bgColor="customBlue.200"
           _hover={{ bgColor: "customBlue.100" }}
           onClick={
-            createSpace.step === CreateSpaceStep.CONFIRM
+            createSpaceState.step === CreateSpaceStep.CONFIRM
               ? handleCreateSpace
               : handleNext
           }
         >
           {!nextSection
             ? "Create space"
-            : createSpace.isAllSet
+            : createSpaceState.isAllSet
             ? "Review changes"
             : "Next"}
         </Button>

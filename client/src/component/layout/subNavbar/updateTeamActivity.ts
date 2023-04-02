@@ -1,15 +1,12 @@
+import { TeamStateType } from "../../../context/team/useTeam";
 import { deleteFolder, deleteList, deleteSpace } from "../../../networkCalls";
 import {
   FolderCategory,
   ListCategory,
   Space,
-  TeamStateActionType,
-  TeamStateType,
-  TEAM_STATE_ACTION,
   UpdateTeamActivityDTO,
 } from "../../../types";
 import { GetTaskBoardURLParam } from "../../../utils/getTaskBoardURL";
-import { space1TaskList } from "../../../utils/mockData";
 import determineListType, {
   determineFolderType,
 } from "./folderAndList/determineList";
@@ -17,7 +14,6 @@ import determineListType, {
 type UpdateTeamActivityParam = {
   userId: number;
   teamState: TeamStateType;
-  teamStateDispatch: React.Dispatch<TeamStateActionType>;
   propsValue: {
     space: Space;
     list?: ListCategory;
@@ -29,10 +25,18 @@ export function deleteItemAndUpdateTeamActivity({
   userId,
   teamState,
   propsValue,
-  teamStateDispatch,
 }: UpdateTeamActivityParam): GetTaskBoardURLParam & {
   defaultStatusCategoryId: number | undefined;
 } {
+  const {
+    teamActiveStatus,
+    originalTeams,
+    removeFolder,
+    removeListInFolder,
+    removeListInSpace,
+    removeSpace,
+  } = teamState;
+
   const { space, list, folder } = propsValue;
   const listId = list?.id;
   const folderId = folder?.id;
@@ -53,13 +57,13 @@ export function deleteItemAndUpdateTeamActivity({
     let defaultStatusCategoryId: number | undefined;
     // purge current opened folder
     space.allListOrFolder.forEach((folderCategory) => {
-      if (teamState.teamActiveStatus.folderIds.includes(folderCategory.id)) {
+      if (teamActiveStatus.folderIds.includes(folderCategory.id)) {
         dto.folderIds?.push(folderCategory.id);
       }
     });
 
     // define next opened space/list
-    teamState.originalTeams.forEach((team) => {
+    originalTeams.forEach((team) => {
       const isCurrentTeam = team.id === space.teamId;
       if (isCurrentTeam) {
         const nextActiveSpace = team.spaces.find(
@@ -75,13 +79,10 @@ export function deleteItemAndUpdateTeamActivity({
       }
     });
 
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.DELETE_SPACE,
-      payload: {
-        deletedSpaceId: space.id,
-        nextListId: dto.listId || null,
-        nextSpaceId: dto.spaceId || null,
-      },
+    removeSpace({
+      deletedSpaceId: space.id,
+      nextListId: dto.listId || null,
+      nextSpaceId: dto.spaceId || null,
     });
 
     // network call
@@ -94,15 +95,14 @@ export function deleteItemAndUpdateTeamActivity({
     let defaultStatusCategoryId: number | undefined;
 
     // push folderId
-    const isFolderAlreadyOpen =
-      teamState.teamActiveStatus.folderIds.includes(folderId);
+    const isFolderAlreadyOpen = teamActiveStatus.folderIds.includes(folderId);
     if (isFolderAlreadyOpen) {
       dto.folderIds?.push(folderId);
     }
 
     // define next opened space/list
     const isListInFolder = folder.allLists.find(
-      (list) => list.id === teamState.teamActiveStatus.listId
+      (list) => list.id === teamActiveStatus.listId
     );
     if (isListInFolder) {
       const nextActiveList = space.allListOrFolder.find(
@@ -115,16 +115,13 @@ export function deleteItemAndUpdateTeamActivity({
       dto.listId = nextActiveList?.id;
       defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
     } else {
-      dto.listId = teamState.teamActiveStatus.listId || null;
+      dto.listId = teamActiveStatus.listId || null;
     }
 
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.DELETE_FOLDER,
-      payload: {
-        deletedFolderId: folderId,
-        nextListId: dto.listId,
-        defaultStatusCategoryId,
-      },
+    removeFolder({
+      deletedFolderId: folderId,
+      nextListId: dto.listId,
+      defaultStatusCategoryId,
     });
 
     // network call
@@ -140,7 +137,7 @@ export function deleteItemAndUpdateTeamActivity({
     let defaultStatusCategoryId: number | undefined;
 
     // define next opened space/list
-    const isListSelected = teamState.teamActiveStatus.listId === listId;
+    const isListSelected = teamActiveStatus.listId === listId;
     if (isListSelected) {
       const nextActiveList = space.allListOrFolder.find(
         (listOrFolder) =>
@@ -150,15 +147,12 @@ export function deleteItemAndUpdateTeamActivity({
       dto.listId = nextActiveList?.id;
       defaultStatusCategoryId = nextActiveList?.defaultStatusCategoryId;
     } else {
-      dto.listId = teamState.teamActiveStatus.listId || null;
+      dto.listId = teamActiveStatus.listId || null;
     }
 
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE,
-      payload: {
-        deletedListId: listId,
-        nextListId: dto.listId,
-      },
+    removeListInSpace({
+      deletedListId: listId,
+      nextListId: dto.listId,
     });
 
     // network call
@@ -181,7 +175,7 @@ export function deleteItemAndUpdateTeamActivity({
       ) as FolderCategory) || undefined;
 
     // define next opened space/list
-    const isListSelected = teamState.teamActiveStatus.listId === listId;
+    const isListSelected = teamActiveStatus.listId === listId;
     if (isListSelected) {
       const nextActiveListInFolder = parentFolder.allLists.find(
         (list) => list.id !== listId
@@ -204,16 +198,13 @@ export function deleteItemAndUpdateTeamActivity({
           nextActiveListInSpace?.defaultStatusCategoryId;
       }
     } else {
-      dto.listId = teamState.teamActiveStatus.listId || null;
+      dto.listId = teamActiveStatus.listId || null;
     }
 
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER,
-      payload: {
-        deletedListId: listId,
-        nextListId: dto.listId,
-        folderId: parentFolder.id,
-      },
+    removeListInFolder({
+      deletedListId: listId,
+      nextListId: dto.listId,
+      folderId: parentFolder.id,
     });
 
     // network call

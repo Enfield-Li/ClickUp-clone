@@ -11,8 +11,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { ChangeEvent, memo, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import NewSpaceSVG from "../../../media/NewSpaceSVG";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 
@@ -24,7 +23,7 @@ type Props = {
 export default memo(CreateSpaceName);
 function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   const [error, setError] = useState(false);
-  const { teamState } = useTeamStateContext();
+  const { teamsForRender, teamActiveStatus } = useTeam();
   const inputBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   useEffect(() => {
@@ -40,9 +39,9 @@ function CreateSpaceName({ createSpace, setCreateSpace }: Props) {
   }
 
   function handleNextStep() {
-    const isTeamNameExist = teamState.teamsForRender.some(
+    const isTeamNameExist = teamsForRender.some(
       (team) =>
-        team.id === teamState.teamActiveStatus.teamId &&
+        team.id === teamActiveStatus.teamId &&
         team.spaces.some(
           (space) => space.name === createSpace.createSpaceDTO.name
         )

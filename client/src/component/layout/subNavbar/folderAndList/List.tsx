@@ -1,13 +1,8 @@
 import { Box, Center, Flex, useColorMode } from "@chakra-ui/react";
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import useTeamStateContext from "../../../../context/team/useTeamContext";
-import {
-  FolderCategory,
-  ListCategory,
-  Space,
-  TEAM_STATE_ACTION,
-} from "../../../../types";
+import { useTeam } from "../../../../context/team/useTeam";
+import { FolderCategory, ListCategory, Space } from "../../../../types";
 import { getTaskBoardURL } from "../../../../utils/getTaskBoardURL";
 import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
 
@@ -17,7 +12,7 @@ export default memo(List);
 function List({ space, folder, list }: Props) {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamActiveStatus, selectList } = useTeam();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
   const isListSelected = list.isSelected;
@@ -25,18 +20,15 @@ function List({ space, folder, list }: Props) {
   function handleSelectList(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const { id: listId, defaultStatusCategoryId } = list;
 
+    selectList(list);
     navigate(
       getTaskBoardURL({
-        teamId: teamState.teamActiveStatus.teamId,
+        teamId: teamActiveStatus.teamId,
         spaceId: space.id,
         listId,
       }),
       { state: { defaultStatusCategoryId } }
     );
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.SELECT_LIST,
-      payload: { list },
-    });
   }
 
   return (

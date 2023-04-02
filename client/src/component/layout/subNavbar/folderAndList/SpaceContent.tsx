@@ -1,8 +1,8 @@
 import { Box, Center } from "@chakra-ui/react";
 import { memo } from "react";
 import { useModalControl } from "../../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { Space, TEAM_STATE_ACTION } from "../../../../types";
+import { useTeam } from "../../../../context/team/useTeam";
+import { Space } from "../../../../types";
 import { determineFolderType } from "./determineList";
 import Folder from "./Folder";
 import List from "./List";
@@ -13,7 +13,7 @@ type Props = {
 
 export default memo(SpaceContent);
 function SpaceContent({ space }: Props) {
-  const { teamStateDispatch } = useTeamStateContext();
+  const { setCreateFolderInfo, setCreateListInfo } = useTeam();
   const { onCreateListModalOpen, onCreateFolderModalOpen } = useModalControl();
 
   return (
@@ -44,12 +44,9 @@ function SpaceContent({ space }: Props) {
             borderBottomColor="white"
             onClick={(e) => {
               onCreateFolderModalOpen();
-              teamStateDispatch({
-                type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
-                payload: {
-                  spaceId: space.id,
-                  defaultStatusCategoryId: space.defaultStatusCategoryId,
-                },
+              setCreateFolderInfo({
+                spaceId: space.id,
+                defaultStatusCategoryId: space.defaultStatusCategoryId,
               });
             }}
           >
@@ -64,12 +61,9 @@ function SpaceContent({ space }: Props) {
             borderBottomColor="white"
             onClick={() => {
               onCreateListModalOpen();
-              teamStateDispatch({
-                type: TEAM_STATE_ACTION.SET_CREATE_LIST_INFO,
-                payload: {
-                  spaceId: space.id,
-                  defaultStatusCategoryId: space.defaultStatusCategoryId,
-                },
+              setCreateListInfo({
+                spaceId: space.id,
+                defaultStatusCategoryId: space.defaultStatusCategoryId,
               });
             }}
           >

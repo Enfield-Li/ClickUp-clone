@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router";
 import { TEAM_ACTIVITY } from "../constant";
 import { useAuth } from "../context/auth/useAuth";
 import { useCurrentListStore } from "../context/currentListStore/useCurrentListStore";
-import useTeamStateContext from "../context/team/useTeamContext";
+import { useTeam } from "../context/team/useTeam";
 import { fetchTeamList } from "../networkCalls";
-import { TeamActiveStatus, TEAM_STATE_ACTION } from "../types";
+import { TeamActiveStatus } from "../types";
 import { getTaskBoardURL } from "../utils/getTaskBoardURL";
 
 export default function useInitSpaceList() {
@@ -15,7 +15,8 @@ export default function useInitSpaceList() {
 
   const { user } = useAuth();
   const { teamId, listId } = useParams();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamActiveStatus, initTeamState, updateListDefaultStatusCategoryId } =
+    useTeam();
   const { storedDefaultCategoryId, updateStoredDefaultCategoryId } =
     useCurrentListStore();
 
@@ -25,8 +26,7 @@ export default function useInitSpaceList() {
   }, [listId]);
 
   // sync current list's defaultStatusCategoryId after adding new column
-  const teamActiveStatusCategoryId =
-    teamState.teamActiveStatus.defaultStatusCategoryId;
+  const teamActiveStatusCategoryId = teamActiveStatus.defaultStatusCategoryId;
   useEffect(() => {
     const isStoredDefaultCategoryIdUpdated =
       storedDefaultCategoryId &&
@@ -34,10 +34,7 @@ export default function useInitSpaceList() {
       teamActiveStatusCategoryId !== storedDefaultCategoryId;
 
     if (isStoredDefaultCategoryIdUpdated) {
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID,
-        payload: { newDefaultStatusCategoryId: storedDefaultCategoryId },
-      });
+      updateListDefaultStatusCategoryId(storedDefaultCategoryId);
     }
   }, [storedDefaultCategoryId, teamActiveStatusCategoryId]);
 
@@ -95,10 +92,7 @@ export default function useInitSpaceList() {
             },
             replace: true,
           });
-          teamStateDispatch({
-            type: TEAM_STATE_ACTION.INIT_TEAM_STATE,
-            payload: { teams, teamActivity: userActivity },
-          });
+          initTeamState({ teams, teamActivity: userActivity });
         },
         (msg) => {
           toast({ description: msg });

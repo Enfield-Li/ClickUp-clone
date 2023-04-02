@@ -17,20 +17,20 @@ import { imgFileToBase64String } from "../../../utils/imgFileToBase64String";
 import EditAvatarModal from "../../createTeam/EditAvatar";
 
 type Props = {
-  createSpace: CreateSpaceState;
+  createSpaceState: CreateSpaceState;
   redirectToReview(createSpaceStep: CreateSpaceStep): CreateSpaceStep;
   setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(CreateSpaceColor);
 function CreateSpaceColor({
-  createSpace,
+  createSpaceState,
   setCreateSpace,
   redirectToReview,
 }: Props) {
   const mx = "6.8px";
   const fileTypes = ["JPEG", "PNG", "GIF"];
-  const avatar = createSpace.createSpaceDTO.avatar;
+  const avatar = createSpaceState.createSpaceDTO.avatar;
 
   const [originalImgStr, setOriginalImgStr] = useState("");
   const borderColor = useColorModeValue("lightMain.200", "darkMain.400");
@@ -47,7 +47,7 @@ function CreateSpaceColor({
 
   function handleCancelColor() {
     setCreateSpace(
-      produce(createSpace, (draftState) => {
+      produce(createSpaceState, (draftState) => {
         draftState.createSpaceDTO.color = "gray";
       })
     );
@@ -55,7 +55,7 @@ function CreateSpaceColor({
 
   function handlePickColor(color: string) {
     setCreateSpace(
-      produce(createSpace, (draftState) => {
+      produce(createSpaceState, (draftState) => {
         draftState.createSpaceDTO.avatar = "";
         draftState.createSpaceDTO.color = color;
       })
@@ -70,7 +70,7 @@ function CreateSpaceColor({
   function handleCancelEdit() {
     setOriginalImgStr("");
     setCreateSpace(
-      produce(createSpace, (draftState) => {
+      produce(createSpaceState, (draftState) => {
         draftState.createSpaceDTO.avatar = "";
       })
     );
@@ -79,7 +79,7 @@ function CreateSpaceColor({
   return (
     <CreateSpaceModalTemplate
       sectionName="Space color"
-      createSpace={createSpace}
+      createSpaceState={createSpaceState}
       setCreateSpace={setCreateSpace}
       previousSection={CreateSpaceStep.NAME}
       nextSection={redirectToReview(CreateSpaceStep.IS_PRIVATE)}
@@ -94,9 +94,9 @@ function CreateSpaceColor({
           fontSize="35px"
           backgroundSize="contain"
           backgroundImage={avatar}
-          bgColor={!avatar ? createSpace.createSpaceDTO.color : ""}
+          bgColor={!avatar ? createSpaceState.createSpaceDTO.color : ""}
         >
-          {!avatar ? createSpace.createSpaceDTO.name[0].toUpperCase() : ""}
+          {!avatar ? createSpaceState.createSpaceDTO.name[0].toUpperCase() : ""}
         </Center>
 
         <Box flexGrow="1" pl="6">
@@ -145,7 +145,7 @@ function CreateSpaceColor({
               originalImg={originalImgStr}
               onImgSelect={(imgOutput) =>
                 setCreateSpace(
-                  produce(createSpace, (draftState) => {
+                  produce(createSpaceState, (draftState) => {
                     draftState.createSpaceDTO.avatar = imgOutput;
                   })
                 )

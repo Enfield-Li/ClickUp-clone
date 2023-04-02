@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
-import { Space, TEAM_STATE_ACTION } from "../../../types";
+import { Space } from "../../../types";
 
 const createNewOptions = [
   "List",
@@ -49,7 +49,7 @@ function AddMoreItemPopover({
   const fontColor = useColorModeValue("black", "lightMain.100");
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
 
-  const { teamStateDispatch } = useTeamStateContext();
+  const { setCreateListInfo, setCreateFolderInfo } = useTeam();
   const { onCreateListModalOpen, onCreateFolderModalOpen } = useModalControl();
 
   function handleOpenModal(
@@ -71,13 +71,10 @@ function AddMoreItemPopover({
   ) {
     handleOpenModal(e, () => {
       onCreateListModalOpen();
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.SET_CREATE_LIST_INFO,
-        payload: {
-          spaceId,
-          folderId: folderId,
-          defaultStatusCategoryId: space.defaultStatusCategoryId,
-        },
+      setCreateListInfo({
+        spaceId,
+        folderId: folderId,
+        defaultStatusCategoryId: space.defaultStatusCategoryId,
       });
     });
   }
@@ -87,12 +84,9 @@ function AddMoreItemPopover({
   ) {
     handleOpenModal(e, () => {
       onCreateFolderModalOpen();
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO,
-        payload: {
-          spaceId,
-          defaultStatusCategoryId,
-        },
+      setCreateFolderInfo({
+        spaceId,
+        defaultStatusCategoryId,
       });
     });
   }

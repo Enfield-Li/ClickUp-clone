@@ -6,18 +6,18 @@ import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 import ReviewCreateSpaceItem from "./ReviewCreateSpaceItem";
 
 type Props = {
-  createSpace: CreateSpaceState;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
+  createSpaceState: CreateSpaceState;
+  setCreateSpaceState: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(CreateSpaceReview);
-function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
-  const avatar = createSpace.createSpaceDTO.avatar;
-  const { color, isPrivate, name } = createSpace.createSpaceDTO;
+function CreateSpaceReview({ createSpaceState, setCreateSpaceState }: Props) {
+  const avatar = createSpaceState.createSpaceDTO.avatar;
+  const { color, isPrivate, name } = createSpaceState.createSpaceDTO;
 
   function handleClick(createSpaceStep: CreateSpaceStep | null): void {
-    setCreateSpace(
-      produce(createSpace, (draftState) => {
+    setCreateSpaceState(
+      produce(createSpaceState, (draftState) => {
         draftState.step = createSpaceStep;
       })
     );
@@ -27,8 +27,8 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
     <CreateSpaceModalTemplate
       nextSection={null}
       sectionName="All good?"
-      createSpace={createSpace}
-      setCreateSpace={setCreateSpace}
+      createSpaceState={createSpaceState}
+      setCreateSpace={setCreateSpaceState}
       previousSection={CreateSpaceStep.STATUS_COLUMNS}
     >
       <Flex height="100%" flexDir="column" justifyContent="center">
@@ -70,7 +70,7 @@ function CreateSpaceReview({ createSpace, setCreateSpace }: Props) {
             handleClick={() => handleClick(CreateSpaceStep.STATUS_COLUMNS)}
           >
             <>
-              {createSpace.selectedStatusColumns.map((column) => (
+              {createSpaceState.selectedStatusColumns.map((column) => (
                 <Tooltip
                   hasArrow
                   rounded="md"

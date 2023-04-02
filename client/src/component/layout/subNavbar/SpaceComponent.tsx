@@ -6,8 +6,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, MouseEvent, useState } from "react";
-import useTeamStateContext from "../../../context/team/useTeamContext";
-import { Space, TEAM_STATE_ACTION } from "../../../types";
+import { useTeam } from "../../../context/team/useTeam";
+import { Space } from "../../../types";
 import AddMoreItemPopover from "./AddMoreItemPopover";
 import CreateMorePlusButton from "./folderAndList/CreateMorePlusButton";
 import SpaceContent from "./folderAndList/SpaceContent";
@@ -19,7 +19,7 @@ export default memo(SpaceComponent);
 function SpaceComponent({ space }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { updateOpenedSpace } = useTeam();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
 
@@ -33,10 +33,7 @@ function SpaceComponent({ space }: Props) {
     e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
     spaceId: number
   ): void {
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.OPEN_SPACE,
-      payload: { spaceId },
-    });
+    updateOpenedSpace(spaceId);
   }
 
   return (

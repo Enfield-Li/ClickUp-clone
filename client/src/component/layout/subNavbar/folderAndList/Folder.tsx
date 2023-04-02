@@ -6,8 +6,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { memo, useState } from "react";
-import useTeamStateContext from "../../../../context/team/useTeamContext";
-import { FolderCategory, Space, TEAM_STATE_ACTION } from "../../../../types";
+import { useTeam } from "../../../../context/team/useTeam";
+import { FolderCategory, Space } from "../../../../types";
 import AddMoreItemPopover from "../AddMoreItemPopover";
 import RightClickShowSpaceOptions from "../RightClickShowSpaceOptions";
 import CreateMorePlusButton from "./CreateMorePlusButton";
@@ -22,7 +22,7 @@ export default memo(Folder);
 function Folder({ space, folder }: Props) {
   const { colorMode } = useColorMode();
   const [hover, setHover] = useState(false);
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { updateOpenedFolder } = useTeam();
   const hoverBgColor =
     colorMode === "dark" ? "rgb(36, 46, 52)" : "darkMain.200";
 
@@ -37,11 +37,7 @@ function Folder({ space, folder }: Props) {
     folderId: number
   ) {
     e.stopPropagation();
-
-    teamStateDispatch({
-      payload: { folderId },
-      type: TEAM_STATE_ACTION.OPEN_FOLDER,
-    });
+    updateOpenedFolder(folderId);
   }
 
   function handleAddCategory(

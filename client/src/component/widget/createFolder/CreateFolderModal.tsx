@@ -7,12 +7,12 @@ import {
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import { determineFolderType } from "../../layout/subNavbar/folderAndList/determineList";
 import CreateFolderEntry from "./CreateFolderEntry";
-import { initCreateFolderState } from "./createfolderInitialState";
+import { initCreateFolderState } from "./createFolderInitialState";
 import CreateFolderSelectList from "./CreateFolderSelectList";
 import CreateFolderSetPrivacy from "./CreateFolderSetPrivacy";
 import CreateFolderStatusColumns from "./CreateFolderStatusColumns";
@@ -21,7 +21,7 @@ type Props = {};
 
 export default memo(CreateFolderModal);
 function CreateFolderModal({}: Props) {
-  const { teamState } = useTeamStateContext();
+  const { teamsForRender, createFolderInfo } = useTeam();
   const bgColor = useColorModeValue("white", "darkMain.100");
   const { isCreateFolderModalOpen, onCreateFolderModalClose } =
     useModalControl();
@@ -31,8 +31,7 @@ function CreateFolderModal({}: Props) {
 
   useEffect(() => {
     if (isCreateFolderModalOpen) {
-      const { createFolderInfo } = teamState;
-      const team = teamState.teamsForRender.find((team) => team.isSelected);
+      const team = teamsForRender.find((team) => team.isSelected);
       const space = team?.spaces.find(
         (space) => space.id === createFolderInfo?.spaceId
       );
@@ -62,7 +61,7 @@ function CreateFolderModal({}: Props) {
         );
       });
     }
-  }, [isCreateFolderModalOpen, teamState]);
+  }, [isCreateFolderModalOpen, createFolderInfo, teamsForRender]);
 
   function handleCloseModal() {
     onCreateFolderModalClose();

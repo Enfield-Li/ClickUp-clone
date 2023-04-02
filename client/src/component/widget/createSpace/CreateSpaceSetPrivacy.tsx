@@ -5,32 +5,32 @@ import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
-  createSpace: CreateSpaceState;
+  createSpaceState: CreateSpaceState;
   redirectToReview(createSpaceStep: CreateSpaceStep): CreateSpaceStep;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
+  setCreateSpaceState: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(CreateSpaceSetPrivacy);
 function CreateSpaceSetPrivacy({
-  createSpace,
-  setCreateSpace,
+  createSpaceState,
   redirectToReview,
+  setCreateSpaceState,
 }: Props) {
   const borderColor = useColorModeValue("lightMain.200", "lightMain.300");
   const textColor = useColorModeValue("blackAlpha.600", "lightMain.400");
-  const isPrivate = createSpace.createSpaceDTO.isPrivate;
-  const spaceName = createSpace.createSpaceDTO.name;
+  const isPrivate = createSpaceState.createSpaceDTO.isPrivate;
+  const spaceName = createSpaceState.createSpaceDTO.name;
 
   function handleSetToOpen() {
-    setCreateSpace(
-      produce(createSpace, (draftState) => {
+    setCreateSpaceState(
+      produce(createSpaceState, (draftState) => {
         draftState.createSpaceDTO.isPrivate = false;
       })
     );
   }
   function handleSetToPrivate() {
-    setCreateSpace(
-      produce(createSpace, (draftState) => {
+    setCreateSpaceState(
+      produce(createSpaceState, (draftState) => {
         draftState.createSpaceDTO.isPrivate = true;
       })
     );
@@ -38,8 +38,8 @@ function CreateSpaceSetPrivacy({
 
   return (
     <CreateSpaceModalTemplate
-      createSpace={createSpace}
-      setCreateSpace={setCreateSpace}
+      createSpaceState={createSpaceState}
+      setCreateSpace={setCreateSpaceState}
       previousSection={CreateSpaceStep.COLOR}
       sectionName={`Share Space "${spaceName}"`}
       nextSection={redirectToReview(CreateSpaceStep.STATUS_COLUMNS)}

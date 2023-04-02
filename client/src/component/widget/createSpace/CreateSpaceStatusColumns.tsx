@@ -6,21 +6,21 @@ import StatusColumnsDisplay from "../statusColumn/StatusColumnsDisplay";
 import CreateSpaceModalTemplate from "./CreateSpaceModalTemplate";
 
 type Props = {
-  createSpace: CreateSpaceState;
+  createSpaceState: CreateSpaceState;
   redirectToReview(createSpaceStep: CreateSpaceStep): CreateSpaceStep;
-  setCreateSpace: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
+  setCreateSpaceState: React.Dispatch<React.SetStateAction<CreateSpaceState>>;
 };
 
 export default memo(CreateSpaceStatusColumns);
 function CreateSpaceStatusColumns({
-  createSpace,
-  setCreateSpace,
+  createSpaceState,
   redirectToReview,
+  setCreateSpaceState,
 }: Props) {
   return (
     <CreateSpaceModalTemplate
-      createSpace={createSpace}
-      setCreateSpace={setCreateSpace}
+      createSpaceState={createSpaceState}
+      setCreateSpace={setCreateSpaceState}
       previousSection={CreateSpaceStep.IS_PRIVATE}
       sectionName="What task statuses do you want?"
       nextSection={redirectToReview(CreateSpaceStep.CONFIRM)}
@@ -28,11 +28,11 @@ function CreateSpaceStatusColumns({
       <Flex pt="6" height="100%">
         <StatusColumnsDisplay
           selectedCategoryId={
-            createSpace.createSpaceDTO.defaultStatusCategoryId
+            createSpaceState.createSpaceDTO.defaultStatusCategoryId
           }
-          teamStatusCategories={createSpace.teamStatusCategories}
+          teamStatusCategories={createSpaceState.teamStatusCategories}
           handleSelectCategory={(selectedCategory) =>
-            setCreateSpace((prev) =>
+            setCreateSpaceState((prev) =>
               produce(prev, (draftState) => {
                 draftState.selectedStatusColumns =
                   selectedCategory.statusColumns;
@@ -42,7 +42,7 @@ function CreateSpaceStatusColumns({
             )
           }
           handleUpdateCategories={(updatedStatusCategories) =>
-            setCreateSpace((prev) =>
+            setCreateSpaceState((prev) =>
               produce(prev, (draftState) => {
                 draftState.teamStatusCategories = updatedStatusCategories;
               })

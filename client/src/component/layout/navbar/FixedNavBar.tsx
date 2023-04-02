@@ -2,7 +2,6 @@ import { Box, Center, Divider, Flex, Image } from "@chakra-ui/react";
 import { memo } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
-import useTeamStateContext from "../../../context/team/useTeamContext";
 import { logoDataUrl } from "../../../media/imgDataUrl";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 import NavIcon from "./NavIcon";

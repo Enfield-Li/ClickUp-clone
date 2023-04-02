@@ -8,9 +8,8 @@ import {
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../../constant";
-import useTeamStateContext from "../../../../context/team/useTeamContext";
+import { useTeam } from "../../../../context/team/useTeam";
 import { updateUserDefaultTeamId } from "../../../../networkCalls";
-import { TEAM_STATE_ACTION } from "../../../../types";
 import { getTaskBoardURL } from "../../../../utils/getTaskBoardURL";
 
 type Props = { onClose: () => void };
@@ -18,7 +17,7 @@ type Props = { onClose: () => void };
 export default memo(JoinedTeamList);
 function JoinedTeamList({ onClose }: Props) {
   const navigate = useNavigate();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamsForRender, selectTeam } = useTeam();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
@@ -26,13 +25,9 @@ function JoinedTeamList({ onClose }: Props) {
   function handleSelectTeam(teamId: number) {
     onClose();
 
+    selectTeam(teamId);
     updateUserDefaultTeamId(teamId);
     navigate(getTaskBoardURL({ teamId }));
-
-    teamStateDispatch({
-      type: TEAM_STATE_ACTION.SELECT_TEAM,
-      payload: { teamId },
-    });
   }
 
   return (
@@ -47,7 +42,7 @@ function JoinedTeamList({ onClose }: Props) {
       borderColor={borderColor}
     >
       <Flex color={fontColor} flexDir="column" alignItems="center">
-        {teamState.teamsForRender.map((team) => (
+        {teamsForRender.map((team) => (
           <Center
             p="2px"
             my="1px"

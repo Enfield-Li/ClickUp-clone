@@ -1,7 +1,6 @@
 import { Box, Center, Flex, Input } from "@chakra-ui/react";
 import produce from "immer";
-import { useEffect, useState } from "react";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
 import CreateFolderTemplate from "./CreateFolderTemplate";
 import ReviewCreateFolderItem from "./ReviewCreateFolderItem";
@@ -15,16 +14,15 @@ export default function CreateFolderEntry({
   createFolderState,
   setCreateFolderState,
 }: Props) {
-  const { teamState } = useTeamStateContext();
+  const { createFolderInfo } = useTeam();
   const folderNameError = createFolderState.folderNameError.isError;
 
   function handleInputOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     setCreateFolderState(
       produce(createFolderState, (draftState) => {
-        const isFolderNameExists =
-          teamState.createFolderInfo?.currentLevelFolders?.find(
-            (folder) => folder.name === e.target.value
-          );
+        const isFolderNameExists = createFolderInfo?.currentLevelFolders?.find(
+          (folder) => folder.name === e.target.value
+        );
 
         draftState.createFolderDTO.name = e.target.value;
         draftState.folderNameError.errorMsg = "Folder name taken";

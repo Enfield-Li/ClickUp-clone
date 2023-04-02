@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../../context/auth/useAuth";
-import useTeamStateContext from "../../../../context/team/useTeamContext";
+import { useTeam } from "../../../../context/team/useTeam";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
 import JoinedTeamList from "./JoinedTeamList";
@@ -20,12 +20,12 @@ type Props = {};
 export default memo(ApplicationSettings);
 function ApplicationSettings({}: Props) {
   const { user } = useAuth();
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { teamsForRender } = useTeam();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
-  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
+  const currentTeam = teamsForRender.find((team) => team.isSelected);
   const isTeamOwner = currentTeam?.owner?.userId === user?.id;
 
   return (

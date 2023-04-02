@@ -7,7 +7,7 @@ import {
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateSpaceState, CreateSpaceStep } from "../../../types";
 import CreateSpaceColor from "./CreateSpaceColor";
@@ -21,12 +21,12 @@ type Props = {};
 
 export default memo(CreateSpaceModal);
 function CreateSpaceModal({}: Props) {
-  const { teamState } = useTeamStateContext();
+  const { teamsForRender } = useTeam();
   const { isCreateSpaceModalOpen, onCreateSpaceModalClose } = useModalControl();
   const contentBgColor = useColorModeValue("white", "darkMain.100");
-  const [createSpace, setCreateSpace] =
+  const [createSpaceState, setCreateSpaceState] =
     useState<CreateSpaceState>(initialCreateSpace);
-  const isAllSet = createSpace.isAllSet;
+  const isAllSet = createSpaceState.isAllSet;
   //   console.log(createSpace);
 
   function redirectToReview(createSpaceStep: CreateSpaceStep) {
@@ -35,7 +35,7 @@ function CreateSpaceModal({}: Props) {
 
   useEffect(() => {
     if (isCreateSpaceModalOpen) {
-      const team = teamState.teamsForRender.find((team) => team.isSelected);
+      const team = teamsForRender.find((team) => team.isSelected);
       if (!team) {
         throw new Error("Can not find team when create folder");
       }
@@ -46,8 +46,8 @@ function CreateSpaceModal({}: Props) {
         : 0;
 
       fetchTeamStatusCategories(Number(teamId), (StatusCategories) => {
-        setCreateSpace(
-          produce(createSpace, (draftState) => {
+        setCreateSpaceState(
+          produce(createSpaceState, (draftState) => {
             draftState.teamStatusCategories = StatusCategories;
 
             draftState.createSpaceDTO.orderIndex = lastOrderIndex + 1;
@@ -57,28 +57,28 @@ function CreateSpaceModal({}: Props) {
         );
       });
     }
-  }, [isCreateSpaceModalOpen, teamState]);
+  }, [isCreateSpaceModalOpen, teamsForRender]);
 
   function handleCloseModal() {
     onCreateSpaceModalClose();
-    setCreateSpace(initialCreateSpace);
+    setCreateSpaceState(initialCreateSpace);
   }
 
   function renderStepComponent() {
-    switch (createSpace.step) {
+    switch (createSpaceState.step) {
       case CreateSpaceStep.NAME: {
         return (
           <CreateSpaceName
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
+            createSpace={createSpaceState}
+            setCreateSpace={setCreateSpaceState}
           />
         );
       }
       case CreateSpaceStep.COLOR: {
         return (
           <CreateSpaceColor
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
+            createSpaceState={createSpaceState}
+            setCreateSpace={setCreateSpaceState}
             redirectToReview={redirectToReview}
           />
         );
@@ -86,8 +86,8 @@ function CreateSpaceModal({}: Props) {
       case CreateSpaceStep.IS_PRIVATE: {
         return (
           <CreateSpaceSetPrivacy
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
+            createSpaceState={createSpaceState}
+            setCreateSpaceState={setCreateSpaceState}
             redirectToReview={redirectToReview}
           />
         );
@@ -95,8 +95,8 @@ function CreateSpaceModal({}: Props) {
       case CreateSpaceStep.STATUS_COLUMNS: {
         return (
           <CreateSpaceStatusColumns
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
+            createSpaceState={createSpaceState}
+            setCreateSpaceState={setCreateSpaceState}
             redirectToReview={redirectToReview}
           />
         );
@@ -104,8 +104,8 @@ function CreateSpaceModal({}: Props) {
       case CreateSpaceStep.CONFIRM: {
         return (
           <CreateSpaceReview
-            createSpace={createSpace}
-            setCreateSpace={setCreateSpace}
+            createSpaceState={createSpaceState}
+            setCreateSpaceState={setCreateSpaceState}
           />
         );
       }

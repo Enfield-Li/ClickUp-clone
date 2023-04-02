@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE, IS_SUB_NAV_OPEN } from "../../../constant";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import useInitSpaceList from "../../../hook/useInitSpaceList";
 import SubNavbarContent from "./SubNavbarContent";
 
@@ -31,9 +31,9 @@ function SubNavbar({
 }: Props) {
   useInitSpaceList();
   const navigate = useNavigate();
-  const { teamState } = useTeamStateContext();
+  const { teamsForRender } = useTeam();
   const [hidden, setHidden] = useState(!isOpen);
-  const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
+  const currentTeam = teamsForRender.find((team) => team.isSelected);
 
   const subNavWidth = "250px";
   const collapseIcon = useColorModeValue("white", "darkMain.200");

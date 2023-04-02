@@ -10,7 +10,7 @@ import {
 import React, { memo, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useAuth } from "../../../context/auth/useAuth";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { FolderCategory, ListCategory, Space } from "../../../types";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
@@ -41,7 +41,8 @@ function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
   const navigate = useNavigate();
   const toast = useUnImplementedToast();
   const ref = useRef<HTMLElement | null>(null);
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+
+  const teamState = useTeam();
   const { listId: listIdUrlParam, spaceId: spaceIdUrlParam } = useParams();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
@@ -65,7 +66,6 @@ function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
     const newUrlLocation = deleteItemAndUpdateTeamActivity({
       teamState,
       propsValue,
-      teamStateDispatch,
       userId: user!.id,
     });
 

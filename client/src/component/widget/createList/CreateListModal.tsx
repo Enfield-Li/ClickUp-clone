@@ -13,11 +13,11 @@ import {
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useModalControl } from "../../../context/modalControl/useModalControl";
-import useTeamStateContext from "../../../context/team/useTeamContext";
+import { useTeam } from "../../../context/team/useTeam";
 import { darkNavBG } from "../../../globalTheme";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { createList } from "../../../networkCalls";
-import { CreateListDTO, TEAM_STATE_ACTION } from "../../../types";
+import { CreateListDTO } from "../../../types";
 import { generateDefaultListName } from "../../../utils/generateDefaultListName";
 import { getTaskBoardURL } from "../../../utils/getTaskBoardURL";
 
@@ -36,16 +36,16 @@ function CreateListModal({}: Props) {
   const [placeHolderValue, setPlaceHolderValue] = useState("");
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
-  const { teamState, teamStateDispatch } = useTeamStateContext();
+  const { createListInfo, teamActiveStatus, addList } = useTeam();
   const { isCreateListModalOpen, onCreateListModalClose } = useModalControl();
 
   useEffect(() => {
-    const currentLevelLists = teamState.createListInfo?.currentLevelLists;
+    const currentLevelLists = createListInfo?.currentLevelLists;
     const [defaultName, listNames] = generateDefaultListName(currentLevelLists);
 
     setNameLists(listNames);
     setPlaceHolderValue(defaultName);
-  }, [teamState]);
+  }, [createListInfo]);
 
   useEffect(() => {
     if (!isCreateListModalOpen) {
@@ -57,14 +57,14 @@ function CreateListModal({}: Props) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ): void {
     if (
-      !teamState.createListInfo?.orderIndex ||
-      !teamState.createListInfo.defaultStatusCategoryId
+      !createListInfo?.orderIndex ||
+      !createListInfo.defaultStatusCategoryId
     ) {
       toast();
       return;
     }
     const { folderId, spaceId, orderIndex, defaultStatusCategoryId } =
-      teamState.createListInfo;
+      createListInfo;
 
     const dto: CreateListDTO = {
       spaceId,
@@ -81,11 +81,9 @@ function CreateListModal({}: Props) {
         list.parentFolderId = folderId;
         list.spaceId = spaceId;
       }
-      teamStateDispatch({
-        type: TEAM_STATE_ACTION.CREATE_LIST,
-        payload: list,
-      });
-      const { teamId } = teamState.teamActiveStatus;
+
+      addList(list);
+      const { teamId } = teamActiveStatus;
       navigate(getTaskBoardURL({ teamId, spaceId, listId: list.id }), {
         state: { defaultStatusCategoryId },
       });
