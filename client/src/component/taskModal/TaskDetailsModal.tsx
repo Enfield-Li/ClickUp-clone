@@ -1,5 +1,4 @@
 import {
-  Button,
   Center,
   Divider,
   Flex,
@@ -7,16 +6,15 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { memo, useEffect, useRef } from "react";
-import TaskInfo from "./TaskInfo";
+import { memo, useRef } from "react";
+import { useModalControl } from "../../context/modalControl/useModalControl";
 import TaskDetailHead from "./TaskDetailHead";
 import TaskEvent from "./TaskEvent";
-import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
+import TaskInfo from "./TaskInfo";
 
 type Props = {};
 
@@ -24,15 +22,14 @@ export default memo(TaskDetailModal);
 function TaskDetailModal({}: Props) {
   const initialRef = useRef(null);
   const bgColor = useColorModeValue("white", "darkMain.100");
-  const { modalState, task } = useTaskDetailContext();
-  const { isModalOpen, onModalClose } = modalState;
+  const { isTaskDetailModalOpen, onTaskDetailModalClose } = useModalControl();
 
   return (
     <Modal
       size="6xl"
-      isOpen={isModalOpen}
-      onClose={onModalClose}
       initialFocusRef={initialRef}
+      isOpen={isTaskDetailModalOpen}
+      onClose={onTaskDetailModalClose}
     >
       <ModalOverlay />
 
