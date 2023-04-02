@@ -10,7 +10,7 @@ import {
 import produce from "immer";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { userModalControl } from "../../../context/modalControl/userModalControl";
+import { useModalControl } from "../../../context/modalControl/useModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { createSpaceForTeam } from "../../../networkCalls";
 import {
@@ -42,7 +42,7 @@ function CreateSpaceModalTemplate({
 }: Props) {
   const navigate = useNavigate();
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const { onCreateSpaceModalClose } = userModalControl();
+  const { onCreateSpaceModalClose } = useModalControl();
 
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
 

@@ -1,13 +1,13 @@
 import { Box, Button, Center, Img } from "@chakra-ui/react";
 import { memo } from "react";
-import { userModalControl } from "../../../context/modalControl/userModalControl";
+import { useModalControl } from "../../../context/modalControl/useModalControl";
 import { emptySpaceImgDisplayDataUrl } from "../../../media/imgDataUrl";
 
 type Props = {};
 
 export default memo(CreateListPanel);
 function CreateListPanel({}: Props) {
-  const { onCreateListModalOpen } = userModalControl();
+  const { onCreateListModalOpen } = useModalControl();
 
   return (
     <Center flexDir="column">

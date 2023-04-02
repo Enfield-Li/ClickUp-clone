@@ -1,19 +1,9 @@
 import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
-import {
-  DueDate,
-  DueDateColumn,
-  DueDateRange,
-  UpdateEvent,
-} from "../../../../types";
+import { DueDate, DueDateColumn, DueDateRange } from "../../../../types";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
-import { getRandomNumberNoLimit } from "../../../../utils/getRandomNumber";
-import {
-  getExpectedDueDateFromWeekString,
-  getLookUpDueDateTable,
-} from "../../actions/columnProcessing";
+import { getExpectedDueDateFromWeekString } from "../../actions/columnProcessing";
 
 type Props = {
   onClose: () => void;

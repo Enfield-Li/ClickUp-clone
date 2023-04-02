@@ -2,7 +2,6 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import React, { memo } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { IS_SUB_NAV_OPEN } from "./constant";
-import AuthStateProvider from "./context/auth/AuthContext";
 import { globalTheme } from "./globalTheme";
 
 type Props = { children: React.ReactNode };
@@ -20,10 +19,8 @@ function AppProvider({ children }: Props) {
 
   return (
     <BrowserRouter>
-      <AuthStateProvider>
-        <ColorModeScript />
-        <ChakraProvider theme={globalTheme}>{children}</ChakraProvider>
-      </AuthStateProvider>
+      <ColorModeScript />
+      <ChakraProvider theme={globalTheme}>{children}</ChakraProvider>
     </BrowserRouter>
   );
 }

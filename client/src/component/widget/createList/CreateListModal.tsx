@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userModalControl } from "../../../context/modalControl/userModalControl";
+import { useModalControl } from "../../../context/modalControl/useModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { darkNavBG } from "../../../globalTheme";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
@@ -37,7 +37,7 @@ function CreateListModal({}: Props) {
   const topBgColor = useColorModeValue("white", "darkMain.100");
   const bottomBgColor = useColorModeValue("lightMain.50", "darkMain.200");
   const { teamState, teamStateDispatch } = useTeamStateContext();
-  const { isCreateListModalOpen, onCreateListModalClose } = userModalControl();
+  const { isCreateListModalOpen, onCreateListModalClose } = useModalControl();
 
   useEffect(() => {
     const currentLevelLists = teamState.createListInfo?.currentLevelLists;

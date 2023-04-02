@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { memo } from "react";
-import { userModalControl } from "../../../context/modalControl/userModalControl";
+import { useModalControl } from "../../../context/modalControl/useModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { Space, TEAM_STATE_ACTION } from "../../../types";
@@ -50,7 +50,7 @@ function AddMoreItemPopover({
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
 
   const { teamStateDispatch } = useTeamStateContext();
-  const { onCreateListModalOpen, onCreateFolderModalOpen } = userModalControl();
+  const { onCreateListModalOpen, onCreateFolderModalOpen } = useModalControl();
 
   function handleOpenModal(
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,

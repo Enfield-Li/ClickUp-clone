@@ -6,7 +6,7 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useEffect, useState } from "react";
-import { userModalControl } from "../../../context/modalControl/userModalControl";
+import { useModalControl } from "../../../context/modalControl/useModalControl";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import { fetchTeamStatusCategories } from "../../../networkCalls";
 import { CreateFolderState, CreateFolderStep } from "../../../types";
@@ -24,7 +24,7 @@ function CreateFolderModal({}: Props) {
   const { teamState } = useTeamStateContext();
   const bgColor = useColorModeValue("white", "darkMain.100");
   const { isCreateFolderModalOpen, onCreateFolderModalClose } =
-    userModalControl();
+    useModalControl();
   const [createFolderState, setCreateFolderState] = useState<CreateFolderState>(
     initCreateFolderState
   );

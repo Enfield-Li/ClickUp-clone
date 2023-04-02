@@ -8,7 +8,6 @@ import {
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CLIENT_ROUTE } from "../../../../constant";
-import useAuthContext from "../../../../context/auth/useAuthContext";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import { updateUserDefaultTeamId } from "../../../../networkCalls";
 import { TEAM_STATE_ACTION } from "../../../../types";
@@ -18,7 +17,6 @@ type Props = { onClose: () => void };
 
 export default memo(JoinedTeamList);
 function JoinedTeamList({ onClose }: Props) {
-  const { authDispatch } = useAuthContext();
   const navigate = useNavigate();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");

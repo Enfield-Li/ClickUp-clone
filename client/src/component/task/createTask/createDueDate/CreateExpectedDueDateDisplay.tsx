@@ -10,8 +10,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
-import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import {
   getMonthAndDay,
   toYYYYMMDDString,

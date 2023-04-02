@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TEAM_ACTIVITY } from "../constant";
 import { useAuth } from "../context/auth/useAuth";
-import useAuthContext from "../context/auth/useAuthContext";
 import { useCurrentListStore } from "../context/currentListStore/useCurrentListStore";
 import useTeamStateContext from "../context/team/useTeamContext";
 import { fetchTeamList } from "../networkCalls";

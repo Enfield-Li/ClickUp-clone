@@ -1,10 +1,9 @@
 import { Box, Button, Center, Flex, Image } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "../../context/auth/useAuthContext";
+import { useAuth } from "../../context/auth/useAuth";
 import { logoDataUrl } from "../../media/imgDataUrl";
 import { createTeam } from "../../networkCalls";
-import { AUTH_ACTION } from "../../types";
 import { getTaskBoardURL } from "../../utils/getTaskBoardURL";
 import { CreateTeamDTO } from "./CreateTeam";
 
@@ -28,7 +27,7 @@ export default function CreateTeamTemplate({
   handleNextStage,
 }: Props) {
   const navigate = useNavigate();
-  const { authDispatch } = useAuthContext();
+  const { updateTeamCount } = useAuth();
 
   function handleClickButton() {
     if (handleNextStage) {
@@ -39,11 +38,8 @@ export default function CreateTeamTemplate({
     if (buttonTitle === "Play with ClickUp" && createTeamDTO) {
       createTeam(createTeamDTO, (createdTeam) => {
         const teamId = createdTeam.id!;
+        updateTeamCount(true, teamId);
         navigate(getTaskBoardURL({ teamId }));
-        authDispatch({
-          type: AUTH_ACTION.UPDATE_TEAM_COUNT,
-          payload: { isAddTeam: true, teamId },
-        });
       });
     }
   }
