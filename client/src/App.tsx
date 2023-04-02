@@ -9,14 +9,15 @@ import UnderConstruction from "./component/layout/UnderConstruction";
 import TaskView from "./component/task/TaskView";
 import TestDev from "./component/test-dev/TestDev";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "./constant";
-import useAuthContext from "./context/auth/useAuthContext";
+import { useAuth } from "./context/auth/useAuth";
 import { refreshUserToken } from "./networkCalls";
 
 export default memo(App);
 function App() {
+  const authState = useAuth();
+  const { user } = authState;
   const navigate = useNavigate();
   const location = useLocation();
-  const { authState, authDispatch } = useAuthContext();
   const toast = useToast({ duration: 3000, isClosable: true });
 
   useEffect(() => {
@@ -28,10 +29,10 @@ function App() {
       location.pathname === CLIENT_ROUTE.LOGIN;
 
     if (accessToken) {
-      refreshUserToken(authDispatch, toast, navigate, isAuthPath);
+      refreshUserToken(authState, toast, navigate, isAuthPath);
 
       intervalId = setInterval(() => {
-        refreshUserToken(authDispatch, toast, navigate, isAuthPath);
+        refreshUserToken(authState, toast, navigate, isAuthPath);
       }, 1790000); // 29 min and 50 sec
     } else if (!isAuthPath && !accessToken) {
       navigate(CLIENT_ROUTE.LOGIN);
@@ -40,15 +41,12 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
+  // redirect to onboarding
   useEffect(() => {
-    if (
-      authState.user &&
-      !authState.user.defaultTeamId &&
-      !authState.user.joinedTeamCount
-    ) {
+    if (user && !user.defaultTeamId && !user.joinedTeamCount) {
       navigate(CLIENT_ROUTE.ON_BOARDING);
     }
-  }, [authState.user]);
+  }, [user]);
 
   return (
     <Routes>

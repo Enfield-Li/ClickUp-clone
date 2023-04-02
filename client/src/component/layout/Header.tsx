@@ -30,9 +30,9 @@ function Header({}: Props) {
         >
           About
         </Box>
-        {authState.user?.username ? (
+        {user?.username ? (
           <>
-            <Text>Hello! {authState.user.username}</Text>
+            <Text>Hello! {user.username}</Text>
             <Box
               p={2}
               borderRadius={3}

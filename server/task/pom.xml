@@ -74,13 +74,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>service-config</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

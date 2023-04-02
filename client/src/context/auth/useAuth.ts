@@ -12,7 +12,7 @@ import {
   storeTeamActiveStatusToLocalStorage,
 } from "../../utils/setTeamActiveStatusToLocalStorage";
 
-type AuthStateType = {
+export type AuthStateType = {
   user: User | null;
   logoutUser: () => void;
   openOnboarding: () => void;

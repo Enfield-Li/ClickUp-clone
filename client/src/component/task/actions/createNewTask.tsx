@@ -18,6 +18,7 @@ import {
   UserInfo,
   AuthStateType,
   DueDateColumns,
+  User,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
@@ -165,7 +166,6 @@ export function findTheLastOrderIndexInColumn(
   columnId: number,
   taskState: TaskState
 ): OrderIndexInColumn {
-
   const allTasks = collectAllTasks(taskState.orderedTasks);
 
   const allOrderIndex: number[] = [];
@@ -283,12 +283,12 @@ function newTaskFactory({
   };
 }
 
-export function newCreator(authState: AuthStateType): UserInfo {
-  if (!authState.user) throw new Error("user not initialized");
+export function newCreator(user: User | null): UserInfo {
+  if (!user) throw new Error("user not initialized");
 
   return {
-    userId: authState.user.id,
-    username: authState.user.username,
-    email: authState.user.email,
+    userId: user.id,
+    username: user.username,
+    email: user.email,
   };
 }

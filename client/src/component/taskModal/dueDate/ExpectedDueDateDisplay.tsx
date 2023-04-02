@@ -10,7 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { GroupBy, Task } from "../../../types";
 import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
@@ -25,7 +25,7 @@ type Props = {
 
 export default memo(ExpectedDueDateDisplay);
 function ExpectedDueDateDisplay({ task }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const { taskStateContext } = useTaskDetailContext();
@@ -45,7 +45,7 @@ function ExpectedDueDateDisplay({ task }: Props) {
       setTaskState,
       currentTask: task,
       expectedDueDate: null,
-      userId: authState.user!.id!,
+      userId: user!.id!,
       targetField: GroupBy.DUE_DATE,
       targetColumnId: noDueDateColumnId, // No due date
     });

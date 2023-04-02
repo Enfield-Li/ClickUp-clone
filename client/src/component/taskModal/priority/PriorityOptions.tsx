@@ -1,13 +1,10 @@
 import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
-import { Priority, SetTaskState, GroupBy, Task } from "../../../types";
+import { GroupBy, Priority, SetTaskState, Task } from "../../../types";
 import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
-import {
-  newUpdateEvent,
-  updateTaskAttribute,
-} from "../../task/actions/updateTaskAttributes";
+import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -22,7 +19,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
     "darkMain.200"
   );
 
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { taskStateContext } = useTaskDetailContext();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 
@@ -54,7 +51,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
                     selectPriority(
                       groupBy,
                       task,
-                      authState.user!.id!,
+                      user!.id!,
                       setTaskState,
                       priorityColumn.id!,
                       onOptionClose

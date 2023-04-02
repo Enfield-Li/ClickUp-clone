@@ -1,7 +1,8 @@
 import { Box, Center, Flex, Input, useColorModeValue } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
+import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import {
   DueDate,
   GroupBy,
@@ -10,11 +11,10 @@ import {
 } from "../../../types";
 import { useFocus } from "../../../utils/useFocus";
 import { getExpectedDueDateFromWeekString } from "../actions/columnProcessing";
-import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import { createNewTask, newCreator, NewTask } from "../actions/createNewTask";
+import CreateDueDateDetails from "./createDueDate/CreateDueDateDetails";
 import CreateSelectPriorityIcon from "./createPriority/CreateSelectPriorityIcon";
 import SaveButton from "./SaveButton";
-import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 
 type Props = {
   taskState: TaskState;
@@ -25,7 +25,7 @@ type Props = {
 export default memo(CreateTask);
 function CreateTask({ taskState, currentColumn, setHovering }: Props) {
   const toast = useUnImplementedToast();
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { taskStateContext, setIsCreatingTask, isCreatingTask } =
     useTaskDetailContext();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
@@ -76,7 +76,7 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
         setTaskState,
         currentColumn,
         newTaskInput: newTask,
-        creator: newCreator(authState),
+        creator: newCreator(user),
         listId: taskStateContext.currentListId,
         dueDateColumn: taskState.columnOptions.dueDateColumns,
       });

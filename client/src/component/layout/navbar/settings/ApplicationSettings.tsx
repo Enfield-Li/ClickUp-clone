@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
+import { useAuth } from "../../../../context/auth/useAuth";
 import useTeamStateContext from "../../../../context/team/useTeamContext";
 import AccountSettings from "./AccountSettings";
 import DownloadApp from "./DownloadApp";
@@ -19,14 +19,14 @@ type Props = {};
 
 export default memo(ApplicationSettings);
 function ApplicationSettings({}: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const bgColor = useColorModeValue("lightMain.100", "darkMain.100");
   const fontColor = useColorModeValue("darkMain.200", "lightMain.100");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
 
   const currentTeam = teamState.teamsForRender.find((team) => team.isSelected);
-  const isTeamOwner = currentTeam?.owner?.userId === authState.user?.id;
+  const isTeamOwner = currentTeam?.owner?.userId === user?.id;
 
   return (
     <Popover isLazy placement="top-start">
@@ -46,9 +46,9 @@ function ApplicationSettings({}: Props) {
                 height="30px"
                 rounded="full"
                 position="absolute"
-                bgColor={authState.user?.color}
+                bgColor={user?.color}
               >
-                {authState.user?.username[0].toUpperCase()}
+                {user?.username[0].toUpperCase()}
               </Center>
 
               <Center

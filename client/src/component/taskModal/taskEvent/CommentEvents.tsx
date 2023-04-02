@@ -1,14 +1,14 @@
 import { Box, Center, Flex } from "@chakra-ui/react";
-import useAuthContext from "../../../context/auth/useAuthContext";
-import { calculateTime } from "../../../utils/calculateTime";
-import { CommentEvent } from "../../../types";
 import { memo } from "react";
+import { useAuth } from "../../../context/auth/useAuth";
+import { CommentEvent } from "../../../types";
+import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = { commentEvent: CommentEvent };
 
 export default memo(CommentEvents);
 function CommentEvents({ commentEvent }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
 
   return (
     <Flex my={1}>
@@ -39,9 +39,7 @@ function CommentEvents({ commentEvent }: Props) {
                 backgroundColor: "blackAlpha.300",
               }}
             >
-              {authState.user!.id === commentEvent.userId
-                ? "You"
-                : commentEvent.username}
+              {user!.id === commentEvent.userId ? "You" : commentEvent.username}
             </Center>
             {/* Commented */}
             <Center opacity="65%">

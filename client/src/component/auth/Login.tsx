@@ -15,8 +15,8 @@ import { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
-import useAuthContext from "../../context/auth/useAuthContext";
-import { loginUser } from "../../networkCalls";
+import { useAuth } from "../../context/auth/useAuth";
+import { login } from "../../networkCalls";
 import { AUTH_ACTION, FieldErrors, LoginUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
@@ -25,7 +25,7 @@ type Props = {};
 export default memo(Login);
 function Login({}: Props) {
   const navigate = useNavigate();
-  const { authDispatch } = useAuthContext();
+  const { loginUser, logoutUser } = useAuth();
   const [emailError, setEmailError] = useState<string>();
 
   const loginSchema = Yup.object().shape({
@@ -60,7 +60,7 @@ function Login({}: Props) {
           validationSchema={loginSchema}
           initialValues={{ email: "", password: "" }}
           onSubmit={async (loginUserDTO, { setErrors }) => {
-            await loginUser(
+            await login(
               loginUserDTO,
               (authResponse) => {
                 // store accessToken to localStorage
@@ -69,10 +69,7 @@ function Login({}: Props) {
                 localStorage.setItem(ACCESS_TOKEN, accessToken);
 
                 // update auth taskState
-                authDispatch({
-                  type: AUTH_ACTION.LOGIN_USER,
-                  payload: { user: authResponse },
-                });
+                loginUser(authResponse);
                 navigate(
                   joinedTeamCount > 0 && defaultTeamId
                     ? `/${defaultTeamId}/` + CLIENT_ROUTE.TASK_BOARD
@@ -81,9 +78,9 @@ function Login({}: Props) {
               },
               (errors) => {
                 // clear local auth taskState and accessToken
+                logoutUser();
                 handleError(setErrors, errors);
                 localStorage.removeItem(ACCESS_TOKEN);
-                authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
               }
             );
           }}

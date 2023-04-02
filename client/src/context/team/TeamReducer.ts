@@ -11,7 +11,7 @@ import {
   TEAM_STATE_ACTION,
 } from "../../types";
 import { deepCopy } from "../../utils/deepCopy";
-import storeTeamActiveStatusToLocalStorage from "../../utils/setTeamActiveStatusToLocalStorage";
+import { storeTeamActiveStatusToLocalStorage } from "../../utils/setTeamActiveStatusToLocalStorage";
 
 export default function teamReducer(
   teamState: TeamStateType,

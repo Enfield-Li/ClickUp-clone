@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { GroupBy, StatusColumn, Task } from "../../../types";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -10,7 +10,7 @@ type Props = { onOptionClose: () => void };
 
 export default memo(StatusOptions);
 function StatusOptions({ onOptionClose }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { task, taskStateContext } = useTaskDetailContext();
   const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
 
@@ -22,7 +22,7 @@ function StatusOptions({ onOptionClose }: Props) {
       setTaskState,
       currentTask: task,
       targetField: GroupBy.STATUS,
-      userId: authState.user!.id!,
+      userId: user!.id!,
       targetColumnId: targetStatusColumnId,
     });
   }

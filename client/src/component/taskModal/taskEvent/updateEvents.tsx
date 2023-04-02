@@ -1,15 +1,15 @@
 import { Box, Flex } from "@chakra-ui/react";
-import useAuthContext from "../../../context/auth/useAuthContext";
-import { calculateTime } from "../../../utils/calculateTime";
-import { UpdateEvent } from "../../../types";
-import BeforeAndAfter from "./BeforeAndAfter";
 import { memo } from "react";
+import { useAuth } from "../../../context/auth/useAuth";
+import { UpdateEvent } from "../../../types";
+import { calculateTime } from "../../../utils/calculateTime";
+import BeforeAndAfter from "./BeforeAndAfter";
 
 type Props = { updateEvent: UpdateEvent };
 
 export default memo(UpdateEvents);
 function UpdateEvents({ updateEvent }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
 
   return (
     <Flex justifyContent="space-between" fontSize="small">
@@ -24,7 +24,7 @@ function UpdateEvents({ updateEvent }: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user!.id === updateEvent.userId ? (
+          {user!.id === updateEvent.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
             <Box opacity="65%">{updateEvent.username}</Box>

@@ -1,7 +1,7 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { GroupBy, Task } from "../../../types";
 import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
@@ -24,7 +24,7 @@ function SetTaskAttribute({
   hasPriority,
   setIsPopoverOpen,
 }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { taskStateContext } = useTaskDetailContext();
   const { groupBy: groupBy, setTaskState } = taskStateContext!;
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
@@ -44,7 +44,7 @@ function SetTaskAttribute({
       setTaskState,
       currentTask: task,
       targetField: GroupBy.STATUS,
-      userId: authState.user!.id!,
+      userId: user!.id!,
       targetColumnId: finishedColumnId,
     });
   }

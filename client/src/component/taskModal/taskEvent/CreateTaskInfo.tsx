@@ -1,6 +1,6 @@
-import { Flex, Box, Center } from "@chakra-ui/react";
+import { Box, Center, Flex } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { calculateTime } from "../../../utils/calculateTime";
 
@@ -8,7 +8,7 @@ type Props = {};
 
 export default memo(TaskCreatorInfo);
 function TaskCreatorInfo({}: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { task } = useTaskDetailContext();
 
   return (
@@ -24,7 +24,7 @@ function TaskCreatorInfo({}: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user?.id === task?.creator.userId ? (
+          {user?.id === task?.creator.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
             <Box>{task?.creator.username}</Box>

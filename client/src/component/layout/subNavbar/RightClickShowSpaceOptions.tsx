@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React, { memo, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTeamStateContext from "../../../context/team/useTeamContext";
 import useUnImplementedToast from "../../../hook/useFeatureNotImplemented";
 import { FolderCategory, ListCategory, Space } from "../../../types";
@@ -37,9 +37,9 @@ type Props = {
 
 export default memo(RightClickShowSpaceOptions);
 function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useUnImplementedToast();
-  const { authState } = useAuthContext();
   const ref = useRef<HTMLElement | null>(null);
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const { listId: listIdUrlParam, spaceId: spaceIdUrlParam } = useParams();
@@ -66,7 +66,7 @@ function RightClickShowSpaceOptions({ list, space, folder, children }: Props) {
       teamState,
       propsValue,
       teamStateDispatch,
-      userId: authState.user!.id,
+      userId: user!.id,
     });
 
     const isNewLocation =

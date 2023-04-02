@@ -1,14 +1,14 @@
-import { Flex, Box } from "@chakra-ui/react";
-import useAuthContext from "../../../context/auth/useAuthContext";
-import { calculateTime } from "../../../utils/calculateTime";
-import { AssignmentEvent } from "../../../types";
+import { Box, Flex } from "@chakra-ui/react";
 import { memo } from "react";
+import { useAuth } from "../../../context/auth/useAuth";
+import { AssignmentEvent } from "../../../types";
+import { calculateTime } from "../../../utils/calculateTime";
 
 type Props = { assignmentEvent: AssignmentEvent };
 
 export default memo(AssignmentEvents);
 function AssignmentEvents({ assignmentEvent }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   return (
     <Flex justifyContent="space-between" fontSize="small">
       <Flex alignItems="center">
@@ -22,7 +22,7 @@ function AssignmentEvents({ assignmentEvent }: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user!.id === assignmentEvent.userId ? (
+          {user!.id === assignmentEvent.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
             <Box opacity="65%">{assignmentEvent.username}</Box>
@@ -44,7 +44,7 @@ function AssignmentEvents({ assignmentEvent }: Props) {
             backgroundColor: "blackAlpha.300",
           }}
         >
-          {authState.user!.id === assignmentEvent.assignedUser.userId ? (
+          {user!.id === assignmentEvent.assignedUser.userId ? (
             <Box color="purple.400">You</Box>
           ) : (
             <Box>{assignmentEvent.assignedUser.username}</Box>

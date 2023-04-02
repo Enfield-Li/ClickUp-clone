@@ -8,12 +8,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { memo } from "react";
-import ColorModeSwitcher from "./ColorModeSwitcher";
-import useAuthContext from "../../../../context/auth/useAuthContext";
-import { logOutUser } from "../../../../networkCalls";
 import { useNavigate } from "react-router";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../../../constant";
-import { AUTH_ACTION } from "../../../../types";
+import { useAuth } from "../../../../context/auth/useAuth";
+import { logOut } from "../../../../networkCalls";
+import ColorModeSwitcher from "./ColorModeSwitcher";
 
 const mySettingTitles1: string[] = [
   "My Settings",
@@ -38,12 +37,14 @@ type Props = { isTeamOwner: boolean };
 
 export default memo(AccountSettings);
 function AccountSettings({ isTeamOwner }: Props) {
+  const { user, logoutUser } = useAuth();
+
   const toast = useToast();
   const navigate = useNavigate();
   const { toggleColorMode } = useColorMode();
-  const { authState, authDispatch } = useAuthContext();
   const fontColor = useColorModeValue("black", "lightMain.200");
   const borderColor = useColorModeValue("lightMain.200", "blackAlpha.600");
+
   function isLogOutBtn(title: string) {
     return title === "Log out";
   }
@@ -51,8 +52,8 @@ function AccountSettings({ isTeamOwner }: Props) {
   function handleLogOutUser() {
     navigate(CLIENT_ROUTE.LOGIN);
     // clear local auth taskState and accessToken
+    logoutUser();
     localStorage.removeItem(ACCESS_TOKEN);
-    authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
 
     toast({
       title: "Successful!",
@@ -60,7 +61,7 @@ function AccountSettings({ isTeamOwner }: Props) {
       status: "success",
     });
 
-    logOutUser();
+    logOut();
   }
 
   return (
@@ -83,13 +84,13 @@ function AccountSettings({ isTeamOwner }: Props) {
           height="26px"
           rounded="full"
           color="lightMain.200"
-          bgColor={authState.user?.color}
+          bgColor={user?.color}
         >
-          {authState.user?.username[0].toUpperCase()}
+          {user?.username[0].toUpperCase()}
         </Center>
 
         <Center ml="2" fontSize="12px" fontWeight="semibold">
-          {authState.user?.username}
+          {user?.username}
         </Center>
       </Flex>
 

@@ -1,6 +1,6 @@
 import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
-import useAuthContext from "../../../../context/auth/useAuthContext";
+import { useAuth } from "../../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../../context/task_detail/useTaskDetailContext";
 import { PriorityColumn } from "../../../../types";
 import { reorderPriorityColumn } from "../../actions/taskProcessing";
@@ -22,7 +22,7 @@ function CreatePriorityOptions({
     "darkMain.200"
   );
 
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { taskStateContext } = useTaskDetailContext();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
 

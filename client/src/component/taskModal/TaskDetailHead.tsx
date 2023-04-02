@@ -7,21 +7,16 @@ import {
 } from "@chakra-ui/react";
 import produce from "immer";
 import { memo, useState } from "react";
-import useAuthContext from "../../context/auth/useAuthContext";
+import { useAuth } from "../../context/auth/useAuth";
 import useTaskDetailContext from "../../context/task_detail/useTaskDetailContext";
 import { updateTaskTitle } from "../../networkCalls";
-import {
-  ActionField,
-  SetTaskState,
-  UpdateEvent,
-  UpdateTaskTitleDTO,
-} from "../../types";
+import { UpdateTaskTitleDTO } from "../../types";
 
 type Props = {};
 
 export default memo(TaskDetailHead);
 function TaskDetailHead({}: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const [showEditIcon, setShowEditIcon] = useState(true);
 
   const { task, taskStateContext, setTaskStateContext } =

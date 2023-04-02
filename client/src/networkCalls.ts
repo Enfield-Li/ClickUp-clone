@@ -10,6 +10,7 @@ import {
 } from "./AxiosInstance";
 import { CreateTeamDTO } from "./component/createTeam/CreateTeam";
 import { ACCESS_TOKEN, API_ENDPOINT, CLIENT_ROUTE } from "./constant";
+import { AuthStateType } from "./context/auth/useAuth";
 import {
   AddStatusColumnDTO,
   AddStatusColumnResponseDTO,
@@ -429,7 +430,7 @@ export async function fetchTeamList(
   }
 }
 
-export async function registerUser(
+export async function register(
   registerCredentials: RegisterUserDTO,
   onSuccess: (data: RegistrationResponse) => void,
   onFailure: (msg: FieldErrors) => void
@@ -451,14 +452,12 @@ export async function registerUser(
   }
 }
 
-export function logOutUser() {
+export function logOut() {
   // invalidate session
-  (import.meta.env.DEV ? axiosTaskServiceInstance : axiosGatewayInstance).post(
-    API_ENDPOINT.AUTH_LOGOUT
-  );
+  axiosTaskServiceInstance.post(API_ENDPOINT.AUTH_LOGOUT);
 }
 
-export async function loginUser(
+export async function login(
   loginUserDTO: LoginUserDTO,
   onSuccess: (data: AuthenticationResponse) => void,
   onFailure: (msg: FieldErrors) => void
@@ -479,11 +478,13 @@ export async function loginUser(
 }
 
 export async function refreshUserToken(
-  dispatch: React.Dispatch<AuthActionType>,
+  authState: AuthStateType,
   toast: (options?: UseToastOptions | undefined) => ToastId,
   navigate: NavigateFunction,
   isAuthPath: boolean
 ) {
+  const { loginUser, logoutUser } = authState;
+
   try {
     const response = await (import.meta.env.DEV
       ? axiosAuthServiceInstance
@@ -495,10 +496,7 @@ export async function refreshUserToken(
     localStorage.setItem(ACCESS_TOKEN, accessToken);
 
     // update auth taskState
-    dispatch({
-      type: AUTH_ACTION.LOGIN_USER,
-      payload: { user: response.data },
-    });
+    loginUser(response.data);
 
     navigate(
       joinedTeamCount > 0 && defaultTeamId
@@ -510,8 +508,8 @@ export async function refreshUserToken(
     console.log(err);
 
     // clear local auth taskState and accessToken
+    logoutUser();
     localStorage.removeItem(ACCESS_TOKEN);
-    dispatch({ type: AUTH_ACTION.LOGOUT_USER });
     const response = err.response?.data as ErrorResponse;
 
     if (!isAuthPath) navigate(CLIENT_ROUTE.LOGIN);

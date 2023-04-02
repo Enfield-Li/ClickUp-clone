@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { GroupBy } from "../../../types";
 import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
@@ -25,7 +25,7 @@ export default memo(SelectStatusIcons);
 function SelectStatusIcons({}: Props) {
   const popoverContentBgColor = useColorModeValue("white", "darkMain.100");
 
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const { isOpen, onToggle, onClose } = useDisclosure();
   const { task, taskStateContext } = useTaskDetailContext();
   const { setTaskState, groupBy, columnOptions } = taskStateContext!;
@@ -63,7 +63,7 @@ function SelectStatusIcons({}: Props) {
       setTaskState,
       currentTask: task!,
       targetField: GroupBy.STATUS,
-      userId: authState.user!.id!,
+      userId: user!.id!,
       targetColumnId: targetStatusColumnId,
     });
   }
@@ -74,7 +74,7 @@ function SelectStatusIcons({}: Props) {
       setTaskState,
       currentTask: task!,
       targetField: GroupBy.STATUS,
-      userId: authState.user!.id!,
+      userId: user!.id!,
       targetColumnId: finishedColumnId,
     });
   }

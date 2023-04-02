@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/toast";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TEAM_ACTIVITY } from "../constant";
+import { useAuth } from "../context/auth/useAuth";
 import useAuthContext from "../context/auth/useAuthContext";
 import { useCurrentListStore } from "../context/currentListStore/useCurrentListStore";
 import useTeamStateContext from "../context/team/useTeamContext";
@@ -12,8 +13,9 @@ import { getTaskBoardURL } from "../utils/getTaskBoardURL";
 export default function useInitSpaceList() {
   const toast = useToast();
   const navigate = useNavigate();
+
+  const { user } = useAuth();
   const { teamId, listId } = useParams();
-  const { authState } = useAuthContext();
   const { teamState, teamStateDispatch } = useTeamStateContext();
   const { storedDefaultCategoryId, updateStoredDefaultCategoryId } =
     useCurrentListStore();
@@ -42,7 +44,7 @@ export default function useInitSpaceList() {
 
   // init spaceListState
   useEffect(() => {
-    if (teamId && authState.user) {
+    if (teamId && user) {
       fetchTeamList(
         Number(teamId),
         (teams) => {
@@ -104,5 +106,5 @@ export default function useInitSpaceList() {
         }
       );
     }
-  }, [authState.user, teamId]);
+  }, [user, teamId]);
 }

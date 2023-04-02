@@ -15,9 +15,9 @@ import { memo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
-import useAuthContext from "../../context/auth/useAuthContext";
+import { useAuth } from "../../context/auth/useAuth";
 import { getRandomSpaceColor } from "../../media/colors";
-import { registerUser } from "../../networkCalls";
+import { register } from "../../networkCalls";
 import { AUTH_ACTION, FieldErrors, RegisterUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
@@ -28,7 +28,7 @@ function Register({}: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [show, setShow] = useState(false);
-  const { authDispatch } = useAuthContext();
+  const { registerUser, logoutUser } = useAuth();
   const initialEmail = location.state?.email ? location.state?.email : "";
 
   const signupSchema = Yup.object().shape({
@@ -68,23 +68,20 @@ function Register({}: Props) {
             color: getRandomSpaceColor(),
           }}
           onSubmit={async (registerUserDTO, { setErrors }) => {
-            await registerUser(
+            await register(
               registerUserDTO,
               (registrationResponse) => {
                 // update auth taskState
-                authDispatch({
-                  type: AUTH_ACTION.REGISTER_USER,
-                  payload: { registrationResponse: registrationResponse },
-                });
+                registerUser(registrationResponse);
                 navigate(
                   `/${registrationResponse.defaultTeamId}/` +
                     CLIENT_ROUTE.TASK_BOARD
                 );
               },
               (errors) => {
-                localStorage.removeItem(ACCESS_TOKEN);
-                authDispatch({ type: AUTH_ACTION.LOGOUT_USER });
+                logoutUser();
                 handleError(setErrors, errors);
+                localStorage.removeItem(ACCESS_TOKEN);
               }
             );
           }}

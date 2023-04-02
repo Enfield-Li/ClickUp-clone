@@ -1,6 +1,6 @@
 import { Center } from "@chakra-ui/react";
 import { memo, useMemo, useState } from "react";
-import useAuthContext from "../../../context/auth/useAuthContext";
+import { useAuth } from "../../../context/auth/useAuth";
 import useTaskDetailContext from "../../../context/task_detail/useTaskDetailContext";
 import { Priority, Task } from "../../../types";
 import { selectPriority } from "./PriorityOptions";
@@ -10,7 +10,7 @@ type Props = { task: Task };
 
 export default memo(SelectPriorityIcon);
 function SelectPriorityIcon({ task }: Props) {
-  const { authState } = useAuthContext();
+  const { user } = useAuth();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const { taskStateContext } = useTaskDetailContext();
   const { columnOptions, setTaskState, groupBy: groupBy } = taskStateContext!;
@@ -64,7 +64,7 @@ function SelectPriorityIcon({ task }: Props) {
               selectPriority(
                 groupBy,
                 task,
-                authState.user!.id!,
+                user!.id!,
                 setTaskState,
                 1 // no priority
               );
