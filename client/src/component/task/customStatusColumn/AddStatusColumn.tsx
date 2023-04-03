@@ -5,9 +5,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useState } from "react";
-import { getRandomSpaceColor, getRandomTeamColor } from "../../../media/colors";
-import { SetTaskState, StatusColumns, TaskState } from "../../../types";
-import { getRandomNumber } from "../../../utils/getRandomNumber";
+import { getRandomSpaceColor } from "../../../media/colors";
+import { StatusColumns } from "../../../types";
 import StatusColorPalletPopover from "../../widget/statusColumn/StatusColorPalletPopover";
 import AddStatusColumnInput from "./AddStatusColumnInput";
 

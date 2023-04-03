@@ -5,18 +5,12 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import produce from "immer";
 import { memo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useCurrentListStore } from "../../../context/currentListStore/useCurrentListStore";
 import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { addStatusColumn } from "../../../networkCalls";
-import {
-  AddStatusColumnDTO,
-  SetTaskState,
-  StatusColumns,
-} from "../../../types";
-import { deepCopy } from "../../../utils/deepCopy";
+import { AddStatusColumnDTO, StatusColumns } from "../../../types";
 
 type Props = {
   color: string;

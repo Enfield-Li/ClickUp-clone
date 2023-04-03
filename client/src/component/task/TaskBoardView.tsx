@@ -1,28 +1,10 @@
 import { Box, Center, Flex, Spinner } from "@chakra-ui/react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import produce from "immer";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useTaskDetail } from "../../context/task_detail/useTaskDetail";
 import { useColumnTaskState } from "../../hook/useFetchTasks";
-import { updateTasksPosition } from "../../networkCalls";
-import {
-  LookUpReorderedColumn,
-  SetTaskState,
-  GroupBy,
-  TaskPositionDTOList,
-  TaskState,
-  UndeterminedColumns,
-  UpdateTasksPositionDTO,
-} from "../../types";
-import { newEventDTO } from "../../utils/createNewEvent";
-import { deepCopy } from "../../utils/deepCopy";
-import { isDueDateColumns } from "../../utils/determineColumns";
-import { newTaskPositionDTO } from "../../utils/newTaskPositionDTO";
-import {
-  getExpectedDueDateFromDueDateColumn,
-  getLookUpReorderedColumnTable,
-} from "./actions/taskProcessing";
+import { GroupBy, TaskState } from "../../types";
 import Column from "./Column";
 import AddStatusColumn from "./customStatusColumn/AddStatusColumn";
 import CreateListPanel from "./panel/CreateListPanel";

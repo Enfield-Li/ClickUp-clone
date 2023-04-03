@@ -182,9 +182,6 @@ export interface TaskState {
   orderedTasks: OrderedTasks;
   columnOptions: ColumnOptions;
 }
-export type SetTaskState = React.Dispatch<
-  React.SetStateAction<TaskState | undefined>
->;
 
 // Look up tables
 export type LookUpReorderedColumn = {
@@ -228,15 +225,6 @@ export interface UpdateTaskDescDTO {
   taskId: number;
   newDesc: string;
 }
-
-export type AuthContextType = {
-  authState: AuthStateType;
-  authDispatch: React.Dispatch<AuthActionType>;
-};
-
-export type AuthStateType = {
-  user: User | null;
-};
 
 export type RegisterUserDTO = {
   email: string;
@@ -355,39 +343,6 @@ export interface RegistrationResponse {
   initTeamUIState: TeamActiveStatus;
 }
 
-export type AuthActionType =
-  | LogInUser
-  | LogOutUser
-  | RegisterUser
-  | OpenOnboarding
-  | UpdateTeamCount
-  | CloseOnboarding;
-
-type LogInUser = {
-  type: typeof AUTH_ACTION.LOGIN_USER;
-  payload: { user: AuthenticationResponse };
-};
-type RegisterUser = {
-  type: typeof AUTH_ACTION.REGISTER_USER;
-  payload: { registrationResponse: RegistrationResponse };
-};
-type UpdateTeamCount = {
-  type: typeof AUTH_ACTION.UPDATE_TEAM_COUNT;
-  payload: { isAddTeam: boolean; teamId: number };
-};
-type LogOutUser = { type: typeof AUTH_ACTION.LOGOUT_USER };
-type OpenOnboarding = { type: typeof AUTH_ACTION.OPEN_ONBOARDING };
-type CloseOnboarding = { type: typeof AUTH_ACTION.CLOSE_ONBOARDING };
-
-export const AUTH_ACTION = {
-  LOGIN_USER: "login_user",
-  LOGOUT_USER: "logout_user",
-  REGISTER_USER: "register_user",
-  OPEN_ONBOARDING: "open_onboarding",
-  CLOSE_ONBOARDING: "close_onboarding",
-  UPDATE_TEAM_COUNT: "update_team_count",
-} as const;
-
 export type TeamActiveStatus = {
   teamId?: number;
   folderIds: number[];
@@ -407,188 +362,6 @@ export type CreateFolderInfo = {
   spaceId: number;
   currentLevelFolders?: FolderCategory[];
   defaultStatusCategoryId?: number;
-};
-
-export type ModalControls = {
-  isCreateListModalOpen: boolean;
-  onCreateListModalOpen: () => void;
-  onCreateListModalClose: () => void;
-
-  isCreateFolderModalOpen: boolean;
-  onCreateFolderModalOpen: () => void;
-  onCreateFolderModalClose: () => void;
-
-  isCreateSpaceModalOpen: boolean;
-  onCreateSpaceModalOpen: () => void;
-  onCreateSpaceModalClose: () => void;
-};
-
-export type TeamStateType = {
-  teamsForRender: Team[];
-  originalTeams: Team[];
-  teamActiveStatus: TeamActiveStatus;
-  createListInfo: CreateListInfo | null;
-  createFolderInfo: CreateFolderInfo | null;
-};
-
-export type TeamContextType = {
-  teamState: TeamStateType;
-  teamStateDispatch: React.Dispatch<TeamStateActionType>;
-};
-
-export const TEAM_STATE_ACTION = {
-  INIT_TEAM_STATE: "init_team_state",
-  CREATE_TEAM: "create_team",
-  CREATE_SPACE: "create_space",
-  CREATE_FOLDER: "create_folder",
-  CREATE_LIST: "create_list",
-
-  DELETE_TEAM: "delete_team",
-  DELETE_LIST_IN_SPACE: "delete_list_in_space",
-  DELETE_LIST_IN_FOLDER: "delete_list_in_folder",
-  DELETE_SPACE: "delete_space",
-  DELETE_FOLDER: "delete_folder",
-
-  SET_CREATE_FOLDER_INFO: "set_create_folder_INFO",
-  SET_CREATE_LIST_INFO: "set_create_list_INFO",
-
-  SELECT_LIST: "select_list",
-  SELECT_TEAM: "select_team",
-  SELECT_SPACE: "select_space",
-  SELECT_FOLDER: "select_folder",
-
-  OPEN_FOLDER: "open_folder",
-  OPEN_SPACE: "open_space",
-
-  UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID:
-    "update_list_default_status_category_id",
-} as const;
-
-export type TeamStateActionType =
-  | SelectTeam
-  | InitTeamState
-  | UpdateOpenedSpace
-  | UpdateOpenedFolder
-  | CreateTeam
-  | SelectList
-  | SelectSpace
-  | CreateSpace
-  | CreateList
-  | CreateFolder
-  | SelectFolder
-  | SetCreateListInfo
-  | SetCreateFolderInfo
-  | DeleteSpace
-  | DeleteFolder
-  | DeleteTeam
-  | DeleteListInSpace
-  | DeleteListInFolder
-  | UpdateListDefaultStatusCategoryId;
-
-type UpdateListDefaultStatusCategoryId = {
-  type: typeof TEAM_STATE_ACTION.UPDATE_LIST_DEFAULT_STATUS_CATEGORY_ID;
-  payload: { newDefaultStatusCategoryId: number };
-};
-type DeleteSpace = {
-  type: typeof TEAM_STATE_ACTION.DELETE_SPACE;
-  payload: {
-    deletedSpaceId: number;
-    nextListId: number | null;
-    nextSpaceId: number | null;
-    defaultStatusCategoryId?: number;
-  };
-};
-type DeleteFolder = {
-  type: typeof TEAM_STATE_ACTION.DELETE_FOLDER;
-  payload: {
-    deletedFolderId: number;
-    // nextFolderId: number;
-    nextListId?: number | null;
-    defaultStatusCategoryId?: number;
-  };
-};
-type DeleteListInFolder = {
-  type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_FOLDER;
-  payload: {
-    folderId: number;
-    deletedListId: number;
-    nextListId?: number | null;
-    defaultStatusCategoryId?: number;
-  };
-};
-type DeleteListInSpace = {
-  type: typeof TEAM_STATE_ACTION.DELETE_LIST_IN_SPACE;
-  payload: {
-    deletedListId: number;
-    nextListId?: number | null;
-    defaultStatusCategoryId?: number;
-  };
-};
-type DeleteTeam = {
-  type: typeof TEAM_STATE_ACTION.DELETE_TEAM;
-  //   payload: { deletedSpaceId: number; nextSpaceId: number; nextListId?: number };
-};
-
-type InitTeamState = {
-  type: typeof TEAM_STATE_ACTION.INIT_TEAM_STATE;
-  payload: TeamsResponseDTO;
-};
-
-type SetCreateListInfo = {
-  type: typeof TEAM_STATE_ACTION.SET_CREATE_LIST_INFO;
-  payload: CreateListInfo;
-};
-type SetCreateFolderInfo = {
-  type: typeof TEAM_STATE_ACTION.SET_CREATE_FOLDER_INFO;
-  payload: CreateFolderInfo;
-};
-
-type CreateList = {
-  type: typeof TEAM_STATE_ACTION.CREATE_LIST;
-  payload: ListCategory;
-};
-
-type CreateTeam = {
-  type: typeof TEAM_STATE_ACTION.CREATE_TEAM;
-  payload: CreateTeamResponseDTO;
-};
-
-type CreateSpace = {
-  type: typeof TEAM_STATE_ACTION.CREATE_SPACE;
-  payload: Space;
-};
-
-type CreateFolder = {
-  type: typeof TEAM_STATE_ACTION.CREATE_FOLDER;
-  payload: FolderCategory;
-};
-
-// Select
-type SelectTeam = {
-  type: typeof TEAM_STATE_ACTION.SELECT_TEAM;
-  payload: { teamId: number };
-};
-type SelectSpace = {
-  type: typeof TEAM_STATE_ACTION.SELECT_SPACE;
-  payload: { spaceId: number };
-};
-type SelectFolder = {
-  type: typeof TEAM_STATE_ACTION.SELECT_FOLDER;
-  payload: { folderId: number };
-};
-type SelectList = {
-  type: typeof TEAM_STATE_ACTION.SELECT_LIST;
-  payload: { list: ListCategory };
-};
-
-// Open
-type UpdateOpenedSpace = {
-  type: typeof TEAM_STATE_ACTION.OPEN_SPACE;
-  payload: { spaceId: number | null };
-};
-type UpdateOpenedFolder = {
-  type: typeof TEAM_STATE_ACTION.OPEN_FOLDER;
-  payload: { folderId: number };
 };
 
 export type CreateListDTO = {
@@ -654,39 +427,10 @@ export type InitTeamListDTO = {
   //   teamActivity: TeamActivity;
 };
 
-export type TaskDetailContextType = {
-  task: Task | null;
-  isCreatingTask: boolean;
-  taskStateContext: TaskStateContext | null;
-  setTask: React.Dispatch<React.SetStateAction<Task | null>>;
-  setIsCreatingTask: React.Dispatch<React.SetStateAction<boolean>>;
-  setTaskStateContext: React.Dispatch<
-    React.SetStateAction<TaskStateContext | null>
-  >;
-};
-
-export type ModalState = {
-  isModalOpen: boolean;
-  onModalOpen: () => void;
-  onModalClose: () => void;
-};
-
 export type TaskStateContext = {
   groupBy: GroupBy;
   currentListId: number;
   columnOptions: ColumnOptions;
-};
-
-export type ModalControlContextType = {
-  isCreateListModalOpen: boolean;
-  onCreateListModalOpen: () => void;
-  onCreateListModalClose: () => void;
-  isCreateFolderModalOpen: boolean;
-  onCreateFolderModalOpen: () => void;
-  onCreateFolderModalClose: () => void;
-  isCreateSpaceModalOpen: boolean;
-  onCreateSpaceModalOpen: () => void;
-  onCreateSpaceModalClose: () => void;
 };
 
 export type StatusCategoryState = {

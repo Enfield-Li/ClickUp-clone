@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
 import { useAuth } from "../../context/auth/useAuth";
 import { login } from "../../networkCalls";
-import { AUTH_ACTION, FieldErrors, LoginUserDTO } from "../../types";
+import { FieldErrors, LoginUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};

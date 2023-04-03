@@ -18,7 +18,7 @@ import { ACCESS_TOKEN, CLIENT_ROUTE } from "../../constant";
 import { useAuth } from "../../context/auth/useAuth";
 import { getRandomSpaceColor } from "../../media/colors";
 import { register } from "../../networkCalls";
-import { AUTH_ACTION, FieldErrors, RegisterUserDTO } from "../../types";
+import { FieldErrors, RegisterUserDTO } from "../../types";
 import AuthTemplate from "./AuthTemplate";
 
 type Props = {};

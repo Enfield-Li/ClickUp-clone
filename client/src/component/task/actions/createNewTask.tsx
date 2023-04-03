@@ -1,31 +1,21 @@
-import produce from "immer";
 import { createTask } from "../../../networkCalls";
 import {
+  AddTaskArgType,
+  DueDateColumns,
   DueDateRange,
+  GroupBy,
   OrderedTasks,
   Priority,
-  SetTaskState,
-  GroupBy,
   TargetColumnAndId,
   Task,
-  DueDatePosition,
   TaskList,
-  PriorityPosition,
   TaskState,
-  StatusPosition,
   UndeterminedColumn,
   UndeterminedColumns,
-  UserInfo,
-  AuthStateType,
-  DueDateColumns,
   User,
-  AddTaskArgType,
+  UserInfo,
 } from "../../../types";
-import { deepCopy } from "../../../utils/deepCopy";
-import {
-  getDueDateColumnIdFromExpectedDueDate,
-  initTaskMissingField,
-} from "./taskProcessing";
+import { getDueDateColumnIdFromExpectedDueDate } from "./taskProcessing";
 
 export type NewTask = {
   title: string;
