@@ -7,9 +7,8 @@ type Props = {
 };
 
 export default function TaskOptions({ taskId }: Props) {
+  const { removeTask } = useTaskDetail();
   const hoverBgColor = useColorModeValue("lightMain.100", "darkMain.300");
-  const { taskStateContext } = useTaskDetail();
-  const { setTaskState } = taskStateContext!;
 
   return (
     <PopoverContent width="270px" p="2" fontSize="sm">
@@ -20,7 +19,7 @@ export default function TaskOptions({ taskId }: Props) {
         opacity="80%"
         cursor="pointer"
         _hover={{ bgColor: hoverBgColor }}
-        onClick={() => handleDeleteTask(taskId, setTaskState)}
+        onClick={() => handleDeleteTask(taskId, removeTask)}
       >
         <Box mr={2}>
           <i className="bi bi-trash3"></i>

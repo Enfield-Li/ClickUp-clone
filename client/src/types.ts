@@ -1,3 +1,5 @@
+import { DropResult } from "@hello-pangea/dnd";
+
 // Sorting options
 export enum GroupBy {
   STATUS = "status",
@@ -672,7 +674,6 @@ export type ModalState = {
 export type TaskStateContext = {
   groupBy: GroupBy;
   currentListId: number;
-  setTaskState: SetTaskState;
   columnOptions: ColumnOptions;
 };
 
@@ -803,4 +804,48 @@ export type DeleteListInSpaceArgType = {
   deletedListId: number;
   nextListId?: number | null;
   defaultStatusCategoryId?: number;
+};
+
+export type InitTaskStateArgType = {
+  networkData: TaskListStatusCategoryDTO;
+  groupBy: GroupBy;
+  statusCategoryId: number;
+  listId: number;
+};
+
+export type DragTaskArgType = {
+  groupBy: GroupBy;
+  result: DropResult;
+};
+
+export type AddColumnArgType = {
+  lastItemIndex: number;
+  dto: AddStatusColumnDTO;
+  storedDefaultCategoryId: number;
+  responseDTO: AddStatusColumnResponseDTO;
+  updateStoredDefaultCategoryId: (newCategoryId: number) => void;
+};
+
+export type UpdateTaskAttributeArgType = {
+  userId: number;
+  groupBy: GroupBy;
+  targetField: GroupBy;
+  currentTask: Task;
+  targetColumnId: number;
+  expectedDueDate?: Date | null;
+};
+
+export type AddTaskArgType = {
+  groupBy: GroupBy;
+  dueDateColumnId: number;
+  priority: number | undefined;
+  createdTask: Task | undefined;
+  dueDateColumn: DueDateColumns;
+  currentColumn: UndeterminedColumn;
+};
+
+export type UpdateColumnTitleArgType = {
+  newTitle: string | undefined;
+  titleInput: string | undefined;
+  currentColumn: UndeterminedColumn | undefined;
 };

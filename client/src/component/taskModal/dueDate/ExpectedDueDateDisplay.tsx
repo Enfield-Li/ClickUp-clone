@@ -16,7 +16,6 @@ import { GroupBy, Task } from "../../../types";
 import { convertUTCDateToLocalDate } from "../../../utils/convertUTCDateToLocalDate";
 import { toYYYYMMDDString } from "../../../utils/getWeekDays";
 import { getDueDateString } from "../../task/actions/columnProcessing";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import DueDatePanel from "./DueDatePanel";
 
 type Props = {
@@ -28,8 +27,8 @@ function ExpectedDueDateDisplay({ task }: Props) {
   const { user } = useAuth();
   const [showDeleteButton, setShowDeleteButton] = useState(false);
 
-  const { taskStateContext } = useTaskDetail();
-  const { groupBy, setTaskState, columnOptions } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy, columnOptions } = taskStateContext!;
 
   const popoverContentBg = useColorModeValue("white", "darkMain.100");
   const popoverContentColor = useColorModeValue(
@@ -42,7 +41,6 @@ function ExpectedDueDateDisplay({ task }: Props) {
 
     updateTaskAttribute({
       groupBy: groupBy,
-      setTaskState,
       currentTask: task,
       expectedDueDate: null,
       userId: user!.id!,

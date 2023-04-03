@@ -6,7 +6,6 @@ import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, Task } from "../../../types";
 import MaterialTheme from "../../../utils/MaterialTheme";
 import { getDueDateColumnIdFromExpectedDueDate } from "../../task/actions/taskProcessing";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -16,8 +15,8 @@ type Props = {
 export default memo(DueDatePicker);
 function DueDatePicker({ task, onClose }: Props) {
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetail();
-  const { groupBy, setTaskState, columnOptions } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy, columnOptions } = taskStateContext!;
 
   function handleDatePicker(expectedDueDateInput: Date) {
     if (expectedDueDateInput && task && user?.id) {
@@ -29,7 +28,6 @@ function DueDatePicker({ task, onClose }: Props) {
       // Update list taskState
       updateTaskAttribute({
         groupBy: groupBy,
-        setTaskState,
         currentTask: task,
         userId: user.id,
         targetField: GroupBy.DUE_DATE,

@@ -1,15 +1,8 @@
-import { useEffect, useState } from "react";
-import { initColumns } from "../component/task/actions/columnProcessing";
-import {
-  collectAllTasks,
-  groupTaskListOnGroupBy,
-  processTaskList,
-} from "../component/task/actions/taskProcessing";
+import { useEffect } from "react";
+import { collectAllTasks } from "../component/task/actions/taskProcessing";
 import { useTaskDetail } from "../context/task_detail/useTaskDetail";
 import { fetchAllTasks as fetchTasksAndStatusCategory } from "../networkCalls";
-import { ColumnOptions, GroupBy, TaskState } from "../types";
-import { sleep } from "../utils/sleep";
-import { defaultColumnOptions } from "../utils/staticColumnsData";
+import { GroupBy } from "../types";
 
 interface UseFetchTasksParam {
   groupBy: GroupBy;
@@ -21,21 +14,20 @@ export function useColumnTaskState({
   listId,
   statusCategoryId,
 }: UseFetchTasksParam) {
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [taskState, setTaskState] = useState<TaskState>();
-  //   console.log({ taskState });
-
-  const { task, selectTask, taskStateContext, initTaskStateContext } =
-    useTaskDetail();
+  const {
+    task,
+    taskState,
+    taskStateContext,
+    selectTask,
+    initTaskStateContext,
+    updateTaskStateContext,
+  } = useTaskDetail();
 
   useEffect(() => {
     initTaskState();
 
     async function initTaskState() {
       if (!listId || !statusCategoryId) {
-        setTaskState(undefined);
-        initTaskStateContext(null);
         return;
       }
 
@@ -45,82 +37,15 @@ export function useColumnTaskState({
         statusCategoryId
       );
 
-      if (networkData) {
-        const {
-          taskList: taskListData,
-          statusCategory: { statusColumns },
-        } = networkData;
-        const { dueDateColumns, priorityColumns } = defaultColumnOptions;
-
-        const allColumns: ColumnOptions = {
-          dueDateColumns,
-          priorityColumns,
-          statusColumns,
-        };
-
-        const { reorderedDueDateColumns, reorderedStatusColumns } =
-          initColumns(allColumns);
-
-        const columnOptions: ColumnOptions = {
-          ...allColumns,
-          dueDateColumns: reorderedDueDateColumns,
-          statusColumns: reorderedStatusColumns,
-        };
-
-        // init taskEvents and convert expectedDueDate to dueDate columns
-        const taskList = processTaskList(reorderedDueDateColumns, taskListData);
-
-        const orderedTasks = groupTaskListOnGroupBy(
-          taskList,
-          allColumns[`${groupBy}Columns`],
-          groupBy
-        );
-
-        initTaskStateContext({
-          columnOptions,
-          setTaskState,
-          groupBy: groupBy,
-          currentListId: listId,
-        });
-        setTaskState({ orderedTasks, columnOptions, statusCategoryId });
-
-        setLoading(false);
-      }
+      initTaskStateContext({ groupBy, listId, networkData, statusCategoryId });
     }
   }, [listId, statusCategoryId]);
 
   // Sync up orderedTasks with columns under groupBy
-  const statusColumnCount = taskState?.columnOptions.statusColumns.length;
+  const statusColumnCount =
+    taskStateContext?.columnOptions.statusColumns.length;
   useEffect(() => {
-    updateTaskState();
-
-    async function updateTaskState() {
-      if (!taskState || !taskStateContext) {
-        return;
-      }
-
-      setLoading(true);
-
-      if (taskState && taskStateContext) {
-        initTaskStateContext({
-          ...taskStateContext,
-          groupBy: groupBy,
-        });
-
-        setTaskState({
-          ...taskState,
-          orderedTasks: groupTaskListOnGroupBy(
-            collectAllTasks(taskState.orderedTasks),
-            taskState.columnOptions[`${groupBy}Columns`],
-            groupBy
-          ),
-        });
-
-        await sleep(10);
-      }
-
-      setLoading(false);
-    }
+    updateTaskStateContext(groupBy);
   }, [groupBy, statusColumnCount]); // Change of groupBy and adding status column
 
   // sync up with modal task
@@ -133,6 +58,4 @@ export function useColumnTaskState({
       if (updatedTask) selectTask(updatedTask);
     }
   }, [taskState]);
-
-  return { taskState, setTaskState, loading, error };
 }

@@ -5,7 +5,6 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import produce from "immer";
 import { memo, useState } from "react";
 import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { UndeterminedColumn } from "../../../types";
@@ -17,25 +16,15 @@ type Props = {
 
 export default memo(EditColumnTitle);
 function EditColumnTitle({ currentColumn, setEditTitle }: Props) {
+  const { updateColumnTitle } = useTaskDetail();
   const [titleInput, setTitleInput] = useState(currentColumn?.title);
 
-  const { taskStateContext } = useTaskDetail();
-  const { setTaskState } = taskStateContext!;
-
   function finishEdit(e?: React.KeyboardEvent<HTMLInputElement>) {
+    const newTitle = e?.currentTarget.value;
+
     // Update column title
-    setTaskState((pre) => {
-      if (pre) {
-        return produce(pre, (draftState) => {
-          draftState.columnOptions.statusColumns.forEach((column) =>
-            column.id === currentColumn?.id &&
-            e?.currentTarget.value !== column.title
-              ? titleInput && (column.title = titleInput)
-              : column
-          );
-        });
-      }
-    });
+    updateColumnTitle({ currentColumn, newTitle, titleInput });
+
     // Close edit
     setEditTitle(false);
   }

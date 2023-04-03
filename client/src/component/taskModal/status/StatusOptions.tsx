@@ -3,7 +3,6 @@ import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
 import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy, StatusColumn, Task } from "../../../types";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import OptionWrapper from "../../task/optionWrapper/SelectOption";
 
 type Props = { onOptionClose: () => void };
@@ -11,15 +10,14 @@ type Props = { onOptionClose: () => void };
 export default memo(StatusOptions);
 function StatusOptions({ onOptionClose }: Props) {
   const { user } = useAuth();
-  const { task, taskStateContext } = useTaskDetail();
-  const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
+  const { task, taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy: groupBy, columnOptions } = taskStateContext!;
 
   function handleSelectStatus(task: Task, column: StatusColumn) {
     const targetStatusColumnId = column.id!;
 
     updateTaskAttribute({
       groupBy: groupBy,
-      setTaskState,
       currentTask: task,
       targetField: GroupBy.STATUS,
       userId: user!.id!,

@@ -12,8 +12,8 @@ export default memo(SelectPriorityIcon);
 function SelectPriorityIcon({ task }: Props) {
   const { user } = useAuth();
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
-  const { taskStateContext } = useTaskDetail();
-  const { columnOptions, setTaskState, groupBy: groupBy } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { columnOptions, groupBy } = taskStateContext!;
 
   const currentTaskPriority = useMemo(() => {
     return columnOptions.priorityColumns.find(
@@ -65,7 +65,7 @@ function SelectPriorityIcon({ task }: Props) {
                 groupBy,
                 task,
                 user!.id!,
-                setTaskState,
+                updateTaskAttribute,
                 1 // no priority
               );
             }}

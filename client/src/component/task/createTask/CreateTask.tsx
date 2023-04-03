@@ -24,11 +24,12 @@ type Props = {
 
 export default memo(CreateTask);
 function CreateTask({ taskState, currentColumn, setHovering }: Props) {
-  const toast = useUnImplementedToast();
   const { user } = useAuth();
+  const { addTask } = useTaskDetail();
+  const toast = useUnImplementedToast();
   const { taskStateContext, setCreatingTask, isCreatingTask } = useTaskDetail();
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
-  const { groupBy, setTaskState } = taskStateContext;
+  const { groupBy } = taskStateContext;
 
   const [showCreateTaskForm, setShowCreateTaskForm] = useState(false);
   const cardBgColor = useColorModeValue("white", "darkMain.200");
@@ -70,9 +71,9 @@ function CreateTask({ taskState, currentColumn, setHovering }: Props) {
       };
 
       createNewTask({
-        groupBy: groupBy,
+        addTask,
         taskState,
-        setTaskState,
+        groupBy: groupBy,
         currentColumn,
         newTaskInput: newTask,
         creator: newCreator(user),

@@ -7,7 +7,6 @@ import { GroupBy, Task } from "../../../types";
 import SelectDueDateIcon from "../../taskModal/dueDate/SelectDueDateIcon";
 import SelectPriorityPopover from "../../taskModal/priority/SelectPriorityPopover";
 import FinishTask from "../../taskModal/status/FinishTask";
-import { updateTaskAttribute } from "../actions/updateTaskAttributes";
 import ThreeDotShowOptions from "./ThreeDotShowOptions";
 
 type Props = {
@@ -25,8 +24,8 @@ function SetTaskAttribute({
   setIsPopoverOpen,
 }: Props) {
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetail();
-  const { groupBy: groupBy, setTaskState } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy } = taskStateContext!;
   if (!taskStateContext) throw new Error("taskStateContext not initialized");
   const { columnOptions } = taskStateContext;
 
@@ -41,7 +40,6 @@ function SetTaskAttribute({
 
     updateTaskAttribute({
       groupBy,
-      setTaskState,
       currentTask: task,
       targetField: GroupBy.STATUS,
       userId: user!.id!,

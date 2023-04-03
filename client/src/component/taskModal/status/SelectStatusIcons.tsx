@@ -1,21 +1,20 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Center,
-  Flex,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  useColorModeValue,
-  useDisclosure,
+    Box,
+    Center,
+    Flex,
+    Popover,
+    PopoverBody,
+    PopoverContent,
+    PopoverTrigger,
+    Tooltip,
+    useColorModeValue,
+    useDisclosure
 } from "@chakra-ui/react";
 import { memo, useMemo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
 import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { GroupBy } from "../../../types";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 import FinishTask from "./FinishTask";
 import StatusOptions from "./StatusOptions";
 
@@ -27,8 +26,8 @@ function SelectStatusIcons({}: Props) {
 
   const { user } = useAuth();
   const { isOpen, onToggle, onClose } = useDisclosure();
-  const { task, taskStateContext } = useTaskDetail();
-  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
+  const { task, taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy, columnOptions } = taskStateContext!;
 
   const column = useMemo(
     () =>
@@ -60,7 +59,6 @@ function SelectStatusIcons({}: Props) {
 
     updateTaskAttribute({
       groupBy: groupBy,
-      setTaskState,
       currentTask: task!,
       targetField: GroupBy.STATUS,
       userId: user!.id!,
@@ -71,7 +69,6 @@ function SelectStatusIcons({}: Props) {
   function handleSetToFinish() {
     updateTaskAttribute({
       groupBy: groupBy,
-      setTaskState,
       currentTask: task!,
       targetField: GroupBy.STATUS,
       userId: user!.id!,

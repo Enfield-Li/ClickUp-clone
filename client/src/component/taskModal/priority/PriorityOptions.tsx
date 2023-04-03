@@ -2,9 +2,13 @@ import { Box, Divider, Flex, useColorModeValue } from "@chakra-ui/react";
 import { memo } from "react";
 import { useAuth } from "../../../context/auth/useAuth";
 import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
-import { GroupBy, Priority, SetTaskState, Task } from "../../../types";
+import {
+  GroupBy,
+  Priority,
+  Task,
+  UpdateTaskAttributeArgType,
+} from "../../../types";
 import { reorderPriorityColumn } from "../../task/actions/taskProcessing";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -20,8 +24,8 @@ function PriorityOptions({ task, onOptionClose }: Props) {
   );
 
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetail();
-  const { setTaskState, groupBy, columnOptions } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy, columnOptions } = taskStateContext!;
 
   return (
     <>
@@ -52,7 +56,7 @@ function PriorityOptions({ task, onOptionClose }: Props) {
                       groupBy,
                       task,
                       user!.id!,
-                      setTaskState,
+                      updateTaskAttribute,
                       priorityColumn.id!,
                       onOptionClose
                     )
@@ -92,7 +96,7 @@ export function selectPriority(
   groupBy: GroupBy,
   task: Task,
   userId: number,
-  setTaskState: SetTaskState,
+  updateTaskAttribute: (param: UpdateTaskAttributeArgType) => void,
   targetPriorityColumnId: number,
   onOptionClose?: () => void
 ) {
@@ -100,7 +104,6 @@ export function selectPriority(
   updateTaskAttribute({
     userId,
     groupBy,
-    setTaskState,
     currentTask: task,
     targetField: GroupBy.PRIORITY,
     targetColumnId: targetPriorityColumnId,

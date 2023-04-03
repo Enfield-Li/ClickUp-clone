@@ -19,6 +19,7 @@ import {
   AuthStateType,
   DueDateColumns,
   User,
+  AddTaskArgType,
 } from "../../../types";
 import { deepCopy } from "../../../utils/deepCopy";
 import {
@@ -39,18 +40,18 @@ interface CreateNewTaskParam {
   creator: UserInfo;
   newTaskInput: NewTask;
   taskState: TaskState;
-  setTaskState: SetTaskState;
   dueDateColumn: DueDateColumns;
   currentColumn: UndeterminedColumn;
+  addTask: (param: AddTaskArgType) => void;
 }
 
 export async function createNewTask({
   listId,
   groupBy,
   creator,
+  addTask,
   taskState,
   newTaskInput,
-  setTaskState,
   currentColumn,
   dueDateColumn,
 }: CreateNewTaskParam) {
@@ -84,27 +85,14 @@ export async function createNewTask({
   // network call
   const createdTask = await createTask(newTask);
 
-  setTaskState(
-    (taskState) =>
-      taskState &&
-      produce(taskState, (draftState) => {
-        // update local state
-        draftState.orderedTasks.forEach((orderedTask) => {
-          const targetColumnId =
-            groupBy === GroupBy.DUE_DATE
-              ? dueDateColumnId
-              : groupBy === GroupBy.PRIORITY
-              ? priority
-              : currentColumn.id;
-
-          const isCurrentColumn = orderedTask.columnId === targetColumnId;
-          if (isCurrentColumn && createdTask) {
-            const task = initTaskMissingField(createdTask, dueDateColumn);
-            orderedTask.taskList.push(task);
-          }
-        });
-      })
-  );
+  addTask({
+    createdTask,
+    currentColumn,
+    dueDateColumn,
+    dueDateColumnId,
+    groupBy,
+    priority,
+  });
 }
 
 interface SetCurrentTaskAttributeParam {

@@ -17,22 +17,11 @@ type Props = {};
 export default memo(TaskDetailHead);
 function TaskDetailHead({}: Props) {
   const { user } = useAuth();
+  const { task, updateTitle } = useTaskDetail();
   const [showEditIcon, setShowEditIcon] = useState(true);
 
-  const { task, taskStateContext } = useTaskDetail();
-  const { setTaskState } = taskStateContext!;
-
   async function handleUpdateTitle(newTitle: string) {
-    setTaskState((previousState) => {
-      if (previousState)
-        return produce(previousState, (draftState) => {
-          draftState.orderedTasks.forEach((tasks) =>
-            tasks.taskList.forEach(
-              (task) => task.id === task.id && (task.title = newTitle)
-            )
-          );
-        });
-    });
+    updateTitle(newTitle);
 
     const updateTaskTitleDTO: UpdateTaskTitleDTO = {
       taskId: task!.id!,

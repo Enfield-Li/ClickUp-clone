@@ -13,16 +13,11 @@ import AddStatusColumnInput from "./AddStatusColumnInput";
 
 type Props = {
   statusCategoryId?: number;
-  setTaskState: SetTaskState;
   statusColumns: StatusColumns;
 };
 
 export default memo(AddStatusColumn);
-function AddStatusColumn({
-  setTaskState,
-  statusColumns,
-  statusCategoryId,
-}: Props) {
+function AddStatusColumn({ statusColumns, statusCategoryId }: Props) {
   const {
     isOpen: isColorPalletOpen,
     onOpen: onColorPalletOpen,
@@ -39,7 +34,6 @@ function AddStatusColumn({
           {/* Title */}
           <AddStatusColumnInput
             color={color}
-            setTaskState={setTaskState}
             statusColumns={statusColumns}
             statusCategoryId={statusCategoryId}
             onColorPalletClose={onColorPalletClose}

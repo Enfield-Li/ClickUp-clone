@@ -5,7 +5,6 @@ import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { DueDateColumn, DueDateRange, GroupBy, Task } from "../../../types";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { getExpectedDueDateFromWeekString } from "../../task/actions/columnProcessing";
-import { updateTaskAttribute } from "../../task/actions/updateTaskAttributes";
 
 type Props = {
   task: Task;
@@ -21,8 +20,8 @@ function DueDateOptions({ task, onClose }: Props) {
   const bgColor = useColorModeValue("lightMain.50", "darkMain.200");
 
   const { user } = useAuth();
-  const { taskStateContext } = useTaskDetail();
-  const { setTaskState, groupBy: groupBy, columnOptions } = taskStateContext!;
+  const { taskStateContext, updateTaskAttribute } = useTaskDetail();
+  const { groupBy, columnOptions } = taskStateContext!;
 
   function handleOnClick(targetColumn: DueDateColumn) {
     onClose();
@@ -32,7 +31,6 @@ function DueDateOptions({ task, onClose }: Props) {
     // Update list taskState
     updateTaskAttribute({
       groupBy,
-      setTaskState,
       expectedDueDate,
       currentTask: task!,
       userId: user!.id!,

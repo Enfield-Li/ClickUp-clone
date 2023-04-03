@@ -220,12 +220,10 @@ export function updatePreviousIdsInColumn(
   targetColumn: TargetColumnAndId,
   sourceTask: Task
 ) {
-  const allTasks = collectAllTasks(taskState.orderedTasks);
-
-  // Updates for newTask's previousItem for other groupBy
-  const previousTaskValues = collectPreviousTaskValues(targetColumn);
-
-  updateTask(previousTaskValues, allTasks, sourceTask);
+  //   const allTasks = collectAllTasks(taskState.orderedTasks);
+  //   // Updates for newTask's previousItem for other groupBy
+  //   const previousTaskValues = collectPreviousTaskValues(targetColumn);
+  //   updateTask(previousTaskValues, allTasks, sourceTask);
 }
 
 // Collect all tasks from OrderedTasks to Task[]

@@ -9,6 +9,7 @@ import produce from "immer";
 import { memo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCurrentListStore } from "../../../context/currentListStore/useCurrentListStore";
+import { useTaskDetail } from "../../../context/task_detail/useTaskDetail";
 import { addStatusColumn } from "../../../networkCalls";
 import {
   AddStatusColumnDTO,
@@ -20,7 +21,6 @@ import { deepCopy } from "../../../utils/deepCopy";
 type Props = {
   color: string;
   statusCategoryId?: number;
-  setTaskState: SetTaskState;
   statusColumns: StatusColumns;
   onColorPalletClose: () => void;
 };
@@ -28,18 +28,18 @@ type Props = {
 export default memo(AddStatusColumnInput);
 function AddStatusColumnInput({
   color,
-  setTaskState,
   statusColumns,
   statusCategoryId,
   onColorPalletClose,
 }: Props) {
   const { listId } = useParams();
   const [title, setTitle] = useState("");
+  const { addColumn } = useTaskDetail();
   const { storedDefaultCategoryId, updateStoredDefaultCategoryId } =
     useCurrentListStore();
   const isTitleTaken = statusColumns.some((column) => column.title === title);
 
-  function createStatusColumn() {
+  function handleAddStatusColumn() {
     if (!statusCategoryId) {
       throw new Error("statusCategoryId is not initialized");
     }
@@ -66,43 +66,12 @@ function AddStatusColumnInput({
     };
 
     addStatusColumn(dto, (responseDTO) => {
-      setTaskState((pre) => {
-        if (pre) {
-          return produce(pre, (draftState) => {
-            const {
-              statusColumnId: newStatusColumnId,
-              statusCategoryId: updatedStatusCategoryId,
-              oldNewStatusPairs,
-            } = responseDTO;
-
-            const newStatusColumn = { ...dto, id: newStatusColumnId };
-            draftState.statusCategoryId = updatedStatusCategoryId;
-            // Create new column before the last one "Done"
-            draftState.columnOptions.statusColumns.splice(
-              lastItemIndex,
-              0,
-              newStatusColumn
-            );
-
-            if (storedDefaultCategoryId !== updatedStatusCategoryId) {
-              updateStoredDefaultCategoryId(updatedStatusCategoryId);
-            }
-            if (oldNewStatusPairs) {
-              draftState.columnOptions.statusColumns.forEach((column) => {
-                if (oldNewStatusPairs[column.id!]) {
-                  column.id = oldNewStatusPairs[column.id!];
-                }
-              });
-              draftState.orderedTasks.forEach((orderedTask) => {
-                orderedTask.columnId = oldNewStatusPairs[orderedTask.columnId];
-                orderedTask.taskList.forEach((task) => {
-                  task.status.columnId =
-                    oldNewStatusPairs[task.status.columnId];
-                });
-              });
-            }
-          });
-        }
+      addColumn({
+        dto,
+        responseDTO,
+        lastItemIndex,
+        storedDefaultCategoryId,
+        updateStoredDefaultCategoryId,
       });
     });
   }
@@ -129,7 +98,7 @@ function AddStatusColumnInput({
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !isTitleTaken) {
-              createStatusColumn();
+              handleAddStatusColumn();
               onColorPalletClose();
             } else if (e.key === "Escape") {
               onColorPalletClose();
@@ -147,7 +116,7 @@ function AddStatusColumnInput({
               <Box
                 fontSize="33px"
                 color="green.500"
-                onClick={!isTitleTaken ? createStatusColumn : undefined}
+                onClick={!isTitleTaken ? handleAddStatusColumn : undefined}
               >
                 <i className="bi bi-check"></i>
               </Box>
