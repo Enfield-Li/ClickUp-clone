@@ -2,6 +2,9 @@ services:
   nginx:
     container_name: nginx
     image: nginx:1.19
+    depends_on:
+      - api-gateway
+      - eureka-server
     volumes:
       - ./client/dist:/usr/share/nginx/html
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
