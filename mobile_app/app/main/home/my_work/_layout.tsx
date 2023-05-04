@@ -28,7 +28,7 @@ function TabOne() {
           },
           tabBarIndicatorStyle: {
             height: 3,
-            left: "10%",
+            left: "6%",
           },
           tabBarInactiveTintColor: "gray",
           tabBarActiveTintColor: "blue",
