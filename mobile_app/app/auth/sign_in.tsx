@@ -25,7 +25,7 @@ export default function sign_in({}: Props) {
   }
 
   return (
-    <View className="flex-1 justify-center mb-20 bg-white">
+    <View className="flex-1 justify-center pb-20 bg-white">
       <Stack.Screen
         options={{
           title: "Email",
