@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {
         "com.example.devTest",
-        "com.example.clients",
-        "service-config",
+        "com.example.serviceConfig",
 })
 public class DevTestApplication {
 

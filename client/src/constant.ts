@@ -10,7 +10,6 @@ export const SERVICE_ENDPOINT = {
   TEAM: import.meta.env.VITE_TEAM_URL,
   GATEWAY: import.meta.env.VITE_GATEWAY_URL,
   AUTHORIZATION: import.meta.env.VITE_AUTHORIZATION_URL,
-  TEAM_ACTIVITY: import.meta.env.VITE_TEAM_ACTIVITY_URL,
   TEAM_STATUS_CATEGORY: import.meta.env.VITE_TEAM_STATUS_CATEGORY_URL,
 } as const;
 

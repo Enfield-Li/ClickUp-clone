@@ -33,10 +33,6 @@ export const axiosTeamServiceInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.TEAM
 );
 
-export const axiosTeamActivityServiceInstance = createDevAxiosInstance(
-  SERVICE_ENDPOINT.TEAM_ACTIVITY
-);
-
 export const axiosStatusCategoryServiceInstance = createDevAxiosInstance(
   SERVICE_ENDPOINT.TEAM_STATUS_CATEGORY
 );

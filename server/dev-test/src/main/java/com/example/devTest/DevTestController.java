@@ -17,6 +17,17 @@ class DevTestController {
 
     private final DevTestService devTestService;
 
+    @GetMapping
+    ResponseEntity<String> testStr() {
+        return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("reject")
+    ResponseEntity.BodyBuilder testReject() {
+        return  ResponseEntity.status(401);
+
+    }
+
     @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
     ResponseEntity<?> test() {
         var img = devTestService.get();

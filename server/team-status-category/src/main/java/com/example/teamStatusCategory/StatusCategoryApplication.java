@@ -12,7 +12,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
         "com.example.teamStatusCategory",
         "com.example.amqp",
         "com.example.clients",
-        "com.example.statusColumn",
         "com.example.serviceConfig",
         "com.example.serviceSecurityConfig",
         "com.example.serviceExceptionHandling",
