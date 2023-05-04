@@ -1,8 +1,6 @@
 # ClickUp clone
 
-Website: http://1.12.70.249
-
-Or download the android app: https://expo.dev/artifacts/eas/piEwi2Qqon4FzjqhGf6j9r.apk
+Preview: [ClickUp(clone) website](http://1.12.70.249), or [click here](https://expo.dev/artifacts/eas/piEwi2Qqon4FzjqhGf6j9r.apk) and download the android app `.apk` file directly
 
 ## Demo:
 
