@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "clickup-clone-android",
+    "slug": "clickup-clone-android",
+    "extra": {
+      "eas": {
+        "projectId": "fd83bbe2-7975-4f97-a233-39b4e016d2be"
+      }
+    },
+    "android": {
+      "package": "com.enfield.clickupcloneandroid"
+    }
+  }
+}
