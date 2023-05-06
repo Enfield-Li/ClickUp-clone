@@ -14,7 +14,7 @@ function comments(props: Props) {
       />
 
       <Text>comments</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }

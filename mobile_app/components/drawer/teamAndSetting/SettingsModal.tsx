@@ -46,7 +46,7 @@ function SettingsModal({ modalVisible, toggleVisiblity }: Props) {
         </View>
 
         <View className="mt-4 justify-center items-center h-screen">
-          <Text>Under construction</Text>
+          <Text>施工中</Text>
         </View>
 
         <TouchableOpacity

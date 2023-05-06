@@ -12,7 +12,7 @@ function notifications(props: Props) {
       />
 
       <Text>notifications</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }

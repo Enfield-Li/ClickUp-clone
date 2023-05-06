@@ -15,7 +15,7 @@ function todo(props: Props) {
       />
 
       <Text>todo</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }

@@ -11,7 +11,7 @@ function calendar(props: Props) {
       <Stack.Screen options={{ headerShown: false, title: "Calendar" }} />
 
       <Text>calendar page</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }

@@ -1,10 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
-import { ACCESS_TOKEN } from "./constant";
-import { refreshUserToken } from "./networkCalls";
+import { ACCESS_TOKEN } from "../utils/constant";
+import { refreshUserToken } from "../utils/networkCalls";
 import { useAuth } from "../stores/useAuth";
-import useNavigate from "../hooks/useNavigate";
-import { autoLogin } from "./autoLogin";
+import useNavigate from "./useNavigate";
+import { autoLogin } from "../utils/autoLogin";
 
 export function useInit() {
   const authState = useAuth();

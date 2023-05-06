@@ -15,7 +15,7 @@ function done(props: Props) {
       />
 
       <Text>done</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }

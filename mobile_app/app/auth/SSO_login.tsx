@@ -27,7 +27,7 @@ function SSO_login(props: Props) {
 
       <TouchableOpacity
         onPress={() => navigation.navigate("auth/sign_in_with_password")}
-        className="rounded-lg bg-gray-100 mt-2 items-center flex-row justify-between p-2 mx-4"
+        className="rounded-lg bg-gray-100 mt-2 items-center flex-row justify-between p-3 mx-4"
       >
         <View className="flex-row">
           <View>

@@ -12,7 +12,7 @@ function list(props: Props) {
       <Stack.Screen options={{}} />
 
       <Text>list</Text>
-      <Text>🛠🛠🛠 under construction 🛠🛠🛠</Text>
+      <Text>🛠🛠🛠 施工中 🛠🛠🛠</Text>
     </View>
   );
 }
