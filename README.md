@@ -1,3 +1,72 @@
+# 企业级应用 ClickUp 克隆项目
+
+网址：[ClickUp-Clone](http://1.12.70.249), 或者[点击这里](https://expo.dev/artifacts/eas/8cW8LMsz1NqVzAXDuPzvKk.apk) 直接下载安卓`.apk`安装包。
+
+## 安卓端预览:
+
+https://user-images.githubusercontent.com/88321505/236599844-fac465ce-261c-4c0c-af8c-9ce167aaa6d4.mp4
+
+(因安卓系统禁止录制密码，故输入密码时用图片展示)
+
+## 网站界面 UI:
+
+登录:
+![login](login.PNG)
+
+主界面:
+![main](main.PNG)
+
+
+## 后端鉴权流程:
+
+实施细节基于这条 [stackoverflow 答案](https://stackoverflow.com/a/69631673/16648127), 和这个油管主播[教程](https://www.youtube.com/watch?v=25GS0MLT8JU):
+
+```
+ +----------------+
+ |                |
+ |  React client  |
+ |                |
+ +----------------+
+     ^    |    |
+     |    |    |             +---------------+
+     |    |    |  register   |               |                      +------------------------+
+     |    |    |  login      |               |     # 1              |                        |
+     |    |    +------------>|               |--------------------> | Authorization service  |
+     |    |                  |               |                      |                        |
+     |    |                  |               |                      +------------------------+
+     |    |                  |               |                                   ^
+     |    |  refresh token   |               |                                   |
+     |    |                  |               |     # 2                           |
+     |    +----------------->|    Gateway    |<----------------------------------+
+     |                       |               |
+     |                       |               |
+     |   access resource     |               |                      +------------------------+
+     |                       |               |     # 3              |                        |
+     +---------------------->|               |<-------------------->|    Resource service    |
+                             |               |                      |                        |
+                             |               |                      +------------------------+
+                             |               |
+                             +---------------+
+```
+
+#### Step #1:
+
+Authorization service authenticate the incoming register/login request, and issue an access token and a refresh token:
+
+1. The access token stores `userId`, `subject`, `issuedAt`, and `expirationTime`. With the expiration time set to 30 min, the access token will be sent through response body, see `AuthorizationResponse` class;
+
+2. The refresh token will store all of the claims(payload properties) like the access token, along with an extra one: `tokenVersion`. With the expiration time set to 7 days, the refresh token will be stored inside http session, so as to prevent client from accessing. The `tokenVersion` means to prevent the use of invalidated old token after user changes password.
+
+#### Step #2:
+
+Before access token expires, the client send a "refresh token" request, in order to get a new access token. The server will be checking the refresh `tokenVersion`. And then create a new access token and a new refresh token, and send back to client.
+
+#### Step #3:
+
+The client makes request to a protected resource server by presenting the access token. The resource server validates the access token, and if valid, serves the request.
+
+
+
 # ClickUp clone
 
 Preview website: [ClickUp-Clone](http://1.12.70.249), or [click here](https://expo.dev/artifacts/eas/8cW8LMsz1NqVzAXDuPzvKk.apk) and download the android app `.apk` file directly
