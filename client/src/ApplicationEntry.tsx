@@ -3,9 +3,9 @@ import { memo } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./component/layout/Header";
 import NavBar from "./component/layout/NavBar";
-import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
 import CreateListModal from "./component/widget/createList/CreateListModal";
 import CreateSpaceModal from "./component/widget/createSpace/CreateSpaceModal";
+import CreateFolderModal from "./component/widget/createFolder/CreateFolderModal";
 
 type Props = {};
 

@@ -40,7 +40,6 @@ function CreateFolderModal({}: Props) {
       }
 
       const teamId = team.id;
-      // @ts-expect-error
       const lastFolder = space.allListOrFolder.findLast((listOrFolder) =>
         determineFolderType(listOrFolder)
       );

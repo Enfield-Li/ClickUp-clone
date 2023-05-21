@@ -26,9 +26,10 @@ const Folder_API_VERSION = TEAM_API_VERSION + "/folder";
 const AUTH_API_VERSION = "/authorization/v1/user";
 const TASK_EVENT_API_VERSION = "/api/v1/task_event";
 const PANEL_ACTIVITY_API_VERSION = "/api/v1/panel_activity";
-const STATUS_COLUMN_API_VERSION = "/api/v1/status_column";
 const TEAM_ACTIVITY_API_VERSION = "/api/v1/team_activity";
-const STATUS_CATEGORY_API_VERSION = "/api/v1/status_category";
+const STATUS_CATEGORY_API = "/api/v1/status_category";
+const STATUS_CATEGORY_API_VERSION = STATUS_CATEGORY_API + "/category";
+const STATUS_COLUMN_API_VERSION = STATUS_CATEGORY_API + "/column";
 
 // API endpoints
 const LOGIN = "/login";
